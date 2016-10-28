@@ -10,7 +10,6 @@ Authors@R: c(person("Ann-Kristin", "Kreutzmann", role="aut", email="ann-kristin.
 Description: Functions that support estimating, assessing and mapping regional disaggregated indicators. Estimation methods comprise some direct indicators for poverty analysis and the model-based approach Empirical Best Prediction, as well as their precision estimates. Furthermore, results can easily be exported to excel.
 Depends:
     R (>= 3.3.0),
-    rgeos,
     maptools
 License: GPL-2
 LazyData: true
@@ -30,4 +29,4 @@ Imports:
     parallelMap,
     HLMdiag,
     parallel
-Suggests: testthat
+Suggests: testthat, rgeos

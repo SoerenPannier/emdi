@@ -32,6 +32,7 @@
 #' @seealso \code{\link{ebp}}, \code{\link{emdiObject}},
 #' \code{\link[maptools]{readShapePoly}}
 #' @examples 
+#' \dontrun{
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_pop")
@@ -53,13 +54,16 @@
 #' mapping_table <- data.frame(unique(eusilcA_pop$district), 
 #' unique(shape_austria_dis$NAME_2))
 #' 
+#' #when rgeos is not available, polygon geometry 	computations in maptools depends on the package gpclib,
+#' #which has a restricted licence. It is disabled by default; to enable gpclib, type gpclibPermit()
+#' gpclibPermit() 
 #' # Create map plot for mean indicator - point and MSE estimates but no CV
 #' map_plot(object = emdi_model, MSE = TRUE, CV = FALSE, 
 #' map_obj = shape_austria_dis, indicator = c("Mean"), map_dom_id = "NAME_2", 
 #' map_tab = mapping_table)
-#' 
+#' }
 #' @export
-#' @import maptools reshape2 rgeos
+#' @import maptools reshape2
 
 map_plot <- function(object,
                      indicator = "all",
