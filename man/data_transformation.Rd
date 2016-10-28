@@ -51,7 +51,7 @@ functions \code{no_transform},\code{log_transform} and \code{box_cox}.
 }
 \examples{
 # Loading data - sample data
-data("eusilcA_pop")
+data("eusilcA_smp")
 
 # Transform dependent variable in sample data with Box-Cox transformation
 transform_data <- data_transformation(eqIncome ~ gender + eqsize + cash + 
