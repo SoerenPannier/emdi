@@ -28,5 +28,6 @@ Imports:
     stats,
     parallelMap,
     HLMdiag,
-    parallel
+    parallel,
+    simFrame
 Suggests: testthat
