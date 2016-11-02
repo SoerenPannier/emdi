@@ -59,6 +59,7 @@
 #' obtained by \code{\link{ggplot}}.
 #' @seealso \code{\link{emdiObject}}, \code{\link{ebp}}
 #' @examples
+#' \dontrun{
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_pop")
@@ -76,7 +77,7 @@
 #' # Creation of diagnostic plots without labels and titles, different colors 
 #' # and without Cook's distance plot.
 #' plot(emdi_model, label="no_title", color=c("red", "yellow"), cooks = FALSE)
-#' 
+#' }
 #' @export
 #' @method plot emdi
 #' @import ggplot2 nlme graphics 

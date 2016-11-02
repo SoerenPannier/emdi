@@ -76,6 +76,7 @@ there are convergence problems. The density plots are obtained by
 optimal parameter.
 }
 \examples{
+\dontrun{
 # Loading data - population and sample data
 data("eusilcA_pop")
 data("eusilcA_pop")
@@ -93,7 +94,7 @@ plot(emdi_model)
 # Creation of diagnostic plots without labels and titles, different colors 
 # and without Cook's distance plot.
 plot(emdi_model, label="no_title", color=c("red", "yellow"), cooks = FALSE)
-
+}
 }
 \seealso{
 \code{\link{emdiObject}}, \code{\link{ebp}}

@@ -201,13 +201,14 @@ plot_real <- function(object,
     {
       col <- rev(col)
     }
+    map_obj.fort[ind][,1][!is.finite(map_obj.fort[ind][,1])] <- NA
     print(ggplot(map_obj.fort, aes(long, lat, group = group, fill = map_obj.fort[ind][,1])) +
             geom_polygon(color="azure3") + coord_equal() + labs(x = "", y = "", fill = ind) +
             ggtitle(gsub(pattern = "_",replacement = " ",x = ind)) +
             scale_fill_gradient2(low = col[1], mid=col[2], high = col[3],
                                  midpoint = (min(map_obj.fort[ind][,1], na.rm = T) +
-                                 diff(range(c(map_obj.fort[ind][,1]))) / 2),
-                                 limits = range(c(map_obj.fort[ind][,1]))) +
+                                 diff(range(c(map_obj.fort[ind][,1]), na.rm = T)) / 2),
+                                 limits = range(c(map_obj.fort[ind][,1]), na.rm = T)) +
             theme(axis.ticks = element_blank(), axis.text = element_blank(), 
                   legend.title=element_blank())
     )
@@ -215,8 +216,10 @@ plot_real <- function(object,
     {
       col <- rev(col)
     }
-    cat ("Press [enter] to continue")
-    line <- readline()
+    if(!ind == tail(indicator,1)){
+      cat ("Press [enter] to continue")
+      line <- readline()
+    }
   }
 }
 
