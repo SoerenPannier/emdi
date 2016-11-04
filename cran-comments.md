@@ -16,3 +16,4 @@ This is a resubmission. In this version I have:
 
 * Reduced computational effort in the examples
 * Taking care of failed tests in testthat
+* Improved DESCRIPTION file
