@@ -50,11 +50,11 @@ print.emdi <- function(x, ...) {
   }
   
   cat("\n")
-  if(is.null(x$transform)){
+  if(is.null(transform_method)){
     cat("Transformation: No transformation \n")
   } else {
     cat("Transformation:\n")
-    print(x$transform)
+    print(transform_method)
   }
   cat("\n")
   cat("Model fit:\n")
