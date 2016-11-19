@@ -117,6 +117,15 @@ direct <- function(y,
                     seed=seed, 
                     na.rm=na.rm)
   
+  PG <- Poverty_Gap(framework = framework,
+                    var=var,
+                    bootType = bootType,
+                    X = X, 
+                    totals = totals, 
+                    R=R,  
+                    seed=seed, 
+                    na.rm=na.rm)
+  
   Gini_coeff <- Gini(framework = framework,
                      sort = sort,
                      var=var,
@@ -127,11 +136,15 @@ direct <- function(y,
                      seed=seed, 
                      na.rm=na.rm)
   
-  ind <- data.frame(Domain = framework$rs, Head_Count=HCR$valueByStratum[,2], 
+  ind <- data.frame(Domain = framework$rs, 
+                    Head_Count=HCR$valueByStratum[,2], 
+                    Poverty_Gap=PG$valueByStratum[,2],
                     Gini = Gini_coeff$valueByStratum[,2])
   
   if(var==TRUE){
-    MSE <- data.frame(Domain=framework$rs, Head_Count=HCR$varByStratum[,2], 
+    MSE <- data.frame(Domain=framework$rs, 
+                      Head_Count=HCR$varByStratum[,2],
+                      Poverty_Gap=PG$valueByStratum[,2],
                       Gini = Gini_coeff$varByStratum[,2])
     
     direct_out <- list(ind = ind, 
