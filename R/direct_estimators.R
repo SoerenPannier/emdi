@@ -414,120 +414,89 @@ getFun_Gini <- function (indicator, byStratum)
 }
 
 
-# Income Quintile Share Ratio --------------------------------------------------
+# yome Quintile Share Ratio --------------------------------------------------
 
-Quintile_Share <- function (y, 
-          weights = NULL, 
-          smp_data = NULL,
-          sort = NULL, 
-          #years = NULL, 
-          smp_domains = NULL, 
-          #design = NULL, 
-          #cluster = NULL, 
-          var = NULL, 
-          bootType = c("calibrate", "naive"), 
-          R = NULL,
-          seed = NULL,
-          X, 
-          totals = NULL,
-          na.rm=FALSE, ...) 
-{
-  #byYear <- !is.null(years)
+Quintile_Share <- function(y, 
+                        weights = NULL, 
+                        sort = NULL, 
+                        #years = NULL, 
+                        smp_domains = NULL, 
+                        #design = NULL, 
+                        #cluster = NULL, 
+                        smp_data = NULL, 
+                        var = NULL, 
+                        bootType = c("calibrate", "naive"), 
+                        R = NULL,
+                        seed = NULL,
+                        X, 
+                        totals = NULL,
+                        #alpha = 0.05, 
+                        na.rm = FALSE, ...) {
   byStratum <- !is.null(smp_domains)
-  
-  # characters for variance
-  smp_domains_chr <- smp_domains
-  y_chr <- y
-  weights_chr <- weights
-  
-    y <- smp_data[, y]
-    if (!is.null(weights)) 
+  y_chr <- y  
+  y <- smp_data[, y]
+    if (!is.null(weights))
+      weights_chr <- weights
       weights <- smp_data[, weights]
     if (!is.null(sort)) 
       sort <- smp_data[, sort]
-    #if (byYear) 
-    #  years <- smp_data[, years]
-    if (byStratum) 
-
+    if (byStratum)
+      smp_domains_chr <-  smp_domains
       smp_domains <- smp_data[, smp_domains]
-    #if (!is.null(var)) {
-    #  if (!is.null(design)) 
-    #    design <- smp_data[, design]
-     # if (!is.null(cluster)) 
-    #    cluster <- smp_data[, cluster]
-    # }
-    
-  if (!is.numeric(y)) {
-    stop("'y' must be a numeric vector")
-  }
+
   n <- length(y)
-  if (is.null(weights)) {
+  if (is.null(weights)) 
     weights <- weights <- rep.int(1, n)
-  } else if (!is.numeric(weights)) {
+  else if (!is.numeric(weights)) 
     stop("'weights' must be a numeric vector")
-  } 
   if (!is.null(sort) && !is.vector(sort) && !is.ordered(sort)) {
     stop("'sort' must be a vector or ordered factor")
   }
-  #if (byYear && !is.numeric(years)) {
-  #  stop("'years' must be a numeric vector")
-  #}
+
   if (byStratum) {
     if (!is.vector(smp_domains) && !is.factor(smp_domains)) {
       stop("'smp_domains' must be a vector or factor")
-    } else {
-      smp_domains <- as.factor(smp_domains)
-    } 
+    }
+    else smp_domains <- as.factor(smp_domains)
   }
 
-    if (length(weights) != n) {
-      stop("'weights' must have the same length as 'x'")
-    }
-    if (!is.null(sort) && length(sort) != n) {
-      stop("'sort' must have the same length as 'x'")
-    }
-   # if (byYear && length(years) != n) {
-  #    stop("'years' must have the same length as 'x'")
-   # }
-    if (byStratum && length(smp_domains) != n) {
-      stop("'smp_domains' must have the same length as 'x'")
-    }
 
-  
-  value <- Quintile_Share_value(y, smp_data, weights, sort, na.rm = na.rm)
-  
+    value <- Quintile_Share_value(y, weights, sort, na.rm = na.rm)
+    
   if (byStratum) {
-  
-    valueByStratum <- aggregate(1:n, list(stratum = smp_domains), QSR, 
-                                y = y, smp_data=smp_data, weights = weights, 
+
+    valueByStratum <- aggregate(1:n, list(stratum = smp_domains), qrR, 
+                                y = y, weights = weights, 
                                 sort = sort, na.rm = na.rm)
     names(valueByStratum)[ncol(valueByStratum)] <- "value"
     rs <- levels(smp_domains)
   }
   else valueByStratum <- rs <- NULL
-  res <- constructQsr(value = value, valueByStratum = valueByStratum, 
-                      years = ys, strata = rs)
+  res <- list(value = value, valueByStratum = valueByStratum, 
+                strata = rs)
   
-  res <- class("Quintile_Share")
-  if (variance==TRUE) {
+  class(res) <- c("QSR")
+  if (var==TRUE) {
     res <- direct_variance(y = y_chr, 
-                           weights = weights_chr, 
-                           smp_domains = smp_domains_chr,
-                           indicator = res, 
+                           weights=weights_chr, 
+                           smp_data=smp_data,  
+                           smp_domains = smp_domains_chr, 
+                           indicator=res, 
                            bootType=bootType, 
                            R = R,
                            seed = seed,
                            X = X, 
                            totals = totals, 
-                           na.rm =na.rm)
-  }
+                           na.rm =na.rm)}
   return(res)
 }
 
+qrR <- function(i, y, weights, sort, na.rm) {
+  Quintile_Share_value(y[i], weights[i], sort[i], na.rm)
+}
 
-
-Quintile_Share_value <- function (x, smp_data=smp_data ,weights = NULL, 
-                                  sort = NULL, na.rm = FALSE) {
+Quintile_Share_value <- function (x, weights = NULL, sort = NULL, na.rm = FALSE) 
+{
   if (isTRUE(na.rm)) {
     indices <- !is.na(x)
     x <- x[indices]
@@ -538,50 +507,27 @@ Quintile_Share_value <- function (x, smp_data=smp_data ,weights = NULL,
   }
   else if (any(is.na(x))) 
     return(NA)
-  
   if (is.null(weights)) {
     weights <- rep.int(1, length(x))
   }
-    
-  q <- incQuintile(x, weights, sort, smp_data=smp_data)
-  iq1 <- x <= q[1]
-  iq4 <- x > q[2]
-  (sum(weights[iq4] * x[iq4])/sum(weights[iq4]))/(sum(weights[iq1] * 
-                                                        x[iq1])/sum(weights[iq1]))
-}
-
-QSR <- function(i, y, weights, sort, na.rm) {
-  Quintile_Share_value(y=y[i], smp_data=smp_data, weights=weights[i], sort=sort[i], na.rm = na.rm)
-}
-
-incQuintile <- function (y, weights = NULL, sort = NULL, years = NULL, k = c(1, 
-                                                                4), smp_data = NULL, na.rm = FALSE) 
-{
-
-    y <- smp_data[, y]
-    if (!is.null(weights)) {
-      weights <- smp_data[, weights]
-    }
-      
-    if (!is.null(sort)) {
-      sort <- smp_data[, sort]
-    }
-    
-  n <- length(y)
-  k <- round(k)
-  order <- if (is.null(sort)) {
-    order(y)
-  } else {
-    order(y, sort)
-  } 
-  y <- y[order]
+  order <- if (is.null(sort)) 
+    order(x)
+  else order(x, sort)
+  x <- x[order]
   weights <- weights[order]
   
-  q <- weightedQuantile(y, weights, probs = k/5, sorted = TRUE, 
-                          na.rm = na.rm)
-  names(q) <- k
-
-  return(q)
+  #q <- incQuintile(x, weights, sort)
+  #iq1 <- x <= q[1]
+  #iq4 <- x > q[2]
+  iq1 <- x <= weightedQuantile(x, weights, probs = 0.2, sorted = TRUE, 
+                               na.rm = na.rm)
+  
+  iq4 <- x > weightedQuantile(x, weights, probs = 0.8, sorted = TRUE, 
+                              na.rm = na.rm)
+  
+  
+  (sum(weights[iq4] * x[iq4])/sum(weights[iq4]))/(sum(weights[iq1] * 
+                                                        x[iq1])/sum(weights[iq1]))
 }
 
 
@@ -641,21 +587,23 @@ weightedQuantile <- function (x, weights = NULL, probs = seq(0, 1, 0.25), sorted
 }
 
 
+
+
 getFun_QSR <- function (indicator, byStratum) 
 {
   if (byStratum) {
     function(x, p, rs, na.rm) {
-      value <- Quintile_Share_value(x$y, smp_data, x$weight, na.rm = na.rm)
+      value <- Quintile_Share_value(x$y, x$weight, na.rm = na.rm)
       valueByStratum <- sapply(rs, function(r, x, t) {
         i <- x$stratum == r
-        Quintile_Share_value(x$y[i], smp_data, x$weight[i], na.rm = na.rm)
+        Quintile_Share_value(x$y[i], x$weight[i], na.rm = na.rm)
       }, x = x)
       c(value, valueByStratum)
     }
   }
   else {
     function(x, p, rs, na.rm) {
-      Quintile_Share_value(x$y, smp_data,x$weight, na.rm = na.rm)
+      Quintile_Share_value(x$y,x$weight, na.rm = na.rm)
     }
   }
 }
