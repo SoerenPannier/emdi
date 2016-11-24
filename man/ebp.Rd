@@ -101,7 +101,7 @@ and the quintile share ratio.
 \examples{
 # Loading data - population and sample data
 data("eusilcA_pop")
-data("eusilcA_pop")
+data("eusilcA_smp")
 
 # Example with default setting but na.rm=TRUE
 set.seed(100); emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 

@@ -79,7 +79,7 @@ optimal parameter.
 \dontrun{
 # Loading data - population and sample data
 data("eusilcA_pop")
-data("eusilcA_pop")
+data("eusilcA_smp")
 
 # Example with default setting but na.rm=TRUE; with Box-Cox transformation
 set.seed(100); emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 
