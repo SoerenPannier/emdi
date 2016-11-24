@@ -15,14 +15,21 @@ direct <- function(y,
   framework_dir <- function(y, smp_data, smp_domains, weights, sort, 
                             pov_line, na.rm){
     
+    
     # two versions of y, one vector version and one character version (original)
     # for variance estimation
     # we force sample data, in laeken data can be NULL
     y_vec <- smp_data[, y]
+    
+    # Number of households in sample
+    N_smp <- length(y_vec)
+    
+    
+    
     if (!is.null(weights)) {
       weights_vec <- smp_data[, weights]
     } else if (is.null(weights)) {
-      weights_vec <- rep.int(1, n)
+      weights_vec <- rep.int(1, N_smp)
     }
   
     if (!is.null(sort)) {
@@ -33,7 +40,13 @@ direct <- function(y,
       smp_domains_vec <- smp_data[, smp_domains]
       smp_domains_vec <- as.factor(smp_data[, smp_domains])
       rs <- levels(smp_domains_vec)
+      # Number of domains in the sample
+      N_dom_smp <- length(unique(smp_domains_vec))
+      # Number of households in sample per domain
+      smp_domains_vec_tmp <- as.numeric(smp_domains_vec)
+      n_smp <- as.vector(table(smp_domains_vec_tmp))
     }
+
     
     if (isTRUE(na.rm)) {
       indices <- !is.na(y)
@@ -60,15 +73,7 @@ direct <- function(y,
       }
        
     }
-    
   
-    # Number of households in sample
-    N_smp <- length(smp_domains_vec)
-    # Number of domains in the sample
-    N_dom_smp <- length(unique(smp_domains_vec))
-    # Number of households in sample per domain
-    smp_domains_vec_tmp <- as.numeric(smp_domains_vec)
-    n_smp <- as.vector(table(smp_domains_vec_tmp))
 
     indicator_names <- c("Mean",
                          "Head_Count",
@@ -136,16 +141,28 @@ direct <- function(y,
                      seed=seed, 
                      na.rm=na.rm)
   
+  QSR <- Quintile_Share(framework = framework,
+                        sort = sort,
+                        var=var,
+                        bootType = bootType,
+                        X = X, 
+                        totals = totals, 
+                        R=R,  
+                        seed=seed, 
+                        na.rm=na.rm)
+  
   ind <- data.frame(Domain = framework$rs, 
                     Head_Count=HCR$valueByStratum[,2], 
                     Poverty_Gap=PG$valueByStratum[,2],
-                    Gini = Gini_coeff$valueByStratum[,2])
+                    Gini = Gini_coeff$valueByStratum[,2], 
+                    Quintile_Share = QSR$valueByStratum[,2])
   
   if(var==TRUE){
     MSE <- data.frame(Domain=framework$rs, 
                       Head_Count=HCR$varByStratum[,2],
                       Poverty_Gap=PG$valueByStratum[,2],
-                      Gini = Gini_coeff$varByStratum[,2])
+                      Gini = Gini_coeff$varByStratum[,2], 
+                      Quintile_Share = QSR$varByStratum[,2])
     
     direct_out <- list(ind = ind, 
                        MSE = MSE,
