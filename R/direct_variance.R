@@ -3,64 +3,56 @@
 # Difference between indicators just in selection of getFun
 direct_variance <- function (y, 
                              weights = NULL, 
-                             #years = NULL, 
                              smp_domains = NULL, 
                              design = NULL, 
                              smp_data = NULL, 
                              indicator, 
-                             R = 100, 
+                             B = 100, 
                              bootType = c("calibrate", "naive"), 
                              X, 
                              totals = NULL, 
-                             #ciType = c("perc","norm", "basic"), 
-                             #alpha = 0.05, 
                              seed = NULL, 
-                             na.rm = FALSE, ...) 
-{
-  haveWeights <- !is.null(weights)
+                             na.rm = FALSE, ...) {
+  
+  # Domain setup - domains and if variance is calculated by domain
   rs <- indicator$strata
   byStratum <- !is.null(rs)
-  if (byStratum && is.null(smp_domains)) 
-    stop("'smp_domains' must be supplied")
-  haveDesign <- !is.null(design)
-
+  
+  
+  # Specification for y, is different to the calculation of value
   y <- smp_data[, y]
   y <- as.numeric(as.integer(y))
+  n <- length(y)
+  
+  # needs to be specified here again due to the different specification of y and
+  # thus n
+  haveWeights <- !is.null(weights)
   if (!is.null(weights)) 
     weights <- smp_data[, weights]
-
-  if (byStratum) 
-    smp_domains <- smp_data[, smp_domains]
-  if (haveDesign) 
+  if(is.null(weights)){
+    weights <- rep.int(1, n)
+  }
+  
+  # not sure how to use design but I also didnt know if we want to delete it
+  haveDesign <- !is.null(design)
+  if (haveDesign) {
     design <- smp_data[, design]
-
-  if (!is.numeric(y)) 
-    stop("'y' must be a numeric vector")
-  n <- length(y)
-  if (haveWeights && !is.numeric(weights)) {
-    stop("'weights' must be a numeric vector")
   }
-
-  if (byStratum && !is.vector(smp_domains) && !is.factor(smp_domains)) {
-    stop("'smp_domains' must be a vector or factor")
-  }
-
   if (!haveDesign) {
     design <- rep.int(1, n)
   } 
-  if (!is.numeric(R) || length(R) == 0) {
-    stop("'R' must be numeric")
+
+  
+  # error if number of iterations is not numeric
+  if (!is.numeric(B) || length(B) == 0) {
+    stop("'B' must be numeric")
   } else {
-    R <- as.integer(R[1])
+    B <- as.integer(B[1])
   }
-  #if (!is.numeric(alpha) || length(alpha) == 0) {
-  #  stop("'alpha' must be numeric")
-  #} else {
-  #  alpha <- alpha[1]
-  #} 
+
   bootType <- match.arg(bootType)
   
-  # for calibrate bootstrap
+  # if calibrate bootstrap is selected
   calibrate <- haveWeights && bootType == "calibrate"
   if (calibrate) {
     X <- as.matrix(X)
@@ -75,13 +67,17 @@ direct_variance <- function (y,
     X <- NULL
     totals <- NULL
   }
-  #ciType <- match.arg(ciType)
-
+  
+  # Define part of data set that is used in the functions for calibration
   smp_data <- data.frame(y = y)
   smp_data$weight <- weights
   smp_data$stratum <- smp_domains
-
+  
+  # definition of poverty line for HCR and PG, is only calculated once and not
+  # for every bootstrap
   pov_line <- indicator$pov_line
+  
+  # set seed for bootstrap
   if (!is.null(seed)) {
     set.seed(seed)
   } 
@@ -95,18 +91,20 @@ direct_variance <- function (y,
     fun <- getFun_HCR(indicator, byStratum)
   }
   if(class(indicator)=="PG") {
-    fun <- getFun_HCR(indicator, byStratum)
+    fun <- getFun_PG(indicator, byStratum)
   }
   if(class(indicator)=="Gini") {
     fun <- getFun_Gini(indicator, byStratum)
   }
-  
+  if(class(indicator)=="QSR"){
+    fun <- getFun_QSR(indicator, byStratum)
+  }
   bootFun <- getBootFun(calibrate, fun)
-
+  
   # actual bootstrap
   b <- clusterBoot(smp_data, 
                    bootFun, 
-                   R, 
+                   B, 
                    strata = design, 
                    #cluster = cluster, 
                    pov_line = pov_line, 
@@ -115,39 +113,22 @@ direct_variance <- function (y,
                    rs = rs, 
                    na.rm = na.rm, 
                    ...)
+  
+  # if variance is calculated by domain
   if (byStratum) {
     var <- apply(b$t, 2, var)
-   # ci <- lapply(1:length(b$t0), function(i) {
-  #    ci <- boot.ci(b, conf = 1 - alpha, type = ciType, 
-  #                  index = i)
-   #   switch(ciType, perc = ci$percent[4:5], norm = ci$normal[2:3], 
-  #           basic = ci$basic[4:5], stud = ci$student[4:5], 
-  #           bca = ci$bca[4:5])
-  #  })
-  #  ci <- do.call(rbind, ci)
-  #  colnames(ci) <- c("lower", "upper")
-
     varByStratum <- data.frame(stratum = rs, var = var[-1])
     var <- var[1]
-   # ciByStratum <- data.frame(stratum = rs, ci[-1, 
-  #                                             , drop = FALSE])
-   # ci <- ci[1, ]
   } else {
     var <- var(b$t[, 1])
-  #  ci <- boot.ci(b, conf = 1 - alpha, type = ciType)
-  #  ci <- switch(ciType, perc = ci$percent[4:5], 
-  #               norm = ci$normal[2:3], basic = ci$basic[4:5], 
-  #               stud = ci$student[4:5], bca = ci$bca[4:5])
-  #  names(ci) <- c("lower", "upper")
   }
+  
+  # preparation of return
   indicator$varMethod <- "bootstrap"
   indicator$var <- var
-  #indicator$ci <- ci
   if (byStratum) {
     indicator$varByStratum <- varByStratum
-   # indicator$ciByStratum <- ciByStratum
   }
- # indicator$alpha <- alpha
   indicator$seed <- seed
   return(indicator)
 }

@@ -1,79 +1,59 @@
 
-
-
-
 # Head Count Ratio -------------------------------------------------------------
-
-Head_Count <- function(y, 
-                       smp_data, 
-                       smp_domains = NULL, 
-                       weights = NULL, 
-                       pov_line = NULL, 
+Head_Count <- function(framework,  
                        var = TRUE, 
                        bootType = "naive", 
-                       R = NULL,
+                       B = NULL,
                        seed = NULL,
                        X = NULL, 
                        totals = NULL, 
                        na.rm=FALSE){
   
-  # Needs to be character for the variance function
-  smp_domains_chr <- smp_domains
-  weights_chr <- weights
-  
-  # logical if domains selected
-  byStratum <- !is.null(smp_domains)
-  
-  # smp_domains needs to be factor for this function
-  smp_domains <- as.factor(smp_data[, smp_domains])
-  rs <- levels(smp_domains)
-  
-  # sample size
-  n <- length(smp_data[,y])
-  #ts <- pov_line
-  if (!is.null(weights)){
-    weights <- smp_data[, weights]
-  } 
-  if (is.null(weights)){
-    weights <- weights <- rep.int(1, n)
-  } 
-    
-  # Overall HCR 
-  value <- Head_Count_value(y = smp_data[,y], 
-                            weights = weights, 
-                            pov_line = pov_line, 
+  # HCR for whole sample  
+  value <- Head_Count_value(y = framework$y_vec, 
+                            weights = framework$weights_vec, 
+                            pov_line = framework$pov_line, 
                             na.rm = na.rm)
   
   # if sample domains are given
-  if (byStratum) {
+  if (framework$byStratum) {
+    valueByStratum <- aggregate(1:framework$N_smp, list(stratum = framework$smp_domains_vec), 
+                                HCR2, y = framework$y_vec, weights = framework$weights_vec, 
+                                pov_line = framework$pov_line, na.rm = na.rm)
+    names(valueByStratum)[2] <- "Head_Count"
+    names(valueByStratum)[1] <- "Domain"
+    rs <- as.factor(as.matrix(valueByStratum[1])[,1])
     
-    valueByStratum <- aggregate(1:n, list(stratum = smp_domains), 
-                                HCR2, y = smp_data[,y], weights = weights, 
-                                pov_line = pov_line, na.rm = na.rm)
-    names(valueByStratum)[2] <- "value"
   } else {
     valueByStratum <- NULL
   }
   
   res <- list(value = value, 
               valueByStratum = valueByStratum, 
-              strata = rs, 
-              pov_line = pov_line)
+              strata = framework$rs, 
+              pov_line = framework$pov_line)
   
   class(res) <- c("HCR")
   
   if (var == TRUE) {
-    res <- direct_variance(y=y, 
-                        weights=weights_chr, 
-                        smp_data=smp_data,  
-                        smp_domains = smp_domains_chr, 
-                        indicator=res,
-                        bootType=bootType, 
-                        R = R,
-                        seed = seed,
-                        X = X, 
-                        totals = totals,
-                        na.rm=na.rm)
+  
+    res <- direct_variance(# is a character here and is converted to numeric 
+                           # in the variance function 
+                           y=framework$y,  
+                           # is a character here and is converted to numeric
+                           # in the variance function 
+                           weights=framework$weights, 
+                           # needs to be given such that above arguments can
+                           # be converted
+                           smp_data=framework$smp_data,  
+                           smp_domains = framework$smp_domains_vec, 
+                           indicator=res,
+                           bootType=bootType, 
+                           B = B,
+                           seed = seed,
+                           X = X, 
+                           totals = totals,
+                           na.rm=na.rm)
   } 
   return(res)
 }
@@ -84,17 +64,6 @@ Head_Count_value <- function(y,
                              weights, 
                              pov_line, 
                              na.rm){
-  if (is.null(weights)) {
-    weights <- rep.int(1, length(y))
-  } 
-  if (isTRUE(na.rm)) {
-    indices <- !is.na(y)
-    y <- y[indices]
-    weights <- weights[indices]
-  }
-  else if (any(is.na(y))) 
-    return(NA)
-  
   sw <- sum(weights)
   sapply(pov_line, function(t) sum(weights[y < t]))/sw*100
 }
@@ -119,8 +88,6 @@ getFun_HCR <- function (indicator, byStratum)
 {
   if (byStratum) {
     function(x, pov_line, rs, na.rm) {
-      
-      #pov_line <- p * weightedMedian(x$y, x$weight)
       value <- Head_Count_value(x$y, x$weight, pov_line, 
                                 na.rm = na.rm)
       valueByStratum <- sapply(rs, function(r, x, t) {
@@ -132,7 +99,6 @@ getFun_HCR <- function (indicator, byStratum)
   }
   else {
     function(x, pov_line, rs, na.rm) {
-      #pov_line <- p * weightedMedian(x$y, x$weight)
       value <- Head_Count_value(x$y, x$weight, pov_line, 
                                 na.rm = na.rm)
     }
@@ -142,73 +108,52 @@ getFun_HCR <- function (indicator, byStratum)
 
 # Poverty_Gap ------------------------------------------------------------------
 
-Poverty_Gap <- function(y, 
-                       smp_data, 
-                       smp_domains = NULL, 
-                       weights = NULL, 
-                       pov_line = NULL, 
-                       var = TRUE, 
-                       bootType = "naive", 
-                       R = NULL,
-                       seed = NULL,
-                       X = NULL, 
-                       totals = NULL, 
-                       na.rm=FALSE){
+Poverty_Gap <- function(framework, 
+                        var = TRUE, 
+                        bootType = "naive", 
+                        B = NULL,
+                        seed = NULL,
+                        X = NULL, 
+                        totals = NULL, 
+                        na.rm=FALSE){
   
-  # Needs to be character for the variance function
-  smp_domains_chr <- smp_domains
-  weights_chr <- weights
-  
-  # logical if domains selected
-  byStratum <- !is.null(smp_domains)
-  
-  # smp_domains needs to be factor for this function
-  smp_domains <- as.factor(smp_data[, smp_domains])
-  rs <- levels(smp_domains)
-  
-  # sample size
-  n <- length(smp_data[,y])
-  #ts <- pov_line
-  
-  if (!is.null(weights)){
-    weights <- smp_data[, weights]
-  } 
-  if (is.null(weights)){
-    weights <- rep.int(1, n)
-  } 
-  
-  # Overall PG 
-  value <- Poverty_Gap_value(y = smp_data[,y], 
-                            weights = weights, 
-                            pov_line = pov_line, 
-                            na.rm = na.rm)
+  # PG using complete sample
+  value <- Poverty_Gap_value(y = framework$y_vec, 
+                             weights = framework$weights_vec, 
+                             pov_line = framework$pov_line, 
+                             na.rm = na.rm)
   
   # if sample domains are given
-  if (byStratum) {
+  if (framework$byStratum) {
     
-    valueByStratum <- aggregate(1:n, list(stratum = smp_domains), 
-                                PG2, y = smp_data[,y], weights = weights, 
-                                pov_line = pov_line, na.rm = na.rm)
-    names(valueByStratum)[2] <- "value"
+    valueByStratum <- aggregate(1:framework$N_smp, list(stratum = framework$smp_domains_vec), 
+                                PG2, y = framework$y_vec, weights = framework$weights_vec, 
+                                pov_line = framework$pov_line, na.rm = na.rm)
+    names(valueByStratum)[2] <- "Poverty_Gap"
+    names(valueByStratum)[1] <- "Domain"
+    rs <- as.factor(as.matrix(valueByStratum[1])[,1])
+    
   } else {
     valueByStratum <- NULL
   }
   
   res <- list(value = value, 
               valueByStratum = valueByStratum, 
-              strata = rs, 
-              pov_line = pov_line)
+              strata = framework$rs, 
+              pov_line =  framework$pov_line)
   
   class(res) <- c("PG")
   
   if (var == TRUE) {
-    res <- direct_variance(y=y, 
-                           weights=weights_chr, 
-                           smp_data=smp_data,  
-                           smp_domains = smp_domains_chr, 
+    res <- direct_variance(# is a character here
+                           y=framework$y, 
+                           # is a character here
+                           weights=framework$weights, 
+                           smp_data=framework$smp_data,  
+                           smp_domains = framework$smp_domains_vec, 
                            indicator=res,
                            bootType=bootType, 
-                           R = R,
+                           B = B,
                            seed = seed,
                            X = X, 
                            totals = totals,
@@ -220,19 +165,9 @@ Poverty_Gap <- function(y,
 
 # Calculate weighted HCR - if weights = NULL, unweighted -----------------------
 Poverty_Gap_value <- function(y, 
-                             weights, 
-                             pov_line, 
-                             na.rm){
-  if (is.null(weights)) {
-    weights <- rep.int(1, length(y))
-  } 
-  if (isTRUE(na.rm)) {
-    indices <- !is.na(y)
-    y <- y[indices]
-    weights <- weights[indices]
-  }
-  else if (any(is.na(y))) 
-    return(NA)
+                              weights, 
+                              pov_line, 
+                              na.rm){
   
   sw <- sum(weights)
   sapply(pov_line, function(t) sum(weights*(y < pov_line) * (pov_line - y) / pov_line))/sw*100
@@ -241,15 +176,15 @@ Poverty_Gap_value <- function(y,
 
 # Function to calculate sample HCR ---------------------------------------------
 PG2 <- function(i, 
-                 y, 
-                 weights, 
-                 pov_line = pov_line, 
-                 na.rm) {
+                y, 
+                weights, 
+                pov_line = pov_line, 
+                na.rm) {
   
-   Poverty_Gap_value(y = y[i], 
-                   weights = weights[i], 
-                   pov_line = pov_line, 
-                   na.rm = na.rm)
+  Poverty_Gap_value(y = y[i], 
+                    weights = weights[i], 
+                    pov_line = pov_line, 
+                    na.rm = na.rm)
 }
 
 
@@ -259,98 +194,71 @@ getFun_PG <- function (indicator, byStratum)
   if (byStratum) {
     function(x, pov_line, rs, na.rm) {
       
-      #pov_line <- p * weightedMedian(x$y, x$weight)
       value <- Poverty_Gap_value(x$y, x$weight, pov_line, 
-                                na.rm = na.rm)
+                                 na.rm = na.rm)
       valueByStratum <- sapply(rs, function(r, x, t) {
         i <- x$stratum == r
-        Head_Count_value(x$y[i], x$weight[i], t, na.rm = na.rm)
+        Poverty_Gap_value(x$y[i], x$weight[i], t, na.rm = na.rm)
       }, x = x, t = pov_line)
       c(value, valueByStratum)
     }
   }
   else {
     function(x, pov_line, rs, na.rm) {
-      #pov_line <- p * weightedMedian(x$y, x$weight)
+
       value <- Poverty_Gap_value(x$y, x$weight, pov_line, 
-                                na.rm = na.rm)
+                                 na.rm = na.rm)
     }
   }
 }
 
 
+# Gini coefficient -------------------------------------------------------------
 
-
-# Gini coeffcient --------------------------------------------------------------
-Gini <- function(y, 
-                 smp_data, 
-                 smp_domains, 
-                 weights, 
+Gini <- function(framework, 
                  sort = NULL,  
                  var = TRUE, 
                  bootType = c("calibrate", "naive"), 
-                 R = NULL,
+                 B = NULL,
                  seed = NULL,
                  X, 
                  totals = NULL,
                  na.rm=FALSE){
   
-  # logical if sample domains are present
-  byStratum <- !is.null(smp_domains)
-  
-  
-  # needs to be character for variance function
-  smp_domains_chr <- smp_domains
-  
-  # needs to be factor for indicator calculation
-  smp_domains <- as.factor(smp_data[, smp_domains])
-  rs <- levels(smp_domains)
-  
-  # needs to be character for variance function
-  y_chr <- y
-  
-  #  needs to be vector for value calculation
-  y <- smp_data[, y]
-  n <- length(y)
-  
-  weights_chr <- weights
-  
-  if (!is.null(weights)){
-    weights <- smp_data[, weights]
-  } 
-  if (!is.null(sort)) {
-    sort <- smp_data[, sort]
-  }
-  
-  #  overall value
-  value <- Gini_value(y = y, weights = weights, sort= sort, na.rm = na.rm)
+  #  Gini using full sample
+  value <- Gini_value(y = framework$y_vec, weights = framework$weights_vec, 
+                      sort = sort, na.rm = na.rm)
   
   # if smp_domains are present
-  if (byStratum) {
-    valueByStratum <- aggregate(1:n, list(stratum = smp_domains), Gini2, y = y, 
-                                weights = weights, sort = sort, na.rm = na.rm)
-    names(valueByStratum)[ncol(valueByStratum)] <- "value"
-    rs <- levels(smp_domains)
+  if (framework$byStratum) {
+    valueByStratum <- aggregate(1:framework$N_smp, list(stratum = framework$smp_domains_vec), 
+                                Gini2, y = framework$y_vec, 
+                                weights = framework$weights_vec, sort = sort, na.rm = na.rm)
+    names(valueByStratum)[ncol(valueByStratum)] <- "Gini"
+    names(valueByStratum)[1] <- "Domain"
+    rs <- as.factor(as.matrix(valueByStratum[1])[,1])
   } else {
-    valueByStratum <- rs <- NULL
+    valueByStratum <- NULL
   }
   res <- list(value = value, valueByStratum = valueByStratum, 
-              strata = rs)
+              strata = framework$rs)
   
   class(res) <- c("Gini")
   
   if(var == TRUE){
-    res <- direct_variance(y = y_chr, 
-                        weights=weights_chr, 
-                        smp_data=smp_data,  
-                        smp_domains = smp_domains_chr, 
-                        indicator=res, 
-                        bootType=bootType, 
-                        R = R,
-                        seed = seed,
-                        X = X, 
-                        totals = totals, 
-                        na.rm =na.rm)
+    res <- direct_variance(# here a character
+                           y = framework$y, 
+                           # here a character
+                           weights=framework$weights, 
+                           smp_data=framework$smp_data,  
+                           smp_domains = framework$smp_domains_vec, 
+                           indicator=res, 
+                           bootType=bootType, 
+                           B = B,
+                           seed = seed,
+                           X = X, 
+                           totals = totals, 
+                           na.rm =na.rm)
     
   }
   
@@ -360,27 +268,15 @@ Gini <- function(y,
 }
 
 
-Gini_value <- function (y, weights = NULL, sort = NULL, na.rm = FALSE) 
-{
-  if (isTRUE(na.rm)) {
-    indices <- !is.na(y)
-    y <- y[indices]
-    if (!is.null(weights)) 
-      weights <- weights[indices]
-    if (!is.null(sort)) 
-      sort <- sort[indices]
-  }
-  else if (any(is.na(y))) 
-    return(NA)
+Gini_value <- function (y, weights = NULL, sort = NULL, na.rm = FALSE) {
+
   order <- if(is.null(sort)){
     order(y)
   } else {
     order(y, sort)
   }
   y <- y[order]
-  if (is.null(weights)){
-    weights <- rep.int(1, length(y))
-  } else {
+  if (!is.null(weights)){
     weights <- weights[order]
   }
   wy <- weights * y
@@ -413,77 +309,48 @@ getFun_Gini <- function (indicator, byStratum)
   }
 }
 
+# Quintile Share Ratio ---------------------------------------------------------
 
-# yome Quintile Share Ratio --------------------------------------------------
+Quintile_Share <- function(framework, 
+                           sort = NULL, 
+                           var = NULL, 
+                           bootType = c("calibrate", "naive"), 
+                           B = NULL,
+                           seed = NULL,
+                           X, 
+                           totals = NULL,
+                           na.rm = FALSE, ...) {
 
-Quintile_Share <- function(y, 
-                        weights = NULL, 
-                        sort = NULL, 
-                        #years = NULL, 
-                        smp_domains = NULL, 
-                        #design = NULL, 
-                        #cluster = NULL, 
-                        smp_data = NULL, 
-                        var = NULL, 
-                        bootType = c("calibrate", "naive"), 
-                        R = NULL,
-                        seed = NULL,
-                        X, 
-                        totals = NULL,
-                        #alpha = 0.05, 
-                        na.rm = FALSE, ...) {
-  byStratum <- !is.null(smp_domains)
-  y_chr <- y  
-  y <- smp_data[, y]
-    if (!is.null(weights))
-      weights_chr <- weights
-      weights <- smp_data[, weights]
-    if (!is.null(sort)) 
-      sort <- smp_data[, sort]
-    if (byStratum)
-      smp_domains_chr <-  smp_domains
-      smp_domains <- smp_data[, smp_domains]
-
-  n <- length(y)
-  if (is.null(weights)) 
-    weights <- weights <- rep.int(1, n)
-  else if (!is.numeric(weights)) 
-    stop("'weights' must be a numeric vector")
-  if (!is.null(sort) && !is.vector(sort) && !is.ordered(sort)) {
-    stop("'sort' must be a vector or ordered factor")
-  }
-
-  if (byStratum) {
-    if (!is.vector(smp_domains) && !is.factor(smp_domains)) {
-      stop("'smp_domains' must be a vector or factor")
-    }
-    else smp_domains <- as.factor(smp_domains)
-  }
-
-
-    value <- Quintile_Share_value(y, weights, sort, na.rm = na.rm)
-    
-  if (byStratum) {
-
-    valueByStratum <- aggregate(1:n, list(stratum = smp_domains), qrR, 
-                                y = y, weights = weights, 
+  
+  # Quintile Share Ratio using full sample
+  value <- Quintile_Share_value(x=framework$y_vec, weights=framework$weights_vec, 
                                 sort = sort, na.rm = na.rm)
-    names(valueByStratum)[ncol(valueByStratum)] <- "value"
-    rs <- levels(smp_domains)
+  
+  if (framework$byStratum) {
+    
+    valueByStratum <- aggregate(1:framework$N_smp, list(stratum = framework$smp_domains_vec), qrR, 
+                                y = framework$y_vec, weights = framework$weights_vec, 
+                                sort = sort, na.rm = na.rm)
+    names(valueByStratum)[ncol(valueByStratum)] <- "Quintile_Share"
+    names(valueByStratum)[1] <- "Domain"
+    rs <- as.factor(as.matrix(valueByStratum[1])[,1])
+  } else {
+    valueByStratum <- rs <- NULL
   }
-  else valueByStratum <- rs <- NULL
   res <- list(value = value, valueByStratum = valueByStratum, 
-                strata = rs)
+              strata = framework$rs)
   
   class(res) <- c("QSR")
   if (var==TRUE) {
-    res <- direct_variance(y = y_chr, 
-                           weights=weights_chr, 
-                           smp_data=smp_data,  
-                           smp_domains = smp_domains_chr, 
+    res <- direct_variance(# here a character
+                           y = framework$y, 
+                           # here a character
+                           weights=framework$weights, 
+                           smp_data=framework$smp_data,  
+                           smp_domains = framework$smp_domains_vec, 
                            indicator=res, 
                            bootType=bootType, 
-                           R = R,
+                           B = B,
                            seed = seed,
                            X = X, 
                            totals = totals, 
@@ -495,30 +362,14 @@ qrR <- function(i, y, weights, sort, na.rm) {
   Quintile_Share_value(y[i], weights[i], sort[i], na.rm)
 }
 
-Quintile_Share_value <- function (x, weights = NULL, sort = NULL, na.rm = FALSE) 
-{
-  if (isTRUE(na.rm)) {
-    indices <- !is.na(x)
-    x <- x[indices]
-    if (!is.null(weights)) 
-      weights <- weights[indices]
-    if (!is.null(sort)) 
-      sort <- sort[indices]
-  }
-  else if (any(is.na(x))) 
-    return(NA)
-  if (is.null(weights)) {
-    weights <- rep.int(1, length(x))
-  }
+Quintile_Share_value <- function (x, weights = NULL, sort = NULL, na.rm = FALSE){
+
   order <- if (is.null(sort)) 
     order(x)
   else order(x, sort)
   x <- x[order]
   weights <- weights[order]
   
-  #q <- incQuintile(x, weights, sort)
-  #iq1 <- x <= q[1]
-  #iq4 <- x > q[2]
   iq1 <- x <= weightedQuantile(x, weights, probs = 0.2, sorted = TRUE, 
                                na.rm = na.rm)
   
@@ -585,8 +436,6 @@ weightedQuantile <- function (x, weights = NULL, probs = seq(0, 1, 0.25), sorted
   })
   return(unname(q))
 }
-
-
 
 
 getFun_QSR <- function (indicator, byStratum) 
