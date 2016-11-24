@@ -106,7 +106,8 @@
 #' @export
 #' @import nlme
 #' @import parallelMap
-#' @importFrom parallel detectCores 
+#' @importFrom parallel detectCores
+#' @importFrom laeken incQuintile 
 #' @importFrom stats as.formula dnorm lm median model.matrix na.omit optimize 
 #' qnorm quantile residuals rnorm sd
 #' @importFrom utils flush.console

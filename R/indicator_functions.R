@@ -22,8 +22,14 @@ pgap_function <- function(y, pov_line) {
 
 # Income Quintile Share Ratio
 qsr_function <- function(y) {
-  sum(y[(y > quantile(y,0.8,type = 2))]) / sum(y[(y <= quantile(y,0.2,type = 2))])
-}
+  #sum(y[(y > quantile(y,0.8,type = 2))]) / sum(y[(y <= quantile(y,0.2,type = 2))])
+  weights <- rep.int(1, length(x))
+  q <- incQuintile(x, weights)
+  iq1 <- x <= q[1]
+  iq4 <- x > q[2]
+  (sum(weights[iq4] * x[iq4])/sum(weights[iq4]))/(sum(weights[iq1] * 
+                                                           x[iq1])/sum(weights[iq1]))
+  }
 
 #TODO REMOVE WHEN DIRECT FINISHED
 # qsr_function2 <- function(y) {
