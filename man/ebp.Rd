@@ -6,7 +6,8 @@
 \usage{
 ebp(fixed, pop_data, pop_domains, smp_data, smp_domains, L, pov_line = NULL,
   transformation = "box.cox", interval = c(-1, 2), MSE = FALSE,
-  B = NULL, parallel_mode = "local", cpus = 1, custom_indicator = NULL,
+  B = NULL, parallel_mode = ifelse(grepl("windows", .Platform$OS.type, ),
+  "socket", "multicore"), cpus = 1, custom_indicator = NULL,
   na.rm = FALSE)
 }
 \arguments{
