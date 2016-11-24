@@ -50,7 +50,7 @@ estimators <- function(object, ...) UseMethod("estimators")
 #' @examples
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
-#' data("eusilcA_pop")
+#' data("eusilcA_smp")
 #'
 #' # generate emdi object with additional indicators; here via function ebp()
 #' set.seed(100); emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 
