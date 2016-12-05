@@ -3,7 +3,7 @@
 #' Function \code{direct} estimates indicators only based on sample information. 
 #' The variance is estimated via a naive or calibrated bootstrap. The estimation
 #' is adapted from the estimation of direct indicators in package 
-#' \pkg{\link[laeken]}. 
+#' laeken. 
 #'
 #' @param y a character indicating the variable that is used for estimating the 
 #' indicators.
@@ -84,9 +84,14 @@ direct <- function(y,
                    na.rm=FALSE)
  {
   
+  
+  # Save call 
+  call <- match.call()
+  
   framework_dir <- function(y, smp_data, smp_domains, weights, sort, 
                             pov_line, na.rm){
     
+
     
     # two versions of y, one vector version and one character version (original)
     # for variance estimation
@@ -231,12 +236,16 @@ direct <- function(y,
   
     direct_out <- list(ind = ind, 
                        MSE = MSE,
-                       framework=framework)
+                       framework=framework, 
+                       call = call)
   } else {
     direct_out <- list(ind = ind, 
                      MSE = NULL,
-                     framework=framework)
+                     framework=framework,
+                     call = call)
   }
+  
+  class(direct_out) <- c("emdi", "direct")
   return(direct_out)
 } 
   
