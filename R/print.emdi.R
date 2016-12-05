@@ -18,52 +18,64 @@
 
 print.emdi <- function(x, ...) {
 
-  cat("Empirical Best Prediction\n")
-  cat("\n")
-  cat("Call:\n ")
-  print(x$call)
-  cat("\n")
-  cat("Out-of-sample domains: ", x$framework$N_dom_unobs, "\n")
-  cat("In-sample domains: ", x$framework$N_dom_smp, "\n")
-
-  if (x$transformation == "box.cox") {
-    transform_method <- data.frame(Transformation  = x$transformation,
-                                   Method          = x$method,
-                                   Optimal_lambda  = x$transform_param$optimal_lambda,
-                                   Shift_parameter = round(x$transform_param$shift_par,3),
-                                   row.names       = ""
-    )
-  } else if (x$transformation == "log") {
-    transform_method <- data.frame(Transformation  = x$transformation,
-                                   Shift_parameter = round(x$transform_param$shift_par,3),
-                                   row.names       = ""
-    )
+  
+  if(any(class(x)=="model")){
+    cat("Empirical Best Prediction\n")
+    cat("\n")
+    cat("Call:\n ")
+    print(x$call)
+    cat("\n")
+    cat("Out-of-sample domains: ", x$framework$N_dom_unobs, "\n")
+    cat("In-sample domains: ", x$framework$N_dom_smp, "\n")
+    
+    if (x$transformation == "box.cox") {
+      transform_method <- data.frame(Transformation  = x$transformation,
+                                     Method          = x$method,
+                                     Optimal_lambda  = x$transform_param$optimal_lambda,
+                                     Shift_parameter = round(x$transform_param$shift_par,3),
+                                     row.names       = ""
+      )
+    } else if (x$transformation == "log") {
+      transform_method <- data.frame(Transformation  = x$transformation,
+                                     Shift_parameter = round(x$transform_param$shift_par,3),
+                                     row.names       = ""
+      )
+    }
+    else if (x$transformation == "no") {
+      transform_method <- NULL
+      #                      data.frame(Transformation  = x$transformation,
+      #                                 Method          = "NULL",
+      #                                 Optimal_lambda  = "NULL",
+      #                                 Shift_parameter = "NULL",
+      #                                 row.names       = ""
+      #                                 )
+    }
+    
+    cat("\n")
+    if(is.null(transform_method)){
+      cat("Transformation: No transformation \n")
+    } else {
+      cat("Transformation:\n")
+      print(transform_method)
+    }
+    cat("\n")
+    cat("Model fit:\n")
+    cat("For model fit lme methods are applicable to emdix$model \n")
+    cat("where transformed_data equals smp_data transformed by function \n")
+    cat("data_transformation using above given transformation and lambda \n")
+    cat("and where fixed/list(fixed) equals ")
+    print(x$fixed)
+    cat("\n")
   }
-  else if (x$transformation == "no") {
-    transform_method <- NULL
-    #                      data.frame(Transformation  = x$transformation,
-    #                                 Method          = "NULL",
-    #                                 Optimal_lambda  = "NULL",
-    #                                 Shift_parameter = "NULL",
-    #                                 row.names       = ""
-    #                                 )
+  if(any(class(x)=="direct")){
+    cat("Direct estimation\n")
+    cat("\n")
+    cat("Call:\n ")
+    print(x$call)
+    cat("\n")
+    cat("In-sample domains: ", x$framework$N_dom_smp, "\n")
   }
   
-  cat("\n")
-  if(is.null(transform_method)){
-    cat("Transformation: No transformation \n")
-  } else {
-    cat("Transformation:\n")
-    print(transform_method)
-  }
-  cat("\n")
-  cat("Model fit:\n")
-  cat("For model fit lme methods are applicable to emdix$model \n")
-  cat("where transformed_data equals smp_data transformed by function \n")
-  cat("data_transformation using above given transformation and lambda \n")
-  cat("and where fixed/list(fixed) equals ")
-  print(x$fixed)
-  cat("\n")
 
 }
 

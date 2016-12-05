@@ -68,7 +68,7 @@ of components of objects of class "emdi".
 Function \code{direct} estimates indicators only based on sample information. 
 The variance is estimated via a naive or calibrated bootstrap. The estimation
 is adapted from the estimation of direct indicators in package 
-\pkg{\link[laeken]}.
+laeken.
 }
 \details{
 The set of predefined indicators includes the mean, median, four further quantiles
