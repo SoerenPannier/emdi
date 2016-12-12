@@ -33,10 +33,11 @@
 #' @param seed an integer to set the seed for the random number generator. Random 
 #' number generation is used in the bootstrap approach. If no seed is set, seed
 #' is chosen randomly.
-#' @param X a matrix including calibration variables if the calibrated bootstrap
-#' is chosen. Defaults to NULL.
-#' @param totals a numeric vector providing the population totals. Defaults to 
-#' \code{NULL}. In this case, the sampling weights are used to calculate the totals.
+#' @param X a numeric matrix including calibration variables if the calibrated 
+#' bootstrap is chosen. Defaults to NULL.
+#' @param totals a numeric vector providing the population totals if the calibrated 
+#' bootstrap is chosen.. Defaults to \code{NULL}. In this case, the sampling 
+#' weights are used to calculate the totals.
 #' @param na.rm if TRUE, observations with \code{NA} values are deleted from the 
 #' sample data. Defaults to \code{FALSE}. 
 #' @return An object of class "emdi" that provides direct estimators for regional
@@ -81,107 +82,30 @@ direct <- function(y,
                    seed = NULL,
                    X = NULL, 
                    totals = NULL, 
-                   na.rm=FALSE)
- {
+                   na.rm=FALSE){
   
   
-  # Save call 
+  direct_check1(y = y, smp_data = smp_data)
+  
+  direct_check2(smp_domains = smp_domains, weights = weights, sort = sort, 
+                pov_line = pov_line, var = var, bootType = bootType, 
+                B = B, X = X, totals = totals)
+
+  # Save call ------------------------------------------------------------------
   call <- match.call()
   
-  framework_dir <- function(y, smp_data, smp_domains, weights, sort, 
-                            pov_line, na.rm){
-    
-
-    
-    # two versions of y, one vector version and one character version (original)
-    # for variance estimation
-    # we force sample data, in laeken data can be NULL
-    y_vec <- smp_data[, y]
-    # Number of households in sample
-    N_smp <- length(y_vec)
-    
-    
-    
-    if (!is.null(weights)) {
-      weights_vec <- smp_data[, weights]
-    } else if (is.null(weights)) {
-      weights_vec <- rep.int(1, N_smp)
-    }
+  # Data manipulation and notational framework ---------------------------------
   
-    if (!is.null(sort)) {
-      sort <- smp_data[, sort]
-    }
-    byStratum <- !is.null(smp_domains)
-    if (byStratum) {
-      smp_domains_vec <- as.factor(smp_data[, smp_domains])
-      smp_domains_vec <- droplevels(smp_domains_vec)
-      rs <- levels(smp_domains_vec)
-      # Number of domains in the sample
-      N_dom_smp <- length(unique(smp_domains_vec))
-      # Number of households in sample per domain
-      smp_domains_vec_tmp <- as.numeric(smp_domains_vec)
-      n_smp <- as.vector(table(smp_domains_vec_tmp))
-    }
-
-    
-    if (isTRUE(na.rm)) {
-      indices <- !is.na(y)
-      y_vec <- y_vec[indices]
-      if (!is.null(weights)) 
-        weights_vec <- weights_vec[indices]
-      if (!is.null(sort)) 
-        sort <- sort[indices]
-    } else if (any(is.na(y))){
-      return(NA)
-    } 
-    
-    
-    if(is.null(pov_line)){
-      if(is.null(weights)){
-        pov_line <- 0.6*median(y_vec)
-      } else if (!is.null(weights)){
-        pov_line <- 0.6*weightedMedian(y_vec, weights_vec)
-      }
-       
-    }
+  # The function framework_dir can be found in script framework_direct.R
+  framework <- framework_dir(y = y,
+                             smp_data = smp_data, 
+                             smp_domains = smp_domains, 
+                             weights = weights, 
+                             sort = sort, 
+                             pov_line = pov_line, 
+                             na.rm = na.rm)
   
-
-    indicator_names <- c("Mean",
-                         "Head_Count",
-                         "Poverty_Gap",
-                         "Quintile_Share",
-                         "Gini",
-                         "Quantile_10",
-                         "Quantile_25",
-                         "Median",
-                         "Quantile_75",
-                         "Quantile_90"
-                         )
-    
-    return(list(smp_data         = smp_data,
-                y                = y, 
-                y_vec            = y_vec,
-                weights          = weights,
-                weights_vec      = weights_vec,
-                smp_domains_vec  = smp_domains_vec,
-                smp_domains      = smp_domains,
-                byStratum        = byStratum,
-                rs               = rs,
-                N_smp            = N_smp,
-                N_dom_smp        = N_dom_smp,
-                n_smp            = n_smp,
-                #indicator_list   = indicator_list,
-                indicator_names  = indicator_names,
-                pov_line         = pov_line 
-    )
-    )
-    
-  }
-  framework <- framework_dir(y=y, smp_data=smp_data, smp_domains=smp_domains, 
-                             weights=weights, sort=sort, pov_line=pov_line, 
-                             na.rm=na.rm)
-  
-  # Call single indicators
+  # Call single indicators -----------------------------------------------------
   HCR <- Head_Count(framework = framework,
                     var=var,
                     bootType = bootType,
@@ -222,15 +146,15 @@ direct <- function(y,
   
   
   ind <- data.frame(Domain = framework$rs, 
-                    Head_Count=HCR$valueByStratum[,2], 
-                    Poverty_Gap=PG$valueByStratum[,2],
+                    Head_Count = HCR$valueByStratum[,2], 
+                    Poverty_Gap = PG$valueByStratum[,2],
                     Gini = Gini_coeff$valueByStratum[,2], 
                     Quintile_Share = QSR$valueByStratum[,2])
   
   if(var==TRUE){
-    MSE <- data.frame(Domain=framework$rs, 
-                      Head_Count=HCR$varByStratum[,2],
-                      Poverty_Gap=PG$varByStratum[,2],
+    MSE <- data.frame(Domain = framework$rs, 
+                      Head_Count = HCR$varByStratum[,2],
+                      Poverty_Gap = PG$varByStratum[,2],
                       Gini = Gini_coeff$varByStratum[,2], 
                       Quintile_Share = QSR$varByStratum[,2])
   

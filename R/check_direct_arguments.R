@@ -1,0 +1,65 @@
+# This script contains the checks of arguments that have be done for the 
+# direct estimation function.
+
+
+# Function called in ebp
+direct_check1 <- function(y, 
+                          smp_data){
+  
+  
+  if(!exists("y") || is.null(y)  || !class(y)=="character"){
+    stop('y must be a character indicating the variable that is used for 
+         estimating the indicators. See also help(direct).')
+  } 
+  if(!exists("smp_data") || !is.data.frame(smp_data)){
+    stop('Smp_data must be a data frame containing the variable y.
+         See also help(direct).')
+  }
+}
+
+
+direct_check2 <- function(smp_domains = NULL, 
+                          weights = NULL, 
+                          sort = NULL,
+                          pov_line = NULL,
+                          var = FALSE, 
+                          bootType = "naive", 
+                          B = NULL,
+                          X = NULL, 
+                          totals = NULL){
+  
+  if(!exists("smp_domains") || !class(smp_domains)=="character"){
+    stop('Smp_domains must be a character containing the name of a numeric or 
+          factor variable indicating domains in the sample data.
+          See also help(direct).')
+  } 
+  if(!exists("weights") || !class(weights)=="character"){
+    stop('Weights must be a character containing the name of a variable for the 
+          sampling weights in the sample data. See also help(direct).')
+  }
+  if(!is.null(sort) && !is.vector(sort) && !is.ordered(sort)){
+    stop('Sort must be a character containing the name of a variable that should 
+          be used to sort the data.')
+  }
+  if(!is.null(pov_line) && !is.numeric(pov_line)){
+    stop('Pov_line needs to be a number. If it is NULL 60% of the median
+         is selected as poverty line.')
+  }
+  if(class(var) != "logical"){
+    stop("Var must be a logical value. Set Var to TRUE or FALSE. See also
+         help(direct).")
+  }
+  if(var==TRUE && !(bootType == "naive" || bootType == "calibrate")){
+    stop('If var is set to TRUE, bootType "naive" or "calibrate" needs to be 
+         selected. See also help(direct).')
+  }
+  if(var==TRUE && !is.numeric(B)){
+    stop('If var is set to TRUE, a numeric value for the number of bootstrap
+         sample needs to be chosen. See also help(direct).')
+  }
+  if(var==TRUE && bootType == "calibrate" && !is.numeric(X)){
+    stop("X must be a numeric matrix.")
+  } 
+    
+  
+}

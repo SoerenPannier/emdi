@@ -47,11 +47,12 @@ bootstrap variance. Defaults to \code{NULL}.}
 number generation is used in the bootstrap approach. If no seed is set, seed
 is chosen randomly.}
 
-\item{X}{a matrix including calibration variables if the calibrated bootstrap
-is chosen. Defaults to NULL.}
+\item{X}{a numeric matrix including calibration variables if the calibrated 
+bootstrap is chosen. Defaults to NULL.}
 
-\item{totals}{a numeric vector providing the population totals. Defaults to 
-\code{NULL}. In this case, the sampling weights are used to calculate the totals.}
+\item{totals}{a numeric vector providing the population totals if the calibrated 
+bootstrap is chosen.. Defaults to \code{NULL}. In this case, the sampling 
+weights are used to calculate the totals.}
 
 \item{na.rm}{if TRUE, observations with \code{NA} values are deleted from the 
 sample data. Defaults to \code{FALSE}.}

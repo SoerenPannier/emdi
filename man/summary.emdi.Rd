@@ -2,13 +2,14 @@
 % Please edit documentation in R/summary.emdi.R
 \name{summary.emdi}
 \alias{summary.emdi}
-\title{Summarize an emdiObjecz}
+\title{Summarize an emdiObject}
 \usage{
 \method{summary}{emdi}(object, ...)
 }
 \arguments{
 \item{object}{an object of type "emdi", representing point and MSE
-estimates.}
+estimates. Objects differ depending on the estimation method: direct 
+vs. model-based.}
 
 \item{...}{additional arguments that are not used in this method}
 }
@@ -17,33 +18,33 @@ an object of type "summary.emdi" with following
 components:
 \item{call}{a list containing an image of the function call that produced the
             object.}
-\item{coeff_determ}{a data frame with colums R2, ICC, Marginal_R2 and
-                    Conditional_R2 representing the coefficient of
+\item{coeff_determ}{if model-based estimation, a data frame with colums R2, 
+                    ICC, Marginal_R2 and Conditional_R2 representing the coefficient of
                     determination of a linear model without random effect,
                     the intracluster correlation and two R2 measures
                     for linear mixed models from the \pkg{MuMin} package
                     obtained by function \code{\link{r.squaredGLMM}}.}
 \item{in_smp}{number of in-sample domains equivalent to \code{N_dom_smp}
              (see \code{\link{emdiObject}}).}
-\item{normality}{a data frame with columns Skewness, Kurtosis,
-                 Shapiro_W and Shapiro_p where the latter two represent
+\item{normality}{if model-based estimation, a data frame with columns Skewness, 
+                 Kurtosis, Shapiro_W and Shapiro_p where the latter two represent
                  the results of a Shapiro-Wilks-Test for normality.
                  Rows correspond to Pearson residuals and random effects
                  of the nested error regression model. The functions
                  \code{\link{skewness}} and \code{\link{kurtosis}} are from
                  the package \pkg{moments}. Details for the Shapiro-Wilks-Test
                  are provided by \code{\link{shapiro.test}}.}
-\item{out_of_smp}{number of out-of-sample domains equivalent to
+\item{out_of_smp}{if model-based estimation, number of out-of-sample domains equivalent to
                  \code{N_dom_unobs} (see \code{\link{emdiObject}}).}
-\item{size_dom}{a data frame with rows Sample_domains and Population_domains
+\item{size_dom}{a data frame with rows Sample_domains and Population_domains (if model-based estimation)
 representing summary statisitics of the sample sizes across domains of sample
 and population data respectively.}
-\item{size_pop}{number of units in population equivalent to \code{N_pop}
+\item{size_pop}{if model-based estimation, number of units in population equivalent to \code{N_pop}
 (see \code{\link{emdiObject}}).}
 \item{size_smp}{number of units in sample equivalent to \code{N_smp}
 (see \code{\link{emdiObject}}).}
-\item{transform}{a data frame with columns Transformation, Method,
-                 Optimal_lambda and Shift_parameter representing the
+\item{transform}{if model-based estimation, a data frame with columns 
+                 Transformation, Method, Optimal_lambda and Shift_parameter representing the
                  chosen transformation type and estimation method for lambda
                  as well as their results.}
 }
@@ -70,7 +71,7 @@ my_min = function(y, pov_line){min(y)}), na.rm = TRUE, cpus = 1)
 summary(emdi_model)
 }
 \seealso{
-\code{\link{emdiObject}}, \code{\link{ebp}},
+\code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
 \code{\link{r.squaredGLMM}}, \code{\link{skewness}}, \code{\link{kurtosis}},
 \code{\link{shapiro.test}}
 }

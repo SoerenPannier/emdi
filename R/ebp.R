@@ -145,7 +145,7 @@ ebp <- function(fixed,
 
   # Data manipulation and notational framework ---------------------------------
 
-  # The function notation can be found in script framework.R
+  # The function notation can be found in script framework_ebp.R
   framework <- notation(pop_data         = pop_data,
                         pop_domains      = pop_domains,
                         smp_data         = smp_data,
