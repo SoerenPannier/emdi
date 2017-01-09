@@ -113,6 +113,7 @@ notation <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
   smp_data <- smp_data[order(smp_data[[smp_domains]]),]
   smp_data[[smp_domains]] <- factor(smp_data[[smp_domains]], levels = unique(pop_data[[pop_domains]]))
   smp_domains_vec <- smp_data[[smp_domains]]
+  smp_domains_vec <- droplevels(smp_domains_vec)
   
   
   fw_check1(pop_domains_vec = pop_domains_vec, smp_domains_vec = smp_domains_vec)
