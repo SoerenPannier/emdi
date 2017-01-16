@@ -67,6 +67,9 @@
 #' weights=NULL, pov_line=10859.24, var=TRUE, bootType = "naive", B=50, 
 #' seed=123, X = NULL, totals = NULL, na.rm=TRUE)
 #' @export
+#' @importFrom boot boot
+#' @importFrom  Hmisc wtd.quantile
+
 
 
 
@@ -82,7 +85,7 @@ direct <- function(y,
                    seed = NULL,
                    X = NULL, 
                    totals = NULL, 
-                   na.rm=FALSE){
+                   na.rm = FALSE){
   
   
   direct_check1(y = y, smp_data = smp_data)
@@ -120,43 +123,113 @@ direct <- function(y,
                     bootType = bootType,
                     X = X, 
                     totals = totals, 
-                    B=B,  
-                    seed=seed, 
-                    na.rm=na.rm)
+                    B = B,  
+                    seed = seed, 
+                    na.rm = na.rm)
   
   Gini_coeff <- Gini(framework = framework,
                      sort = sort,
-                     var=var,
+                     var = var,
                      bootType = bootType,
                      X = X, 
                      totals = totals, 
-                     B=B,  
-                     seed=seed, 
-                     na.rm=na.rm)
+                     B = B,  
+                     seed = seed, 
+                     na.rm = na.rm)
   
   QSR <- Quintile_Share(framework = framework,
                         sort = sort,
-                        var=var,
+                        var = var,
                         bootType = bootType,
                         X = X, 
                         totals = totals, 
-                        B=B,  
-                        seed=seed, 
-                        na.rm=na.rm)
+                        B = B,  
+                        seed = seed, 
+                        na.rm = na.rm)
   
+  Mean <- Mean(framework = framework,
+                        var = var,
+                        bootType = bootType,
+                        X = X, 
+                        totals = totals, 
+                        B = B,  
+                        seed = seed, 
+                        na.rm = na.rm)
+  
+  Quantile_10 <- Quants(framework = framework, 
+                        var = var, 
+                        bootType = bootType, 
+                        B = B,
+                        seed = seed,
+                        X = X, 
+                        totals = totals, 
+                        na.rm = na.rm,
+                        prob = 0.1)
+  
+  Quantile_25 <- Quants(framework = framework, 
+                        var = var, 
+                        bootType = bootType, 
+                        B = B,
+                        seed = seed,
+                        X = X, 
+                        totals = totals, 
+                        na.rm = na.rm,
+                        prob = 0.25)
+  
+  Median <- Quants(framework = framework, 
+                   var = var, 
+                   bootType = bootType, 
+                   B = B,
+                   seed = seed,
+                   X = X, 
+                   totals = totals, 
+                   na.rm = na.rm,
+                   prob = 0.5)
+  
+  Quantile_75 <- Quants(framework = framework, 
+                        var = var, 
+                        bootType = bootType, 
+                        B = B,
+                        seed = seed,
+                        X = X, 
+                        totals = totals, 
+                        na.rm = na.rm,
+                        prob = 0.75)
+  
+  Quantile_90 <- Quants(framework = framework, 
+                        var = var, 
+                        bootType = bootType, 
+                        B = B,
+                        seed = seed,
+                        X = X, 
+                        totals = totals, 
+                        na.rm = na.rm,
+                        prob = 0.9)
   
   ind <- data.frame(Domain = framework$rs, 
+                    Mean = Mean$valueByStratum[,2],
                     Head_Count = HCR$valueByStratum[,2], 
                     Poverty_Gap = PG$valueByStratum[,2],
                     Gini = Gini_coeff$valueByStratum[,2], 
-                    Quintile_Share = QSR$valueByStratum[,2])
+                    Quintile_Share = QSR$valueByStratum[,2],
+                    Quantile_10 = Quantile_10$valueByStratum[,2],
+                    Quantile_25 = Quantile_25$valueByStratum[,2],
+                    Median = Median$valueByStratum[,2],
+                    Quantile_75 = Quantile_75$valueByStratum[,2],
+                    Quantile_90 = Quantile_90$valueByStratum[,2])
   
   if(var==TRUE){
     MSE <- data.frame(Domain = framework$rs, 
+                      Mean = Mean$varByStratum[,2],
                       Head_Count = HCR$varByStratum[,2],
                       Poverty_Gap = PG$varByStratum[,2],
                       Gini = Gini_coeff$varByStratum[,2], 
-                      Quintile_Share = QSR$varByStratum[,2])
+                      Quintile_Share = QSR$varByStratum[,2],
+                      Quantile_10 = Quantile_10$varByStratum[,2],
+                      Quantile_25 = Quantile_25$varByStratum[,2],
+                      Median = Median$varByStratum[,2],
+                      Quantile_75 = Quantile_75$varByStratum[,2],
+                      Quantile_90 = Quantile_90$varByStratum[,2])
   
     direct_out <- list(ind = ind, 
                        MSE = MSE,

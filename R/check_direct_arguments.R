@@ -33,7 +33,7 @@ direct_check2 <- function(smp_domains = NULL,
           factor variable indicating domains in the sample data.
           See also help(direct).')
   } 
-  if(!exists("weights") || !class(weights)=="character"){
+  if(bootType != "naive" && (!exists("weights") || !class(weights)=="character")){
     stop('Weights must be a character containing the name of a variable for the 
           sampling weights in the sample data. See also help(direct).')
   }

@@ -12,7 +12,9 @@ direct_variance <- function (y,
                              X, 
                              totals = NULL, 
                              seed = NULL, 
-                             na.rm = FALSE, ...) {
+                             na.rm = FALSE,
+                             prob = NULL,
+                             ...) {
   
   # Domain setup - domains and if variance is calculated by domain
   rs <- indicator$strata
@@ -99,6 +101,12 @@ direct_variance <- function (y,
   if(class(indicator)=="QSR"){
     fun <- getFun_QSR(indicator, byStratum)
   }
+  if(class(indicator)=="Mean"){
+    fun <- getFun_Mean(indicator, byStratum)
+  }
+  if(class(indicator)=="Quant"){
+    fun <- getFun_Quant(indicator, byStratum)
+  }
   bootFun <- getBootFun(calibrate, fun)
   
   # actual bootstrap
@@ -112,6 +120,7 @@ direct_variance <- function (y,
                    totals = totals, 
                    rs = rs, 
                    na.rm = na.rm, 
+                   prob = prob,
                    ...)
   
   # if variance is calculated by domain
@@ -137,33 +146,33 @@ direct_variance <- function (y,
 # Function in order to select between naive and calibrate bootstrap
 getBootFun  <- function(calibrate, fun) {
   if (calibrate) {
-    function(x, i, pov_line, aux, totals, rs, na.rm, ...) {
+    function(x, i, pov_line, aux, totals, rs, na.rm, prob, ...) {
       x <- x[i, , drop = FALSE]
       aux <- aux[i, , drop = FALSE]
       g <- calibWeights(aux, x$weight, totals, ...)
       x$weight <- g * x$weight
-      fun(x, pov_line, rs, na.rm)
+      fun(x, pov_line, rs, na.rm, prob)
     }
   } else {
-    function(x, i, pov_line, aux, totals, rs, na.rm, ...) {
+    function(x, i, pov_line, aux, totals, rs, na.rm, prob,...) {
       x <- x[i, , drop = FALSE]
-      fun(x, pov_line, rs, na.rm)
+      fun(x, pov_line, rs, na.rm, prob)
     }
   }
 }
 
 
 # Wrapper function for bootstrap function
-clusterBoot <- function(data, statistic, ..., strata, cluster = NULL){
+clusterBoot <- function(data, statistic, ..., strata, prob, cluster = NULL){
   if (is.null(cluster)) {
-    boot(data, statistic, ..., strata = strata)
+    boot(data, statistic, ..., strata = strata, prob = prob)
   } else {
     fun <- function(cluster, i, ..., .data, .statistic) {
       i <- do.call(c, split(1:nrow(.data), .data$cluster)[i])
       .statistic(.data, i, ...)
     }
     keep <- !duplicated(cluster)
-    boot(cluster[keep], fun, ..., strata = strata[keep], 
+    boot(cluster[keep], fun, ..., strata = strata[keep], prob = prob, 
          .data = data, .statistic = statistic)
   }
 }
