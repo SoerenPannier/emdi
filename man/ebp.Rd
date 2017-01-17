@@ -4,11 +4,11 @@
 \alias{ebp}
 \title{Empirical Best Prediction for disaggregated indicators}
 \usage{
-ebp(fixed, pop_data, pop_domains, smp_data, smp_domains, L, pov_line = NULL,
-  transformation = "box.cox", interval = c(-1, 2), MSE = FALSE,
-  B = NULL, parallel_mode = ifelse(grepl("windows", .Platform$OS.type, ),
-  "socket", "multicore"), cpus = 1, custom_indicator = NULL,
-  na.rm = FALSE)
+ebp(fixed, pop_data, pop_domains, smp_data, smp_domains, L = 50,
+  pov_line = NULL, transformation = "box.cox", interval = c(-1, 2),
+  MSE = FALSE, B = 50, parallel_mode = ifelse(grepl("windows",
+  .Platform$OS.type, ), "socket", "multicore"), cpus = 1,
+  custom_indicator = NULL, na.rm = FALSE)
 }
 \arguments{
 \item{fixed}{a two-sided linear formula object describing the
@@ -34,7 +34,8 @@ that indicates domains in the sample data. The variable can be numeric or a
 factor but needs to be of the same class as the variable named in
 \code{pop_domains}.}
 
-\item{L}{a number determining the number of Monte-Carlo simulations.}
+\item{L}{a number determining the number of Monte-Carlo simulations.Defaults
+to 50.}
 
 \item{pov_line}{a number defining a poverty line. A poverty line is
 needed for calculation e.g. of head count ratios and poverty gaps. The 
@@ -58,9 +59,10 @@ to \code{FALSE}.}
 
 \item{B}{a number determining the number of bootstrap populations in the
 parametric bootstrap approach (see also \cite{Gonzalez-Manteiga et al. (2008)})
-used in the MSE estimation. Defaults to \code{NULL}.}
+used in the MSE estimation. Defaults to 50.}
 
-\item{parallel_mode}{modus of parallelisation, defaults to local. For details see \code{\link[parallelMap]{parallelStart}}}
+\item{parallel_mode}{modus of parallelisation, defaults to local. 
+For details see \code{\link[parallelMap]{parallelStart}}}
 
 \item{cpus}{number determining the kernels that are used for the 
 parallelization. Defaults to 1. For details see \code{\link[parallelMap]{parallelStart}}}
