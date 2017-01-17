@@ -29,5 +29,7 @@ Imports:
     parallelMap,
     HLMdiag,
     parallel,
-    simFrame
+    simFrame,
+    boot,
+    Hmisc
 Suggests: testthat

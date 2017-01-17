@@ -25,8 +25,8 @@ framework_dir <- function(y, smp_data, smp_domains, weights, sort,
   if (!is.null(sort)) {
     sort <- smp_data[, sort]
   }
-  byStratum <- !is.null(smp_domains)
-  if (byStratum) {
+  byDomain <- !is.null(smp_domains)
+  if (byDomain) {
     smp_domains_vec <- as.factor(smp_data[, smp_domains])
     smp_domains_vec <- droplevels(smp_domains_vec)
     rs <- levels(smp_domains_vec)
@@ -52,9 +52,13 @@ framework_dir <- function(y, smp_data, smp_domains, weights, sort,
   
   if(is.null(pov_line)){
     if(is.null(weights)){
-      pov_line <- 0.6*median(y_vec)
+      pov_line <- 0.6 * median(y_vec)
     } else if (!is.null(weights)){
-      pov_line <- 0.6*weightedMedian(y_vec, weights_vec)
+      pov_line <- 0.6 * Quant_value(y = y_vec, 
+                                   weights = weights_vec,
+                                   pov_line = NULL,
+                                   prob = .5,
+                                   na.rm = na.rm)
     }
     
   }
@@ -79,7 +83,7 @@ framework_dir <- function(y, smp_data, smp_domains, weights, sort,
               weights_vec      = weights_vec,
               smp_domains_vec  = smp_domains_vec,
               smp_domains      = smp_domains,
-              byStratum        = byStratum,
+              byDomain         = byDomain,
               rs               = rs,
               N_smp            = N_smp,
               N_dom_smp        = N_dom_smp,

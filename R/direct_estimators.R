@@ -16,23 +16,23 @@ Head_Count <- function(framework,
                             na.rm = na.rm)
   
   # if sample domains are given
-  if (framework$byStratum) {
-    valueByStratum <- 
-      aggregate(1:framework$N_smp, list(stratum = framework$smp_domains_vec), 
+  if (framework$byDomain) {
+    valueByDomain <- 
+      aggregate(1:framework$N_smp, list(Domain = framework$smp_domains_vec), 
                                 HCR2, y = framework$y_vec, 
                 weights = framework$weights_vec, 
                                 pov_line = framework$pov_line, na.rm = na.rm)
-    names(valueByStratum)[2] <- "Head_Count"
-    names(valueByStratum)[1] <- "Domain"
-    rs <- as.factor(as.matrix(valueByStratum[1])[,1])
+    names(valueByDomain)[2] <- "Head_Count"
+    names(valueByDomain)[1] <- "Domain"
+    rs <- as.factor(as.matrix(valueByDomain[1])[,1])
     
   } else {
-    valueByStratum <- NULL
+    valueByDomain <- NULL
   }
   
   res <- list(value = value, 
-              valueByStratum = valueByStratum, 
-              strata = framework$rs, 
+              valueByDomain = valueByDomain, 
+              domain = framework$rs, 
               pov_line = framework$pov_line)
   
   class(res) <- c("HCR")
@@ -86,17 +86,17 @@ HCR2 <- function(i,
 
 
 # Get HCR function for bootstrap variance
-getFun_HCR <- function (indicator, byStratum) 
+getFun_HCR <- function (indicator, byDomain) 
 {
-  if (byStratum) {
+  if (byDomain) {
     function(x, pov_line, rs, na.rm, prob = NULL) {
       value <- Head_Count_value(x$y, x$weight, pov_line, 
                                 na.rm = na.rm)
-      valueByStratum <- sapply(rs, function(r, x, t) {
-        i <- x$stratum == r
+      valueByDomain <- sapply(rs, function(r, x, t) {
+        i <- x$Domain == r
         Head_Count_value(x$y[i], x$weight[i], t, na.rm = na.rm)
       }, x = x, t = pov_line)
-      c(value, valueByStratum)
+      c(value, valueByDomain)
     }
   }
   else {
@@ -126,24 +126,24 @@ Poverty_Gap <- function(framework,
                              na.rm = na.rm)
   
   # if sample domains are given
-  if (framework$byStratum) {
+  if (framework$byDomain) {
     
-    valueByStratum <- 
-      aggregate(1:framework$N_smp, list(stratum = framework$smp_domains_vec), 
+    valueByDomain <- 
+      aggregate(1:framework$N_smp, list(Domain = framework$smp_domains_vec), 
                                 PG2, y = framework$y_vec, 
                 weights = framework$weights_vec, 
                                 pov_line = framework$pov_line, na.rm = na.rm)
-    names(valueByStratum)[2] <- "Poverty_Gap"
-    names(valueByStratum)[1] <- "Domain"
-    rs <- as.factor(as.matrix(valueByStratum[1])[,1])
+    names(valueByDomain)[2] <- "Poverty_Gap"
+    names(valueByDomain)[1] <- "Domain"
+    rs <- as.factor(as.matrix(valueByDomain[1])[,1])
     
   } else {
-    valueByStratum <- NULL
+    valueByDomain <- NULL
   }
   
   res <- list(value = value, 
-              valueByStratum = valueByStratum, 
-              strata = framework$rs, 
+              valueByDomain = valueByDomain, 
+              domain = framework$rs, 
               pov_line =  framework$pov_line)
   
   class(res) <- c("PG")
@@ -194,18 +194,18 @@ PG2 <- function(i,
 
 
 # Get HCR function for bootstrap variance
-getFun_PG <- function (indicator, byStratum) 
+getFun_PG <- function (indicator, byDomain) 
 {
-  if (byStratum) {
+  if (byDomain) {
     function(x, pov_line, rs, na.rm, prob = NULL) {
       
       value <- Poverty_Gap_value(x$y, x$weight, pov_line, 
                                  na.rm = na.rm)
-      valueByStratum <- sapply(rs, function(r, x, t) {
-        i <- x$stratum == r
+      valueByDomain <- sapply(rs, function(r, x, t) {
+        i <- x$Domain == r
         Poverty_Gap_value(x$y[i], x$weight[i], t, na.rm = na.rm)
       }, x = x, t = pov_line)
-      c(value, valueByStratum)
+      c(value, valueByDomain)
     }
   }
   else {
@@ -235,20 +235,20 @@ Gini <- function(framework,
                       sort = sort, na.rm = na.rm)
   
   # if smp_domains are present
-  if (framework$byStratum) {
-    valueByStratum <- 
-      aggregate(1:framework$N_smp, list(stratum = framework$smp_domains_vec), 
+  if (framework$byDomain) {
+    valueByDomain <- 
+      aggregate(1:framework$N_smp, list(Domain = framework$smp_domains_vec), 
                                 Gini2, y = framework$y_vec, 
                                 weights = framework$weights_vec, 
                 sort = sort, na.rm = na.rm)
-    names(valueByStratum)[ncol(valueByStratum)] <- "Gini"
-    names(valueByStratum)[1] <- "Domain"
-    rs <- as.factor(as.matrix(valueByStratum[1])[,1])
+    names(valueByDomain)[ncol(valueByDomain)] <- "Gini"
+    names(valueByDomain)[1] <- "Domain"
+    rs <- as.factor(as.matrix(valueByDomain[1])[,1])
   } else {
-    valueByStratum <- NULL
+    valueByDomain <- NULL
   }
-  res <- list(value = value, valueByStratum = valueByStratum, 
-              strata = framework$rs)
+  res <- list(value = value, valueByDomain = valueByDomain, 
+              domain = framework$rs)
   
   class(res) <- c("Gini")
   
@@ -297,16 +297,16 @@ Gini2 <- function(i, y, weights, sort, na.rm) {
   Gini_value(y = y[i], weights = weights[i], sort = sort[i], na.rm = na.rm)
 }
 
-getFun_Gini <- function (indicator, byStratum)
+getFun_Gini <- function (indicator, byDomain)
 {
-  if (byStratum) {
+  if (byDomain) {
     function(x, pov_line, rs, na.rm, prob = NULL) {
       value <- Gini_value(x$y, x$weight, na.rm = na.rm)
-      valueByStratum <- sapply(rs, function(r, x, t) {
-        i <- x$stratum == r
+      valueByDomain <- sapply(rs, function(r, x, t) {
+        i <- x$Domain == r
         Gini_value(x$y[i], x$weight[i], na.rm = na.rm)
       }, x = x)
-      c(value, valueByStratum)
+      c(value, valueByDomain)
     }
   }
   else {
@@ -333,20 +333,20 @@ Quintile_Share <- function(framework,
   value <- Quintile_Share_value(x=framework$y_vec, weights=framework$weights_vec, 
                                 sort = sort, na.rm = na.rm)
   
-  if (framework$byStratum) {
+  if (framework$byDomain) {
     
-    valueByStratum <- 
-      aggregate(1:framework$N_smp, list(stratum = framework$smp_domains_vec), qrR, 
+    valueByDomain <- 
+      aggregate(1:framework$N_smp, list(Domain = framework$smp_domains_vec), qrR, 
                                 y = framework$y_vec, weights = framework$weights_vec, 
                                 sort = sort, na.rm = na.rm)
-    names(valueByStratum)[ncol(valueByStratum)] <- "Quintile_Share"
-    names(valueByStratum)[1] <- "Domain"
-    rs <- as.factor(as.matrix(valueByStratum[1])[,1])
+    names(valueByDomain)[ncol(valueByDomain)] <- "Quintile_Share"
+    names(valueByDomain)[1] <- "Domain"
+    rs <- as.factor(as.matrix(valueByDomain[1])[,1])
   } else {
-    valueByStratum <- rs <- NULL
+    valueByDomain <- rs <- NULL
   }
-  res <- list(value = value, valueByStratum = valueByStratum, 
-              strata = framework$rs)
+  res <- list(value = value, valueByDomain = valueByDomain, 
+              domain = framework$rs)
   
   class(res) <- c("QSR")
   if (var==TRUE) {
@@ -378,94 +378,29 @@ Quintile_Share_value <- function (x, weights = NULL, sort = NULL, na.rm = FALSE)
   x <- x[order]
   weights <- weights[order]
   
-  iq1 <- x <= Quant_value(y = x, 
-                          weights = weights,
-                          pov_line = NULL,
-                          prob = 0.2,
-                          na.rm = na.rm)
-
-    # weightedQuantile(x, weights, probs = 0.2, sorted = TRUE, 
-    #                            na.rm = na.rm)
-  
-  iq4 <- x > Quant_value(y = x, 
+  quant14 <- Quant_value(y = x, 
                          weights = weights,
                          pov_line = NULL,
-                         prob = 0.8,
+                         prob = c(0.2, 0.8),
                          na.rm = na.rm)
-    # weightedQuantile(x, weights, probs = 0.8, sorted = TRUE, 
-    #                           na.rm = na.rm)
-    # 
   
+  iq1 <- x <= quant14[1]
+  iq4 <- x > quant14[2]
+   
   (sum(weights[iq4] * x[iq4])/sum(weights[iq4]))/(sum(weights[iq1] * 
                                                         x[iq1])/sum(weights[iq1]))
 }
 
-# weightedQuantile <- 
-#   function (x, weights = NULL, probs = seq(0, 1, 0.25), sorted = FALSE, 
-#                               na.rm = FALSE){
-#   if (!is.numeric(x)) 
-#     stop("'x' must be a numeric vector")
-#   n <- length(x)
-#   if (n == 0 || (!isTRUE(na.rm) && any(is.na(x)))) {
-#     return(rep.int(NA, length(probs)))
-#   }
-#   if (!is.null(weights)) {
-#     if (!is.numeric(weights)) 
-#       stop("'weights' must be a numeric vector")
-#     else if (length(weights) != n) {
-#       stop("'weights' must have the same length as 'x'")
-#     }
-#     else if (!all(is.finite(weights))) 
-#       stop("missing or infinite weights")
-#     if (any(weights < 0)) 
-#       warning("negative weights")
-#     if (!is.numeric(probs) || all(is.na(probs)) || isTRUE(any(probs < 
-#                                                               0 | probs > 1))) {
-#       stop("'probs' must be a numeric vector with values in [0,1]")
-#     }
-#     if (all(weights == 0)) {
-#       warning("all weights equal to zero")
-#       return(rep.int(0, length(probs)))
-#     }
-#   }
-#   if (isTRUE(na.rm)) {
-#     indices <- !is.na(x)
-#     x <- x[indices]
-#     if (!is.null(weights)) 
-#       weights <- weights[indices]
-#   }
-#   if (!isTRUE(sorted)) {
-#     order <- order(x)
-#     x <- x[order]
-#     weights <- weights[order]
-#   }
-#   if (is.null(weights)) 
-#     rw <- (1:n)/n
-#   else rw <- cumsum(weights)/sum(weights)
-#   q <- sapply(probs, function(p) {
-#     if (p == 0) 
-#       return(x[1])
-#     else if (p == 1) 
-#       return(x[n])
-#     select <- min(which(rw >= p))
-#     if (rw[select] == p) 
-#       mean(x[select:(select + 1)])
-#     else x[select]
-#   })
-#   return(unname(q))
-# }
-
-
-getFun_QSR <- function (indicator, byStratum) 
+getFun_QSR <- function (indicator, byDomain) 
 {
-  if (byStratum) {
+  if (byDomain) {
     function(x, p, rs, na.rm, prob = NULL) {
       value <- Quintile_Share_value(x$y, x$weight, na.rm = na.rm)
-      valueByStratum <- sapply(rs, function(r, x, t) {
-        i <- x$stratum == r
+      valueByDomain <- sapply(rs, function(r, x, t) {
+        i <- x$Domain == r
         Quintile_Share_value(x$y[i], x$weight[i], na.rm = na.rm)
       }, x = x)
-      c(value, valueByStratum)
+      c(value, valueByDomain)
     }
   }
   else {
@@ -493,23 +428,23 @@ Mean <- function(framework,
                       na.rm = na.rm)
   
   # if sample domains are given
-  if (framework$byStratum) {
-    valueByStratum <- 
-      aggregate(1:framework$N_smp, list(stratum = framework$smp_domains_vec), 
+  if (framework$byDomain) {
+    valueByDomain <- 
+      aggregate(1:framework$N_smp, list(Domain = framework$smp_domains_vec), 
                 Mean2, y = framework$y_vec, 
                 weights = framework$weights_vec, 
                 pov_line = framework$pov_line, na.rm = na.rm)
-    names(valueByStratum)[2] <- "Mean"
-    names(valueByStratum)[1] <- "Domain"
-    rs <- as.factor(as.matrix(valueByStratum[1])[,1])
+    names(valueByDomain)[2] <- "Mean"
+    names(valueByDomain)[1] <- "Domain"
+    rs <- as.factor(as.matrix(valueByDomain[1])[,1])
     
   } else {
-    valueByStratum <- NULL
+    valueByDomain <- NULL
   }
   
   res <- list(value = value, 
-              valueByStratum = valueByStratum, 
-              strata = framework$rs, 
+              valueByDomain = valueByDomain, 
+              domain = framework$rs, 
               pov_line =  framework$pov_line)
   
   class(res) <- c("Mean")
@@ -555,18 +490,18 @@ Mean2 <- function(i,
 
 
 # Get Mean function for bootstrap variance
-getFun_Mean <- function (indicator, byStratum) 
+getFun_Mean <- function (indicator, byDomain) 
 {
-  if (byStratum) {
+  if (byDomain) {
     function(x, pov_line, rs, na.rm, prob = NULL) {
       
       value <- Mean_value(x$y, x$weight, pov_line, 
                           na.rm = na.rm)
-      valueByStratum <- sapply(rs, function(r, x, t) {
-        i <- x$stratum == r
+      valueByDomain <- sapply(rs, function(r, x, t) {
+        i <- x$Domain == r
         Mean_value(x$y[i], x$weight[i], t, na.rm = na.rm)
       }, x = x, t = pov_line)
-      c(value, valueByStratum)
+      c(value, valueByDomain)
     }
   }
   else {
@@ -598,27 +533,27 @@ Quants <- function(framework,
                        na.rm = na.rm)
   
   # if sample domains are given
-  if (framework$byStratum) {
-    valueByStratum <- 
-      aggregate(1:framework$N_smp, list(stratum = framework$smp_domains_vec), 
+  if (framework$byDomain) {
+    valueByDomain <- 
+      aggregate(1:framework$N_smp, list(Domain = framework$smp_domains_vec), 
                 Quant2, y = framework$y_vec, 
                 weights = framework$weights_vec, 
                 pov_line = framework$pov_line, 
                 na.rm = na.rm,
                 prob = prob)
-    names(valueByStratum)[2] <- ifelse(prob != 0.5,
+    names(valueByDomain)[2] <- ifelse(prob != 0.5,
                                        paste0("Quant_", as.integer(prob * 100)),
                                        "Median")
-    names(valueByStratum)[1] <- "Domain"
-    rs <- as.factor(as.matrix(valueByStratum[1])[,1])
+    names(valueByDomain)[1] <- "Domain"
+    rs <- as.factor(as.matrix(valueByDomain[1])[,1])
     
   } else {
-    valueByStratum <- NULL
+    valueByDomain <- NULL
   }
   
   res <- list(value = value, 
-              valueByStratum = valueByStratum, 
-              strata = framework$rs, 
+              valueByDomain = valueByDomain, 
+              domain = framework$rs, 
               pov_line =  framework$pov_line)
   
   class(res) <- c("Quant")
@@ -670,18 +605,18 @@ Quant2 <- function(i,
 
 
 # Get Mean function for bootstrap variance
-getFun_Quant <- function (indicator, byStratum) 
+getFun_Quant <- function (indicator, byDomain) 
 {
-  if (byStratum) {
+  if (byDomain) {
     function(x, pov_line, rs, na.rm, prob) {
       
       value <- Quant_value(x$y, x$weight, pov_line, prob = prob,
                            na.rm = na.rm)
-      valueByStratum <- sapply(rs, function(r, x, t) {
-        i <- x$stratum == r
+      valueByDomain <- sapply(rs, function(r, x, t) {
+        i <- x$Domain == r
         Quant_value(x$y[i], x$weight[i], t, prob = prob, na.rm = na.rm)
       }, x = x, t = pov_line)
-      c(value, valueByStratum)
+      c(value, valueByDomain)
     }
   }
   else {

@@ -51,7 +51,9 @@ Defaults to \code{NULL}.}
 
 \item{interval}{a numeric vector containing a lower and upper limit
 determining an interval for the estimation of the optimal parameter. Defaults
-to c(-1,2).}
+to c(-1,2). If the convergence fails, it is often advisable to choose a smaller
+more suitable interval. For right skewed distributions the negative values may be
+excluded, also values larger than 1 are seldom observed.}
 
 \item{MSE}{if TRUE, MSE estimates using a parametric bootstrap approach
 are calculated (see also \cite{Gonzalez-Manteiga et al. (2008)}). Defaults
@@ -61,8 +63,9 @@ to \code{FALSE}.}
 parametric bootstrap approach (see also \cite{Gonzalez-Manteiga et al. (2008)})
 used in the MSE estimation. Defaults to 50.}
 
-\item{parallel_mode}{modus of parallelisation, defaults to local. 
-For details see \code{\link[parallelMap]{parallelStart}}}
+\item{parallel_mode}{modus of parallelization, defaults to an automatic selection 
+of a suitable mode, depending on the operating system, if the number of cpus is 
+chosen higher than 1. For details see \code{\link[parallelMap]{parallelStart}}}
 
 \item{cpus}{number determining the kernels that are used for the 
 parallelization. Defaults to 1. For details see \code{\link[parallelMap]{parallelStart}}}
