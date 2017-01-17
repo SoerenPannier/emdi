@@ -233,13 +233,19 @@ direct <- function(y,
   
     direct_out <- list(ind = ind, 
                        MSE = MSE,
-                       framework=framework, 
+                       framework = framework[c("N_dom_smp",
+                                               "N_smp",
+                                               "smp_domains",
+                                               "smp_domains_vec")], 
                        call = call)
   } else {
     direct_out <- list(ind = ind, 
-                     MSE = NULL,
-                     framework=framework,
-                     call = call)
+                       MSE = NULL,
+                       framework=framework[c("N_dom_smp",
+                                             "N_smp",
+                                             "smp_domains",
+                                             "smp_domains_vec")],
+                       call = call)
   }
   
   class(direct_out) <- c("emdi", "direct")
