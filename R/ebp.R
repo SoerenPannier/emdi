@@ -39,14 +39,16 @@
 #' @param interval a numeric vector containing a lower and upper limit
 #' determining an interval for the estimation of the optimal parameter. Defaults
 #' to c(-1,2).
-#' @param L a number determining the number of Monte-Carlo simulations.
+#' @param L a number determining the number of Monte-Carlo simulations.Defaults
+#' to 50.
 #' @param MSE if TRUE, MSE estimates using a parametric bootstrap approach
 #' are calculated (see also \cite{Gonzalez-Manteiga et al. (2008)}). Defaults
 #' to \code{FALSE}.
 #' @param B a number determining the number of bootstrap populations in the
 #' parametric bootstrap approach (see also \cite{Gonzalez-Manteiga et al. (2008)})
-#' used in the MSE estimation. Defaults to \code{NULL}.
-#' @param parallel_mode modus of parallelisation, defaults to local. For details see \code{\link[parallelMap]{parallelStart}}
+#' used in the MSE estimation. Defaults to 50.
+#' @param parallel_mode modus of parallelisation, defaults to local. 
+#' For details see \code{\link[parallelMap]{parallelStart}}
 #' @param cpus number determining the kernels that are used for the 
 #' parallelization. Defaults to 1. For details see \code{\link[parallelMap]{parallelStart}}
 #' @param custom_indicator a list of functions containing the indicators to be
@@ -117,12 +119,12 @@ ebp <- function(fixed,
                 pop_domains,
                 smp_data,
                 smp_domains,
-                L,
+                L = 50,
                 pov_line = NULL,
                 transformation = "box.cox",
                 interval = c(-1,2),
                 MSE = FALSE,
-                B = NULL,
+                B = 50,
                 parallel_mode = ifelse(grepl("windows",.Platform$OS.type,), 
                                        "socket", "multicore"),
                 cpus = 1,
