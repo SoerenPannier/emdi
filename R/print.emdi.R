@@ -60,20 +60,23 @@ print.emdi <- function(x, ...) {
     }
     cat("\n")
     cat("Model fit:\n")
-    cat("For model fit lme methods are applicable to emdix$model \n")
+    cat("For model fit lme methods are applicable to emdiObject$model \n")
     cat("where transformed_data equals smp_data transformed by function \n")
     cat("data_transformation using above given transformation and lambda \n")
     cat("and where fixed/list(fixed) equals ")
     print(x$fixed)
     cat("\n")
   }
-  if(any(class(x)=="direct")){
+  if(any(class(x) == "direct")){
     cat("Direct estimation\n")
     cat("\n")
     cat("Call:\n ")
     print(x$call)
     cat("\n")
     cat("In-sample domains: ", x$framework$N_dom_smp, "\n")
+    cat("\n")
+    cat("Units in each Domain:")
+    print(table(direct_all_naive$framework$smp_domains_vec))
   }
   
 

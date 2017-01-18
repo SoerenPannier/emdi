@@ -150,7 +150,6 @@ notation <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
     hcr = function(y, pov_line) {t(mean(y < pov_line))},
     # deletion of .Internal
     pgap = function(y, pov_line) {t(mean((y < pov_line) * (pov_line - y) / pov_line))},
-    qsr = function(y, pov_line) { t(sum(y[(y > quantile(y,0.8))]) / sum(y[(y < quantile(y,0.2))]))},
     gini = function(y, pov_line) {
       n <- length(y)
       y <- sort(y)
@@ -161,13 +160,14 @@ notation <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
       return(G)
     }
     ,
+    qsr = function(y, pov_line) { t(sum(y[(y > quantile(y,0.8))]) / sum(y[(y < quantile(y,0.2))]))},
     quants = function(y, pov_line) {t(quantile(y, probs = c(.10,.25, .5, .75, .9)))}
   )
   indicator_names <- c("Mean",
                       "Head_Count",
                       "Poverty_Gap",
-                      "Quintile_Share",
                       "Gini",
+                      "Quintile_Share",
                       "Quantile_10",
                       "Quantile_25",
                       "Median",

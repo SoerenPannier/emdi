@@ -65,7 +65,7 @@
 #'
 summary.emdi <- function(object, ...) {
   
-  if(any(class(object)=="model")){
+  if(any(class(object) == "model")){
     call_emdi <- object$call
     
     N_dom_unobs <- object$framework$N_dom_unobs
@@ -110,8 +110,10 @@ summary.emdi <- function(object, ...) {
     
     if(length(residuals(object$model, level=0, type="pearson"))>3 & 
        length(residuals(object$model, level=0, type="pearson")) <5000){
-      shapiro_p_res <- shapiro.test(residuals(object$model, level=0, type="pearson"))[[2]]
-      shapiro_W_res <- shapiro.test(residuals(object$model, level=0, type="pearson"))[[1]]
+      shapiro_p_res <- 
+        shapiro.test(residuals(object$model, level = 0, type = "pearson"))[[2]]
+      shapiro_W_res <- 
+        shapiro.test(residuals(object$model, level = 0, type = "pearson"))[[1]]
     } else {
       warning("Number of observations exceeds 5000 or is lower then 3 and thus the
               Shapiro-Wilk test is not applicable for the residuals.")
@@ -119,8 +121,8 @@ summary.emdi <- function(object, ...) {
       shapiro_W_res <- NA
     }
     
-    if(length(ranef(object$model)$'(Intercept)')>3 & 
-       length(ranef(object$model)$'(Intercept)') <5000){
+    if(length(ranef(object$model)$'(Intercept)') > 3 & 
+       length(ranef(object$model)$'(Intercept)') < 5000){
       shapiro_p_ran <- shapiro.test(ranef(object$model)$'(Intercept)')[[2]]
       shapiro_W_ran <- shapiro.test(ranef(object$model)$'(Intercept)')[[1]]
     } else {
@@ -137,9 +139,9 @@ summary.emdi <- function(object, ...) {
                        row.names = c("Error", "Random_effect")
     )
     
-    r_squared <- r2(object$fixed, data = object$model$data)
-    r_marginal <- r.squaredGLMM(object$model)[1]
-    r_conditional <- r.squaredGLMM(object$model)[2]
+    r_squared <- r.squaredGLMM(object$model)
+    r_marginal <- r_squared[1]
+    r_conditional <- r_squared[2]
     icc_mixed <- icc(object$model)
     
     coeff_det <- data.frame(#R2             = r_squared,
@@ -161,23 +163,24 @@ summary.emdi <- function(object, ...) {
                      call         = call_emdi
     )
   }
-  if(any(class(object)=="direct")){
+  if(any(class(object) == "direct")){
     call_emdi <- object$call
     
     N_dom_smp <-   object$framework$N_dom_smp
     
     smp_size <- object$framework$N_smp
     
-    smp_size_dom <- rbind(Sample_domains = summary(as.data.frame(table(direct_all_naive$framework$smp_domains_vec))[,"Freq"]))
+    smp_size_tab <- table(direct_all_naive$framework$smp_domains_vec)
     
-    
+    smp_size_dom <- 
+      rbind(Sample_domains = summary(as.numeric(smp_size_tab)))
     
     sum_emdi <- list(in_smp       = N_dom_smp,
                      size_smp     = smp_size,
                      size_dom     = smp_size_dom,
-                     call         = call_emdi 
+                     call         = call_emdi,
+                     smp_size_tab = smp_size_tab
     )
-    
   }
   
   class(sum_emdi) <- "summary.emdi"
@@ -197,7 +200,6 @@ summary.emdi <- function(object, ...) {
 #' @export
 
 print.summary.emdi <- function(x,...) {
-  
   if(!is.null(x$size_pop)){
     cat("Empirical Best Prediction\n")
     cat("\n")
@@ -237,24 +239,19 @@ print.summary.emdi <- function(x,...) {
     cat("Sample sizes:\n")
     cat("Units in sample: ", x$size_smp, "\n")
     print(x$size_dom)
+    cat("\n")
+    cat("Units in each Domain:")
+    print(x$smp_size_tab)
   }
 }
 
 # Auxiliary functions (taken from Results_Mexico_neueEBP.R)---------------------
-
-# R-squared from linear model
-
-r2 <- function(formula, data) {
-  lmfit <-  lm(formula = formula, data = data)
-  summary(lmfit)$r.squared
-}
 
 #  ICC
 
 icc <- function(model){
   u <- as.numeric(VarCorr(model)[1,1])
   e <- model$sigma^2
-
   u / (u + e)
 }
 

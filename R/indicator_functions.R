@@ -24,9 +24,14 @@ pgap_function <- function(y, pov_line) {
 qsr_function <- function(y) {
   #sum(y[(y > quantile(y,0.8,type = 2))]) / sum(y[(y <= quantile(y,0.2,type = 2))])
   weights <- rep.int(1, length(x))
-  q <- incQuintile(x, weights)
-  iq1 <- x <= q[1]
-  iq4 <- x > q[2]
+  quant14 <- Quant_value(y = x, 
+                         weights = weights,
+                         pov_line = NULL,
+                         prob = c(0.2, 0.8),
+                         na.rm = F)
+  
+  iq1 <- x <= quant14[1]
+  iq4 <- x > quant14[2]
   (sum(weights[iq4] * x[iq4])/sum(weights[iq4]))/(sum(weights[iq1] * 
                                                            x[iq1])/sum(weights[iq1]))
   }

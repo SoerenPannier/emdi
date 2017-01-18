@@ -38,7 +38,9 @@
 #' Defaults to \code{NULL}.
 #' @param interval a numeric vector containing a lower and upper limit
 #' determining an interval for the estimation of the optimal parameter. Defaults
-#' to c(-1,2).
+#' to c(-1,2). If the convergence fails, it is often advisable to choose a smaller
+#' more suitable interval. For right skewed distributions the negative values may be
+#' excluded, also values larger than 1 are seldom observed. 
 #' @param L a number determining the number of Monte-Carlo simulations.Defaults
 #' to 50.
 #' @param MSE if TRUE, MSE estimates using a parametric bootstrap approach
@@ -47,8 +49,9 @@
 #' @param B a number determining the number of bootstrap populations in the
 #' parametric bootstrap approach (see also \cite{Gonzalez-Manteiga et al. (2008)})
 #' used in the MSE estimation. Defaults to 50.
-#' @param parallel_mode modus of parallelisation, defaults to local. 
-#' For details see \code{\link[parallelMap]{parallelStart}}
+#' @param parallel_mode modus of parallelization, defaults to an automatic selection 
+#' of a suitable mode, depending on the operating system, if the number of cpus is 
+#' chosen higher than 1. For details see \code{\link[parallelMap]{parallelStart}}
 #' @param cpus number determining the kernels that are used for the 
 #' parallelization. Defaults to 1. For details see \code{\link[parallelMap]{parallelStart}}
 #' @param custom_indicator a list of functions containing the indicators to be
@@ -111,7 +114,7 @@
 #' @import nlme
 #' @import parallelMap
 #' @importFrom parallel detectCores
-#' @importFrom laeken incQuintile 
+#' @importFrom Hmisc wtd.quantile 
 #' @importFrom stats as.formula dnorm lm median model.matrix na.omit optimize 
 #' qnorm quantile residuals rnorm sd
 #' @importFrom utils flush.console

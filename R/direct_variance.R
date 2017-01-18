@@ -17,8 +17,8 @@ direct_variance <- function (y,
                              ...) {
   
   # Domain setup - domains and if variance is calculated by domain
-  rs <- indicator$strata
-  byStratum <- !is.null(rs)
+  rs <- indicator$domain
+  byDomain <- !is.null(rs)
   
   
   # Specification for y, is different to the calculation of value
@@ -73,7 +73,7 @@ direct_variance <- function (y,
   # Define part of data set that is used in the functions for calibration
   smp_data <- data.frame(y = y)
   smp_data$weight <- weights
-  smp_data$stratum <- smp_domains
+  smp_data$Domain <- smp_domains
   
   # definition of poverty line for HCR and PG, is only calculated once and not
   # for every bootstrap
@@ -90,22 +90,22 @@ direct_variance <- function (y,
   
   # Choose indicator
   if(class(indicator)=="HCR") {
-    fun <- getFun_HCR(indicator, byStratum)
+    fun <- getFun_HCR(indicator, byDomain)
   }
   if(class(indicator)=="PG") {
-    fun <- getFun_PG(indicator, byStratum)
+    fun <- getFun_PG(indicator, byDomain)
   }
   if(class(indicator)=="Gini") {
-    fun <- getFun_Gini(indicator, byStratum)
+    fun <- getFun_Gini(indicator, byDomain)
   }
   if(class(indicator)=="QSR"){
-    fun <- getFun_QSR(indicator, byStratum)
+    fun <- getFun_QSR(indicator, byDomain)
   }
   if(class(indicator)=="Mean"){
-    fun <- getFun_Mean(indicator, byStratum)
+    fun <- getFun_Mean(indicator, byDomain)
   }
   if(class(indicator)=="Quant"){
-    fun <- getFun_Quant(indicator, byStratum)
+    fun <- getFun_Quant(indicator, byDomain)
   }
   bootFun <- getBootFun(calibrate, fun)
   
@@ -113,7 +113,7 @@ direct_variance <- function (y,
   b <- clusterBoot(smp_data, 
                    bootFun, 
                    B, 
-                   strata = design, 
+                   domain = design, 
                    #cluster = cluster, 
                    pov_line = pov_line, 
                    aux = X, 
@@ -124,9 +124,9 @@ direct_variance <- function (y,
                    ...)
   
   # if variance is calculated by domain
-  if (byStratum) {
+  if (byDomain) {
     var <- apply(b$t, 2, var)
-    varByStratum <- data.frame(stratum = rs, var = var[-1])
+    varByDomain <- data.frame(Domain = rs, var = var[-1])
     var <- var[1]
   } else {
     var <- var(b$t[, 1])
@@ -135,8 +135,8 @@ direct_variance <- function (y,
   # preparation of return
   indicator$varMethod <- "bootstrap"
   indicator$var <- var
-  if (byStratum) {
-    indicator$varByStratum <- varByStratum
+  if (byDomain) {
+    indicator$varByDomain <- varByDomain
   }
   indicator$seed <- seed
   return(indicator)
@@ -163,16 +163,16 @@ getBootFun  <- function(calibrate, fun) {
 
 
 # Wrapper function for bootstrap function
-clusterBoot <- function(data, statistic, ..., strata, prob, cluster = NULL){
+clusterBoot <- function(data, statistic, ..., domain, prob, cluster = NULL){
   if (is.null(cluster)) {
-    boot(data, statistic, ..., strata = strata, prob = prob)
+    boot(data, statistic, ..., domain = domain, prob = prob)
   } else {
     fun <- function(cluster, i, ..., .data, .statistic) {
       i <- do.call(c, split(1:nrow(.data), .data$cluster)[i])
       .statistic(.data, i, ...)
     }
     keep <- !duplicated(cluster)
-    boot(cluster[keep], fun, ..., strata = strata[keep], prob = prob, 
+    boot(cluster[keep], fun, ..., domain = domain[keep], prob = prob, 
          .data = data, .statistic = statistic)
   }
 }
