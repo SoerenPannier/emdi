@@ -5,7 +5,7 @@
 #' reduced to 19 variables containing four regional variables for the country, 
 #' states, districts and counties.  
 #'
-#' @format A data frame with 25000 observations and 19 variables:
+#' @format A data frame with 25000 observations and 18 variables:
 #' \describe{
 #' \item{eqIncome}{numeric; a simplified version of the equivalized household income.}
 #' \item{eqsize}{numeric; the equivalized household size according to the 
@@ -24,7 +24,6 @@
 #' \item{cap_inv}{numeric; interest, dividends, profit from capital investments
 #'  in unincorporated business (net).}
 #' \item{tax_adj}{numeric; repayments/receipts for tax adjustment (net).}
-#' \item{country}{factor; country (one level)}
 #' \item{state}{factor; state (nine levels)}
 #' \item{district}{factor; districts (96 levels)}
 #' \item{county}{factor; counties (2115 levels)}
