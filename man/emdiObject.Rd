@@ -25,8 +25,7 @@ The following components are always included in an emdi object:
      \tab \code{smp_data} \tab an arranged data set of sample data. Not 
              filled for class direct. \cr
      \tab \code{smp_domains} \tab a character naming the
-                    domain indicator variable (see also \code{smp_domains} in
-                    \code{\link{ebp}}).\cr
+                    domain indicator variable.\cr
      \tab \code{smp_domains_vec} \tab an arranged vector of
                     the domain indicator variable \cr
 }
@@ -65,7 +64,7 @@ Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
 indicators. The Canadian Journal of Statistics, Vol. 38, No.3, 369-385.
 }
 \seealso{
-\code{\link{ebp}}, \code{ \link[nlme]{lme}},
+\code{\link{direct}}, \code{\link{ebp}}, \code{ \link[nlme]{lme}},
 \code{ \link[nlme]{lmeObject}}
 }
 
