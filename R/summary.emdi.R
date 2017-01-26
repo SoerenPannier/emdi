@@ -170,7 +170,7 @@ summary.emdi <- function(object, ...) {
     
     smp_size <- object$framework$N_smp
     
-    smp_size_tab <- table(direct_all_naive$framework$smp_domains_vec)
+    smp_size_tab <- table(object$framework$smp_domains_vec)
     
     smp_size_dom <- 
       rbind(Sample_domains = summary(as.numeric(smp_size_tab)))

@@ -2,8 +2,8 @@
 #'
 #' The data set is synthetic EU-SILC data based on the data set
 #' \code{\link[simFrame]{eusilcP}} from package \pkg{simFrame}. The data set is 
-#' reduced to 19 variables containing four regional variables for the country, 
-#' states, districts and counties.  
+#' reduced to 18 variables containing three regional variables for the states, 
+#' districts and counties.  
 #'
 #' @format A data frame with 25000 observations and 18 variables:
 #' \describe{

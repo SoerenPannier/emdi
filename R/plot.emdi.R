@@ -21,8 +21,8 @@
 #' list elements need to have three elements each called \code{title, y_lab and 
 #' x_lab}. Only the labels for the plots that should be different to the original
 #' need to be specified. \cr
-#' list(
 #' \describe{
+#' \item{list(} 
 #' \item{qq_res =}{c(title="Error term", y_lab="Quantiles of pearson residuals", 
 #'                 x_lab="Theoretical quantiles"),}
 #' \item{qq_ran =}{c(title="Random effect",

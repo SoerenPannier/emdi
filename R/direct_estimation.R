@@ -59,13 +59,15 @@
 #' \code{\link{estimators.emdi}}, \code{\link{print.emdi}}, \code{\link{plot.emdi}},
 #' \code{\link{summary.emdi}}
 #' @examples
+#' \dontrun{
 #' # Loading sample data
 #' data("eusilcA_smp")
 #'
 #' # Example without weights and naive bootstrap
-#' emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", 
-#' weights=NULL, pov_line=10859.24, var=TRUE, bootType = "naive", B=50, 
-#' seed=123, X = NULL, totals = NULL, na.rm=TRUE)
+#' emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, 
+#' smp_domains="district", weights=NULL, pov_line=10859.24, var=TRUE, 
+#' bootType = "naive", B=50, seed=123, X = NULL, totals = NULL, na.rm=TRUE)
+#' }
 #' @export
 #' @importFrom boot boot
 #' @importFrom  Hmisc wtd.quantile
@@ -207,29 +209,29 @@ direct <- function(y,
                         prob = 0.9)
   
   ind <- data.frame(Domain = framework$rs, 
-                    Mean = Mean$valueByDomain[,2],
-                    Head_Count = HCR$valueByDomain[,2], 
-                    Poverty_Gap = PG$valueByDomain[,2],
-                    Gini = Gini_coeff$valueByDomain[,2], 
-                    Quintile_Share = QSR$valueByDomain[,2],
-                    Quantile_10 = Quantile_10$valueByDomain[,2],
-                    Quantile_25 = Quantile_25$valueByDomain[,2],
-                    Median = Median$valueByDomain[,2],
-                    Quantile_75 = Quantile_75$valueByDomain[,2],
-                    Quantile_90 = Quantile_90$valueByDomain[,2])
+                    Mean = Mean$valueByStratum[,2],
+                    Head_Count = HCR$valueByStratum[,2], 
+                    Poverty_Gap = PG$valueByStratum[,2],
+                    Gini = Gini_coeff$valueByStratum[,2], 
+                    Quintile_Share = QSR$valueByStratum[,2],
+                    Quantile_10 = Quantile_10$valueByStratum[,2],
+                    Quantile_25 = Quantile_25$valueByStratum[,2],
+                    Median = Median$valueByStratum[,2],
+                    Quantile_75 = Quantile_75$valueByStratum[,2],
+                    Quantile_90 = Quantile_90$valueByStratum[,2])
   
   if(var==TRUE){
     MSE <- data.frame(Domain = framework$rs, 
-                      Mean = Mean$varByDomain[,2],
-                      Head_Count = HCR$varByDomain[,2],
-                      Poverty_Gap = PG$varByDomain[,2],
-                      Gini = Gini_coeff$varByDomain[,2], 
-                      Quintile_Share = QSR$varByDomain[,2],
-                      Quantile_10 = Quantile_10$varByDomain[,2],
-                      Quantile_25 = Quantile_25$varByDomain[,2],
-                      Median = Median$varByDomain[,2],
-                      Quantile_75 = Quantile_75$varByDomain[,2],
-                      Quantile_90 = Quantile_90$varByDomain[,2])
+                      Mean = Mean$varByStratum[,2],
+                      Head_Count = HCR$varByStratum[,2],
+                      Poverty_Gap = PG$varByStratum[,2],
+                      Gini = Gini_coeff$varByStratum[,2], 
+                      Quintile_Share = QSR$varByStratum[,2],
+                      Quantile_10 = Quantile_10$varByStratum[,2],
+                      Quantile_25 = Quantile_25$varByStratum[,2],
+                      Median = Median$varByStratum[,2],
+                      Quantile_75 = Quantile_75$varByStratum[,2],
+                      Quantile_90 = Quantile_90$varByStratum[,2])
   
     direct_out <- list(ind = ind, 
                        MSE = MSE,
