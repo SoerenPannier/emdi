@@ -205,8 +205,8 @@ direct <- function(y,
                         totals = totals, 
                         na.rm = na.rm,
                         prob = 0.9)
-  
-  ind <- data.frame(Domain = framework$rs, 
+
+    ind <- data.frame(Domain = framework$rs, 
                     Mean = Mean$valueByDomain[,2],
                     Head_Count = HCR$valueByDomain[,2], 
                     Poverty_Gap = PG$valueByDomain[,2],

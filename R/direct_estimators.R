@@ -41,21 +41,21 @@ Head_Count <- function(framework,
   
     res <- direct_variance(# is a character here and is converted to numeric 
                            # in the variance function 
-                           y=framework$y,  
+                           y = framework$y,  
                            # is a character here and is converted to numeric
                            # in the variance function 
-                           weights=framework$weights, 
+                           weights = framework$weights, 
                            # needs to be given such that above arguments can
                            # be converted
-                           smp_data=framework$smp_data,  
+                           smp_data = framework$smp_data,  
                            smp_domains = framework$smp_domains_vec, 
-                           indicator=res,
-                           bootType=bootType, 
+                           indicator = res,
+                           bootType = bootType, 
                            B = B,
                            seed = seed,
                            X = X, 
                            totals = totals,
-                           na.rm=na.rm)
+                           na.rm = na.rm)
   } 
   return(res)
 }
@@ -513,7 +513,7 @@ getFun_Mean <- function (indicator, byDomain)
   }
 }
 
-#Quantiles ---------------------------------------------------------------------
+# Quantiles ---------------------------------------------------------------------
 
 Quants <- function(framework, 
                    var = TRUE, 
