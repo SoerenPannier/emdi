@@ -63,18 +63,21 @@ framework_dir <- function(y, smp_data, smp_domains, weights, sort,
     
   }
   
-  
+  indicator_list <- getIndicatorList()
+ 
   indicator_names <- c("Mean",
                        "Head_Count",
                        "Poverty_Gap",
-                       "Quintile_Share",
                        "Gini",
+                       "Quintile_Share",
                        "Quantile_10",
                        "Quantile_25",
                        "Median",
                        "Quantile_75",
                        "Quantile_90"
   )
+  
+  
   
   return(list(smp_data         = smp_data,
               y                = y, 
@@ -88,10 +91,108 @@ framework_dir <- function(y, smp_data, smp_domains, weights, sort,
               N_smp            = N_smp,
               N_dom_smp        = N_dom_smp,
               n_smp            = n_smp,
-              #indicator_list   = indicator_list,
+              indicator_list   = indicator_list,
               indicator_names  = indicator_names,
               pov_line         = pov_line 
   )
   )
-  
+}
+
+getIndicatorList <- function(){
+  list(
+    mean_wrap = function(y, 
+                          weights, 
+                          pov_line,
+                          sort = NULL){
+      weighted.mean(x = y, w = weights)
+    },
+    hcr_wrap = function(y, 
+                        weights, 
+                        pov_line,
+                        sort = NULL){
+      sw <- sum(weights)
+      sum(weights[y < pov_line]) / sw * 100
+    },
+    pgap_wrap =  function(y, 
+                          weights, 
+                          pov_line,
+                          sort = NULL){
+      
+      sw <- sum(weights)
+      sum(weights  * (y < pov_line) * (pov_line - y) / pov_line) / sw * 100
+    },
+    gini_wrap = function (y, 
+                          weights = NULL, 
+                          pov_line = NULL, 
+                          sort = NULL) {
+      order <- if(is.null(sort)){
+        order(y)
+      } else {
+        order(y, sort)
+      }
+      y <- y[order]
+      if (!is.null(weights)){
+        weights <- weights[order]
+      }
+      wy <- weights * y
+      sw <- sum(weights)
+      cw <- cumsum(weights)
+      100 * ((2 * sum(wy * cw) - sum(weights^2 * y))/(sw * sum(wy)) - 1)
+    }
+    ,
+    qsr_wrap = function (y, 
+                         weights, 
+                         pov_line, 
+                         sort = NULL){
+      
+      order <- if (is.null(sort)){ 
+        order(y)
+      } else {
+        order(y, sort)
+      }
+      y <- y[order]
+      weights <- weights[order]
+      quant14 <- wtd.quantile(x = y, weights = weights, 
+                              probs = c(.2, .8))
+      iq1 <- y <= quant14[1]
+      iq4 <- y > quant14[2]
+      (sum(weights[iq4] * y[iq4]) / 
+          sum(weights[iq4])) / (sum(weights[iq1] *  y[iq1])/sum(weights[iq1]))
+    },
+    quant10_wrap = function(y, 
+                             weights, 
+                             pov_line,
+                             sort = NULL){
+      wtd.quantile(x = y, weights = weights, 
+                   probs = .10)
+    },
+    quant25_wrap = function(y, 
+                             weights, 
+                             pov_line,
+                             sort = NULL){
+      wtd.quantile(x = y, weights = weights, 
+                   probs = .25)
+    },
+    quant50_wrap = function(y, 
+                             weights, 
+                             pov_line,
+                             sort = NULL){
+      wtd.quantile(x = y, weights = weights, 
+                   probs = .50)
+    },
+    quant75_wrap = function(y, 
+                             weights, 
+                             pov_line,
+                             sort = NULL){
+      wtd.quantile(x = y, weights = weights, 
+                   probs = .75)
+    },
+    quant90_wrap = function(y, 
+                             weights, 
+                             pov_line,
+                             sort = NULL){
+      wtd.quantile(x = y, weights = weights, 
+                   probs = .9)
+    }
+  )
 }

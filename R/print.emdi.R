@@ -76,7 +76,7 @@ print.emdi <- function(x, ...) {
     cat("In-sample domains: ", x$framework$N_dom_smp, "\n")
     cat("\n")
     cat("Units in each Domain:")
-    print(table(direct_all_naive$framework$smp_domains_vec))
+    print(table(x$framework$smp_domains_vec))
   }
   
 

@@ -144,11 +144,8 @@ notation <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
   fw_check2(obs_dom = obs_dom, dist_obs_dom = dist_obs_dom)
 
   indicator_list <- list(
-    # deletion of .Internal 
     fast_mean = function(y, pov_line) {t(mean(y))},
-    # deletion of .Internal
     hcr = function(y, pov_line) {t(mean(y < pov_line))},
-    # deletion of .Internal
     pgap = function(y, pov_line) {t(mean((y < pov_line) * (pov_line - y) / pov_line))},
     gini = function(y, pov_line) {
       n <- length(y)
@@ -156,13 +153,13 @@ notation <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
       G <- sum(y * 1L:n)
       G <- 2 * G / sum(y) - (n + 1L)
       G <- t(G / n)
-      #cat(G)
       return(G)
     }
     ,
     qsr = function(y, pov_line) { t(sum(y[(y > quantile(y,0.8))]) / sum(y[(y < quantile(y,0.2))]))},
     quants = function(y, pov_line) {t(quantile(y, probs = c(.10,.25, .5, .75, .9)))}
   )
+  
   indicator_names <- c("Mean",
                       "Head_Count",
                       "Poverty_Gap",
