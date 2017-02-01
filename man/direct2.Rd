@@ -4,7 +4,7 @@
 \alias{direct2}
 \title{Direct estimation of disaggregated indicators}
 \usage{
-direct2(y, smp_data, smp_domains = NULL, weights = NULL, sort = NULL,
+direct2(y, smp_data, smp_domains = NULL, weights = NULL, design = NULL,
   pov_line = NULL, var = FALSE, bootType = "naive", B = NULL,
   seed = NULL, X_calib = NULL, totals = NULL, na.rm = FALSE)
 }
@@ -22,9 +22,6 @@ factor.}
 \item{weights}{a character containing the name of a variable for 
 the sampling weights in the sample data. This argument is optional and defaults
 to \code{NULL}.}
-
-\item{sort}{a character containing the name of a variable that should be used
-to sort the data. Defaults to \code{NULL}.}
 
 \item{pov_line}{a number defining a poverty line. A poverty line is
 needed for calculation e.g. of head count ratios and poverty gaps. The 
@@ -53,6 +50,9 @@ weights are used to calculate the totals.}
 
 \item{na.rm}{if TRUE, observations with \code{NA} values are deleted from the 
 sample data. Defaults to \code{FALSE}.}
+
+\item{sort}{a character containing the name of a variable that should be used
+to sort the data. Defaults to \code{NULL}.}
 
 \item{X}{a numeric matrix including calibration variables if the calibrated 
 bootstrap is chosen. Defaults to NULL.}

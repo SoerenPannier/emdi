@@ -84,14 +84,14 @@ direct2 <- function(y,
                     smp_data, 
                     smp_domains = NULL, 
                     weights = NULL, 
-                    sort = NULL,
+                    design = NULL,
                     pov_line = NULL,
                     var = FALSE, 
                     bootType = "naive", 
                     B = NULL,
                     seed = NULL,
                     X_calib = NULL, 
-                    totals = NULL, 
+                    totals = NULL,
                     na.rm = FALSE){
   
   
@@ -99,7 +99,7 @@ direct2 <- function(y,
   
   direct_check2(smp_domains = smp_domains, weights = weights, sort = sort, 
                 pov_line = pov_line, var = var, bootType = bootType, 
-                B = B, X = X, totals = totals)
+                B = B, X = X_calib, totals = totals)
   
   # Save call ------------------------------------------------------------------
   call <- match.call()
@@ -111,7 +111,7 @@ direct2 <- function(y,
                              smp_data = smp_data, 
                              smp_domains = smp_domains, 
                              weights = weights, 
-                             sort = sort, 
+                             sort = NULL, 
                              pov_line = pov_line, 
                              na.rm = na.rm)
   
@@ -140,7 +140,7 @@ direct2 <- function(y,
                            weights = framework$weights, 
                            smp_data = framework$smp_data,  
                            smp_domains = framework$smp_domains_vec,
-                           design = NULL,
+                           design = design,
                            bootType = bootType, 
                            B = B,
                            seed = seed,
@@ -157,8 +157,6 @@ direct2 <- function(y,
     ind <- cbind(res[[1]]$valueByDomain$Domain, 
                 as.data.frame(lapply(res, function(erg){erg$valueByDomain[,2]}))
     )
-    
-    
     if(!var) {
       MSE <- NULL 
       } else {

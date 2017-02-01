@@ -175,7 +175,8 @@ calibWeights <- function (X_calib,
                           bounds = c(0, 10), 
                           maxit = 500, 
                           tol = 1e-06, 
-                          eps = .Machine$double.eps) 
+                          eps = .Machine$double.eps,
+                          domain = NULL) 
 {
   X_calib <- as.matrix(X_calib)
   d <- as.numeric(d)

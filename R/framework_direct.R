@@ -102,35 +102,26 @@ getIndicatorList <- function(){
   list(
     mean_wrap = function(y, 
                           weights, 
-                          pov_line,
-                          sort = NULL){
+                          pov_line){
       weighted.mean(x = y, w = weights)
     },
     hcr_wrap = function(y, 
                         weights, 
-                        pov_line,
-                        sort = NULL){
+                        pov_line){
       sw <- sum(weights)
       sum(weights[y < pov_line]) / sw * 100
     },
     pgap_wrap =  function(y, 
                           weights, 
-                          pov_line,
-                          sort = NULL){
+                          pov_line){
       
       sw <- sum(weights)
       sum(weights  * (y < pov_line) * (pov_line - y) / pov_line) / sw * 100
     },
     gini_wrap = function (y, 
                           weights = NULL, 
-                          pov_line = NULL, 
-                          sort = NULL) {
-      order <- if(is.null(sort)){
-        order(y)
-      } else {
-        order(y, sort)
-      }
-      y <- y[order]
+                          pov_line = NULL) {
+      y <- y[order(y)]
       if (!is.null(weights)){
         weights <- weights[order]
       }
@@ -142,15 +133,8 @@ getIndicatorList <- function(){
     ,
     qsr_wrap = function (y, 
                          weights, 
-                         pov_line, 
-                         sort = NULL){
-      
-      order <- if (is.null(sort)){ 
-        order(y)
-      } else {
-        order(y, sort)
-      }
-      y <- y[order]
+                         pov_line){
+      y <- y[order(y)]
       weights <- weights[order]
       quant14 <- wtd.quantile(x = y, weights = weights, 
                               probs = c(.2, .8))
@@ -161,36 +145,31 @@ getIndicatorList <- function(){
     },
     quant10_wrap = function(y, 
                              weights, 
-                             pov_line,
-                             sort = NULL){
+                             pov_line){
       wtd.quantile(x = y, weights = weights, 
                    probs = .10)
     },
     quant25_wrap = function(y, 
                              weights, 
-                             pov_line,
-                             sort = NULL){
+                             pov_line){
       wtd.quantile(x = y, weights = weights, 
                    probs = .25)
     },
     quant50_wrap = function(y, 
                              weights, 
-                             pov_line,
-                             sort = NULL){
+                             pov_line){
       wtd.quantile(x = y, weights = weights, 
                    probs = .50)
     },
     quant75_wrap = function(y, 
                              weights, 
-                             pov_line,
-                             sort = NULL){
+                             pov_line){
       wtd.quantile(x = y, weights = weights, 
                    probs = .75)
     },
     quant90_wrap = function(y, 
                              weights, 
-                             pov_line,
-                             sort = NULL){
+                             pov_line){
       wtd.quantile(x = y, weights = weights, 
                    probs = .9)
     }
