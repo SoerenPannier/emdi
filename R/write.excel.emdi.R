@@ -64,8 +64,17 @@ write.excel <- function(object,
                               borderStyle    = "medium"
                               #bgFill        = "#FFFFFF"
                               )
-
-  wb <- add_summary(object = object, wb = wb, headlines_cs = headlines_cs)
+  
+  if("direct" %in% class(object))
+  {
+    wb <- add_summary_direct(object = object, 
+                             wb = wb, 
+                             headlines_cs = headlines_cs)
+  }
+  else if(model %in% class(object))
+  {
+    wb <- add_summary(object = object, wb = wb, headlines_cs = headlines_cs)
+  }
 
   if (!split & (MSE | CV)) {
     wb <- add_estims(object       = object,
@@ -198,6 +207,78 @@ add_summary <- function(object, wb, headlines_cs) {
   return(wb)
 
 }
+
+add_summary_direct <- function(object, wb, headlines_cs) {
+  su <- summary(object)
+  
+  title_cs <- createStyle(fontSize = 14,
+                          border = "Bottom",
+                          halign ="left",
+                          borderStyle = "thick",
+                          textDecoration = "bold")
+
+  df_nobs <- data.frame(Count = c(su$in_smp, su$size_smp))
+  rownames(df_nobs) <- c("in sample domains",
+                         "in sample observations")
+  df_size_dom <- as.data.frame(su$size_dom)
+  
+  addWorksheet(wb, sheetName = "summary", gridLines = FALSE)
+  
+  writeData(wb = wb, sheet = "summary", x = "Direct Estimation", colNames = FALSE)
+  addStyle(wb = wb, sheet = "summary", cols = 1, rows = 1, style = title_cs, stack =TRUE)
+  
+  starting_row <- 5
+  writeDataTable(x = df_nobs,
+                 withFilter = FALSE,
+                 wb = wb,
+                 sheet = "summary",
+                 startRow=starting_row,
+                 startCol=3,
+                 rowNames = TRUE,
+                 headerStyle = headlines_cs,
+                 colNames = TRUE,
+                 tableStyle = "TableStyleMedium2"
+  )
+  
+  starting_row <- starting_row + 2 + nrow(df_nobs)
+  
+  writeDataTable(x = df_size_dom,
+                 wb = wb,
+                 withFilter = FALSE,
+                 sheet = "summary",
+                 startRow=starting_row,
+                 startCol=3,
+                 rowNames = TRUE,
+                 headerStyle = headlines_cs,
+                 colNames = TRUE,
+                 tableStyle = "TableStyleMedium2"
+  )
+  
+  starting_row <- starting_row + 2 + nrow(df_size_dom)
+  
+  df_smp_sizes <- as.data.frame(su$smp_size_tab)
+  colnames(df_smp_sizes) <- c("Domain", "Frequency")
+  writeDataTable(x = df_smp_sizes,
+                 wb = wb,
+                 withFilter = FALSE,
+                 sheet = "summary",
+                 startRow=starting_row,
+                 startCol=3,
+                 rowNames = FALSE,
+                 headerStyle = headlines_cs,
+                 colNames = TRUE,
+                 tableStyle = "TableStyleMedium2"
+  )
+  
+  setColWidths(wb = wb,
+               sheet = "summary",
+               cols = 3:9,
+               widths = "auto"
+  )
+  return(wb)
+  
+}
+
 
 add_pointests <- function(object, indicator, wb, headlines_cs) {
   addWorksheet(wb, sheetName = "Point Estimators", gridLines = FALSE)
