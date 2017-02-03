@@ -121,9 +121,10 @@ getIndicatorList <- function(){
     gini_wrap = function (y, 
                           weights = NULL, 
                           pov_line = NULL) {
-      y <- y[order(y)]
+      ord <- order(y)
+      y <- y[ord]
       if (!is.null(weights)){
-        weights <- weights[order]
+        weights <- weights[ord]
       }
       wy <- weights * y
       sw <- sum(weights)
@@ -134,8 +135,9 @@ getIndicatorList <- function(){
     qsr_wrap = function (y, 
                          weights, 
                          pov_line){
-      y <- y[order(y)]
-      weights <- weights[order]
+      ord <- order(y)
+      y <- y[ord]
+      weights <- weights[ord]
       quant14 <- wtd.quantile(x = y, weights = weights, 
                               probs = c(.2, .8))
       iq1 <- y <= quant14[1]

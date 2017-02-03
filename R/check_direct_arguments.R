@@ -38,10 +38,6 @@ direct_check2 <- function(smp_domains = NULL,
     stop('Weights must be a character containing the name of a variable for the 
           sampling weights in the sample data. See also help(direct).')
   }
-  if(!is.null(sort) && !is.vector(sort) && !is.ordered(sort)){
-    stop('Sort must be a character containing the name of a variable that should 
-          be used to sort the data.')
-  }
   if(!is.null(pov_line) && !is.numeric(pov_line)){
     stop('Pov_line needs to be a number. If it is NULL 60% of the median
          is selected as poverty line.')
