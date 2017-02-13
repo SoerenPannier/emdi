@@ -47,7 +47,7 @@
 #' my_min = function(y, pov_line){min(y)}), na.rm = TRUE, cpus = 1)
 #' 
 #' # Load shape file
-#' load(system.file("shapes/shape_austria_dis.RData", package="emdi"))
+#' load_shapeaustria()
 #' 
 #' # Create mapping table such that variables that indicate domains correspond
 #' # in population data and shape file

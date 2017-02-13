@@ -66,7 +66,7 @@ to obtain further information. See \code{\link{emdiObject}} for descriptions
 of components of objects of class "emdi".
 }
 \description{
-Function \code{direct2} estimates indicators only based on sample information. 
+Function \code{direct} estimates indicators only based on sample information. 
 The variance is estimated via a naive or calibrated bootstrap. The estimation
 is adapted from the estimation of direct indicators in package 
 laeken.

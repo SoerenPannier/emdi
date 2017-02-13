@@ -1,6 +1,6 @@
 #' Direct estimation of disaggregated indicators
 #'
-#' Function \code{direct2} estimates indicators only based on sample information. 
+#' Function \code{direct} estimates indicators only based on sample information. 
 #' The variance is estimated via a naive or calibrated bootstrap. The estimation
 #' is adapted from the estimation of direct indicators in package 
 #' laeken. 
@@ -71,14 +71,6 @@
 #' @importFrom  Hmisc wtd.quantile
 #' @importFrom MASS ginv
 
-#########################################################
-#########################################################
-##############
-############## THIS IS ONLY A PROTOTYPE!!!
-############## NOT FOR USAGE YET!!!
-##############
-#########################################################
-#########################################################
 
 direct <- function(y, 
                    smp_data, 

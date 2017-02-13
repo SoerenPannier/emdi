@@ -71,7 +71,7 @@ write.excel <- function(object,
                              wb = wb, 
                              headlines_cs = headlines_cs)
   }
-  else if(model %in% class(object))
+  else if("model" %in% class(object))
   {
     wb <- add_summary(object = object, wb = wb, headlines_cs = headlines_cs)
   }
