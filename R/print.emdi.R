@@ -2,8 +2,8 @@
 #'
 #' Basic information of an emdi object is printed.
 #' @param x an x of type "emdi", representing point and MSE
-#' estimates following the Empirical Best Prediction by
-#' \cite{Molina and Rao (2010)}.
+#' estimates obtained by direct estimation (see also \code{\link{direct}})
+#' or Empirical Best Prediction (see also \code{\link{ebp}}). 
 #' @param ... optional arguments passed to \code{\link{print.default}}.
 # #' @param quote	not applicable.
 # #' @param max.levels	not applicable.

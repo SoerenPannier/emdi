@@ -1,8 +1,8 @@
 #' Summarize an emdiObject
 #'
-#' Additional information about the model in small area estimation methods and
-#' components of an emdi object are extracted. The returned object is suitable
-#' for printing  with the \code{print.summary.emdi} method.
+#' Additional information about the data and model in small area estimation 
+#' methods and components of an emdi object are extracted. The returned object 
+#' is suitable for printing  with the \code{print.summary.emdi} method.
 #' @param object an object of type "emdi", representing point and MSE
 #' estimates. Objects differ depending on the estimation method: direct 
 #' vs. model-based.
@@ -27,11 +27,11 @@
 #'                  \code{\link{skewness}} and \code{\link{kurtosis}} are from
 #'                  the package \pkg{moments}. Details for the Shapiro-Wilks-Test
 #'                  are provided by \code{\link{shapiro.test}}.}
-#' \item{out_of_smp}{if model-based estimation, number of out-of-sample domains equivalent to
-#'                  \code{N_dom_unobs} (see \code{\link{emdiObject}}).}
-#' \item{size_dom}{a data frame with rows Sample_domains and Population_domains (if model-based estimation)
-#' representing summary statisitics of the sample sizes across domains of sample
-#' and population data respectively.}
+#' \item{out_of_smp}{if model-based estimation, number of out-of-sample domains 
+#' equivalent to \code{N_dom_unobs} (see \code{\link{emdiObject}}).}
+#' \item{size_dom}{a data frame with rows Sample_domains and Population_domains 
+#' (if model-based estimation) representing summary statisitics of the sample 
+#' sizes across domains of sample and population data respectively.}
 #' \item{size_pop}{if model-based estimation, number of units in population equivalent to \code{N_pop}
 #' (see \code{\link{emdiObject}}).}
 #' \item{size_smp}{number of units in sample equivalent to \code{N_smp}

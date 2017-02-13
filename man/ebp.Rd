@@ -47,7 +47,7 @@ Committee 2001}). However, any desired poverty line can be chosen.}
 \item{transformation}{a character string. Three different transformation
 types for the dependent variable can be chosen (i) no transformation ("no");
 (ii) log transformation ("log"); (iii) Box-Cox transformation ("box.cox").
-Defaults to \code{NULL}.}
+Defaults to \code{"box.cox"}.}
 
 \item{interval}{a numeric vector containing a lower and upper limit
 determining an interval for the estimation of the optimal parameter. Defaults
@@ -71,7 +71,7 @@ chosen higher than 1. For details see \code{\link[parallelMap]{parallelStart}}}
 parallelization. Defaults to 1. For details see \code{\link[parallelMap]{parallelStart}}}
 
 \item{custom_indicator}{a list of functions containing the indicators to be
-calculated additionaly, such functions must and must only depend on the
+calculated additionaly. Such functions must and must only depend on the
 population income vector \code{y} and the poverty line \code{pov_line}. 
 Defaults to \code{NULL}.}
 
@@ -105,6 +105,8 @@ The set of predefined indicators includes the mean, median, four further quantil
 and the quintile share ratio.
 }
 \examples{
+# Since the Monte-Carlo iterations and number of bootstrap populations is set
+# to 50 as a default, evaluating below commands takes some computational time.
 \dontrun{
 # Loading data - population and sample data
 data("eusilcA_pop")

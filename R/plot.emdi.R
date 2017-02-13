@@ -1,17 +1,17 @@
 #' Plots for an emdi object
 #'
-#' Plots of the optimal parameter in Box-Cox transformations and density plots
-#' of residuals and random effects from the nested error regression model are
-#' obtained. The return depends on the transformation such that a plot for the
-#' optimal parameter is only returned in case a Box-Cox transformation is chosen.
-#' The range of the x-axis is optional but necessary to change if
-#' there are convergence problems. The density plots are obtained by
-#' \code{\link{ggplot}} using Pearson residuals and random effects. Function
-#' \code{generic_opt} is used for obtaining \code{\link{ggplot}} plots for the
-#' optimal parameter.
+#' Diagnostic plots of the underlying model in the EBP approach (see also 
+#' \code{\link{ebp}}) are obtained. These include Q-Q plots and density plots 
+#' of residuals and random effects from the nested error regression model, a 
+#' Cook's distance plot for detecting outliers and the log-likelihood of the 
+#' estimation of the optimal parameter in Box-Cox transformations. The return 
+#' depends on the transformation such that a plot for the optimal parameter is 
+#' only returned in case a Box-Cox transformation is chosen. The range of the 
+#' x-axis is optional but necessary to change if there are convergence problems. 
+#' All plots are obtained by \code{\link{ggplot}}.
 
-#' @param x an object of type "emdi", representing point and MSE
-#' estimates.
+#' @param x an object of type "emdi", "model", representing point and MSE
+#' estimates obtained by the EBP approach (see also \code{\link{ebp}}).
 #' @param label argument that enables to customize title and axis labels. There 
 #' are four options to label the diagsnostic plot: (i) original labels ("orig"), 
 #' (ii) axis lables but no title ("no_title"), (iii) neither axis 
@@ -43,7 +43,7 @@
 #' }
 #' @param color a character vector with two elements. The first element defines
 #' the color for the line in the QQ-plots, for the Cook's Distance plot and for
-#' the Box-Cox plot. The second element define the color for the densities. 
+#' the Box-Cox plot. The second element defines the color for the densities. 
 #' @param gg_theme \code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}. 
 #' @param cooks if TRUE, a Cook's distance plot is returned. The used method
 #' \code{\link[HLMdiag]{cooks.distance.lme}} struggles when data sets get large.
@@ -55,7 +55,8 @@
 #' leads in some cases to convergence problems such that is should be changed to
 #' e.g. the selected \code{interval}. This means for the default seq(-1,2,by=0.05).
 #' @param ... optional arguments passed to generic function.
-#' @return one line plot for the optimal parameter and two density plots
+#' @return Two Q-Q plots in one grid, two density plots, a Cook' distance plot 
+#' and a likelihood plot for the optimal parameter of the Box-Cox transformation 
 #' obtained by \code{\link{ggplot}}.
 #' @seealso \code{\link{emdiObject}}, \code{\link{ebp}}
 #' @examples
@@ -69,7 +70,7 @@
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 #' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' L= 1, na.rm = TRUE)
+#' na.rm = TRUE)
 #'
 #' # Creation of default diagnostic plots
 #' plot(emdi_model)

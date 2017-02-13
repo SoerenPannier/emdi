@@ -1,4 +1,4 @@
-#' Loading the shape file for austrian district
+#' Loading the shape file for austrian districts
 #'
 #' @return A shape file of class \code{SpatialPolygonsDataFrame}.
 #' @details The shape file contains the borders of Austrian districts. Thus, it

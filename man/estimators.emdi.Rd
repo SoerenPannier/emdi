@@ -16,11 +16,11 @@ shall be returned: (i) all calculated indicators ("all");
 (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
 "Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini", 
 "Quintile_Share" or the function name/s of "custom_indicator/s"; 
-(ii) groups of indicators: "Quantiles", "Poverty", "Inequality" or "Custom". 
+(iii) groups of indicators: "Quantiles", "Poverty", "Inequality" or "Custom". 
 Defaults to "all". Note, additional custom indicators can be 
-defined as argument for model-based approaches (\code{link{ebp}}) and do not 
-appear in groups of indicators even though these might belong to one of the 
-groups.}
+defined as argument for model-based approaches (see also \code{\link{ebp}}) 
+and do not appear in groups of indicators even though these might belong to 
+one of the groups.}
 
 \item{MSE}{optional logical. If TRUE, MSE estimates for selected indicators
 per domain are added to the data frame of point estimates. Defaults to FALSE.}

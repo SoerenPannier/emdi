@@ -18,18 +18,20 @@ shall be returned: (i) all calculated indicators ("all");
 (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
 "Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini", 
 "Quintile_Share" or the function name/s of "custom_indicator/s"; 
-(ii) groups of indicators: "Quantiles", "Poverty" or 
+(iii) groups of indicators: "Quantiles", "Poverty" or 
 "Inequality". Defaults to "all". Note, additional custom indicators can be 
-defined as argument for model-based approaches (\code{link{ebp}}) and do not 
-appear in groups of indicators even though these might belong to one of the 
-groups.}
+defined as argument for model-based approaches (see also \code{\link{ebp}}) 
+and do not appear in groups of indicators even though these might belong to 
+one of the groups.}
 
-\item{MSE}{logical. If TRUE, the MSE of the emdiObject is exported.}
+\item{MSE}{logical. If TRUE, the MSE of the emdiObject is exported. Defaults 
+to \code{FALSE}.}
 
-\item{CV}{logical. If TRUE, the CV of the emdiObject is exported.}
+\item{CV}{logical. If TRUE, the CV of the emdiObject is exported. Defaults 
+to \code{FALSE}.}
 
 \item{split}{logical. If TRUE, point estimates, MSE and CV are written to
-different sheets in the excel file.}
+different sheets in the excel file. Defaults to \code{FALSE}.}
 }
 \description{
 Function \code{write.excel} enables the user to export point and MSE 
@@ -61,6 +63,6 @@ write.excel(emdi_model, file ="excel_output_all_split.xlsx", indicator = "all",
 MSE = TRUE, CV = TRUE, split=TRUE)
 }
 \seealso{
-\code{\link{emdiObject}}, \code{\link{ebp}}
+\code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}}
 }
 

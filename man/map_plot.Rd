@@ -2,7 +2,7 @@
 % Please edit documentation in R/map_plot.R
 \name{map_plot}
 \alias{map_plot}
-\title{Visualises regional disaggregrated estimates on a map}
+\title{Visualizes regional disaggregrated estimates on a map}
 \usage{
 map_plot(object, indicator = "all", MSE = FALSE, CV = FALSE,
   map_obj = NULL, map_dom_id = NULL, map_tab = NULL, col = c("green",
@@ -10,25 +10,25 @@ map_plot(object, indicator = "all", MSE = FALSE, CV = FALSE,
 }
 \arguments{
 \item{object}{an object of type emdi, containing the estimates to be 
-visualised.}
+visualized.}
 
 \item{indicator}{optional character vector that selects which indicators
 shall be returned: (i) all calculated indicators ("all");
 (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
 "Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini", 
 "Quintile_Share" or the function name/s of "custom_indicator/s"; 
-(ii) groups of indicators: "Quantiles", "Poverty" or 
+(iii) groups of indicators: "Quantiles", "Poverty" or 
 "Inequality". Defaults to "all". Note, additional custom indicators can be 
-defined as argument for model-based approaches (\code{link{ebp}}) and do not 
-appear in groups of indicators even though these might belong to one of the 
-groups.}
+defined as argument for model-based approaches (see also \code{\link{ebp}}) 
+and do not appear in groups of indicators even though these might belong to 
+one of the groups.}
 
-\item{MSE}{optional logical. If TRUE, the MSE is also visualised.}
+\item{MSE}{optional logical. If TRUE, the MSE is also visualized.}
 
-\item{CV}{optional logical. If TRUE, the CV is also visualised.}
+\item{CV}{optional logical. If TRUE, the CV is also visualized.}
 
 \item{map_obj}{an \code{SpatialPolygonsDataFrame} object as defined by the
-\code{sp} package on which the data should be visualised.}
+\code{sp} package on which the data should be visualized.}
 
 \item{map_dom_id}{a character string containing the name of a variable in
 \code{map_obj} that indicates the domains.}
@@ -38,13 +38,14 @@ domain variable from the census data set (first column) with the domain
 variable in the map_obj (second column). This should only be used if the IDs 
 in both objects differ.}
 
-\item{col}{A \code{vector} of length 3 defining the lowest, mid and highest color in the plots}
+\item{col}{A \code{vector} of length 3 defining the lowest, mid and highest 
+color in the plots}
 }
 \value{
 creates the plots demanded
 }
 \description{
-Function \code{map_plot} creates spatial visualisations of the estimates
+Function \code{map_plot} creates spatial visualizations of the estimates
 obtained by small area estimation methods or direct estimation.
 }
 \examples{
@@ -63,7 +64,7 @@ custom_indicator = list( my_max = function(y, pov_line){max(y)},
 my_min = function(y, pov_line){min(y)}), na.rm = TRUE, cpus = 1)
 
 # Load shape file
-load(system.file("shapes/shape_austria_dis.RData", package="emdi"))
+load_shapeaustria()
 
 # Create mapping table such that variables that indicate domains correspond
 # in population data and shape file

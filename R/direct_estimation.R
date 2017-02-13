@@ -3,20 +3,18 @@
 #' Function \code{direct} estimates indicators only based on sample information. 
 #' The variance is estimated via a naive or calibrated bootstrap. The estimation
 #' is adapted from the estimation of direct indicators in package 
-#' laeken. 
+#' \pkg{laeken}. 
 #'
 #' @param y a character indicating the variable that is used for estimating the 
 #' indicators.
 #' @param smp_data survey data containing the above variable as well as sampling
-#' domains, and weights and sort if selected.
+#' domains, and weights if selected.
 #' @param smp_domains a character string containing the name of a variable
 #' that indicates domains in the sample data. The variable can be numeric or a
 #' factor.
 #' @param weights a character containing the name of a variable for 
 #' the sampling weights in the sample data. This argument is optional and defaults
 #' to \code{NULL}. 
-#' @param sort a character containing the name of a variable that should be used
-#' to sort the data. Defaults to \code{NULL}.
 #' @param pov_line a number defining a poverty line. A poverty line is
 #' needed for calculation e.g. of head count ratios and poverty gaps. The 
 #' argument defaults to \code{NULL}. In this case the poverty line is set to 60\% 
@@ -43,7 +41,7 @@
 #' @return An object of class "emdi" that provides direct estimators for regional
 #' disaggregated indicators and optionally corresponding variance estimates. Generic
 #' functions such as \code{\link{estimators}}, \code{\link{print}}, 
-#' \code{\link{plot}}, and \code{\link{summary}} have methods that can be used
+#' and \code{\link{summary}} have methods that can be used
 #' to obtain further information. See \code{\link{emdiObject}} for descriptions
 #' of components of objects of class "emdi".
 #' @details The set of predefined indicators includes the mean, median, four further quantiles
@@ -56,7 +54,7 @@
 #' Social Protection Committee (2001). Report on indicators in the field of
 #' poverty and social exclusions, Technical Report, European Union.
 #' @seealso \code{\link{emdiObject}}, \code{\link[nlme]{lme}},
-#' \code{\link{estimators.emdi}}, \code{\link{print.emdi}}, \code{\link{plot.emdi}},
+#' \code{\link{estimators.emdi}}, \code{\link{print.emdi}}, 
 #' \code{\link{summary.emdi}}
 #' @examples
 #' # Loading sample data

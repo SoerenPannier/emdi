@@ -29,11 +29,11 @@ estimators <- function(object, ...) UseMethod("estimators")
 #' (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
 #' "Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini", 
 #' "Quintile_Share" or the function name/s of "custom_indicator/s"; 
-#' (ii) groups of indicators: "Quantiles", "Poverty", "Inequality" or "Custom". 
+#' (iii) groups of indicators: "Quantiles", "Poverty", "Inequality" or "Custom". 
 #' Defaults to "all". Note, additional custom indicators can be 
-#' defined as argument for model-based approaches (\code{link{ebp}}) and do not 
-#' appear in groups of indicators even though these might belong to one of the 
-#' groups.  
+#' defined as argument for model-based approaches (see also \code{\link{ebp}}) 
+#' and do not appear in groups of indicators even though these might belong to 
+#' one of the groups.  
 #' @param MSE optional logical. If TRUE, MSE estimates for selected indicators
 #' per domain are added to the data frame of point estimates. Defaults to FALSE.
 #' @param CV optional logical. If TRUE, coefficients of variation for selected
@@ -119,7 +119,7 @@ print.estimators.emdi <- function(x,...) {
 #' point estimators and, if chosen, MSE and/or CV estimates for selected 
 #' indicators.
 #' @param n a single integer. If positive, it determines the number of rows for 
-#' the data frame. If negative, all but the n last/first rows of
+#' the data frame. If negative, all but the n last rows of
 #' elements of the object.
 #' @param addrownums if there are no row names, create them from the row numbers.
 #' @param ... arguments to be passed to or from other methods. 
@@ -136,7 +136,7 @@ head.estimators.emdi <- function(x, n = 6L, addrownums=NULL, ...) {
 #' point estimators and, if chosen, MSE and/or CV estimates for selected 
 #' indicators.
 #' @param n a single integer. If positive, it determines the number of rows for 
-#' the data frame. If negative, all but the n last/first rows of
+#' the data frame. If negative, all but the n first rows of
 #' elements of the object.
 #' @param addrownums if there are no row names, create them from the row numbers.
 #' @param ... arguments to be passed to or from other methods. 

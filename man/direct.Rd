@@ -13,7 +13,7 @@ direct(y, smp_data, smp_domains = NULL, weights = NULL, design = NULL,
 indicators.}
 
 \item{smp_data}{survey data containing the above variable as well as sampling
-domains, and weights and sort if selected.}
+domains, and weights if selected.}
 
 \item{smp_domains}{a character string containing the name of a variable
 that indicates domains in the sample data. The variable can be numeric or a
@@ -51,9 +51,6 @@ weights are used to calculate the totals.}
 \item{na.rm}{if TRUE, observations with \code{NA} values are deleted from the 
 sample data. Defaults to \code{FALSE}.}
 
-\item{sort}{a character containing the name of a variable that should be used
-to sort the data. Defaults to \code{NULL}.}
-
 \item{X}{a numeric matrix including calibration variables if the calibrated 
 bootstrap is chosen. Defaults to NULL.}
 }
@@ -61,7 +58,7 @@ bootstrap is chosen. Defaults to NULL.}
 An object of class "emdi" that provides direct estimators for regional
 disaggregated indicators and optionally corresponding variance estimates. Generic
 functions such as \code{\link{estimators}}, \code{\link{print}}, 
-\code{\link{plot}}, and \code{\link{summary}} have methods that can be used
+and \code{\link{summary}} have methods that can be used
 to obtain further information. See \code{\link{emdiObject}} for descriptions
 of components of objects of class "emdi".
 }
@@ -69,7 +66,7 @@ of components of objects of class "emdi".
 Function \code{direct} estimates indicators only based on sample information. 
 The variance is estimated via a naive or calibrated bootstrap. The estimation
 is adapted from the estimation of direct indicators in package 
-laeken.
+\pkg{laeken}.
 }
 \details{
 The set of predefined indicators includes the mean, median, four further quantiles
@@ -94,7 +91,7 @@ poverty and social exclusions, Technical Report, European Union.
 }
 \seealso{
 \code{\link{emdiObject}}, \code{\link[nlme]{lme}},
-\code{\link{estimators.emdi}}, \code{\link{print.emdi}}, \code{\link{plot.emdi}},
+\code{\link{estimators.emdi}}, \code{\link{print.emdi}}, 
 \code{\link{summary.emdi}}
 }
 

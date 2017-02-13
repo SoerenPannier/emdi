@@ -12,7 +12,7 @@ point estimators and, if chosen, MSE and/or CV estimates for selected
 indicators.}
 
 \item{n}{a single integer. If positive, it determines the number of rows for 
-the data frame. If negative, all but the n last/first rows of
+the data frame. If negative, all but the n last rows of
 elements of the object.}
 
 \item{addrownums}{if there are no row names, create them from the row numbers.}

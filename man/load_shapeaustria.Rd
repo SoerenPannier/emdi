@@ -2,7 +2,7 @@
 % Please edit documentation in R/load_shape.R
 \name{load_shapeaustria}
 \alias{load_shapeaustria}
-\title{Loading the shape file for austrian district}
+\title{Loading the shape file for austrian districts}
 \usage{
 load_shapeaustria()
 }
@@ -10,7 +10,7 @@ load_shapeaustria()
 A shape file of class \code{SpatialPolygonsDataFrame}.
 }
 \description{
-Loading the shape file for austrian district
+Loading the shape file for austrian districts
 }
 \details{
 The shape file contains the borders of Austrian districts. Thus, it

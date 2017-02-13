@@ -1,33 +1,34 @@
 # External documentation -------------------------------------------------------
 
-#' Visualises regional disaggregrated estimates on a map
+#' Visualizes regional disaggregrated estimates on a map
 #'
-#' Function \code{map_plot} creates spatial visualisations of the estimates
+#' Function \code{map_plot} creates spatial visualizations of the estimates
 #' obtained by small area estimation methods or direct estimation.
 #'
 #' @param object an object of type emdi, containing the estimates to be 
-#' visualised.
+#' visualized.
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
 #' (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
 #' "Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini", 
 #' "Quintile_Share" or the function name/s of "custom_indicator/s"; 
-#' (ii) groups of indicators: "Quantiles", "Poverty" or 
+#' (iii) groups of indicators: "Quantiles", "Poverty" or 
 #' "Inequality". Defaults to "all". Note, additional custom indicators can be 
-#' defined as argument for model-based approaches (\code{link{ebp}}) and do not 
-#' appear in groups of indicators even though these might belong to one of the 
-#' groups.  
-#' @param MSE optional logical. If TRUE, the MSE is also visualised.
-#' @param CV optional logical. If TRUE, the CV is also visualised.
+#' defined as argument for model-based approaches (see also \code{\link{ebp}}) 
+#' and do not appear in groups of indicators even though these might belong to 
+#' one of the groups.  
+#' @param MSE optional logical. If TRUE, the MSE is also visualized.
+#' @param CV optional logical. If TRUE, the CV is also visualized.
 #' @param map_obj an \code{SpatialPolygonsDataFrame} object as defined by the
-#' \code{sp} package on which the data should be visualised.
+#' \code{sp} package on which the data should be visualized.
 #' @param map_dom_id a character string containing the name of a variable in
 #' \code{map_obj} that indicates the domains. 
 #' @param map_tab a \code{data.frame} object with two columns that match the 
 #' domain variable from the census data set (first column) with the domain 
 #' variable in the map_obj (second column). This should only be used if the IDs 
 #' in both objects differ.
-#' @param col A \code{vector} of length 3 defining the lowest, mid and highest color in the plots
+#' @param col A \code{vector} of length 3 defining the lowest, mid and highest 
+#' color in the plots
 #' @return creates the plots demanded
 #' @seealso \code{\link{ebp}}, \code{\link{emdiObject}},
 #' \code{\link[maptools]{readShapePoly}}
@@ -78,7 +79,7 @@ map_plot <- function(object,
   if(is.null(map_obj))
   {
     message("No Map Object has been provided. An artificial polygone is used for
-            visualisation")
+            visualization")
     map_pseudo(object = object , indicator = indicator, panelplot = FALSE, MSE = MSE,
                CV = CV)
   }

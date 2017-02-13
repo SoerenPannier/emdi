@@ -35,7 +35,7 @@
 #' @param transformation a character string. Three different transformation
 #' types for the dependent variable can be chosen (i) no transformation ("no");
 #' (ii) log transformation ("log"); (iii) Box-Cox transformation ("box.cox").
-#' Defaults to \code{NULL}.
+#' Defaults to \code{"box.cox"}.
 #' @param interval a numeric vector containing a lower and upper limit
 #' determining an interval for the estimation of the optimal parameter. Defaults
 #' to c(-1,2). If the convergence fails, it is often advisable to choose a smaller
@@ -55,7 +55,7 @@
 #' @param cpus number determining the kernels that are used for the 
 #' parallelization. Defaults to 1. For details see \code{\link[parallelMap]{parallelStart}}
 #' @param custom_indicator a list of functions containing the indicators to be
-#' calculated additionaly, such functions must and must only depend on the
+#' calculated additionaly. Such functions must and must only depend on the
 #' population income vector \code{y} and the poverty line \code{pov_line}. 
 #' Defaults to \code{NULL}.
 #' @param na.rm if TRUE, observations with \code{NA} values are deleted from the 
@@ -88,6 +88,8 @@
 #' \code{\link{estimators.emdi}}, \code{\link{print.emdi}}, \code{\link{plot.emdi}},
 #' \code{\link{summary.emdi}}
 #' @examples
+#' # Since the Monte-Carlo iterations and number of bootstrap populations is set
+#' # to 50 as a default, evaluating below commands takes some computational time.
 #' \dontrun{
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
