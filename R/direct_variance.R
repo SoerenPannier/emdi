@@ -1,4 +1,4 @@
-direct_variance2 <- function( direct_estimator,
+direct_variance <- function( direct_estimator,
                               indicator_name,
                               y,
                               weights,

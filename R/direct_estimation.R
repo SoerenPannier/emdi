@@ -80,19 +80,19 @@
 #########################################################
 #########################################################
 
-direct2 <- function(y, 
-                    smp_data, 
-                    smp_domains = NULL, 
-                    weights = NULL, 
-                    design = NULL,
-                    pov_line = NULL,
-                    var = FALSE, 
-                    bootType = "naive", 
-                    B = NULL,
-                    seed = NULL,
-                    X_calib = NULL, 
-                    totals = NULL,
-                    na.rm = FALSE){
+direct <- function(y, 
+                   smp_data, 
+                   smp_domains = NULL, 
+                   weights = NULL, 
+                   design = NULL,
+                   pov_line = NULL,
+                   var = FALSE, 
+                   bootType = "naive", 
+                   B = NULL,
+                   seed = NULL,
+                   X_calib = NULL, 
+                   totals = NULL,
+                   na.rm = FALSE){
   
   
   direct_check1(y = y, smp_data = smp_data)
@@ -131,7 +131,7 @@ direct2 <- function(y,
 
 
   if(var == TRUE){
-    res <- mapply(FUN = direct_variance2,
+    res <- mapply(FUN = direct_variance,
                   direct_estimator =  framework$indicator_list,
                   indicator_name =  framework$indicator_names,
                   indicator = result_point,
