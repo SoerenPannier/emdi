@@ -18,7 +18,7 @@
 
 print.emdi <- function(x, ...) {
 
-  if(any(class(x)!="emdi")){
+  if(!any(class(x)=="emdi")){
     stop('First object needs to be of class emdi.')
   }
   

@@ -70,7 +70,7 @@ estimators <- function(object, ...) UseMethod("estimators")
 
 estimators.emdi <- function(object, indicator = "all", MSE = FALSE, CV = FALSE, ...) {
 
-  if(any(class(object)!="emdi")){
+  if(!any(class(object)=="emdi")){
     stop('First object needs to be of class emdi.')
   }
   

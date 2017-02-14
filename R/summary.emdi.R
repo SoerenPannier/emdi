@@ -66,7 +66,7 @@
 #'
 summary.emdi <- function(object, ...) {
   
-  if(any(class(object)!="emdi")){
+  if(!any(class(object)=="emdi")){
     stop('First object needs to be of class emdi.')
   }
   
