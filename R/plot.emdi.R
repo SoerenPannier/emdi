@@ -10,8 +10,8 @@
 #' x-axis is optional but necessary to change if there are convergence problems. 
 #' All plots are obtained by \code{\link{ggplot}}.
 
-#' @param x an object of type "emdi", "model", representing point and MSE
-#' estimates obtained by the EBP approach (see also \code{\link{ebp}}).
+#' @param x an object of type "emdi", "model", representing point and, if chosen, 
+#' MSE estimates obtained by the EBP approach (see also \code{\link{ebp}}).
 #' @param label argument that enables to customize title and axis labels. There 
 #' are four options to label the diagsnostic plot: (i) original labels ("orig"), 
 #' (ii) axis lables but no title ("no_title"), (iii) neither axis 
