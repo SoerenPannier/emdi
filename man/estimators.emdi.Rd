@@ -66,6 +66,6 @@ estimators(emdi_model, indicator = "Gini", MSE = TRUE, CV = TRUE)
 estimators(emdi_model, indicator = "Custom")
 }
 \seealso{
-\code{\link{emdiObject}}, \code{\link{ebp}}
+\code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}
 }
 

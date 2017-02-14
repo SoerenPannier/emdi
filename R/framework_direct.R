@@ -109,14 +109,14 @@ getIndicatorList <- function(){
                         weights, 
                         pov_line){
       sw <- sum(weights)
-      sum(weights[y < pov_line]) / sw * 100
+      sum(weights[y < pov_line]) / sw 
     },
     pgap_wrap =  function(y, 
                           weights, 
                           pov_line){
       
       sw <- sum(weights)
-      sum(weights  * (y < pov_line) * (pov_line - y) / pov_line) / sw * 100
+      sum(weights  * (y < pov_line) * (pov_line - y) / pov_line) / sw 
     },
     gini_wrap = function (y, 
                           weights = NULL, 
@@ -129,7 +129,7 @@ getIndicatorList <- function(){
       wy <- weights * y
       sw <- sum(weights)
       cw <- cumsum(weights)
-      100 * ((2 * sum(wy * cw) - sum(weights^2 * y))/(sw * sum(wy)) - 1)
+      ((2 * sum(wy * cw) - sum(weights^2 * y))/(sw * sum(wy)) - 1)
     }
     ,
     qsr_wrap = function (y, 
