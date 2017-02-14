@@ -8,8 +8,8 @@
   gg_theme = NULL, cooks = TRUE, range = NULL, ...)
 }
 \arguments{
-\item{x}{an object of type "emdi", "model", representing point and MSE
-estimates obtained by the EBP approach (see also \code{\link{ebp}}).}
+\item{x}{an object of type "emdi", "model", representing point and, if chosen, 
+MSE estimates obtained by the EBP approach (see also \code{\link{ebp}}).}
 
 \item{label}{argument that enables to customize title and axis labels. There 
 are four options to label the diagsnostic plot: (i) original labels ("orig"), 
