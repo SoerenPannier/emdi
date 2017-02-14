@@ -16,16 +16,21 @@ vs. model-based.}
 \value{
 an object of type "summary.emdi" with following
 components:
-\item{call}{a list containing an image of the function call that produced the
-            object.}
-\item{coeff_determ}{if model-based estimation, a data frame with colums R2, 
-                    ICC, Marginal_R2 and Conditional_R2 representing the coefficient of
-                    determination of a linear model without random effect,
-                    the intracluster correlation and two R2 measures
-                    for linear mixed models from the \pkg{MuMin} package
-                    obtained by function \code{\link{r.squaredGLMM}}.}
+\item{out_of_smp}{if model-based estimation, number of out-of-sample domains 
+equivalent to \code{N_dom_unobs} (see \code{\link{emdiObject}}).}
 \item{in_smp}{number of in-sample domains equivalent to \code{N_dom_smp}
              (see \code{\link{emdiObject}}).}
+\item{size_smp}{number of units in sample equivalent to \code{N_smp}
+(see \code{\link{emdiObject}}).}
+\item{size_pop}{if model-based estimation, number of units in population equivalent to \code{N_pop}
+(see \code{\link{emdiObject}}).}
+\item{size_dom}{a data frame with rows Sample_domains and Population_domains 
+(if model-based estimation) representing summary statisitics of the sample 
+sizes across domains of sample and population data respectively.}
+\item{transform}{if model-based estimation, a data frame with columns 
+                 Transformation, Method, Optimal_lambda and Shift_parameter representing the
+                 chosen transformation type and estimation method for lambda
+                 as well as their results.}
 \item{normality}{if model-based estimation, a data frame with columns Skewness, 
                  Kurtosis, Shapiro_W and Shapiro_p where the latter two represent
                  the results of a Shapiro-Wilks-Test for normality.
@@ -34,19 +39,15 @@ components:
                  \code{\link{skewness}} and \code{\link{kurtosis}} are from
                  the package \pkg{moments}. Details for the Shapiro-Wilks-Test
                  are provided by \code{\link{shapiro.test}}.}
-\item{out_of_smp}{if model-based estimation, number of out-of-sample domains 
-equivalent to \code{N_dom_unobs} (see \code{\link{emdiObject}}).}
-\item{size_dom}{a data frame with rows Sample_domains and Population_domains 
-(if model-based estimation) representing summary statisitics of the sample 
-sizes across domains of sample and population data respectively.}
-\item{size_pop}{if model-based estimation, number of units in population equivalent to \code{N_pop}
-(see \code{\link{emdiObject}}).}
-\item{size_smp}{number of units in sample equivalent to \code{N_smp}
-(see \code{\link{emdiObject}}).}
-\item{transform}{if model-based estimation, a data frame with columns 
-                 Transformation, Method, Optimal_lambda and Shift_parameter representing the
-                 chosen transformation type and estimation method for lambda
-                 as well as their results.}
+\item{icc}{if model-based estimation, the value of the intraclass coefficient.}
+\item{coeff_determ}{if model-based estimation, a data frame with colums R2, 
+                    ICC, Marginal_R2 and Conditional_R2 representing the coefficient of
+                    determination of a linear model without random effect,
+                    the intracluster correlation and two R2 measures
+                    for linear mixed models from the \pkg{MuMin} package
+                    obtained by function \code{\link{r.squaredGLMM}}.}                  
+\item{call}{a list containing an image of the function call that produced the
+            object.}
 }
 \description{
 Additional information about the data and model in small area estimation 

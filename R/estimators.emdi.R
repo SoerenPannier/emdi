@@ -70,6 +70,10 @@ estimators <- function(object, ...) UseMethod("estimators")
 
 estimators.emdi <- function(object, indicator = "all", MSE = FALSE, CV = FALSE, ...) {
 
+  if(any(class(object)!="emdi")){
+    stop('First object needs to be of class emdi.')
+  }
+  
   if (is.null(object$MSE) && (MSE == TRUE || CV == TRUE)){
     stop('No MSE estimates in object: arguments MSE and CV have to be FALSE')
   }
@@ -113,7 +117,8 @@ print.estimators.emdi <- function(x,...) {
 
 # Tail/head functions ----------------------------------------------------------
 
-#' Returns the first part of predicted indicators
+#' Returns the first part of predicted indicators and, if chosen, of MSE and 
+#' CV estimators.
 #'
 #' @param x an object of type "estimators.emdi", representing 
 #' point estimators and, if chosen, MSE and/or CV estimates for selected 
@@ -146,7 +151,8 @@ head.estimators.emdi <- function(x, n = 6L, addrownums=NULL, ...) {
   head(x$ind, n = n, addrownums = addrownums, ...)
 }
 
-#' Returns the last part of predicted indicators
+#' Returns the last part of predicted indicators and, if chosen, of MSE and 
+#' CV estimators.
 #'
 #' @param x an object of type "estimators.emdi", representing 
 #' point estimators and, if chosen, MSE and/or CV estimates for selected 

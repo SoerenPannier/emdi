@@ -2,7 +2,8 @@
 % Please edit documentation in R/estimators.emdi.R
 \name{head.estimators.emdi}
 \alias{head.estimators.emdi}
-\title{Returns the first part of predicted indicators}
+\title{Returns the first part of predicted indicators and, if chosen, of MSE and 
+CV estimators.}
 \usage{
 \method{head}{estimators.emdi}(x, n = 6L, addrownums = NULL, ...)
 }
@@ -23,7 +24,8 @@ elements of the object.}
 Selected rows of the object of type "estimators.emdi".
 }
 \description{
-Returns the first part of predicted indicators
+Returns the first part of predicted indicators and, if chosen, of MSE and 
+CV estimators.
 }
 \examples{
 # Loading data - population and sample data

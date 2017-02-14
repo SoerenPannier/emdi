@@ -18,6 +18,9 @@
 
 print.emdi <- function(x, ...) {
 
+  if(any(class(x)!="emdi")){
+    stop('First object needs to be of class emdi.')
+  }
   
   if(any(class(x)=="model")){
     cat("Empirical Best Prediction\n")

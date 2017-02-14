@@ -93,6 +93,12 @@ plot.emdi <- function(x,
                       gg_theme = NULL,
                       cooks = TRUE,
                       range = NULL, ...){
+  
+  if(!all(class(x)==c("emdi", "model"))){
+    stop('First object needs to be of class emdi, model. For emdi objects
+         obtained by direct estimation diagnostic plots are not reasonable.')
+  }
+  
   Residuals <- Random <- index <- lambda <- log_likelihood <- NULL # avoid note due to ggplot2
   # Preparation for plots
   residuals <- residuals(x$model, level=0, type = "pearson")
