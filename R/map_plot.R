@@ -39,11 +39,11 @@
 #' data("eusilcA_smp")
 #' 
 #' # generate emdi object with additional indicators; here via function ebp()
-#' set.seed(100); emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 
+#' emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 #' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' pov_line = 10722.66, transformation = "box.cox", L= 1, MSE = TRUE, B = 1,
+#' pov_line = 10722.66, transformation = "box.cox", L= 50, MSE = TRUE, B = 50,
 #' custom_indicator = list( my_max = function(y, pov_line){max(y)},
 #' my_min = function(y, pov_line){min(y)}), na.rm = TRUE, cpus = 1)
 #' 

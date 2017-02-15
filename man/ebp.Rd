@@ -105,8 +105,6 @@ The set of predefined indicators includes the mean, median, four further quantil
 and the quintile share ratio.
 }
 \examples{
-# Since the Monte-Carlo iterations and number of bootstrap populations is set
-# to 50 as a default, evaluating below commands takes some computational time.
 \dontrun{
 # Loading data - population and sample data
 data("eusilcA_pop")

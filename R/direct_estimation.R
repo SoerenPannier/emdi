@@ -57,6 +57,7 @@
 #' \code{\link{estimators.emdi}}, \code{\link{print.emdi}}, 
 #' \code{\link{summary.emdi}}
 #' @examples
+#' \dontrun{
 #' # Loading sample data
 #' data("eusilcA_smp")
 #'
@@ -64,6 +65,7 @@
 #' emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", 
 #' weights=NULL, pov_line=10859.24, var=TRUE, bootType = "naive", B=50, 
 #' seed=123, X = NULL, totals = NULL, na.rm=TRUE)
+#' }
 #' @export
 #' @importFrom boot boot
 #' @importFrom  Hmisc wtd.quantile

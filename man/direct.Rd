@@ -74,6 +74,7 @@ The set of predefined indicators includes the mean, median, four further quantil
 and the quintile share ratio.
 }
 \examples{
+\dontrun{
 # Loading sample data
 data("eusilcA_smp")
 
@@ -81,6 +82,7 @@ data("eusilcA_smp")
 emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", 
 weights=NULL, pov_line=10859.24, var=TRUE, bootType = "naive", B=50, 
 seed=123, X = NULL, totals = NULL, na.rm=TRUE)
+}
 }
 \references{
 Alfons, A. and Templ, M. (2013). Estimation of Social Exclusion Indicators

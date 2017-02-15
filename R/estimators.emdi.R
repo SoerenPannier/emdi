@@ -48,16 +48,17 @@ estimators <- function(object, ...) UseMethod("estimators")
 #' indicator or indicator group \code{ind_name}.
 #' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}
 #' @examples
+#' \dontrun{
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
 #'
 #' # generate emdi object with additional indicators; here via function ebp()
-#' set.seed(100); emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 
+#' emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 #' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' pov_line = 10722.66, transformation = "box.cox", L= 1, MSE = TRUE, B = 1,
+#' pov_line = 10722.66, transformation = "box.cox", L= 50, MSE = TRUE, B = 50,
 #' custom_indicator = list( my_max = function(y, pov_line){max(y)},
 #' my_min = function(y, pov_line){min(y)}), na.rm = TRUE, cpus = 1)
 #'
@@ -66,6 +67,7 @@ estimators <- function(object, ...) UseMethod("estimators")
 #' 
 #' # choose custom indicators without MSE and CV
 #' estimators(emdi_model, indicator = "Custom")
+#' }
 #' @export
 
 estimators.emdi <- function(object, indicator = "all", MSE = FALSE, CV = FALSE, ...) {
@@ -131,12 +133,13 @@ print.estimators.emdi <- function(x,...) {
 #' @return Selected rows of the object of type "estimators.emdi".
 #' @seealso \code{\link{estimators.emdi}}
 #' @examples
+#' \dontrun{
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
 #' 
 #' # generate emdi object with deleting missing values; here via function ebp()
-#' set.seed(100); emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 
+#' emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj,
 #' pop_data = eusilcA_pop, pop_domains = "district",
@@ -144,7 +147,8 @@ print.estimators.emdi <- function(x,...) {
 #' na.rm = TRUE)
 #'
 #' # choose first lines of the Gini coefficient, MSE and CV
-#' head(estimators(emdi_model, indicator = "Gini", MSE = TRUE, CV = TRUE))
+#' head(estimators(emdi_model, indicator = "Gini", MSE = FALSE, CV = TRUE))
+#' }
 #' @importFrom utils head
 #' @export
 head.estimators.emdi <- function(x, n = 6L, addrownums=NULL, ...) {
@@ -165,6 +169,7 @@ head.estimators.emdi <- function(x, n = 6L, addrownums=NULL, ...) {
 #' @return Selected rows of the object of type "estimators.emdi".
 #' @seealso \code{\link{estimators.emdi}}
 #' @examples
+#' \dontrun{
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
@@ -178,7 +183,8 @@ head.estimators.emdi <- function(x, n = 6L, addrownums=NULL, ...) {
 #' na.rm = TRUE)
 #'
 #' # choose last lines of the Gini coefficient, MSE and CV
-#' tail(estimators(emdi_model, indicator = "Gini", MSE = TRUE, CV = TRUE))
+#' tail(estimators(emdi_model, indicator = "Gini", MSE = FALSE, CV = TRUE))
+#' }
 #' @importFrom utils tail
 #' @export
 
