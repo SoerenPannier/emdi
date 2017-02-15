@@ -42,26 +42,26 @@ test_that("Does the direct estimation in emdi return the point and variance
   gini_all <- read.csv2("./gini_all.csv", sep=",")  
   gini_all_naive  <- read.csv2("./gini_all_naive.csv", sep=",")
   gini_all$Gini <- as.numeric(as.character(gini_all$Gini))/100
-  gini_all_naive$Gini <- as.numeric(as.character(gini_all_naive$Gini))
+  gini_all_naive$Gini <- as.numeric(as.character(gini_all_naive$Gini))/10000
 
   # Compare Gini from direct and benchmark
   expect_equal(gini_all,
                direct_all_naive$ind[, c("Domain","Gini")])
-  #expect_equal(gini_all_naive,
-  #             direct_all_naive$MSE[, c("Domain","Gini")])
+  expect_equal(gini_all_naive,
+               direct_all_naive$MSE[, c("Domain","Gini")])
   
   
   # QSR from laeken package (benchmark)
   qsr_all <- read.csv2("./qsr_all.csv", sep=",")  
   qsr_all_naive  <- read.csv2("./qsr_all_naive.csv", sep=",")
-  qsr_all$Quintile_Share <- as.numeric(as.character(qsr_all$Quintile_Share))/100
+  qsr_all$Quintile_Share <- as.numeric(as.character(qsr_all$Quintile_Share))
   qsr_all_naive$Quintile_Share <- as.numeric(as.character(qsr_all_naive$Quintile_Share))
   
   # Compare QSR from direct and benchmark
   # expect_equal(qsr_all,
   #             direct_all_naive$ind[, c("Domain","Quintile_Share")])
-  #expect_equal(qsr_all_naive,
-  #             direct_all_naive$MSE[, c("Domain","Quintile_Share")])
+  expect_equal(qsr_all_naive,
+               direct_all_naive$MSE[, c("Domain","Quintile_Share")])
   
 })
 
@@ -98,11 +98,11 @@ test_that("Does the direct estimation in emdi return the point and variance
             
             # Gini from laeken package (benchmark)
             gini_all_cali  <- read.csv2("./gini_all_cali.csv", sep=",")
-            gini_all_cali$Gini <- as.numeric(as.character(gini_all_cali$Gini))
+            gini_all_cali$Gini <- as.numeric(as.character(gini_all_cali$Gini))/10000
             
             # Compare Gini from direct and benchmark
-            #expect_equal(gini_all_cali,
-            #             direct_all_cali$MSE[, c("Domain","Gini")])
+            expect_equal(gini_all_cali,
+                         direct_all_cali$MSE[, c("Domain","Gini")])
             
             
             # QSR from laeken package (benchmark)
@@ -112,8 +112,8 @@ test_that("Does the direct estimation in emdi return the point and variance
             # Compare QSR from direct and benchmark
             # expect_equal(qsr_all,
             #             direct_all_naive$ind[, c("Domain","Quintile_Share")])
-            #expect_equal(qsr_all_cali,
-            #             direct_all_cali$MSE[, c("Domain","Quintile_Share")])
+            expect_equal(qsr_all_cali,
+                         direct_all_cali$MSE[, c("Domain","Quintile_Share")])
             
           })
 
