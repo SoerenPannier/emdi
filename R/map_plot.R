@@ -66,7 +66,7 @@
 #' map_tab = mapping_table)
 #' }
 #' @export
-#' @import maptools reshape2 
+#' @import rgeos maptools reshape2 
 
 map_plot <- function(object,
                      indicator = "all",
