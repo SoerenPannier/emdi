@@ -23,6 +23,16 @@
 #' to \code{FALSE}.
 #' @param split logical. If TRUE, point estimates, MSE and CV are written to
 #' different sheets in the excel file. Defaults to \code{FALSE}.
+#' @details This function creates an excel file via the package 
+#' \code{\link{openxlsx}}. The openxlsx package requires a zip application to be 
+#' available to R, such as the one that comes with Rtools, available here. (Windows only)
+#' If the command R  shell("zip") returns R 'zip' is not recognized as an 
+#' internal or external command, operable program or  batch file. Then: 
+#' \itemize{
+#' \item Install Rtools from: http://cran.r-project.org/bin/windows/Rtools/ and 
+#' modify the system PATH during installation.
+#' \item If Rtools is installed, add the Rtools bin directory paths (default 
+#' installation paths are c:and c:-4.6.3) to the system PATH variable.}
 #' @seealso \code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}}
 #' @examples 
 #' \dontrun{

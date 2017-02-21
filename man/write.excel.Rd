@@ -33,11 +33,21 @@ to \code{FALSE}.}
 \item{split}{logical. If TRUE, point estimates, MSE and CV are written to
 different sheets in the excel file. Defaults to \code{FALSE}.}
 }
+\value{
+bal
+}
 \description{
 Function \code{write.excel} enables the user to export point and MSE 
 estimates as well as diagnostics from \code{summary.emdi} to an excel file. 
 The user can choose if the results should be reported in one or several excel 
 sheets. Furthermore, a selection of indicators can be specified.
+}
+\details{
+This function creates an excel file via the package 
+\code{\link{openxlsx}}. The openxlsx package requires a zip application to be 
+available to R, such as the one that comes with Rtools, available here. (Windows only)
+If the command R  shell("zip") returns R 'zip' is not recognized as an 
+internal or external command, operable program or  batch file. Then:
 }
 \examples{
 \dontrun{

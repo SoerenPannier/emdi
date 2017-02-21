@@ -71,7 +71,6 @@ load_shapeaustria()
 mapping_table <- data.frame(unique(eusilcA_pop$district), 
 unique(shape_austria_dis$NAME_2))
 
-library(rgeos)
 # Create map plot for mean indicator - point and MSE estimates but no CV
 map_plot(object = emdi_model, MSE = TRUE, CV = FALSE, 
 map_obj = shape_austria_dis, indicator = c("Mean"), map_dom_id = "NAME_2", 
