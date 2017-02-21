@@ -156,7 +156,17 @@ notation <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
       return(G)
     }
     ,
-    qsr = function(y, pov_line) { t(sum(y[(y > quantile(y,0.8))]) / sum(y[(y < quantile(y,0.2))]))},
+    qsr = function(y, pov_line) {   
+      weights <- rep.int(1, length(y))
+      quant14 <- wtd.quantile(x = y, 
+                            weights = weights,
+                            probs = c(0.2, 0.8))
+    
+      iq1 <- y <= quant14[1]
+      iq4 <- y > quant14[2]
+      t((sum(weights[iq4] * y[iq4])/sum(weights[iq4]))/
+          (sum(weights[iq1] * y[iq1])/sum(weights[iq1])))
+      },
     quants = function(y, pov_line) {t(quantile(y, probs = c(.10,.25, .5, .75, .9)))}
   )
   
