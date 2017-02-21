@@ -2,9 +2,23 @@
 # needed in the following direct estimation. 
 
 
-framework_dir <- function(y, smp_data, smp_domains, weights, sort, 
+framework_dir <- function(y, smp_data, smp_domains, weights, 
                           pov_line, na.rm){
   
+  
+  if (isTRUE(na.rm)) {
+    indices <- !is.na(smp_data[y])
+    if(!is.null(weights)){
+      indices <- indices & !is.na(smp_data[weights])
+    }
+    smp_data <- smp_data[indices,]
+  } else if (any(is.na(smp_data[y]))){
+    warning('There are NA-Values in the target variable and na.rm is set FALSE. 
+            Therefore, only quantiles are estimated')
+  } else if(!is.null(weights) && any(is.na(smp_data[weights]))){
+    warning('There are NA-Values in the weights variable and na.rm is set FALSE. 
+            Therefore, only quantiles are estimated')
+  }
   
   
   # two versions of y, one vector version and one character version (original)
@@ -22,9 +36,7 @@ framework_dir <- function(y, smp_data, smp_domains, weights, sort,
     weights_vec <- rep.int(1, N_smp)
   }
   
-  if (!is.null(sort)) {
-    sort <- smp_data[, sort]
-  }
+
   byDomain <- !is.null(smp_domains)
   if (byDomain) {
     smp_domains_vec <- as.factor(smp_data[, smp_domains])
@@ -38,27 +50,16 @@ framework_dir <- function(y, smp_data, smp_domains, weights, sort,
   }
   
   
-  if (isTRUE(na.rm)) {
-    indices <- !is.na(y)
-    y_vec <- y_vec[indices]
-    if (!is.null(weights)) 
-      weights_vec <- weights_vec[indices]
-    if (!is.null(sort)) 
-      sort <- sort[indices]
-  } else if (any(is.na(y))){
-    return(NA)
-  } 
+
   
   
   if(is.null(pov_line)){
     if(is.null(weights)){
       pov_line <- 0.6 * median(y_vec)
     } else if (!is.null(weights)){
-      pov_line <- 0.6 * Quant_value(y = y_vec, 
-                                   weights = weights_vec,
-                                   pov_line = NULL,
-                                   prob = .5,
-                                   na.rm = na.rm)
+      pov_line <- 0.6 * wtd.quantile(x = y_vec, 
+                                     weights = weights_vec,
+                                     probs = .5)
     }
     
   }
@@ -76,8 +77,6 @@ framework_dir <- function(y, smp_data, smp_domains, weights, sort,
                        "Quantile_75",
                        "Quantile_90"
   )
-  
-  
   
   return(list(smp_data         = smp_data,
               y                = y, 
@@ -121,6 +120,7 @@ getIndicatorList <- function(){
     gini_wrap = function (y, 
                           weights = NULL, 
                           pov_line = NULL) {
+
       ord <- order(y)
       y <- y[ord]
       if (!is.null(weights)){
@@ -135,9 +135,6 @@ getIndicatorList <- function(){
     qsr_wrap = function (y, 
                          weights, 
                          pov_line){
-      ord <- order(y)
-      y <- y[ord]
-      weights <- weights[ord]
       quant14 <- wtd.quantile(x = y, weights = weights, 
                               probs = c(.2, .8))
       iq1 <- y <= quant14[1]

@@ -1,3 +1,4 @@
+
 direct_variance <- function( direct_estimator,
                               indicator_name,
                               y,

@@ -7,13 +7,14 @@ point_estim_direct <-  function(direct_estimator,
                                 X_calib, 
                                 totals){
   # whole sample value
+
   value <- direct_estimator(y = framework$y_vec, 
                             weights = framework$weights_vec, 
                             pov_line = framework$pov_line)
     valueByDomain <- 
       aggregate(1:framework$N_smp, 
                 list(Domain = framework$smp_domains_vec), 
-                function(i, y, pov_line, weights, sort) {
+                function(i, y, pov_line, weights) {
                   direct_estimator(y = y[i], 
                                    weights = weights[i], 
                                    pov_line = pov_line)

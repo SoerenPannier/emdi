@@ -23,6 +23,10 @@ factor.}
 the sampling weights in the sample data. This argument is optional and defaults
 to \code{NULL}.}
 
+\item{design}{a character containing the name of a variable for different 
+strata for stratified sampling designs. This argument is optional and defaults
+to \code{NULL}.}
+
 \item{pov_line}{a number defining a poverty line. A poverty line is
 needed for calculation e.g. of head count ratios and poverty gaps. The 
 argument defaults to \code{NULL}. In this case the poverty line is set to 60\% 
@@ -44,15 +48,15 @@ bootstrap variance. Defaults to \code{NULL}.}
 number generation is used in the bootstrap approach. If no seed is set, seed
 is chosen randomly.}
 
+\item{X_calib}{a numeric matrix including calibration variables if the calibrated 
+bootstrap is chosen. Defaults to NULL.}
+
 \item{totals}{a numeric vector providing the population totals if the calibrated 
 bootstrap is chosen.. Defaults to \code{NULL}. In this case, the sampling 
 weights are used to calculate the totals.}
 
 \item{na.rm}{if TRUE, observations with \code{NA} values are deleted from the 
 sample data. Defaults to \code{FALSE}.}
-
-\item{X}{a numeric matrix including calibration variables if the calibrated 
-bootstrap is chosen. Defaults to NULL.}
 }
 \value{
 An object of class "emdi" that provides direct estimators for regional

@@ -15,6 +15,9 @@
 #' @param weights a character containing the name of a variable for 
 #' the sampling weights in the sample data. This argument is optional and defaults
 #' to \code{NULL}. 
+#' @param design a character containing the name of a variable for different 
+#' strata for stratified sampling designs. This argument is optional and defaults
+#' to \code{NULL}. 
 #' @param pov_line a number defining a poverty line. A poverty line is
 #' needed for calculation e.g. of head count ratios and poverty gaps. The 
 #' argument defaults to \code{NULL}. In this case the poverty line is set to 60\% 
@@ -31,7 +34,7 @@
 #' @param seed an integer to set the seed for the random number generator. Random 
 #' number generation is used in the bootstrap approach. If no seed is set, seed
 #' is chosen randomly.
-#' @param X a numeric matrix including calibration variables if the calibrated 
+#' @param X_calib a numeric matrix including calibration variables if the calibrated 
 #' bootstrap is chosen. Defaults to NULL.
 #' @param totals a numeric vector providing the population totals if the calibrated 
 #' bootstrap is chosen.. Defaults to \code{NULL}. In this case, the sampling 
@@ -68,8 +71,9 @@
 #' }
 #' @export
 #' @importFrom boot boot
-#' @importFrom  Hmisc wtd.quantile
+#' @importFrom Hmisc wtd.quantile
 #' @importFrom MASS ginv
+#' @importFrom stats aggregate runif weighted.mean
 
 
 direct <- function(y, 
@@ -103,7 +107,6 @@ direct <- function(y,
                              smp_data = smp_data, 
                              smp_domains = smp_domains, 
                              weights = weights, 
-                             sort = NULL, 
                              pov_line = pov_line, 
                              na.rm = na.rm)
   
@@ -142,21 +145,24 @@ direct <- function(y,
                            ),
                   SIMPLIFY = F
     )
+  } else {
+    res <- result_point
   }
   ####### Putting together the emdi object
   
 
-    ind <- cbind(res[[1]]$valueByDomain$Domain, 
-                as.data.frame(lapply(res, function(erg){erg$valueByDomain[,2]}))
-    )
-    if(!var) {
-      MSE <- NULL 
-      } else {
-        MSE <- cbind(res[[1]]$varByDomain$Domain, 
-                as.data.frame(lapply(res, function(erg){erg$varByDomain[,2]}))
-                )
-      }
-  colnames(MSE) <- colnames(ind) <- c("Domain", framework$indicator_names)
+  ind <- cbind(res[[1]]$valueByDomain$Domain, 
+              as.data.frame(lapply(res, function(erg){erg$valueByDomain[,2]}))
+  )
+  if(!var) {
+    MSE <- NULL 
+    colnames(ind) <- c("Domain", framework$indicator_names)
+    } else {
+      MSE <- cbind(res[[1]]$varByDomain$Domain, 
+              as.data.frame(lapply(res, function(erg){erg$varByDomain[,2]}))
+              )
+      colnames(MSE) <- colnames(ind) <- c("Domain", framework$indicator_names)
+    }
   
   direct_out <- list(
     ind = ind, 
