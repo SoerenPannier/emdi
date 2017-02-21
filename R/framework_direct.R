@@ -3,7 +3,7 @@
 
 
 framework_dir <- function(y, smp_data, smp_domains, weights, 
-                          pov_line, na.rm){
+                          pov_line, custom_indicator, na.rm){
   
   
   if (isTRUE(na.rm)) {
@@ -65,7 +65,6 @@ framework_dir <- function(y, smp_data, smp_domains, weights,
   }
   
   indicator_list <- getIndicatorList()
- 
   indicator_names <- c("Mean",
                        "Head_Count",
                        "Poverty_Gap",
@@ -77,6 +76,10 @@ framework_dir <- function(y, smp_data, smp_domains, weights,
                        "Quantile_75",
                        "Quantile_90"
   )
+  if(!is.null(custom_indicator) && length(custom_indicator) > 0){
+    indicator_list <- c(indicator_list, custom_indicator)
+    indicator_names <- c(indicator_names, names(custom_indicator))
+  }
   
   return(list(smp_data         = smp_data,
               y                = y, 

@@ -72,7 +72,7 @@ parallelization. Defaults to 1. For details see \code{\link[parallelMap]{paralle
 
 \item{custom_indicator}{a list of functions containing the indicators to be
 calculated additionaly. Such functions must and must only depend on the
-population income vector \code{y} and the poverty line \code{pov_line}. 
+target variable \code{y} and the poverty line \code{pov_line}. 
 Defaults to \code{NULL}.}
 
 \item{na.rm}{if TRUE, observations with \code{NA} values are deleted from the 

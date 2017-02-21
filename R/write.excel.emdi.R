@@ -23,16 +23,21 @@
 #' to \code{FALSE}.
 #' @param split logical. If TRUE, point estimates, MSE and CV are written to
 #' different sheets in the excel file. Defaults to \code{FALSE}.
-#' @details This function creates an excel file via the package 
-#' \code{\link{openxlsx}}. The openxlsx package requires a zip application to be 
-#' available to R, such as the one that comes with Rtools, available here. (Windows only)
-#' If the command R  shell("zip") returns R 'zip' is not recognized as an 
-#' internal or external command, operable program or  batch file. Then: 
+#' @return An excel file is created in your working directory, or at the given
+#' path.
+#' @details This function creates an excel file via the package
+#' \code{\link{openxlsx}}. The \code{\link{openxlsx}} package requires a zip 
+#' application to be available to R. If this is not the case the authors of 
+#' \code{\link{openxlsx}} suggest the first of the two following ways. 
 #' \itemize{
-#' \item Install Rtools from: http://cran.r-project.org/bin/windows/Rtools/ and 
+#' \item Install Rtools from: http://cran.r-project.org/bin/windows/Rtools/ and
 #' modify the system PATH during installation.
-#' \item If Rtools is installed, add the Rtools bin directory paths (default 
-#' installation paths are c:and c:-4.6.3) to the system PATH variable.}
+#' \item If Rtools is installed, but no system path variable is set. One can 
+#' set such a variable temporarily to R by a command like: 
+#' \code{Sys.setenv("R_ZIPCMD" = "PathToTheRToolsFolder/bin/zip.exe")}
+#' }
+#' To check if a zip application is available they recommend the command 
+#' \code{shell("zip")}.
 #' @seealso \code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}}
 #' @examples 
 #' \dontrun{

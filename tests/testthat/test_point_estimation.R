@@ -11,7 +11,7 @@ load("./Xoutsamp_AuxVar.RData")
 test_that("Does monte_carlo function give benchmark results?", {
   
   # Single elements needed in monte_carlo()
-  framework <- notation(income~educ1,
+  framework <- framework_ebp(income~educ1,
                         Xoutsamp_AuxVar, 
                         "provlab", 
                         incomedata,

@@ -56,7 +56,7 @@
 #' parallelization. Defaults to 1. For details see \code{\link[parallelMap]{parallelStart}}
 #' @param custom_indicator a list of functions containing the indicators to be
 #' calculated additionaly. Such functions must and must only depend on the
-#' population income vector \code{y} and the poverty line \code{pov_line}. 
+#' target variable \code{y} and the poverty line \code{pov_line}. 
 #' Defaults to \code{NULL}.
 #' @param na.rm if TRUE, observations with \code{NA} values are deleted from the 
 #' population and sample data. For the EBP procedure complete observations  
@@ -152,16 +152,16 @@ ebp <- function(fixed,
 
   # Data manipulation and notational framework ---------------------------------
 
-  # The function notation can be found in script framework_ebp.R
-  framework <- notation(pop_data         = pop_data,
-                        pop_domains      = pop_domains,
-                        smp_data         = smp_data,
-                        smp_domains      = smp_domains,
-                        custom_indicator = custom_indicator,
-                        fixed            = fixed,
-                        pov_line         = pov_line,
-                        na.rm            = na.rm
-                        )
+  # The function framework_ebp can be found in script framework_ebp.R
+  framework <- framework_ebp( pop_data         = pop_data,
+                              pop_domains      = pop_domains,
+                              smp_data         = smp_data,
+                              smp_domains      = smp_domains,
+                              custom_indicator = custom_indicator,
+                              fixed            = fixed,
+                              pov_line         = pov_line,
+                              na.rm            = na.rm
+                              )
 
 
   

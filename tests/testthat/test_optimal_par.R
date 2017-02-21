@@ -15,7 +15,7 @@ test_that("Does function optimal_parameter() return the benchmark lambda?", {
   lambda <- as.numeric(as.character(ebp_optpar_bc[,"Optpar"]))
             
   # Single elements needed in optimal_parameter()
-  framework <- notation(income~educ1,
+  framework <- framework_ebp(income~educ1,
                         Xoutsamp_AuxVar, 
                         "provlab", 
                         incomedata,

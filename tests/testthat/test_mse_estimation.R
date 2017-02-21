@@ -11,7 +11,7 @@ test_that("Does parametric_bootstrap return the benchmark results?", {
 
   
   # Conduct single steps
-  framework <- notation(income~educ1,
+  framework <- framework_ebp(income~educ1,
                         Xoutsamp_AuxVar, 
                         "provlab", 
                         incomedata,

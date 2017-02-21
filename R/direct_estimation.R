@@ -39,6 +39,10 @@
 #' @param totals a numeric vector providing the population totals if the calibrated 
 #' bootstrap is chosen.. Defaults to \code{NULL}. In this case, the sampling 
 #' weights are used to calculate the totals.
+#' @param custom_indicator a list of functions containing the indicators to be
+#' calculated additionaly. Such functions must and must only depend on the
+#' target variable \code{y}, the \code{weights} and the poverty line 
+#' \code{pov_line}. Defaults to \code{NULL}.
 #' @param na.rm if TRUE, observations with \code{NA} values are deleted from the 
 #' sample data. Defaults to \code{FALSE}. 
 #' @return An object of class "emdi" that provides direct estimators for regional
@@ -88,6 +92,7 @@ direct <- function(y,
                    seed = NULL,
                    X_calib = NULL, 
                    totals = NULL,
+                   custom_indicator = NULL,
                    na.rm = FALSE){
   
   
@@ -108,6 +113,7 @@ direct <- function(y,
                              smp_domains = smp_domains, 
                              weights = weights, 
                              pov_line = pov_line, 
+                             custom_indicator = custom_indicator,
                              na.rm = na.rm)
   
   result_point <- mapply( FUN = point_estim_direct, 

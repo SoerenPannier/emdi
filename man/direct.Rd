@@ -6,7 +6,8 @@
 \usage{
 direct(y, smp_data, smp_domains = NULL, weights = NULL, design = NULL,
   pov_line = NULL, var = FALSE, bootType = "naive", B = NULL,
-  seed = NULL, X_calib = NULL, totals = NULL, na.rm = FALSE)
+  seed = NULL, X_calib = NULL, totals = NULL, custom_indicator = NULL,
+  na.rm = FALSE)
 }
 \arguments{
 \item{y}{a character indicating the variable that is used for estimating the 
@@ -54,6 +55,11 @@ bootstrap is chosen. Defaults to NULL.}
 \item{totals}{a numeric vector providing the population totals if the calibrated 
 bootstrap is chosen.. Defaults to \code{NULL}. In this case, the sampling 
 weights are used to calculate the totals.}
+
+\item{custom_indicator}{a list of functions containing the indicators to be
+calculated additionaly. Such functions must and must only depend on the
+target variable \code{y}, the \code{weights} and the poverty line 
+\code{pov_line}. Defaults to \code{NULL}.}
 
 \item{na.rm}{if TRUE, observations with \code{NA} values are deleted from the 
 sample data. Defaults to \code{FALSE}.}

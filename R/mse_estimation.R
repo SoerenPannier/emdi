@@ -6,59 +6,6 @@
 # mse_estim (see below)
 # The parametric boostrap approach can be find in Molina and Rao (2010) p. 376
 
-# External documentation -------------------------------------------------------
-
-# #' Estimates the Parametric Bootstrap MSE of the EBP approach
-# #'
-# #' Function \code{parametric_bootstrap} estimates the parametric bootstrap MSE
-# #' for regional disaggregated indicators using the Parametric Bootstrap approach
-# #' by \cite{Gonzalez-Manteiga et al. (2008)}.
-# #'
-# #' @param framework the result of applying function \code{\link{notation}}. A
-# #' list with 15 components containing rearranged data sets and vectors of
-# #' variables indicating the domains as well as determinants of the notational
-# #' framework (see also \code{\link{emdiObject}}).
-# #' @param point_estim the result of applying \code{\link{point_estim}}.
-# #' @param fixed fixed a two-sided linear formula object describing the
-# #' fixed-effects part of the nested error linear regression model with the
-# #' dependent variable on the left of a ~ operator and the explanatory
-# #' variables on the right, separated by + operators. The argument corresponds
-# #' to the argument \code{fixed} in function \code{\link[nlme]{lme}}.
-# #' @param transformation a character string. Three different transformation
-# #' types for the dependent variable can be chosen (i) no transformation ("no");
-# #' (ii) log transformation ("log"); (iii) Box-Cox transformation ("box.cox").
-# #' @param interval a numeric vector containing a lower and upper limit
-# #' determining an interval for the estimation of the optimal parameter. Defaults
-# #' to c(-1,2).
-# #' @param L a number determining the number of Monte-Carlo simulations.
-# #' @param B a number determining the number of bootstrap populations in the
-# #' parametric bootstrap approach (see also \cite{Gonzalez-Manteiga et al. (2008)})
-# #' used in the MSE estimation.
-# #' @return a data frame with MSE estimators for each indicator per domain.
-# #' @references
-# #' Gonzalez-Manteiga, W. et al. (2008). Bootstrap mean squared error of
-# #' a small-area EBLUP. Journal of Statistical Computation and Simulation,
-# #' 78:5, 443-462.
-# #' @seealso \code{\link{ebp}}, \code{\link{emdiObject}}, \code{\link{notation}},
-# #' \code{\link{point_estim}}
-# #' @examples
-# #' # Loading data
-# #' data("Xoutsamp_AuxVar")
-# #' data("incomedata")
-# #'
-# #' # Determine notational framework
-# #' framework <- notation(Xoutsamp_AuxVar, "provlab", incomedata, "provlab")
-# #'
-# #' # Obtain point predictions
-# #' set.seed(100); point <- point_estim(framework, income~educ1, 4500,
-# #' "box.cox", L=2)
-# #'
-# #' # Parametric bootstrap MSE
-# #' set.seed(100); mse <- parametric_bootstrap(framework, point, income ~ educ1,
-# #' 4500, "box.cox", L=2, B=2)
-# #' @export
-# #' @import nlme
-
 parametric_bootstrap <- function(framework,
                                  point_estim,
                                  fixed,
