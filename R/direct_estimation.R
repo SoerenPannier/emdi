@@ -72,6 +72,13 @@
 #' emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", 
 #' weights=NULL, pov_line=10859.24, var=TRUE, bootType = "naive", B=50, 
 #' seed=123, X = NULL, totals = NULL, na.rm=TRUE)
+#' 
+#' #' # Example with custom indicators
+#' emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", 
+#' weights=NULL, pov_line=10859.24, var=TRUE, bootType = "naive", B=50, 
+#' seed=123, X = NULL, totals = NULL, custom_indicator = list( my_max = 
+#' function(y, weights, pov_line){max(y)}, my_min = 
+#' function(y, weights, pov_line){min(y)}), na.rm=TRUE)
 #' }
 #' @export
 #' @importFrom boot boot
