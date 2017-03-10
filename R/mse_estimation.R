@@ -129,7 +129,7 @@ mse_estim <- function(framework,
                                     shift          = shift,
                                     vu_tmp         = superpop$vu_tmp
                                     )
-
+  
   framework$smp_data <- bootstrap_sample
 
   # Prediction of indicators with bootstap sample.
