@@ -16,7 +16,7 @@ test_that("Does the direct estimation in emdi return the point and variance
                              smp_domains="db040", 
                              weights="rb050", 
                              # with weights
-                             pov_line=10859.24, 
+                             threshold=10859.24, 
                              var=TRUE,
                              bootType = "naive",
                              X = NULL, 
@@ -76,9 +76,9 @@ test_that("Does the direct estimation in emdi return the point and variance
                                        smp_domains="db040", 
                                        weights="rb050", 
                                        # without weights
-                                       #pov_line = 10848.8, 
+                                       #threshold = 10848.8, 
                                        # with weights
-                                       pov_line=10859.24, 
+                                       threshold=10859.24, 
                                        var=TRUE,
                                        bootType = "calibrate",
                                        X = as.matrix(eusilc$age), 

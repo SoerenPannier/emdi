@@ -12,7 +12,7 @@ direct_variance <- function( direct_estimator,
                               seed,
                               X_calib, 
                               totals,
-                              pov_line){
+                              threshold){
 
   # Domain setup - domains and if variance is calculated by domain
   rs <- indicator$domain
@@ -89,7 +89,7 @@ direct_variance <- function( direct_estimator,
                      B, 
                      domain = design, 
                      #cluster = cluster, 
-                     pov_line = pov_line, 
+                     threshold = threshold, 
                      aux = X_calib, 
                      totals = totals, 
                      rs = rs)
@@ -118,18 +118,18 @@ direct_variance <- function( direct_estimator,
 getFun2 <- function(byDomain, direct_estimator){
   if(byDomain)
   {
-    function(x, pov_line, rs) {
-      value <- direct_estimator(x$y, x$weight, pov_line)
+    function(x, threshold, rs) {
+      value <- direct_estimator(x$y, x$weight, threshold)
       valueByDomain <- sapply(rs, function(r, x, t) {
         i <- x$Domain == r
-        direct_estimator(x$y[i], x$weight[i],  pov_line)
+        direct_estimator(x$y[i], x$weight[i],  threshold)
       }, x = x)
       c(value, valueByDomain)
     }
   }
   else{
-    function(x, pov_line, rs, na.rm) {
-      direct_estimator(x$y, x$weight, pov_line)
+    function(x, threshold, rs, na.rm) {
+      direct_estimator(x$y, x$weight, threshold)
     }
   }
 }
@@ -137,32 +137,32 @@ getFun2 <- function(byDomain, direct_estimator){
 # Function in order to select between naive and calibrate bootstrap
 getBootFun2  <- function(calibrate, fun) {
   if (calibrate) {
-    function(x, i, pov_line, aux, totals, rs, ...) {
+    function(x, i, threshold, aux, totals, rs, ...) {
       x <- x[i, , drop = FALSE]
       aux <- aux[i, , drop = FALSE]
       g <- calibWeights(aux, x$weight, totals, ...)
       x$weight <- g * x$weight
-      fun(x, pov_line, rs)
+      fun(x, threshold, rs)
     }
   } else {
-    function(x, i, pov_line, aux, totals, rs, ...) {
+    function(x, i, threshold, aux, totals, rs, ...) {
       x <- x[i, , drop = FALSE]
-      fun(x, pov_line, rs)
+      fun(x, threshold, rs)
     }
   }
 }
 
 # Wrapper function for bootstrap function
-clusterBoot2 <- function(data, statistic, ..., domain, pov_line, cluster = NULL){
+clusterBoot2 <- function(data, statistic, ..., domain, threshold, cluster = NULL){
   if (is.null(cluster)) {
-    boot(data, statistic,  pov_line = pov_line, ..., domain = domain)
+    boot(data, statistic,  threshold = threshold, ..., domain = domain)
   } else {
     fun <- function(cluster, i, ..., .data, .statistic) {
       i <- do.call(c, split(1:nrow(.data), .data$cluster)[i])
       .statistic(.data, i, ...)
     }
     keep <- !duplicated(cluster)
-    boot(cluster[keep], fun, ..., domain = domain[keep], pov_line = pov_line,
+    boot(cluster[keep], fun, ..., domain = domain[keep], threshold = threshold,
          .data = data, .statistic = statistic)
   }
 }

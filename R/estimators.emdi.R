@@ -58,9 +58,9 @@ estimators <- function(object, ...) UseMethod("estimators")
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 #' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' pov_line = 10722.66, transformation = "box.cox", L= 50, MSE = TRUE, B = 50,
-#' custom_indicator = list( my_max = function(y, pov_line){max(y)},
-#' my_min = function(y, pov_line){min(y)}), na.rm = TRUE, cpus = 1)
+#' threshold = 10722.66, transformation = "box.cox", L= 50, MSE = TRUE, B = 50,
+#' custom_indicator = list( my_max = function(y, threshold){max(y)},
+#' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 #'
 #' # choose Gini coefficient and MSE and CV
 #' estimators(emdi_model, indicator = "Gini", MSE = TRUE, CV = TRUE)

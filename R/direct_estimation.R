@@ -18,12 +18,12 @@
 #' @param design a character containing the name of a variable for different 
 #' strata for stratified sampling designs. This argument is optional and defaults
 #' to \code{NULL}. 
-#' @param pov_line a number defining a poverty line. A poverty line is
+#' @param threshold a number defining a threshold. A threshold is
 #' needed for calculation e.g. of head count ratios and poverty gaps. The 
-#' argument defaults to \code{NULL}. In this case the poverty line is set to 60\% 
+#' argument defaults to \code{NULL}. In this case the threshold is set to 60\% 
 #' of the median of the variable that is selected as y similary to the 
 #' At-risk-of-poverty rate used in the EU (see also \cite{Social Protection Committee 2001}). 
-#' However, any desired poverty line can be chosen.
+#' However, any desired threshold can be chosen.
 #' @param var if TRUE, estimates for the variance are calcualted using a 
 #' naive or calibrated bootstrap. Defaults to \code{FALSE}.
 #' @param bootType a character containing the name of the bootstrap specification. 
@@ -41,8 +41,8 @@
 #' weights are used to calculate the totals.
 #' @param custom_indicator a list of functions containing the indicators to be
 #' calculated additionaly. Such functions must and must only depend on the
-#' target variable \code{y}, the \code{weights} and the poverty line 
-#' \code{pov_line}. Defaults to \code{NULL}.
+#' target variable \code{y}, the \code{weights} and the threshold 
+#' \code{threshold}. Defaults to \code{NULL}.
 #' @param na.rm if TRUE, observations with \code{NA} values are deleted from the 
 #' sample data. Defaults to \code{FALSE}. 
 #' @return An object of class "emdi" that provides direct estimators for regional
@@ -70,15 +70,15 @@
 #'
 #' # Example without weights and naive bootstrap
 #' emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", 
-#' weights=NULL, pov_line=10859.24, var=TRUE, bootType = "naive", B=50, 
+#' weights=NULL, threshold=10859.24, var=TRUE, bootType = "naive", B=50, 
 #' seed=123, X = NULL, totals = NULL, na.rm=TRUE)
 #' 
 #' #' # Example with custom indicators
 #' emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", 
-#' weights=NULL, pov_line=10859.24, var=TRUE, bootType = "naive", B=50, 
+#' weights=NULL, threshold=10859.24, var=TRUE, bootType = "naive", B=50, 
 #' seed=123, X = NULL, totals = NULL, custom_indicator = list( my_max = 
-#' function(y, weights, pov_line){max(y)}, my_min = 
-#' function(y, weights, pov_line){min(y)}), na.rm=TRUE)
+#' function(y, weights, threshold){max(y)}, my_min = 
+#' function(y, weights, threshold){min(y)}), na.rm=TRUE)
 #' }
 #' @export
 #' @importFrom boot boot
@@ -92,7 +92,7 @@ direct <- function(y,
                    smp_domains = NULL, 
                    weights = NULL, 
                    design = NULL,
-                   pov_line = NULL,
+                   threshold = NULL,
                    var = FALSE, 
                    bootType = "naive", 
                    B = NULL,
@@ -106,7 +106,7 @@ direct <- function(y,
   direct_check1(y = y, smp_data = smp_data)
   
   direct_check2(smp_domains = smp_domains, weights = weights, sort = sort, 
-                pov_line = pov_line, var = var, bootType = bootType, 
+                threshold = threshold, var = var, bootType = bootType, 
                 B = B, X = X_calib, totals = totals)
   
   # Save call ------------------------------------------------------------------
@@ -119,7 +119,7 @@ direct <- function(y,
                              smp_data = smp_data, 
                              smp_domains = smp_domains, 
                              weights = weights, 
-                             pov_line = pov_line, 
+                             threshold = threshold, 
                              custom_indicator = custom_indicator,
                              na.rm = na.rm)
   
@@ -154,7 +154,7 @@ direct <- function(y,
                            seed = seed,
                            X_calib = X_calib, 
                            totals = totals,
-                           pov_line = framework$pov_line
+                           threshold = framework$threshold
                            ),
                   SIMPLIFY = F
     )

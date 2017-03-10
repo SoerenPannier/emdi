@@ -103,16 +103,16 @@ mse_estim <- function(framework,
   # True indicator values
   true_indicators <- matrix(nrow = framework$N_dom_pop,
                             data = unlist(lapply(framework$indicator_list,
-                                   function(f, pov_line){
+                                   function(f, threshold){
                                      matrix(nrow = framework$N_dom_pop,
                                             data = unlist(tapply(pop_income_vector,
                                                                  framework$pop_domains_vec, f,
-                                                                 pov_line = framework$pov_line ,
+                                                                 threshold = framework$threshold ,
                                                                  simplify = TRUE)
                                                           ),
                                             byrow=TRUE)
                                      },
-                                   pov_line = framework$pov_line)
+                                   threshold = framework$threshold)
                                    )
                             )
 
@@ -129,7 +129,7 @@ mse_estim <- function(framework,
                                     shift          = shift,
                                     vu_tmp         = superpop$vu_tmp
                                     )
-
+  
   framework$smp_data <- bootstrap_sample
 
   # Prediction of indicators with bootstap sample.
