@@ -99,7 +99,11 @@ mse_estim <- function(framework,
                               transformation = transformation)
 
   pop_income_vector <- superpop$pop_income_vector
-
+  
+  if("function" %in% class(framework$threshold )){
+    framework$threshold <- 
+      framework$threshold(y = pop_income_vector)
+  }
   # True indicator values
   true_indicators <- matrix(nrow = framework$N_dom_pop,
                             data = unlist(lapply(framework$indicator_list,

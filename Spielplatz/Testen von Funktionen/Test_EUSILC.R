@@ -11,7 +11,7 @@ emdi_direct <- direct(y = "eqIncome",
                       smp_data = eusilcA_smp, 
                       smp_domains = "district", 
                       weights = NULL, 
-                      pov_line = 10859.24, 
+                      threshold = 10859.24, 
                       var = TRUE, 
                       bootType = "naive", 
                       B = 5, 
@@ -20,6 +20,18 @@ emdi_direct <- direct(y = "eqIncome",
                       totals = NULL, 
                       na.rm = TRUE)
 
+emdi_direct_varth <- direct(y = "eqIncome", 
+                      smp_data = eusilcA_smp, 
+                      smp_domains = "district", 
+                      weights = NULL, 
+                      threshold = function(y, weights){median(y)},#10859.24, 
+                      var = TRUE, 
+                      bootType = "naive", 
+                      B = 5, 
+                      seed = 123, 
+                      X = NULL, 
+                      totals = NULL, 
+                      na.rm = TRUE)
 
 # Information about data
 print(emdi_direct)
@@ -67,6 +79,7 @@ write.excel(emdi_direct, file="excel_output.xlsx")
 
 
 # Model-based ------------------------------------------------------------------
+set.seed(100)
 emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
                      unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + 
                      rent + fam_allow + house_allow + cap_inv + tax_adj,
@@ -74,9 +87,22 @@ emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + self_empl +
                    pop_domains = "district",
                    smp_data = eusilcA_smp,
                    smp_domains = "district",
-                   na.rm = TRUE
+                   na.rm = TRUE,
+                   L = 5, B=5, MSE = T
 )
 
+set.seed(100)
+emdi_model_varth <- ebp( fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
+                     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + 
+                     rent + fam_allow + house_allow + cap_inv + tax_adj,
+                   pop_data = eusilcA_pop,
+                   pop_domains = "district",
+                   smp_data = eusilcA_smp,
+                   smp_domains = "district",
+                   na.rm = TRUE,
+                   threshold = function(y){0.6 * median(y)},
+                   L = 5, B = 5, MSE = T
+)
 
 
 emdi_model2 <- ebp( fixed = eqIncome ~ gender + eqsize + cash + self_empl + 

@@ -132,10 +132,9 @@ point_estim <- function (framework,
                        )
 
   # Monte-Carlo approximation --------------------------------------------------
-
   if("function" %in% class(framework$threshold )){
     framework$threshold <- 
-      framework$threshold(y = framework$ as.vector(smp_data[paste(fixed[2])]))
+      framework$threshold(y = as.numeric(framework$smp_data[[paste0(fixed[2])]]))
   }
   
   # The monte-carlo function returns a data frame of desired indicators.
