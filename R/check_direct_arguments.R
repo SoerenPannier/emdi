@@ -21,7 +21,7 @@ direct_check1 <- function(y,
 direct_check2 <- function(smp_domains = NULL, 
                           weights = NULL, 
                           sort = NULL,
-                          pov_line = NULL,
+                          threshold = NULL,
                           var = FALSE, 
                           bootType = "naive", 
                           B = NULL,
@@ -38,9 +38,9 @@ direct_check2 <- function(smp_domains = NULL,
     stop('Weights must be a character containing the name of a variable for the 
           sampling weights in the sample data. See also help(direct).')
   }
-  if(!is.null(pov_line) && !is.numeric(pov_line)){
-    stop('Pov_line needs to be a number. If it is NULL 60% of the median
-         is selected as poverty line.')
+  if(!is.null(threshold) && !is.numeric(threshold)){
+    stop('threshold needs to be a number. If it is NULL 60% of the median
+         is selected as threshold.')
   }
   if(class(var) != "logical"){
     stop("Var must be a logical value. Set Var to TRUE or FALSE. See also

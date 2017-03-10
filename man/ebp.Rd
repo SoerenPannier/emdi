@@ -5,7 +5,7 @@
 \title{Empirical Best Prediction for disaggregated indicators}
 \usage{
 ebp(fixed, pop_data, pop_domains, smp_data, smp_domains, L = 50,
-  pov_line = NULL, transformation = "box.cox", interval = c(-1, 2),
+  threshold = NULL, transformation = "box.cox", interval = c(-1, 2),
   MSE = FALSE, B = 50, parallel_mode = ifelse(grepl("windows",
   .Platform$OS.type, ), "socket", "multicore"), cpus = 1,
   custom_indicator = NULL, na.rm = FALSE)
@@ -37,12 +37,12 @@ factor but needs to be of the same class as the variable named in
 \item{L}{a number determining the number of Monte-Carlo simulations.Defaults
 to 50.}
 
-\item{pov_line}{a number defining a poverty line. A poverty line is
+\item{threshold}{a number defining a threshold. A threshold is
 needed for calculation e.g. of head count ratios and poverty gaps. The 
-argument defaults to \code{NULL}. In this case the poverty line is set to 60\% 
+argument defaults to \code{NULL}. In this case the threshold is set to 60\% 
 of the median of the variable that is selected as dependent variable similary 
 to the At-risk-of-poverty rate used in the EU (see also \cite{Social Protection 
-Committee 2001}). However, any desired poverty line can be chosen.}
+Committee 2001}). However, any desired threshold can be chosen.}
 
 \item{transformation}{a character string. Three different transformation
 types for the dependent variable can be chosen (i) no transformation ("no");
@@ -72,7 +72,7 @@ parallelization. Defaults to 1. For details see \code{\link[parallelMap]{paralle
 
 \item{custom_indicator}{a list of functions containing the indicators to be
 calculated additionaly. Such functions must and must only depend on the
-target variable \code{y} and the poverty line \code{pov_line}. 
+target variable \code{y} and the threshold \code{threshold}. 
 Defaults to \code{NULL}.}
 
 \item{na.rm}{if TRUE, observations with \code{NA} values are deleted from the 
@@ -123,9 +123,9 @@ emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
 self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-pov_line = 10722.66, transformation = "box.cox", L= 50, MSE = TRUE, B = 50,
-custom_indicator = list( my_max = function(y, pov_line){max(y)},
-my_min = function(y, pov_line){min(y)}), na.rm = TRUE, cpus = 1)
+threshold = 10722.66, transformation = "box.cox", L= 50, MSE = TRUE, B = 50,
+custom_indicator = list( my_max = function(y, threshold){max(y)},
+my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 }
 }
 \references{

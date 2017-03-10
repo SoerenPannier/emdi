@@ -3,7 +3,7 @@
 
 
 framework_dir <- function(y, smp_data, smp_domains, weights, 
-                          pov_line, custom_indicator, na.rm){
+                          threshold, custom_indicator, na.rm){
   
   
   if (isTRUE(na.rm)) {
@@ -53,11 +53,11 @@ framework_dir <- function(y, smp_data, smp_domains, weights,
 
   
   
-  if(is.null(pov_line)){
+  if(is.null(threshold)){
     if(is.null(weights)){
-      pov_line <- 0.6 * median(y_vec)
+      threshold <- 0.6 * median(y_vec)
     } else if (!is.null(weights)){
-      pov_line <- 0.6 * wtd.quantile(x = y_vec, 
+      threshold <- 0.6 * wtd.quantile(x = y_vec, 
                                      weights = weights_vec,
                                      probs = .5)
     }
@@ -95,7 +95,7 @@ framework_dir <- function(y, smp_data, smp_domains, weights,
               n_smp            = n_smp,
               indicator_list   = indicator_list,
               indicator_names  = indicator_names,
-              pov_line         = pov_line 
+              threshold         = threshold 
   )
   )
 }
@@ -104,25 +104,25 @@ getIndicatorList <- function(){
   list(
     mean_wrap = function(y, 
                           weights, 
-                          pov_line){
+                          threshold){
       weighted.mean(x = y, w = weights)
     },
     hcr_wrap = function(y, 
                         weights, 
-                        pov_line){
+                        threshold){
       sw <- sum(weights)
-      sum(weights[y < pov_line]) / sw 
+      sum(weights[y < threshold]) / sw 
     },
     pgap_wrap =  function(y, 
                           weights, 
-                          pov_line){
+                          threshold){
       
       sw <- sum(weights)
-      sum(weights  * (y < pov_line) * (pov_line - y) / pov_line) / sw 
+      sum(weights  * (y < threshold) * (threshold - y) / threshold) / sw 
     },
     gini_wrap = function (y, 
                           weights = NULL, 
-                          pov_line = NULL) {
+                          threshold = NULL) {
 
       ord <- order(y)
       y <- y[ord]
@@ -137,7 +137,7 @@ getIndicatorList <- function(){
     ,
     qsr_wrap = function (y, 
                          weights, 
-                         pov_line){
+                         threshold){
       quant14 <- wtd.quantile(x = y, weights = weights, 
                               probs = c(.2, .8))
       iq1 <- y <= quant14[1]
@@ -147,31 +147,31 @@ getIndicatorList <- function(){
     },
     quant10_wrap = function(y, 
                              weights, 
-                             pov_line){
+                             threshold){
       wtd.quantile(x = y, weights = weights, 
                    probs = .10)
     },
     quant25_wrap = function(y, 
                              weights, 
-                             pov_line){
+                             threshold){
       wtd.quantile(x = y, weights = weights, 
                    probs = .25)
     },
     quant50_wrap = function(y, 
                              weights, 
-                             pov_line){
+                             threshold){
       wtd.quantile(x = y, weights = weights, 
                    probs = .50)
     },
     quant75_wrap = function(y, 
                              weights, 
-                             pov_line){
+                             threshold){
       wtd.quantile(x = y, weights = weights, 
                    probs = .75)
     },
     quant90_wrap = function(y, 
                              weights, 
-                             pov_line){
+                             threshold){
       wtd.quantile(x = y, weights = weights, 
                    probs = .9)
     }

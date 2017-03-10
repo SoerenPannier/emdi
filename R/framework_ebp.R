@@ -7,7 +7,7 @@
 
 
 framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, 
-                     pov_line, custom_indicator = NULL, na.rm) {
+                     threshold, custom_indicator = NULL, na.rm) {
 
   #smp_domains_orig <- smp_domains
   
@@ -70,10 +70,10 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
   fw_check2(obs_dom = obs_dom, dist_obs_dom = dist_obs_dom)
 
   indicator_list <- list(
-    fast_mean = function(y, pov_line) {t(mean(y))},
-    hcr = function(y, pov_line) {t(mean(y < pov_line))},
-    pgap = function(y, pov_line) {t(mean((y < pov_line) * (pov_line - y) / pov_line))},
-    gini = function(y, pov_line) {
+    fast_mean = function(y, threshold) {t(mean(y))},
+    hcr = function(y, threshold) {t(mean(y < threshold))},
+    pgap = function(y, threshold) {t(mean((y < threshold) * (threshold - y) / threshold))},
+    gini = function(y, threshold) {
       n <- length(y)
       y <- sort(y)
       G <- sum(y * 1L:n)
@@ -82,7 +82,7 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
       return(G)
     }
     ,
-    qsr = function(y, pov_line) {   
+    qsr = function(y, threshold) {   
       weights <- rep.int(1, length(y))
       quant14 <- wtd.quantile(x = y, 
                             weights = weights,
@@ -93,7 +93,7 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
       t((sum(weights[iq4] * y[iq4])/sum(weights[iq4]))/
           (sum(weights[iq1] * y[iq1])/sum(weights[iq1])))
       },
-    quants = function(y, pov_line) {t(quantile(y, probs = c(.10,.25, .5, .75, .9)))}
+    quants = function(y, threshold) {t(quantile(y, probs = c(.10,.25, .5, .75, .9)))}
   )
   
   indicator_names <- c("Mean",
@@ -114,12 +114,12 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
     indicator_names <- c(indicator_names, names(custom_indicator))
   }
 
-  if(is.null(pov_line)){
-    pov_line <- 0.6 * median(smp_data[[paste(fixed[2])]])
+  if(is.null(threshold)){
+    threshold <- 0.6 * median(smp_data[[paste(fixed[2])]])
     cat("The poverty line for the HCR and the PG is automatically set to 60% of 
-        the median of the dependent variable and equals",pov_line, "\n")
+        the median of the dependent variable and equals",threshold, "\n")
   } else {
-    pov_line <- pov_line
+    threshold <- threshold
   }
 
   return(list(pop_data         = pop_data,
@@ -139,7 +139,7 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
               dist_obs_dom     = dist_obs_dom,
               indicator_list   = indicator_list,
               indicator_names  = indicator_names,
-              pov_line         = pov_line
+              threshold         = threshold
               )
          )
 }
