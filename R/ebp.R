@@ -26,12 +26,15 @@
 #' that indicates domains in the sample data. The variable can be numeric or a
 #' factor but needs to be of the same class as the variable named in
 #' \code{pop_domains}.
-#' @param pov_line a number defining a poverty line. A poverty line is
-#' needed for calculation e.g. of head count ratios and poverty gaps. The 
-#' argument defaults to \code{NULL}. In this case the poverty line is set to 60\% 
-#' of the median of the variable that is selected as dependent variable similary 
-#' to the At-risk-of-poverty rate used in the EU (see also \cite{Social Protection 
-#' Committee 2001}). However, any desired poverty line can be chosen.
+#' @param threshold a number defining a threshold. Alternatively, a threshold may 
+#' be defined as a \code{function} of \code{y} returning a numeric value. Such a 
+#' function will be evaluated once for the point estimation and in each iteration 
+#' of the parametric bootstrap. A threshold is needed for calculation e.g. of 
+#' head count ratios and poverty gaps. The  argument defaults to \code{NULL}. 
+#' In this case the threshold is set to 60\% of the median of the variable that 
+#' is selected as dependent variable similary to the At-risk-of-poverty rate 
+#' used in the EU (see also \cite{Social Protection Committee 2001}). However, 
+#' any desired threshold can be chosen.
 #' @param transformation a character string. Three different transformation
 #' types for the dependent variable can be chosen (i) no transformation ("no");
 #' (ii) log transformation ("log"); (iii) Box-Cox transformation ("box.cox").
@@ -56,7 +59,7 @@
 #' parallelization. Defaults to 1. For details see \code{\link[parallelMap]{parallelStart}}
 #' @param custom_indicator a list of functions containing the indicators to be
 #' calculated additionaly. Such functions must and must only depend on the
-#' population income vector \code{y} and the poverty line \code{pov_line}. 
+#' target variable \code{y} and the threshold \code{threshold}. 
 #' Defaults to \code{NULL}.
 #' @param na.rm if TRUE, observations with \code{NA} values are deleted from the 
 #' population and sample data. For the EBP procedure complete observations  
@@ -106,9 +109,10 @@
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 #' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' pov_line = 10722.66, transformation = "box.cox", L= 50, MSE = TRUE, B = 50,
-#' custom_indicator = list( my_max = function(y, pov_line){max(y)},
-#' my_min = function(y, pov_line){min(y)}), na.rm = TRUE, cpus = 1)
+#' threshold = function(y){0.5 * median(y)}, transformation = "box.cox", 
+#' L= 50, MSE = TRUE, B = 50, custom_indicator = 
+#' list( my_max = function(y, threshold){max(y)},
+#' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 #' }
 #' @export
 #' @import nlme
@@ -125,7 +129,7 @@ ebp <- function(fixed,
                 smp_data,
                 smp_domains,
                 L = 50,
-                pov_line = NULL,
+                threshold = NULL,
                 transformation = "box.cox",
                 interval = c(-1,2),
                 MSE = FALSE,
@@ -140,7 +144,7 @@ ebp <- function(fixed,
   ebp_check1(fixed = fixed, pop_data = pop_data, pop_domains = pop_domains,
              smp_data = smp_data, smp_domains = smp_domains, L = L) 
   
-  ebp_check2(pov_line = pov_line, transformation = transformation, 
+  ebp_check2(threshold = threshold, transformation = transformation, 
              interval = interval, MSE = MSE, B = B, 
              custom_indicator = custom_indicator, cpus = cpus)
     
@@ -152,16 +156,16 @@ ebp <- function(fixed,
 
   # Data manipulation and notational framework ---------------------------------
 
-  # The function notation can be found in script framework_ebp.R
-  framework <- notation(pop_data         = pop_data,
-                        pop_domains      = pop_domains,
-                        smp_data         = smp_data,
-                        smp_domains      = smp_domains,
-                        custom_indicator = custom_indicator,
-                        fixed            = fixed,
-                        pov_line         = pov_line,
-                        na.rm            = na.rm
-                        )
+  # The function framework_ebp can be found in script framework_ebp.R
+  framework <- framework_ebp( pop_data         = pop_data,
+                              pop_domains      = pop_domains,
+                              smp_data         = smp_data,
+                              smp_domains      = smp_domains,
+                              custom_indicator = custom_indicator,
+                              fixed            = fixed,
+                              threshold         = threshold,
+                              na.rm            = na.rm
+                              )
 
 
   

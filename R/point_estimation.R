@@ -132,9 +132,12 @@ point_estim <- function (framework,
                        )
 
   # Monte-Carlo approximation --------------------------------------------------
-
+  if("function" %in% class(framework$threshold )){
+    framework$threshold <- 
+      framework$threshold(y = as.numeric(framework$smp_data[[paste0(fixed[2])]]))
+  }
+  
   # The monte-carlo function returns a data frame of desired indicators.
-
   indicator_prediction <- monte_carlo(transformation = transformation,
                                       L              = L,
                                       framework      = framework,
@@ -250,14 +253,14 @@ monte_carlo <- function(transformation,
     # Calculation of indicators for each Monte Carlo population
 
     ests_mcmc[,l,] <- matrix(nrow=framework$N_dom_pop, data = unlist(lapply(
-      framework$indicator_list, function(f, pov_line){matrix(nrow=framework$N_dom_pop, 
+      framework$indicator_list, function(f, threshold){matrix(nrow=framework$N_dom_pop, 
                                                              data = unlist(tapply(
                                                                population_vector,
                                                               framework$pop_domains_vec, 
                                                               f, 
-                                                              pov_line = framework$pov_line,
+                                                              threshold = framework$threshold,
                                                               simplify = TRUE)),byrow=TRUE)}, 
-      pov_line = framework$pov_line)))
+      threshold = framework$threshold)))
 
   } # End for loop
 

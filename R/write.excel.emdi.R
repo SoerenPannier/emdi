@@ -23,6 +23,21 @@
 #' to \code{FALSE}.
 #' @param split logical. If TRUE, point estimates, MSE and CV are written to
 #' different sheets in the excel file. Defaults to \code{FALSE}.
+#' @return An excel file is created in your working directory, or at the given
+#' path.
+#' @details This function creates an excel file via the package
+#' \code{\link{openxlsx}}. The \code{\link{openxlsx}} package requires a zip 
+#' application to be available to R. If this is not the case the authors of 
+#' \code{\link{openxlsx}} suggest the first of the two following ways. 
+#' \itemize{
+#' \item Install Rtools from: http://cran.r-project.org/bin/windows/Rtools/ and
+#' modify the system PATH during installation.
+#' \item If Rtools is installed, but no system path variable is set. One can 
+#' set such a variable temporarily to R by a command like: 
+#' \code{Sys.setenv("R_ZIPCMD" = "PathToTheRToolsFolder/bin/zip.exe")}
+#' }
+#' To check if a zip application is available they recommend the command 
+#' \code{shell("zip")}.
 #' @seealso \code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}}
 #' @examples 
 #' \dontrun{
@@ -35,9 +50,9 @@
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 #' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' pov_line = 10722.66, transformation = "box.cox", L= 50, MSE = TRUE, B = 50,
-#' custom_indicator = list( my_max = function(y, pov_line){max(y)},
-#' my_min = function(y, pov_line){min(y)}), na.rm = TRUE, cpus = 1)
+#' threshold = 10722.66, transformation = "box.cox", L= 50, MSE = TRUE, B = 50,
+#' custom_indicator = list( my_max = function(y, threshold){max(y)},
+#' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 #' 
 #' # Export estimates for all indicators and uncertainty measures and 
 #' # diagnostics to excel

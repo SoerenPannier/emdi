@@ -15,12 +15,18 @@
 #' @param weights a character containing the name of a variable for 
 #' the sampling weights in the sample data. This argument is optional and defaults
 #' to \code{NULL}. 
-#' @param pov_line a number defining a poverty line. A poverty line is
+#' @param design a character containing the name of a variable for different 
+#' strata for stratified sampling designs. This argument is optional and defaults
+#' to \code{NULL}. 
+#' @param threshold a number defining a threshold. Alternatively, a threshold may 
+#' be defined as a \code{function} of \code{y} and \code{weights} returning a 
+#' numeric value. Such a function will be evaluated once for the point 
+#' estimation and in each iteration of the parametric bootstrap. A threshold is
 #' needed for calculation e.g. of head count ratios and poverty gaps. The 
-#' argument defaults to \code{NULL}. In this case the poverty line is set to 60\% 
+#' argument defaults to \code{NULL}. In this case the threshold is set to 60\% 
 #' of the median of the variable that is selected as y similary to the 
 #' At-risk-of-poverty rate used in the EU (see also \cite{Social Protection Committee 2001}). 
-#' However, any desired poverty line can be chosen.
+#' However, any desired threshold can be chosen.
 #' @param var if TRUE, estimates for the variance are calcualted using a 
 #' naive or calibrated bootstrap. Defaults to \code{FALSE}.
 #' @param bootType a character containing the name of the bootstrap specification. 
@@ -31,11 +37,15 @@
 #' @param seed an integer to set the seed for the random number generator. Random 
 #' number generation is used in the bootstrap approach. If no seed is set, seed
 #' is chosen randomly.
-#' @param X a numeric matrix including calibration variables if the calibrated 
+#' @param X_calib a numeric matrix including calibration variables if the calibrated 
 #' bootstrap is chosen. Defaults to NULL.
 #' @param totals a numeric vector providing the population totals if the calibrated 
 #' bootstrap is chosen.. Defaults to \code{NULL}. In this case, the sampling 
 #' weights are used to calculate the totals.
+#' @param custom_indicator a list of functions containing the indicators to be
+#' calculated additionaly. Such functions must and must only depend on the
+#' target variable \code{y}, the \code{weights} and the threshold 
+#' \code{threshold}. Defaults to \code{NULL}.
 #' @param na.rm if TRUE, observations with \code{NA} values are deleted from the 
 #' sample data. Defaults to \code{FALSE}. 
 #' @return An object of class "emdi" that provides direct estimators for regional
@@ -63,13 +73,21 @@
 #'
 #' # Example without weights and naive bootstrap
 #' emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", 
-#' weights=NULL, pov_line=10859.24, var=TRUE, bootType = "naive", B=50, 
+#' weights=NULL, threshold=10859.24, var=TRUE, bootType = "naive", B=50, 
 #' seed=123, X = NULL, totals = NULL, na.rm=TRUE)
+#' 
+#' #' # Example with custom indicators
+#' emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", 
+#' weights=NULL, threshold=10859.24, var=TRUE, bootType = "naive", B=50, 
+#' seed=123, X = NULL, totals = NULL, custom_indicator = list( my_max = 
+#' function(y, weights, threshold){max(y)}, my_min = 
+#' function(y, weights, threshold){min(y)}), na.rm=TRUE)
 #' }
 #' @export
 #' @importFrom boot boot
-#' @importFrom  Hmisc wtd.quantile
+#' @importFrom Hmisc wtd.quantile
 #' @importFrom MASS ginv
+#' @importFrom stats aggregate runif weighted.mean
 
 
 direct <- function(y, 
@@ -77,20 +95,21 @@ direct <- function(y,
                    smp_domains = NULL, 
                    weights = NULL, 
                    design = NULL,
-                   pov_line = NULL,
+                   threshold = NULL,
                    var = FALSE, 
                    bootType = "naive", 
                    B = NULL,
                    seed = NULL,
                    X_calib = NULL, 
                    totals = NULL,
+                   custom_indicator = NULL,
                    na.rm = FALSE){
   
   
   direct_check1(y = y, smp_data = smp_data)
   
   direct_check2(smp_domains = smp_domains, weights = weights, sort = sort, 
-                pov_line = pov_line, var = var, bootType = bootType, 
+                threshold = threshold, var = var, bootType = bootType, 
                 B = B, X = X_calib, totals = totals)
   
   # Save call ------------------------------------------------------------------
@@ -103,8 +122,8 @@ direct <- function(y,
                              smp_data = smp_data, 
                              smp_domains = smp_domains, 
                              weights = weights, 
-                             sort = NULL, 
-                             pov_line = pov_line, 
+                             threshold = threshold, 
+                             custom_indicator = custom_indicator,
                              na.rm = na.rm)
   
   result_point <- mapply( FUN = point_estim_direct, 
@@ -138,25 +157,28 @@ direct <- function(y,
                            seed = seed,
                            X_calib = X_calib, 
                            totals = totals,
-                           pov_line = framework$pov_line
+                           threshold = framework$threshold
                            ),
                   SIMPLIFY = F
     )
+  } else {
+    res <- result_point
   }
   ####### Putting together the emdi object
   
 
-    ind <- cbind(res[[1]]$valueByDomain$Domain, 
-                as.data.frame(lapply(res, function(erg){erg$valueByDomain[,2]}))
-    )
-    if(!var) {
-      MSE <- NULL 
-      } else {
-        MSE <- cbind(res[[1]]$varByDomain$Domain, 
-                as.data.frame(lapply(res, function(erg){erg$varByDomain[,2]}))
-                )
-      }
-  colnames(MSE) <- colnames(ind) <- c("Domain", framework$indicator_names)
+  ind <- cbind(res[[1]]$valueByDomain$Domain, 
+              as.data.frame(lapply(res, function(erg){erg$valueByDomain[,2]}))
+  )
+  if(!var) {
+    MSE <- NULL 
+    colnames(ind) <- c("Domain", framework$indicator_names)
+    } else {
+      MSE <- cbind(res[[1]]$varByDomain$Domain, 
+              as.data.frame(lapply(res, function(erg){erg$varByDomain[,2]}))
+              )
+      colnames(MSE) <- colnames(ind) <- c("Domain", framework$indicator_names)
+    }
   
   direct_out <- list(
     ind = ind, 

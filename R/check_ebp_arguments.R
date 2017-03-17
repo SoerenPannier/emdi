@@ -34,11 +34,12 @@ ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L){
   
 }
 
-ebp_check2 <- function(pov_line, transformation, interval, MSE, B, 
+ebp_check2 <- function(threshold, transformation, interval, MSE, B, 
                        custom_indicator, cpus){
-  if(!(is.null(pov_line) || is.numeric(pov_line))){
-    stop("Pov_line needs to be a number. If it is NULL 60% of the median
-         is selected as poverty line.")
+  if(!(is.null(threshold) || is.numeric(threshold) 
+       || "function" %in% class(threshold))){
+    stop("threshold needs to be a number or a function of y. 
+          If it is NULL 60% of the median is selected as threshold.")
   }
   if(!(transformation=="box.cox" || transformation=="log" || transformation=="no")){
     stop("The three options for transformation are ''no'', ''log'' or ''box.cox''." )
@@ -62,11 +63,11 @@ ebp_check2 <- function(pov_line, transformation, interval, MSE, B,
     for(i in 1:N_custom){
       #if(length(formals(custom_indicator[[i]])) != 2){
       #  stop("Function for custom indicators needs to have two arguments: y and
-      #       pov_line. See also help(ebp).")
+      #       threshold. See also help(ebp).")
       #}
-      if(!all(names(formals(custom_indicator[[i]])) == c("y", "pov_line"))){
+      if(!all(names(formals(custom_indicator[[i]])) == c("y", "threshold"))){
         stop("Functions for custom indicators need to have exactly the following 
-             two arguments: y, pov_line; even though a poverty line is not 
+             two arguments: y, threshold; even though a threshold is not 
              included in the indicator. See also help(ebp).")
       }
       }
