@@ -192,3 +192,48 @@ tail.estimators.emdi <- function(x, n = 6L, addrownums=NULL, ...) {
   tail(x$ind, n = n, addrownums = addrownums, ...)
 }
 
+
+#' Transforms estimators.emdi objects into a matrix object
+#'
+#' @param x an object of type "estimators.emdi".
+#' @param ... further arguments passed to or from other methods.
+#' @export
+
+as.matrix.estimators.emdi <- function(x,...) {
+  as.matrix(x$ind[,-1])
+}
+
+#' Transforms estimators.emdi objects into a dataframe object
+#'
+#' @param x an object of type "estimators.emdi".
+#' @param ... further arguments passed to or from other methods.
+#' @export
+
+as.data.frame.estimators.emdi <- function(x,...) {
+  as.data.frame(x$ind, ...)
+}
+
+#' Subsets an estimators.emdi object
+#' 
+#' @param x an object of type "estimators.emdi".
+#' @param subset	logical expression indicating elements or rows to keep: 
+#' missing values are taken as false.
+#' @param select	expression, indicating columns to select from a 
+#' estimaors.emdi object.
+#' @param drop	passed on to [ indexing operator.
+#' @param ... further arguments passed to or from other methods.
+#' @export
+
+subset.estimators.emdi <- function(x, subset, select, drop = FALSE, ...) {
+  subset(x = as.data.frame(x$ind), 
+         subset = subset, 
+         select = select, 
+         drop = drop, ...)
+}
+
+
+
+
+
+
+
