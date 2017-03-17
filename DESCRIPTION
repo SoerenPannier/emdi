@@ -32,5 +32,6 @@ Imports:
     boot,
     Hmisc,
     rgeos,
-    maptools
+    maptools,
+    MASS
 Suggests: testthat
