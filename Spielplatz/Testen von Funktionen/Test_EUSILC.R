@@ -112,13 +112,13 @@ emdi_model2 <- ebp( fixed = eqIncome ~ gender + eqsize + cash + self_empl +
                    pop_domains = "district",
                    smp_data = eusilcA_smp,
                    smp_domains = "district",
-                   pov_line = 10722.66,
+                   threshold = 10722.66,
                    transformation = "no",
                    L= 50,
                    MSE = TRUE,
                    B = 50,
-                   custom_indicator = list( my_max = function(y, pov_line){max(y)},
-                                            my_min = function(y, pov_line){min(y)}
+                   custom_indicator = list( my_max = function(y, threshold){max(y)},
+                                            my_min = function(y, threshold){min(y)}
                    ),  
                    na.rm = TRUE, 
                    cpus = 1

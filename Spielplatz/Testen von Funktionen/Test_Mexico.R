@@ -116,11 +116,11 @@ map_plot(emdi_mexico, indicator = "Mean", MSE = T, CV = T,
 direct_mexico <- direct(y = "inglabpc", 
                         smp_data = survey_mex,#[filt,], 
                         smp_domains = "ent", 
-                        weights=NULL, pov_line=900.8202, var=T, 
+                        weights=NULL, threshold=900.8202, var=T, 
                         bootType = "naive", B=5, 
                         seed=123, X = NULL, totals = NULL, 
-                        custom_indicator = list( my_max = function(y,weights, pov_line){max(y)},
-                                                 my_min = function(y, weights,pov_line){min(y)})
+                        custom_indicator = list( my_max = function(y,weights, threshold){max(y)},
+                                                 my_min = function(y, weights,threshold){min(y)})
                                                  ,na.rm=T)
 
 

@@ -6,7 +6,7 @@
 \usage{
 map_plot(object, indicator = "all", MSE = FALSE, CV = FALSE,
   map_obj = NULL, map_dom_id = NULL, map_tab = NULL, col = c("green",
-  "yellow", "red"))
+  "yellow", "red"), scale_points = NULL)
 }
 \arguments{
 \item{object}{an object of type emdi, containing the estimates to be 
@@ -40,6 +40,12 @@ in both objects differ.}
 
 \item{col}{A \code{vector} of length 3 defining the lowest, mid and highest 
 color in the plots}
+
+\item{scale_points}{a structure defining the lowest, the mid and the highest 
+value of the colorscale. If a numeric vector of lengt three is given, this scale
+will be used for every plot. Alternatively a list defining colors for each 
+plot seperatly may be given. Please see the details section and examples for 
+this.}
 }
 \value{
 creates the plots demanded
@@ -59,9 +65,9 @@ emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash +
 self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-pov_line = 10722.66, transformation = "box.cox", L= 50, MSE = TRUE, B = 50,
-custom_indicator = list( my_max = function(y, pov_line){max(y)},
-my_min = function(y, pov_line){min(y)}), na.rm = TRUE, cpus = 1)
+threshold = 10722.66, transformation = "box.cox", L= 50, MSE = TRUE, B = 50,
+custom_indicator = list( my_max = function(y, threshold){max(y)},
+my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 
 # Load shape file
 load_shapeaustria()

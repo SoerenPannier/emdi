@@ -29,6 +29,11 @@
 #' in both objects differ.
 #' @param col A \code{vector} of length 3 defining the lowest, mid and highest 
 #' color in the plots
+#' @param scale_points a structure defining the lowest, the mid and the highest 
+#' value of the colorscale. If a numeric vector of lengt three is given, this scale
+#' will be used for every plot. Alternatively a list defining colors for each 
+#' plot seperatly may be given. Please see the details section and examples for 
+#' this. 
 #' @return creates the plots demanded
 #' @seealso \code{\link{ebp}}, \code{\link{emdiObject}},
 #' \code{\link[maptools]{readShapePoly}}
@@ -43,9 +48,9 @@
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 #' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' pov_line = 10722.66, transformation = "box.cox", L= 50, MSE = TRUE, B = 50,
-#' custom_indicator = list( my_max = function(y, pov_line){max(y)},
-#' my_min = function(y, pov_line){min(y)}), na.rm = TRUE, cpus = 1)
+#' threshold = 10722.66, transformation = "box.cox", L= 50, MSE = TRUE, B = 50,
+#' custom_indicator = list( my_max = function(y, threshold){max(y)},
+#' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 #' 
 #' # Load shape file
 #' load_shapeaustria()
@@ -75,7 +80,8 @@ map_plot <- function(object,
                      map_obj = NULL,
                      map_dom_id = NULL,
                      map_tab = NULL,
-                     col = c("green", "yellow", "red")){
+                     col = c("green", "yellow", "red"),
+                     scale_points = NULL){
   if(is.null(map_obj))
   {
     message("No Map Object has been provided. An artificial polygone is used for
@@ -91,7 +97,8 @@ map_plot <- function(object,
     
     if(length(col) != 3 || !is.vector(col))
     {
-      stop("col needs to be a vector of length 3 defining the starting, mid and upper color of the map-plot")
+      stop("col needs to be a vector of length 3 
+           defining the starting, mid and upper color of the map-plot")
     }
     
     plot_real(object,
@@ -101,7 +108,8 @@ map_plot <- function(object,
               map_obj = map_obj,
               map_dom_id = map_dom_id,
               map_tab = map_tab,
-              col = col
+              col = col,
+              scale_points = scale_points
     )
   }
 }
@@ -136,7 +144,8 @@ plot_real <- function(object,
                       map_obj = NULL,
                       map_dom_id = NULL,
                       map_tab = NULL,
-                      col = col
+                      col = col,
+                      scale_points = NULL
 ) {
   if(!is.null(map_obj) && is.null(map_dom_id)) {
     stop("No Domain ID for the map object is given")
@@ -182,7 +191,7 @@ plot_real <- function(object,
   map_obj@data[colnames(map_data)] <- map_data
 
   map_obj.fort <- fortify(map_obj, region = map_dom_id)
-  map_obj.fort <- merge(map_obj.fort, map_obj@data, by.x="id", by.y = map_dom_id)
+  map_obj.fort <- merge(map_obj.fort, map_obj@data, by.x = "id", by.y = map_dom_id)
   lookup <- c( "Mean"           = TRUE,
                "Head_Count"     = FALSE,
                "Poverty_Gap"    = FALSE,
@@ -197,19 +206,18 @@ plot_real <- function(object,
   indicator <- colnames(map_data)
   for(ind in indicator)
   {
-    #col <- c("green", "yellow", "red")
     if(ind %in% names(lookup) && lookup[ind])
     {
       col <- rev(col)
     }
     map_obj.fort[ind][,1][!is.finite(map_obj.fort[ind][,1])] <- NA
+    scale_point <- get_scale_points(map_obj.fort[ind][,1], ind, scale_points)
     print(ggplot(map_obj.fort, aes(long, lat, group = group, fill = map_obj.fort[ind][,1])) +
             geom_polygon(color="azure3") + coord_equal() + labs(x = "", y = "", fill = ind) +
             ggtitle(gsub(pattern = "_",replacement = " ",x = ind)) +
             scale_fill_gradient2(low = col[1], mid=col[2], high = col[3],
-                                 midpoint = (min(map_obj.fort[ind][,1], na.rm = T) +
-                                 diff(range(c(map_obj.fort[ind][,1]), na.rm = T)) / 2),
-                                 limits = range(c(map_obj.fort[ind][,1]), na.rm = T)) +
+                                 midpoint = scale_point[2],
+                                 limits = scale_point[-2]) +
             theme(axis.ticks = element_blank(), axis.text = element_blank(), 
                   legend.title=element_blank())
     )
@@ -245,3 +253,40 @@ get_polygone <- function(values)
   combo <- merge(poly, values, by = "id", all = TRUE, sort = FALSE)
   melt(combo[order(combo$ordering),], id.vars = c("id","x","y","ordering"))
 }
+
+get_scale_points <- function(y, ind, scale_points){
+  result <- NULL
+  if(!is.null(scale_points)){
+    if(class(scale_points) == "numeric" && length(scale_points == 3)){
+      result <- scale_points
+    } else 
+    {
+      splt <- strsplit(ind, "_\\s*(?=[^_]+$)", perl = TRUE)[[1]]
+      indicator_name <- splt[1]
+      if(length(splt == 2)){
+        measure <- splt[2]
+      } else {
+        measure <- "ind"
+      }
+      if(indicator_name %in% names(scale_points)){
+        pointset <- scale_points[[indicator_name]]
+        try(result <- pointset[[measure]])
+      }
+      if(is.null(result) || length(result) != 3)
+      {
+        warnings("scale_points is of no apropriate form, default values will 
+                 be used. See the descriptions and examples for details")
+        result <- NULL
+      }
+    }
+  }
+  if(is.null(result)){
+    rg <- range(y, na.rm = T)
+    midp <- mean(rg)
+    result <- c(rg[1], midp, rg[2])
+  }
+  return(result)
+
+}
+
+

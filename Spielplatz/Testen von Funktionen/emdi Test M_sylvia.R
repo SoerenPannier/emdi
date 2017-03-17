@@ -99,8 +99,8 @@ set.seed(100)
 emdi_model <- ebp(fixed = formula, pop_data = census_new,
                                   pop_domains = "cluster_id", smp_data = survey_data, smp_domains = "cluster_id",
                                  transformation = "box.cox", L= 1, MSE = TRUE, B = 1,
-                  custom_indicator = list( my_max = function(y, pov_line){max(y)},
-                                           my_min = function(y, pov_line){min(y)}), na.rm = TRUE, cpus = 1)
+                  custom_indicator = list( my_max = function(y, threshold){max(y)},
+                                           my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 
 summary(emdi_model)
 plot(emdi_model)

@@ -113,7 +113,7 @@ devtools::use_data(eusilcA_smp, compress = "xz", overwrite = TRUE)
 
 # Direct
 emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", 
-                      weights="invProb", pov_line=10859.24, var=TRUE, 
+                      weights="invProb", threshold=10859.24, var=TRUE, 
                       bootType = "naive", B=50, seed=123, X = NULL, 
                       totals = NULL, na.rm=TRUE)
 
@@ -144,13 +144,13 @@ emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + self_empl +
                    pop_domains = "district",
                    smp_data = eusilcA_smp,
                    smp_domains = "district",
-                   pov_line = 10722.66,
+                   threshold = 10722.66,
                    transformation = "no",
                    L= 50,
                    MSE = TRUE,
                    B = 50,
-                   custom_indicator = list( my_max = function(y, pov_line){max(y)},
-                                            my_min = function(y, pov_line){min(y)}
+                   custom_indicator = list( my_max = function(y, threshold){max(y)},
+                                            my_min = function(y, threshold){min(y)}
                    ),  
                    na.rm = TRUE, 
                    cpus = 1

@@ -298,13 +298,13 @@ ebp_edomex <- ebp( fixed = ictpc ~  pcocup + jnived + clase_hog + pcpering +
             pop_domains = "domain_id",
             smp_data = survey_edomex,
             smp_domains = "domain_id",
-            pov_line = 903.04,
+            threshold = 903.04,
             transformation = "box.cox",
             L=5,
             MSE = T,
             B = 5,
-            custom_indicator = list( my_max = function(y, pov_line){max(y)},
-                                     my_min = function(y, pov_line){min(y)}
+            custom_indicator = list( my_max = function(y, threshold){max(y)},
+                                     my_min = function(y, threshold){min(y)}
             ),
             na.rm=TRUE
 )
@@ -312,7 +312,7 @@ ebp_edomex <- ebp( fixed = ictpc ~  pcocup + jnived + clase_hog + pcpering +
 direct_edomex <- direct(y = "inglabpc", 
                         smp_data = survey_edomex, 
                         smp_domains = "domain_id", 
-                        weights=NULL, pov_line=900.8202, var=TRUE, 
+                        weights=NULL, threshold=900.8202, var=TRUE, 
                         bootType = "naive", B=50, 
                         seed=123, X = NULL, totals = NULL, na.rm=TRUE)
 
