@@ -54,6 +54,8 @@ framework_dir <- function(y, smp_data, smp_domains, weights,
   
   
   if(is.null(threshold)){
+	 cat("The threshold for the HCR and the PG is automatically set to 60% of 
+        the median of the dependent variable and equals",threshold, "\n")
     if(is.null(weights)){
       threshold <- 0.6 * median(y_vec)
     } else if (!is.null(weights)){
