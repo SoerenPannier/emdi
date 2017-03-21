@@ -44,7 +44,7 @@ mmRe_originaldata <- mmRE
 all.equal(mmRE_modeldata, mmRe_originaldata)
 # The component using the data does not differ when different data sets are used
 
-
+test_r.GLMM(x)
 
 
 test_r.GLMM <- function (x) 
@@ -61,7 +61,7 @@ test_r.GLMM <- function (x)
                                                                          attr(reStruct[[i]], "Dimnames")[[2L]], sep = ".")
   }
   varRe <- sum(sapply(reStruct, function(z) {
-    browser()
+   # browser()
     sig <- nlme::pdMatrix(z) * sigma2
     mm1 <- mmRE[, rownames(sig), drop = FALSE]
     sum(MuMIn:::matmultdiag(mm1 %*% sig, ty = mm1))/n
