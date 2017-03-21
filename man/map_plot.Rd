@@ -42,7 +42,7 @@ in both objects differ.}
 color in the plots}
 
 \item{scale_points}{a structure defining the lowest, the mid and the highest 
-value of the colorscale. If a numeric vector of lengt three is given, this scale
+value of the colorscale. If a numeric vector of length three is given, this scale
 will be used for every plot. Alternatively a list defining colors for each 
 plot seperatly may be given. Please see the details section and examples for 
 this.}
