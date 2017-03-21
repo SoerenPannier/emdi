@@ -25,9 +25,6 @@ print.emdi <- function(x, ...) {
   if(any(class(x)=="model")){
     cat("Empirical Best Prediction\n")
     cat("\n")
-    cat("Call:\n ")
-    print(x$call)
-    cat("\n")
     cat("Out-of-sample domains: ", x$framework$N_dom_unobs, "\n")
     cat("In-sample domains: ", x$framework$N_dom_smp, "\n")
     
@@ -72,9 +69,6 @@ print.emdi <- function(x, ...) {
   }
   if(any(class(x) == "direct")){
     cat("Direct estimation\n")
-    cat("\n")
-    cat("Call:\n ")
-    print(x$call)
     cat("\n")
     cat("In-sample domains: ", x$framework$N_dom_smp, "\n")
     cat("\n")
