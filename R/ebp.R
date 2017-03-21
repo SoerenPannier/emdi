@@ -177,7 +177,7 @@ ebp <- function(fixed,
                                   transformation = transformation,
                                   interval       = interval,
                                   L              = L,
-                                  keep_data      = TRUE
+                                  keep_data      = FALSE
                                   )
 
 
