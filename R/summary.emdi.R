@@ -146,6 +146,7 @@ summary.emdi <- function(object, ...) {
                        row.names = c("Error", "Random_effect")
     )
     
+    #object$model$data <- object$framework$smp_data
     r_squared <- r.squaredGLMM(object$model)
     r_marginal <- r_squared[1]
     r_conditional <- r_squared[2]
