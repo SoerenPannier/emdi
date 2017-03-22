@@ -5,8 +5,8 @@
 \title{Visualizes regional disaggregrated estimates on a map}
 \usage{
 map_plot(object, indicator = "all", MSE = FALSE, CV = FALSE,
-  map_obj = NULL, map_dom_id = NULL, map_tab = NULL, col = c("green",
-  "yellow", "red"), scale_points = NULL)
+  map_obj = NULL, map_dom_id = NULL, map_tab = NULL, col = c("white",
+  "red4"), scale_points = NULL)
 }
 \arguments{
 \item{object}{an object of type emdi, containing the estimates to be 

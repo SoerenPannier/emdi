@@ -68,9 +68,13 @@ length(unique(shape_austria_dis$NAME_2))
 mapping_table <- data.frame(unique(eusilcA_pop$district), 
                             unique(shape_austria_dis$NAME_2))
 
-detach(package:rgeos)
-map_plot(object = emdi_direct, MSE = TRUE, CV = FALSE, map_obj = shape_austria_dis,
-         indicator = c("Gini"), map_dom_id = "NAME_2", map_tab = mapping_table)
+map_plot(object = emdi_direct, 
+         MSE = TRUE, 
+         CV = FALSE, 
+         map_obj = shape_austria_dis,
+         indicator = c("Gini"), 
+         map_dom_id = "NAME_2", 
+         map_tab = mapping_table)
 
 
 # Export to excel

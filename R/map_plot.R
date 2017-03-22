@@ -27,10 +27,10 @@
 #' domain variable from the census data set (first column) with the domain 
 #' variable in the map_obj (second column). This should only be used if the IDs 
 #' in both objects differ.
-#' @param col A \code{vector} of length 3 defining the lowest, mid and highest 
+#' @param col A \code{vector} of length 2 defining the lowest and highest 
 #' color in the plots
 #' @param scale_points a structure defining the lowest, the mid and the highest 
-#' value of the colorscale. If a numeric vector of length three is given, this scale
+#' value of the colorscale. If a numeric vector of length two is given, this scale
 #' will be used for every plot. Alternatively a list defining colors for each 
 #' plot seperatly may be given. Please see the details section and examples for 
 #' this. 
@@ -80,7 +80,7 @@ map_plot <- function(object,
                      map_obj = NULL,
                      map_dom_id = NULL,
                      map_tab = NULL,
-                     col = c("green", "yellow", "red"),
+                     col = c("white", "red4"),
                      scale_points = NULL){
   if(is.null(map_obj))
   {
@@ -95,9 +95,9 @@ map_plot <- function(object,
   }
   else {
     
-    if(length(col) != 3 || !is.vector(col))
+    if(length(col) != 2 || !is.vector(col))
     {
-      stop("col needs to be a vector of length 3 
+      stop("col needs to be a vector of length 2 
            defining the starting, mid and upper color of the map-plot")
     }
     
@@ -192,39 +192,41 @@ plot_real <- function(object,
 
   map_obj.fort <- fortify(map_obj, region = map_dom_id)
   map_obj.fort <- merge(map_obj.fort, map_obj@data, by.x = "id", by.y = map_dom_id)
-  lookup <- c( "Mean"           = TRUE,
-               "Head_Count"     = FALSE,
-               "Poverty_Gap"    = FALSE,
-               "Quintile_Share" = FALSE,
-               "Gini"           = FALSE,
-               "Quantile_10"    = TRUE,
-               "Quantile_25"    = TRUE,
-               "Median"         = TRUE,
-               "Quantile_75"    = TRUE,
-               "Quantile_90"    = TRUE
-  )
+  # lookup <- c( "Mean"           = TRUE,
+  #              "Head_Count"     = FALSE,
+  #              "Poverty_Gap"    = FALSE,
+  #              "Quintile_Share" = FALSE,
+  #              "Gini"           = FALSE,
+  #              "Quantile_10"    = TRUE,
+  #              "Quantile_25"    = TRUE,
+  #              "Median"         = TRUE,
+  #              "Quantile_75"    = TRUE,
+  #              "Quantile_90"    = TRUE
+  # )
   indicator <- colnames(map_data)
   for(ind in indicator)
   {
-    if(ind %in% names(lookup) && lookup[ind])
-    {
-      col <- rev(col)
-    }
+    # if(ind %in% names(lookup) && lookup[ind])
+    # {
+    #   col <- rev(col)
+    # }
     map_obj.fort[ind][,1][!is.finite(map_obj.fort[ind][,1])] <- NA
     scale_point <- get_scale_points(map_obj.fort[ind][,1], ind, scale_points)
+    
     print(ggplot(map_obj.fort, aes(long, lat, group = group, fill = map_obj.fort[ind][,1])) +
             geom_polygon(color="azure3") + coord_equal() + labs(x = "", y = "", fill = ind) +
             ggtitle(gsub(pattern = "_",replacement = " ",x = ind)) +
-            scale_fill_gradient2(low = col[1], mid=col[2], high = col[3],
-                                 midpoint = scale_point[2],
-                                 limits = scale_point[-2]) +
+            scale_fill_gradient(low = col[1], high = col[2],limits = scale_point) +
+            # scale_fill_gradient2(low = col[1], mid=col[2], high = col[3],
+            #                      midpoint = scale_point[2],
+            #                      limits = scale_point[-2]) +
             theme(axis.ticks = element_blank(), axis.text = element_blank(), 
                   legend.title=element_blank())
     )
-    if(ind %in% names(lookup) && lookup[ind])
-    {
-      col <- rev(col)
-    }
+    # if(ind %in% names(lookup) && lookup[ind])
+    # {
+    #   col <- rev(col)
+    # }
     if(!ind == tail(indicator,1)){
       cat ("Press [enter] to continue")
       line <- readline()
@@ -257,7 +259,7 @@ get_polygone <- function(values)
 get_scale_points <- function(y, ind, scale_points){
   result <- NULL
   if(!is.null(scale_points)){
-    if(class(scale_points) == "numeric" && length(scale_points == 3)){
+    if(class(scale_points) == "numeric" && length(scale_points == 2)){
       result <- scale_points
     } else 
     {
@@ -282,11 +284,10 @@ get_scale_points <- function(y, ind, scale_points){
   }
   if(is.null(result)){
     rg <- range(y, na.rm = T)
-    midp <- mean(rg)
-    result <- c(rg[1], midp, rg[2])
+    # midp <- mean(rg)
+    result <- rg #c(rg[1], midp, rg[2])
   }
   return(result)
-
 }
 
 
