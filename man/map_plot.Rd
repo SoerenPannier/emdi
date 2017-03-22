@@ -6,7 +6,7 @@
 \usage{
 map_plot(object, indicator = "all", MSE = FALSE, CV = FALSE,
   map_obj = NULL, map_dom_id = NULL, map_tab = NULL, col = c("white",
-  "red4"), scale_points = NULL)
+  "red4"), scale_points = NULL, return_data = FALSE)
 }
 \arguments{
 \item{object}{an object of type emdi, containing the estimates to be 
@@ -38,14 +38,18 @@ domain variable from the census data set (first column) with the domain
 variable in the map_obj (second column). This should only be used if the IDs 
 in both objects differ.}
 
-\item{col}{A \code{vector} of length 3 defining the lowest, mid and highest 
+\item{col}{A \code{vector} of length 2 defining the lowest and highest 
 color in the plots}
 
 \item{scale_points}{a structure defining the lowest, the mid and the highest 
-value of the colorscale. If a numeric vector of length three is given, this scale
+value of the colorscale. If a numeric vector of length two is given, this scale
 will be used for every plot. Alternatively a list defining colors for each 
 plot seperatly may be given. Please see the details section and examples for 
 this.}
+
+\item{return_data}{if set to true a fortified data frame including the 
+map data as well as the chosen indicators is returned. Customized can easily 
+be obtained from this data frame via the package \code{ggmap}. Defaults to false}
 }
 \value{
 creates the plots demanded

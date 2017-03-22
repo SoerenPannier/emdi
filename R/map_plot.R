@@ -34,6 +34,9 @@
 #' will be used for every plot. Alternatively a list defining colors for each 
 #' plot seperatly may be given. Please see the details section and examples for 
 #' this. 
+#' @param return_data if set to true a fortified data frame including the 
+#' map data as well as the chosen indicators is returned. Customized can easily 
+#' be obtained from this data frame via the package \code{ggmap}. Defaults to false
 #' @return creates the plots demanded
 #' @seealso \code{\link{ebp}}, \code{\link{emdiObject}},
 #' \code{\link[maptools]{readShapePoly}}
@@ -81,7 +84,8 @@ map_plot <- function(object,
                      map_dom_id = NULL,
                      map_tab = NULL,
                      col = c("white", "red4"),
-                     scale_points = NULL){
+                     scale_points = NULL,
+                     return_data = FALSE){
   if(is.null(map_obj))
   {
     message("No Map Object has been provided. An artificial polygone is used for
@@ -109,7 +113,8 @@ map_plot <- function(object,
               map_dom_id = map_dom_id,
               map_tab = map_tab,
               col = col,
-              scale_points = scale_points
+              scale_points = scale_points,
+              return_data = return_data
     )
   }
 }
@@ -145,7 +150,8 @@ plot_real <- function(object,
                       map_dom_id = NULL,
                       map_tab = NULL,
                       col = col,
-                      scale_points = NULL
+                      scale_points = NULL,
+                      return_data = FALSE
 ) {
   if(!is.null(map_obj) && is.null(map_dom_id)) {
     stop("No Domain ID for the map object is given")
@@ -231,6 +237,10 @@ plot_real <- function(object,
       cat ("Press [enter] to continue")
       line <- readline()
     }
+  }
+  if(return_data)
+  {
+    return(map_obj.fort)
   }
 }
 

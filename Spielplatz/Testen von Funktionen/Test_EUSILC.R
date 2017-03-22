@@ -74,7 +74,8 @@ map_plot(object = emdi_direct,
          map_obj = shape_austria_dis,
          indicator = c("Gini"), 
          map_dom_id = "NAME_2", 
-         map_tab = mapping_table)
+         map_tab = mapping_table,
+         return_data = T)
 
 
 # Export to excel
