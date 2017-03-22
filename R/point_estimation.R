@@ -251,11 +251,10 @@ monte_carlo <- function(transformation,
                                       )
 
     # Calculation of indicators for each Monte Carlo population
-
-    ests_mcmc[,l,] <- matrix(nrow=framework$N_dom_pop, data = unlist(lapply(
+      ests_mcmc[,l,] <- matrix(nrow=framework$N_dom_pop, data = unlist(lapply(
       framework$indicator_list, function(f, threshold){matrix(nrow=framework$N_dom_pop, 
                                                              data = unlist(tapply(
-                                                               population_vector,
+                                                              population_vector,
                                                               framework$pop_domains_vec, 
                                                               f, 
                                                               threshold = framework$threshold,
