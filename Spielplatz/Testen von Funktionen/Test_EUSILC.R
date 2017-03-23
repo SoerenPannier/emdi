@@ -75,7 +75,7 @@ map_plot(object = emdi_direct,
          indicator = c("Gini"), 
          map_dom_id = "NAME_2", 
          map_tab = mapping_table,
-         return_data = T)
+         return_data = F)
 
 
 # Export to excel
@@ -93,7 +93,7 @@ emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + self_empl +
                    smp_data = eusilcA_smp,
                    smp_domains = "district",
                    na.rm = TRUE,
-                   L = 5, B=5, MSE = T
+                   L = 5, B=5, MSE = T,boot_type = "wild"
 )
 
 set.seed(100)

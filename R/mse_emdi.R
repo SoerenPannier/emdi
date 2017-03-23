@@ -1,43 +1,3 @@
-# #' Presents MSE estimates of an emdiObject
-# #'
-# #' Function \code{mse_emdi} presents MSE estimates for regional
-# #' disaggregated indicators. This method enables to select for which
-# #' indicators the MSE estimates shall be returned. Furthermore, coefficients of
-# #' variation can be calculated per selected indicator per domain. The returned
-# #' object is suitable for printing with the \code{print.mse.emdi} method.
-# #' @param object an object of type "emdi", representing point and
-# #' MSE estimates.
-# #' @param indicator optional character vector that selects which indicators
-# #' shall be returned: (i) all calculated indicators ("all");
-# #' (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
-# #' "Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini", 
-# #' "Quintile_Share" or the function name/s of "custom_indicator/s"; 
-# #' (ii) groups of indicators: "Quantiles", "Poverty" or 
-# #' "Inequality". Defaults to "all". Note, additional custom indicators can be 
-# #' defined as argument for model-based approaches (\code{link{ebp}}) and do not 
-# #' appear in groups of indicators even though these might belong to one of the 
-# #' groups.  
-# #' @param CV logical. If TRUE, coefficients of variation for selected indicators
-# #' per domain are added to the data frame of MSE estimates. Defaults to FALSE.
-# #' @return
-# #' an object of type "mse.emdi" with MSE estimates per domain
-# #' obtained from \code{emdiObject$MSE}. These objects contain two elements,
-
-# #' one data frame \code{ind} and a character naming the indicator or indicator
-# #' group \code{ind_name}.
-# #' @seealso \code{\link{emdiObject}}, \code{\link{ebp}}
-# #' @examples
-# #' # Loading data
-# #' data("Xoutsamp_AuxVar")
-# #' data("incomedata")
-# #'
-# #' # generate emdi object
-# #' set.seed(100); ebp <- ebp(income~educ1, Xoutsamp_AuxVar, "provlab",
-# #' incomedata, "provlab", 4500, "no", L=2, MSE=TRUE, B=2)
-# #'
-# #' # choose Gini coefficient and CV
-# #' mse(ebp, indicator = "gini", CV = TRUE)
-# #' @export
 
 mse_emdi <- function(object, indicator = "all", CV = FALSE) {
 
@@ -92,12 +52,6 @@ mse_emdi <- function(object, indicator = "all", CV = FALSE) {
 
   return(mse_emdi)
 }
-
-# #' Prints mse.emdi objects
-# #'
-# #' @param object an object of type "mse.emdi".
-# #' @export
-
 
 print.mse.emdi <- function(x,...) {
 

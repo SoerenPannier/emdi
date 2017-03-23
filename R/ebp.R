@@ -52,6 +52,9 @@
 #' @param B a number determining the number of bootstrap populations in the
 #' parametric bootstrap approach (see also \cite{Gonzalez-Manteiga et al. (2008)})
 #' used in the MSE estimation. Defaults to 50.
+#' @param boot_type character to choose between different MSE estimation procedures,
+#' currently a \code{"parametric"} and a semi-parametric \code{"wild"} bootstrap 
+#' are possible
 #' @param parallel_mode modus of parallelization, defaults to an automatic selection 
 #' of a suitable mode, depending on the operating system, if the number of cpus is 
 #' chosen higher than 1. For details see \code{\link[parallelMap]{parallelStart}}
@@ -134,6 +137,7 @@ ebp <- function(fixed,
                 interval = c(-1,2),
                 MSE = FALSE,
                 B = 50,
+                boot_type = "parametric",
                 parallel_mode = ifelse(grepl("windows",.Platform$OS.type,), 
                                        "socket", "multicore"),
                 cpus = 1,
@@ -194,6 +198,7 @@ ebp <- function(fixed,
                                           interval       = interval,
                                           L              = L,
                                           B              = B,
+                                          boot_type      = boot_type,
                                           parallel_mode  = parallel_mode,
                                           cpus           = cpus
                                           )

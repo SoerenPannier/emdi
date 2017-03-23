@@ -6,9 +6,9 @@
 \usage{
 ebp(fixed, pop_data, pop_domains, smp_data, smp_domains, L = 50,
   threshold = NULL, transformation = "box.cox", interval = c(-1, 2),
-  MSE = FALSE, B = 50, parallel_mode = ifelse(grepl("windows",
-  .Platform$OS.type, ), "socket", "multicore"), cpus = 1,
-  custom_indicator = NULL, na.rm = FALSE)
+  MSE = FALSE, B = 50, boot_type = "parametric",
+  parallel_mode = ifelse(grepl("windows", .Platform$OS.type, ), "socket",
+  "multicore"), cpus = 1, custom_indicator = NULL, na.rm = FALSE)
 }
 \arguments{
 \item{fixed}{a two-sided linear formula object describing the
@@ -65,6 +65,10 @@ to \code{FALSE}.}
 \item{B}{a number determining the number of bootstrap populations in the
 parametric bootstrap approach (see also \cite{Gonzalez-Manteiga et al. (2008)})
 used in the MSE estimation. Defaults to 50.}
+
+\item{boot_type}{character to choose between different MSE estimation procedures,
+currently a \code{"parametric"} and a semi-parametric \code{"wild"} bootstrap 
+are possible}
 
 \item{parallel_mode}{modus of parallelization, defaults to an automatic selection 
 of a suitable mode, depending on the operating system, if the number of cpus is 

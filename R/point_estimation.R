@@ -6,69 +6,6 @@
 # error linear regression model and the monte-carlo approximation to predict
 # the desired indicators. See corresponding functions below.
 
-# External documentation -------------------------------------------------------
-
-# #' Point predictions obtained by the EBP approach
-# #'
-# #' Function \code{point_estim} provides point predictions for ten
-# #' poverty indicators using the Empirical Best Prediction approach by
-# #' \cite{Molina and Rao (2010)}.
-# #'
-# #' @param framework the result of applying function \code{\link{notation}}. A
-# #' list with 15 components containing rearranged data sets and vectors of
-# #' variables indicating the domains as well as determinants of the notational
-# #' framework (see also \code{\link{emdiObject}}).
-# #' @param fixed a two-sided linear formula object describing the
-# #' fixed-effects part of the nested error linear regression model with the
-# #' dependent variable on the left of a ~ operator and the explanatory
-# #' variables on the right, separated by + operators. The argument corresponds
-# #' to the argument \code{fixed} in function \code{\link[nlme]{lme}}.
-# #' @param transformation a character string. Three different transformation
-# #' types for the dependent variable can be chosen (i) no transformation ("no");
-# #' (ii) log transformation ("log"); (iii) Box-Cox transformation ("box.cox").
-# #' @param interval a numeric vector containing a lower and upper limit
-# #' determining an interval for the estimation of the optimal parameter. Defaults
-# #' to c(-1,2).
-# #' @param L a number determining the number of Monte-Carlo simulations.
-# #' @return
-# #' A list with seven named elements:
-# #' \tabular{rll}{
-# #'                    \tab  \code{ind} \tab a data frame containing point
-# #'                          predictions \cr
-# #'                     \tab \code{framework} \tab a list with 15 named elements
-# #'                         (see \code{\link{notation}}) \cr
-# #'                     \tab \code{optimal_lambda} \tab a number containing the
-# #'                          optimal lambda for Box-Cox transformations or NULL
-# #'                          otherwise \cr
-# #'                     \tab \code{shift_par} \tab a shift parameter in Box-Cox
-# #'                          or log transformations or NULL otherwise \cr
-# #'                     \tab \code{model_par} \tab a list with model parameters
-# #'                           theta \cr
-# #'                     \tab \code{gen_model} \tab list with parameter from the
-# #'                            generating model \cr
-# #'                     \tab \code{mixed_model} \tab an object returned by the
-# #'                     lme function of type "lme" and representing a fitted linear
-# #'                     mixed-effects model (for further explanations see
-# #'                     \code{\link[nlme]{lme}} and \code{\link[nlme]{lmeObject}}). \cr
-# #'  }
-# #' @references
-# #' Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
-# #' indicators. The Canadian Journal of Statistics, Vol. 38, No.3, 369-385.
-# #' @seealso \code{\link{emdiObject}}, \code{\link[nlme]{lme}},
-# #' \code{\link[nlme]{lmeObject}}, \code{\link{notation}}
-# #' @examples
-# #' # Loading data
-# #' data("Xoutsamp_AuxVar")
-# #' data("incomedata")
-# #'
-# #' # Determine notational framework
-# #' framework <- notation(Xoutsamp_AuxVar, "provlab", incomedata, "provlab")
-# #'
-# #' # Obtain point predictions
-# #' set.seed(100); point <- point_estim(framework, income~educ1, 4500,
-# #' "box.cox", L=2)
-# # #' @export
-# #' @import nlme
 
 point_estim <- function (framework,
                          fixed,
