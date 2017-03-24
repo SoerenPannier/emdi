@@ -30,9 +30,9 @@ map_plot(object = emdi_model, MSE = TRUE, CV = T,
 #"Mean"     "Mean_MSE" "Mean_CV" 
 
 scaleset <- list("Mean" = list(
-                                ind = c(0,50000,10000), 
-                                 MSE = c(1000, 10000, 100000), 
-                                 CV = c(0,1,10)
+                                ind = c(0,10000), 
+                                 MSE = c(1000,  100000), 
+                                 CV = c(0,10)
     )
   )
 

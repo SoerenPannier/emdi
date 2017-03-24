@@ -119,6 +119,9 @@ getFun2 <- function(byDomain, direct_estimator){
   if(byDomain)
   {
     function(x, threshold, rs) {
+      if("function" %in% class(threshold)){
+        threshold <- threshold(x$y, x$weight)
+      }
       value <- direct_estimator(x$y, x$weight, threshold)
       valueByDomain <- sapply(rs, function(r, x, t) {
         i <- x$Domain == r
@@ -129,6 +132,9 @@ getFun2 <- function(byDomain, direct_estimator){
   }
   else{
     function(x, threshold, rs, na.rm) {
+      if("function" %in% class(threshold)){
+        threshold <- threshold(x$y, x$weight)
+      }
       direct_estimator(x$y, x$weight, threshold)
     }
   }

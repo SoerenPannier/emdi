@@ -6,14 +6,14 @@ data(eusilc)
 
 # 1. with weights and sampling domains (naive bootstrap)
 
-direct_all_naive <- direct(y="eqIncome",
-                           smp_data=eusilc, 
-                           smp_domains="db040", 
-                           weights="rb050", 
+direct_all_naive <- direct(y = "eqIncome",
+                           smp_data = eusilc, 
+                           smp_domains = "db040", 
+                           weights = "rb050", 
                            # without weights
-                           #threshold = 10848.8, 
                            # with weights
-                           threshold=10859.24, 
+                           #threshold=10859.24, 
+                           threshold = function(y,weights){weightedMedian(x = y, weights = weights)}, 
                            var=TRUE,
                            bootType = "naive",
                            X = NULL, 

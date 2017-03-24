@@ -61,7 +61,7 @@ weights are used to calculate the totals.}
 
 \item{custom_indicator}{a list of functions containing the indicators to be
 calculated additionaly. Such functions must and must only depend on the
-target variable \code{y}, the \code{weights} and the threshold 
+target variable \code{y}, the \code{weights} and the threshold (numeric value)
 \code{threshold}. Defaults to \code{NULL}.}
 
 \item{na.rm}{if TRUE, observations with \code{NA} values are deleted from the 
