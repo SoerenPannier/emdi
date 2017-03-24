@@ -1,6 +1,7 @@
 Package: emdi
 Title: Estimating and Mapping Disaggregated Indicators
 Version: 1.1.0
+Date: 2016-03-24
 Authors@R: c(person("Ann-Kristin", "Kreutzmann", role="aut", email="ann-kristin.kreutzmann@fu-berlin.de"),
     person("Soeren", "Pannier", role=c("aut", "cre"), email="soeren.pannier@fu-berlin.de"),
     person("Natalia", "Rojas-Perilla", role="aut", email = "natalia.rojas@fu-berlin.de"),
