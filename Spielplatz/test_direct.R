@@ -13,7 +13,7 @@ direct_all_naive <- direct(y = "eqIncome",
                            # without weights
                            # with weights
                            #threshold=10859.24, 
-                           threshold = function(y,weights){weightedMedian(x = y, weights = weights)}, 
+                           threshold = function(y,weights){0.6 * weightedMedian(x = y, weights = weights)}, 
                            var=TRUE,
                            bootType = "naive",
                            X = NULL, 
@@ -39,7 +39,7 @@ arpr_all_naive <- variance("eqIncome",
 # lines
 all.equal(arpr_all$valueByStratum, direct_all_naive$ind[, c("Domain","Head_Count")])
 all.equal(arpr_all_naive$varByStratum, direct_all_naive$MSE[, c("Domain","Head_Count")])
-
+all.equal(arpr_all_naive$varByStratum$var/10000, direct_all_naive$MSE[, c("Domain","Head_Count")][,2])
 
 gini_all <- gini(eusilc$eqIncome, breakdown = eusilc$db040, weights=eusilc$rb050)
 gini_all_naive <- variance("eqIncome", 

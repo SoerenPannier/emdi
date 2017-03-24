@@ -16,7 +16,7 @@ test_that("Does the direct estimation in emdi return the point and variance
                              smp_domains="db040", 
                              weights="rb050", 
                              # with weights
-                             threshold=10859.24, 
+                             threshold=function(y, weights){0.6 * laeken::weightedMedian(x = y, weights = weights)}, 
                              var=TRUE,
                              bootType = "naive",
                              X = NULL, 
@@ -34,8 +34,8 @@ test_that("Does the direct estimation in emdi return the point and variance
   # Compare HCR from direct and benchmark
   expect_equal(arpr_all,
                direct_all_naive$ind[, c("Domain","Head_Count")])
-  #expect_equal(arpr_all_naive,
-  #              direct_all_naive$MSE[, c("Domain","Head_Count")])
+  expect_equal(arpr_all_naive,
+               direct_all_naive$MSE[, c("Domain","Head_Count")])
   
   
   # Gini from laeken package (benchmark)
