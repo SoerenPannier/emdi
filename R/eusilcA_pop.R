@@ -5,7 +5,7 @@
 #' reduced to 18 variables containing three regional variables for the states, 
 #' districts and counties.  
 #'
-#' @format A data frame with 25000 observations and 18 variables:
+#' @format A data frame with 25000 observations and 17 variables:
 #' \describe{
 #' \item{eqIncome}{numeric; a simplified version of the equivalized household income.}
 #' \item{eqsize}{numeric; the equivalized household size according to the 
@@ -26,7 +26,6 @@
 #' \item{tax_adj}{numeric; repayments/receipts for tax adjustment (net).}
 #' \item{state}{factor; state (nine levels)}
 #' \item{district}{factor; districts (96 levels)}
-#' \item{county}{factor; counties (2115 levels)}
 #' }
 #' @docType data
 "eusilcA_pop"

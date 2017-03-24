@@ -3,7 +3,7 @@
 #' The data set is a simple random sample of data set \code{\link{eusilcA_pop}} 
 #' which is based on \code{\link[simFrame]{eusilcP}} from package \pkg{simFrame}. 
 #'
-#' @format A data frame with 1000 observations and 19 variables:
+#' @format A data frame with 1000 observations and 18 variables:
 #' \describe{
 #' \item{eqIncome}{numeric; a simplified version of the equivalized household income.}
 #' \item{eqsize}{numeric; the equivalized household size according to the 
@@ -24,7 +24,6 @@
 #' \item{tax_adj}{numeric; repayments/receipts for tax adjustment (net).}
 #' \item{state}{factor; state (nine levels)}
 #' \item{district}{factor; districts (96 levels)}
-#' \item{county}{factor; counties (2115 levels)}
 #' \item{weight}{numeric; constant weight}
 #' }
 #' @docType data
