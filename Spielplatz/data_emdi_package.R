@@ -1,10 +1,33 @@
 # Datensätze im Paket ----------------------------------------------------------
 
 # Datensätze von Sören laden und dann im Paket abspeichern
-load("C:/austria/mulilevel_eusilcP.RData") # Population
+# Old population
+#load("C:/austria/mulilevel_eusilcP.RData") # Population
+
+# New population
+load("I:/LS-Rendtel/Forschung/emdi Package/austria/mulilevel_eusilcP_meanvar.RData") # Population
+library(simFrame)
+data("eusilcP")
+
+
+# Check data set
+table(my_eusilcP_test$sub_2)
+summary(as.data.frame(table(as.factor(my_eusilcP_test$sub_2)))[,"Freq"])
+sum(table(as.factor(my_eusilcP_test$sub_2)))
+summary(as.data.frame(table(as.factor(my_eusilcP_test$region)))[,"Freq"])
+
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+# 37.0   232.5   423.0   611.0   638.2 11660.0
+# Die Bevölkerung von Wien ist nun sehr groß, aber das macht ja auch irgendwie 
+# Sinn
+eusilcP_main <- eusilcP[eusilcP$main == 1,]
+table(eusilcP_main$region)
+summary(as.data.frame(table(as.factor(eusilcP_main$region)))[,"Freq"])
+
 
 # Umbennen der Datensätze
-eusilcA_pop <- my_eusilcP_test
+my_eusilcP <- my_eusilcP_test
+eusilcA_pop <- my_eusilcP
 
 
 
@@ -39,17 +62,17 @@ class(eusilcA_smp$eqIncome)
 
 
 # Löschen aller nicht genutzten Variablen
-fixed = eqIncome ~ gender + eqsize + py010n + py050n + py090n + py100n + py110n + py120n + py130n + hy040n + hy050n + hy070n + hy090n + hy145n  
+fixed = eqIncome ~ gender + eqsize + py010n + py050n + py090n + py100n + py110n + py120n + py130n + hy040n + hy050n + hy070n + hy090n + hy145n + region 
 
 mod_vars <- gsub(" ", "",unlist(strsplit(paste(fixed[3]), "[+]")), 
                  fixed = TRUE)
-data_vars <- c(as.character(fixed[2]), mod_vars, "sub_0", "sub_1", "sub_2", "sub_3")
+data_vars <- c(as.character(fixed[2]), mod_vars, "sub_2")
 
 eusilcA_pop <- eusilcA_pop[, data_vars]
 head(eusilcA_pop)
 dim(eusilcA_pop)
 
-data_vars <- c(as.character(fixed[2]), mod_vars, "sub_0", "sub_1", "sub_2", "sub_3", "invProb")
+#data_vars <- c(as.character(fixed[2]), mod_vars, "sub_0", "sub_1", "sub_2", "sub_3", "invProb")
 eusilcA_smp <- eusilcA_smp[, data_vars]
 head(eusilcA_smp)
 dim(eusilcA_smp)
@@ -65,8 +88,7 @@ eusilcA_pop <- rename(eusilcA_pop, c("py010n"="cash", "py050n"="self_empl",
                                      "py130n"="dis_ben", "hy040n"="rent",
                                      "hy050n"="fam_allow", "hy070n"="house_allow",
                                      "hy090n"="cap_inv", "hy145n"="tax_adj",
-                                     "sub_0"="country", "sub_1"="state", 
-                                     "sub_2"="district", "sub_3"="county"))
+                                     "sub_2"="district", "region" = "state"))
 head(eusilcA_pop)
 
 names(eusilcA_smp)
@@ -78,26 +100,27 @@ eusilcA_smp <- rename(eusilcA_smp, c("py010n"="cash", "py050n"="self_empl",
                                      "py130n"="dis_ben", "hy040n"="rent",
                                      "hy050n"="fam_allow", "hy070n"="house_allow",
                                      "hy090n"="cap_inv", "hy145n"="tax_adj",
-                                     "sub_0"="country", "sub_1"="state", 
-                                     "sub_2"="district", "sub_3"="county"))
+                                     "region"="state", "sub_2"="district"))
 head(eusilcA_smp)
 
 
 # Factor anstatt character
-eusilcA_pop$county <- factor(eusilcA_pop$county, levels=unique(eusilcA_pop$county))
-str(eusilcA_pop$county)
+# counties gibt es nicht mehr
+#eusilcA_pop$county <- factor(eusilcA_pop$county, levels=unique(eusilcA_pop$county))
+#str(eusilcA_pop$county)
 
-eusilcA_smp$county <- factor(eusilcA_smp$county, levels=unique(eusilcA_pop$county))
-str(eusilcA_smp$county)
+#eusilcA_smp$county <- factor(eusilcA_smp$county, levels=unique(eusilcA_pop$county))
+#str(eusilcA_smp$county)
 
 
 # Hinzufügen von konstantem Gewicht
-library(emdi)
-data("eusilcA_smp")
+#library(emdi)
+#data("eusilcA_smp")
 eusilcA_smp$weight <- 25000/nrow(eusilcA_smp) 
 
 
 # Abspeichern der Datensätze im Datenordner des  Pakets
+setwd("C:/Package Project/emdi_git")
 save("eusilcA_pop", file = "./data/eusilcA_pop.RData")
 save("eusilcA_smp", file = "./data/eusilcA_smp.RData")
 
