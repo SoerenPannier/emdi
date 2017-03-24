@@ -6,7 +6,11 @@ my_rmpg <- function(y, threshold){
   rmpg(inc = y)$value
 }
 
+
+
 my_indicators <- list(my_rmpg = my_rmpg)
+
+
 
 
 data("eusilcA_pop")
@@ -24,7 +28,9 @@ emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
                    L = 5, 
                    B = 5, 
                    MSE = T, 
-                   threshold = my_threshold ,
+                   threshold = my_threshold,
                    custom_indicator = my_indicators
 )
 estimators(emdi_model, indicator = "custom")
+
+rmpg(eusilcA_smp$eqIncome, breakdown = eusilcA_smp$district)
