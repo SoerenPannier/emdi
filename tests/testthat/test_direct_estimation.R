@@ -29,12 +29,12 @@ test_that("Does the direct estimation in emdi return the point and variance
   arpr_all <- read.csv2("./arpr_all.csv", sep=",")  
   arpr_all_naive  <- read.csv2("./arpr_all_naive.csv", sep=",")
   arpr_all$Head_Count <- as.numeric(as.character(arpr_all$Head_Count))/100
-  arpr_all_naive$Head_Count <- as.numeric(as.character(arpr_all_naive$Head_Count))
+  arpr_all_naive$Head_Count <- as.numeric(as.character(arpr_all_naive$Head_Count))/10000
   
   # Compare HCR from direct and benchmark
   expect_equal(arpr_all,
                direct_all_naive$ind[, c("Domain","Head_Count")])
-  # expect_equal(arpr_all_naive,
+  #expect_equal(arpr_all_naive,
   #              direct_all_naive$MSE[, c("Domain","Head_Count")])
   
   
