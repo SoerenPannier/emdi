@@ -7,11 +7,12 @@ data("eusilcA_smp")
 # Beispiele im Paket -----------------------------------------------------------
 
 # Direct
+0.6 * weightedMedian(eusilcA_smp$eqIncome, weights = eusilcA_smp$weight)
 emdi_direct <- direct(y = "eqIncome", 
                       smp_data = eusilcA_smp, 
                       smp_domains = "district", 
-                      weights = NULL, 
-                      threshold = 10859.24, 
+                      weights = "weight", 
+                      threshold = 10722.66, 
                       var = TRUE, 
                       bootType = "naive", 
                       B = 5, 
@@ -20,11 +21,19 @@ emdi_direct <- direct(y = "eqIncome",
                       totals = NULL, 
                       na.rm = TRUE)
 
+# Gibt Warnungen zurück
+emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", 
+                      weights="weight", threshold=10859.24, var=TRUE, bootType = "naive", B=50, 
+                      seed=123, X = NULL, totals = NULL, custom_indicator = list( my_max = 
+                      function(y, weights, threshold){max(y)}, my_min = 
+                      function(y, weights, threshold){min(y)}), na.rm=TRUE)
+
+# Wie gibt man threshold mit Gewichten rein?
 emdi_direct_varth <- direct(y = "eqIncome", 
                       smp_data = eusilcA_smp, 
                       smp_domains = "district", 
-                      weights = NULL, 
-                      threshold = function(y, weights){median(y)},#10859.24, 
+                      weights = "weight", 
+                      threshold = function(y, weights){weightedMedian(x = y, weights=eusilcA_smp$weight)},#10859.24, 
                       var = TRUE, 
                       bootType = "naive", 
                       B = 5, 
@@ -131,6 +140,10 @@ emdi_model2 <- ebp( fixed = eqIncome ~ gender + eqsize + cash + self_empl +
 
 
 # Information about data and model
+print(emdi_model)
+summary(emdi_model)
+plot(emdi_model)
+
 print(emdi_model2)
 summary(emdi_model2)
 plot(emdi_model2)
