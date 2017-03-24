@@ -155,6 +155,7 @@ emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + self_empl +
                    pop_domains = "district",
                    smp_data = eusilcA_smp,
                    smp_domains = "district",
+                   L = 5, B = 5,
                    na.rm = TRUE
 )
 

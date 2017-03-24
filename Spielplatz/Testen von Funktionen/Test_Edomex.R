@@ -351,10 +351,6 @@ estimators(object = ebp_edomex, MSE = T, CV = T, indicator = c("Quantiles"))
 estimators(object = direct_edomex, MSE = T, CV = T, indicator = c("Quantiles"))
 
 
-estimators(object = ebp, MSE = F, CV = F, indicator = c("Inequality"))
-
-selection <- estimators(object = ebp, MSE = T, CV = T, indicator = "Poverty")
-
 
 
 #the write.excel method, writes the summary output as well as the chosen estimates into an excel file
