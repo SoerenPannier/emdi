@@ -107,7 +107,7 @@
 #' na.rm = TRUE)
 #' 
 #' 
-#' # Example with MSE and two additional indicators
+#' # Example with MSE, two additional indicators and function as threshold
 #' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
