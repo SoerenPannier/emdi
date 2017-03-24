@@ -2,5 +2,6 @@
 ^\.Rproj\.user$
 .travis.yml
 .git
+^.*\.xlsx$
 cran-comments.md
 Spielplatz
