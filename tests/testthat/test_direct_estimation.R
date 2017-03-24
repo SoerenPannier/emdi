@@ -16,7 +16,7 @@ test_that("Does the direct estimation in emdi return the point and variance
                              smp_domains="db040", 
                              weights="rb050", 
                              # with weights
-                             threshold=function(y, weights){0.6 * laeken::weightedMedian(x = y, weights = weights)}, 
+                             threshold=function(y, weights){0.6 * wtd.quantile(x = y, weights = weights, probs=0.5)}, 
                              var=TRUE,
                              bootType = "naive",
                              X = NULL, 
