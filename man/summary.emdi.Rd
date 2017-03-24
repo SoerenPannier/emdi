@@ -61,11 +61,11 @@ data("eusilcA_pop")
 data("eusilcA_smp")
   
 # Example with two additional indicators
-emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 
+emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
 self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-threshold = 10722.66, transformation = "box.cox", L= 50, MSE = TRUE, B = 50,
+threshold = function(y){0.6 * median(y)}, L= 50, MSE = TRUE, B = 50, 
 custom_indicator = list( my_max = function(y, threshold){max(y)},
 my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 
