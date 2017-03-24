@@ -93,7 +93,7 @@ data("eusilcA_smp")
 
 # Example without weights and naive bootstrap
 emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
-smp_domains = "district", weights = "weight", threshold = 10859.24, var = TRUE, 
+smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
 bootType = "naive", B = 50, seed = 123, X = NULL, totals = NULL, na.rm = TRUE)
 
 #' # Example with custom indicators

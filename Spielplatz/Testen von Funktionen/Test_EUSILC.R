@@ -7,12 +7,12 @@ data("eusilcA_smp")
 # Beispiele im Paket -----------------------------------------------------------
 
 # Direct
-0.6 * weightedMedian(eusilcA_smp$eqIncome, weights = eusilcA_smp$weight)
+0.6 * laeken::weightedMedian(eusilcA_smp$eqIncome, weights = eusilcA_smp$weight)
 emdi_direct <- direct(y = "eqIncome", 
                       smp_data = eusilcA_smp, 
                       smp_domains = "district", 
                       weights = "weight", 
-                      threshold = 10722.66, 
+                      threshold = 11064.82, 
                       var = TRUE, 
                       bootType = "naive", 
                       B = 5, 
@@ -23,7 +23,8 @@ emdi_direct <- direct(y = "eqIncome",
 
 # Gibt Warnungen zurück
 emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", 
-                      weights="weight", threshold=10859.24, var=TRUE, bootType = "naive", B=50, 
+                      weights="weight", threshold=11064.82, var=TRUE, 
+                      bootType = "naive", B=50, 
                       seed=123, X = NULL, totals = NULL, custom_indicator = list( my_max = 
                       function(y, weights, threshold){max(y)}, my_min = 
                       function(y, weights, threshold){min(y)}), na.rm=TRUE)
@@ -33,7 +34,7 @@ emdi_direct_varth <- direct(y = "eqIncome",
                       smp_data = eusilcA_smp, 
                       smp_domains = "district", 
                       weights = "weight", 
-                      threshold = function(y, weights){weightedMedian(x = y, weights=eusilcA_smp$weight)},#10859.24, 
+                      threshold = function(y, weights){0.6 * laeken::weightedMedian(eusilcA_smp$eqIncome, weights = eusilcA_smp$weight)},#11064.82, 
                       var = TRUE, 
                       bootType = "naive", 
                       B = 5, 

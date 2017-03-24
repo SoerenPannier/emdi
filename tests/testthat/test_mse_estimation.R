@@ -34,6 +34,7 @@ test_that("Does parametric_bootstrap return the benchmark results?", {
                               interval=c(-1,2),
                               L=2,
                               B=2,
+                              boot_type ="parametric",
                               cpus=1)
   
   # Get benchmark results
