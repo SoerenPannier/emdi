@@ -23,7 +23,7 @@ direct_check2 <- function(smp_domains = NULL,
                           sort = NULL,
                           threshold = NULL,
                           var = FALSE, 
-                          bootType = "naive", 
+                          boot_type = "naive", 
                           B = NULL,
                           X = NULL, 
                           totals = NULL){
@@ -33,7 +33,7 @@ direct_check2 <- function(smp_domains = NULL,
           factor variable indicating domains in the sample data.
           See also help(direct).')
   } 
-  if((bootType != "naive" && (!exists("weights")))
+  if((boot_type != "naive" && (!exists("weights")))
       || (exists("weights") && !(is.null(weights) || class(weights)=="character"))){
     stop('Weights must be a character containing the name of a variable for the 
           sampling weights in the sample data. See also help(direct).')
@@ -46,15 +46,15 @@ direct_check2 <- function(smp_domains = NULL,
     stop("Var must be a logical value. Set Var to TRUE or FALSE. See also
          help(direct).")
   }
-  if(var==TRUE && !(bootType == "naive" || bootType == "calibrate")){
-    stop('If var is set to TRUE, bootType "naive" or "calibrate" needs to be 
+  if(var==TRUE && !(boot_type == "naive" || boot_type == "calibrate")){
+    stop('If var is set to TRUE, boot_type "naive" or "calibrate" needs to be 
          selected. See also help(direct).')
   }
   if(var==TRUE && !is.numeric(B)){
     stop('If var is set to TRUE, a numeric value for the number of bootstrap
          sample needs to be chosen. See also help(direct).')
   }
-  if(var==TRUE && bootType == "calibrate" && !is.numeric(X)){
+  if(var==TRUE && boot_type == "calibrate" && !is.numeric(X)){
     stop("X must be a numeric matrix.")
   } 
     

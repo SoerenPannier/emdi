@@ -5,7 +5,7 @@
 \title{Direct estimation of disaggregated indicators}
 \usage{
 direct(y, smp_data, smp_domains = NULL, weights = NULL, design = NULL,
-  threshold = NULL, var = FALSE, bootType = "naive", B = NULL,
+  threshold = NULL, var = FALSE, boot_type = "naive", B = NULL,
   seed = NULL, X_calib = NULL, totals = NULL, custom_indicator = NULL,
   na.rm = FALSE)
 }
@@ -41,7 +41,7 @@ However, any desired threshold can be chosen.}
 \item{var}{if TRUE, estimates for the variance are calcualted using a 
 naive or calibrated bootstrap. Defaults to \code{FALSE}.}
 
-\item{bootType}{a character containing the name of the bootstrap specification. 
+\item{boot_type}{a character containing the name of the bootstrap specification. 
 Either a \code{"naive"} or a \code{"calibrate"} bootstrap can be used. See 
 also \code{\link[laeken]{bootVar}}. Defaults to \code{naive}.}
 
@@ -94,11 +94,11 @@ data("eusilcA_smp")
 # Example without weights and naive bootstrap
 emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
 smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
-bootType = "naive", B = 50, seed = 123, X = NULL, totals = NULL, na.rm = TRUE)
+boot_type = "naive", B = 50, seed = 123, X = NULL, totals = NULL, na.rm = TRUE)
 
 #' # Example with custom indicators
 emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", 
-weights="weight", threshold=10859.24, var=TRUE, bootType = "naive", B=50, 
+weights="weight", threshold=10859.24, var=TRUE, boot_type = "naive", B=50, 
 seed=123, X = NULL, totals = NULL, custom_indicator = list( my_max = 
 function(y, weights, threshold){max(y)}, my_min = 
 function(y, weights, threshold){min(y)}), na.rm=TRUE)

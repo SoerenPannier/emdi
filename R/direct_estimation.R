@@ -29,7 +29,7 @@
 #' However, any desired threshold can be chosen.
 #' @param var if TRUE, estimates for the variance are calcualted using a 
 #' naive or calibrated bootstrap. Defaults to \code{FALSE}.
-#' @param bootType a character containing the name of the bootstrap specification. 
+#' @param boot_type a character containing the name of the bootstrap specification. 
 #' Either a \code{"naive"} or a \code{"calibrate"} bootstrap can be used. See 
 #' also \code{\link[laeken]{bootVar}}. Defaults to \code{naive}.
 #' @param B a number determining the number of bootstrap populations for the 
@@ -74,11 +74,11 @@
 #' # Example without weights and naive bootstrap
 #' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
 #' smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
-#' bootType = "naive", B = 50, seed = 123, X = NULL, totals = NULL, na.rm = TRUE)
+#' boot_type = "naive", B = 50, seed = 123, X = NULL, totals = NULL, na.rm = TRUE)
 #' 
 #' #' # Example with custom indicators
 #' emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", 
-#' weights="weight", threshold=10859.24, var=TRUE, bootType = "naive", B=50, 
+#' weights="weight", threshold=10859.24, var=TRUE, boot_type = "naive", B=50, 
 #' seed=123, X = NULL, totals = NULL, custom_indicator = list( my_max = 
 #' function(y, weights, threshold){max(y)}, my_min = 
 #' function(y, weights, threshold){min(y)}), na.rm=TRUE)
@@ -97,7 +97,7 @@ direct <- function(y,
                    design = NULL,
                    threshold = NULL,
                    var = FALSE, 
-                   bootType = "naive", 
+                   boot_type = "naive", 
                    B = NULL,
                    seed = NULL,
                    X_calib = NULL, 
@@ -109,7 +109,7 @@ direct <- function(y,
   direct_check1(y = y, smp_data = smp_data)
   
   direct_check2(smp_domains = smp_domains, weights = weights, sort = sort, 
-                threshold = threshold, var = var, bootType = bootType, 
+                threshold = threshold, var = var, boot_type = boot_type, 
                 B = B, X = X_calib, totals = totals)
   
   # Save call ------------------------------------------------------------------
@@ -131,7 +131,7 @@ direct <- function(y,
                           indicator_name =  framework$indicator_names,
                           MoreArgs = list(
                                 framework = framework,  
-                                bootType = bootType, 
+                                boot_type = boot_type, 
                                 B = B,
                                 seed = seed,
                                 X_calib = X_calib, 
@@ -152,7 +152,7 @@ direct <- function(y,
                            smp_data = framework$smp_data,  
                            smp_domains = framework$smp_domains_vec,
                            design = design,
-                           bootType = bootType, 
+                           bootType = boot_type, 
                            B = B,
                            seed = seed,
                            X_calib = X_calib, 
