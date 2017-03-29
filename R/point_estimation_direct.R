@@ -1,7 +1,7 @@
 point_estim_direct <-  function(direct_estimator,
                                 indicator_name,
                                 framework,  
-                                bootType, 
+                                boot_type, 
                                 B,
                                 seed,
                                 X_calib, 

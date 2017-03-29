@@ -18,7 +18,7 @@ test_that("Does the direct estimation in emdi return the point and variance
                              # with weights
                              threshold=function(y, weights){0.6 * wtd.quantile(x = y, weights = weights, probs=0.5)}, 
                              var=TRUE,
-                             bootType = "naive",
+                             boot_type = "naive",
                              X = NULL, 
                              totals = NULL, 
                              B=5,  
@@ -80,7 +80,7 @@ test_that("Does the direct estimation in emdi return the point and variance
                                        # with weights
                                        threshold=10859.24, 
                                        var=TRUE,
-                                       bootType = "calibrate",
+                                       boot_type = "calibrate",
                                        X = as.matrix(eusilc$age), 
                                        totals = NULL, 
                                        B=5,  
