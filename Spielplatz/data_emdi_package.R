@@ -11,10 +11,10 @@ data("eusilcP")
 
 
 # Check data set
-table(my_eusilcP_test$sub_2)
-summary(as.data.frame(table(as.factor(my_eusilcP_test$sub_2)))[,"Freq"])
-sum(table(as.factor(my_eusilcP_test$sub_2)))
-summary(as.data.frame(table(as.factor(my_eusilcP_test$region)))[,"Freq"])
+table(my_eusilcP$sub_2)
+summary(as.data.frame(table(as.factor(my_eusilcP$sub_2)))[,"Freq"])
+sum(table(as.factor(my_eusilcP$sub_2)))
+summary(as.data.frame(table(as.factor(my_eusilcP$region)))[,"Freq"])
 
 # Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 # 37.0   232.5   423.0   611.0   638.2 11660.0
@@ -26,7 +26,6 @@ summary(as.data.frame(table(as.factor(eusilcP_main$region)))[,"Freq"])
 
 
 # Umbennen der Datensätze
-my_eusilcP <- my_eusilcP_test
 eusilcA_pop <- my_eusilcP
 
 
@@ -126,9 +125,6 @@ save("eusilcA_smp", file = "./data/eusilcA_smp.RData")
 
 devtools::use_data(eusilcA_pop, compress = "xz", overwrite = TRUE)
 devtools::use_data(eusilcA_smp, compress = "xz", overwrite = TRUE)
-
-
-
 
 
 
