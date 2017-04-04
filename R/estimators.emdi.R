@@ -225,14 +225,15 @@ as.data.frame.estimators.emdi <- function(x,...) {
 #' @param ... further arguments passed to or from other methods.
 #' @export
 
-subset.estimators.emdi <- function(x, subset, select, drop = FALSE, ...) {
-  subset(x = as.data.frame(x$ind), 
-         subset = subset, 
-         select = select, 
-         drop = drop, ...)
+subset.estimators.emdi <- function(x, ...) {
+  x <- as.data.frame(x)
+  subset(x = x,  ...)
 }
-
-
+# subset, select, drop = FALSE,
+# 
+# subset = subset, 
+# select = select, 
+# drop = drop,
 
 
 
