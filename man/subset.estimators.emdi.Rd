@@ -10,14 +10,6 @@
 \item{x}{an object of type "estimators.emdi".}
 
 \item{...}{further arguments passed to or from other methods.}
-
-\item{subset}{logical expression indicating elements or rows to keep: 
-missing values are taken as false.}
-
-\item{select}{expression, indicating columns to select from a 
-estimaors.emdi object.}
-
-\item{drop}{passed on to [ indexing operator.}
 }
 \description{
 Subsets an estimators.emdi object
