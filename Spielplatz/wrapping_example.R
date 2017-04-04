@@ -51,10 +51,7 @@ emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
                   smp_data = eusilcA_smp,
                   smp_domains = "district",
                   na.rm = TRUE,
-                  L = 5, 
-                  B = 5, 
                   MSE = T, 
-                  threshold = 1500,
                   custom_indicator = list(theil = function(y, threshold){ineq(x = y, type = "Theil")})
 )
 
@@ -62,6 +59,7 @@ emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
 emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", weights = "weight",     
                       var=TRUE, B=50, seed=123, 
                       custom_indicator = list(theil = function(y, weights, threshold){ineq(x = y, type = "Theil")}), na.rm=TRUE)
+tail(estimators(emdi_direct, indicator = "theil", CV = TRUE))
 
 
 theil_districts <- tapply(eusilcA_smp$eqIncome, droplevels(eusilcA_smp$district), ineq, type="Theil")
