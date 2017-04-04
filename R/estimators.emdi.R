@@ -148,7 +148,7 @@ print.estimators.emdi <- function(x,...) {
 #' na.rm = TRUE)
 #'
 #' # choose first lines of the Gini coefficient, MSE and CV
-#' head(estimators(emdi_model, indicator = "Gini", MSE = FALSE, CV = TRUE))
+#' head(estimators(emdi_model, indicator = c("Gini", "Head_Count")))
 #' }
 #' @importFrom utils head
 #' @export
@@ -184,7 +184,7 @@ head.estimators.emdi <- function(x, n = 6L, addrownums=NULL, ...) {
 #' na.rm = TRUE)
 #'
 #' # choose last lines of the Gini coefficient, MSE and CV
-#' tail(estimators(emdi_model, indicator = "Gini", MSE = FALSE, CV = TRUE))
+#' tail(estimators(emdi_model, indicator = c("Gini", "Head_Count")))
 #' }
 #' @importFrom utils tail
 #' @export
@@ -218,17 +218,33 @@ as.data.frame.estimators.emdi <- function(x,...) {
 #' 
 #' @param x an object of type "estimators.emdi".
 #' @param ... further arguments passed to or from other methods.
+#' @return Selected subsets of the object of type "estimators.emdi".
+#' @seealso \code{\link{estimators.emdi}}
+#' @examples
+#' \dontrun{
+#' # Loading data - population and sample data
+#' data("eusilcA_pop")
+#' data("eusilcA_smp")
+#' 
+#' # generate emdi object with deleting missing values; here via function ebp()
+#' set.seed(100); emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 
+#' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
+#' fam_allow + house_allow + cap_inv + tax_adj,
+#' pop_data = eusilcA_pop, pop_domains = "district",
+#' smp_data = eusilcA_smp, smp_domains = "district",
+#' na.rm = TRUE)
+#'
+#' # choose last lines of the Gini coefficient, MSE and CV
+#' subset(estimators(emdi_model, indicator = "Gini"), 
+#'        Domain %in% c("Wien", "Wien Umgebung"))
+#' }
 #' @export
 
 subset.estimators.emdi <- function(x, ...) {
   x <- as.data.frame(x)
   subset(x = x,  ...)
 }
-# subset, select, drop = FALSE,
-# 
-# subset = subset, 
-# select = select, 
-# drop = drop,
+
 
 
 
