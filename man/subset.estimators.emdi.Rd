@@ -4,10 +4,12 @@
 \alias{subset.estimators.emdi}
 \title{Subsets an estimators.emdi object}
 \usage{
-\method{subset}{estimators.emdi}(x, subset, select, drop = FALSE, ...)
+\method{subset}{estimators.emdi}(x, ...)
 }
 \arguments{
 \item{x}{an object of type "estimators.emdi".}
+
+\item{...}{further arguments passed to or from other methods.}
 
 \item{subset}{logical expression indicating elements or rows to keep: 
 missing values are taken as false.}
@@ -16,8 +18,6 @@ missing values are taken as false.}
 estimaors.emdi object.}
 
 \item{drop}{passed on to [ indexing operator.}
-
-\item{...}{further arguments passed to or from other methods.}
 }
 \description{
 Subsets an estimators.emdi object
