@@ -86,4 +86,3 @@ MSE = TRUE, CV = TRUE, split=TRUE)
 \seealso{
 \code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}}
 }
-

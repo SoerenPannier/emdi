@@ -22,4 +22,3 @@ estimaors.emdi object.}
 \description{
 Subsets an estimators.emdi object
 }
-
