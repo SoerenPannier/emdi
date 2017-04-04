@@ -61,4 +61,3 @@ fam_allow + house_allow + cap_inv + tax_adj, eusilcA_smp, "box.cox", 0.7)
 \seealso{
 \code{\link[nlme]{lme}}
 }
-

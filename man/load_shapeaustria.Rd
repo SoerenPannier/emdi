@@ -17,4 +17,3 @@ The shape file contains the borders of Austrian districts. Thus, it
 can be used for the visualiuzation of estimation results for Austrian
 districts.
 }
-

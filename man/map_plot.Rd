@@ -91,4 +91,3 @@ map_tab = mapping_table)
 \code{\link{ebp}}, \code{\link{emdiObject}},
 \code{\link[maptools]{readShapePoly}}
 }
-
