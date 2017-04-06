@@ -69,7 +69,7 @@ subset(estimators(emdi_direct, indicator = "theil", CV = TRUE),
 class(estimators(emdi_direct, indicator = "theil", CV = TRUE))
 getAnywhere(subset.estimators.emdi)
 
-theil_districts <- tapply(eusilcA_smp$eqIncome, droplevels(eusilcA_smp$district), ineq, type="Theil")
+theil_districts <- tapply(eusilcA_smp$eqIncome, as.factor(eusilcA_smp$district), ineq, type="Theil")
 
 all.equal(as.numeric(theil_districts),
           estimators(emdi_direct, indicator = "theil")$ind$theil)
