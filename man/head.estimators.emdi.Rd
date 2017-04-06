@@ -42,9 +42,10 @@ smp_data = eusilcA_smp, smp_domains = "district",
 na.rm = TRUE)
 
 # choose first lines of the Gini coefficient, MSE and CV
-head(estimators(emdi_model, indicator = "Gini", MSE = FALSE, CV = TRUE))
+head(estimators(emdi_model, indicator = c("Gini", "Head_Count")))
 }
 }
 \seealso{
 \code{\link{estimators.emdi}}
 }
+

@@ -42,9 +42,10 @@ smp_data = eusilcA_smp, smp_domains = "district",
 na.rm = TRUE)
 
 # choose last lines of the Gini coefficient, MSE and CV
-tail(estimators(emdi_model, indicator = "Gini", MSE = FALSE, CV = TRUE))
+tail(estimators(emdi_model, indicator = c("Gini", "Head_Count")))
 }
 }
 \seealso{
 \code{\link{estimators.emdi}}
 }
+
