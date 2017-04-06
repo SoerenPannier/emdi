@@ -217,11 +217,6 @@ as.data.frame.estimators.emdi <- function(x,...) {
 #' Subsets an estimators.emdi object
 #' 
 #' @param x an object of type "estimators.emdi".
-#' @param subset	logical expression indicating elements or rows to keep: 
-#' missing values are taken as false.
-#' @param select	expression, indicating columns to select from a 
-#' estimaors.emdi object.
-#' @param drop	passed on to [ indexing operator.
 #' @param ... further arguments passed to or from other methods.
 #' @return Selected subsets of the object of type "estimators.emdi".
 #' @seealso \code{\link{estimators.emdi}}
