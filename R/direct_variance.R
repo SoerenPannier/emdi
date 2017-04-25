@@ -102,6 +102,11 @@ direct_variance <- function( direct_estimator,
     var <- var[1]
   } else {
     var <- var(b$t[, 1])
+    # TODO should be include a robustification here? and if yes
+    # how shoud we formulate the warning! should a minimum of valid distinct
+    # estimates be required to obtain a variance estimate? from my perspecive
+    # this would be usefull! but we need to exclude empty estimations from the
+    # other estimators as well!
   }
   
   # preparation of return
@@ -125,6 +130,8 @@ getFun2 <- function(byDomain, direct_estimator){
       value <- direct_estimator(x$y, x$weight, threshold)
       valueByDomain <- sapply(rs, function(r, x, t) {
         i <- x$Domain == r
+       # if(!length(x$y[i]) > 0)
+        #  browser()
         direct_estimator(x$y[i], x$weight[i],  threshold)
       }, x = x)
       c(value, valueByDomain)
@@ -214,8 +221,8 @@ calibWeights <- function (X_calib,
   }
   method <- match.arg(method)
   if (method == "linear") {
-    lambda <- ginv(t(X_calib * d * q) %*% X_calib, tol = eps) %*% (totals - 
-                                                         as.vector(t(d) %*% X_calib))
+    lambda <- ginv(t(X_calib * d * q) %*% X_calib, tol = eps) %*% 
+      (totals -  as.vector(t(d) %*% X_calib))
     g <- 1 + q * as.vector(X_calib %*% lambda)
   }
   else {
@@ -254,9 +261,8 @@ calibWeights <- function (X_calib,
       A <- diff(bounds)/((1 - bounds[1]) * (bounds[2] - 
                                               1))
       getG <- function(u, bounds) {
-        (bounds[1] * (bounds[2] - 1) + bounds[2] * (1 - 
-                                                      bounds[1]) * u)/(bounds[2] - 1 + (1 - bounds[1]) * 
-                                                                         u)
+        (bounds[1] * (bounds[2] - 1) + bounds[2] * 
+           (1 - bounds[1]) * u)/(bounds[2] - 1 + (1 - bounds[1]) * u)
       }
       g <- getG(rep.int(1, n), bounds)
       X1 <- X_calib
@@ -269,8 +275,9 @@ calibWeights <- function (X_calib,
         any(g < bounds[1]) || any(g > bounds[2])
       }
       i <- 1
-      while (!any(is.na(g)) && (tolNotReached(X_calib, g * d, 
-                                              totals, tol) || anyOutOfBounds(g, bounds)) && 
+      while (!any(is.na(g)) && 
+             (tolNotReached(X_calib, g * d, totals, tol) || 
+              anyOutOfBounds(g, bounds)) && 
              i <= maxit) {
         if (anyOutOfBounds(g, bounds)) {
           g[g < bounds[1]] <- bounds[1]
@@ -281,8 +288,9 @@ calibWeights <- function (X_calib,
             X1 <- X_calib[indices, ]
             d1 <- d[indices]
             if (length(indices) < n) {
-              totals1 <- totals - as.vector(t(g[-indices] * 
-                                                d[-indices]) %*% X_calib[-indices, , drop = FALSE])
+              totals1 <- totals - 
+                as.vector(t(g[-indices] *  d[-indices]) 
+                          %*% X_calib[-indices, , drop = FALSE])
             }
             q1 <- q[indices]
             g1 <- g[indices]

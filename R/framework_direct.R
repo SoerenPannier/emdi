@@ -145,7 +145,7 @@ getIndicatorList_fixed <- function(){
       iq1 <- y <= quant14[1]
       iq4 <- y > quant14[2]
       (sum(weights[iq4] * y[iq4]) / 
-          sum(weights[iq4])) / (sum(weights[iq1] *  y[iq1])/sum(weights[iq1]))
+          sum(weights[iq4])) / (sum(weights[iq1] *  y[iq1]) / sum(weights[iq1]))
     },
     quant10_wrap = function(y, 
                              weights, 
