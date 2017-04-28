@@ -12,7 +12,8 @@ direct_variance <- function( direct_estimator,
                               seed,
                               X_calib, 
                               totals,
-                              threshold){
+                              threshold,
+                              envir){
 
   # Domain setup - domains and if variance is calculated by domain
   rs <- indicator$domain
@@ -84,6 +85,7 @@ direct_variance <- function( direct_estimator,
   fun <- getFun2(byDomain, direct_estimator)
   bootFun <- getBootFun2(calibrate, fun)
   # actual bootstrap
+  
   b <- clusterBoot2( smp_data, 
                      bootFun, 
                      B, 
@@ -92,7 +94,8 @@ direct_variance <- function( direct_estimator,
                      threshold = threshold, 
                      aux = X_calib, 
                      totals = totals, 
-                     rs = rs)
+                     rs = rs,
+                     envir = envir)
                      #, ...)
    # browser()
   # if variance is calculated by domain
@@ -102,11 +105,6 @@ direct_variance <- function( direct_estimator,
     var <- var[1]
   } else {
     var <- var(b$t[, 1])
-    # TODO should be include a robustification here? and if yes
-    # how shoud we formulate the warning! should a minimum of valid distinct
-    # estimates be required to obtain a variance estimate? from my perspecive
-    # this would be usefull! but we need to exclude empty estimations from the
-    # other estimators as well!
   }
   
   # preparation of return
@@ -120,25 +118,29 @@ direct_variance <- function( direct_estimator,
 }
 
 
-getFun2 <- function(byDomain, direct_estimator){
+getFun2 <- function(byDomain, direct_estimator, envir){
   if(byDomain)
   {
-    function(x, threshold, rs) {
+    function(x, threshold, rs, envir) {
       if("function" %in% class(threshold)){
         threshold <- threshold(x$y, x$weight)
       }
       value <- direct_estimator(x$y, x$weight, threshold)
-      valueByDomain <- sapply(rs, function(r, x, t) {
+      valueByDomain <- sapply(rs, function(r, x, t, evir) {
         i <- x$Domain == r
-       # if(!length(x$y[i]) > 0)
-        #  browser()
-        direct_estimator(x$y[i], x$weight[i],  threshold)
+        if(!sum(i) > 0)
+        {
+          assign("warnlist", c(get("warnlist", envir = envir), as.character(r)), envir = envir)
+          NA
+        } else {
+          direct_estimator(x$y[i], x$weight[i],  threshold)
+        }
       }, x = x)
       c(value, valueByDomain)
     }
   }
   else{
-    function(x, threshold, rs, na.rm) {
+    function(x, threshold, rs, na.rm, envir) {
       if("function" %in% class(threshold)){
         threshold <- threshold(x$y, x$weight)
       }
@@ -148,27 +150,27 @@ getFun2 <- function(byDomain, direct_estimator){
 }
 
 # Function in order to select between naive and calibrate bootstrap
-getBootFun2  <- function(calibrate, fun) {
+getBootFun2  <- function(calibrate, fun, envir) {
   if (calibrate) {
-    function(x, i, threshold, aux, totals, rs, ...) {
+    function(x, i, threshold, aux, totals, rs, envir, ...) {
       x <- x[i, , drop = FALSE]
       aux <- aux[i, , drop = FALSE]
       g <- calibWeights(aux, x$weight, totals, ...)
       x$weight <- g * x$weight
-      fun(x, threshold, rs)
+      fun(x, threshold, rs, envir)
     }
   } else {
-    function(x, i, threshold, aux, totals, rs, ...) {
+    function(x, i, threshold, aux, totals, rs, envir, ...) {
       x <- x[i, , drop = FALSE]
-      fun(x, threshold, rs)
+      fun(x, threshold, rs, envir)
     }
   }
 }
 
 # Wrapper function for bootstrap function
-clusterBoot2 <- function(data, statistic, ..., domain, threshold, cluster = NULL){
+clusterBoot2 <- function(data, statistic, ..., domain, threshold, cluster = NULL, envir){
   if (is.null(cluster)) {
-    boot(data, statistic,  threshold = threshold, ..., domain = domain)
+    boot(data, statistic,  threshold = threshold, ..., domain = domain, envir = envir)
   } else {
     fun <- function(cluster, i, ..., .data, .statistic) {
       i <- do.call(c, split(1:nrow(.data), .data$cluster)[i])
@@ -176,7 +178,7 @@ clusterBoot2 <- function(data, statistic, ..., domain, threshold, cluster = NULL
     }
     keep <- !duplicated(cluster)
     boot(cluster[keep], fun, ..., domain = domain[keep], threshold = threshold,
-         .data = data, .statistic = statistic)
+         .data = data, .statistic = statistic, envir = envir)
   }
 }
 

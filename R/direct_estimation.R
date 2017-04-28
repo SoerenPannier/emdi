@@ -142,6 +142,8 @@ direct <- function(y,
 
 
   if(var == TRUE){
+    warnlist <- character()
+    envir <- environment()
     res <- mapply(FUN = direct_variance,
                   direct_estimator =  framework$indicator_list,
                   indicator_name =  framework$indicator_names,
@@ -157,10 +159,16 @@ direct <- function(y,
                            seed = seed,
                            X_calib = X_calib, 
                            totals = totals,
-                           threshold = framework$threshold
+                           threshold = framework$threshold,
+                           envir = envir
                            ),
                   SIMPLIFY = F
     )
+    if(length(warnlist) >0){
+      warning(paste0("For the following domains at least one bootstrap failed ",
+                     ", this may be due to a very small sample size. For these domains ",
+                     "no MSE estimate is displayed. ", paste0(unique(warnlist), collapse = ", ")))
+    }
   } else {
     res <- result_point
   }
