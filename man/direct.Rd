@@ -5,8 +5,8 @@
 \title{Direct estimation of disaggregated indicators}
 \usage{
 direct(y, smp_data, smp_domains = NULL, weights = NULL, design = NULL,
-  threshold = NULL, var = FALSE, boot_type = "naive", B = NULL,
-  seed = NULL, X_calib = NULL, totals = NULL, custom_indicator = NULL,
+  threshold = NULL, var = FALSE, boot_type = "naive", B = 50,
+  seed = 123, X_calib = NULL, totals = NULL, custom_indicator = NULL,
   na.rm = FALSE)
 }
 \arguments{
@@ -46,11 +46,11 @@ Either a \code{"naive"} or a \code{"calibrate"} bootstrap can be used. See
 also \code{\link[laeken]{bootVar}}. Defaults to \code{naive}.}
 
 \item{B}{a number determining the number of bootstrap populations for the 
-bootstrap variance. Defaults to \code{NULL}.}
+bootstrap variance. Defaults to \code{50}.}
 
 \item{seed}{an integer to set the seed for the random number generator. Random 
 number generation is used in the bootstrap approach. If no seed is set, seed
-is chosen randomly.}
+is chosen randomly. Defaults to \code{123}.}
 
 \item{X_calib}{a numeric matrix including calibration variables if the calibrated 
 bootstrap is chosen. Defaults to NULL.}

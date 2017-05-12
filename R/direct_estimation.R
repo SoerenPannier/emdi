@@ -33,10 +33,10 @@
 #' Either a \code{"naive"} or a \code{"calibrate"} bootstrap can be used. See 
 #' also \code{\link[laeken]{bootVar}}. Defaults to \code{naive}.
 #' @param B a number determining the number of bootstrap populations for the 
-#' bootstrap variance. Defaults to \code{NULL}.
+#' bootstrap variance. Defaults to \code{50}.
 #' @param seed an integer to set the seed for the random number generator. Random 
 #' number generation is used in the bootstrap approach. If no seed is set, seed
-#' is chosen randomly.
+#' is chosen randomly. Defaults to \code{123}.
 #' @param X_calib a numeric matrix including calibration variables if the calibrated 
 #' bootstrap is chosen. Defaults to NULL.
 #' @param totals a numeric vector providing the population totals if the calibrated 
@@ -98,8 +98,8 @@ direct <- function(y,
                    threshold = NULL,
                    var = FALSE, 
                    boot_type = "naive", 
-                   B = NULL,
-                   seed = NULL,
+                   B = 50,
+                   seed = 123,
                    X_calib = NULL, 
                    totals = NULL,
                    custom_indicator = NULL,
