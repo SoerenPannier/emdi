@@ -36,4 +36,3 @@ reduced to 18 variables containing three regional variables for the states,
 districts and counties.
 }
 \keyword{datasets}
-

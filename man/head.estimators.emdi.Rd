@@ -48,4 +48,3 @@ head(estimators(emdi_model, indicator = c("Gini", "Head_Count")))
 \seealso{
 \code{\link{estimators.emdi}}
 }
-
