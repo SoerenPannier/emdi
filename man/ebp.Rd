@@ -153,3 +153,4 @@ poverty and social exclusions, Technical Report, European Union.
 \code{\link{estimators.emdi}}, \code{\link{print.emdi}}, \code{\link{plot.emdi}},
 \code{\link{summary.emdi}}
 }
+

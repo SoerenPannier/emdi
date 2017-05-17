@@ -14,3 +14,4 @@
 \description{
 Transforms estimators.emdi objects into a dataframe object
 }
+
