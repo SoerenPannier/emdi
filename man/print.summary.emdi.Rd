@@ -19,4 +19,3 @@ The elements described in summary.emdi are printed.
 \seealso{
 \code{\link{summary.emdi}}
 }
-
