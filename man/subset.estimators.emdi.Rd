@@ -39,3 +39,4 @@ subset(estimators(emdi_model, indicator = "Gini"),
 \seealso{
 \code{\link{estimators.emdi}}
 }
+

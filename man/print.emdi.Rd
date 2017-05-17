@@ -19,3 +19,4 @@ Basic information of an emdi object is printed.
 \seealso{
 \code{\link{emdiObject}}, \code{\link{ebp}}
 }
+

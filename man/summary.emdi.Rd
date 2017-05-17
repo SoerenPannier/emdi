@@ -78,3 +78,4 @@ summary(emdi_model)
 \code{\link{r.squaredGLMM}}, \code{\link{skewness}}, \code{\link{kurtosis}},
 \code{\link{shapiro.test}}
 }
+

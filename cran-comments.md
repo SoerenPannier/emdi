@@ -11,3 +11,8 @@
 
 I have also run R CMD check on downstream dependencies of emdi:
 No ERRORs or WARNINGs found
+
+## Resubmission
+This is a resubmission. In this version I have:
+
+* Added the doi for Molina and Rao (2010) 

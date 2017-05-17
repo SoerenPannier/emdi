@@ -71,3 +71,4 @@ estimators(emdi_model, indicator = "Custom")
 \seealso{
 \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}
 }
+
