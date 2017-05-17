@@ -9,4 +9,5 @@
 
 ## Downstream dependencies
 
-There are no downstream dependencies.
+I have also run R CMD check on downstream dependencies of emdi:
+No ERRORs or WARNINGs found

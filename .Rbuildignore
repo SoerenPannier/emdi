@@ -5,4 +5,6 @@
 ^.*\.xlsx$
 cran-comments.md
 Spielplatz
+revdep
 NEWS.md
+^revdep$
