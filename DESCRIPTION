@@ -43,5 +43,6 @@ Imports:
     MASS
 Suggests:
     testthat,
-    R.rsp
+    R.rsp,
+    laeken
 VignetteBuilder: R.rsp
