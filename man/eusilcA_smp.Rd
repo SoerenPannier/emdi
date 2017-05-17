@@ -35,3 +35,4 @@ The data set is a simple random sample of data set \code{\link{eusilcA_pop}}
 which is based on \code{\link[simFrame]{eusilcP}} from package \pkg{simFrame}.
 }
 \keyword{datasets}
+

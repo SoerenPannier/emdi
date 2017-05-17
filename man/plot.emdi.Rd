@@ -100,3 +100,4 @@ plot(emdi_model, label="no_title", color=c("red", "yellow"), cooks = FALSE)
 \seealso{
 \code{\link{emdiObject}}, \code{\link{ebp}}
 }
+

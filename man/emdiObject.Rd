@@ -67,3 +67,4 @@ indicators. The Canadian Journal of Statistics, Vol. 38, No.3, 369-385.
 \code{\link{direct}}, \code{\link{ebp}}, \code{ \link[nlme]{lme}},
 \code{ \link[nlme]{lmeObject}}
 }
+
