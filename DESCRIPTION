@@ -11,8 +11,8 @@ Authors@R: c(person("Ann-Kristin", "Kreutzmann", role="aut", email="ann-kristin.
 Description: Functions that support estimating, assessing and mapping regional
     disaggregated indicators. So far, estimation methods comprise direct estimation
     and the model-based approach Empirical Best Prediction (see "Small area
-    estimation of poverty indicators" by Molina and Rao (2010) <doi:10.1002/cjs.
-    10051>), as well as their precision estimates. The assessment of the used model
+    estimation of poverty indicators" by Molina and Rao (2010) <doi:10.1002/cjs.10051>), 
+    as well as their precision estimates. The assessment of the used model
     is supported by a summary and diagnostic plots. For a suitable presentation of
     estimates, map plots can be easily created. Furthermore, results can easily be
     exported to excel.

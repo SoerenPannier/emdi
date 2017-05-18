@@ -16,3 +16,4 @@ No ERRORs or WARNINGs found
 This is a resubmission. In this version I have:
 
 * Added the doi for Molina and Rao (2010) 
+* Corrected the doi for Molina and Rao (2010) 
