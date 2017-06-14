@@ -131,7 +131,7 @@ mse_estim <- function(framework,
   }
   pop_income_vector <- superpop$pop_income_vector
   
-  if("function" %in% class(framework$threshold )){
+  if(inherits(framework$threshold, "function")){
     framework$threshold <- 
       framework$threshold(y = pop_income_vector)
   }
@@ -145,7 +145,7 @@ mse_estim <- function(framework,
                                                                  threshold = framework$threshold ,
                                                                  simplify = TRUE)
                                                           ),
-                                            byrow=TRUE)
+                                            byrow = TRUE)
                                      },
                                    threshold = framework$threshold)
                                    )
@@ -157,7 +157,7 @@ mse_estim <- function(framework,
   # point estimation to get predictors of the indicators that can be compared
   # to the "truth".
   
-  if(boot_type == "wild"){  
+  if(boot_type == "wild") {  
     bootstrap_sample <- bootstrap_par_wild(fixed          = fixed,
                                       transformation = transformation,
                                       framework      = framework,
@@ -168,7 +168,7 @@ mse_estim <- function(framework,
                                       res_s          = res_s,
                                       fitted_s       = fitted_s
     )
-  }else{
+  }else {
     bootstrap_sample <- bootstrap_par(fixed          = fixed,
                                       transformation = transformation,
                                       framework      = framework,

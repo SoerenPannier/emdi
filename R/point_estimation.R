@@ -69,7 +69,7 @@ point_estim <- function (framework,
                        )
 
   # Monte-Carlo approximation --------------------------------------------------
-  if("function" %in% class(framework$threshold )){
+  if(inherits(framework$threshold, "function")) {
     framework$threshold <- 
       framework$threshold(y = as.numeric(framework$smp_data[[paste0(fixed[2])]]))
   }

@@ -84,14 +84,12 @@ write.excel <- function(object,
                               #bgFill        = "#FFFFFF"
                               )
   
-  if("direct" %in% class(object))
-  {
+  if(inherits(object, "direct"))  {
     wb <- add_summary_direct(object = object, 
                              wb = wb, 
                              headlines_cs = headlines_cs)
   }
-  else if("model" %in% class(object))
-  {
+  else if(inherits(object, "model"))  {
     wb <- add_summary(object = object, wb = wb, headlines_cs = headlines_cs)
   }
 

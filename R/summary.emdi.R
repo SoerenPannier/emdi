@@ -68,11 +68,11 @@
 #'
 summary.emdi <- function(object, ...) {
   
-  if(!any(class(object)=="emdi")){
+  if(!inherits(object, "emdi")){
     stop('First object needs to be of class emdi.')
   }
   
-  if(any(class(object) == "model")){
+  if(inherits(object, "model")){
     call_emdi <- object$call
     
     N_dom_unobs <- object$framework$N_dom_unobs
@@ -170,7 +170,7 @@ summary.emdi <- function(object, ...) {
                      call         = call_emdi
     )
   }
-  if(any(class(object) == "direct")){
+  if(inherits(object, "direct")){
     call_emdi <- object$call
     
     N_dom_smp <-   object$framework$N_dom_smp

@@ -73,11 +73,11 @@ estimators <- function(object, ...) UseMethod("estimators")
 
 estimators.emdi <- function(object, indicator = "all", MSE = FALSE, CV = FALSE, ...) {
 
-  if(!any(class(object)=="emdi")){
+  if(!inherits(object, "emdi")) {
     stop('First object needs to be of class emdi.')
   }
   
-  if (is.null(object$MSE) && (MSE == TRUE || CV == TRUE)){
+  if (is.null(object$MSE) && (MSE == TRUE || CV == TRUE)) {
     stop('No MSE estimates in object: arguments MSE and CV have to be FALSE')
   }
   
@@ -85,7 +85,7 @@ estimators.emdi <- function(object, indicator = "all", MSE = FALSE, CV = FALSE, 
   all_ind <- point_emdi(object = object, indicator = indicator)
   selected <- colnames(all_ind$ind)[-1]
 
-  if( MSE == TRUE || CV ==TRUE )
+  if( MSE == TRUE || CV == TRUE )
   {
     all_precisions <- mse_emdi(object = object, indicator = indicator, CV = TRUE)
     colnames(all_precisions$ind) <- paste0(colnames(all_precisions$ind), "_MSE")

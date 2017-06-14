@@ -122,7 +122,7 @@ getFun2 <- function(byDomain, direct_estimator, envir){
   if(byDomain)
   {
     function(x, threshold, rs, envir) {
-      if("function" %in% class(threshold)){
+      if(inherits(threshold, "function")){
         threshold <- threshold(x$y, x$weight)
       }
       value <- direct_estimator(x$y, x$weight, threshold)
@@ -141,7 +141,7 @@ getFun2 <- function(byDomain, direct_estimator, envir){
   }
   else{
     function(x, threshold, rs, na.rm, envir) {
-      if("function" %in% class(threshold)){
+      if(inherits(threshold, "function")){
         threshold <- threshold(x$y, x$weight)
       }
       direct_estimator(x$y, x$weight, threshold)

@@ -18,11 +18,11 @@
 
 print.emdi <- function(x, ...) {
 
-  if(!any(class(x)=="emdi")){
+  if(!inherits(x, "emdi")) {
     stop('First object needs to be of class emdi.')
   }
   
-  if(any(class(x)=="model")){
+  if(inherits(x, "model")) {
     cat("Empirical Best Prediction\n")
     cat("\n")
     cat("Out-of-sample domains: ", x$framework$N_dom_unobs, "\n")
@@ -67,7 +67,7 @@ print.emdi <- function(x, ...) {
     print(x$fixed)
     cat("\n")
   }
-  if(any(class(x) == "direct")){
+  if(inherits(x, "direct")) {
     cat("Direct estimation\n")
     cat("\n")
     cat("In-sample domains: ", x$framework$N_dom_smp, "\n")

@@ -7,7 +7,7 @@ point_estim_direct <-  function(direct_estimator,
                                 X_calib, 
                                 totals){
   # whole sample value
-  if("function" %in% class(framework$threshold)){
+  if(inherits(framework$threshold, "function")){
     framework$threshold <- framework$threshold(framework$y_vec, framework$weights_vec)
   }
   value <- direct_estimator(y = framework$y_vec, 

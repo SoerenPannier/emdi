@@ -264,22 +264,22 @@ get_polygone <- function(values)
 get_scale_points <- function(y, ind, scale_points){
   result <- NULL
   if(!is.null(scale_points)){
-    if(class(scale_points) == "numeric" && length(scale_points == 2)){
+    if(inherits(scale_points, "numeric") && length(scale_points == 2)){
       result <- scale_points
     } else 
     {
       splt <- strsplit(ind, "_\\s*(?=[^_]+$)", perl = TRUE)[[1]]
       indicator_name <- splt[1]
-      if(length(splt == 2)){
+      if(length(splt == 2)) {
         measure <- splt[2]
       } else {
         measure <- "ind"
       }
-      if(indicator_name %in% names(scale_points)){
+      if(indicator_name %in% names(scale_points)) {
         pointset <- scale_points[[indicator_name]]
         try(result <- pointset[[measure]])
       }
-      if(is.null(result) || length(result) != 3)
+      if(is.null(result) || length(result) != 2)
       {
         warnings("scale_points is of no apropriate form, default values will 
                  be used. See the descriptions and examples for details")
