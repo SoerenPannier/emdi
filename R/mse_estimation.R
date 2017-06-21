@@ -27,6 +27,7 @@ parametric_bootstrap <- function(framework,
 
   start_time = Sys.time()
   if(cpus > 1){
+    seedvec <- sample(.Random.seed, cpus)
     cpus <- min(cpus, detectCores())
     parallelStart(mode = parallel_mode, cpus = cpus, show.info = FALSE)
     parallelLibrary("nlme")
@@ -45,7 +46,8 @@ parametric_bootstrap <- function(framework,
                                            res_s           = res_s,
                                            fitted_s        = fitted_s,
                                            start_time      = start_time,
-                                           boot_type       = boot_type
+                                           boot_type       = boot_type,
+                                           seedvec         = seedvec
                   )
             )
     parallelStop()
@@ -65,7 +67,8 @@ parametric_bootstrap <- function(framework,
                                             res_s           = res_s,
                                             fitted_s        = fitted_s,
                                             start_time      = start_time,
-                                            boot_type       = boot_type
+                                            boot_type       = boot_type,
+                                            seedvec         = NULL
         )
       )
   }
@@ -342,7 +345,11 @@ mse_estim_wrapper <-  function(i,
                                res_s,
                                fitted_s,
                                start_time,
-                               boot_type) {
+                               boot_type,
+                               seedvec) {
+  if (!is.null(seedvec) && i <= length(seedvec)) {
+    set.seed(abs(seedvec[i]))
+  }
 
   tmp <- mse_estim(framework       = framework,
                    lambda          = lambda,

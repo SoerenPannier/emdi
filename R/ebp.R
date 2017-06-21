@@ -138,12 +138,14 @@ ebp <- function(fixed,
                 interval = c(-1,2),
                 MSE = FALSE,
                 B = 50,
+                seed = NULL,
                 boot_type = "parametric",
                 parallel_mode = ifelse(grepl("windows",.Platform$OS.type,), 
                                        "socket", "multicore"),
                 cpus = 1,
                 custom_indicator = NULL, 
-                na.rm = FALSE) {
+                na.rm = FALSE
+) {
 
 
   ebp_check1(fixed = fixed, pop_data = pop_data, pop_domains = pop_domains,
@@ -158,9 +160,12 @@ ebp <- function(fixed,
   # Save function call ---------------------------------------------------------
 
   call <- match.call()
-
+  
   # Data manipulation and notational framework ---------------------------------
-
+  if(!is.null(seed)){
+    set.seed(seed)
+  }
+    
   # The function framework_ebp can be found in script framework_ebp.R
   framework <- framework_ebp( pop_data         = pop_data,
                               pop_domains      = pop_domains,

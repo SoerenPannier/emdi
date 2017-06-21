@@ -88,7 +88,7 @@ map_plot <- function(object,
     map_pseudo(object = object , indicator = indicator, panelplot = FALSE, MSE = MSE,
                CV = CV)
   }
-  else if(class(map_obj) != "SpatialPolygonsDataFrame" || attr(class(map_obj),
+  else if(!inherits(map_obj, "SpatialPolygonsDataFrame") || attr(class(map_obj),
                                                                "package") != "sp"){
     stop("map_obj is not of class SpatialPolygonsDataFrame from the sp package")
   }
