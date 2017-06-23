@@ -28,12 +28,17 @@ parametric_bootstrap <- function(framework,
   start_time = Sys.time()
   if (cpus > 1) {
     
-    if (grepl("windows",.Platform$OS.type)){
-      cpus <- min(cpus, detectCores())
-    }
+
+    cpus <- min(cpus, detectCores())
+    
     parallelStart(mode = parallel_mode, cpus = cpus, show.info = FALSE)
 
-    clusterSetRNGStream()
+    if (parallel_mode == "socket") {
+      clusterSetRNGStream()
+    } else {
+      set.seed(kind = "L'Ecuyer")
+    }
+      
 
     parallelLibrary("nlme")
     mses <- simplify2array(parallelLapply(xs              = 1:B, 
