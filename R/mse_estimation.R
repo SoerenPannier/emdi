@@ -115,7 +115,7 @@ mse_estim <- function(framework,
   # variable that passes the random effect to generating bootstrap populations
   # in bootstrap_par.
   
-  if(boot_type == "wild"){
+  if (boot_type == "wild"){
     superpop <- superpopulation_wild(framework      = framework,
                                       model_par      = model_par,
                                       gen_model      = gen_model,
@@ -137,7 +137,7 @@ mse_estim <- function(framework,
   }
   pop_income_vector <- superpop$pop_income_vector
   
-  if(inherits(framework$threshold, "function")){
+  if (inherits(framework$threshold, "function")){
     framework$threshold <- 
       framework$threshold(y = pop_income_vector)
   }
@@ -163,7 +163,7 @@ mse_estim <- function(framework,
   # point estimation to get predictors of the indicators that can be compared
   # to the "truth".
   
-  if(boot_type == "wild") {  
+  if (boot_type == "wild") {  
     bootstrap_sample <- bootstrap_par_wild(fixed          = fixed,
                                       transformation = transformation,
                                       framework      = framework,
@@ -365,8 +365,8 @@ mse_estim_wrapper <-  function(i,
                    boot_type       = boot_type
                    )
 
-  if(i%%10 == 0) {
-    if(i != B) {
+  if (i%%10 == 0) {
+    if (i != B) {
       delta <- difftime(Sys.time(), start_time, units = "secs")
       remaining <- (delta/i)*(B-i)
       remaining <- unclass(remaining)

@@ -110,7 +110,7 @@ direct <- function(y,
   
   direct_check2(smp_domains = smp_domains, weights = weights, sort = sort, 
                 threshold = threshold, var = var, boot_type = boot_type, 
-                B = B, X = X_calib, totals = totals)
+                B = B, X = X_calib, totals = totals, seed = seed)
   
   # Save call ------------------------------------------------------------------
   call <- match.call()

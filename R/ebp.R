@@ -157,7 +157,7 @@ ebp <- function(fixed,
   
   ebp_check2(threshold = threshold, transformation = transformation, 
              interval = interval, MSE = MSE, B = B, 
-             custom_indicator = custom_indicator, cpus = cpus)
+             custom_indicator = custom_indicator, cpus = cpus,  seed = seed)
     
 
 

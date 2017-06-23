@@ -6,28 +6,28 @@
 ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L){
   
   
-  if(is.null(fixed)  || !inherits(fixed, "formula")){
+  if (is.null(fixed)  || !inherits(fixed, "formula")) {
     stop('Fixed must be a formula object. See also help(ebp).')
   } 
-  if(!is.data.frame(pop_data)){
+  if (!is.data.frame(pop_data)) {
     stop('Pop_data must be a data.frame containing population data. 
            See also help(ebp).')
   }
-  if(!is.character(pop_domains)){
+  if (!is.character(pop_domains) || length(pop_domains) != 1) {
     stop('Pop_domains must be a character containing the name of a numeric or 
            factor variable indicating domains in the population data. 
            See also help(ebp).')
   }
-  if(!is.data.frame(smp_data)){
+  if (!is.data.frame(smp_data)){
     stop('Smp_data must be a data.frame containing sample data.
            See also help(ebp).')
   }
-  if(!is.character(smp_domains)){
+  if (!is.character(smp_domains) || length(smp_domains) != 1) {
     stop('Smp_domains must be a character containing the name of a numeric or 
            factor variable indicating domains in the sample data.
            See also help(ebp).')
   }
-  if(!is.numeric(L) || length(L) != 1){
+  if (!is.numeric(L) || length(L) != 1) {
     stop('L needs to be a number determining the
            number of Monte-Carlo simulations. See also help(ebp).')
   }
@@ -35,9 +35,9 @@ ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L){
 }
 
 ebp_check2 <- function(threshold, transformation, interval, MSE, B, 
-                       custom_indicator, cpus){
-  if(!(is.null(threshold) || (is.numeric(threshold) && length(threshold) == 1))
-       || inherits(threshold, "function")){
+                       custom_indicator, cpus, seed){
+  if (!(is.null(threshold) || (is.numeric(threshold) && length(threshold) == 1))
+       || inherits(threshold, "function")) {
     stop("threshold needs to be a number or a function of y. 
           If it is NULL 60% of the median is selected as threshold.")
   }
@@ -46,19 +46,21 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, B,
         || transformation == "no")){
     stop("The three options for transformation are ''no'', ''log'' or ''box.cox''." )
   }
-  if(!is.logical(MSE) || length(MSE) != 1){
+  if (!is.logical(MSE) || length(MSE) != 1) {
     stop("MSE must be a logical value. Set MSE to TRUE or FALSE. See also
          help(ebp).")
   }
-  if(MSE == TRUE && !(is.numeric(B) && length(B) == 1)){
+  if (MSE == TRUE && !(is.numeric(B) && length(B) == 1)){
     stop('If MSE is set to TRUE, a numeric value for the number of bootstrap
          sample needs to be chosen. See also help(ebp).')
   }
-  if(!is.numeric(cpus)){
+  if (!is.numeric(cpus) || !(is.numeric(cpus) && length(cpus) == 1)){
     stop("Cpus must be a number determining the number of kernels for the
          parallelization.")
   }
-  
+  if (!is.numeric(seed) || !(is.numeric(seed) && length(seed) == 1)) {
+    stop("Seed must be a single number or NULL as initialisation of the RNG")
+  }
   
   if (!is.null(custom_indicator)) {
     N_custom <- length(custom_indicator)
@@ -80,16 +82,16 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, B,
 
 # Function called in notation
 fw_check1 <- function(pop_domains_vec, smp_domains_vec){
-  if(!(is.numeric(pop_domains_vec) || any(inherits(pop_domains_vec, "factor")))) {
+  if (!(is.numeric(pop_domains_vec) || any(inherits(pop_domains_vec, "factor")))) {
     stop('Pop_domains needs to be the name of a variable that is numeric or
            a (ordered) factor.')
   }
-  if(!(is.numeric(smp_domains_vec) || any(inherits(smp_domains_vec, "factor")))) {
+  if (!(is.numeric(smp_domains_vec) || any(inherits(smp_domains_vec, "factor")))) {
     stop('Smp_domains needs to be the name of a variable that is numeric or
            a (ordered) factor.')
   }
-  if((is.numeric(pop_domains_vec) && any(inherits(smp_domains_vec, "factor"))) ||
-     (is.numeric(smp_domains_vec) && any(inherits(pop_domains_vec, "factor"))) ){
+  if ((is.numeric(pop_domains_vec) && any(inherits(smp_domains_vec, "factor"))) ||
+     (is.numeric(smp_domains_vec) && any(inherits(pop_domains_vec, "factor"))) ) {
     stop('Pop_domains and smp_domains need to be names of variables that are
           of the same class (factor and ordered factor are considered to be 
          the same class). See also help(ebp).')
@@ -97,7 +99,7 @@ fw_check1 <- function(pop_domains_vec, smp_domains_vec){
 }
 
 fw_check2 <- function(obs_dom, dist_obs_dom){
-  if(sum(obs_dom) == 0 || sum(dist_obs_dom) == 0){
+  if (sum(obs_dom) == 0 || sum(dist_obs_dom) == 0) {
     stop('Pop_domains and smp_domains do not have any value in common. Do really
          both variables indicate the same domains in population data and sample
          data, respectively?')
