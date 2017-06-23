@@ -35,11 +35,7 @@ parametric_bootstrap <- function(framework,
 
     if (parallel_mode == "socket") {
       clusterSetRNGStream()
-    } else {
-      set.seed(kind = "L'Ecuyer")
-    }
-      
-
+    } 
     parallelLibrary("nlme")
     mses <- simplify2array(parallelLapply(xs              = 1:B, 
                                            fun             = mse_estim_wrapper,

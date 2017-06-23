@@ -166,8 +166,15 @@ ebp <- function(fixed,
   call <- match.call()
   
   # Data manipulation and notational framework ---------------------------------
-  if(!is.null(seed)){
-    set.seed(seed)
+  if(!is.null(seed)) {
+    if (cpus > 1 && parallel_mode != "socket") {
+      RNG_kind <- RNGkind()
+      set.seed(seed, kind = "L'Ecuyer")
+    }
+    else
+    {
+      set.seed(seed)
+    }
   }
     
   # The function framework_ebp can be found in script framework_ebp.R
@@ -252,7 +259,10 @@ ebp <- function(fixed,
                     call            = call
                     )
   }
-
+  
+  if (cpus > 1 && parallel_mode != "socket") {
+    RNGkind(RNG_kind[1]) # restoring RNG type
+  }
   class(ebp_out) <- c("emdi", "model")
   return(ebp_out)
 }
