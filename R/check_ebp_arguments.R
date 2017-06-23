@@ -58,7 +58,7 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, B,
     stop("Cpus must be a number determining the number of kernels for the
          parallelization.")
   }
-  if (!is.numeric(seed) || !(is.numeric(seed) && length(seed) == 1)) {
+  if (!is.null(seed) && (!is.numeric(seed) || !(is.numeric(seed) && length(seed) == 1))) {
     stop("Seed must be a single number or NULL as initialisation of the RNG")
   }
   

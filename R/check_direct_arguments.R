@@ -59,7 +59,7 @@ direct_check2 <- function(smp_domains = NULL,
   if(var == TRUE && boot_type == "calibrate" && !is.numeric(X)){
     stop("X must be a numeric matrix.")
   } 
-  if (!is.numeric(seed) || !(is.numeric(seed) && length(seed) == 1)) {
+  if (!is.null(seed) && (!is.numeric(seed) || !(is.numeric(seed) && length(seed) == 1))) {
     stop("Seed must be a single number or NULL as initialisation of the RNG")
   } 
   
