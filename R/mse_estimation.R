@@ -26,10 +26,15 @@ parametric_bootstrap <- function(framework,
   }
 
   start_time = Sys.time()
-  if(cpus > 1){
-    seedvec <- sample(.Random.seed, cpus)
-    cpus <- min(cpus, detectCores())
+  if (cpus > 1) {
+    
+    if (grepl("windows",.Platform$OS.type)){
+      cpus <- min(cpus, detectCores())
+    }
     parallelStart(mode = parallel_mode, cpus = cpus, show.info = FALSE)
+
+    clusterSetRNGStream()
+
     parallelLibrary("nlme")
     mses <- simplify2array(parallelLapply(xs              = 1:B, 
                                            fun             = mse_estim_wrapper,
@@ -46,8 +51,7 @@ parametric_bootstrap <- function(framework,
                                            res_s           = res_s,
                                            fitted_s        = fitted_s,
                                            start_time      = start_time,
-                                           boot_type       = boot_type,
-                                           seedvec         = seedvec
+                                           boot_type       = boot_type
                   )
             )
     parallelStop()
@@ -67,8 +71,7 @@ parametric_bootstrap <- function(framework,
                                             res_s           = res_s,
                                             fitted_s        = fitted_s,
                                             start_time      = start_time,
-                                            boot_type       = boot_type,
-                                            seedvec         = NULL
+                                            boot_type       = boot_type
         )
       )
   }
@@ -347,10 +350,7 @@ mse_estim_wrapper <-  function(i,
                                start_time,
                                boot_type,
                                seedvec) {
-  if (!is.null(seedvec) && i <= length(seedvec)) {
-    set.seed(abs(seedvec[i]))
-  }
-
+  
   tmp <- mse_estim(framework       = framework,
                    lambda          = lambda,
                    shift           = shift,
