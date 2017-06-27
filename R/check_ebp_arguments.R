@@ -10,7 +10,7 @@ ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L){
     stop('Fixed must be a formula object. See also help(ebp).')
   } 
   if (!is.data.frame(pop_data)) {
-    stop('Pop_data must be a data.frame containing population data. 
+    stop('Pop_data must be a data frame containing population data. 
            See also help(ebp).')
   }
   if (!is.character(pop_domains) || length(pop_domains) != 1) {
@@ -19,7 +19,7 @@ ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L){
            See also help(ebp).')
   }
   if (!is.data.frame(smp_data)){
-    stop('Smp_data must be a data.frame containing sample data.
+    stop('Smp_data must be a data frame containing sample data.
            See also help(ebp).')
   }
   if (!is.character(smp_domains) || length(smp_domains) != 1) {
