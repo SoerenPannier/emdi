@@ -85,7 +85,6 @@
 #' }
 #' @export
 #' @importFrom boot boot
-#' @importFrom Hmisc wtd.quantile
 #' @importFrom MASS ginv
 #' @importFrom stats aggregate runif weighted.mean
 

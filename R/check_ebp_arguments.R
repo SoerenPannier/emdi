@@ -36,8 +36,8 @@ ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L){
 
 ebp_check2 <- function(threshold, transformation, interval, MSE, B, 
                        custom_indicator, cpus, seed){
-  if (!(is.null(threshold) && !(is.numeric(threshold) && length(threshold) == 1))
-       && !inherits(threshold, "function")) {
+  if (!is.null(threshold) && !(is.numeric(threshold) && length(threshold) == 1)
+       && !inherits(threshold, "function")) { 
     stop("threshold needs to be a number or a function of y. 
           If it is NULL 60% of the median is selected as threshold.")
   }
