@@ -44,8 +44,7 @@ color in the plots}
 \item{scale_points}{a structure defining the lowest, the mid and the highest 
 value of the colorscale. If a numeric vector of length two is given, this scale
 will be used for every plot. Alternatively a list defining colors for each 
-plot seperatly may be given. Please see the details section and examples for 
-this.}
+plot seperatly may be given. Please see the examples for this.}
 
 \item{return_data}{if set to true a fortified data frame including the 
 map data as well as the chosen indicators is returned. Customized can easily 
@@ -81,10 +80,42 @@ load_shapeaustria()
 mapping_table <- data.frame(unique(eusilcA_pop$district), 
 unique(shape_austria_dis$NAME_2))
 
+# Example 1
 # Create map plot for mean indicator - point and MSE estimates but no CV
 map_plot(object = emdi_model, MSE = TRUE, CV = FALSE, 
 map_obj = shape_austria_dis, indicator = c("Mean"), map_dom_id = "NAME_2", 
 map_tab = mapping_table)
+
+# Example 2
+# Now we are creating plots for the Mean and the Median with both their precision
+# measures, while forcing coloring ranges of both indicators to be the same
+
+# First, define appropriate scales for each indicator and measure and save it 
+# in a nested list as seen below
+
+my_scale_points <- list(Mean   = list(ind = c(0, 75000),
+                                    MSE = c(45000, 15000000),
+                                    CV  = c(0, 0.5)
+                                   ),
+                        Median = list(ind = c(0, 75000),
+                                      MSE = c(45000, 15000000),
+                                      CV  = c(0, 0.5)
+                                   )
+                       )
+ # When done so, this list may be used as an argument to map_plot 
+ 
+ map_plot(object = emdi_model, MSE = TRUE, CV = TRUE, 
+          map_obj = shape_austria_dis, indicator = c("Mean", "Median"), 
+          map_dom_id = "NAME_2", map_tab = mapping_table, 
+          scale_points = my_scale_points)
+ 
+ # Example 3
+ # In the simple case, that all plots shall use the same color range,
+ # the procedure from example 2 may be abbreviated to:
+ map_plot(object = emdi_model, MSE = FALSE, CV = FALSE, 
+          map_obj = shape_austria_dis, indicator = c("Mean", "Median"), 
+          map_dom_id = "NAME_2", map_tab = mapping_table, 
+          scale_points = c(0, 75000))
 }
 }
 \seealso{
