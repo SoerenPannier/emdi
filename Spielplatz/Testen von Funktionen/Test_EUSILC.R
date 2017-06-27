@@ -22,17 +22,11 @@ emdi_direct <- direct(y = "eqIncome",
                       na.rm = TRUE)
 
 # Gibt Warnungen zurück
-<<<<<<< HEAD
+
 emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, smp_domains = "district", 
                       weights = "weight", threshold = 11064.82, var = TRUE, 
                       boot_type = "naive", B = 50, 
                       seed = 123, X_calib = NULL, totals = NULL, custom_indicator = list( my_max = 
-=======
-emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", 
-                      weights="weight", threshold=11064.82, var=TRUE, 
-                      bootType = "naive", B=50, 
-                      seed=123, X_calib = NULL, totals = NULL, custom_indicator = list( my_max = 
->>>>>>> 0aa278d0ec507611543b7f9bf17c405aee089331
                       function(y, weights, threshold){max(y)}, my_min = 
                       function(y, weights, threshold){min(y)}), na.rm = TRUE)
 
