@@ -1,7 +1,7 @@
 ## Test environments
-* ubuntu 12.04.5 (on travis-ci), R 3.3.4
-* Windows7  R 3.3.4 local development environment
-* Windows10 R 3.3.4 local development environment
+* ubuntu 12.04.5 (on travis-ci), R 3.4
+* Windows7  R 3.3.3 local development environment
+* Windows10 R 3.4 local development environment
 
 ## R CMD check results
 
@@ -12,8 +12,3 @@
 I have also run R CMD check on downstream dependencies of emdi:
 No ERRORs or WARNINGs found
 
-## Resubmission
-This is a resubmission. In this version I have:
-
-* Added the doi for Molina and Rao (2010) 
-* Corrected the doi for Molina and Rao (2010) 
