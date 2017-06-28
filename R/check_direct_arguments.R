@@ -7,7 +7,7 @@ direct_check1 <- function(y,
                           smp_data){
   
   
-  if (is.null(y)  || !inherits(y, "character")) {
+  if (is.null(y)  || !(inherits(y, "character") && length(y) == 1)) {
     stop('y must be a character indicating the variable that is used for 
          estimating the indicators. See also help(direct).')
   } 

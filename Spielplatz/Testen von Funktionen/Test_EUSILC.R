@@ -17,17 +17,18 @@ emdi_direct <- direct(y = "eqIncome",
                       boot_type = "naive", 
                       B = 5, 
                       seed = 123, 
-                      X = NULL, 
+                      X_calib = NULL, 
                       totals = NULL, 
                       na.rm = TRUE)
 
 # Gibt Warnungen zurück
-emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", 
-                      weights="weight", threshold=11064.82, var=TRUE, 
-                      bootType = "naive", B=50, 
-                      seed=123, X = NULL, totals = NULL, custom_indicator = list( my_max = 
+
+emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, smp_domains = "district", 
+                      weights = "weight", threshold = 11064.82, var = TRUE, 
+                      boot_type = "naive", B = 50, 
+                      seed = 123, X_calib = NULL, totals = NULL, custom_indicator = list( my_max = 
                       function(y, weights, threshold){max(y)}, my_min = 
-                      function(y, weights, threshold){min(y)}), na.rm=TRUE)
+                      function(y, weights, threshold){min(y)}), na.rm = TRUE)
 
 # Wie gibt man threshold mit Gewichten rein?
 emdi_direct_varth <- direct(y = "eqIncome", 
@@ -36,10 +37,10 @@ emdi_direct_varth <- direct(y = "eqIncome",
                       weights = "weight", 
                       threshold = function(y, weights){0.6 * laeken::weightedMedian(eusilcA_smp$eqIncome, weights = eusilcA_smp$weight)},#11064.82, 
                       var = TRUE, 
-                      bootType = "naive", 
+                      boot_type = "naive", 
                       B = 5, 
                       seed = 123, 
-                      X = NULL, 
+                      X_calib = NULL, 
                       totals = NULL, 
                       na.rm = TRUE)
 
