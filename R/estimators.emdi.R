@@ -142,7 +142,7 @@ print.estimators.emdi <- function(x,...) {
 #' smp_data = eusilcA_smp, smp_domains = "district",
 #' na.rm = TRUE)
 #'
-#' # choose first lines of the Gini coefficient, MSE and CV
+#' # Example: Choose first lines of the Gini coefficient, MSE and CV
 #' head(estimators(emdi_model, indicator = c("Gini", "Head_Count")))
 #' }
 #' @importFrom utils head
@@ -178,7 +178,7 @@ head.estimators.emdi <- function(x, n = 6L, addrownums=NULL, ...) {
 #' smp_data = eusilcA_smp, smp_domains = "district",
 #' na.rm = TRUE)
 #'
-#' # choose last lines of the Gini coefficient, MSE and CV
+#' # Example: Choose last lines of the Gini coefficient, MSE and CV
 #' tail(estimators(emdi_model, indicator = c("Gini", "Head_Count")))
 #' }
 #' @importFrom utils tail

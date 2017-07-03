@@ -33,9 +33,9 @@
 #' value of the colorscale. If a numeric vector of length two is given, this scale
 #' will be used for every plot. Alternatively a list defining colors for each 
 #' plot seperatly may be given. Please see the examples for this. 
-#' @param return_data if set to true a fortified data frame including the 
+#' @param return_data if set to TRUE a fortified data frame including the 
 #' map data as well as the chosen indicators is returned. Customized can easily 
-#' be obtained from this data frame via the package \code{ggmap}. Defaults to false
+#' be obtained from this data frame via the package \code{ggmap}. Defaults to FALSE
 #' @return creates the plots demanded
 #' @seealso \code{\link{ebp}}, \code{\link{emdiObject}},
 #' \code{\link[maptools]{readShapePoly}}
@@ -62,13 +62,13 @@
 #' mapping_table <- data.frame(unique(eusilcA_pop$district), 
 #' unique(shape_austria_dis$NAME_2))
 #'
-#' # Example 1
-#' # Create map plot for mean indicator - point and MSE estimates but no CV
+#' # Example 1: Create map plot for mean indicator - point and MSE estimates 
+#' # but no CV
 #' map_plot(object = emdi_model, MSE = TRUE, CV = FALSE, 
 #' map_obj = shape_austria_dis, indicator = c("Mean"), map_dom_id = "NAME_2", 
 #' map_tab = mapping_table)
 #' 
-#' # Example 2
+#' # Example 2:
 #' # Now we are creating plots for the Mean and the Median with both their precision
 #' # measures, while forcing coloring ranges of both indicators to be the same
 #' 
@@ -91,7 +91,7 @@
 #'           map_dom_id = "NAME_2", map_tab = mapping_table, 
 #'           scale_points = my_scale_points)
 #'  
-#'  # Example 3
+#'  # Example 3:
 #'  # In the simple case, that all plots shall use the same color range,
 #'  # the procedure from example 2 may be abbreviated to:
 #'  map_plot(object = emdi_model, MSE = FALSE, CV = FALSE, 
@@ -112,23 +112,25 @@ map_plot <- function(object,
                      col = c("white", "red4"),
                      scale_points = NULL,
                      return_data = FALSE){
+
+  
   if (is.null(map_obj))
   {
     message("No Map Object has been provided. An artificial polygone is used for
-            visualization")
+            visualization. For real visualization give an object of 
+            class SpatialPolygonsDataFrame to the argument map_obj.")
     map_pseudo(object = object , indicator = indicator, panelplot = FALSE, MSE = MSE,
                CV = CV)
   }
   else if (!inherits(map_obj, "SpatialPolygonsDataFrame") || attr(class(map_obj),
                                                                "package") != "sp") {
-    stop("map_obj is not of class SpatialPolygonsDataFrame from the sp package")
+    stop("map_obj needs to be of class SpatialPolygonsDataFrame from the sp package.")
   }
   else {
+
     
-    if (length(col) != 2 || !is.vector(col)) {
-      stop("col needs to be a vector of length 2 
-           defining the starting, mid and upper color of the map-plot")
-    }
+    mapplot_check(object = object, map_dom_id = map_dom_id, map_obj = map_obj, 
+                  map_tab = map_tab, col = col, return_data = return_data)
     
     plot_real(object,
               indicator = indicator,
@@ -141,7 +143,7 @@ map_plot <- function(object,
               scale_points = scale_points,
               return_data = return_data
     )
-  }
+}
 }
 
 map_pseudo <- function(object, indicator, panelplot, MSE, CV)
@@ -178,9 +180,10 @@ plot_real <- function(object,
                       scale_points = NULL,
                       return_data = FALSE
 ) {
-  if (!is.null(map_obj) && is.null(map_dom_id)) {
-    stop("No Domain ID for the map object is given")
-  }
+  
+
+  
+
   long <- lat <- group <- NULL
   
   
@@ -195,10 +198,11 @@ plot_real <- function(object,
     
     if (any(is.na(matcher))) {
       if (all(is.na(matcher))) {
-        stop("Domains of map_tab and Map object do not match. Check map_tab")
+        stop("Domains of map_tab and map_obj do not match. Check map_tab. 
+             See also help(map_plot).")
       } else {
-        warnings("Not all Domains of map_tab and Map object could be matched.
-                 Check map_tab")
+        warnings("Not all domains of map_tab and map_obj could be matched.
+                  Check map_tab. See also help(map_plot).")
       }
     }
     map_data <- map_data[matcher,]
@@ -210,10 +214,11 @@ plot_real <- function(object,
 
     if (any(is.na(matcher))) {
       if (all(is.na(matcher))) {
-        stop("Domain of EMDI and Map object do not match. Try using map_tab")
+        stop("Domain of emdi object and map object do not match. 
+             Try using map_tab. See also help(map_plot).")
       } else {
-        warnings("Not all Domains of EMDI and Map object could be matched.
-                 Try using map_tab")
+        warnings("Not all domains of emdi object and map object could be matched.
+                 Try using map_tab. See also help(map_plot).")
       }
     }
     map_data <- map_data[matcher,]
@@ -289,7 +294,8 @@ get_scale_points <- function(y, ind, scale_points){
       if (is.null(result) || length(result) != 2)
       {
         warnings("scale_points is of no appropriate form, default values will 
-                 be used. See the second and third example for details.")
+                 be used. See the second and third example in 
+                 help(map_plot) for details.")
         result <- NULL
       }
     }
