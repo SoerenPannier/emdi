@@ -4,7 +4,7 @@
 
 framework_dir <- function(y, smp_data, smp_domains, weights, 
                           threshold, custom_indicator, na.rm){
-  
+
   
   if (isTRUE(na.rm)) {
     indices <- !is.na(smp_data[y])
