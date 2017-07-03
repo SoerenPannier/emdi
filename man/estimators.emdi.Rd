@@ -16,7 +16,8 @@ shall be returned: (i) all calculated indicators ("all");
 (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
 "Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini", 
 "Quintile_Share" or the function name/s of "custom_indicator/s"; 
-(iii) groups of indicators: "Quantiles", "Poverty", "Inequality" or "Custom". 
+(iii) groups of indicators: "Quantiles", "Poverty", "Inequality" or "Custom".
+If two of these groups are selected, only the first one is returned. 
 Defaults to "all". Note, additional custom indicators can be 
 defined as argument for model-based approaches (see also \code{\link{ebp}}) 
 and do not appear in groups of indicators even though these might belong to 
@@ -61,10 +62,10 @@ L= 50, MSE = TRUE, B = 50, custom_indicator =
 list( my_max = function(y, threshold){max(y)},
 my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 
-# choose Gini coefficient and MSE and CV
+# Example 1: Choose Gini coefficient and MSE and CV
 estimators(emdi_model, indicator = "Gini", MSE = TRUE, CV = TRUE)
 
-# choose custom indicators without MSE and CV
+Example 2: Choose custom indicators without MSE and CV
 estimators(emdi_model, indicator = "Custom")
 }
 }

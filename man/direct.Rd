@@ -31,7 +31,7 @@ to \code{NULL}.}
 \item{threshold}{a number defining a threshold. Alternatively, a threshold may 
 be defined as a \code{function} of \code{y} and \code{weights} returning a 
 numeric value. Such a function will be evaluated once for the point 
-estimation and in each iteration of the parametric bootstrap. See Example 3 
+estimation and in each iteration of the parametric bootstrap. See Example 2 
 for using a function as threshold.  A threshold is needed for calculation e.g. 
 of head count ratios and poverty gaps. The argument defaults to \code{NULL}. 
 In this case the threshold is set to 60\% of the median of the variable that 
@@ -57,13 +57,15 @@ is chosen randomly. Defaults to \code{123}.}
 bootstrap is chosen. Defaults to NULL.}
 
 \item{totals}{a numeric vector providing the population totals if the calibrated 
-bootstrap is chosen.. Defaults to \code{NULL}. In this case, the sampling 
-weights are used to calculate the totals.}
+bootstrap is chosen. If a vector is chosen, the length of the vector needs to 
+equal the number of columns in X_calib. Defaults to \code{NULL}. In this case, 
+the sampling weights are used to calculate the totals.}
 
 \item{custom_indicator}{a list of functions containing the indicators to be
 calculated additionaly. Such functions must and must only depend on the
 target variable \code{y}, the \code{weights} and the threshold (numeric value)
-\code{threshold} (see Example 2). Defaults to \code{NULL}.}
+\code{threshold} (see Example 3) even though some arguments might not be used
+in the additional function. Defaults to \code{NULL}.}
 
 \item{na.rm}{if TRUE, observations with \code{NA} values are deleted from the 
 sample data. Defaults to \code{FALSE}.}
@@ -97,19 +99,19 @@ emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
 smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
 boot_type = "naive", B = 50, seed = 123, X = NULL, totals = NULL, na.rm = TRUE)
 
-# Example 2: With custom indicators
+#' # Example 3: With function as threshold
+emdi_direct_varth <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
+smp_domains = "district", weights = "weight", threshold = function(y, 
+weights){0.6 * laeken::weightedMedian(eusilcA_smp$eqIncome, 
+weights = eusilcA_smp$weight)}, na.rm = TRUE)
+
+# Example 3: With custom indicators
 emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
 smp_domains = "district", weights = "weight", threshold = 10859.24, 
 var = TRUE, boot_type = "naive", B = 50, seed = 123, X = NULL, totals = NULL, 
 custom_indicator = list( my_max = function(y, weights, threshold){max(y)}, 
 my_min = function(y, weights, threshold){min(y)}), na.rm = TRUE)
 }
-
-# Example 2: With function as threshold
-emdi_direct_varth <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
-smp_domains = "district", weights = "weight", threshold = function(y, 
-weights){0.6 * laeken::weightedMedian(eusilcA_smp$eqIncome, 
-weights = eusilcA_smp$weight)}, na.rm = TRUE)
 }
 \references{
 Alfons, A. and Templ, M. (2013). Estimation of Social Exclusion Indicators
