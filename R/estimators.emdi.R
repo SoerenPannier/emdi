@@ -29,7 +29,8 @@ estimators <- function(object, ...) UseMethod("estimators")
 #' (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
 #' "Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini", 
 #' "Quintile_Share" or the function name/s of "custom_indicator/s"; 
-#' (iii) groups of indicators: "Quantiles", "Poverty", "Inequality" or "Custom". 
+#' (iii) groups of indicators: "Quantiles", "Poverty", "Inequality" or "Custom".
+#' If two of these groups are selected, only the first one is returned. 
 #' Defaults to "all". Note, additional custom indicators can be 
 #' defined as argument for model-based approaches (see also \code{\link{ebp}}) 
 #' and do not appear in groups of indicators even though these might belong to 
@@ -62,38 +63,32 @@ estimators <- function(object, ...) UseMethod("estimators")
 #' L= 50, MSE = TRUE, B = 50, custom_indicator = 
 #' list( my_max = function(y, threshold){max(y)},
 #' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
-#'
-#' # choose Gini coefficient and MSE and CV
+#' 
+#' # Example 1: Choose Gini coefficient and MSE and CV
 #' estimators(emdi_model, indicator = "Gini", MSE = TRUE, CV = TRUE)
 #' 
-#' # choose custom indicators without MSE and CV
+#' Example 2: Choose custom indicators without MSE and CV
 #' estimators(emdi_model, indicator = "Custom")
 #' }
 #' @export
 
 estimators.emdi <- function(object, indicator = "all", MSE = FALSE, CV = FALSE, ...) {
 
-  if(!inherits(object, "emdi")) {
-    stop('First object needs to be of class emdi.')
-  }
-  
-  if (is.null(object$MSE) && (MSE == TRUE || CV == TRUE)) {
-    stop('No MSE estimates in object: arguments MSE and CV have to be FALSE')
-  }
+  estimators_check(object = object, indicator = indicator, 
+                   MSE = MSE, CV = CV)
   
   # Only point estimates
   all_ind <- point_emdi(object = object, indicator = indicator)
   selected <- colnames(all_ind$ind)[-1]
 
-  if( MSE == TRUE || CV == TRUE )
-  {
+  if ( MSE == TRUE || CV == TRUE ) {
     all_precisions <- mse_emdi(object = object, indicator = indicator, CV = TRUE)
     colnames(all_precisions$ind) <- paste0(colnames(all_precisions$ind), "_MSE")
     colnames(all_precisions$ind_cv) <- paste0(colnames(all_precisions$ind_cv), "_CV")
     combined <- data.frame(all_ind$ind, all_precisions$ind, all_precisions$ind_cv)
     endings <- c("","_MSE", "_CV")[c(TRUE,MSE,CV)]
 
-    combined <- combined[,c("Domain",paste0(rep(selected,each=length(endings)),
+    combined <- combined[,c("Domain",paste0(rep(selected,each = length(endings)),
                                            endings))]
   } else {
     combined <- all_ind$ind
