@@ -4,7 +4,7 @@
 #' approach by \cite{Molina and Rao (2010)}. Point predictions of indicators are
 #' obtained by Monte-Carlo approximations. Additionally, mean squared error (MSE)
 #' estimation can be conducted by using a parametric bootstrap approach (see
-#' also \cite{Gonzalez-Manteiga et al. (2008)}). The unit level model of
+#' also \cite{Gonzalez-Manteiga et al. (2008)}). The unit-level model of
 #' \cite{Battese, Harter and Fuller (1988)} is fitted by REML method and one of
 #' three different transformation types for the dependent variable can be chosen.
 #'
@@ -52,9 +52,9 @@
 #' @param B a number determining the number of bootstrap populations in the
 #' parametric bootstrap approach (see also \cite{Gonzalez-Manteiga et al. (2008)})
 #' used in the MSE estimation. Defaults to 50.
-#' @param seed an integer to set the seed for the random number generator. Random 
-#' number generation is used in the bootstrap approach. If no seed is set, seed
-#' is chosen randomly. Defaults to \code{123}.
+#' @param seed an integer to set the seed for the random number generator. For 
+#' the usage of random number generation see details. If seed is \code{NULL}, 
+#' seed is chosen randomly. Defaults to \code{123}.
 #' @param boot_type character to choose between different MSE estimation procedures,
 #' currently a \code{"parametric"} and a semi-parametric \code{"wild"} bootstrap 
 #' are possible
@@ -77,8 +77,8 @@
 #' to obtain further information. See \code{\link{emdiObject}} for descriptions
 #' of components of objects of class "emdi".
 #' @details For Monte-Carlo approximations and in the parametric bootstrap
-#' approach random number generation is used. In order to specify seeds use
-#' \code{\link{set.seed}}. \cr \cr
+#' approach random number generation is used. Thus, a seed is set by the 
+#' argument \code{seed}. \cr \cr
 #' The set of predefined indicators includes the mean, median, four further quantiles
 #' (10\%, 25\%, 75\% and 90\%), head count ratio, poverty gap, Gini coefficient
 #' and the quintile share ratio.
