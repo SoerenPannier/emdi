@@ -6,9 +6,6 @@ data("eusilcA_smp")
 
 # Beispiele im Paket -----------------------------------------------------------
 
-# Direct
-0.6 * laeken::weightedMedian(eusilcA_smp$eqIncome, weights = eusilcA_smp$weight)
-
 # Teste mit Skalaren
 # numeric
 num_skalar <- 5
@@ -60,24 +57,40 @@ list_poss <- list(num_skalar,
                   NULL)
 
 
+
+# Direct #######################################################################
+0.6 * laeken::weightedMedian(eusilcA_smp$eqIncome, weights = eusilcA_smp$weight)
+
+
+for (i in 1:14) {
+  
 emdi_direct <- direct(y = "eqIncome", 
                       smp_data = eusilcA_smp, 
                       smp_domains = "district", 
                       weights = "weight", 
                       design = NULL,
-                      threshold = function(y, weights){0.6 * laeken::weightedMedian(eusilcA_smp$eqIncome, weights = eusilcA_smp$weight)}, 
-                      var = TRUE, 
-                      boot_type = "calibrate", 
+                      #threshold = function(y, weights){0.6 * laeken::weightedMedian(eusilcA_smp$eqIncome, weights = eusilcA_smp$weight)}, 
+                      threshold = 10989.28,
+                      var = FALSE, 
+                      boot_type = "naive", 
                       B = 2, 
                       seed = 123, 
                       #X_calib = as.matrix(as.numeric(eusilcA_smp$gender)),
                       X_calib = cbind(as.numeric(list_poss[[13]]$gender),
                                           as.numeric(list_poss[[13]]$state)),
-                      totals = NULL, 
+                      totals = char_skalar,
+                      #X_calib = list_poss[[10]],
+                      #totals = NULL, 
                       na.rm = TRUE,
-                      custom_indicator = list(my_max = function(y, weights, threshold){max(y)}, 
-                                              my_min = function(y, weights, threshold){min(y)}))
+                      custom_indicator = list( my_max = function(y, weights, threshold){max(y)}, 
+                                               my_min = function(y, weights, threshold){min(y)}))
+}
 
+# Only default values
+direct_default <- direct(y = "eqIncome",                  
+               smp_data = eusilcA_smp, 
+               smp_domains = "district", 
+               var = FALSE)
 
 # Try all possibilities above for y
 # We always get: y must be a character indicating the variable that is used for 
@@ -149,25 +162,64 @@ all(attributes(formals(threshold))$names == c("y", "weights"))
 
 
 # Try all possibilities above for X_calib
+# When boot type is calibrate, we get: If boot_type is set to 'calibrate', 
+# X_calib must be a numeric matrix which colums have the same length as the 
+# colums in the sample data. See also help(direct).
+# for all possibilities.
+# Does only work when it is a numeric matric which colums lengths equals the 
+# colum length of the sample data.
+# When boot type is naive, it does not matter how X_calib is specified. 
 
+
+# Try all possibilities above for totals
+# It works for num_skalar and ind_skalar when X_calib has one colum and 
+# it works for num_vek and ind_vek when x_calib has two colums, which is fine
+# Otherwise, we get: If boot_type is set to 'calibrate', totals can be NULL or must be 
+# a numeric vector which length equals to the number of colums in 
+# X_calib. See also help(direct).
+# When boot type is naive, it does not matter how totals is specified. 
  
+# Try all possibilities above for na.rm
+# It works for log_skalar which is fine
+# Otherwise, we get: na.rm needs to be a logical value. Set na.rm to TRUE or 
+# FALSE. See also help(direct).
+
+# Try all possibilities above for custom_indicators
+# It works for NULL which is fine
+# Otherwise, we get: Additional indicators need to be added in argument 
+# custom_indicator as a list of functions. For help see Example 3 in help(direct).
+# Problem: The functions itself are not checked! 
 
 
+
+# Methods for direct
 
 # Information about data
+# These two function only have one argument and this is the emdi object, so no
+# further arguments for checking
 print(emdi_direct)
 summary(emdi_direct)
 
 
 
 # Check error messages
+# This method is not available for an emdi object of class direct and it return 
+# a suitable error message. 
 plot(emdi_direct)
 
 
 # Choose indicators
-estimators(object = emdi_direct, MSE = F, CV = F, indicator = "all")
-head(estimators(object = emdi_direct, MSE = F, CV = T, indicator = c("Head_Count","Poverty_Gap")))
-tail(estimators(object = emdi_direct, MSE = T, CV = T, indicator = c("Head_Count","Poverty_Gap")))
+# 1. Case: No MSE estimation conducted.
+estimators(object = emdi_direct, MSE = F, CV = F, indicator = names(emdi_direct$ind[-1]))
+
+
+# Try all possibilities above for custom_indicators
+# We get for all: indicator is a character vector that can only contain the 
+# names of estimated indicators or 'all' or indicator groups as described in 
+# help(estimators.emdi).
+
+head(estimators(object = emdi_direct, MSE = F, CV = F, indicator = list_poss[[6]]))
+tail(estimators(object = emdi_direct, MSE = T, CV = FALSE, indicator = c("Gini", "Mean")))
 
 
 
@@ -189,66 +241,144 @@ length(unique(shape_austria_dis$NAME_2))
 mapping_table <- data.frame(unique(eusilcA_pop$district), 
                             unique(shape_austria_dis$NAME_2))
 
+
 map_plot(object = emdi_direct, 
          MSE = TRUE, 
          CV = FALSE, 
          map_obj = shape_austria_dis,
-         indicator = c("Gini"), 
+         #map_obj = NULL,
+         indicator = "poverty", 
          map_dom_id = "NAME_2", 
          map_tab = mapping_table,
-         return_data = F)
+         #col = c("white", "black"), 
+         return_data = FALSE)
+
+
+
+# Try all possibilities: map_obj
+# If it is NULL: No Map Object has been provided. An artificial polygone is 
+# used for visualization. For real visualization give an object of 
+# class SpatialPolygonsDataFrame to the argument map_obj.
+# Otherwise we get: map_obj is not of class SpatialPolygonsDataFrame from the 
+# sp package
+
+# Try all possibilities: map_dom_id
+# We get in all cases:  A domain ID needs to be given by argument map_dom_id. 
+# This argument needs to be a single character that indicates a variable
+# in map_obj. Thus, it also needs to be contained in map_obj. 
+# See also help(map_plot). 
+
+
+# Try all possibilities: map_tab
+# We get in most cases: If the IDs in the data object and shape file differ a 
+# mapping table needs to be used. This table needs to be a data frame with 
+# two colums. See also help(map_plot). 
+# If a data frame with two colums in given but it does not fit, it comes: 
+# Domains of map_tab and Map object do not match. Check map_tab 
+# If the domains do not match and map_tab is still NULL, we get an unspecific
+# error. 
+
+# Try all possibilities: col
+# For num_vek it works 10 and 10 seem to specify colours and for ind_vek but e.g. 
+# for char_vek we get invalid color name 'Hallo'  which is understandable, the 
+# same for TRUE. 
+# Otherwise we get: col needs to be a vector of length 2 defining the starting 
+# and upper color of the map-plot
+
+
+# Try all possibilities: return_data
+# Wet get: return_data needs to be a logical value. Set na.rm to TRUE or FALSE. See 
+# also help(direct).
+
 
 
 # Export to excel
-write.excel(emdi_direct, file="excel_output.xlsx")
+write.excel(emdi_direct, file = "excel_output.xlsx")
 
 
 
 # Model-based ------------------------------------------------------------------
-set.seed(100)
-emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-                     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + 
-                     rent + fam_allow + house_allow + cap_inv + tax_adj,
+
+# Add possibility
+list_poss[[15]] <- hallo ~ es + geht + noch
+
+# Check arguments in model
+emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
+                  unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + 
+                    rent + fam_allow + house_allow + cap_inv + tax_adj,
                    pop_data = eusilcA_pop,
                    pop_domains = "district",
                    smp_data = eusilcA_smp,
                    smp_domains = "district",
-                   na.rm = TRUE,
-                   L = 5, B=5, MSE = T,boot_type = "wild"
-)
-
-set.seed(100)
-emdi_model_varth <- ebp( fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-                     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + 
-                     rent + fam_allow + house_allow + cap_inv + tax_adj,
-                   pop_data = eusilcA_pop,
-                   pop_domains = "district",
-                   smp_data = eusilcA_smp,
-                   smp_domains = "district",
-                   na.rm = TRUE,
-                   threshold = function(y){0.6 * median(y)},
-                   L = 5, B = 5, MSE = T
-)
-
-
-emdi_model2 <- ebp( fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-                     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + 
-                     rent + fam_allow + house_allow + cap_inv + tax_adj,
-                   pop_data = eusilcA_pop,
-                   pop_domains = "district",
-                   smp_data = eusilcA_smp,
-                   smp_domains = "district",
-                   threshold = 10722.66,
-                   transformation = "no",
-                   L= 50,
+                   threshold = function(y){0.6 * median(eusilcA_smp$eqIncome)},
+                   transformation = "box.cox",
+                   interval = ,
+                   L = 2,
                    MSE = TRUE,
-                   B = 50,
+                   boot_type = "parametric",
+                   B = 2,
+                   seed = 123,
                    custom_indicator = list( my_max = function(y, threshold){max(y)},
                                             my_min = function(y, threshold){min(y)}
                    ),  
                    na.rm = TRUE, 
                    cpus = 1
 )
+
+
+# Try possibilities: fixed
+# We always get: Fixed must be a formula object. See also help(ebp).
+# If it is formula but the variables are not in the data sets, we get:
+# Both the variable name in pop_domains and the explanatory variables
+# in argument fixed need to be contained in pop_data. 
+
+
+# Try possibilities: pop_data
+# If it is not a data frame, we get: Pop_data must be a data frame containing 
+# population data. See also help(ebp).
+# If it is a data frame but does not contain the variables in fixed:
+# Both the variable name in pop_domains and the explanatory variables
+# in argument fixed need to be contained in pop_data.
+# You can use smp data for pop data but this cannot be controlled.
+
+
+# Try possibilities: pop_domains
+# We get if it is not a character: Pop_domains must be a single character containing 
+# the name of a numeric or factor variable indicating domains in the population 
+# data. See also help(ebp).
+# If it is a single character but it does not fit: Both the variable name in 
+# pop_domains and the explanatory variables in argument fixed need to be 
+# contained in pop_data. 
+# There is no plausible error when as pop_domains e.g. cash is chosen.
+
+
+# Try possibilities: smp_data
+# We get: Smp_data must be a data frame containing sample data. See also help(ebp). 
+# And if it is a data frame without the right variables: The variable name 
+# in smp_domains and the variables in argument fixed need to be contained in 
+# smp_data. 
+
+
+# Try possibilities: smp_domains
+# We get if it is not a character: Smp_domains must be a single character 
+# containing the name of a numeric or factor variable indicating domains 
+# in the sample data. See also help(ebp). 
+# If it is a single character that does not fit:
+# The variable name in smp_domains and the variables
+# in argument fixed need to be contained in smp_data.
+
+
+# Try possibilities: threshold
+# For NULL, num_skalar and ind_skalar it works, but this is fine
+# Otherwise we get:  threshold needs to be a single number or a function of y. 
+# If it is NULL 60% of the median is selected as threshold. See also help(ebp).
+# Added that argument of function in threshold is checked.
+
+# Try possibilities: transformation
+# We always get: The three options for transformation are ''no'', ''log'' or 
+# ''box.cox''.
+
+
 
 
 # Information about data and model
