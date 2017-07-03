@@ -41,7 +41,7 @@ pop_data = eusilcA_pop, pop_domains = "district",
 smp_data = eusilcA_smp, smp_domains = "district",
 na.rm = TRUE)
 
-# choose first lines of the Gini coefficient, MSE and CV
+# Example: Choose first lines of the Gini coefficient, MSE and CV
 head(estimators(emdi_model, indicator = c("Gini", "Head_Count")))
 }
 }
