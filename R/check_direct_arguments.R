@@ -11,9 +11,11 @@ direct_check <- function(y,
                           var = FALSE, 
                           boot_type = "naive", 
                           B = NULL,
+                          seed,
                           X_calib = NULL, 
                           totals = NULL,
-                          seed) {
+                          na.rm, 
+                          custom_indicator) {
   if (is.null(y)  || !(inherits(y, "character") && length(y) == 1)) {
     stop('y must be a single character indicating the variable that is used for 
          estimating the indicators. See also help(direct).')
@@ -53,7 +55,7 @@ direct_check <- function(y,
           See also help(direct).')
   }
   if (!is.logical(var) || length(var) != 1) {
-    stop("Var must be a logical value. Set Var to TRUE or FALSE. See also
+    stop("Var needs to be a logical value. Set Var to TRUE or FALSE. See also
          help(direct).")
   }
   if (var == TRUE && !(boot_type == "naive" || boot_type == "calibrate")) {
@@ -64,15 +66,28 @@ direct_check <- function(y,
     stop('If var is set to TRUE, a single number for the number of bootstrap
          sample needs to be chosen. See also help(direct).')
   }
+  if (!is.null(seed) && (!is.numeric(seed) || !(is.numeric(seed) && length(seed) == 1))) {
+    stop("Seed must be a single number or NULL as initialisation of the RNG.
+         See also help(direct).")
+  } 
   if (var == TRUE && boot_type == "calibrate" 
-      && !(inherits(X_calib, c("numeric", "matrix")) && dim(X_calib)[1] == dim(smp_data)[1])) {
+      && !(inherits(X_calib, c("matrix")) && is.numeric(X_calib) && (dim(X_calib)[1] == dim(smp_data)[1]))) {
     stop("If boot_type is set to 'calibrate', X_calib must be a numeric matrix
           which colums have the same length as the colums in the sample data.
          See also help(direct).")
   } 
-  if (!is.null(seed) && (!is.numeric(seed) || !(is.numeric(seed) && length(seed) == 1))) {
-    stop("Seed must be a single number or NULL as initialisation of the RNG.
-          See also help(direct).")
+  if (var == TRUE && boot_type == "calibrate" 
+      && !(is.null(totals) || (is.numeric(totals) && (length(totals) == dim(X_calib)[2])))) {
+    stop("If boot_type is set to 'calibrate', totals can be NULL or must be 
+         a numeric vector which length equals to the number of colums in 
+         X_calib. See also help(direct).")
   } 
-  
+  if (!(inherits(na.rm, "logical") && length(na.rm) == 1)) {
+    stop("na.rm needs to be a logical value. Set na.rm to TRUE or FALSE. See 
+         also help(direct).")
+  }
+  if (!(is.null(custom_indicator) || inherits(custom_indicator, "list"))) {
+    stop("Additional indicators need to be added in argument custom_indicator
+         as a list of functions. For help see Example 3 in help(direct).")
+  }
 }
