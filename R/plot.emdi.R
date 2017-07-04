@@ -65,17 +65,17 @@
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
 #' 
-#' # Example with default setting but na.rm=TRUE; with Box-Cox transformation
+#' # With default setting but na.rm = TRUE; with Box-Cox transformation
 #' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
 #' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
 #' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 #' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
 #' na.rm = TRUE)
 #'
-#' # Creation of default diagnostic plots
+#' # Example 1: Creation of default diagnostic plots
 #' plot(emdi_model)
 #' 
-#' # Creation of diagnostic plots without labels and titles, different colors 
+#' # Example 1: Creation of diagnostic plots without labels and titles, different colors 
 #' # and without Cook's distance plot.
 #' plot(emdi_model, label="no_title", color=c("red", "yellow"), cooks = FALSE)
 #' }
@@ -93,11 +93,9 @@ plot.emdi <- function(x,
                       gg_theme = NULL,
                       cooks = TRUE,
                       range = NULL, ...){
+
   
-  if(!all(inherits(x, which = T, c("emdi", "model")))){
-    stop('First object needs to be of class emdi, model. For emdi objects
-         obtained by direct estimation diagnostic plots are not reasonable.')
-  }
+  plot_check(x = x, label = label, color = color, cooks = cooks, range = range)
   
   Residuals <- Random <- index <- lambda <- log_likelihood <- NULL # avoid note due to ggplot2
   # Preparation for plots
