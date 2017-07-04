@@ -12,14 +12,14 @@ mapplot_check <- function(object,
                              && length(map_dom_id) == 1 && 
                              map_dom_id %in% names(map_obj))) {
       stop("A domain ID needs to be given by argument map_dom_id. This 
-           argument needs to be a single character that indicates a variable
-           in map_obj. Thus, it needs to be contained in map_obj. 
-           See also help(map_plot).")
+           argument  must be a vector of lenght 1 and of class character 
+           specifying the variable (name) in map_obj. Thus, it needs to be 
+           contained in map_obj. See also help(map_plot).")
   }
   
   if (length(col) != 2 || !is.vector(col)) {
       stop("col needs to be a vector of length 2 
-           defining the starting and upper color of the map plot.")
+           defining the lower and upper color of the map plot.")
   }
   if (!is.null(map_tab) && !(inherits(map_tab, "data.frame") 
                              && dim(map_tab)[2] == 2)) {

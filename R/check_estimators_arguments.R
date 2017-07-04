@@ -6,8 +6,8 @@ estimators_check <- function(object,
     stop('First object needs to be of class emdi.')
   }
   if (is.null(object$MSE) && (MSE == TRUE || CV == TRUE)) {
-    stop('No MSE estimates in object: arguments MSE and CV have to be FALSE or 
-         a new emdi object with MSE needs to be generated.')
+    stop('No MSE estimates in emdi object: arguments MSE and CV have to be FALSE
+          or a new emdi object with variance/MSE needs to be generated.')
   }
   if (!(inherits(MSE, "logical") && length(MSE) == 1)) {
     stop("MSE needs to be a logical value. Set MSE to TRUE or FALSE.")

@@ -14,22 +14,22 @@ ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L){
            See also help(ebp).')
   }
   if (!is.character(pop_domains) || length(pop_domains) != 1) {
-    stop('Pop_domains must be a single character containing the name of 
-           a numeric or factor variable indicating domains in the population 
-           data. See also help(ebp).')
+    stop('Pop_domains must be a vector of lenght 1 and of class character 
+         specifying the variable name of a numeric or factor variable 
+         indicating domains in the population data. See also help(ebp).')
   }
   if (!is.data.frame(smp_data)) { 
     stop('Smp_data must be a data frame containing sample data.
            See also help(ebp).')
   }
   if (!is.character(smp_domains) || length(smp_domains) != 1) {
-    stop('Smp_domains must be a single character containing the name of a 
-          numeric or factor variable indicating domains in the sample data.
-          See also help(ebp).')
+    stop('Smp_domains must be a vector of lenght 1 and of class character 
+          specifying the variable (name)  of a numeric or factor variable 
+          indicating domains in the sample data. See also help(ebp).')
   }
   if (!is.numeric(L) || length(L) != 1) {
-    stop('L needs to be a single number determining the
-           number of Monte-Carlo simulations. See also help(ebp).')
+    stop('L needs to be a single value, interpreted as an integer, determining 
+          the number of Monte-Carlo simulations. See also help(ebp).')
   }
   
 }
@@ -38,13 +38,13 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
                        custom_indicator, cpus, seed, na.rm){
   if (!is.null(threshold) && !(is.numeric(threshold) && length(threshold) == 1)
        && !inherits(threshold, "function")) { 
-    stop("threshold needs to be a single number or a function of y. 
+    stop("threshold needs to be a single numeric value or a function of y. 
           If it is NULL 60% of the median is selected as threshold.
          See also help(ebp).")
   }
   if (inherits(threshold, "function") && !all(attributes(formals(threshold))$names == c("y"))) {
     stop('If threshold is a function the argument needs to be y and only y. Also 
-          a single number is possible as threshold. If it is 
+          a single numeric value is possible as threshold. If it is 
           NULL 60% of the median of the target variable is selected as threshold. 
           See also help(ebp).')
   }
@@ -55,7 +55,7 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
   }
   if (length(interval) != 2 || !is.vector(interval, mode = "numeric") ||
       !(interval[1] < interval[2])) {
-    stop("interval needs to be a vector of length 2 
+    stop("interval needs to be a numeric vector of length 2 
          defining a lower and upper limit for the estimation of the optimal 
          transformation parameter. The value of the lower limit needs to be 
          smaller than the upper limit. See also help(ebp).")
@@ -69,7 +69,7 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
     stop("The two bootstrap procedures are ''parametric'' or ''wild''." )
   }
   if (MSE == TRUE && !(is.numeric(B) && length(B) == 1)) {
-    stop('If MSE is set to TRUE, a single number for the number of bootstrap
+    stop('If MSE is set to TRUE, a single numeric value for the number of bootstrap
          sample needs to be chosen. See also help(ebp).')
   }
   if (!is.numeric(cpus) || !(is.numeric(cpus) && length(cpus) == 1)) {
@@ -77,7 +77,7 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
          parallelization.")
   }
   if (!is.null(seed) && (!is.numeric(seed) || !(is.numeric(seed) && length(seed) == 1))) {
-    stop("Seed must be a single number or NULL as initialisation of the RNG. 
+    stop("The seed must be a single value, interpreted as an integer, or NULL
          See also help(ebp).")
   }
   if (!is.null(custom_indicator)) {
@@ -95,10 +95,6 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
              two arguments: y, threshold; even though a threshold might not 
              included in the indicator. For help see Example 2 in help(ebp).")
       }
-      #if(length(formals(custom_indicator[[i]])) != 2){
-      #  stop("Function for custom indicators needs to have two arguments: y and
-      #       threshold. See also help(ebp).")
-      #}
       else if (inherits(custom_indicator[[i]], "function") 
                && !all(names(formals(custom_indicator[[i]])) == c("y", "threshold"))) {
         stop("Functions for custom indicators need to have exactly the following 
@@ -109,7 +105,7 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
   }
   if (!(inherits(na.rm, "logical") && length(na.rm) == 1)) {
     stop("na.rm needs to be a logical value. Set na.rm to TRUE or FALSE. See 
-         also help(direct).")
+         also help(ebp).")
   }
     
 }
@@ -118,12 +114,12 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
 # Functions called in notation
 fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data, 
                       fixed, smp_domains) {
-  if (!((mod_vars %in% names(pop_data)) && (pop_domains %in% names(pop_data)))) {
+  if (!((mod_vars %in% names(pop_data)) && (pop_domains %in% colnames(pop_data)))) {
     stop('Both the variable name in pop_domains and the explanatory variables
          in argument fixed need to be contained in pop_data.')
   }
   if (!((mod_vars %in% names(smp_data)) && (smp_domains %in% names(smp_data))
-        && (as.character(fixed[2])) %in% names(smp_data))) {
+        && (as.character(fixed[2])) %in% colnames(smp_data))) {
     stop('The variable name in smp_domains and the variables
          in argument fixed need to be contained in smp_data.')
   }

@@ -6,7 +6,7 @@ plot_check <- function(x, label, color, cooks, range) {
   }
   if (is.null(label) || (!(label == "orig" || label == "no_title" || label == "blank") 
                          && !inherits(label, "list"))) {
-    stop("label can be either one of the following character 'orig', 
+    stop("label can be either one of the following characters 'orig', 
          'no_title' or 'blank' or a list as specified in help(plot.emdi).")
   }
   if (length(color) != 2 || !is.vector(color)) {
