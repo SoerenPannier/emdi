@@ -32,7 +32,7 @@ eusilcA_pop
 \description{
 The data set is synthetic EU-SILC data based on the data set
 \code{\link[simFrame]{eusilcP}} from package \pkg{simFrame}. The data set is 
-reduced to 18 variables containing three regional variables for the states, 
+reduced to 17 variables containing three regional variables for the states, 
 districts and counties.
 }
 \keyword{datasets}

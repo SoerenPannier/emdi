@@ -16,22 +16,22 @@ MSE estimates.}
 \item{indicator}{optional character vector that selects which indicators
 shall be returned: (i) all calculated indicators ("all");
 (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
-"Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini", 
-"Quintile_Share" or the function name/s of "custom_indicator/s"; 
-(iii) groups of indicators: "Quantiles", "Poverty" or 
+"Quantile_75", "Quantile_90", "Head_Count", 
+"Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of 
+"custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty" or 
 "Inequality". Defaults to "all". Note, additional custom indicators can be 
 defined as argument for model-based approaches (see also \code{\link{ebp}}) 
 and do not appear in groups of indicators even though these might belong to 
 one of the groups.}
 
-\item{MSE}{logical. If TRUE, the MSE of the emdiObject is exported. Defaults 
-to \code{FALSE}.}
+\item{MSE}{logical. If \code{TRUE}, the MSE of the emdiObject is exported. 
+Defaults to \code{FALSE}.}
 
-\item{CV}{logical. If TRUE, the CV of the emdiObject is exported. Defaults 
-to \code{FALSE}.}
+\item{CV}{logical. If \code{TRUE}, the CV of the emdiObject is exported. 
+Defaults to \code{FALSE}.}
 
-\item{split}{logical. If TRUE, point estimates, MSE and CV are written to
-different sheets in the excel file. Defaults to \code{FALSE}.}
+\item{split}{logical. If \code{TRUE}, point estimates, MSE and CV are written 
+to different sheets in the excel file. Defaults to \code{FALSE}.}
 }
 \value{
 An excel file is created in your working directory, or at the given
@@ -69,18 +69,18 @@ emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
 self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-threshold = function(y){0.6 * median(y)}, L= 50, MSE = TRUE, B = 50, 
+threshold = function(y){0.6 * median(y)}, L = 50, MSE = TRUE, B = 50, 
 custom_indicator = list( my_max = function(y, threshold){max(y)},
 my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 
 # Example 1: Export estimates for all indicators and uncertainty measures and 
 # diagnostics to excel
-write.excel(emdi_model, file ="excel_output_all.xlsx", indicator = "all", 
+write.excel(emdi_model, file = "excel_output_all.xlsx", indicator = "all", 
 MSE = TRUE, CV = TRUE)
 
 # Example 2: Single excel sheets for point, MSE and CV estimates
-write.excel(emdi_model, file ="excel_output_all_split.xlsx", indicator = "all", 
-MSE = TRUE, CV = TRUE, split=TRUE)
+write.excel(emdi_model, file = "excel_output_all_split.xlsx", indicator = "all", 
+MSE = TRUE, CV = TRUE, split = TRUE)
 }
 }
 \seealso{

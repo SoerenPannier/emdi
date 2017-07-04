@@ -47,17 +47,17 @@ the Box-Cox plot. The second element defines the color for the densities.}
 
 \item{gg_theme}{\code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.}
 
-\item{cooks}{if TRUE, a Cook's distance plot is returned. The used method
-\code{\link[HLMdiag]{cooks.distance.lme}} struggles when data sets get large.
-In these cases, \code{cooks} should be set to \code{FALSE}. It defaults to 
-\code{TRUE}.}
+\item{cooks}{if \code{TRUE}, a Cook's distance plot is returned. The used 
+method \code{\link[HLMdiag]{cooks.distance.lme}} struggles when data sets 
+get large. In these cases, \code{cooks} should be set to \code{FALSE}. It 
+defaults to \code{TRUE}.}
 
 \item{range}{optional sequence determining the range of the x-axis for plots
-of the optimal parameter that defaults to NULL. In that case a range of the
-optimal parameter +2/-1 is used for the plots of the optimal parameter. This
-leads in some cases to convergence problems such that is should be changed to
-e.g. the selected \code{interval}. This means for the default interval 
-seq(-1,2,by=0.05).}
+of the optimal parameter that defaults to \code{NULL}. In that case a range 
+of the optimal parameter +2/-1 is used for the plots of the optimal parameter. 
+This leads in some cases to convergence problems such that is should be 
+changed to e.g. the selected \code{interval}. This means for the default 
+interval \code{seq(-1, 2, by = 0.05)}.}
 
 \item{...}{optional arguments passed to generic function.}
 }
@@ -93,9 +93,16 @@ na.rm = TRUE)
 # Example 1: Creation of default diagnostic plots
 plot(emdi_model)
 
-# Example 1: Creation of diagnostic plots without labels and titles, different colors 
+# Example 2: Creation of diagnostic plots without labels and titles, different colors 
 # and without Cook's distance plot.
-plot(emdi_model, label="no_title", color=c("red", "yellow"), cooks = FALSE)
+plot(emdi_model, label = "no_title", color = c("red", "yellow"), cooks = FALSE)
+
+# Example 3: Creation of diagnostic plots where labels and title differs for 
+# residual plot
+plot(emdi_model, label = list(qq_res = c(title = "Pearson resid.", 
+y_lab = "Quant.", x_lab = "Theo. Quant.")), color = c("red", "yellow"), 
+cooks = FALSE)
+
 }
 }
 \seealso{
