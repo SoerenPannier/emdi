@@ -1,3 +1,7 @@
+devtools::install_github("soerenpannier/emdi")
+library(emdi)
+
+
 # Datensätze im Paket ----------------------------------------------------------
 data("eusilcA_pop")
 data("eusilcA_smp")

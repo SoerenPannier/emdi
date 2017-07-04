@@ -2,9 +2,7 @@ estimators_check <- function(object,
                              indicator, 
                              MSE, 
                              CV){
-  if (!inherits(object, "emdi")) {
-    stop('First object needs to be of class emdi.')
-  }
+
   if (is.null(object$MSE) && (MSE == TRUE || CV == TRUE)) {
     stop('No MSE estimates in emdi object: arguments MSE and CV have to be FALSE
           or a new emdi object with variance/MSE needs to be generated.')
