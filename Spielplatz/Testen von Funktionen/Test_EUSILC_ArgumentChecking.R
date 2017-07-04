@@ -64,13 +64,13 @@ list_poss <- list(num_skalar,
 
 for (i in 1:14) {
   
-emdi_direct <- direct(y = "eqIncome", 
+emdi_directNEU <- direct(y = "eqIncome", 
                       smp_data = eusilcA_smp, 
                       smp_domains = "district", 
                       weights = "weight", 
                       design = NULL,
                       #threshold = function(y, weights){0.6 * laeken::weightedMedian(eusilcA_smp$eqIncome, weights = eusilcA_smp$weight)}, 
-                      threshold = 10989.28,
+                      threshold = threshold1,
                       var = FALSE, 
                       boot_type = "naive", 
                       B = 2, 
@@ -82,8 +82,9 @@ emdi_direct <- direct(y = "eqIncome",
                       #X_calib = list_poss[[10]],
                       #totals = NULL, 
                       na.rm = TRUE,
-                      custom_indicator = list( my_max = function(y, weights, threshold){max(y)}, 
-                                               my_min = function(y, weights, threshold){min(y)}))
+                      custom_indicator = list( my_max = function(weights, threshold){max(y)}, 
+                                              my_min = function(weights, threshold){min(y)}))
+
 }
 
 # Only default values
@@ -133,7 +134,7 @@ direct_default <- direct(y = "eqIncome",
 # as threshold. See also help(direct).
 
 # Excursus: How to check if function for threshold has arguments y and weights?
-threshold = function(y, weights){0.6 * laeken::weightedMedian(eusilcA_smp$eqIncome, 
+threshold1 = function(y, weights){0.6 * laeken::weightedMedian(eusilcA_smp$eqIncome, 
                                                               weights = eusilcA_smp$weight)}
 
 attributes(alist(y = , weights = ))$names
@@ -190,6 +191,16 @@ all(attributes(formals(threshold))$names == c("y", "weights"))
 # custom_indicator as a list of functions. For help see Example 3 in help(direct).
 # Problem: The functions itself are not checked! 
 
+# Works now, also with checking elements!!!
+# But this warning is added automatically:
+#Error in direct_check(y = y, smp_data = smp_data, smp_domains = smp_domains,  : 
+# Functions for custom indicators need to have exactly the following 
+# three arguments: y, weights threshold; even though weights might 
+# not be needed and a threshold might not be 
+#included in the indicator. For help see Example 3 in help(direct). 
+#In addition: Warning message:
+# In names(formals(custom_indicator[[i]])) == c("y", "weights", "threshold") :
+# longer object length is not a multiple of shorter object length
 
 
 # Methods for direct
@@ -310,19 +321,18 @@ emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
                    pop_domains = "district",
                    smp_data = eusilcA_smp,
                    smp_domains = "district",
-                   threshold = function(y){0.6 * median(eusilcA_smp$eqIncome)},
+                   threshold = function(y){0.6 * median(y)},
                    transformation = "box.cox",
-                   interval = ,
-                   L = 2,
+                   interval = c(-1,2),
+                   L = 50,
                    MSE = TRUE,
                    boot_type = "parametric",
-                   B = 2,
-                   seed = 123,
+                   B = 50,
+                   seed = 100,
                    custom_indicator = list( my_max = function(y, threshold){max(y)},
-                                            my_min = function(y, threshold){min(y)}
-                   ),  
+                                            my_min = function(y, threshold){min(y)}),  
                    na.rm = TRUE, 
-                   cpus = 1
+                   cpus = 5
 )
 
 
@@ -378,22 +388,67 @@ emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
 # We always get: The three options for transformation are ''no'', ''log'' or 
 # ''box.cox''.
 
+# Try possibilities: interval
+# If it is ind_skalar, it works but this is fine. 
+# We always get: interval needs to be a vector of length 2 
+# defining a lower and upper limit for the estimation of the optimal 
+# transformation parameter. The value of the lower limit needs to be 
+# smaller than the upper limit. See also help(ebp). 
+
+
+# Try possibilities: L
+# If it is num_skalar or ind_skalar it works but this is fine. 
+# Otherwise we get: L needs to be a single number determining the
+# number of Monte-Carlo simulations. See also help(ebp). 
+
+
+# Try possibiltiies: MSE
+# If it is log_skalar, it works but this it fine. 
+# Otherwise we get: MSE must be a logical value. Set MSE to TRUE or FALSE. See 
+# also help(ebp). 
+
+
+# Try possibilities: boot_type
+# We always get: The two bootstrap procedures are ''parametric'' or ''wild''. 
+
+# Try possibilities: B
+# It is it num_skalar or ind_skalar it works but this is fine. 
+# Otherwise we get:  If MSE is set to TRUE, a single number for the number of
+# bootstrap sample needs to be chosen. See also help(ebp). 
+
+
+# Try possibilities: seed
+# If it is NULL, num_skalar or ind_skalar it works but this is fine
+# Otherwise we get:  Seed must be a single number or NULL as initialisation 
+# of the RNG. See also help(ebp). 
+
+
+# Try possibilities: custom_indicator
+# If it is not a list:  Additional indicators need to be added in argument 
+# custom_indicator as a list of functions. For help see Example 3 in help(direct).
+# If it is a list but elements are not functions: The elements of the list need 
+# to be functions. These Functions for custom indicators need to have exactly 
+# the following two arguments: y, threshold; even though a threshold might not 
+# included in the indicator. See also help(ebp). 
+# If list elements are functions but with wrong arguments: Functions for custom 
+# indicators need to have exactly the following two arguments: y, threshold; 
+# even though a threshold might not included in the indicator. See also help(ebp). 
 
 
 
 # Information about data and model
 print(emdi_model)
 summary(emdi_model)
-plot(emdi_model)
 
-print(emdi_model2)
-summary(emdi_model2)
-plot(emdi_model2)
+
+
+plot(emdi_model, label = "orig", color = c("green","yellow"))
+
 
 # Choose indicators
-estimators(object = emdi_model2, MSE = F, CV = F, indicator = "all")
-head(estimators(object = emdi_model2, MSE = F, CV = T, indicator = c("Head_Count","Poverty_Gap")))
-tail(estimators(object = emdi_model2, MSE = T, CV = T, indicator = c("Head_Count","Poverty_Gap")))
+estimators(object = emdi_model, MSE = F, CV = F, indicator = "all")
+head(estimators(object = emdi_model, MSE = T, CV = T, indicator = c("Gini", "Median")))
+tail(estimators(object = emdi_model, MSE = T, CV = T, indicator = c("Head_Count","Poverty_Gap")))
 
 
 
@@ -402,10 +457,10 @@ mapping_table <- data.frame(unique(eusilcA_pop$district),
                             unique(shape_austria_dis$NAME_2))
 
 
-map_plot(object = emdi_model2, MSE = TRUE, CV = FALSE, map_obj = shape_austria_dis,
-    indicator = c("Gini"), map_dom_id = "NAME_2", map_tab = mapping_table)
+map_plot(object = emdi_model, MSE = TRUE, CV = FALSE, map_obj = shape_austria_dis,
+    indicator = "Gini", map_dom_id = "NAME_2", map_tab = mapping_table)
 
 
 # Export to excel
-write.excel(emdi_model2, file="excel_output.xlsx")
+write.excel(emdi_model2, file = "excel_output.xlsx")
 
