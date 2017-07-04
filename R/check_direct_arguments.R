@@ -16,22 +16,27 @@ direct_check <- function(y,
                           totals = NULL,
                           na.rm, 
                           custom_indicator) {
-  if (is.null(y)  || !(inherits(y, "character") && length(y) == 1)) {
+  if (is.null(y)  || !(inherits(y, "character") && length(y) == 1 
+                       && (y %in% names(smp_data)))) {
     stop('y must be a single character indicating the variable that is used for 
-         estimating the indicators. See also help(direct).')
+         estimating the indicators. The variable needs to be contained in 
+         smp_data. See also help(direct).')
   } 
   if (!inherits(smp_data, "data.frame")) {
     stop('Smp_data must be a data frame containing the variable y.
          See also help(direct).')
   } 
-  if (!inherits(smp_domains, "character") || length(smp_domains) != 1) {
+  if (!inherits(smp_domains, "character") || length(smp_domains) != 1
+      ||  !(smp_domains %in% names(smp_data))) {
     stop('Smp_domains must be a single character containing the name of a 
-          variable indicating domains in the sample data.
-          See also help(direct).')
+          variable indicating domains in the sample data. The variable needs 
+          to be contained in smp_data. See also help(direct).')
   } 
-  if ((!(is.null(weights) || (inherits(weights, "character") && length(weights) == 1)))) {
+  if ((!(is.null(weights) || (inherits(weights, "character") && length(weights) == 1
+                              && (weights %in% names(smp_data)))))) {
     stop('Weights must be a single character containing the name of a variable 
-          for the sampling weights in the sample data. See also help(direct).')
+          for the sampling weights in the sample data.  The variable needs 
+          to be contained in smp_data. See also help(direct).')
   }
   if (var == TRUE && boot_type != "naive" && is.null(weights)) {
     stop("If boot_type is set to 'calibrate' weights must be chosen. Weights
