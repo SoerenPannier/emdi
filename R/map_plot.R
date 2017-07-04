@@ -10,16 +10,18 @@
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
 #' (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
-#' "Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini", 
-#' "Quintile_Share" or the function name/s of "custom_indicator/s"; 
-#' (iii) groups of indicators: "Quantiles", "Poverty" or 
+#' "Quantile_75", "Quantile_90", "Head_Count", 
+#' "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
+#' "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty" or 
 #' "Inequality". Defaults to "all". Note, additional custom indicators can be 
-#' defined as argument for model-based approaches (see also \code{\link{ebp}}) 
-#' and do not appear in groups of indicators even though these might belong to 
-#' one of the groups.  
-#' @param MSE optional logical. If TRUE, the MSE is also visualized.
-#' @param CV optional logical. If TRUE, the CV is also visualized.
-#' @param map_obj an \code{SpatialPolygonsDataFrame} object as defined by the
+#' defined as argument for estimation approaches (see also \code{\link{direct}}
+#' and  \code{\link{ebp}}) and do not appear in groups of indicators even 
+#' though these might belong to one of the groups.  
+#' @param MSE optional logical. If \code{TRUE}, the MSE is also visualized. 
+#' Defaults to \code{FALSE}.
+#' @param CV optional logical. If \code{TRUE}, the CV is also visualized. 
+#' Defaults to \code{FALSE}.
+#' @param map_obj a \code{SpatialPolygonsDataFrame} object as defined by the
 #' \code{sp} package on which the data should be visualized.
 #' @param map_dom_id a character string containing the name of a variable in
 #' \code{map_obj} that indicates the domains. 
@@ -27,16 +29,17 @@
 #' domain variable from the census data set (first column) with the domain 
 #' variable in the map_obj (second column). This should only be used if the IDs 
 #' in both objects differ.
-#' @param col A \code{vector} of length 2 defining the lowest and highest 
-#' color in the plots
+#' @param col a \code{vector} of length 2 defining the lowest and highest 
+#' color in the plots.
 #' @param scale_points a structure defining the lowest, the mid and the highest 
 #' value of the colorscale. If a numeric vector of length two is given, this scale
 #' will be used for every plot. Alternatively a list defining colors for each 
 #' plot seperatly may be given. Please see the examples for this. 
-#' @param return_data if set to TRUE a fortified data frame including the 
+#' @param return_data if set to \code{TRUE} a fortified data frame including the 
 #' map data as well as the chosen indicators is returned. Customized can easily 
-#' be obtained from this data frame via the package \code{ggmap}. Defaults to FALSE
-#' @return creates the plots demanded
+#' be obtained from this data frame via the package \code{ggmap}. 
+#' Defaults to \code{FALSE}.
+#' @return Creates the map plots demanded.
 #' @seealso \code{\link{ebp}}, \code{\link{emdiObject}},
 #' \code{\link[maptools]{readShapePoly}}
 #' @examples 
@@ -50,7 +53,7 @@
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 #' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' threshold = 11064.82, transformation = "box.cox", L= 50, MSE = TRUE, B = 50, 
+#' threshold = 11064.82, transformation = "box.cox", L = 50, MSE = TRUE, B = 50, 
 #' custom_indicator = list( my_max = function(y, threshold){max(y)},
 #' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 #' 

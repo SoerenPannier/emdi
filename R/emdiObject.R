@@ -3,7 +3,7 @@
 #' An object of class emdi that represents point predictions of regional 
 #' disaggregated indicators. Optionally it also contains corresponding MSE 
 #' estimates. Depending on the estimation the object is also of class direct
-#' or model. Objects of this classes have methods for the generic functions 
+#' or model. Objects of these classes have methods for the generic functions 
 #' \code{\link{estimators}}, \code{\link{print}}, \code{\link{plot}} (only for
 #' class model) and \code{\link{summary}}.
 #'
@@ -55,6 +55,9 @@
 #'    and NULL for no transformation. Not 
 #'              filled for class direct.}
 #' @references
+#' Alfons, A. and Templ, M. (2013). Estimation of Social Exclusion Indicators
+#' from complex Surveys: The R package laeken. Journal of Statistical Software, 
+#' 54(15), 1-25.  \cr \cr
 #' Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
 #' indicators. The Canadian Journal of Statistics, Vol. 38, No.3, 369-385.
 #' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{ \link[nlme]{lme}},

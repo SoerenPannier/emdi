@@ -22,11 +22,10 @@ emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
 
 
 # Direct estimation
-0.6 * Hmisc::wtd.quantile(eusilcA_smp$eqIncome, weights=eusilcA_smp$weight, probs=0.5)
 emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
                       smp_domains = "district", weights = "weight", 
                       threshold = 11064.82, var = TRUE, 
-                      bootType = "naive", B = 50, seed = 123, X = NULL, 
+                      boot_type = "naive", B = 50, seed = 123, X = NULL, 
                       totals = NULL, na.rm = TRUE)
 # funktioniert
 

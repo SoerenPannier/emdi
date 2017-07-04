@@ -27,19 +27,20 @@ estimators <- function(object, ...) UseMethod("estimators")
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
 #' (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
-#' "Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini", 
-#' "Quintile_Share" or the function name/s of "custom_indicator/s"; 
-#' (iii) groups of indicators: "Quantiles", "Poverty", "Inequality" or "Custom".
-#' If two of these groups are selected, only the first one is returned. 
-#' Defaults to "all". Note, additional custom indicators can be 
+#' "Quantile_75", "Quantile_90", "Head_Count", 
+#' "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of 
+#' "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty", 
+#' "Inequality" or "Custom".If two of these groups are selected, only the first
+#' one is returned. Defaults to "all". Note, additional custom indicators can be 
 #' defined as argument for model-based approaches (see also \code{\link{ebp}}) 
 #' and do not appear in groups of indicators even though these might belong to 
 #' one of the groups.  
-#' @param MSE optional logical. If TRUE, MSE estimates for selected indicators
-#' per domain are added to the data frame of point estimates. Defaults to FALSE.
-#' @param CV optional logical. If TRUE, coefficients of variation for selected
+#' @param MSE optional logical. If \code{TRUE}, MSE estimates for selected indicators
+#' per domain are added to the data frame of point estimates. Defaults to 
+#' \code{FALSE}.
+#' @param CV optional logical. If \code{TRUE}, coefficients of variation for selected
 #' indicators per domain are added to the data frame of point estimates.
-#' Defaults to FALSE.
+#' Defaults to \code{FALSE}.
 #' @param ... other parameters that can be passed to function \code{estimators}.
 #' @return
 #' an object of type "estimators.emdi" with point and/or MSE
@@ -60,14 +61,14 @@ estimators <- function(object, ...) UseMethod("estimators")
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 #' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
 #' threshold = 11064.82, transformation = "box.cox", 
-#' L= 50, MSE = TRUE, B = 50, custom_indicator = 
+#' L = 50, MSE = TRUE, B = 50, custom_indicator = 
 #' list( my_max = function(y, threshold){max(y)},
 #' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 #' 
 #' # Example 1: Choose Gini coefficient and MSE and CV
 #' estimators(emdi_model, indicator = "Gini", MSE = TRUE, CV = TRUE)
 #' 
-#' Example 2: Choose custom indicators without MSE and CV
+#' # Example 2: Choose custom indicators without MSE and CV
 #' estimators(emdi_model, indicator = "Custom")
 #' }
 #' @export
@@ -171,7 +172,7 @@ head.estimators.emdi <- function(x, n = 6L, addrownums=NULL, ...) {
 #' data("eusilcA_smp")
 #' 
 #' # generate emdi object with deleting missing values; here via function ebp()
-#' set.seed(100); emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 
+#' emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj,
 #' pop_data = eusilcA_pop, pop_domains = "district",
@@ -222,14 +223,14 @@ as.data.frame.estimators.emdi <- function(x,...) {
 #' data("eusilcA_smp")
 #' 
 #' # generate emdi object with deleting missing values; here via function ebp()
-#' set.seed(100); emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 
+#' emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj,
 #' pop_data = eusilcA_pop, pop_domains = "district",
 #' smp_data = eusilcA_smp, smp_domains = "district",
 #' na.rm = TRUE)
 #'
-#' # choose last lines of the Gini coefficient, MSE and CV
+#' # Example: Choose last lines of the Gini coefficient, MSE and CV
 #' subset(estimators(emdi_model, indicator = "Gini"), 
 #'        Domain %in% c("Wien", "Wien Umgebung"))
 #' }
