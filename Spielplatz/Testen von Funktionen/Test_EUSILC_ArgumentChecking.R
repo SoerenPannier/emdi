@@ -327,8 +327,8 @@ emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
                    boot_type = "parametric",
                    B = 50,
                    seed = 100,
-                   custom_indicator = list( my_max = function(y, threshold){max(y)},
-                                            my_min = function(y, threshold){min(y)}),  
+                   #custom_indicator = list( my_max = function(y, threshold){max(y)},
+                    #                        my_min = function(y, threshold){min(y)}),  
                    na.rm = TRUE, 
                    cpus = 5
 )
@@ -444,7 +444,7 @@ plot(emdi_model, label = "orig", color = c("green","yellow"))
 
 
 # Choose indicators
-estimators(object = emdi_model, MSE = F, CV = F, indicator = "all")
+estimators(object = emdi_model, MSE = T, CV = F, indicator = "all")
 head(estimators(object = emdi_model, MSE = T, CV = T, indicator = c("Gini", "Median")))
 tail(estimators(object = emdi_model, MSE = T, CV = T, indicator = c("Head_Count","Poverty_Gap")))
 
@@ -455,10 +455,11 @@ mapping_table <- data.frame(unique(eusilcA_pop$district),
                             unique(shape_austria_dis$NAME_2))
 
 
-map_plot(object = emdi_model, MSE = TRUE, CV = FALSE, map_obj = shape_austria_dis,
+map_plot(object = emdi_model, MSE = T, CV = FALSE, map_obj = shape_austria_dis,
     indicator = "Gini", map_dom_id = "NAME_2", map_tab = mapping_table)
 
 
 # Export to excel
-write.excel(emdi_model2, file = "excel_output.xlsx")
+write.excel(emdi_model, indicator = c("Mean", "Median"), MSE = T, CV = F, file = "excel_output.xlsx", 
+            split = FALSE)
 

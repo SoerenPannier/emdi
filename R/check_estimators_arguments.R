@@ -10,10 +10,10 @@ estimators_check <- function(object,
           or a new emdi object with variance/MSE needs to be generated.')
   }
   if (!(inherits(MSE, "logical") && length(MSE) == 1)) {
-    stop("MSE needs to be a logical value. Set MSE to TRUE or FALSE.")
+    stop("MSE must be a logical value. Set MSE to TRUE or FALSE.")
   }
   if (!(inherits(CV, "logical") && length(CV) == 1)) {
-    stop("CV needs to be a logical value. Set CV to TRUE or FALSE.")
+    stop("CV must be a logical value. Set CV to TRUE or FALSE.")
   }
   if (is.null(indicator) || !(indicator == "all" || indicator == "Quantiles" 
        || indicator == "quantiles"

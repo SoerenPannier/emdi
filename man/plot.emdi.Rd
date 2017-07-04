@@ -56,7 +56,8 @@ In these cases, \code{cooks} should be set to \code{FALSE}. It defaults to
 of the optimal parameter that defaults to NULL. In that case a range of the
 optimal parameter +2/-1 is used for the plots of the optimal parameter. This
 leads in some cases to convergence problems such that is should be changed to
-e.g. the selected \code{interval}. This means for the default seq(-1,2,by=0.05).}
+e.g. the selected \code{interval}. This means for the default interval 
+seq(-1,2,by=0.05).}
 
 \item{...}{optional arguments passed to generic function.}
 }

@@ -45,7 +45,7 @@
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
 #' 
-#' # Example with two additional indicators
+#' # Generate emdi object with two additional indicators
 #' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
@@ -54,12 +54,12 @@
 #' custom_indicator = list( my_max = function(y, threshold){max(y)},
 #' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 #' 
-#' # Export estimates for all indicators and uncertainty measures and 
+#' # Example 1: Export estimates for all indicators and uncertainty measures and 
 #' # diagnostics to excel
 #' write.excel(emdi_model, file ="excel_output_all.xlsx", indicator = "all", 
 #' MSE = TRUE, CV = TRUE)
 #' 
-#' # Single excel sheets for point, MSE and CV estimates
+#' # Example 2: Single excel sheets for point, MSE and CV estimates
 #' write.excel(emdi_model, file ="excel_output_all_split.xlsx", indicator = "all", 
 #' MSE = TRUE, CV = TRUE, split=TRUE)
 #' }
@@ -72,6 +72,12 @@ write.excel <- function(object,
                         MSE       = FALSE,
                         CV        = FALSE,
                         split     = FALSE) {
+  
+  
+  if (!(inherits(split, "logical") && length(split) == 1)) {
+    stop("split must to be a logical value. Set CV to TRUE or FALSE.")
+  }
+  
   wb <- createWorkbook()
 
   headlines_cs <- createStyle(fontColour     = "#ffffff",
@@ -299,6 +305,18 @@ add_summary_direct <- function(object, wb, headlines_cs) {
 
 add_pointests <- function(object, indicator, wb, headlines_cs) {
   addWorksheet(wb, sheetName = "Point Estimators", gridLines = FALSE)
+  
+  if (is.null(indicator) || !(indicator == "all" || indicator == "Quantiles" 
+                              || indicator == "quantiles"
+                              || indicator == "Poverty" || indicator == "poverty" 
+                              || indicator == "Inequality" || indicator == "inequality" 
+                              || indicator == "Custom" || indicator == "custom" 
+                              || indicator %in% names(object$ind[-1]))) {
+    stop("indicator is a character vector that can only contain the names
+         of estimated indicators or 'all' or indicator groups as described in 
+         help(write.excel).")
+  }
+  
   data <- point_emdi(object = object, indicator = indicator)$ind
 
   writeDataTable(x           = data,

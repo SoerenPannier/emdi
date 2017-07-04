@@ -18,4 +18,9 @@ plot_check <- function(x, label, color, cooks, range) {
     stop("cooks needs to be a logical value. Set na.rm to TRUE or FALSE. See 
          also help(plot.emdi).")
   }
+  if (!is.null(range) && !inherits(range, "numeric")) {
+    stop("range must be a sequence determining the range of the x-axis for plots 
+          of the optimal parameter.. Set na.rm to TRUE or FALSE. See 
+         also help(plot.emdi).")
+  }
 }

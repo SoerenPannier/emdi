@@ -53,7 +53,8 @@
 #' of the optimal parameter that defaults to NULL. In that case a range of the
 #' optimal parameter +2/-1 is used for the plots of the optimal parameter. This
 #' leads in some cases to convergence problems such that is should be changed to
-#' e.g. the selected \code{interval}. This means for the default seq(-1,2,by=0.05).
+#' e.g. the selected \code{interval}. This means for the default interval 
+#' seq(-1,2,by=0.05).
 #' @param ... optional arguments passed to generic function.
 #' @return Two Q-Q plots in one grid, two density plots, a Cook' distance plot 
 #' and a likelihood plot for the optimal parameter of the Box-Cox transformation 
