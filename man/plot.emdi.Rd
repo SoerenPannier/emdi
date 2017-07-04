@@ -82,17 +82,17 @@ All plots are obtained by \code{\link{ggplot}}.
 data("eusilcA_pop")
 data("eusilcA_smp")
 
-# Example with default setting but na.rm=TRUE; with Box-Cox transformation
+# With default setting but na.rm = TRUE; with Box-Cox transformation
 emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
 unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
 house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
 na.rm = TRUE)
 
-# Creation of default diagnostic plots
+# Example 1: Creation of default diagnostic plots
 plot(emdi_model)
 
-# Creation of diagnostic plots without labels and titles, different colors 
+# Example 1: Creation of diagnostic plots without labels and titles, different colors 
 # and without Cook's distance plot.
 plot(emdi_model, label="no_title", color=c("red", "yellow"), cooks = FALSE)
 }
