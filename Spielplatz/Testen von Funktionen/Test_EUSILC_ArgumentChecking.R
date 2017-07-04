@@ -67,7 +67,7 @@ for (i in 1:14) {
 emdi_directNEU <- direct(y = "eqIncome", 
                       smp_data = eusilcA_smp, 
                       smp_domains = "district", 
-                      weights = "weight", 
+                      weights = NULL, 
                       design = NULL,
                       #threshold = function(y, weights){0.6 * laeken::weightedMedian(eusilcA_smp$eqIncome, weights = eusilcA_smp$weight)}, 
                       threshold = threshold1,
@@ -82,8 +82,8 @@ emdi_directNEU <- direct(y = "eqIncome",
                       #X_calib = list_poss[[10]],
                       #totals = NULL, 
                       na.rm = TRUE,
-                      custom_indicator = list( my_max = function(weights, threshold){max(y)}, 
-                                              my_min = function(weights, threshold){min(y)}))
+                      custom_indicator = list( my_max = function(y, weights, threshold){max(y)}, 
+                                              my_min = function(y,weights, threshold){min(y)}))
 
 }
 
@@ -96,9 +96,7 @@ direct_default <- direct(y = "eqIncome",
 # Try all possibilities above for y
 # We always get: y must be a character indicating the variable that is used for 
 # estimating the indicators. See also help(direct).
-# char_skalar hat keine eigene Fehlermeldung, sondern undefined colums 
-# selected, aber dies sagt eigentlich auch, was falsch ist
-# Ich weiß grad keine Lösung, das anders abzufangen
+
 
 
 # Try all possibilities above for smp_data
