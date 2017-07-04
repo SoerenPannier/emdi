@@ -57,7 +57,7 @@
 #' seed is chosen randomly. Defaults to \code{123}.
 #' @param boot_type character to choose between different MSE estimation procedures,
 #' currently a \code{"parametric"} and a semi-parametric \code{"wild"} bootstrap 
-#' are possible
+#' are possible. Defaults to \code{"parametric"}. 
 #' @param parallel_mode modus of parallelization, defaults to an automatic selection 
 #' of a suitable mode, depending on the operating system, if the number of cpus is 
 #' chosen higher than 1. For details see \code{\link[parallelMap]{parallelStart}}
@@ -102,7 +102,7 @@
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
 #'
-#' # Example with default setting but na.rm=TRUE
+#' # Example 1: With default setting but na.rm=TRUE
 #' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
 #' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
 #' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
@@ -110,7 +110,7 @@
 #' na.rm = TRUE)
 #' 
 #' 
-#' # Example with MSE, two additional indicators and function as threshold
+#' # Example 2: With MSE, two additional indicators and function as threshold
 #' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
@@ -155,8 +155,9 @@ ebp <- function(fixed,
              smp_data = smp_data, smp_domains = smp_domains, L = L) 
   
   ebp_check2(threshold = threshold, transformation = transformation, 
-             interval = interval, MSE = MSE, B = B, 
-             custom_indicator = custom_indicator, cpus = cpus,  seed = seed)
+             interval = interval, MSE = MSE, boot_type = boot_type, B = B, 
+             custom_indicator = custom_indicator, cpus = cpus,  seed = seed,
+             na.rm = na.rm)
     
 
 
