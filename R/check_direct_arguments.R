@@ -48,7 +48,7 @@ direct_check <- function(y,
           If it is NULL 60% of the median of the target variable is selected 
          as threshold. See also help(direct).')
   }
-  if (inherits(threshold, "function") && !all(attributes(formals(threshold))$names == c("y", "weights"))) {
+  if (inherits(threshold, "function") && !all(names(formals(threshold)) == c("y", "weights"))) {
     stop('If threshold is a function the arguments need to be y and weights in 
           this order. Also a single number is possible as threshold. If it is 
           NULL 60% of the median of the target variable is selected as threshold. 
@@ -86,8 +86,33 @@ direct_check <- function(y,
     stop("na.rm needs to be a logical value. Set na.rm to TRUE or FALSE. See 
          also help(direct).")
   }
-  if (!(is.null(custom_indicator) || inherits(custom_indicator, "list"))) {
-    stop("Additional indicators need to be added in argument custom_indicator
-         as a list of functions. For help see Example 3 in help(direct).")
-  }
+  if (!is.null(custom_indicator)) {
+    
+    if (!inherits(custom_indicator, "list")) {
+      stop("Additional indicators need to be added in argument custom_indicator
+           as a list of functions. For help see Example 3 in help(direct).")
+    }
+    
+    N_custom <- length(custom_indicator)
+    for (i in 1:N_custom) {
+      if (!inherits(custom_indicator[[i]], "function")) {
+        stop("The elements of the list need to be functions. These Functions 
+             for custom indicators need to have exactly the following 
+             three arguments: y, weights, threshold; even though weights might 
+             not be needed and a threshold might not be 
+             included in the indicator. For help see Example 3 in help(direct).")
+      }
+      #if(length(formals(custom_indicator[[i]])) != 2){
+      #  stop("Function for custom indicators needs to have two arguments: y and
+      #       threshold. See also help(ebp).")
+      #}
+      else if (inherits(custom_indicator[[i]], "function") 
+               && !all(names(formals(custom_indicator[[i]])) == c("y", "weights", "threshold"))) {
+        stop("Functions for custom indicators need to have exactly the following 
+             three arguments: y, weights threshold; even though weights might 
+             not be needed and a threshold might not be 
+             included in the indicator. For help see Example 3 in help(direct).")
+      }
+      }
+      }
 }

@@ -28,8 +28,8 @@ mapplot_check <- function(object,
          two colums. See also help(map_plot).")
   }
   if (!(inherits(return_data, "logical") && length(return_data) == 1)) {
-    stop("return_data needs to be a logical value. Set na.rm to TRUE or FALSE. See 
-         also help(direct).")
+    stop("return_data needs to be a logical value. Set na.rm to TRUE or FALSE. 
+         See also help(map_plot).")
   }
   
   }

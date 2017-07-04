@@ -34,8 +34,8 @@ ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L){
   
 }
 
-ebp_check2 <- function(threshold, transformation, interval, MSE, B, 
-                       custom_indicator, cpus, seed){
+ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B, 
+                       custom_indicator, cpus, seed, na.rm){
   if (!is.null(threshold) && !(is.numeric(threshold) && length(threshold) == 1)
        && !inherits(threshold, "function")) { 
     stop("threshold needs to be a single number or a function of y. 
@@ -53,14 +53,20 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, B,
         || transformation == "no")) {
     stop("The three options for transformation are ''no'', ''log'' or ''box.cox''." )
   }
-  if (length(interval) != 2 || !is.vector(interval)) {
+  if (length(interval) != 2 || !is.vector(interval, mode = "numeric") ||
+      !(interval[1] < interval[2])) {
     stop("interval needs to be a vector of length 2 
          defining a lower and upper limit for the estimation of the optimal 
-         transformation parameter. See also help(ebp).")
+         transformation parameter. The value of the lower limit needs to be 
+         smaller than the upper limit. See also help(ebp).")
   }
   if (!is.logical(MSE) || length(MSE) != 1) {
     stop("MSE must be a logical value. Set MSE to TRUE or FALSE. See also
          help(ebp).")
+  }
+  if (is.null(boot_type) || !(length(boot_type) == 1 && (boot_type == "parametric" 
+                                   || boot_type == "wild"))) {
+    stop("The two bootstrap procedures are ''parametric'' or ''wild''." )
   }
   if (MSE == TRUE && !(is.numeric(B) && length(B) == 1)) {
     stop('If MSE is set to TRUE, a single number for the number of bootstrap
@@ -71,25 +77,42 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, B,
          parallelization.")
   }
   if (!is.null(seed) && (!is.numeric(seed) || !(is.numeric(seed) && length(seed) == 1))) {
-    stop("Seed must be a single number or NULL as initialisation of the RNG. ")
+    stop("Seed must be a single number or NULL as initialisation of the RNG. 
+         See also help(ebp).")
   }
-  
   if (!is.null(custom_indicator)) {
+    
+    if (!inherits(custom_indicator, "list")) {
+      stop("Additional indicators need to be added in argument custom_indicator
+           as a list of functions. For help see Example 2 in help(ebp).")
+    }
+    
     N_custom <- length(custom_indicator)
     for (i in 1:N_custom) {
+      if (!inherits(custom_indicator[[i]], "function")) {
+        stop("The elements of the list need to be functions. These Functions 
+             for custom indicators need to have exactly the following 
+             two arguments: y, threshold; even though a threshold might not 
+             included in the indicator. For help see Example 2 in help(ebp).")
+      }
       #if(length(formals(custom_indicator[[i]])) != 2){
       #  stop("Function for custom indicators needs to have two arguments: y and
       #       threshold. See also help(ebp).")
       #}
-      if (!all(names(formals(custom_indicator[[i]])) == c("y", "threshold"))) {
+      else if (inherits(custom_indicator[[i]], "function") 
+               && !all(names(formals(custom_indicator[[i]])) == c("y", "threshold"))) {
         stop("Functions for custom indicators need to have exactly the following 
-             two arguments: y, threshold; even though a threshold is not 
-             included in the indicator. See also help(ebp).")
+             two arguments: y, threshold; even though a threshold might not 
+             included in the indicator. For help see Example 2 in help(ebp).")
       }
       }
+  }
+  if (!(inherits(na.rm, "logical") && length(na.rm) == 1)) {
+    stop("na.rm needs to be a logical value. Set na.rm to TRUE or FALSE. See 
+         also help(direct).")
   }
     
-  }
+}
 
 
 # Functions called in notation
