@@ -114,11 +114,11 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
 # Functions called in notation
 fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data, 
                       fixed, smp_domains) {
-  if (!((mod_vars %in% names(pop_data)) && (pop_domains %in% colnames(pop_data)))) {
+  if (!((mod_vars %in% colnames(pop_data)) && (pop_domains %in% colnames(pop_data)))) {
     stop('Both the variable name in pop_domains and the explanatory variables
          in argument fixed need to be contained in pop_data.')
   }
-  if (!((mod_vars %in% names(smp_data)) && (smp_domains %in% names(smp_data))
+  if (!((mod_vars %in% colnames(smp_data)) && (smp_domains %in% colnames(smp_data))
         && (as.character(fixed[2])) %in% colnames(smp_data))) {
     stop('The variable name in smp_domains and the variables
          in argument fixed need to be contained in smp_data.')
