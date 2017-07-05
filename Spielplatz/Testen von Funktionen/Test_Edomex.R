@@ -1,7 +1,7 @@
 # Check functions in emdi with data from EDOMEX
 
 
-setwd("C:/Package Project/daten_mexico/daten_mexico")
+setwd("H:/Package Project/daten_mexico/daten_mexico")
 library(foreign)
 
 
@@ -10,7 +10,7 @@ census_edomex <- read.dta("base_censo2010_hogares_15 20141024_all2.dta")
 survey_edomex <- read.dta("base_MCS2010_hogares_15 20141024_all2.dta")
 
 # Create numeric domain IDs for survey_mex and census since mun is character
-survey_edomex <- data.frame(survey_edomex, domain_id=as.numeric(survey_edomex$mun))
+survey_edomex <- data.frame(survey_edomex, domain_id = as.numeric(survey_edomex$mun))
 unique(survey_edomex$domain_id)
 
 
@@ -295,26 +295,35 @@ census_edomex <- census_edomex[!(is.na(census_edomex$clase_hog)),]
 ebp_edomex <- ebp( fixed = ictpc ~  pcocup + jnived + clase_hog + pcpering +
               bienes + actcom,
             pop_data = census_edomex,
-            pop_domains = "domain_id",
+            pop_domains = "mun",
             smp_data = survey_edomex,
-            smp_domains = "domain_id",
+            smp_domains = "mun",
             threshold = 903.04,
-            transformation = "box.cox",
-            L=5,
+            transformation = "log",
+            L = 5,
             MSE = T,
             B = 5,
             custom_indicator = list( my_max = function(y, threshold){max(y)},
                                      my_min = function(y, threshold){min(y)}
             ),
-            na.rm=TRUE
+            na.rm = TRUE
 )
 
 direct_edomex <- direct(y = "inglabpc", 
                         smp_data = survey_edomex, 
-                        smp_domains = "domain_id", 
-                        weights=NULL, threshold=900.8202, var=TRUE, 
-                        bootType = "naive", B=50, 
-                        seed=123, X = NULL, totals = NULL, na.rm=TRUE)
+                        smp_domains = "mun", 
+                        weights = NULL, threshold = 900.8202, var = TRUE, 
+                        boot_type = "naive", B = 50, 
+                        seed = 123, X = NULL, totals = NULL, na.rm = TRUE)
+
+
+direct_edomex <- direct(y = "inglabpc", 
+                        smp_data = survey_edomex, 
+                        smp_domains = "mun", 
+                        weights = "clases", threshold = 900.8202, var = TRUE, 
+                        boot_type = "calibrate", B = 5, 
+                      seed = 123, X = as.matrix(as.numeric(survey_edomex$id_men)), 
+                      totals = 100000, na.rm = TRUE)
 
 
 
@@ -333,10 +342,14 @@ print(direct_edomex)
 # the estimators method extracts point estimations as well as, if set true, MSE and CV estimates
 # the resulting class is S3 estimators.ebp
 # methods like head and tail are yet to implement for this class
-# estimators will extract all, some specifically defined estimators or predefined groups of estimators
-estimators(object = ebp_edomex, MSE = F, CV = F, indicator = "all")
-estimators(object = direct_edomex, MSE = T, CV = T, indicator = "all")
+# estimators will extract all, some specifically defined estimators or predefined groups of estimator
+estimators(object = ebp_edomex, MSE = T, CV = F, indicator = "all")
 
+
+
+estimators(object = ebp_edomex, MSE = T, CV = T, indicator = "all")
+
+head(estimators(object = direct_edomex, MSE = F, CV = T, indicator = "Custom"))
 
 
 head(estimators(object = ebp_edomex, MSE = F, CV = T, indicator = "Custom"))
@@ -344,7 +357,8 @@ head(estimators(object = ebp_edomex, MSE = F, CV = T, indicator = "Custom"))
 head(estimators(object = ebp_edomex, MSE = F, CV = T, indicator = c("Head_Count","Poverty_Gap")))
 head(estimators(object = direct_edomex, MSE = F, CV = T, indicator = c("Head_Count","Poverty_Gap")))
 
-tail(estimators(object = ebp_edomex, MSE = F, CV = T, indicator = c("Head_Count","Poverty_Gap")))
+
+tail(estimators(object = ebp_edomex, MSE = F, CV = T, indicator = c(6,"Poverty_Gap")))
 tail(estimators(object = direct_edomex, MSE = F, CV = T, indicator = c("Head_Count","Poverty_Gap")))
 
 estimators(object = ebp_edomex, MSE = T, CV = T, indicator = c("Quantiles"))
@@ -368,7 +382,7 @@ write.excel(ebp, file ="excel_output_all_sep.xlsx", indicator = "all", MSE = T, 
 # plot daten gives some graphs to analyse normal assumption, as well as if chosen,
 # the estimation of the pover parameter of an underlying box-cox transformation
 theme_set(theme_gray(base_size=18))
-plot(ebp_edomex)
+plot(ebp_edomex, label = "blank", color = c(1, 2), cooks = FALSE)
 
 
 #the estimators can be linked to a spatial poygone, if no polygone is given an artificial one is created
@@ -378,11 +392,11 @@ map_plot(object = ebp, indicator = c("Poverty_Gap", "Head_Count"), MSE =  F, CV 
 # fitting to a polygone file
 
 # reading in the spatial polygone
-load("H:/Ann-Kristin/Paket/Example/shp_mex.RData")
+load("H:/Ann-Kristin/Masterarbeit/Paket/Example/shp_mex.RData")
 
 #as the domainnames in the polygone do not match the ones from the artificial data,
 #a mapping table needs to be provided
-map_table <- data.frame(Domain = unique(census_edomex$domain_id), 
+map_table <- data.frame(Domain = unique(census_edomex$mun), 
                         mun = sort(shp_mex$mun))
 
 #' #when rgeos is not available, polygon geometry 	computations in maptools depends on the package gpclib,
@@ -390,7 +404,7 @@ map_table <- data.frame(Domain = unique(census_edomex$domain_id),
 gpclibPermit() 
 theme_set(theme_gray(base_size=18))
 map_plot(object = ebp_edomex, MSE = T, CV = T, map_obj = shp_mex,
-         indicator = "Head_Count", map_dom_id = "mun", map_tab = map_table)
+         indicator = "Custom", map_dom_id = "mun", map_tab = map_table)
 
 
 map_plot(object = direct_edomex, MSE = T, CV = T, map_obj = shp_mex,
