@@ -192,6 +192,8 @@ sum_model <- summary(emdi_model)
 write.excel(emdi_model, file = "excel_output_all.xlsx", indicator = "all", 
 MSE = TRUE, CV = TRUE)
 
+
+
 # Example 2: Single excel sheets for point, MSE and CV estimates
 write.excel(emdi_model, file = "excel_output_all_split.xlsx", indicator = "all", 
 MSE = TRUE, CV = TRUE, split = TRUE)
