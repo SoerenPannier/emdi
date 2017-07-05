@@ -44,11 +44,11 @@ direct_check <- function(y,
           data.  The variable needs to be contained in smp_data. 
           See also help(direct).')
   }
-  if (!(weights %in% colnames(smp_data))) {
+  if (!(is.null(weights) || weights %in% colnames(smp_data))) {
     stop(paste0(weights, " is not contained in smp_data. 
          Please provide valid variable name for weights."))
   } 
-  if (!is.numeric(smp_data[[weights]])) {
+  if (!(is.null(weights) || is.numeric(smp_data[[weights]]))) {
     stop(paste0(weights, " must be the name of a variable that is a numeric vector."))
   }
   if (var == TRUE && boot_type != "naive" && is.null(weights)) {
