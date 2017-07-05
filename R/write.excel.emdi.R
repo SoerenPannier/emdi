@@ -314,9 +314,9 @@ add_pointests <- function(object, indicator, wb, headlines_cs) {
                               || indicator == "Inequality" || indicator == "inequality" 
                               || indicator == "Custom" || indicator == "custom" 
                               || indicator %in% names(object$ind[-1]))) {
-    stop("indicator is a character vector that can only contain the names
-         of estimated indicators or 'all' or indicator groups as described in 
-         help(write.excel).")
+    stop(paste0("The argument indicator is set to ", indicator, ". The argument 
+         only allows to be set to all, a name of estimated indicators or 
+                indicator groups as described in help(estimators.emdi)."))
   }
   
   data <- point_emdi(object = object, indicator = indicator)$ind
