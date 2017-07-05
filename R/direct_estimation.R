@@ -77,7 +77,8 @@
 #' # Example 1: Without weights and naive bootstrap
 #' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
 #' smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
-#' boot_type = "naive", B = 50, seed = 123, X = NULL, totals = NULL, na.rm = TRUE)
+#' boot_type = "naive", B = 50, seed = 123, X_calib = NULL, totals = NULL, 
+#' na.rm = TRUE)
 #' 
 #' # Example 2: With function as threshold
 #' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
@@ -87,9 +88,10 @@
 #' # Example 3: With custom indicators
 #' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
 #' smp_domains = "district", weights = "weight", threshold = 10859.24, 
-#' var = TRUE, boot_type = "naive", B = 50, seed = 123, X = NULL, totals = NULL, 
-#' custom_indicator = list( my_max = function(y, weights, threshold){max(y)}, 
-#' my_min = function(y, weights, threshold){min(y)}), na.rm = TRUE)
+#' var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL, 
+#' totals = NULL, custom_indicator = list( my_max = function(y, weights, 
+#' threshold){max(y)}, my_min = function(y, weights, threshold){min(y)}), 
+#' na.rm = TRUE)
 #' }
 #' @export
 #' @importFrom boot boot
