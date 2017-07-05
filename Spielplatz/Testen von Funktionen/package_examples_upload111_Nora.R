@@ -223,7 +223,7 @@ MSE = TRUE, CV = TRUE)
 
 # Example 2: Single excel sheets for point, MSE and CV estimates
 write.excel(emdi_model, file = "excel_output_all_split.xlsx", indicator = "all", 
-MSE = F, CV = TRUE, split = TRUE)
+MSE = F, CV = F, split = TRUE)
 
 # Only for testing
 emdi_model <- ebp(eqIncome ~ gender, eusilcA_pop, "district", eusilcA_smp, "district")
