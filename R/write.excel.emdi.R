@@ -73,12 +73,9 @@ write.excel <- function(object,
                         CV        = FALSE,
                         split     = FALSE) {
   
-  if (!inherits(object, "emdi")) {
-    stop('First object needs to be of class emdi.')
-  }
-  if (!(inherits(split, "logical") && length(split) == 1)) {
-    stop("split must to be a logical value. Set CV to TRUE or FALSE.")
-  }
+  writeexcel_check(object = object, 
+                   file = file, 
+                   split = split)
   
   wb <- createWorkbook()
 
