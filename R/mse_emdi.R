@@ -1,7 +1,7 @@
 
 mse_emdi <- function(object, indicator = "all", CV = FALSE) {
 
-  if (is.null(object$MSE) && (MSE == TRUE || CV == TRUE)) {
+  if (is.null(object$MSE) && CV == TRUE) {
     stop('No MSE estimates in emdi object: arguments MSE and CV have to be FALSE
           or a new emdi object with variance/MSE needs to be generated.')
   }
