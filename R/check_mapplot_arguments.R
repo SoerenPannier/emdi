@@ -9,12 +9,15 @@ mapplot_check <- function(object,
   }
 
   if (!is.null(map_obj) && !(inherits(map_dom_id, "character") 
-                             && length(map_dom_id) == 1 && 
-                             map_dom_id %in% names(map_obj))) {
+                             && length(map_dom_id) == 1)) {
       stop("A domain ID needs to be given by argument map_dom_id. This 
            argument  must be a vector of lenght 1 and of class character 
            specifying the variable (name) in map_obj. Thus, it needs to be 
            contained in map_obj. See also help(map_plot).")
+  }
+  if (!(map_dom_id %in% names(map_obj))) {
+    stop(paste0(map_dom_id, " is not contained in map_obj.
+        Please provide valid variable name for pop_domains."))
   }
   
   if (length(col) != 2 || !is.vector(col)) {

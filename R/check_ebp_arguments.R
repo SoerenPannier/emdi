@@ -114,11 +114,6 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
 # Functions called in notation
 fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data, 
                       fixed, smp_domains) {
-  #if (!(all(mod_vars %in% colnames(pop_data)) && (pop_domains %in% colnames(pop_data)))) {
-  #  stop('Both the variable name in pop_domains and the explanatory variables
-  #       in argument fixed need to be contained in pop_data. Check variable 
-  #       names.')
-  #}
   if (!all(mod_vars %in% colnames(pop_data))) {
     stop(paste0("Variable ", mod_vars[which(!(mod_vars %in% colnames(smp_data)))], " is not contained in pop_data.
                 Please provide valid variable names for the explanatory variables."))
@@ -127,12 +122,6 @@ fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data,
     stop(paste0("The domain variable ", pop_domains, " is not contained in pop_data.
                 Please provide valid variable name for pop_domains."))
   }
- # if (!(all(mod_vars %in% colnames(smp_data)) && (smp_domains %in% colnames(smp_data))
-#        && (as.character(fixed[2])) %in% colnames(smp_data))) {
-#    stop('The variable name in smp_domains and the variables
-#         in argument fixed need to be contained in smp_data. Check variable
-#         names.')
-#  }
   if (!all(mod_vars %in% colnames(smp_data))) {
     stop(paste0("Variable ", mod_vars[which(!(mod_vars %in% colnames(smp_data)))], " is not contained in smp_data.
                  Please provide valid variable names for the explanatory variables."))
@@ -155,28 +144,31 @@ fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data,
 
 
 
-fw_check2 <- function(pop_domains_vec, smp_domains_vec){
+fw_check2 <- function(pop_domains, pop_domains_vec, smp_domains, smp_domains_vec){
   if (!(is.numeric(pop_domains_vec) || any(inherits(pop_domains_vec, "factor")))) {
-    stop('Pop_domains needs to be the name of a variable that is numeric or
-           a (ordered) factor.')
+    stop(paste0(pop_domains, " needs to be the name of a variable that is numeric or
+           a (ordered) factor."))
   }
   if (!(is.numeric(smp_domains_vec) || any(inherits(smp_domains_vec, "factor")))) {
-    stop('Smp_domains needs to be the name of a variable that is numeric or
-           a (ordered) factor.')
+    stop(paste0(smp_domains, " needs to be the name of a variable that is numeric or
+           a (ordered) factor."))
   }
   if ((is.numeric(pop_domains_vec) && any(inherits(smp_domains_vec, "factor"))) ||
      (is.numeric(smp_domains_vec) && any(inherits(pop_domains_vec, "factor"))) ) {
-    stop('Pop_domains and smp_domains need to be names of variables that are
+    stop(paste0(pop_domains, " and ", smp_domains," need to be names of variables that are
           of the same class (factor and ordered factor are considered to be 
-         the same class). See also help(ebp).')
+         the same class). See also help(ebp)."))
   }
 }
 
-fw_check3 <- function(obs_dom, dist_obs_dom){
+fw_check3 <- function(obs_dom, dist_obs_dom, pop_domains, smp_domains){
   if (sum(obs_dom) == 0 || sum(dist_obs_dom) == 0) {
-    stop('Pop_domains and smp_domains do not have any value in common. Do really
-         both variables indicate the same domains in population data and sample
-         data, respectively?')
+    #stop('Pop_domains and smp_domains do not have any value in common. Do really
+    #     both variables indicate the same domains in population data and sample
+    #     data, respectively?')
+    stop(paste0(pop_domains, " and ", smp_domains, " do not have any value in common. 
+         Do really both variables indicate the same domains in population data 
+         and sample data, respectively?"))
   }
   
 }
