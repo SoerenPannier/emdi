@@ -44,7 +44,8 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
   smp_domains_vec <- droplevels(smp_domains_vec)
   
   
-  fw_check2(pop_domains_vec = pop_domains_vec, smp_domains_vec = smp_domains_vec)
+  fw_check2(pop_domains = pop_domains, pop_domains_vec = pop_domains_vec, 
+            smp_domains = smp_domains, smp_domains_vec = smp_domains_vec)
 
 
   # Number of households in population
@@ -52,7 +53,7 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
   # Number of households in sample
   N_smp <- length(smp_domains_vec)
   # Number of out-of-sample households
-  N_unobs= N_pop - N_smp
+  N_unobs <- N_pop - N_smp
   # Number of domains in the population
   N_dom_pop <- length(unique(pop_domains_vec))
   # Number of domains in the sample
@@ -69,7 +70,8 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
   obs_dom <- pop_domains_vec %in% unique(smp_domains_vec)
   dist_obs_dom <- unique(pop_domains_vec) %in% unique(smp_domains_vec)
   
-  fw_check3(obs_dom = obs_dom, dist_obs_dom = dist_obs_dom)
+  fw_check3(obs_dom = obs_dom, dist_obs_dom = dist_obs_dom, pop_domains = pop_domains, 
+            smp_domains = smp_domains)
 
   indicator_list <- list(
     fast_mean = function(y, threshold) {t(mean(y))},

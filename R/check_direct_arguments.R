@@ -39,6 +39,9 @@ direct_check <- function(y,
           data.  The variable needs to be contained in smp_data. 
           See also help(direct).')
   }
+  if (!is.numeric(smp_data[[weights]])) {
+    stop('The variable named in weights must be a numeric vector.')
+  }
   if (var == TRUE && boot_type != "naive" && is.null(weights)) {
     stop("If boot_type is set to 'calibrate' weights must be chosen. Weights
           must be a vector of length 1 and of class character 
