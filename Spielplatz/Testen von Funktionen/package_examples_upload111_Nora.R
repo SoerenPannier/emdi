@@ -225,6 +225,7 @@ MSE = TRUE, CV = TRUE)
 write.excel(emdi_model, file = "excel_output_all_split.xlsx", indicator = "all", 
 MSE = F, CV = TRUE, split = TRUE)
 
-
+# Only for testing
+emdi_model <- ebp(eqIncome ~ gender, eusilcA_pop, "district", eusilcA_smp, "district")
 
 
