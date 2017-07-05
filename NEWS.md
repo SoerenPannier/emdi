@@ -1,9 +1,9 @@
 # emdi 1.1.1
 
 * The function `ebp` benefits from a new parameter called `seed` that allows 
-reproducibility even when the function is     run in parallel mode.
+reproducibility even when the function is run in parallel mode.
 * Argument checks have been added, and improved
-* Additional example in `map_plot`
+* Additional example in `map_plot` and `direct` 
 * Updated Vignette
 
 # emdi 1.1.0
