@@ -192,7 +192,8 @@ plot_real <- function(object,
   map_obj@data[colnames(map_data)] <- map_data
 
   map_obj.fort <- fortify(map_obj, region = map_dom_id)
-  map_obj.fort <- merge(map_obj.fort, map_obj@data, by.x = "id", by.y = map_dom_id)
+  map_obj.fort <- merge(map_obj.fort, map_obj@data, 
+                        by.x = "id", by.y = map_dom_id)
   # lookup <- c( "Mean"           = TRUE,
   #              "Head_Count"     = FALSE,
   #              "Poverty_Gap"    = FALSE,
@@ -214,35 +215,35 @@ plot_real <- function(object,
     map_obj.fort[ind][,1][!is.finite(map_obj.fort[ind][,1])] <- NA
     scale_point <- get_scale_points(map_obj.fort[ind][,1], ind, scale_points)
     
-    print(ggplot(map_obj.fort, aes(long, lat, group = group, fill = map_obj.fort[ind][,1])) +
-            geom_polygon(color="azure3") + coord_equal() + labs(x = "", y = "", fill = ind) +
+    print(ggplot(map_obj.fort, aes(long, lat, group = group, 
+                                   fill = map_obj.fort[ind][,1])) +
+            geom_polygon(color="azure3") + coord_equal() + 
+            labs(x = "", y = "", fill = ind) +
             ggtitle(gsub(pattern = "_",replacement = " ",x = ind)) +
-            scale_fill_gradient(low = col[1], high = col[2],limits = scale_point) +
+            scale_fill_gradient(low = col[1], high = col[2],limits = scale_point,
+                                guide = NULL) +
             # scale_fill_gradient2(low = col[1], mid=col[2], high = col[3],
             #                      midpoint = scale_point[2],
             #                      limits = scale_point[-2]) +
             theme(axis.ticks = element_blank(), axis.text = element_blank(), 
-                  legend.title=element_blank())
+                 legend.position = "none") + guides(fill = FALSE)
     )
     # if(ind %in% names(lookup) && lookup[ind])
     # {
     #   col <- rev(col)
     # }
-    if(!ind == tail(indicator,1)){
+    if (!ind == tail(indicator,1)) {
       cat ("Press [enter] to continue")
       line <- readline()
     }
   }
-  if(return_data)
-  {
+  if (return_data) {
     return(map_obj.fort)
   }
 }
 
-get_polygone <- function(values)
-{
-  if(is.null(dim(values)))
-  {
+get_polygone <- function(values) {
+  if (is.null(dim(values))) {
     values = as.data.frame(values)
   }
   n <- nrow(values)
@@ -253,8 +254,8 @@ get_polygone <- function(values)
 
   poly <- data.frame(id = rep(1:n, each = 4),
                      ordering = seq_len((n*4)),
-                     x = c(0,1,1,0)+rep(0:(cols-1), each = (cols*4)),
-                     y =rep(c(0,0,1,1)+rep(0:(cols-1), each = 4),cols)
+                     x = c(0,1,1,0) + rep(0:(cols-1), each = (cols*4)),
+                     y =rep(c(0,0,1,1) + rep(0:(cols-1), each = 4),cols)
   )
 
   combo <- merge(poly, values, by = "id", all = TRUE, sort = FALSE)
@@ -263,23 +264,22 @@ get_polygone <- function(values)
 
 get_scale_points <- function(y, ind, scale_points){
   result <- NULL
-  if(!is.null(scale_points)){
-    if(class(scale_points) == "numeric" && length(scale_points == 2)){
+  if (!is.null(scale_points)) {
+    if (class(scale_points) == "numeric" && length(scale_points == 2)) {
       result <- scale_points
-    } else 
-    {
+    } else {
       splt <- strsplit(ind, "_\\s*(?=[^_]+$)", perl = TRUE)[[1]]
       indicator_name <- splt[1]
-      if(length(splt == 2)){
+      if (length(splt == 2)) {
         measure <- splt[2]
       } else {
         measure <- "ind"
       }
-      if(indicator_name %in% names(scale_points)){
+      if (indicator_name %in% names(scale_points)) {
         pointset <- scale_points[[indicator_name]]
         try(result <- pointset[[measure]])
       }
-      if(is.null(result) || length(result) != 3)
+      if (is.null(result) || length(result) != 3)
       {
         warnings("scale_points is of no apropriate form, default values will 
                  be used. See the descriptions and examples for details")
