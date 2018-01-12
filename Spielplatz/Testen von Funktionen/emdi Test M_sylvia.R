@@ -105,8 +105,8 @@ emdi_model <- ebp(fixed = formula, pop_data = census_new,
 summary(emdi_model)
 plot(emdi_model)
 
-estimators(object = emdi_model, CV = F, MSE = T)
-estimators(object = emdi_model, CV = T)
+estimators(object = emdi_model, CV = F, MSE = TRUE)
+estimators(object = emdi_model, CV = TRUE)
 emdi_model$model
 
 

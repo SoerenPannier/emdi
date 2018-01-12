@@ -131,10 +131,11 @@ devtools::use_data(eusilcA_smp, compress = "xz", overwrite = TRUE)
 # Beispiele im Paket -----------------------------------------------------------
 
 # Direct
-emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", 
-                      weights="invProb", threshold=10859.24, var=TRUE, 
-                      bootType = "naive", B=50, seed=123, X = NULL, 
-                      totals = NULL, na.rm=TRUE)
+emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
+                      smp_domains = "district", weights="invProb", 
+                      threshold = 10859.24, var = TRUE,
+                      boot_type = "naive", B = 50, seed = 123, 
+                      X_calib = NULL, totals = NULL, na.rm = TRUE)
 
 
 

@@ -297,8 +297,8 @@ calibWeights <- function(X_calib,
         }
         w1 <- g1 * d1
         phi <- t(X1) %*% w1 - totals1
-        T <- t(X1 * w1)
-        dphi <- T %*% X1
+        Tmat <- t(X1 * w1)
+        dphi <- Tmat %*% X1
         lambda <- lambda - ginv(dphi, tol = eps) %*% 
           phi
         u <- exp(A * as.vector(X1 %*% lambda) * q1)

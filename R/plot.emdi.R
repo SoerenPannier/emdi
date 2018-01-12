@@ -116,7 +116,7 @@ plot.emdi <- function(x,
   if(cooks == TRUE)
   {
     cooksdist <- NULL
-    try(cooksdist <- as.vector(cooks.distance(model)), silent = T)
+    try(cooksdist <- as.vector(cooks.distance(model)), silent = TRUE)
     if(is.null(cooksdist))
     {
       cooks <- FALSE
@@ -139,11 +139,15 @@ plot.emdi <- function(x,
     }
     
     
-    likelihoods <- sapply(range, function(lam, fixed , smp_data, smp_domains, transformation)
+    likelihoods <- sapply(range, 
+                          function(lam, fixed , smp_data, smp_domains, 
+                                   transformation)
     {
       result <- NULL
-      try(result <- -as.numeric(generic_opt(lam, fixed, smp_data, smp_domains, transformation)), silent = T)
-      if(is.null(result)) result <- NA
+      try(result <- -as.numeric(
+        generic_opt(lam, fixed, smp_data, smp_domains, transformation)), 
+        silent = TRUE)
+      if (is.null(result)) result <- NA
       result
     },   fixed = x$fixed, smp_data = x$framework$smp_data, 
          smp_domains = x$framework$smp_domains,
@@ -165,7 +169,7 @@ plot.emdi <- function(x,
   ran <- ggplot(data.frame(tmp) ,aes(sample=tmp)) +
     stat_qq(distribution=qnorm,dparams = list(mean = mean(tmp),
                                               sd = sd(tmp))) +
-    geom_abline(intercept=0, slope=1,na.rm=T, col = color[1]) +
+    geom_abline(intercept=0, slope = 1,na.rm = TRUE, col = color[1]) +
     ggtitle(label$qq_ran["title"]) + ylab(label$qq_ran["y_lab"]) +
     xlab(label$qq_ran["x_lab"]) + gg_theme
   grid.arrange(res, ran ,ncol=2)

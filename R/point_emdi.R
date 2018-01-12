@@ -29,7 +29,7 @@
 # #'
 # #' # generate emdi object
 # #' set.seed(100); ebp <- ebp(income~educ1, Xoutsamp_AuxVar, "provlab",
-# #' incomedata, "provlab", 4500, "no", L=2, MSE=TRUE, B=2)
+# #' incomedata, "provlab", 4500, "no", L = 2, MSE = TRUE, B = 2)
 # #'
 # #' # choose Gini coefficient
 # #' point(ebp, indicator = "gini")

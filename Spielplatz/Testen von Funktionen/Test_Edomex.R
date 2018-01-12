@@ -371,7 +371,8 @@ estimators(object = direct_edomex, MSE = T, CV = T, indicator = c("Quantiles"))
 write.excel(ebp_edomex, file ="excel_output.xlsx", indicator = "Poverty", MSE = T, CV = T)
 write.excel(direct_edomex, file ="excel_output_direct.xlsx", indicator = "Poverty", MSE = T, CV = T)
 
-write.excel(ebp, file ="excel_output_incl_MSE.xlsx", indicator = "all", MSE = T, CV = F)
+write.excel(ebp, file ="excel_output_incl_MSE.xlsx", 
+            indicator = "all", MSE = TRUE, CV = FALSE)
 
 write.excel(ebp, file ="excel_output_all.xlsx", indicator = "Poverty", MSE = T, CV = T)
 
@@ -386,7 +387,8 @@ plot(ebp_edomex, label = "blank", color = c(1, 2), cooks = FALSE)
 
 
 #the estimators can be linked to a spatial poygone, if no polygone is given an artificial one is created
-map_plot(object = ebp, indicator = c("Poverty_Gap", "Head_Count"), MSE =  F, CV = F)
+map_plot(object = ebp, indicator = c("Poverty_Gap", "Head_Count"), 
+         MSE =  FALSE, CV = FALSE)
 
 # for demonstration of the plot with a spatial polygone use an artificial dataset with a number of domains
 # fitting to a polygone file

@@ -15,21 +15,19 @@ visualized.}
 \item{indicator}{optional character vector that selects which indicators
 shall be returned: (i) all calculated indicators ("all");
 (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
-"Quantile_75", "Quantile_90", "Head_Count", 
-"Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
-"custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty" or 
+"Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini", 
+"Quintile_Share" or the function name/s of "custom_indicator/s"; 
+(iii) groups of indicators: "Quantiles", "Poverty" or 
 "Inequality". Defaults to "all". Note, additional custom indicators can be 
-defined as argument for estimation approaches (see also \code{\link{direct}}
-and  \code{\link{ebp}}) and do not appear in groups of indicators even 
-though these might belong to one of the groups.}
+defined as argument for model-based approaches (see also \code{\link{ebp}}) 
+and do not appear in groups of indicators even though these might belong to 
+one of the groups.}
 
-\item{MSE}{optional logical. If \code{TRUE}, the MSE is also visualized. 
-Defaults to \code{FALSE}.}
+\item{MSE}{optional logical. If TRUE, the MSE is also visualized.}
 
-\item{CV}{optional logical. If \code{TRUE}, the CV is also visualized. 
-Defaults to \code{FALSE}.}
+\item{CV}{optional logical. If TRUE, the CV is also visualized.}
 
-\item{map_obj}{a \code{SpatialPolygonsDataFrame} object as defined by the
+\item{map_obj}{an \code{SpatialPolygonsDataFrame} object as defined by the
 \code{sp} package on which the data should be visualized.}
 
 \item{map_dom_id}{a character string containing the name of a variable in
@@ -40,21 +38,21 @@ domain variable from the census data set (first column) with the domain
 variable in the map_obj (second column). This should only be used if the IDs 
 in both objects differ.}
 
-\item{col}{a \code{vector} of length 2 defining the lowest and highest 
-color in the plots.}
+\item{col}{A \code{vector} of length 2 defining the lowest and highest 
+color in the plots}
 
 \item{scale_points}{a structure defining the lowest, the mid and the highest 
 value of the colorscale. If a numeric vector of length two is given, this scale
 will be used for every plot. Alternatively a list defining colors for each 
-plot seperatly may be given. Please see the examples for this.}
+plot seperatly may be given. Please see the details section and examples for 
+this.}
 
-\item{return_data}{if set to \code{TRUE} a fortified data frame including the 
+\item{return_data}{if set to true a fortified data frame including the 
 map data as well as the chosen indicators is returned. Customized can easily 
-be obtained from this data frame via the package \code{ggmap}. 
-Defaults to \code{FALSE}.}
+be obtained from this data frame via the package \code{ggmap}. Defaults to false}
 }
 \value{
-Creates the map plots demanded.
+creates the plots demanded
 }
 \description{
 Function \code{map_plot} creates spatial visualizations of the estimates
@@ -71,7 +69,7 @@ emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
 self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-threshold = 11064.82, transformation = "box.cox", L = 50, MSE = TRUE, B = 50, 
+threshold = 11064.82, transformation = "box.cox", L= 50, MSE = TRUE, B = 50, 
 custom_indicator = list( my_max = function(y, threshold){max(y)},
 my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 
@@ -83,42 +81,10 @@ load_shapeaustria()
 mapping_table <- data.frame(unique(eusilcA_pop$district), 
 unique(shape_austria_dis$NAME_2))
 
-# Example 1: Create map plot for mean indicator - point and MSE estimates 
-# but no CV
+# Create map plot for mean indicator - point and MSE estimates but no CV
 map_plot(object = emdi_model, MSE = TRUE, CV = FALSE, 
 map_obj = shape_austria_dis, indicator = c("Mean"), map_dom_id = "NAME_2", 
 map_tab = mapping_table)
-
-# Example 2:
-# Now we are creating plots for the Mean and the Median with both their precision
-# measures, while forcing coloring ranges of both indicators to be the same
-
-# First, define appropriate scales for each indicator and measure and save it 
-# in a nested list as seen below
-
-my_scale_points <- list(Mean   = list(ind = c(0, 75000),
-                                    MSE = c(45000, 15000000),
-                                    CV  = c(0, 0.5)
-                                   ),
-                        Median = list(ind = c(0, 75000),
-                                      MSE = c(45000, 15000000),
-                                      CV  = c(0, 0.5)
-                                   )
-                       )
- # When done so, this list may be used as an argument to map_plot 
- 
- map_plot(object = emdi_model, MSE = TRUE, CV = TRUE, 
-          map_obj = shape_austria_dis, indicator = c("Mean", "Median"), 
-          map_dom_id = "NAME_2", map_tab = mapping_table, 
-          scale_points = my_scale_points)
- 
- # Example 3:
- # In the simple case, that all plots shall use the same color range,
- # the procedure from example 2 may be abbreviated to:
- map_plot(object = emdi_model, MSE = FALSE, CV = FALSE, 
-          map_obj = shape_austria_dis, indicator = c("Mean", "Median"), 
-          map_dom_id = "NAME_2", map_tab = mapping_table, 
-          scale_points = c(0, 75000))
 }
 }
 \seealso{

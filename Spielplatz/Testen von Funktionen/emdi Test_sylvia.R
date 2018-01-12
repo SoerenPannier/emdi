@@ -53,7 +53,7 @@ summary(emdi_model)
 plot(emdi_model)
 
 
-estimators(object = emdi_model, CV = T)
+estimators(object = emdi_model, CV = TRUE)
 call("MSE")
 call
 framework
@@ -86,7 +86,7 @@ rm(list = ls())
 # head.estimators.emdi
 
 head(emdi_model$MSE$Poverty_Gap, n = 2, addrownums = TRUE)
-# Beispiel fehlt in Beschreibung. Wäre etwas leicher. addrownums? TRUE/FALSE richtig? egal welche Zahlen man eingibt, immer gleiches Ergebnis
+# Beispiel fehlt in Beschreibung. W?re etwas leicher. addrownums? TRUE/FALSE richtig? egal welche Zahlen man eingibt, immer gleiches Ergebnis
 
 rm(list = ls())
 

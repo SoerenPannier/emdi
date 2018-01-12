@@ -41,7 +41,7 @@ map_plot(object = emdi_model, MSE = TRUE, CV = T,
          map_tab = mapping_table, scale_points = scaleset)
 
 
-fgs <-estimators(emdi_model, indicator = c("Mean", "Gini"), MSE = T)
+fgs <- estimators(emdi_model, indicator = c("Mean", "Gini"), MSE = TRUE)
 as.matrix(fgs)
 as.data.frame(fgs)
 

@@ -28,7 +28,9 @@ emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
                       smp_domains = "district")
 emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
                       smp_domains = "district", weights = "weight", threshold = 
-                        function(y, weights){0.6 * laeken::weightedMedian(y, weights)}, na.rm = F)
+                        function(y, weights){
+                          0.6 * laeken::weightedMedian(y, weights)}, 
+                      na.rm = FALSE)
 totals <- rep(10000,2)
 X_calib <- cbind(rep(0.5,1000), rep(0.5,1000))
 emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
@@ -72,14 +74,14 @@ emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
                     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
                   pop_domains = "district", 
                   smp_data = eusilcA_smp, smp_domains = "district" 
-                  ,na.rm = TRUE, interval = c(-1,2), MSE = T)
+                  ,na.rm = TRUE, interval = c(-1,2), MSE = TRUE)
 
 emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
                     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
                     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
                   pop_domains = "district", 
                   smp_data = eusilcA_smp, smp_domains = "district" 
-                  ,na.rm = TRUE, interval = c(-1,2), MSE = T, B= 1)
+                  ,na.rm = TRUE, interval = c(-1,2), MSE = TRUE, B= 1)
 
 # Example 1: Choose Gini coefficient and MSE and CV
 estimators(emdi_model, indicator = "Gini", MSE = TRUE, CV = TRUE)

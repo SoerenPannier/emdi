@@ -29,11 +29,11 @@
 #                                threshold = 4282.081,
 #                                transformation = "box.cox",
 #                                interval=c(-1,2), 
-#                                L=2, 
-#                                MSE=TRUE, 
-#                                B=2, 
+#                                L = 2, 
+#                                MSE = TRUE, 
+#                                B = 2, 
 #                                custom_indicator = NULL, 
-#                                na.rm = F)
+#                                na.rm = FALSE)
 # 
 #   expect_equal(ebp_bc$transform_param$optimal_lambda,
 #                as.numeric(as.character(ebp_optpar_bc[,"Optpar"])))
@@ -63,12 +63,12 @@
 #                                smp_domains = "provlab",
 #                                threshold = 4282.081, 
 #                                transformation = "no",
-#                                interval=c(-1,2), 
-#                                L=2, 
-#                                MSE=TRUE, 
-#                                B=2,
+#                                interval = c(-1,2), 
+#                                L = 2, 
+#                                MSE = TRUE, 
+#                                B = 2,
 #                                custom_indicator = NULL, 
-#                                na.rm = F)
+#                                na.rm = FALSE)
 # 
 #   # Optpar and shift are NULL in the original code
 #   expect_equal(ebp_no$transform_param$optimal_lambda,
@@ -106,7 +106,7 @@
 #                                 MSE=TRUE, 
 #                                 B=2,
 #                                 custom_indicator = NULL, 
-#                                 na.rm = F)
+#                                 na.rm = FALSE)
 #   
 #   # Optpar is NULL in the original code
 #   expect_equal(ebp_log$transform_param$optimal_lambda,
@@ -146,11 +146,11 @@
 #                                   threshold = 4282.081,
 #                                   transformation = "box.cox", 
 #                                   interval=c(-1,2), 
-#                                   L=2, 
-#                                   MSE=TRUE, 
-#                                   B=2, 
+#                                   L = 2, 
+#                                   MSE = TRUE, 
+#                                   B = 2, 
 #                                   custom_indicator = NULL, 
-#                                   na.rm = F)
+#                                   na.rm = FALSE)
 # 
 #   expect_equal(ebp_bc_wo$transform_param$optimal_lambda,
 #                as.numeric(as.character(ebp_optpar_bc_out[,"Optpar"])))

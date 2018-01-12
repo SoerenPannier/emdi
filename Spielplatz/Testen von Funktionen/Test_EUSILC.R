@@ -90,7 +90,7 @@ map_plot(object = emdi_direct,
          indicator = c("Gini"), 
          map_dom_id = "NAME_2", 
          map_tab = mapping_table,
-         return_data = F)
+         return_data = FALSE)
 
 
 # Export to excel

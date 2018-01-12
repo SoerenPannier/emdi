@@ -288,7 +288,7 @@ get_scale_points <- function(y, ind, scale_points){
     }
   }
   if(is.null(result)){
-    rg <- range(y, na.rm = T)
+    rg <- range(y, na.rm = TRUE)
     # midp <- mean(rg)
     result <- rg #c(rg[1], midp, rg[2])
   }

@@ -219,7 +219,7 @@ superpopulation_wild <-  function(framework, model_par, gen_model, lambda, shift
   
   # superpopulation individual errors
   eps <- res_s[indexer]
-  wu <- sample(c(-1,1),size = length(eps), replace = T)
+  wu <- sample(c(-1,1),size = length(eps), replace = TRUE)
   eps <- abs(eps) * wu
   
   #  superpopulation income vector
@@ -306,7 +306,7 @@ bootstrap_par_wild <- function( fixed,
   # rescaling sample individual error term
   res_s <- sqrt(model_par$sigmae2est) * (res_s - mean(res_s))/sd(res_s)
   # Bootstrap sample individual error term
-  ws <- sample(c(-1,1),size = length(res_s), replace = T)
+  ws <- sample(c(-1,1),size = length(res_s), replace = TRUE)
   eps <- abs(res_s) * ws
   
   # Bootstrap sample random effect
