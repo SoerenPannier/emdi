@@ -45,15 +45,16 @@
 #' the color for the line in the QQ-plots, for the Cook's Distance plot and for
 #' the Box-Cox plot. The second element defines the color for the densities. 
 #' @param gg_theme \code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}. 
-#' @param cooks if TRUE, a Cook's distance plot is returned. The used method
-#' \code{\link[HLMdiag]{cooks.distance.lme}} struggles when data sets get large.
-#' In these cases, \code{cooks} should be set to \code{FALSE}. It defaults to 
-#' \code{TRUE}.
+#' @param cooks if \code{TRUE}, a Cook's distance plot is returned. The used 
+#' method \code{\link[HLMdiag]{cooks.distance.lme}} struggles when data sets 
+#' get large. In these cases, \code{cooks} should be set to \code{FALSE}. It 
+#' defaults to \code{TRUE}.
 #' @param range optional sequence determining the range of the x-axis for plots
-#' of the optimal parameter that defaults to NULL. In that case a range of the
-#' optimal parameter +2/-1 is used for the plots of the optimal parameter. This
-#' leads in some cases to convergence problems such that is should be changed to
-#' e.g. the selected \code{interval}. This means for the default seq(-1,2,by=0.05).
+#' of the optimal parameter that defaults to \code{NULL}. In that case a range 
+#' of the optimal parameter +2/-1 is used for the plots of the optimal parameter. 
+#' This leads in some cases to convergence problems such that is should be 
+#' changed to e.g. the selected \code{interval}. This means for the default 
+#' interval \code{seq(-1, 2, by = 0.05)}.
 #' @param ... optional arguments passed to generic function.
 #' @return Two Q-Q plots in one grid, two density plots, a Cook' distance plot 
 #' and a likelihood plot for the optimal parameter of the Box-Cox transformation 
@@ -65,19 +66,26 @@
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
 #' 
-#' # Example with default setting but na.rm=TRUE; with Box-Cox transformation
+#' # With default setting but na.rm = TRUE; with Box-Cox transformation
 #' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
 #' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
 #' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 #' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
 #' na.rm = TRUE)
 #'
-#' # Creation of default diagnostic plots
+#' # Example 1: Creation of default diagnostic plots
 #' plot(emdi_model)
 #' 
-#' # Creation of diagnostic plots without labels and titles, different colors 
+#' # Example 2: Creation of diagnostic plots without labels and titles, different colors 
 #' # and without Cook's distance plot.
-#' plot(emdi_model, label="no_title", color=c("red", "yellow"), cooks = FALSE)
+#' plot(emdi_model, label = "no_title", color = c("red", "yellow"), cooks = FALSE)
+#' 
+#' # Example 3: Creation of diagnostic plots where labels and title differs for 
+#' # residual plot
+#' plot(emdi_model, label = list(qq_res = c(title = "Pearson resid.", 
+#' y_lab = "Quant.", x_lab = "Theo. Quant.")), color = c("red", "yellow"), 
+#' cooks = FALSE)
+#' 
 #' }
 #' @export
 #' @method plot emdi
@@ -93,24 +101,22 @@ plot.emdi <- function(x,
                       gg_theme = NULL,
                       cooks = TRUE,
                       range = NULL, ...){
+
   
-  if(!all(class(x)==c("emdi", "model"))){
-    stop('First object needs to be of class emdi, model. For emdi objects
-         obtained by direct estimation diagnostic plots are not reasonable.')
-  }
+  plot_check(x = x, label = label, color = color, cooks = cooks, range = range)
   
   Residuals <- Random <- index <- lambda <- log_likelihood <- NULL # avoid note due to ggplot2
   # Preparation for plots
-  residuals <- residuals(x$model, level=0, type = "pearson")
+  residuals <- residuals(x$model, level = 0, type = "pearson")
   rand.eff <- ranef(x$model)$'(Intercept)'
-  srand.eff <- (rand.eff-mean(rand.eff)) / sd(rand.eff)
+  srand.eff <- (rand.eff - mean(rand.eff)) / sd(rand.eff)
   
   model <- x$model
-  model$call$fixed <-x$fixed
+  model$call$fixed <- x$fixed
   if(cooks == TRUE)
   {
     cooksdist <- NULL
-    try(cooksdist <-as.vector(cooks.distance(model)), silent = T)
+    try(cooksdist <- as.vector(cooks.distance(model)), silent = T)
     if(is.null(cooksdist))
     {
       cooks <- FALSE
@@ -228,78 +234,78 @@ plot.emdi <- function(x,
 # Definition of the labels
 
 define_label <- function(label){
-  if(class(label) != "list"){
+  if(!inherits(label, "list")){
     if(label == "orig"){
-      label <- list(qq_res = c(title="Error term", 
-                               y_lab="Quantiles of pearson residuals", 
-                               x_lab="Theoretical quantiles"),
-                    qq_ran = c(title="Random effect",
-                               y_lab="Quantiles of random effects", 
-                               x_lab="Theoretical quantiles"),
-                    d_res = c(title="Density - Pearson residuals", 
-                              y_lab="Density", 
-                              x_lab="Pearson residuals"),
-                    d_ran = c(title="Density - Standardized random effects",
-                              y_lab="Density", 
-                              x_lab="Standardized random effects"),
-                    cooks = c(title="Cook's Distance Plot", 
-                              y_lab="Cook's Distance", 
-                              x_lab="Index"), 
-                    box_cox = c(title="Box-Cox - REML", 
-                                y_lab="Log-Likelihood", 
-                                x_lab="expression(lambda)"))
+      label <- list(qq_res = c(title = "Error term", 
+                               y_lab = "Quantiles of pearson residuals", 
+                               x_lab = "Theoretical quantiles"),
+                    qq_ran = c(title = "Random effect",
+                               y_lab = "Quantiles of random effects", 
+                               x_lab = "Theoretical quantiles"),
+                    d_res = c(title = "Density - Pearson residuals", 
+                              y_lab = "Density", 
+                              x_lab = "Pearson residuals"),
+                    d_ran = c(title = "Density - Standardized random effects",
+                              y_lab = "Density", 
+                              x_lab = "Standardized random effects"),
+                    cooks = c(title = "Cook's Distance Plot", 
+                              y_lab = "Cook's Distance", 
+                              x_lab = "Index"), 
+                    box_cox = c(title = "Box-Cox - REML", 
+                                y_lab = "Log-Likelihood", 
+                                x_lab = "expression(lambda)"))
     } else if(label == "blank"){
-      label <- list(qq_res = c(title="", 
-                               y_lab="", 
-                               x_lab=""),
-                    qq_ran = c(title="",
-                               y_lab="", 
-                               x_lab=""),
-                    d_res = c(title="", 
-                              y_lab="", 
-                              x_lab=""),
-                    d_ran = c(title="",
-                              y_lab="", 
-                              x_lab=""),
-                    cooks = c(title="", 
-                              y_lab="", 
-                              x_lab=""), 
-                    box_cox = c(title="", 
-                                y_lab="", 
-                                x_lab=""))
+      label <- list(qq_res = c(title = "", 
+                               y_lab = "", 
+                               x_lab = ""),
+                    qq_ran = c(title = "",
+                               y_lab = "", 
+                               x_lab = ""),
+                    d_res = c(title = "", 
+                              y_lab = "", 
+                              x_lab = ""),
+                    d_ran = c(title = "",
+                              y_lab = "", 
+                              x_lab = ""),
+                    cooks = c(title = "", 
+                              y_lab = "", 
+                              x_lab = ""), 
+                    box_cox = c(title = "", 
+                                y_lab = "", 
+                                x_lab = ""))
     } else if(label == "no_title"){
-      label <- list(qq_res = c(title="", 
-                               y_lab="Quantiles of pearson residuals", 
-                               x_lab="Theoretical quantiles"),
-                    qq_ran = c(title="",
-                               y_lab="Quantiles of random effects", 
-                               x_lab="Theoretical quantiles"),
-                    d_res = c(title="", 
-                              y_lab="Density", 
-                              x_lab="Pearson residuals"),
-                    d_ran = c(title="",
-                              y_lab="Density", 
-                              x_lab="Standardized random effects"),
-                    cooks = c(title="", 
-                              y_lab="Cook's Distance", 
-                              x_lab="Index"), 
-                    box_cox = c(title="", 
-                                y_lab="Log-Likelihood", 
-                                x_lab="expression(lambda)"))
+      label <- list(qq_res = c(title = "", 
+                               y_lab = "Quantiles of pearson residuals", 
+                               x_lab = "Theoretical quantiles"),
+                    qq_ran = c(title = "",
+                               y_lab = "Quantiles of random effects", 
+                               x_lab = "Theoretical quantiles"),
+                    d_res = c(title = "", 
+                              y_lab = "Density", 
+                              x_lab = "Pearson residuals"),
+                    d_ran = c(title = "",
+                              y_lab = "Density", 
+                              x_lab = "Standardized random effects"),
+                    cooks = c(title = "", 
+                              y_lab = "Cook's Distance", 
+                              x_lab = "Index"), 
+                    box_cox = c(title = "", 
+                                y_lab = "Log-Likelihood", 
+                                x_lab = "expression(lambda)"))
     }
     
-  } else if(class(label) == "list"){
+  } else if(inherits(label, "list")) {
 
     if(!any(names(label) %in% c("qq_res", "qq_ran", 
                                "d_res", "d_ran",
-                               "cooks", "box_cox"))){
+                               "cooks", "box_cox"))) {
      stop("List elements must have following names even though not 
           all must be included: qq_res, qq_ran, d_res, d_ran, cooks, 
           box_cox. Every list element must have the elements title, 
           y_lab and x_lab. See also help(plot.emdi).")
     }
-    for(i in names(label)){
-      if(!all(names(label[[i]]) == c("title", "y_lab", "x_lab"))){
+    for(i in names(label)) {
+      if(!all(names(label[[i]]) == c("title", "y_lab", "x_lab"))) {
         stop("Every list element must have the elements title, 
              y_lab and x_lab in this order. See also 
              help(plot.emdi).")
@@ -312,51 +318,51 @@ define_label <- function(label){
 #      label <- label
 #    } else if(length(label) < 6){
 #      
-      orig_label <- list(qq_res = c(title="Error term", 
-                                    y_lab="Quantiles of pearson residuals", 
-                                    x_lab="Theoretical quantiles"),
-                         qq_ran = c(title="Random effect",
-                                    y_lab="Quantiles of random effects", 
-                                    x_lab="Theoretical quantiles"),
-                         d_res = c(title="Density - Pearson residuals", 
-                                   y_lab="Density", 
-                                   x_lab="Pearson residuals"),
-                         d_ran = c(title="Density - Standardized random effects",
-                                   y_lab="Density", 
-                                   x_lab="Standardized random effects"),
-                         cooks = c(title="Cook's Distance Plot", 
-                                   y_lab="Cook's Distance", 
-                                   x_lab="Index"), 
-                         box_cox = c(title="Box-Cox - REML", 
-                                     y_lab="Log-Likelihood", 
-                                     x_lab="expression(lambda)"))
+      orig_label <- list(qq_res = c(title = "Error term", 
+                                    y_lab = "Quantiles of pearson residuals", 
+                                    x_lab = "Theoretical quantiles"),
+                         qq_ran = c(title = "Random effect",
+                                    y_lab = "Quantiles of random effects", 
+                                    x_lab = "Theoretical quantiles"),
+                         d_res = c(title = "Density - Pearson residuals", 
+                                   y_lab = "Density", 
+                                   x_lab = "Pearson residuals"),
+                         d_ran = c(title = "Density - Standardized random effects",
+                                   y_lab = "Density", 
+                                   x_lab = "Standardized random effects"),
+                         cooks = c(title = "Cook's Distance Plot", 
+                                   y_lab = "Cook's Distance", 
+                                   x_lab = "Index"), 
+                         box_cox = c(title = "Box-Cox - REML", 
+                                     y_lab = "Log-Likelihood", 
+                                     x_lab = "expression(lambda)"))
       
-      if(any(names(label)=="qq_res")){
+      if(any(names(label) == "qq_res")){
         label$qq_res <- label$qq_res
       } else {
         label$qq_res <- orig_label$qq_res
       }
-      if(any(names(label)=="qq_ran")){
+      if(any(names(label) == "qq_ran")){
         label$qq_ran <- label$qq_ran
       } else {
         label$qq_ran <- orig_label$qq_ran
       }
-      if(any(names(label)=="d_res")){
+      if(any(names(label) == "d_res")){
         label$d_res <- label$d_res
       } else {
         label$d_res <- orig_label$d_res
       }
-      if(any(names(label)=="d_ran")){
+      if(any(names(label) == "d_ran")){
         label$d_ran <- label$d_ran
       } else {
         label$d_ran <- orig_label$d_ran
       }
-      if(any(names(label)=="cooks")){
+      if(any(names(label) == "cooks")){
         label$cooks <- label$cooks
       } else {
         label$cooks <- orig_label$cooks
       }
-      if(any(names(label)=="box_cox")){
+      if(any(names(label) == "box_cox")){
         label$box_cox <- label$box_cox
       } else {
         label$box_cox <- orig_label$box_cox

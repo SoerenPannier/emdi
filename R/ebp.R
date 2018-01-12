@@ -4,7 +4,7 @@
 #' approach by \cite{Molina and Rao (2010)}. Point predictions of indicators are
 #' obtained by Monte-Carlo approximations. Additionally, mean squared error (MSE)
 #' estimation can be conducted by using a parametric bootstrap approach (see
-#' also \cite{Gonzalez-Manteiga et al. (2008)}). The unit level model of
+#' also \cite{Gonzalez-Manteiga et al. (2008)}). The unit-level model of
 #' \cite{Battese, Harter and Fuller (1988)} is fitted by REML method and one of
 #' three different transformation types for the dependent variable can be chosen.
 #'
@@ -44,17 +44,20 @@
 #' to c(-1,2). If the convergence fails, it is often advisable to choose a smaller
 #' more suitable interval. For right skewed distributions the negative values may be
 #' excluded, also values larger than 1 are seldom observed. 
-#' @param L a number determining the number of Monte-Carlo simulations.Defaults
+#' @param L a number determining the number of Monte-Carlo simulations. Defaults
 #' to 50.
-#' @param MSE if TRUE, MSE estimates using a parametric bootstrap approach
+#' @param MSE if \code{TRUE}, MSE estimates using a parametric bootstrap approach
 #' are calculated (see also \cite{Gonzalez-Manteiga et al. (2008)}). Defaults
 #' to \code{FALSE}.
 #' @param B a number determining the number of bootstrap populations in the
 #' parametric bootstrap approach (see also \cite{Gonzalez-Manteiga et al. (2008)})
 #' used in the MSE estimation. Defaults to 50.
-#' @param boot_type character to choose between different MSE estimation procedures,
-#' currently a \code{"parametric"} and a semi-parametric \code{"wild"} bootstrap 
-#' are possible
+#' @param seed an integer to set the seed for the random number generator. For 
+#' the usage of random number generation see details. If seed is set to 
+#' \code{NULL}, seed is chosen randomly. Defaults to \code{123}.
+#' @param boot_type character string to choose between different MSE estimation 
+#' procedures,currently a \code{"parametric"} and a semi-parametric \code{"wild"} 
+#' bootstrap are possible. Defaults to \code{"parametric"}. 
 #' @param parallel_mode modus of parallelization, defaults to an automatic selection 
 #' of a suitable mode, depending on the operating system, if the number of cpus is 
 #' chosen higher than 1. For details see \code{\link[parallelMap]{parallelStart}}
@@ -62,10 +65,10 @@
 #' parallelization. Defaults to 1. For details see \code{\link[parallelMap]{parallelStart}}
 #' @param custom_indicator a list of functions containing the indicators to be
 #' calculated additionaly. Such functions must and must only depend on the
-#' target variable \code{y} and the threshold \code{threshold}. 
+#' target variable \code{y} and the \code{threshold}. 
 #' Defaults to \code{NULL}.
-#' @param na.rm if TRUE, observations with \code{NA} values are deleted from the 
-#' population and sample data. For the EBP procedure complete observations  
+#' @param na.rm if \code{TRUE}, observations with \code{NA} values are deleted 
+#' from the population and sample data. For the EBP procedure complete observations  
 #' are required. Defaults to \code{FALSE}. 
 #' @return An object of class "emdi" that provides estimators for regional
 #' disaggregated indicators and optionally corresponding MSE estimates. Generic
@@ -74,8 +77,8 @@
 #' to obtain further information. See \code{\link{emdiObject}} for descriptions
 #' of components of objects of class "emdi".
 #' @details For Monte-Carlo approximations and in the parametric bootstrap
-#' approach random number generation is used. In order to specify seeds use
-#' \code{\link{set.seed}}. \cr \cr
+#' approach random number generation is used. Thus, a seed is set by the 
+#' argument \code{seed}. \cr \cr
 #' The set of predefined indicators includes the mean, median, four further quantiles
 #' (10\%, 25\%, 75\% and 90\%), head count ratio, poverty gap, Gini coefficient
 #' and the quintile share ratio.
@@ -99,7 +102,7 @@
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
 #'
-#' # Example with default setting but na.rm=TRUE
+#' # Example 1: With default setting but na.rm=TRUE
 #' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
 #' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
 #' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
@@ -107,21 +110,21 @@
 #' na.rm = TRUE)
 #' 
 #' 
-#' # Example with MSE, two additional indicators and function as threshold
+#' # Example 2: With MSE, two additional indicators and function as threshold
 #' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 #' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
 #' threshold = function(y){0.6 * median(y)}, transformation = "log", 
-#' L= 50, MSE = TRUE, boot_type = "wild", B = 50, custom_indicator = 
+#' L = 50, MSE = TRUE, boot_type = "wild", B = 50, custom_indicator = 
 #' list( my_max = function(y, threshold){max(y)},
 #' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 #' }
 #' @export
 #' @import nlme
 #' @import parallelMap
-#' @importFrom parallel detectCores
-#' @importFrom Hmisc wtd.quantile 
+#' @importFrom parallel detectCores 
+#' @importFrom parallel clusterSetRNGStream
 #' @importFrom stats as.formula dnorm lm median model.matrix na.omit optimize 
 #' qnorm quantile residuals rnorm sd
 #' @importFrom utils flush.console
@@ -138,29 +141,42 @@ ebp <- function(fixed,
                 interval = c(-1,2),
                 MSE = FALSE,
                 B = 50,
+                seed = 123,
                 boot_type = "parametric",
-                parallel_mode = ifelse(grepl("windows",.Platform$OS.type,), 
+                parallel_mode = ifelse(grepl("windows",.Platform$OS.type), 
                                        "socket", "multicore"),
                 cpus = 1,
                 custom_indicator = NULL, 
-                na.rm = FALSE) {
+                na.rm = FALSE
+) {
 
 
   ebp_check1(fixed = fixed, pop_data = pop_data, pop_domains = pop_domains,
              smp_data = smp_data, smp_domains = smp_domains, L = L) 
   
   ebp_check2(threshold = threshold, transformation = transformation, 
-             interval = interval, MSE = MSE, B = B, 
-             custom_indicator = custom_indicator, cpus = cpus)
+             interval = interval, MSE = MSE, boot_type = boot_type, B = B, 
+             custom_indicator = custom_indicator, cpus = cpus,  seed = seed,
+             na.rm = na.rm)
     
 
 
   # Save function call ---------------------------------------------------------
 
   call <- match.call()
-
+  
   # Data manipulation and notational framework ---------------------------------
-
+  if(!is.null(seed)) {
+    if (cpus > 1 && parallel_mode != "socket") {
+      RNG_kind <- RNGkind()
+      set.seed(seed, kind = "L'Ecuyer")
+    }
+    else
+    {
+      set.seed(seed)
+    }
+  }
+    
   # The function framework_ebp can be found in script framework_ebp.R
   framework <- framework_ebp( pop_data         = pop_data,
                               pop_domains      = pop_domains,
@@ -243,7 +259,10 @@ ebp <- function(fixed,
                     call            = call
                     )
   }
-
+  
+  if (cpus > 1 && parallel_mode != "socket") {
+    RNGkind(RNG_kind[1]) # restoring RNG type
+  }
   class(ebp_out) <- c("emdi", "model")
   return(ebp_out)
 }

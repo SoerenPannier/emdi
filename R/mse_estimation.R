@@ -26,9 +26,16 @@ parametric_bootstrap <- function(framework,
   }
 
   start_time = Sys.time()
-  if(cpus > 1){
+  if (cpus > 1) {
+    
+
     cpus <- min(cpus, detectCores())
+    
     parallelStart(mode = parallel_mode, cpus = cpus, show.info = FALSE)
+
+    if (parallel_mode == "socket") {
+      clusterSetRNGStream()
+    } 
     parallelLibrary("nlme")
     mses <- simplify2array(parallelLapply(xs              = 1:B, 
                                            fun             = mse_estim_wrapper,
@@ -109,7 +116,7 @@ mse_estim <- function(framework,
   # variable that passes the random effect to generating bootstrap populations
   # in bootstrap_par.
   
-  if(boot_type == "wild"){
+  if (boot_type == "wild"){
     superpop <- superpopulation_wild(framework      = framework,
                                       model_par      = model_par,
                                       gen_model      = gen_model,
@@ -131,7 +138,7 @@ mse_estim <- function(framework,
   }
   pop_income_vector <- superpop$pop_income_vector
   
-  if("function" %in% class(framework$threshold )){
+  if (inherits(framework$threshold, "function")){
     framework$threshold <- 
       framework$threshold(y = pop_income_vector)
   }
@@ -145,7 +152,7 @@ mse_estim <- function(framework,
                                                                  threshold = framework$threshold ,
                                                                  simplify = TRUE)
                                                           ),
-                                            byrow=TRUE)
+                                            byrow = TRUE)
                                      },
                                    threshold = framework$threshold)
                                    )
@@ -157,7 +164,7 @@ mse_estim <- function(framework,
   # point estimation to get predictors of the indicators that can be compared
   # to the "truth".
   
-  if(boot_type == "wild"){  
+  if (boot_type == "wild") {  
     bootstrap_sample <- bootstrap_par_wild(fixed          = fixed,
                                       transformation = transformation,
                                       framework      = framework,
@@ -168,7 +175,7 @@ mse_estim <- function(framework,
                                       res_s          = res_s,
                                       fitted_s       = fitted_s
     )
-  }else{
+  }else {
     bootstrap_sample <- bootstrap_par(fixed          = fixed,
                                       transformation = transformation,
                                       framework      = framework,
@@ -342,8 +349,9 @@ mse_estim_wrapper <-  function(i,
                                res_s,
                                fitted_s,
                                start_time,
-                               boot_type) {
-
+                               boot_type,
+                               seedvec) {
+  
   tmp <- mse_estim(framework       = framework,
                    lambda          = lambda,
                    shift           = shift,
@@ -358,8 +366,8 @@ mse_estim_wrapper <-  function(i,
                    boot_type       = boot_type
                    )
 
-  if(i%%10 == 0) {
-    if(i != B) {
+  if (i%%10 == 0) {
+    if (i != B) {
       delta <- difftime(Sys.time(), start_time, units = "secs")
       remaining <- (delta/i)*(B-i)
       remaining <- unclass(remaining)

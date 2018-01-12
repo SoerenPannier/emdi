@@ -4,7 +4,7 @@
 
 framework_dir <- function(y, smp_data, smp_domains, weights, 
                           threshold, custom_indicator, na.rm){
-  
+
   
   if (isTRUE(na.rm)) {
     indices <- !is.na(smp_data[y])
@@ -178,4 +178,27 @@ getIndicatorList_fixed <- function(){
                    probs = .9)
     }
   )
+}
+
+wtd.quantile <- function(x, weights = NULL, probs = NULL) {
+  n <- length(x)
+  order <- order(x)
+  x <- x[order]
+  weights <- weights[order]
+  if(is.null(weights)){
+    rw <- (1:n)/n
+  } else {
+    rw <- cumsum(weights)/sum(weights)
+  }
+  q <- sapply(probs, function(p) {
+    if (p == 0) 
+      return(x[1])
+    else if (p == 1) 
+      return(x[n])
+    select <- min(which(rw >= p))
+    if (rw[select] == p) 
+      mean(x[select:(select + 1)])
+    else x[select]
+  })
+  return(unname(q))
 }

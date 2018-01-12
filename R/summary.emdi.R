@@ -19,7 +19,7 @@
 #' (see \code{\link{emdiObject}}).}
 #' \item{size_dom}{a data frame with rows Sample_domains and Population_domains 
 #' (if model-based estimation) representing summary statisitics of the sample 
-#' sizes across domains of sample and population data respectively.}
+#' sizes across domains of sample and population data, respectively.}
 #' \item{transform}{if model-based estimation, a data frame with columns 
 #'                  Transformation, Method, Optimal_lambda and Shift_parameter representing the
 #'                  chosen transformation type and estimation method for lambda
@@ -33,10 +33,8 @@
 #'                  the package \pkg{moments}. Details for the Shapiro-Wilks-Test
 #'                  are provided by \code{\link{shapiro.test}}.}
 #' \item{icc}{if model-based estimation, the value of the intraclass coefficient.}
-#' \item{coeff_determ}{if model-based estimation, a data frame with colums R2, 
-#'                     ICC, Marginal_R2 and Conditional_R2 representing the coefficient of
-#'                     determination of a linear model without random effect,
-#'                     the intracluster correlation and two R2 measures
+#' \item{coeff_determ}{if model-based estimation, a data frame with colums 
+#'                     Marginal_R2 and Conditional_R2 representing two R2 measures
 #'                     for linear mixed models from the \pkg{MuMin} package
 #'                     obtained by function \code{\link{r.squaredGLMM}}.}                  
 #' \item{call}{a list containing an image of the function call that produced the
@@ -55,7 +53,7 @@
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 #' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' threshold = function(y){0.6 * median(y)}, L= 50, MSE = TRUE, B = 50, 
+#' threshold = function(y){0.6 * median(y)}, L = 50, MSE = TRUE, B = 50, 
 #' custom_indicator = list( my_max = function(y, threshold){max(y)},
 #' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 #' 
@@ -68,11 +66,11 @@
 #'
 summary.emdi <- function(object, ...) {
   
-  if(!any(class(object)=="emdi")){
+  if(!inherits(object, "emdi")){
     stop('First object needs to be of class emdi.')
   }
   
-  if(any(class(object) == "model")){
+  if(inherits(object, "model")){
     call_emdi <- object$call
     
     N_dom_unobs <- object$framework$N_dom_unobs
@@ -170,7 +168,7 @@ summary.emdi <- function(object, ...) {
                      call         = call_emdi
     )
   }
-  if(any(class(object) == "direct")){
+  if(inherits(object, "direct")){
     call_emdi <- object$call
     
     N_dom_smp <-   object$framework$N_dom_smp

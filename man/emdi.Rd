@@ -36,4 +36,3 @@ a small-area EBLUP. Journal of Statistical Computation and Simulation,
 Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
 indicators. The Canadian Journal of Statistics, Vol. 38, No.3, 369-385.
 }
-

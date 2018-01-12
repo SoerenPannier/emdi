@@ -1,19 +1,18 @@
-
-direct_variance <- function( direct_estimator,
-                              indicator_name,
-                              y,
-                              weights,
-                              smp_data,
-                              smp_domains,
-                              design,
-                              indicator, 
-                              bootType, 
-                              B = B,
-                              seed,
-                              X_calib, 
-                              totals,
-                              threshold,
-                              envir){
+direct_variance <- function(direct_estimator,
+                            indicator_name,
+                            y,
+                            weights,
+                            smp_data,
+                            smp_domains,
+                            design,
+                            indicator, 
+                            bootType, 
+                            B = B,
+                            seed,
+                            X_calib, 
+                            totals,
+                            threshold,
+                            envir){
 
   # Domain setup - domains and if variance is calculated by domain
   rs <- indicator$domain
@@ -30,7 +29,7 @@ direct_variance <- function( direct_estimator,
   haveWeights <- !is.null(weights)
   if (!is.null(weights)) 
     weights <- smp_data[, weights]
-  if(is.null(weights)){
+  if (is.null(weights)) {
     weights <- rep.int(1, n)
   }
   
@@ -97,7 +96,7 @@ direct_variance <- function( direct_estimator,
                      rs = rs,
                      envir = envir)
                      #, ...)
-   # browser()
+
   # if variance is calculated by domain
   if (byDomain) {
     var <- apply(b$t, 2, var)
@@ -119,16 +118,15 @@ direct_variance <- function( direct_estimator,
 
 
 getFun2 <- function(byDomain, direct_estimator, envir){
-  if(byDomain)
-  {
+  if (byDomain) {
     function(x, threshold, rs, envir) {
-      if("function" %in% class(threshold)){
+      if (inherits(threshold, "function")) {
         threshold <- threshold(x$y, x$weight)
       }
       value <- direct_estimator(x$y, x$weight, threshold)
       valueByDomain <- sapply(rs, function(r, x, t, evir) {
         i <- x$Domain == r
-        if(!sum(i) > 0)
+        if (!sum(i) > 0)
         {
           assign("warnlist", c(get("warnlist", envir = envir), as.character(r)), envir = envir)
           NA
@@ -141,7 +139,7 @@ getFun2 <- function(byDomain, direct_estimator, envir){
   }
   else{
     function(x, threshold, rs, na.rm, envir) {
-      if("function" %in% class(threshold)){
+      if (inherits(threshold, "function")) {
         threshold <- threshold(x$y, x$weight)
       }
       direct_estimator(x$y, x$weight, threshold)
@@ -167,7 +165,7 @@ getBootFun2  <- function(calibrate, fun, envir) {
   }
 }
 
-# Wrapper function for bootstrap function
+# Wrapper function for bootstrap function (for possible extensions)
 clusterBoot2 <- function(data, statistic, ..., domain, threshold, cluster = NULL, envir){
   if (is.null(cluster)) {
     boot(data, statistic,  threshold = threshold, ..., domain = domain, envir = envir)
@@ -183,17 +181,16 @@ clusterBoot2 <- function(data, statistic, ..., domain, threshold, cluster = NULL
 }
 
 
-calibWeights <- function (X_calib, 
-                          d, 
-                          totals, 
-                          q = NULL, 
-                          method = c("raking", "linear", "logit"), 
-                          bounds = c(0, 10), 
-                          maxit = 500, 
-                          tol = 1e-06, 
-                          eps = .Machine$double.eps,
-                          domain = NULL) 
-{
+calibWeights <- function(X_calib, 
+                         d, 
+                         totals, 
+                         q = NULL, 
+                         method = c("raking", "linear", "logit"), 
+                         bounds = c(0, 10), 
+                         maxit = 500, 
+                         tol = 1e-06, 
+                         eps = .Machine$double.eps,
+                         domain = NULL) {
   X_calib <- as.matrix(X_calib)
   d <- as.numeric(d)
   totals <- as.numeric(totals)

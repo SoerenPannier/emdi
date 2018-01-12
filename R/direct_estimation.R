@@ -5,47 +5,50 @@
 #' is adapted from the estimation of direct indicators in package 
 #' \pkg{laeken}. 
 #'
-#' @param y a character indicating the variable that is used for estimating the 
-#' indicators.
-#' @param smp_data survey data containing the above variable as well as sampling
+#' @param y a character string indicating the variable that is used for 
+#' estimating the indicators. The variable must be contained in the sample data.
+#' @param smp_data survey data containing variable y as well as sampling
 #' domains, and weights if selected.
-#' @param smp_domains a character string containing the name of a variable
-#' that indicates domains in the sample data. The variable can be numeric or a
+#' @param smp_domains a character containing the name of a variable
+#' that indicates domains in the sample data. The variable must be numeric or a
 #' factor.
-#' @param weights a character containing the name of a variable for 
+#' @param weights a character string containing the name of a variable for 
 #' the sampling weights in the sample data. This argument is optional and defaults
 #' to \code{NULL}. 
-#' @param design a character containing the name of a variable for different 
+#' @param design a character string containing the name of a variable for different 
 #' strata for stratified sampling designs. This argument is optional and defaults
 #' to \code{NULL}. 
 #' @param threshold a number defining a threshold. Alternatively, a threshold may 
 #' be defined as a \code{function} of \code{y} and \code{weights} returning a 
 #' numeric value. Such a function will be evaluated once for the point 
-#' estimation and in each iteration of the parametric bootstrap. A threshold is
-#' needed for calculation e.g. of head count ratios and poverty gaps. The 
-#' argument defaults to \code{NULL}. In this case the threshold is set to 60\% 
-#' of the median of the variable that is selected as y similary to the 
-#' At-risk-of-poverty rate used in the EU (see also \cite{Social Protection Committee 2001}). 
-#' However, any desired threshold can be chosen.
-#' @param var if TRUE, estimates for the variance are calcualted using a 
+#' estimation and in each iteration of the parametric bootstrap. See Example 2 
+#' for using a function as threshold.  A threshold is needed for calculation e.g. 
+#' of head count ratios and poverty gaps. The argument defaults to \code{NULL}. 
+#' In this case the threshold is set to 60\% of the median of the variable that 
+#' is selected as y similary to the At-risk-of-poverty rate used in the EU (see 
+#' also \cite{Social Protection Committee 2001}). However, any desired threshold 
+#' can be chosen.
+#' @param var if \code{TRUE}, estimates for the variance are calcualted using a 
 #' naive or calibrated bootstrap. Defaults to \code{FALSE}.
-#' @param boot_type a character containing the name of the bootstrap specification. 
-#' Either a \code{"naive"} or a \code{"calibrate"} bootstrap can be used. See 
-#' also \code{\link[laeken]{bootVar}}. Defaults to \code{naive}.
+#' @param boot_type a character string containing the name of the bootstrap 
+#' specification. Either a \code{"naive"} or a \code{"calibrate"} bootstrap can 
+#' be used. See also \code{\link[laeken]{bootVar}}. Defaults to \code{naive}.
 #' @param B a number determining the number of bootstrap populations for the 
 #' bootstrap variance. Defaults to \code{50}.
 #' @param seed an integer to set the seed for the random number generator. Random 
-#' number generation is used in the bootstrap approach. If no seed is set, seed
-#' is chosen randomly. Defaults to \code{123}.
+#' number generation is used in the bootstrap approach. If seed is set to 
+#' \code{NULL}, seed is chosen randomly. Defaults to \code{123}.
 #' @param X_calib a numeric matrix including calibration variables if the calibrated 
 #' bootstrap is chosen. Defaults to NULL.
 #' @param totals a numeric vector providing the population totals if the calibrated 
-#' bootstrap is chosen.. Defaults to \code{NULL}. In this case, the sampling 
-#' weights are used to calculate the totals.
+#' bootstrap is chosen. If a vector is chosen, the length of the vector needs to 
+#' equal the number of columns in X_calib. Defaults to \code{NULL}. In this case, 
+#' the sampling weights are used to calculate the totals.
 #' @param custom_indicator a list of functions containing the indicators to be
 #' calculated additionaly. Such functions must and must only depend on the
-#' target variable \code{y}, the \code{weights} and the threshold (numeric value)
-#' \code{threshold}. Defaults to \code{NULL}.
+#' target variable \code{y}, the \code{weights} and the 
+#' \code{threshold} (numeric value) (see Example 3) even though some arguments 
+#' might not be used in the additional function. Defaults to \code{NULL}.
 #' @param na.rm if TRUE, observations with \code{NA} values are deleted from the 
 #' sample data. Defaults to \code{FALSE}. 
 #' @return An object of class "emdi" that provides direct estimators for regional
@@ -54,9 +57,9 @@
 #' and \code{\link{summary}} have methods that can be used
 #' to obtain further information. See \code{\link{emdiObject}} for descriptions
 #' of components of objects of class "emdi".
-#' @details The set of predefined indicators includes the mean, median, four further quantiles
-#' (10\%, 25\%, 75\% and 90\%), head count ratio, poverty gap, Gini coefficient
-#' and the quintile share ratio.
+#' @details The set of predefined indicators includes the mean, median, four 
+#' further quantiles (10\%, 25\%, 75\% and 90\%), head count ratio, poverty gap, 
+#' Gini coefficient and the quintile share ratio.
 #' @references
 #' Alfons, A. and Templ, M. (2013). Estimation of Social Exclusion Indicators
 #' from complex Surveys: The R package laeken. Journal of Statistical Software, 
@@ -71,28 +74,34 @@
 #' # Loading sample data
 #' data("eusilcA_smp")
 #'
-#' # Example without weights and naive bootstrap
+#' # Example 1: Without weights and naive bootstrap
 #' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
 #' smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
-#' boot_type = "naive", B = 50, seed = 123, X = NULL, totals = NULL, na.rm = TRUE)
+#' boot_type = "naive", B = 50, seed = 123, X_calib = NULL, totals = NULL, 
+#' na.rm = TRUE)
 #' 
-#' #' # Example with custom indicators
-#' emdi_direct <- direct(y="eqIncome", smp_data=eusilcA_smp, smp_domains="district", 
-#' weights="weight", threshold=10859.24, var=TRUE, boot_type = "naive", B=50, 
-#' seed=123, X = NULL, totals = NULL, custom_indicator = list( my_max = 
-#' function(y, weights, threshold){max(y)}, my_min = 
-#' function(y, weights, threshold){min(y)}), na.rm=TRUE)
+#' # Example 2: With function as threshold
+#' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
+#' smp_domains = "district", weights = "weight", threshold = 
+#' function(y, weights){0.6 * laeken::weightedMedian(y, weights)}, na.rm = TRUE)
+#' 
+#' # Example 3: With custom indicators
+#' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
+#' smp_domains = "district", weights = "weight", threshold = 10859.24, 
+#' var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL, 
+#' totals = NULL, custom_indicator = list( my_max = function(y, weights, 
+#' threshold){max(y)}, my_min = function(y, weights, threshold){min(y)}), 
+#' na.rm = TRUE)
 #' }
 #' @export
 #' @importFrom boot boot
-#' @importFrom Hmisc wtd.quantile
 #' @importFrom MASS ginv
 #' @importFrom stats aggregate runif weighted.mean
 
 
 direct <- function(y, 
                    smp_data, 
-                   smp_domains = NULL, 
+                   smp_domains, 
                    weights = NULL, 
                    design = NULL,
                    threshold = NULL,
@@ -106,11 +115,12 @@ direct <- function(y,
                    na.rm = FALSE){
   
   
-  direct_check1(y = y, smp_data = smp_data)
   
-  direct_check2(smp_domains = smp_domains, weights = weights, sort = sort, 
-                threshold = threshold, var = var, boot_type = boot_type, 
-                B = B, X = X_calib, totals = totals)
+  direct_check(y = y, smp_data = smp_data, smp_domains = smp_domains, 
+                weights = weights, design = design, threshold = threshold, 
+                var = var, boot_type = boot_type, 
+                B = B, seed = seed, X_calib = X_calib, totals = totals, 
+                na.rm = na.rm, custom_indicator = custom_indicator)
   
   # Save call ------------------------------------------------------------------
   call <- match.call()

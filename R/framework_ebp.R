@@ -15,6 +15,8 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
   mod_vars <- gsub(" ", "",unlist(strsplit(paste(fixed[3]), "[+]")), 
                    fixed = TRUE)
   
+  fw_check1(pop_data = pop_data, mod_vars = mod_vars, pop_domains = pop_domains, 
+           smp_data = smp_data, fixed = fixed, smp_domains = smp_domains)
  
   pop_vars <- c(mod_vars, pop_domains)
   pop_data <- pop_data[, pop_vars]
@@ -22,7 +24,7 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
   smp_data <- smp_data[, smp_vars]
   
   # Deletion of NA
-  if(na.rm == T){
+  if (na.rm == T) {
     pop_data <- na.omit(pop_data)
     smp_data <- na.omit(smp_data)
   } else if(any(is.na(pop_data)) || any(is.na(smp_data))){
@@ -42,7 +44,8 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
   smp_domains_vec <- droplevels(smp_domains_vec)
   
   
-  fw_check1(pop_domains_vec = pop_domains_vec, smp_domains_vec = smp_domains_vec)
+  fw_check2(pop_domains = pop_domains, pop_domains_vec = pop_domains_vec, 
+            smp_domains = smp_domains, smp_domains_vec = smp_domains_vec)
 
 
   # Number of households in population
@@ -50,7 +53,7 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
   # Number of households in sample
   N_smp <- length(smp_domains_vec)
   # Number of out-of-sample households
-  N_unobs= N_pop - N_smp
+  N_unobs <- N_pop - N_smp
   # Number of domains in the population
   N_dom_pop <- length(unique(pop_domains_vec))
   # Number of domains in the sample
@@ -67,7 +70,8 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
   obs_dom <- pop_domains_vec %in% unique(smp_domains_vec)
   dist_obs_dom <- unique(pop_domains_vec) %in% unique(smp_domains_vec)
   
-  fw_check2(obs_dom = obs_dom, dist_obs_dom = dist_obs_dom)
+  fw_check3(obs_dom = obs_dom, dist_obs_dom = dist_obs_dom, pop_domains = pop_domains, 
+            smp_domains = smp_domains)
 
   indicator_list <- list(
     fast_mean = function(y, threshold) {t(mean(y))},
