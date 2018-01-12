@@ -34,7 +34,7 @@ mse_emdi <- function(object, indicator = "all", CV = FALSE) {
   }
   else {
     selection = colnames(object$MSE[-1]) %in% indicator
-    ind <- object$MSE[,c(T, selection)]
+    ind <- object$MSE[,c(TRUE, selection)]
     ind_cv <- data.frame(Domain = object$MSE[,1], all_cv[, selection])
     colnames(ind_cv) = colnames(ind)
     ind_name <- paste(unique(indicator), collapse = ", ")

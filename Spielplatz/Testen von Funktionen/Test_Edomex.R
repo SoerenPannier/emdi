@@ -301,7 +301,7 @@ ebp_edomex <- ebp( fixed = ictpc ~  pcocup + jnived + clase_hog + pcpering +
             threshold = 903.04,
             transformation = "log",
             L = 5,
-            MSE = T,
+            MSE = TRUE,
             B = 5,
             custom_indicator = list( my_max = function(y, threshold){max(y)},
                                      my_min = function(y, threshold){min(y)}
@@ -343,26 +343,26 @@ print(direct_edomex)
 # the resulting class is S3 estimators.ebp
 # methods like head and tail are yet to implement for this class
 # estimators will extract all, some specifically defined estimators or predefined groups of estimator
-estimators(object = ebp_edomex, MSE = T, CV = F, indicator = "all")
+estimators(object = ebp_edomex, MSE = TRUE, CV = FALSE, indicator = "all")
 
 
 
-estimators(object = ebp_edomex, MSE = T, CV = T, indicator = "all")
+estimators(object = ebp_edomex, MSE = TRUE, CV = TRUE, indicator = "all")
 
-head(estimators(object = direct_edomex, MSE = F, CV = T, indicator = "Custom"))
-
-
-head(estimators(object = ebp_edomex, MSE = F, CV = T, indicator = "Custom"))
-
-head(estimators(object = ebp_edomex, MSE = F, CV = T, indicator = c("Head_Count","Poverty_Gap")))
-head(estimators(object = direct_edomex, MSE = F, CV = T, indicator = c("Head_Count","Poverty_Gap")))
+head(estimators(object = direct_edomex, MSE = FALSE, CV = TRUE, indicator = "Custom"))
 
 
-tail(estimators(object = ebp_edomex, MSE = F, CV = T, indicator = c(6,"Poverty_Gap")))
-tail(estimators(object = direct_edomex, MSE = F, CV = T, indicator = c("Head_Count","Poverty_Gap")))
+head(estimators(object = ebp_edomex, MSE = FALSE, CV = TRUE, indicator = "Custom"))
 
-estimators(object = ebp_edomex, MSE = T, CV = T, indicator = c("Quantiles"))
-estimators(object = direct_edomex, MSE = T, CV = T, indicator = c("Quantiles"))
+head(estimators(object = ebp_edomex, MSE = FALSE, CV = TRUE, indicator = c("Head_Count","Poverty_Gap")))
+head(estimators(object = direct_edomex, MSE = FALSE, CV = TRUE, indicator = c("Head_Count","Poverty_Gap")))
+
+
+tail(estimators(object = ebp_edomex, MSE = FALSE, CV = TRUE, indicator = c(6,"Poverty_Gap")))
+tail(estimators(object = direct_edomex, MSE = FALSE, CV = TRUE, indicator = c("Head_Count","Poverty_Gap")))
+
+estimators(object = ebp_edomex, MSE = TRUE, CV = TRUE, indicator = c("Quantiles"))
+estimators(object = direct_edomex, MSE = TRUE, CV = TRUE, indicator = c("Quantiles"))
 
 
 

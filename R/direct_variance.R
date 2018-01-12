@@ -236,8 +236,8 @@ calibWeights <- function(X_calib,
       while (!any(is.na(g)) && tolNotReached(X_calib, w, totals, 
                                              tol) && i <= maxit) {
         phi <- t(X_calib) %*% w - totals
-        T <- t(X_calib * w)
-        dphi <- T %*% X_calib
+        Tmat <- t(X_calib * w)
+        dphi <- Tmat %*% X_calib
         lambda <- lambda - ginv(dphi, tol = eps) %*% 
           phi
         g <- exp(as.vector(X_calib %*% lambda) * q)

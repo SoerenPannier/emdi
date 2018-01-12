@@ -71,7 +71,7 @@ point_emdi <- function(object, indicator = "all") {
     ind_name <- "All indicators"
   } else {
     selection <- colnames(object$ind[-1]) %in% indicator
-    ind <- object$ind[,c(T, selection)]
+    ind <- object$ind[,c(TRUE, selection)]
     ind_name <- paste(unique(indicator), collapse = ", ")
   }
 

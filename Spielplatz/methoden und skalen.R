@@ -23,7 +23,7 @@ load_shapeaustria()
 mapping_table <- data.frame(unique(eusilcA_pop$district), 
                             unique(shape_austria_dis$NAME_2))
 
-map_plot(object = emdi_model, MSE = TRUE, CV = T, 
+map_plot(object = emdi_model, MSE = TRUE, CV = TRUE, 
          map_obj = shape_austria_dis, indicator = c("Mean"), map_dom_id = "NAME_2", 
          map_tab = mapping_table)
 
@@ -36,7 +36,7 @@ scaleset <- list("Mean" = list(
     )
   )
 
-map_plot(object = emdi_model, MSE = TRUE, CV = T, 
+map_plot(object = emdi_model, MSE = TRUE, CV = TRUE, 
          map_obj = shape_austria_dis, indicator = c("Mean", "Gini"), map_dom_id = "NAME_2", 
          map_tab = mapping_table, scale_points = scaleset)
 

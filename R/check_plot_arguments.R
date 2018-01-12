@@ -1,6 +1,6 @@
 plot_check <- function(x, label, color, cooks, range) {
   
-  if (!all(inherits(x, which = T, c("emdi", "model")))) {
+  if (!all(inherits(x, which = TRUE, c("emdi", "model")))) {
     stop('First object needs to be of class emdi, model. For emdi objects
          obtained by direct estimation diagnostic plots are not reasonable.')
   }
