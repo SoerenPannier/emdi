@@ -124,11 +124,13 @@ getFun2 <- function(byDomain, direct_estimator, envir){
         threshold <- threshold(x$y, x$weight)
       }
       value <- direct_estimator(x$y, x$weight, threshold)
-      valueByDomain <- sapply(rs, function(r, x, t, evir) {
+      valueByDomain <- vapply(rs, function(r, x, t, evir) {
         i <- x$Domain == r
         if (!sum(i) > 0)
         {
-          assign("warnlist", c(get("warnlist", envir = envir), as.character(r)), envir = envir)
+          assign("warnlist", c(get("warnlist", envir = envir), 
+                               as.character(r)), 
+                 envir = envir)
           NA
         } else {
           direct_estimator(x$y[i], x$weight[i],  threshold)

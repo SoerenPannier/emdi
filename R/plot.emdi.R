@@ -139,7 +139,7 @@ plot.emdi <- function(x,
     }
     
     
-    likelihoods <- sapply(range, 
+    likelihoods <- vapply(range, 
                           function(lam, fixed , smp_data, smp_domains, 
                                    transformation)
     {

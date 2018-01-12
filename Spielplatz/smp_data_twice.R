@@ -60,7 +60,7 @@ test_r.GLMM <- function (x)
     for (i in seq.int(m)) attr(reStruct[[i]], "Dimnames")[[2L]] <- paste(nams[[i]], 
                                                                          attr(reStruct[[i]], "Dimnames")[[2L]], sep = ".")
   }
-  varRe <- sum(sapply(reStruct, function(z) {
+  varRe <- sum(vapply(reStruct, function(z) {
    # browser()
     sig <- nlme::pdMatrix(z) * sigma2
     mm1 <- mmRE[, rownames(sig), drop = FALSE]

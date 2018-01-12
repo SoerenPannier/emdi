@@ -190,7 +190,7 @@ wtd.quantile <- function(x, weights = NULL, probs = NULL) {
   } else {
     rw <- cumsum(weights)/sum(weights)
   }
-  q <- sapply(probs, function(p) {
+  q <- vapply(probs, function(p) {
     if (p == 0) 
       return(x[1])
     else if (p == 1) 
