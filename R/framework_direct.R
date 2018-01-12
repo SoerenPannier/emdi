@@ -190,7 +190,8 @@ wtd.quantile <- function(x, weights = NULL, probs = NULL) {
   } else {
     rw <- cumsum(weights)/sum(weights)
   }
-  q <- vapply(probs, function(p) {
+  q <- sapply(probs, function(p) {
+    # TODO warum geht hier vapply nicht?
     if (p == 0) 
       return(x[1])
     else if (p == 1) 

@@ -64,7 +64,7 @@ test_r.GLMM <- function (x)
    # browser()
     sig <- nlme::pdMatrix(z) * sigma2
     mm1 <- mmRE[, rownames(sig), drop = FALSE]
-    sum(MuMIn:::matmultdiag(mm1 %*% sig, ty = mm1))/n
+    sum(MuMIn:::matmultdiag(mm1 %*% sig, ty = mm1)) / n
   }))
   varTot <- sum(VarFx, varRe)
   res <- c(VarFx, varTot)/(varTot + sigma2)

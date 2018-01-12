@@ -124,7 +124,8 @@ getFun2 <- function(byDomain, direct_estimator, envir){
         threshold <- threshold(x$y, x$weight)
       }
       value <- direct_estimator(x$y, x$weight, threshold)
-      valueByDomain <- vapply(rs, function(r, x, t, evir) {
+      valueByDomain <- sapply(rs, function(r, x, t, evir) {
+        # TODO hier kein vapply?
         i <- x$Domain == r
         if (!sum(i) > 0)
         {
