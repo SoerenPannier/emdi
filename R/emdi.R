@@ -1,6 +1,6 @@
 #' A package for estimating and mapping disaggregated indicators
 #'
-#' The package \code{emdi} supports estimating and mapping regional
+#' The package \pkg{emdi} supports estimating and mapping regional
 #' disaggregated indicators. For estimating these indicators direct estimation 
 #' and the Empirical Best Prediction approach by \cite{Molina and Rao (2010)} 
 #' are provided. Estimates of the mean squared error for these methods can be 

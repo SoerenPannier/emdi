@@ -20,7 +20,7 @@
 #' @param MSE optional logical. If TRUE, the MSE is also visualized.
 #' @param CV optional logical. If TRUE, the CV is also visualized.
 #' @param map_obj an \code{SpatialPolygonsDataFrame} object as defined by the
-#' \code{sp} package on which the data should be visualized.
+#' \pkg{sp} package on which the data should be visualized.
 #' @param map_dom_id a character string containing the name of a variable in
 #' \code{map_obj} that indicates the domains. 
 #' @param map_tab a \code{data.frame} object with two columns that match the 
@@ -36,7 +36,7 @@
 #' this. 
 #' @param return_data if set to true a fortified data frame including the 
 #' map data as well as the chosen indicators is returned. Customized can easily 
-#' be obtained from this data frame via the package \code{ggmap}. Defaults to false
+#' be obtained from this data frame via the package \pkg{ggmap}. Defaults to false
 #' @return creates the plots demanded
 #' @seealso \code{\link{ebp}}, \code{\link{emdiObject}},
 #' \code{\link[maptools]{readShapePoly}}
