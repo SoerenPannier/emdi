@@ -1,6 +1,7 @@
 # Load package
 install.packages("emdi")
 library(emdi)
+library(reshape)
 
 
 # Code in Section Data sets ----------------------------------------------------
@@ -30,31 +31,69 @@ emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
 
 
 
-evaluate <- function(direct, model, indicator = "all", color = "blue") {
+evaluate <- function(direct, model, indicator = "all", color = c("red2", "red4")) {
   
-  obs_dom <- emdi_model$ind$Domain %in% emdi_direct$ind$Domain
+  Direct <- direct$ind[, c("Domain", indicator)]
+  names(Direct) <- c("Domain", "Direct")
+  Direct$smp_size <- as.numeric(table(direct$framework$smp_domains_vec))
+  Model <- model$ind[, c("Domain", indicator)]
+  names(Model) <- c("Domain", "EBP")
+  
+  Data <- merge(Direct, Model, by = "Domain")
   
   
-  Mean_direct <- emdi_direct$ind[, c("Domain", "Mean")]
-  Mean_direct$smp_size <- as.numeric(table(emdi_direct$framework$smp_domains_vec))
-  Mean_model <- emdi_model$ind[, c("Domain", "Mean")]
-
-  
-  Mean_data <- merge(Mean_direct, Mean_model, by = "Domain")
-  
-  summary(lm(Mean.x ~ Mean.y, data = Mean_data))
-  ggplot(Mean_data, aes(x = Mean.x, y = Mean.y)) + 
+  print(summary(lm(Direct ~ EBP, data = Data)))
+  print(ggplot(Data, aes(x = Direct, y = EBP)) + 
     geom_point() +
-    geom_smooth(method = lm, color = color, 
+    geom_smooth(method = lm, color = color[1] 
                 #se = FALSE
-                ) + coord_fixed() 
-  
-  
-  Mean_data <- Mean_data[order(Mean_data$smp_size), ]
-  
-  ggplot(data = Mean_data, aes(x = Mean.x, y = Mean.y, group=1)) +
-    geom_line(color="red")+
-    geom_point()
-  
+                ) + coord_fixed() + ggtitle(indicator))
+  Data <- Data[order(Data$smp_size), ]
+  Data_shaped <- data.frame(melt(Data[, c("Domain", "Direct", "EBP")], 
+                                      id = "Domain"))
+  # Mean_data_shaped$smp_size <- c(Mean_data$smp_size, Mean_data$smp_size)
+  # names(Mean_data_shaped) <- c("Domain", "Method", "value", "smp_size")
+  Data_shaped$ID <- c(1:length(Data$Domain), 1:length(Data$Domain))
+  names(Data_shaped) <- c("Domain", "Method", "value", "ID")
+  print(ggplot(data = Data_shaped, aes(x = ID, y = value, group = Method, colour = Method)) +
+    geom_line(size = 0.7) +
+    geom_point(aes(shape = Method, color = Method), size = 2) +
+    scale_color_manual(name = "Method",
+                       values = c(color[1], color[2])) +                 
+    scale_linetype_discrete(name = "Method") +
+    xlab("Domain") + ylab("Value") + 
+    ggtitle(indicator))
   
 }
+
+evaluate(emdi_direct, emdi_model, indicator = "Quantile_75")
+
+
+
+
+brown <- function(direct, model, indicator) {
+  
+  Direct <- direct$ind[, c("Domain", indicator)]
+  names(Direct) <- c("Domain", "Direct")
+  Direct$Var <- direct$MSE[, indicator]
+  
+  Model <- model$ind[, c("Domain", indicator)]
+  names(Model) <- c("Domain", "EBP")
+  Model$MSE <- model$MSE[, indicator]
+  
+  
+  Data <- merge(Direct, Model, by = "Domain")
+  df <- length(Data$Domain)
+  
+  W <- sum((Data$Direct - Data$EBP)^2 / (Data$Var + Data$MSE), na.rm = TRUE)
+
+  p_value <- 1 - pchisq(W, df)
+  
+  return(list(W = W, p_value = p_value, df = df))
+  
+  }
+
+
+brown(emdi_direct, emdi_model, indicator = "Quantile_75")
+
+
