@@ -56,7 +56,7 @@
 #'              filled for class direct.}
 #' @references
 #' Alfons, A. and Templ, M. (2013). Estimation of Social Exclusion Indicators
-#' from complex Surveys: The \proglang{R} package \pkg{laeken}. Journal of 
+#' from complex Surveys: The R package \pkg{laeken}. Journal of 
 #' Statistical Software, 54(15), 1-25.  \cr \cr
 #' Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
 #' indicators. The Canadian Journal of Statistics, Vol. 38, No.3, 369-385.

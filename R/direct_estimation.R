@@ -62,7 +62,7 @@
 #' Gini coefficient and the quintile share ratio.
 #' @references
 #' Alfons, A. and Templ, M. (2013). Estimation of Social Exclusion Indicators
-#' from complex Surveys: The \proglang{R} package \pkg{laeken}. Journal of 
+#' from complex Surveys: The R package \pkg{laeken}. Journal of 
 #' Statistical Software, 54(15), 1-25.  \cr \cr
 #' Social Protection Committee (2001). Report on indicators in the field of
 #' poverty and social exclusions, Technical Report, European Union.

@@ -28,7 +28,7 @@ one of the groups.}
 \item{CV}{optional logical. If TRUE, the CV is also visualized.}
 
 \item{map_obj}{an \code{SpatialPolygonsDataFrame} object as defined by the
-\code{sp} package on which the data should be visualized.}
+\pkg{sp} package on which the data should be visualized.}
 
 \item{map_dom_id}{a character string containing the name of a variable in
 \code{map_obj} that indicates the domains.}
@@ -49,7 +49,7 @@ this.}
 
 \item{return_data}{if set to true a fortified data frame including the 
 map data as well as the chosen indicators is returned. Customized can easily 
-be obtained from this data frame via the package \code{ggmap}. Defaults to false}
+be obtained from this data frame via the package \pkg{ggmap}. Defaults to false}
 }
 \value{
 creates the plots demanded
