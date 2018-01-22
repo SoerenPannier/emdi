@@ -19,6 +19,7 @@ Description: Functions that support estimating, assessing and mapping regional
 Depends:
     R (>= 3.3.0)
 License: GPL-2
+URL: https://github.com/SoerenPannier/emdi
 LazyData: true
 RoxygenNote: 6.0.1
 Imports:
