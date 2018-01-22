@@ -2,9 +2,9 @@
 
 
 # The data that is used for testing is the data from the sae package. 
-load("./incomedata.RData")
-load("./incomedata_woTeruel.RData")
-load("./Xoutsamp_AuxVar.RData")
+load("EBP/incomedata.RData")
+load("EBP/incomedata_woTeruel.RData")
+load("EBP/Xoutsamp_AuxVar.RData")
 
 
 # Test if return is a data.frame
@@ -35,10 +35,10 @@ test_that("Test that transformed_data is data_frame", {
 # Test if the data frame returns 9 variables or rather a variable y
 
 # Load benchmark transformed data or rather y vector and lambda
-data_bc <- read.csv2("./data_bc.csv", sep=",")
-data_bc_std <- read.csv2("./data_bc_std.csv", sep=",")
-data_log <- read.csv2("./data_log.csv", sep=",")
-ebp_optpar_bc <- read.csv2("./ebp_optpar_bc.csv", sep=",")
+data_bc <- read.csv2("EBP/data_bc.csv", sep=",")
+data_bc_std <- read.csv2("EBP/data_bc_std.csv", sep=",")
+data_log <- read.csv2("EBP/data_log.csv", sep=",")
+ebp_optpar_bc <- read.csv2("EBP/ebp_optpar_bc.csv", sep=",")
 
 test_that("Test if data_transformation returns correctly 
           transformed y and a correct shift paramter",{

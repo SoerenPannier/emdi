@@ -2,15 +2,15 @@
 # Box-Cox transformation
 
 # The data that is used for testing is the data from the sae package. 
-load("./incomedata.RData")
-load("./incomedata_woTeruel.RData")
-load("./Xoutsamp_AuxVar.RData")
+load("EBP/incomedata.RData")
+load("EBP/incomedata_woTeruel.RData")
+load("EBP/Xoutsamp_AuxVar.RData")
 
 
 test_that("Does function optimal_parameter() return the benchmark lambda?", {
             
   # Fixed optimal parameter and shift (benchmark values)
-  ebp_optpar_bc <- read.csv2("./ebp_optpar_bc.csv", sep=",")  
+  ebp_optpar_bc <- read.csv2("EBP/ebp_optpar_bc.csv", sep=",")  
   
   lambda <- as.numeric(as.character(ebp_optpar_bc[,"Optpar"]))
             

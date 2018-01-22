@@ -2,9 +2,9 @@
 
 
 # Load needed data
-load("./incomedata.RData")
-load("./incomedata_woTeruel.RData")
-load("./Xoutsamp_AuxVar.RData")
+load("EBP/incomedata.RData")
+load("EBP/incomedata_woTeruel.RData")
+load("EBP/Xoutsamp_AuxVar.RData")
 
 
 
@@ -20,8 +20,8 @@ test_that("Does monte_carlo function give benchmark results?", {
                         custom_indicator = NULL,
                         na.rm = TRUE)
   # Fixed optimal parameter and shift (benchmark values)
-  ebp_optpar_bc <- read.csv2("./ebp_optpar_bc.csv", sep=",")  
-  ebp_shift_bc  <- read.csv2("./ebp_shift_bc.csv", sep=",")
+  ebp_optpar_bc <- read.csv2("EBP/ebp_optpar_bc.csv", sep=",")  
+  ebp_shift_bc  <- read.csv2("EBP/ebp_shift_bc.csv", sep=",")
   
   lambda <- as.numeric(as.character(ebp_optpar_bc[,"Optpar"]))
   shift  <- as.numeric(as.character(ebp_shift_bc))
@@ -62,7 +62,7 @@ test_that("Does monte_carlo function give benchmark results?", {
                                       )
 
   # Load benchmark point estimates
-  ebp_point_bc <- read.csv2("./ebp_point_bc.csv", sep=",")
+  ebp_point_bc <- read.csv2("EBP/ebp_point_bc.csv", sep=",")
  
   # compare 10% quantile
   expect_equal(point[,"Quantile_10"],
