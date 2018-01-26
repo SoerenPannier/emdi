@@ -18,5 +18,5 @@ that method functions.}
 The results of the goodness of fit test are printed.
 }
 \seealso{
-\code{\link{evaluate.emdi}}
+\code{\link{evaluate_test}}
 }

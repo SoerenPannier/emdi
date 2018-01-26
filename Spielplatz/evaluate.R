@@ -48,7 +48,15 @@
 #' }
 #' @export
 
+
 evaluate_plot <- function(direct, model, indicator = "all", color = c("blue", "lightblue3")) {
+  
+  Direct <- NULL
+  Model_based <- NULL
+  ID <- NULL
+  value <- NULL
+  Method <- NULL
+  pchisq <- NULL
   
   
   ind_direct <- point_emdi(object = direct, indicator = indicator)$ind 
@@ -166,6 +174,7 @@ evaluate_plot <- function(direct, model, indicator = "all", color = c("blue", "l
 #' # Receive first overview
 #' evaluate_test(direct = emdi_direct, model = emdi_model)
 #' }
+#' @importFrom stats pchisq
 #' @export
 
 
@@ -232,7 +241,7 @@ evaluate_test <- function(direct, model, indicator = "all") {
 #' @param ... optional arguments passed to print.default; see the documentation on
 #' that method functions.
 #' @seealso
-#' \code{\link{evaluate.emdi}}
+#' \code{\link{evaluate_test}}
 #' @export
 
 print.evaluate.emdi <- function(x,...) {
