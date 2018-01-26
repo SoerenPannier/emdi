@@ -33,40 +33,76 @@ emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
 
 evaluate <- function(direct, model, indicator = "all", color = c("red2", "red4")) {
   
-  Direct <- direct$ind[, c("Domain", indicator)]
-  names(Direct) <- c("Domain", "Direct")
-  Direct$smp_size <- as.numeric(table(direct$framework$smp_domains_vec))
-  Model <- model$ind[, c("Domain", indicator)]
-  names(Model) <- c("Domain", "EBP")
   
-  Data <- merge(Direct, Model, by = "Domain")
+  ind_direct <- point_emdi(object = direct, indicator = indicator)$ind 
+  selected_direct <- colnames(ind_direct)[-1]
+  colnames(ind_direct) <- c("Domain", paste0(colnames(ind_direct)[-1], "_Direct"))
   
   
-  print(summary(lm(Direct ~ EBP, data = Data)))
-  print(ggplot(Data, aes(x = Direct, y = EBP)) + 
-    geom_point() +
-    geom_smooth(method = lm, color = color[1] 
-                #se = FALSE
-                ) + coord_fixed() + ggtitle(indicator))
-  Data <- Data[order(Data$smp_size), ]
-  Data_shaped <- data.frame(melt(Data[, c("Domain", "Direct", "EBP")], 
-                                      id = "Domain"))
-  # Mean_data_shaped$smp_size <- c(Mean_data$smp_size, Mean_data$smp_size)
-  # names(Mean_data_shaped) <- c("Domain", "Method", "value", "smp_size")
-  Data_shaped$ID <- c(1:length(Data$Domain), 1:length(Data$Domain))
-  names(Data_shaped) <- c("Domain", "Method", "value", "ID")
-  print(ggplot(data = Data_shaped, aes(x = ID, y = value, group = Method, colour = Method)) +
-    geom_line(size = 0.7) +
-    geom_point(aes(shape = Method, color = Method), size = 2) +
-    scale_color_manual(name = "Method",
-                       values = c(color[1], color[2])) +                 
-    scale_linetype_discrete(name = "Method") +
-    xlab("Domain") + ylab("Value") + 
-    ggtitle(indicator))
+  precisions_direct <- mse_emdi(object = direct, indicator = indicator, CV = TRUE)
+  cv_direct <- precisions_direct$ind_cv  
+
   
+  ind_model <- point_emdi(object = model, indicator = indicator)$ind 
+  selected_model <- colnames(ind_model)[-1]
+  colnames(ind_model) <- c("Domain", paste0(colnames(ind_model)[-1], "_Model"))
+  smp_size <- as.numeric(table(direct$framework$smp_domains_vec))
+  
+  
+  #Direct <- direct$ind[, c("Domain", indicator)]
+  #names(Direct) <- c("Domain", "Direct")
+  #Direct$smp_size <- as.numeric(table(direct$framework$smp_domains_vec))
+  #Model <- model$ind[, c("Domain", indicator)]
+  #names(Model) <- c("Domain", "EBP")
+  
+  Data <- merge(ind_direct, ind_model, by = "Domain")
+  
+  selection_indicators <- selected_model %in% selected_direct
+  selected_indicators <- selected_direct[selection_indicators]
+  
+  
+  for (ind in selected_indicators) {
+    
+    data_tmp <- data.frame(Direct = Data[, paste0(ind, "_Direct")],
+                           Model_based = Data[, paste0(ind, "_Model")])
+    
+    print(ggplot(data_tmp, aes(x = Direct, y = Model_based)) + 
+            geom_point() +
+            geom_smooth(method = lm, color = color[1], 
+                        se = FALSE
+            ) + coord_fixed() + ggtitle(ind) + ylab(label = "Model-based"))
+    cat("Press [enter] to continue")
+    line <- readline()
+    
+    data_tmp <- data_tmp[order(smp_size), ]
+    data_tmp$ID <- 1:length(ind_direct$Domain)
+    data_shaped <- data.frame(melt(data_tmp, id.vars = "ID"))
+    names(data_shaped) <- c("ID", "Method", "value")
+    
+    print(ggplot(data = data_shaped, aes(x = ID, 
+                                         y = value, group = Method, 
+                                         colour = Method)) +
+            geom_line(size = 0.7) +
+            geom_point(aes(color = Method), size = 2) +
+            scale_color_manual(name = "Method",
+                               values = c(color[1], color[2])) + 
+            scale_fill_manual(name = "Method",
+                              breaks = c("Direct", "Model_based"),
+                              labels = c("Direct", "Model-based")) +               
+            scale_linetype_discrete(name = "Method") +
+            xlab("Domain") + ylab("Value") + 
+            ggtitle(ind))
+    #cat("Press [enter] to continue")
+    #line <- readline()
+    
+    if (!ind == tail(selected_indicators,1)) {
+      cat("Press [enter] to continue")
+      line <- readline()
+    }
+  }
 }
 
-evaluate(emdi_direct, emdi_model, indicator = "Quantile_75")
+evaluate(emdi_direct, emdi_model, indicator = "Poverty", color = c("red3", "dodgerblue"))
 
 
 
