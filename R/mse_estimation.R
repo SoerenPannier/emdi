@@ -17,7 +17,7 @@ parametric_bootstrap <- function(framework,
                                  parallel_mode,
                                  cpus) {
   cat('\r', "Bootstrap started                                                                        ")
-  if(boot_type == "wild"){
+  if (boot_type == "wild") {
     res_s <- residuals(point_estim$model)
     fitted_s <- fitted(point_estim$model, level = 1)
   } else {
@@ -78,7 +78,7 @@ parametric_bootstrap <- function(framework,
   }
   
   cat('\r', "Bootstrap completed                                                                      ")
-  if(.Platform$OS.type == "windows"){
+  if (.Platform$OS.type == "windows") {
     flush.console()
   }
   mses <- apply(mses, c(1,2), mean)
@@ -116,7 +116,7 @@ mse_estim <- function(framework,
   # variable that passes the random effect to generating bootstrap populations
   # in bootstrap_par.
   
-  if (boot_type == "wild"){
+  if (boot_type == "wild") {
     superpop <- superpopulation_wild(framework      = framework,
                                       model_par      = model_par,
                                       gen_model      = gen_model,
@@ -127,7 +127,7 @@ mse_estim <- function(framework,
                                       fitted_s       = fitted_s
     )
   }
-  else{
+  else {
     superpop <- superpopulation(framework      = framework,
                                 model_par      = model_par,
                                 gen_model      = gen_model,
@@ -138,7 +138,7 @@ mse_estim <- function(framework,
   }
   pop_income_vector <- superpop$pop_income_vector
   
-  if (inherits(framework$threshold, "function")){
+  if (inherits(framework$threshold, "function")) {
     framework$threshold <- 
       framework$threshold(y = pop_income_vector)
   }
@@ -244,7 +244,7 @@ superpopulation <-  function(framework, model_par, gen_model, lambda, shift,
                                     sqrt(model_par$sigmae2est))
   eps[!framework$obs_dom] <- rnorm(sum(!framework$obs_dom),
                                    0,
-                                   sqrt(model_par$sigmae2est+model_par$sigmau2est))
+                                   sqrt(model_par$sigmae2est + model_par$sigmau2est))
   # superpopulation random effect
   vu_tmp <- rnorm(framework$N_dom_pop, 0, sqrt(model_par$sigmau2est))
   vu_pop <- rep(vu_tmp, framework$n_pop)
@@ -257,7 +257,7 @@ superpopulation <-  function(framework, model_par, gen_model, lambda, shift,
   )
   Y_pop_b[!is.finite(Y_pop_b)] <- 0
   
-  return(list(pop_income_vector=Y_pop_b, vu_tmp=vu_tmp))
+  return(list(pop_income_vector = Y_pop_b, vu_tmp = vu_tmp))
 }
 
 # Bootstrap function -----------------------------------------------------------
@@ -366,10 +366,10 @@ mse_estim_wrapper <-  function(i,
                    boot_type       = boot_type
                    )
 
-  if (i%%10 == 0) {
+  if (i %% 10 == 0) {
     if (i != B) {
       delta <- difftime(Sys.time(), start_time, units = "secs")
-      remaining <- (delta/i)*(B-i)
+      remaining <- (delta/i)*(B - i)
       remaining <- unclass(remaining)
       remaining <- sprintf("%02d:%02d:%02d:%02d",
                            remaining %/% 86400,  # days
@@ -379,7 +379,7 @@ mse_estim_wrapper <-  function(i,
 
       cat('\r', i, " of ", B, " Bootstrap iterations completed \t Approximately ",
           remaining, " remaining")
-      if(.Platform$OS.type == "windows") flush.console()
+      if (.Platform$OS.type == "windows") flush.console()
     }
   }
   return(tmp)
