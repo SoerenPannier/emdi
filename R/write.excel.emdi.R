@@ -64,8 +64,10 @@
 #' MSE = TRUE, CV = TRUE, split = TRUE)
 #' }
 #' @export
-#' @import openxlsx
-#'
+#' @importFrom openxlsx createWorkbook createStyle freezePane
+#' @importFrom openxlsx addWorksheet writeData saveWorkbook
+#' @importFrom openxlsx addStyle writeDataTable setColWidths
+#' 
 write.excel <- function(object,
                         file      ="excel_output.xlsx",
                         indicator = "all",
