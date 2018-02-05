@@ -45,9 +45,10 @@ point_estim <- function (framework,
   # See Molina and Rao (2010) p. 374
   # lme function is included in the nlme package which is imported.
 
-  mixed_model <- lme(fixed  = fixed,
+  mixed_model <- nlme::lme(fixed  = fixed,
                      data   = transformation_par$transformed_data ,
-                     random = as.formula(paste0("~ 1 | as.factor(", framework$smp_domains, ")")),
+                     random = as.formula(paste0("~ 1 | as.factor(", 
+                                                framework$smp_domains, ")")),
                      method = "REML",
                      keep.data = keep_data)
 
@@ -105,12 +106,12 @@ point_estim <- function (framework,
 
 model_par <- function(framework,
                       mixed_model) {
-  # fixed parameters
-  betas <- fixed.effects(mixed_model)
+  # fixed parametersn
+  betas <- nlme::fixed.effects(mixed_model)
   # Estimated error variance
   sigmae2est <- mixed_model$sigma^2
   # VarCorr(fit2) is the estimated random error variance
-  sigmau2est <- as.numeric(VarCorr(mixed_model)[1,1])
+  sigmau2est <- as.numeric(nlme::VarCorr(mixed_model)[1,1])
   # Random effect: vector with zeros for all domains, filled with
   rand_eff <- rep(0, length(unique(framework$pop_domains_vec)))
   # random effect for in-sample domains (dist_obs_dom)

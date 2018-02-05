@@ -121,10 +121,9 @@
 #' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 #' }
 #' @export
-#' @import nlme
-#' @import parallelMap
-#' @importFrom parallel detectCores 
-#' @importFrom parallel clusterSetRNGStream
+#' @importFrom nlme fixed.effects VarCorr lme
+#' @importFrom parallelMap parallelStop parallelLapply parallelLibrary
+#' @importFrom parallel detectCores clusterSetRNGStream
 #' @importFrom stats as.formula dnorm lm median model.matrix na.omit optimize 
 #' qnorm quantile residuals rnorm sd
 #' @importFrom utils flush.console
@@ -158,8 +157,6 @@ ebp <- function(fixed,
              interval = interval, MSE = MSE, boot_type = boot_type, B = B, 
              custom_indicator = custom_indicator, cpus = cpus,  seed = seed,
              na.rm = na.rm)
-    
-
 
   # Save function call ---------------------------------------------------------
 

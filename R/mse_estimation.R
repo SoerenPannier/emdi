@@ -29,33 +29,34 @@ parametric_bootstrap <- function(framework,
   if (cpus > 1) {
     
 
-    cpus <- min(cpus, detectCores())
-    
-    parallelStart(mode = parallel_mode, cpus = cpus, show.info = FALSE)
+    cpus <- min(cpus, parallel::detectCores())
+    parallelMap::parallelStart(mode = parallel_mode, 
+                               cpus = cpus, show.info = FALSE)
 
     if (parallel_mode == "socket") {
-      clusterSetRNGStream()
+      parallel::clusterSetRNGStream()
     } 
-    parallelLibrary("nlme")
-    mses <- simplify2array(parallelLapply(xs              = 1:B, 
-                                           fun             = mse_estim_wrapper,
-                                           B               = B,
-                                           framework       = framework,
-                                           lambda          = point_estim$optimal_lambda,
-                                           shift           = point_estim$shift_par,
-                                           model_par       = point_estim$model_par,
-                                           gen_model       = point_estim$gen_model,
-                                           fixed           = fixed,
-                                           transformation  = transformation,
-                                           interval        = interval,
-                                           L               = L,
-                                           res_s           = res_s,
-                                           fitted_s        = fitted_s,
-                                           start_time      = start_time,
-                                           boot_type       = boot_type
+    parallelMap::parallelLibrary("nlme")
+    mses <- simplify2array(parallelMap::parallelLapply(
+                                   xs              = 1:B, 
+                                   fun             = mse_estim_wrapper,
+                                   B               = B,
+                                   framework       = framework,
+                                   lambda          = point_estim$optimal_lambda,
+                                   shift           = point_estim$shift_par,
+                                   model_par       = point_estim$model_par,
+                                   gen_model       = point_estim$gen_model,
+                                   fixed           = fixed,
+                                   transformation  = transformation,
+                                   interval        = interval,
+                                   L               = L,
+                                   res_s           = res_s,
+                                   fitted_s        = fitted_s,
+                                   start_time      = start_time,
+                                   boot_type       = boot_type
                   )
             )
-    parallelStop()
+    parallelMap::parallelStop()
   } else{
       mses <- simplify2array(lapply(        X               = 1:B,  
                                             FUN             = mse_estim_wrapper,
@@ -77,7 +78,7 @@ parametric_bootstrap <- function(framework,
       )
   }
   
-  cat('\r', "Bootstrap completed                                                                      ")
+  cat('\r', "Bootstrap completed", "\n")
   if (.Platform$OS.type == "windows") {
     flush.console()
   }
@@ -294,7 +295,8 @@ bootstrap_par <- function(fixed,
   return(bootstrap_sample = bootstrap_smp)
 }
 
-bootstrap_par_wild <- function( fixed,
+bootstrap_par_wild <- function( 
+                                fixed,
                                 transformation,
                                 framework,
                                 model_par,
