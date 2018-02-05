@@ -73,11 +73,11 @@ evaluate_plot <- function(direct, model, indicator = "all", color = c("blue", "l
   ind_model <- point_emdi(object = model, indicator = indicator)$ind 
   selected_model <- colnames(ind_model)[-1]
   colnames(ind_model) <- c("Domain", paste0(colnames(ind_model)[-1], "_Model"))
-  smp_size <- as.numeric(table(direct$framework$smp_domains_vec))
-  
-  
+  smp_size <- (table(direct$framework$smp_domains_vec))
+   
   Data <- merge(ind_direct, ind_model, by = "Domain")
-  
+  matcher <- match(Data$Domain, names(smp_size))
+  Data$smp_size <- as.numeric(smp_size)[matcher]
   selection_indicators <- selected_model %in% selected_direct
   selected_indicators <- selected_direct[selection_indicators]
   
@@ -85,7 +85,8 @@ evaluate_plot <- function(direct, model, indicator = "all", color = c("blue", "l
   for (ind in selected_indicators) {
     
     data_tmp <- data.frame(Direct = Data[, paste0(ind, "_Direct")],
-                           Model_based = Data[, paste0(ind, "_Model")])
+                           Model_based = Data[, paste0(ind, "_Model")],
+                           smp_size = Data$smp_size)
     
     print(ggplot(data_tmp, aes(x = Direct, y = Model_based)) + 
             geom_point() +
@@ -95,9 +96,10 @@ evaluate_plot <- function(direct, model, indicator = "all", color = c("blue", "l
     cat("Press [enter] to continue")
     line <- readline()
     
-    data_tmp <- data_tmp[order(smp_size), ]
-    data_tmp$ID <- 1:length(ind_direct$Domain)
-    data_shaped <- data.frame(melt(data_tmp, id.vars = "ID"))
+    data_tmp <- data_tmp[order(data_tmp$smp_size), ]
+    data_tmp$smp_size <- NULL
+    data_tmp$ID <- seq_along(ind_direct$Domain)
+    data_shaped <- melt(data_tmp, id.vars = "ID")
     names(data_shaped) <- c("ID", "Method", "value")
     
     print(ggplot(data = data_shaped, aes(x = ID, 
