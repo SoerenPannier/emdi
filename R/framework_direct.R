@@ -39,7 +39,7 @@ framework_dir <- function(y, smp_data, smp_domains, weights,
 
   byDomain <- !is.null(smp_domains)
   if (byDomain) {
-    smp_domains_vec <- as.factor(smp_data[, smp_domains])
+    smp_domains_vec <- as.factor(as.character(smp_data[, smp_domains]))
     smp_domains_vec <- droplevels(smp_domains_vec)
     rs <- levels(smp_domains_vec)
     # Number of domains in the sample

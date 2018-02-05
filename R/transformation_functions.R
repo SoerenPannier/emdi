@@ -55,7 +55,7 @@
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj, eusilcA_smp, "box.cox", 0.7)
 #' @export
-#' @import nlme
+
 
 data_transformation <- function(fixed,
                                 smp_data,
@@ -99,7 +99,7 @@ std_data_transformation <- function(fixed=fixed,
     }
 
   smp_data[paste(fixed[2])] <- std_transformed
-  return(transformed_data=smp_data)
+  return(transformed_data = smp_data)
 } # End std_data_transformation
 
 
@@ -199,7 +199,7 @@ box_cox_std <- function(y, lambda) {
   }
 
   gm <- geometric.mean(y)
-  y <- if(abs(lambda) > 1e-12) {
+  y <- if (abs(lambda) > 1e-12) {
     y <- (y^lambda - 1) / (lambda * ((gm)^(lambda - 1)))
   } else {
     y <- gm * log(y)

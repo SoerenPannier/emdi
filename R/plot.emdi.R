@@ -89,8 +89,13 @@
 #' }
 #' @export
 #' @method plot emdi
-#' @import ggplot2 nlme graphics 
-#' @import HLMdiag 
+# @import graphics
+#' @importFrom ggplot2 qplot geom_abline ggtitle ylab xlab ggplot stat_qq 
+#' @importFrom ggplot2 aes geom_point geom_smooth coord_fixed geom_line
+#' @importFrom ggplot2 scale_color_manual scale_fill_manual geom_segment
+#' @importFrom ggplot2 scale_linetype_discrete geom_density geom_text
+#' @importFrom ggplot2 geom_line geom_vline stat_function
+#' @importFrom nlme ranef random.effects
 #' @importFrom gridExtra grid.arrange 
 #' @importFrom stats shapiro.test logLik cooks.distance
 
@@ -108,16 +113,17 @@ plot.emdi <- function(x,
   Residuals <- Random <- index <- lambda <- log_likelihood <- NULL # avoid note due to ggplot2
   # Preparation for plots
   residuals <- residuals(x$model, level = 0, type = "pearson")
-  rand.eff <- ranef(x$model)$'(Intercept)'
+  rand.eff <- nlme::ranef(x$model)$'(Intercept)'
   srand.eff <- (rand.eff - mean(rand.eff)) / sd(rand.eff)
   
   model <- x$model
   model$call$fixed <- x$fixed
-  if(cooks == TRUE)
+  if (cooks == TRUE)
   {
     cooksdist <- NULL
-    try(cooksdist <- as.vector(cooks.distance(model)), silent = TRUE)
-    if(is.null(cooksdist))
+    try(cooksdist <- as.vector( 
+      cooks.distance(model)), silent = TRUE)
+    if (is.null(cooksdist))
     {
       cooks <- FALSE
       warning(paste0("Cook's distance could not be calculated, this is usually due",
@@ -159,7 +165,7 @@ plot.emdi <- function(x,
   ## QQ Plots
   # Residuals
   res <- qplot(sample = residuals) +
-    geom_abline(colour=color[1]) +
+    geom_abline(colour = color[1]) +
     ggtitle(label$qq_res["title"]) + ylab(label$qq_res["y_lab"]) +
     xlab(label$qq_res["x_lab"]) + gg_theme
   
@@ -167,13 +173,13 @@ plot.emdi <- function(x,
   
   # Random effects
   ran <- ggplot(data.frame(tmp) ,aes(sample=tmp)) +
-    stat_qq(distribution=qnorm,dparams = list(mean = mean(tmp),
+    stat_qq(distribution = qnorm,dparams = list(mean = mean(tmp),
                                               sd = sd(tmp))) +
-    geom_abline(intercept=0, slope = 1,na.rm = TRUE, col = color[1]) +
+    geom_abline(intercept = 0, slope = 1,na.rm = TRUE, col = color[1]) +
     ggtitle(label$qq_ran["title"]) + ylab(label$qq_ran["y_lab"]) +
     xlab(label$qq_ran["x_lab"]) + gg_theme
-  grid.arrange(res, ran ,ncol=2)
-  cat ("Press [enter] to continue")
+  grid.arrange(res, ran ,ncol = 2)
+  cat("Press [enter] to continue")
   line <- readline()
   
   print( ggplot(data.frame(Residuals = residuals), aes(x = Residuals),

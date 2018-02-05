@@ -121,7 +121,7 @@
 #' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 #' }
 #' @export
-#' @importFrom nlme fixed.effects VarCorr lme
+#' @importFrom nlme fixed.effects VarCorr lme random.effects
 #' @importFrom parallelMap parallelStop parallelLapply parallelLibrary
 #' @importFrom parallel detectCores clusterSetRNGStream
 #' @importFrom stats as.formula dnorm lm median model.matrix na.omit optimize 

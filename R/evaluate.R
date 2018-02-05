@@ -48,6 +48,7 @@
 #' }
 #' @export
 #' @importFrom reshape2 melt
+#' @importFrom ggplot2 aes geom_point geom_smooth coord_fixed geom_line
 
 
 evaluate_plot <- function(direct, model, indicator = "all", color = c("blue", "lightblue3")) {
