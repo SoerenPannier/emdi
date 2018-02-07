@@ -97,8 +97,8 @@
 #' @importFrom ggplot2 geom_line geom_vline stat_function
 #' @importFrom nlme ranef random.effects
 #' @importFrom gridExtra grid.arrange 
-#' @importFrom stats shapiro.test logLik cooks.distance
-
+#' @importFrom stats shapiro.test logLik 
+#' @import HLMdiag
 
 plot.emdi <- function(x,
                       label = "orig",
