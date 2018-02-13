@@ -97,7 +97,7 @@
 #' @importFrom ggplot2 geom_line geom_vline stat_function
 #' @importFrom nlme ranef random.effects
 #' @importFrom gridExtra grid.arrange 
-#' @importFrom stats shapiro.test logLik 
+#' @importFrom stats shapiro.test logLik cooks.distance
 #' @import HLMdiag
 
 plot.emdi <- function(x,
@@ -110,7 +110,8 @@ plot.emdi <- function(x,
   
   plot_check(x = x, label = label, color = color, cooks = cooks, range = range)
   
-  Residuals <- Random <- index <- lambda <- log_likelihood <- NULL # avoid note due to ggplot2
+  Residuals <- Random <- index <- lambda <- log_likelihood <- NULL 
+  # avoid note due to ggplot2
   # Preparation for plots
   residuals <- residuals(x$model, level = 0, type = "pearson")
   rand.eff <- nlme::ranef(x$model)$'(Intercept)'
@@ -145,7 +146,7 @@ plot.emdi <- function(x,
     }
     
     # Todo vapply prüfen
-    likelihoods <- sapply(range, 
+    likelihoods <- vapply(range, 
                           function(lam, fixed , smp_data, smp_domains, 
                                    transformation)
     {
@@ -155,7 +156,7 @@ plot.emdi <- function(x,
         silent = TRUE)
       if (is.null(result)) result <- NA
       result
-    },   fixed = x$fixed, smp_data = x$framework$smp_data, 
+    }, numeric(1),   fixed = x$fixed, smp_data = x$framework$smp_data, 
          smp_domains = x$framework$smp_domains,
          transformation = x$transformation)
   }
