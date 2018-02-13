@@ -14,7 +14,7 @@ point_estim_direct <-  function(direct_estimator,
                             weights = framework$weights_vec, 
                             threshold = framework$threshold)
     valueByDomain <- 
-      aggregate(1:framework$N_smp, 
+      aggregate(seq_len(framework$N_smp), 
                 list(Domain = framework$smp_domains_vec), 
                 function(i, y, threshold, weights) {
                   direct_estimator(y = y[i], 

@@ -38,7 +38,7 @@ parametric_bootstrap <- function(framework,
     } 
     parallelMap::parallelLibrary("nlme")
     mses <- simplify2array(parallelMap::parallelLapply(
-                                   xs              = 1:B, 
+                                   xs              = seq_len(B), 
                                    fun             = mse_estim_wrapper,
                                    B               = B,
                                    framework       = framework,
@@ -58,7 +58,7 @@ parametric_bootstrap <- function(framework,
             )
     parallelMap::parallelStop()
   } else{
-      mses <- simplify2array(lapply(        X               = 1:B,  
+      mses <- simplify2array(lapply(        X               = seq_len(B),  
                                             FUN             = mse_estim_wrapper,
                                             B               = B,
                                             framework       = framework,

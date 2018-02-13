@@ -254,9 +254,9 @@ get_polygone <- function(values) {
   cols <- ceiling(sqrt(n))
   n <- cols^2
 
-  values["id"] <- 1:nrow(values)
+  values["id"] <- seq_len(nrow(values))
 
-  poly <- data.frame(id = rep(1:n, each = 4),
+  poly <- data.frame(id = rep(seq_len(n), each = 4),
                      ordering = seq_len((n*4)),
                      x = c(0,1,1,0) + rep(0:(cols-1), each = (cols*4)),
                      y =rep(c(0,0,1,1) + rep(0:(cols-1), each = 4),cols)

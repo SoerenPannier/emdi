@@ -170,7 +170,7 @@ monte_carlo <- function(transformation,
 
   ests_mcmc <- array(dim = c(framework$N_dom_pop,L,length(framework$indicator_names)))
 
-  for (l in 1:L) {
+  for (l in seq_len(L)) {
 
     # Errors in generating model: individual error term and random effect
     # See below for function errors_gen.

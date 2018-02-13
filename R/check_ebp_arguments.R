@@ -88,7 +88,7 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
     }
     
     N_custom <- length(custom_indicator)
-    for (i in 1:N_custom) {
+    for (i in seq_len(N_custom)) {
       if (!inherits(custom_indicator[[i]], "function")) {
         stop("The elements of the list need to be functions. These Functions 
              for custom indicators need to have exactly the following 

@@ -114,7 +114,7 @@ direct_check <- function(y,
     }
     
     N_custom <- length(custom_indicator)
-    for (i in 1:N_custom) {
+    for (i in seq_len(N_custom)) {
       if (!inherits(custom_indicator[[i]], "function")) {
         stop("The elements of the list need to be functions. These Functions 
              for custom indicators need to have exactly the following 
@@ -128,7 +128,7 @@ direct_check <- function(y,
              three arguments: y, weights threshold; even though weights might 
              not be needed and a threshold might not be 
              included in the indicator. For help see Example 3 in help(direct).")
+        }
       }
-      }
-      }
+    }
 }

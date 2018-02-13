@@ -186,7 +186,7 @@ wtd.quantile <- function(x, weights = NULL, probs = NULL) {
   x <- x[order]
   weights <- weights[order]
   if(is.null(weights)){
-    rw <- (1:n)/n
+    rw <- seq_len(n)/n
   } else {
     rw <- cumsum(weights)/sum(weights)
   }

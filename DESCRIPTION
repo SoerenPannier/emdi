@@ -24,20 +24,17 @@ LazyData: true
 RoxygenNote: 6.0.1
 Imports:
     nlme,
-    FNN,
     moments,
     ggplot2,
     MuMIn,
     gridExtra,
     openxlsx,
-    ggmap,
     reshape2,
     graphics,
     stats,
     parallelMap,
     HLMdiag,
     parallel,
-    simFrame,
     boot,
     rgeos,
     maptools,
@@ -45,5 +42,6 @@ Imports:
 Suggests:
     testthat,
     R.rsp,
+    simFrame,
     laeken
 VignetteBuilder: R.rsp

@@ -173,7 +173,7 @@ clusterBoot2 <- function(data, statistic, ..., domain, threshold, cluster = NULL
     boot(data, statistic,  threshold = threshold, ..., domain = domain, envir = envir)
   } else {
     fun <- function(cluster, i, ..., .data, .statistic) {
-      i <- do.call(c, split(1:nrow(.data), .data$cluster)[i])
+      i <- do.call(c, split(seq_len(nrow(.data)), .data$cluster)[i])
       .statistic(.data, i, ...)
     }
     keep <- !duplicated(cluster)
@@ -271,7 +271,7 @@ calibWeights <- function(X_calib,
       totals1 <- totals
       q1 <- q
       g1 <- g
-      indices <- 1:n
+      indices <- seq_len(n)
       anyOutOfBounds <- function(g, bounds) {
         any(g < bounds[1]) || any(g > bounds[2])
       }
