@@ -333,7 +333,7 @@ add_pointests <- function(object, indicator, wb, headlines_cs) {
 
   setColWidths(wb     = wb,
                sheet  = "Point Estimators",
-               cols   = 1:ncol(data),
+               cols   = seq_len(ncol(data)),
                widths = "auto"
                )
 
@@ -363,7 +363,7 @@ add_precisions <- function(object, indicator, MSE, wb, headlines_cs, CV) {
                    )
     setColWidths(wb     = wb,
                  sheet  = "MSE Estimators",
-                 cols   = 1:ncol(precisions$ind),
+                 cols   = seq_len(ncol(precisions$ind)),
                  widths = "auto"
                  )
     freezePane(wb       = wb,
@@ -388,7 +388,7 @@ add_precisions <- function(object, indicator, MSE, wb, headlines_cs, CV) {
 
     setColWidths(wb     = wb,
                  sheet  = "CV Estimators",
-                 cols   = 1:ncol(precisions$ind_cv),
+                 cols   = seq_len(ncol(precisions$ind_cv)),
                  widths = "auto"
                  )
 
@@ -418,7 +418,7 @@ add_estims <- function(object, indicator, wb, headlines_cs, MSE, CV) {
 
   setColWidths(wb     = wb,
                sheet  = "Estimates",
-               cols   = 1:ncol(data),
+               cols   = seq_len(ncol(data)),
                widths = "auto"
                )
 

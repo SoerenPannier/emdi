@@ -145,7 +145,6 @@ plot.emdi <- function(x,
       range <- range
     }
     
-    # Todo vapply prüfen
     likelihoods <- vapply(range, 
                           function(lam, fixed , smp_data, smp_domains, 
                                    transformation)
@@ -173,7 +172,7 @@ plot.emdi <- function(x,
   tmp <- as.matrix(random.effects(x$model))[,1]
   
   # Random effects
-  ran <- ggplot(data.frame(tmp) ,aes(sample=tmp)) +
+  ran <- ggplot(data.frame(tmp) ,aes(sample = tmp)) +
     stat_qq(distribution = qnorm,dparams = list(mean = mean(tmp),
                                               sd = sd(tmp))) +
     geom_abline(intercept = 0, slope = 1,na.rm = TRUE, col = color[1]) +
@@ -187,57 +186,54 @@ plot.emdi <- function(x,
                         fill = color[2], color = color[2]) +
                         geom_density(fill = color[2], color = color[2],
                                      alpha = 0.4) +
-                        stat_function(fun = dnorm) + ylab(label$d_res["y_lab"])+
+                        stat_function(fun = dnorm) + ylab(label$d_res["y_lab"]) +
                         xlab(label$d_res["x_lab"]) +
                         ggtitle(label$d_res["title"]) + gg_theme)
-  cat ("Press [enter] to continue")
+  cat("Press [enter] to continue")
   line <- readline()
   print( ggplot(data.frame(Random = srand.eff), aes(x = Random),
                         fill = color[2], color = color[2]) +
                         geom_density(fill = color[2], color = color[2],
                                      alpha = 0.4) +
-                        stat_function(fun = dnorm)+ ylab(label$d_ran["y_lab"]) +
+                        stat_function(fun = dnorm) + ylab(label$d_ran["y_lab"]) +
                         xlab(label$d_ran["x_lab"]) +
                         ggtitle(label$d_ran["title"]) +
                         gg_theme)
-  cat ("Press [enter] to continue")
+  cat("Press [enter] to continue")
   line <- readline()
   
   
-  if(cooks == TRUE){
-    print(ggplot(data=cook_df, aes(x = index, y = cooksdist)) +
+  if (cooks == TRUE) {
+    print(ggplot(data = cook_df, aes(x = index, y = cooksdist)) +
             geom_segment(aes(x = index, y = 0, xend = index, yend = cooksdist), 
-                         colour = color[1])+
+                         colour = color[1]) +
             xlab("Index") + ylab(label$cooks["y_lab"]) 
-          + geom_text(label=indexer[,1], data = indexer) +
+          + geom_text(label = indexer[,1], data = indexer) +
             ggtitle(label$cooks["title"]) + gg_theme)
   }
 
-  
-
-  
   if (x$transformation == "box.cox") {
-    cat ("Press [enter] to continue")
+    cat("Press [enter] to continue")
     line <- readline()
     
-    if(any(label$box_cox["x_lab"] == "expression(lambda)")||
-       any(label$box_cox["x_lab"] == "expression(Lambda)")){
+    if (any(label$box_cox["x_lab"] == "expression(lambda)") ||
+       any(label$box_cox["x_lab"] == "expression(Lambda)")) {
       
        x_lab <- expression(lambda)
     } else {
       x_lab <- label$box_cox["x_lab"]
     }
-    if(any(is.na(likelihoods)))
-    {
+    if (any(is.na(likelihoods))) {
       warning(paste0("For some lambda in the chosen range, the likelihood does not converge. ",
               "For these lambdas no likelihood is plotted. ",
               "Choose a different range to avoid this behaviour"))
     }
     print( ggplot(data.frame(lambda = range, log_likelihood = likelihoods),
                   aes(x = lambda, y = log_likelihood)) + geom_line() +
-             xlab(x_lab) + ylab(label$box_cox["y_lab"])+
+             xlab(x_lab) + ylab(label$box_cox["y_lab"]) +
              geom_vline(xintercept = range[which.max(likelihoods)],
-                        colour = color[1]) + ggtitle(label$box_cox["title"]) + gg_theme)
+                        colour = color[1]) + ggtitle(label$box_cox["title"]) + 
+                          gg_theme)
   }
 }
 
@@ -245,8 +241,8 @@ plot.emdi <- function(x,
 # Definition of the labels
 
 define_label <- function(label){
-  if(!inherits(label, "list")){
-    if(label == "orig"){
+  if (!inherits(label, "list")) {
+    if (label == "orig") {
       label <- list(qq_res = c(title = "Error term", 
                                y_lab = "Quantiles of pearson residuals", 
                                x_lab = "Theoretical quantiles"),
@@ -265,7 +261,7 @@ define_label <- function(label){
                     box_cox = c(title = "Box-Cox - REML", 
                                 y_lab = "Log-Likelihood", 
                                 x_lab = "expression(lambda)"))
-    } else if(label == "blank"){
+    } else if (label == "blank"){
       label <- list(qq_res = c(title = "", 
                                y_lab = "", 
                                x_lab = ""),
@@ -284,7 +280,7 @@ define_label <- function(label){
                     box_cox = c(title = "", 
                                 y_lab = "", 
                                 x_lab = ""))
-    } else if(label == "no_title"){
+    } else if (label == "no_title"){
       label <- list(qq_res = c(title = "", 
                                y_lab = "Quantiles of pearson residuals", 
                                x_lab = "Theoretical quantiles"),
@@ -305,9 +301,9 @@ define_label <- function(label){
                                 x_lab = "expression(lambda)"))
     }
     
-  } else if(inherits(label, "list")) {
+  } else if (inherits(label, "list")) {
 
-    if(!any(names(label) %in% c("qq_res", "qq_ran", 
+    if (!any(names(label) %in% c("qq_res", "qq_ran", 
                                "d_res", "d_ran",
                                "cooks", "box_cox"))) {
      stop("List elements must have following names even though not 
@@ -315,8 +311,8 @@ define_label <- function(label){
           box_cox. Every list element must have the elements title, 
           y_lab and x_lab. See also help(plot.emdi).")
     }
-    for(i in names(label)) {
-      if(!all(names(label[[i]]) == c("title", "y_lab", "x_lab"))) {
+    for (i in names(label)) {
+      if (!all(names(label[[i]]) == c("title", "y_lab", "x_lab"))) {
         stop("Every list element must have the elements title, 
              y_lab and x_lab in this order. See also 
              help(plot.emdi).")
@@ -348,41 +344,41 @@ define_label <- function(label){
                                      y_lab = "Log-Likelihood", 
                                      x_lab = "expression(lambda)"))
       
-      if(any(names(label) == "qq_res")){
+      if (any(names(label) == "qq_res")) {
         label$qq_res <- label$qq_res
       } else {
         label$qq_res <- orig_label$qq_res
       }
-      if(any(names(label) == "qq_ran")){
+      if (any(names(label) == "qq_ran")) {
         label$qq_ran <- label$qq_ran
       } else {
         label$qq_ran <- orig_label$qq_ran
       }
-      if(any(names(label) == "d_res")){
+      if (any(names(label) == "d_res")) {
         label$d_res <- label$d_res
       } else {
         label$d_res <- orig_label$d_res
       }
-      if(any(names(label) == "d_ran")){
+      if (any(names(label) == "d_ran")) {
         label$d_ran <- label$d_ran
       } else {
         label$d_ran <- orig_label$d_ran
       }
-      if(any(names(label) == "cooks")){
+      if (any(names(label) == "cooks")) {
         label$cooks <- label$cooks
       } else {
         label$cooks <- orig_label$cooks
       }
-      if(any(names(label) == "box_cox")){
+      if (any(names(label) == "box_cox")) {
         label$box_cox <- label$box_cox
       } else {
         label$box_cox <- orig_label$box_cox
       }
   }
 
-  if(any(!(names(label) %in%  c("qq_res", "qq_ran", 
+  if (any(!(names(label) %in%  c("qq_res", "qq_ran", 
                                "d_res", "d_ran",
-                               "cooks", "box_cox")))){
+                               "cooks", "box_cox")))) {
     warning("One or more list elements are not called qq_res, qq_ran, d_res, 
              d_ran, cooks or box_cox. The changes are for this/these element(s)
             is/are not done. Instead the original labels are used.")
