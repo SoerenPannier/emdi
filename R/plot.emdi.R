@@ -96,7 +96,7 @@
 #' @importFrom ggplot2 scale_linetype_discrete geom_density geom_text
 #' @importFrom ggplot2 geom_line geom_vline stat_function
 #' @importFrom nlme ranef random.effects
-#' @importFrom gridExtra grid.arrange 
+#' @importFrom gridExtra arrangeGrob grid.arrange
 #' @importFrom stats shapiro.test logLik cooks.distance
 #' @import HLMdiag
 
@@ -109,7 +109,10 @@ plot.emdi <- function(x,
 
   
   plot_check(x = x, label = label, color = color, cooks = cooks, range = range)
-  
+  plotList <- vector(mode = "list", length = 5)
+  plotList <- lapply(plotList, function(x) NA)
+  names(plotList) <- c("QQPlots", "DensitiyResid","DensitiyRand", 
+                       "CooksDistance", "Likelihood")
   Residuals <- Random <- index <- lambda <- log_likelihood <- NULL 
   # avoid note due to ggplot2
   # Preparation for plots
@@ -178,38 +181,39 @@ plot.emdi <- function(x,
     geom_abline(intercept = 0, slope = 1,na.rm = TRUE, col = color[1]) +
     ggtitle(label$qq_ran["title"]) + ylab(label$qq_ran["y_lab"]) +
     xlab(label$qq_ran["x_lab"]) + gg_theme
-  grid.arrange(res, ran ,ncol = 2)
+  plotList[[1]] <- arrangeGrob(res, ran ,ncol = 2)
+  grid.arrange(plotList[[1]])
   cat("Press [enter] to continue")
   line <- readline()
   
-  print( ggplot(data.frame(Residuals = residuals), aes(x = Residuals),
+  print( (plotList[[2]] <- ggplot(data.frame(Residuals = residuals), 
+                                  aes(x = Residuals),
                         fill = color[2], color = color[2]) +
                         geom_density(fill = color[2], color = color[2],
                                      alpha = 0.4) +
                         stat_function(fun = dnorm) + ylab(label$d_res["y_lab"]) +
                         xlab(label$d_res["x_lab"]) +
-                        ggtitle(label$d_res["title"]) + gg_theme)
+                        ggtitle(label$d_res["title"]) + gg_theme))
   cat("Press [enter] to continue")
   line <- readline()
-  print( ggplot(data.frame(Random = srand.eff), aes(x = Random),
+  print( (plotList[[3]] <- ggplot(data.frame(Random = srand.eff), aes(x = Random),
                         fill = color[2], color = color[2]) +
                         geom_density(fill = color[2], color = color[2],
                                      alpha = 0.4) +
                         stat_function(fun = dnorm) + ylab(label$d_ran["y_lab"]) +
                         xlab(label$d_ran["x_lab"]) +
                         ggtitle(label$d_ran["title"]) +
-                        gg_theme)
-  cat("Press [enter] to continue")
-  line <- readline()
-  
-  
+                        gg_theme))
+
   if (cooks == TRUE) {
-    print(ggplot(data = cook_df, aes(x = index, y = cooksdist)) +
+    cat("Press [enter] to continue")
+    line <- readline()
+    print((plotList[[4]] <- ggplot(data = cook_df, aes(x = index, y = cooksdist)) +
             geom_segment(aes(x = index, y = 0, xend = index, yend = cooksdist), 
                          colour = color[1]) +
             xlab("Index") + ylab(label$cooks["y_lab"]) 
           + geom_text(label = indexer[,1], data = indexer) +
-            ggtitle(label$cooks["title"]) + gg_theme)
+            ggtitle(label$cooks["title"]) + gg_theme))
   }
 
   if (x$transformation == "box.cox") {
@@ -228,13 +232,15 @@ plot.emdi <- function(x,
               "For these lambdas no likelihood is plotted. ",
               "Choose a different range to avoid this behaviour"))
     }
-    print( ggplot(data.frame(lambda = range, log_likelihood = likelihoods),
+    print((plotList[[5]] <- ggplot(data.frame(lambda = range, 
+                                               log_likelihood = likelihoods),
                   aes(x = lambda, y = log_likelihood)) + geom_line() +
              xlab(x_lab) + ylab(label$box_cox["y_lab"]) +
              geom_vline(xintercept = range[which.max(likelihoods)],
                         colour = color[1]) + ggtitle(label$box_cox["title"]) + 
-                          gg_theme)
+                          gg_theme))
   }
+  invisible(plotList)
 }
 
 
