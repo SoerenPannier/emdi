@@ -228,7 +228,8 @@ plot.emdi <- function(x,
       x_lab <- label$box_cox["x_lab"]
     }
     if (any(is.na(likelihoods))) {
-      warning(paste0("For some lambda in the chosen range, the likelihood does not converge. ",
+      warning(paste0("For some lambda in the chosen range, the ",
+              "likelihood does not converge. ",
               "For these lambdas no likelihood is plotted. ",
               "Choose a different range to avoid this behaviour"))
     }
