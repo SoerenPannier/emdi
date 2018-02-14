@@ -17,11 +17,22 @@
 #' one is returned. Defaults to "all". Note, additional custom indicators can be 
 #' defined as argument for model-based approaches (see also \code{\link{ebp}}) 
 #' and do not appear in groups of indicators even though these might belong to 
-#' one of the groups.  
+#' one of the groups.
+#' @param label argument that enables to customize title and axis labels. There 
+#' are four options to label the evaluation plots: (i) original labels ("orig"), 
+#' (ii) axis lables but no title ("no_title"), (iii) neither axis 
+#' labels nor title ("blank").  
 #' @param color a character vector with two elements. The first color determines
 #' the color of the line in the scatter plot and the color for the direct 
 #' estimates in the line plot. The second color specifies the color of the line
 #' for the model-based estimates.
+#' @param shape a character vector with two elements. The first shape determines
+#' the shape of the points in the line plot for the direct estimates and the 
+#' second shape for the model-based estimates. 
+#' @param line_type a character vector with two elements. The first line type 
+#' determines the type of the line for the direct estimates and the 
+#' second type for the model-based estimates.
+#' @param gg_theme \code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
 #' @return A scatter plot and a line plot comparing direct and model-based 
 #' estimators for each selected indicator obtained by \code{\link{ggplot}}.
 #' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
@@ -51,7 +62,10 @@
 #' @importFrom ggplot2 aes geom_point geom_smooth coord_fixed geom_line
 
 
-evaluate_plot <- function(direct, model, indicator = "all", color = c("blue", "lightblue3")) {
+evaluate_plot <- function(direct, model, indicator = "all", label = "orig", 
+                          color = c("blue", "lightblue3"),
+                          shape = c(16, 16), line_type = c("solid", "solid"),
+                          gg_theme = NULL) {
   
   Direct <- NULL
   Model_based <- NULL
@@ -84,6 +98,8 @@ evaluate_plot <- function(direct, model, indicator = "all", color = c("blue", "l
   
   for (ind in selected_indicators) {
     
+    label <- define_evallabel(label = label, indicator = ind)
+    
     data_tmp <- data.frame(Direct = Data[, paste0(ind, "_Direct")],
                            Model_based = Data[, paste0(ind, "_Model")],
                            smp_size = Data$smp_size)
@@ -92,7 +108,15 @@ evaluate_plot <- function(direct, model, indicator = "all", color = c("blue", "l
             geom_point() +
             geom_smooth(method = lm, color = color[1], 
                         se = FALSE
-            ) + coord_fixed() + ggtitle(ind) + ylab(label = "Model-based"))
+            ) + geom_abline(intercept = 0, slope = 1, size = 1, 
+                            color = color[2]) +
+            xlim(min(min(data_tmp$Direct), min(data_tmp$Model_based)), 
+                     max(max(data_tmp$Direct), max(data_tmp$Model_based))) +
+            ylim(min(min(data_tmp$Direct), min(data_tmp$Model_based)), 
+                 max(max(data_tmp$Direct), max(data_tmp$Model_based))) +
+            ggtitle(label$scatter["title"]) + 
+            ylab(label$scatter["y_lab"]) + 
+      xlab(label$scatter["x_lab"]) + gg_theme)
     cat("Press [enter] to continue")
     line <- readline()
     
@@ -105,16 +129,22 @@ evaluate_plot <- function(direct, model, indicator = "all", color = c("blue", "l
     print(ggplot(data = data_shaped, aes(x = ID, 
                                          y = value, group = Method, 
                                          colour = Method)) +
-            geom_line(size = 0.7) +
-            geom_point(aes(color = Method), size = 2) +
-            scale_color_manual(name = "Method",
-                               values = c(color[1], color[2])) + 
+            geom_line(aes(linetype = Method), size = 0.7) +
+            geom_point(aes(color = Method, shape = Method), size = 2) +
+            scale_shape_manual(values = c(shape[1], shape[2]),
+                               breaks = c("Direct", "Model_based"),
+                               labels = c("Direct", "Model-based")) +
+            scale_linetype_manual(values = c(line_type[1], line_type[2]),
+                                  breaks = c("Direct", "Model_based"),
+                                  labels = c("Direct", "Model-based")) +
+            scale_color_manual(values = c(color[1], color[2]),
+                               breaks = c("Direct", "Model_based"),
+                               labels = c("Direct", "Model-based")) + 
             scale_fill_manual(name = "Method",
                               breaks = c("Direct", "Model_based"),
                               labels = c("Direct", "Model-based")) +               
-            scale_linetype_discrete(name = "Method") +
-            xlab("Domain") + ylab("Value") + 
-            ggtitle(ind))
+            xlab(label$line["x_lab"]) + ylab(label$line["y_lab"]) + 
+            ggtitle(label$line["title"]) + gg_theme)
     #cat("Press [enter] to continue")
     #line <- readline()
     
@@ -125,6 +155,72 @@ evaluate_plot <- function(direct, model, indicator = "all", color = c("blue", "l
   }
 }
 
+define_evallabel <- function(label, indicator){
+  if (!inherits(label, "list")) {
+    if (label == "orig") {
+      label <- list(scatter = c(title = indicator, 
+                               y_lab = "Model-based", 
+                               x_lab = "Direct"),
+                    line = c(title = indicator,
+                               y_lab = "Value", 
+                               x_lab = "Domain (ordered by sample size)"))
+    } else if (label == "blank") {
+      label <- list(scatter = c(title = "", 
+                               y_lab = "", 
+                               x_lab = ""),
+                    line = c(title = "",
+                               y_lab = "", 
+                               x_lab = ""))
+    } else if (label == "no_title") {
+      label <- list(scatter = c(title = "", 
+                                y_lab = "Model-based", 
+                                x_lab = "Direct"),
+                    line = c(title = "",
+                             y_lab = "Value", 
+                             x_lab = "Domain (ordered by sample size)"))
+    }
+    
+  } else if (inherits(label, "list")) {
+    
+    if (!any(names(label) %in% c("scatter", "line"))) {
+      stop("List elements must have following names even though not 
+           all must be included: scatter and line Every list element must 
+           have the elements title, y_lab and x_lab.")
+    }
+    for (i in names(label)) {
+      if (!all(names(label[[i]]) == c("title", "y_lab", "x_lab"))) {
+        stop("Every list element must have the elements title, 
+             y_lab and x_lab in this order.")
+      }
+      }
+
+    orig_label <- list(scatter = c(title = indicator, 
+                                   y_lab = "Model-based", 
+                                   x_lab = "Direct"),
+                       line = c(title = indicator,
+                                y_lab = "Value", 
+                                x_lab = "Domain (ordered by sample size)"))
+    
+    if (any(names(label) == "scatter")) {
+      label$scatter <- label$scatter
+    } else {
+      label$scatter <- orig_label$scatter
+    }
+    if (any(names(label) == "line")) {
+      label$line <- label$line
+    } else {
+      label$line <- orig_label$line
+    }
+      }
+  
+  if (any(!(names(label) %in%  c("scatter", "line")))) {
+    warning("One or more list elements are not called scatter or line. The 
+             changes are for this/these element(s) is/are not done. Instead the 
+            original labels are used.")
+  }
+  
+  return(label)
+    }
 
 
 
