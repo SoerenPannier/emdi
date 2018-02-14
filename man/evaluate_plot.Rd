@@ -4,8 +4,9 @@
 \alias{evaluate_plot}
 \title{Shows plots for the comparison of direct and model-based estimates}
 \usage{
-evaluate_plot(direct, model, indicator = "all", color = c("blue",
-  "lightblue3"))
+evaluate_plot(direct, model, indicator = "all", label = "orig",
+  color = c("blue", "lightblue3"), shape = c(16, 16),
+  line_type = c("solid", "solid"), gg_theme = NULL)
 }
 \arguments{
 \item{direct}{an object of type "emdi","direct", representing point and MSE
@@ -26,10 +27,25 @@ defined as argument for model-based approaches (see also \code{\link{ebp}})
 and do not appear in groups of indicators even though these might belong to 
 one of the groups.}
 
+\item{label}{argument that enables to customize title and axis labels. There 
+are four options to label the evaluation plots: (i) original labels ("orig"), 
+(ii) axis lables but no title ("no_title"), (iii) neither axis 
+labels nor title ("blank").}
+
 \item{color}{a character vector with two elements. The first color determines
 the color of the line in the scatter plot and the color for the direct 
 estimates in the line plot. The second color specifies the color of the line
 for the model-based estimates.}
+
+\item{shape}{a character vector with two elements. The first shape determines
+the shape of the points in the line plot for the direct estimates and the 
+second shape for the model-based estimates.}
+
+\item{line_type}{a character vector with two elements. The first line type 
+determines the type of the line for the direct estimates and the 
+second type for the model-based estimates.}
+
+\item{gg_theme}{\code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.}
 }
 \value{
 A scatter plot and a line plot comparing direct and model-based 

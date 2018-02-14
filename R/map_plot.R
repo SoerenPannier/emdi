@@ -34,6 +34,8 @@
 #' will be used for every plot. Alternatively a list defining colors for each 
 #' plot seperatly may be given. Please see the details section and examples for 
 #' this. 
+#' @param guide character passed to \code{\link[ggplot2]{scale_colour_gradient}.
+#' Possible values are "none", "colourbar", and "legend"
 #' @param return_data if set to true a fortified data frame including the 
 #' map data as well as the chosen indicators is returned. Customized can easily 
 #' be obtained from this data frame via the package \pkg{ggmap}. Defaults to false
@@ -84,7 +86,9 @@ map_plot <- function(object,
                      map_tab = NULL,
                      col = c("white", "red4"),
                      scale_points = NULL,
-                     return_data = FALSE){
+                     guide = "colourbar",
+                     return_data = FALSE
+                     ){
   if (is.null(map_obj)) {
     message("No Map Object has been provided. An artificial polygone is used for
             visualization")
@@ -108,7 +112,8 @@ map_plot <- function(object,
               map_tab = map_tab,
               col = col,
               scale_points = scale_points,
-              return_data = return_data
+              return_data = return_data,
+              guide = guide
     )
   }
 }
@@ -118,7 +123,6 @@ map_pseudo <- function(object, indicator, panelplot, MSE, CV)
   x <- y <- id <- value <- NULL #avoid note due to usage in ggplot
   values <-  estimators(object = object, indicator = indicator,
                                  MSE = MSE, CV = CV)$ind
-
   indicator <- colnames(values)[-1]
 
   tplot <- get_polygone(values = values)
@@ -145,7 +149,8 @@ plot_real <- function(object,
                       map_tab = NULL,
                       col = col,
                       scale_points = NULL,
-                      return_data = FALSE
+                      return_data = FALSE,
+                      guide = NULL
 ) {
   if (!is.null(map_obj) && is.null(map_dom_id)) {
     stop("No Domain ID for the map object is given")
@@ -200,16 +205,14 @@ plot_real <- function(object,
   for (ind in indicator) {
     map_obj.fort[ind][,1][!is.finite(map_obj.fort[ind][,1])] <- NA
     scale_point <- get_scale_points(map_obj.fort[ind][,1], ind, scale_points)
-    
     print(ggplot(map_obj.fort, aes(long, lat, group = group, 
                                    fill = map_obj.fort[ind][,1])) +
             geom_polygon(color = "azure3") + coord_equal() + 
             labs(x = "", y = "", fill = ind) +
             ggtitle(gsub(pattern = "_",replacement = " ",x = ind)) +
             scale_fill_gradient(low = col[1], high = col[2],limits = scale_point,
-                                guide = NULL) +
-            theme(axis.ticks = element_blank(), axis.text = element_blank(), 
-                 legend.position = "none") + guides(fill = FALSE)
+                                guide = guide) +
+            theme(axis.ticks = element_blank(), axis.text = element_blank()) 
     )
     if (!ind == tail(indicator,1)) {
       cat("Press [enter] to continue")
