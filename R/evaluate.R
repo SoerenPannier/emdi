@@ -22,16 +22,18 @@
 #' are four options to label the evaluation plots: (i) original labels ("orig"), 
 #' (ii) axis lables but no title ("no_title"), (iii) neither axis 
 #' labels nor title ("blank").  
-#' @param color a character vector with two elements. The first color determines
+#' @param color a vector with two elements. The first color determines
 #' the color of the line in the scatter plot and the color for the direct 
 #' estimates in the line plot. The second color specifies the color of the line
 #' for the model-based estimates.
-#' @param shape a character vector with two elements. The first shape determines
+#' @param shape a numeric vector with two elements. The first shape determines
 #' the shape of the points in the line plot for the direct estimates and the 
-#' second shape for the model-based estimates. 
+#' second shape for the model-based estimates. The options are numbered from 
+#' 0 to 25. 
 #' @param line_type a character vector with two elements. The first line type 
 #' determines the type of the line for the direct estimates and the 
-#' second type for the model-based estimates.
+#' second type for the model-based estimates. The options are: "twodash", 
+#' "solid", "longdash", "dotted", "dotdash", "dashed" and "blank". 
 #' @param gg_theme \code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
 #' @return A scatter plot and a line plot comparing direct and model-based 
 #' estimators for each selected indicator obtained by \code{\link{ggplot}}.
@@ -47,7 +49,7 @@
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 #' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' threshold = function(y){0.6 * median(y)}, L = 50, MSE = TRUE, B = 50,
+#' threshold = function(y){0.6 * median(y)}, L = 50, MSE = TRUE,
 #' na.rm = TRUE, cpus = 1)
 #' 
 #' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
@@ -59,8 +61,9 @@
 #' }
 #' @export
 #' @importFrom reshape2 melt
-#' @importFrom ggplot2 aes geom_point geom_smooth coord_fixed geom_line
-
+#' @importFrom ggplot2 geom_point geom_smooth geom_line 
+#' @importFrom ggplot2 aes xlim ylim scale_shape_manual scale_linetype_manual 
+#' @importFrom ggplot2 scale_color_manual scale_fill_manual
 
 evaluate_plot <- function(direct, model, indicator = "all", label = "orig", 
                           color = c("blue", "lightblue3"),
@@ -74,14 +77,18 @@ evaluate_plot <- function(direct, model, indicator = "all", label = "orig",
   Method <- NULL
   pchisq <- NULL
   
+  evaluate_plot_check(direct = direct, model = model, indicator = indicator, 
+                      label = label, color = color, shape = shape, 
+                      line_type = line_type, gg_theme = gg_theme)
+  
   
   ind_direct <- point_emdi(object = direct, indicator = indicator)$ind 
   selected_direct <- colnames(ind_direct)[-1]
   colnames(ind_direct) <- c("Domain", paste0(colnames(ind_direct)[-1], "_Direct"))
   
   
-  precisions_direct <- mse_emdi(object = direct, indicator = indicator, CV = TRUE)
-  cv_direct <- precisions_direct$ind_cv  
+  #precisions_direct <- mse_emdi(object = direct, indicator = indicator, CV = TRUE)
+  #cv_direct <- precisions_direct$ind_cv  
   
   
   ind_model <- point_emdi(object = model, indicator = indicator)$ind 
@@ -98,7 +105,7 @@ evaluate_plot <- function(direct, model, indicator = "all", label = "orig",
   
   for (ind in selected_indicators) {
     
-    label <- define_evallabel(label = label, indicator = ind)
+    label_ind <- define_evallabel(label = label, indi = ind)
     
     data_tmp <- data.frame(Direct = Data[, paste0(ind, "_Direct")],
                            Model_based = Data[, paste0(ind, "_Model")],
@@ -114,9 +121,9 @@ evaluate_plot <- function(direct, model, indicator = "all", label = "orig",
                      max(max(data_tmp$Direct), max(data_tmp$Model_based))) +
             ylim(min(min(data_tmp$Direct), min(data_tmp$Model_based)), 
                  max(max(data_tmp$Direct), max(data_tmp$Model_based))) +
-            ggtitle(label$scatter["title"]) + 
-            ylab(label$scatter["y_lab"]) + 
-      xlab(label$scatter["x_lab"]) + gg_theme)
+            ggtitle(label_ind$scatter["title"]) + 
+            ylab(label_ind$scatter["y_lab"]) + 
+      xlab(label_ind$scatter["x_lab"]) + gg_theme)
     cat("Press [enter] to continue")
     line <- readline()
     
@@ -143,8 +150,8 @@ evaluate_plot <- function(direct, model, indicator = "all", label = "orig",
             scale_fill_manual(name = "Method",
                               breaks = c("Direct", "Model_based"),
                               labels = c("Direct", "Model-based")) +               
-            xlab(label$line["x_lab"]) + ylab(label$line["y_lab"]) + 
-            ggtitle(label$line["title"]) + gg_theme)
+            xlab(label_ind$line["x_lab"]) + ylab(label_ind$line["y_lab"]) + 
+            ggtitle(label_ind$line["title"]) + gg_theme)
     #cat("Press [enter] to continue")
     #line <- readline()
     
@@ -155,13 +162,13 @@ evaluate_plot <- function(direct, model, indicator = "all", label = "orig",
   }
 }
 
-define_evallabel <- function(label, indicator){
+define_evallabel <- function(label, indi){
   if (!inherits(label, "list")) {
     if (label == "orig") {
-      label <- list(scatter = c(title = indicator, 
+      label <- list(scatter = c(title = indi, 
                                y_lab = "Model-based", 
                                x_lab = "Direct"),
-                    line = c(title = indicator,
+                    line = c(title = indi,
                                y_lab = "Value", 
                                x_lab = "Domain (ordered by sample size)"))
     } else if (label == "blank") {
@@ -194,7 +201,7 @@ define_evallabel <- function(label, indicator){
       }
       }
 
-    orig_label <- list(scatter = c(title = indicator, 
+    orig_label <- list(scatter = c(title = indi, 
                                    y_lab = "Model-based", 
                                    x_lab = "Direct"),
                        line = c(title = indicator,
@@ -279,6 +286,13 @@ define_evallabel <- function(label, indicator){
 
 
 evaluate_test <- function(direct, model, indicator = "all") {
+  
+  
+  evaluate_test_check(direct = direct, model = model, indicator = indicator, 
+                      label = label, color = color, shape = shape, 
+                      line_type = line_type, gg_theme = gg_theme)
+  
+  
   
   ind_direct <- point_emdi(object = direct, indicator = indicator)$ind 
   selected_direct <- colnames(ind_direct)[-1]

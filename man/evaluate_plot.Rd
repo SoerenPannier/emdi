@@ -32,18 +32,20 @@ are four options to label the evaluation plots: (i) original labels ("orig"),
 (ii) axis lables but no title ("no_title"), (iii) neither axis 
 labels nor title ("blank").}
 
-\item{color}{a character vector with two elements. The first color determines
+\item{color}{a vector with two elements. The first color determines
 the color of the line in the scatter plot and the color for the direct 
 estimates in the line plot. The second color specifies the color of the line
 for the model-based estimates.}
 
-\item{shape}{a character vector with two elements. The first shape determines
+\item{shape}{a numeric vector with two elements. The first shape determines
 the shape of the points in the line plot for the direct estimates and the 
-second shape for the model-based estimates.}
+second shape for the model-based estimates. The options are numbered from 
+0 to 25.}
 
 \item{line_type}{a character vector with two elements. The first line type 
 determines the type of the line for the direct estimates and the 
-second type for the model-based estimates.}
+second type for the model-based estimates. The options are: "twodash", 
+"solid", "longdash", "dotted", "dotdash", "dashed" and "blank".}
 
 \item{gg_theme}{\code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.}
 }
@@ -67,7 +69,7 @@ emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
 self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-threshold = function(y){0.6 * median(y)}, L = 50, MSE = TRUE, B = 50,
+threshold = function(y){0.6 * median(y)}, L = 50, MSE = TRUE,
 na.rm = TRUE, cpus = 1)
 
 emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
