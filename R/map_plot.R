@@ -207,7 +207,9 @@ plot_real <- function(object,
             ggtitle(gsub(pattern = "_",replacement = " ",x = ind)) +
             scale_fill_gradient(low = col[1], high = col[2],limits = scale_point,
                                 guide = guide) +
-            theme(axis.ticks = element_blank(), axis.text = element_blank()) 
+            theme(axis.ticks = element_blank(), axis.text = element_blank(),
+                  legend.title = element_blank()) 
+            
     )
     if (!ind == tail(indicator,1)) {
       cat("Press [enter] to continue")
