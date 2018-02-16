@@ -47,6 +47,9 @@ will be used for every plot. Alternatively a list defining colors for each
 plot seperatly may be given. Please see the details section and examples for 
 this.}
 
+\item{guide}{character passed to \code{\link[ggplot2]{scale_colour_gradient}}.
+Possible values are "none", "colourbar", and "legend"}
+
 \item{return_data}{if set to true a fortified data frame including the 
 map data as well as the chosen indicators is returned. Customized can easily 
 be obtained from this data frame via the package \pkg{ggmap}. Defaults to false}
@@ -76,16 +79,11 @@ my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 # Load shape file
 load_shapeaustria()
 
-# Create mapping table such that variables that indicate domains correspond
-# in population data and shape file
-mapping_table <- data.frame(unique(eusilcA_pop$district), 
-unique(shape_austria_dis$NAME_2))
-
 # Create map plot for mean indicator - point and MSE estimates but no CV
 map_plot(object = emdi_model, MSE = TRUE, CV = FALSE, 
-map_obj = shape_austria_dis, indicator = c("Mean"), map_dom_id = "NAME_2", 
-map_tab = mapping_table)
-}
+        map_obj = shape_austria_dis, indicator = c("Mean"), 
+        map_dom_id = "PB")
+        }
 }
 \seealso{
 \code{\link{ebp}}, \code{\link{emdiObject}},
