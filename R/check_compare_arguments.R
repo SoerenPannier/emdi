@@ -1,4 +1,4 @@
-evaluate_plot_check <- function(direct, model, indicator, label, color, shape, 
+compare_plot_check <- function(direct, model, indicator, label, color, shape, 
                                 line_type, gg_theme) {
   
   if (!all(inherits(direct, which = TRUE, c("emdi", "direct")))) {
@@ -43,35 +43,3 @@ evaluate_plot_check <- function(direct, model, indicator, label, color, shape,
 
 
 
-evaluate_test_check <- function(direct, model, indicator, label, color, shape, 
-                                line_type, gg_theme) {
-  
-  if (!all(inherits(direct, which = TRUE, c("emdi", "direct")))) {
-    stop('First object needs to be of class emdi, direct.')
-  }
-  if (!all(inherits(model, which = TRUE, c("emdi", "model")))) {
-    stop('First object needs to be of class emdi, model.')
-  }
-  if (is.null(indicator) || !(indicator == "all" || indicator == "Quantiles" 
-                              || indicator == "quantiles"
-                              || indicator == "Poverty" || indicator == "poverty" 
-                              || indicator == "Inequality" || indicator == "inequality" 
-                              || indicator == "Custom" || indicator == "custom" 
-                              || indicator %in% names(direct$ind[-1]))) {
-    stop(paste0("The argument indicator is set to ", indicator, ". The argument 
-                only allows to be set to all, a name of estimated indicators or 
-                indicator groups as described in help(estimators.emdi)."))
-  }
-  
-  if (is.null(direct$MSE)) {
-    stop('No MSE estimates in the emdi direct object. These are needed for the 
-         calculation of the test statistics. Generate a direct object with 
-         variance estimates.')
-  }
-  
-  if (is.null(model$MSE)) {
-    stop('No MSE estimates in the emdi model object. These are needed for the 
-         calculation of the test statistics. Generate a direct object with 
-         MSE estimates.')
-  }
-}
