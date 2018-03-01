@@ -204,7 +204,7 @@ define_evallabel <- function(label, indi){
     orig_label <- list(scatter = c(title = indi, 
                                    y_lab = "Model-based", 
                                    x_lab = "Direct"),
-                       line = c(title = indicator,
+                       line = c(title = indi,
                                 y_lab = "Value", 
                                 x_lab = "Domain (ordered by sample size)"))
     
