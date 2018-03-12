@@ -1,4 +1,4 @@
-#' Summarize an emdiObject
+#' Summarizes an emdiObject
 #'
 #' Additional information about the data and model in small area estimation 
 #' methods and components of an emdi object are extracted. The returned object 
@@ -6,7 +6,7 @@
 #' @param object an object of type "emdi", representing point and MSE
 #' estimates. Objects differ depending on the estimation method: direct 
 #' vs. model-based.
-#' @param ... additional arguments that are not used in this method
+#' @param ... additional arguments that are not used in this method.
 #' @return an object of type "summary.emdi" with following
 #' components:
 #' \item{out_of_smp}{if model-based estimation, number of out-of-sample domains 
@@ -199,7 +199,7 @@ summary.emdi <- function(object, ...) {
 #' @param x an object of type "summary.emdi", generally resulting
 #' from applying summary to an object of type "emdi"
 #' @param ... optional arguments passed to print.default; see the documentation on
-#' that method functions
+#' that method functions.
 #' @seealso
 #' \code{\link{summary.emdi}}
 #' @export

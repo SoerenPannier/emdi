@@ -9,7 +9,7 @@
 \item{eqIncome}{numeric; a simplified version of the equivalized household income.}
 \item{eqsize}{numeric; the equivalized household size according to the 
 modified OECD scale.}
-\item{gender}{factor; the person's gender (levels male and female).}
+\item{gender}{factor; the person's gender (levels: male and female).}
 \item{cash}{numeric; employee cash or near cash income (net).}
 \item{self_empl}{numeric; cash benefits or losses from self-employment (net).}
 \item{unempl_ben}{numeric; unemployment benefits (net).}
@@ -23,9 +23,9 @@ modified OECD scale.}
 \item{cap_inv}{numeric; interest, dividends, profit from capital investments
  in unincorporated business (net).}
 \item{tax_adj}{numeric; repayments/receipts for tax adjustment (net).}
-\item{state}{factor; state (nine levels)}
-\item{district}{factor; districts (96 levels)}
-\item{weight}{numeric; constant weight}
+\item{state}{factor; state (nine levels).}
+\item{district}{factor; districts (94 levels).}
+\item{weight}{numeric; constant weight.}
 }}
 \usage{
 eusilcA_smp

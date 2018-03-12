@@ -35,11 +35,11 @@ estimation and in each iteration of the parametric bootstrap. See Example 2
 for using a function as threshold.  A threshold is needed for calculation e.g. 
 of head count ratios and poverty gaps. The argument defaults to \code{NULL}. 
 In this case the threshold is set to 60\% of the median of the variable that 
-is selected as y similary to the At-risk-of-poverty rate used in the EU (see 
-also \cite{Social Protection Committee 2001}). However, any desired threshold 
-can be chosen.}
+is selected as \code{y} similary to the at-risk-of-poverty rate used in the 
+EU (see also \cite{Social Protection Committee 2001}). However, any desired 
+threshold can be chosen.}
 
-\item{var}{if \code{TRUE}, estimates for the variance are calcualted using a 
+\item{var}{if \code{TRUE}, estimates for the variance are calculated using a 
 naive or calibrated bootstrap. Defaults to \code{FALSE}.}
 
 \item{boot_type}{a character string containing the name of the bootstrap 
@@ -62,18 +62,18 @@ equal the number of columns in X_calib. Defaults to \code{NULL}. In this case,
 the sampling weights are used to calculate the totals.}
 
 \item{custom_indicator}{a list of functions containing the indicators to be
-calculated additionaly. Such functions must and must only depend on the
+calculated additionally. Such functions must and must only depend on the
 target variable \code{y}, the \code{weights} and the 
 \code{threshold} (numeric value) (see Example 3) even though some arguments 
 might not be used in the additional function. Defaults to \code{NULL}.}
 
-\item{na.rm}{if TRUE, observations with \code{NA} values are deleted from the 
-sample data. Defaults to \code{FALSE}.}
+\item{na.rm}{if \code{TRUE}, observations with \code{NA} values are deleted 
+from the sample data. Defaults to \code{FALSE}.}
 }
 \value{
 An object of class "emdi" that provides direct estimators for regional
 disaggregated indicators and optionally corresponding variance estimates. Generic
-functions such as \code{\link{estimators}}, \code{\link{print}}, 
+functions such as \code{\link{estimators}}, \code{\link{print}} 
 and \code{\link{summary}} have methods that can be used
 to obtain further information. See \code{\link{emdiObject}} for descriptions
 of components of objects of class "emdi".
@@ -109,17 +109,17 @@ function(y, weights){0.6 * laeken::weightedMedian(y, weights)}, na.rm = TRUE)
 emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
 smp_domains = "district", weights = "weight", threshold = 10859.24, 
 var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL, 
-totals = NULL, custom_indicator = list( my_max = function(y, weights, 
+totals = NULL, custom_indicator = list(my_max = function(y, weights, 
 threshold){max(y)}, my_min = function(y, weights, threshold){min(y)}), 
 na.rm = TRUE)
 }
 }
 \references{
 Alfons, A. and Templ, M. (2013). Estimation of Social Exclusion Indicators
-from complex Surveys: The R package \pkg{laeken}. Journal of 
+from Complex Surveys: The \R Package \pkg{laeken}. Journal of 
 Statistical Software, 54(15), 1-25.  \cr \cr
-Social Protection Committee (2001). Report on indicators in the field of
-poverty and social exclusions, Technical Report, European Union.
+Social Protection Committee (2001). Report on Indicators in the Field of
+Poverty and Social Exclusions, Technical Report, European Union.
 }
 \seealso{
 \code{\link{emdiObject}}, \code{\link[nlme]{lme}},

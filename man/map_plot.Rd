@@ -14,7 +14,7 @@ visualized.}
 
 \item{indicator}{optional character vector that selects which indicators
 shall be returned: (i) all calculated indicators ("all");
-(ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
+(ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
 "Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini", 
 "Quintile_Share" or the function name/s of "custom_indicator/s"; 
 (iii) groups of indicators: "Quantiles", "Poverty" or 
@@ -38,24 +38,25 @@ domain variable from the census data set (first column) with the domain
 variable in the map_obj (second column). This should only be used if the IDs 
 in both objects differ.}
 
-\item{col}{A \code{vector} of length 2 defining the lowest and highest 
-color in the plots}
+\item{col}{a \code{vector} of length 2 defining the lowest and highest 
+color in the plots.}
 
 \item{scale_points}{a structure defining the lowest, the mid and the highest 
 value of the colorscale. If a numeric vector of length two is given, this scale
 will be used for every plot. Alternatively a list defining colors for each 
-plot seperatly may be given. Please see the details section and examples for 
+plot separately may be given. Please see the details section and examples for 
 this.}
 
 \item{guide}{character passed to \code{\link[ggplot2]{scale_colour_gradient}}.
-Possible values are "none", "colourbar", and "legend"}
+Possible values are "none", "colourbar", and "legend".}
 
-\item{return_data}{if set to true a fortified data frame including the 
-map data as well as the chosen indicators is returned. Customized can easily 
-be obtained from this data frame via the package \pkg{ggmap}. Defaults to false}
+\item{return_data}{if set to \code{TRUE} a fortified data frame including the 
+map data as well as the chosen indicators is returned. Customized maps can 
+easily be obtained from this data frame via the package \pkg{ggmap}. Defaults 
+to \code{FALSE}.}
 }
 \value{
-creates the plots demanded
+Creates the plots demanded.
 }
 \description{
 Function \code{map_plot} creates spatial visualizations of the estimates
@@ -67,13 +68,13 @@ obtained by small area estimation methods or direct estimation.
 data("eusilcA_pop")
 data("eusilcA_smp")
 
-# generate emdi object with additional indicators; here via function ebp()
+# Generate emdi object with additional indicators; here via function ebp()
 emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
 self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
 threshold = 11064.82, transformation = "box.cox", L= 50, MSE = TRUE, B = 50, 
-custom_indicator = list( my_max = function(y, threshold){max(y)},
+custom_indicator = list(my_max = function(y, threshold){max(y)},
 my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 
 # Load shape file

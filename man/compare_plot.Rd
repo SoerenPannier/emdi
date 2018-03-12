@@ -17,7 +17,7 @@ estimates.}
 
 \item{indicator}{optional character vector that selects which indicators
 shall be returned: (i) all calculated indicators ("all");
-(ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
+(ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
 "Quantile_75", "Quantile_90", "Head_Count", 
 "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of 
 "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty", 
@@ -56,7 +56,7 @@ estimators for each selected indicator obtained by \code{\link{ggplot}}.
 \description{
 For all indicators or a selection of indicators two plots are returned. The 
 first plot is a scatter plot of the direct and model-based point estimates 
-and the second is a line plots with both point estimates.
+and the second is a line plot with both point estimates.
 }
 \examples{
 \dontrun{
@@ -81,5 +81,5 @@ compare_plot(direct = emdi_direct, model = emdi_model)
 }
 }
 \seealso{
-\code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}},
+\code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}
 }

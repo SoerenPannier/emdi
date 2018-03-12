@@ -44,10 +44,10 @@ For the natural log and Box-Cox transformation the dependent variable
 is shifted such that all values are greater than zero since the transformations 
 are not applicable for values equal to or smaller than zero. The shift is 
 calculated as follows: 
-  \deqn{shift = |min(y)| + 1 if min(y) <= 0}
+  \deqn{shift = |min(y)| + 1 \qquad if \qquad min(y) <= 0}
 Function \code{data_transformation} works as a wrapper function. This means
 that the function manages the selection of the three different transformation
-functions \code{no_transform},\code{log_transform} and \code{box_cox}.
+functions \code{no_transform}, \code{log_transform} and \code{box_cox}.
 }
 \examples{
 # Loading data - sample data

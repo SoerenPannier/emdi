@@ -11,7 +11,7 @@
 from applying summary to an object of type "emdi"}
 
 \item{...}{optional arguments passed to print.default; see the documentation on
-that method functions}
+that method functions.}
 }
 \description{
 The elements described in summary.emdi are printed.

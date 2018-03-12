@@ -2,7 +2,7 @@
 % Please edit documentation in R/summary.emdi.R
 \name{summary.emdi}
 \alias{summary.emdi}
-\title{Summarize an emdiObject}
+\title{Summarizes an emdiObject}
 \usage{
 \method{summary}{emdi}(object, ...)
 }
@@ -11,7 +11,7 @@
 estimates. Objects differ depending on the estimation method: direct 
 vs. model-based.}
 
-\item{...}{additional arguments that are not used in this method}
+\item{...}{additional arguments that are not used in this method.}
 }
 \value{
 an object of type "summary.emdi" with following

@@ -2,15 +2,15 @@
 #'
 #' The data set is synthetic EU-SILC data based on the data set
 #' \code{\link[simFrame]{eusilcP}} from package \pkg{simFrame}. The data set is 
-#' reduced to 17 variables containing three regional variables for the states, 
-#' districts and counties.  
+#' reduced to 17 variables containing three regional variables for the states 
+#' and districts.  
 #'
 #' @format A data frame with 25000 observations and 17 variables:
 #' \describe{
 #' \item{eqIncome}{numeric; a simplified version of the equivalized household income.}
 #' \item{eqsize}{numeric; the equivalized household size according to the 
 #' modified OECD scale.}
-#' \item{gender}{factor; the person's gender (levels male and female).}
+#' \item{gender}{factor; the person's gender (levels: male and female).}
 #' \item{cash}{numeric; employee cash or near cash income (net).}
 #' \item{self_empl}{numeric; cash benefits or losses from self-employment (net).}
 #' \item{unempl_ben}{numeric; unemployment benefits (net).}
@@ -24,8 +24,8 @@
 #' \item{cap_inv}{numeric; interest, dividends, profit from capital investments
 #'  in unincorporated business (net).}
 #' \item{tax_adj}{numeric; repayments/receipts for tax adjustment (net).}
-#' \item{state}{factor; state (nine levels)}
-#' \item{district}{factor; districts (96 levels)}
+#' \item{state}{factor; state (nine levels).}
+#' \item{district}{factor; districts (94 levels).}
 #' }
 #' @docType data
 "eusilcA_pop"
