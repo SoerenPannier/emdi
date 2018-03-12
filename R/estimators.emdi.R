@@ -5,6 +5,23 @@
 #' (CV).
 #' @param object an object for which point and/or MSE estimates and/or
 #' calculated CV's are desired.
+#' @param indicator optional character vector that selects which indicators
+#' shall be returned: (i) all calculated indicators ("all");
+#' (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
+#' "Quantile_75", "Quantile_90", "Head_Count", 
+#' "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of 
+#' "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty", 
+#' "Inequality" or "Custom".If two of these groups are selected, only the first
+#' one is returned. Defaults to "all". Note, additional custom indicators can be 
+#' defined as argument for model-based approaches (see also \code{\link{ebp}}) 
+#' and do not appear in groups of indicators even though these might belong to 
+#' one of the groups.  
+#' @param MSE optional logical. If \code{TRUE}, MSE estimates for selected indicators
+#' per domain are added to the data frame of point estimates. Defaults to 
+#' \code{FALSE}.
+#' @param CV optional logical. If \code{TRUE}, coefficients of variation for selected
+#' indicators per domain are added to the data frame of point estimates.
+#' Defaults to \code{FALSE}.
 #' @param ... arguments to be passed to or from other methods, e.g. indicator.
 #' @return
 #' The return of \code{estimators} depends on the class of its argument. The
@@ -12,7 +29,7 @@
 #' return of that method.
 #' @export
 
-estimators <- function(object, ...) UseMethod("estimators")
+estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
 
 
 #' Presents point, MSE and/or CV estimates of an emdiObject

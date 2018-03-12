@@ -75,28 +75,25 @@ compare_plot <- function(direct, model, indicator = "all", label = "orig",
   ID <- NULL
   value <- NULL
   Method <- NULL
-  pchisq <- NULL
-  
+
   compare_plot_check(direct = direct, model = model, indicator = indicator, 
                       label = label, color = color, shape = shape, 
                       line_type = line_type, gg_theme = gg_theme)
-  
   
   ind_direct <- point_emdi(object = direct, indicator = indicator)$ind 
   selected_direct <- colnames(ind_direct)[-1]
   colnames(ind_direct) <- c("Domain", paste0(colnames(ind_direct)[-1], "_Direct"))
   
-  
-  #precisions_direct <- mse_emdi(object = direct, indicator = indicator, CV = TRUE)
-  #cv_direct <- precisions_direct$ind_cv  
-  
-  
   ind_model <- point_emdi(object = model, indicator = indicator)$ind 
   selected_model <- colnames(ind_model)[-1]
   colnames(ind_model) <- c("Domain", paste0(colnames(ind_model)[-1], "_Model"))
   smp_size <- (table(direct$framework$smp_domains_vec))
-   
+  
+  compare_plot_check2(ind_direct, ind_model)
+  
   Data <- merge(ind_direct, ind_model, by = "Domain")
+  
+
   matcher <- match(Data$Domain, names(smp_size))
   Data$smp_size <- as.numeric(smp_size)[matcher]
   selection_indicators <- selected_model %in% selected_direct
@@ -152,10 +149,8 @@ compare_plot <- function(direct, model, indicator = "all", label = "orig",
                               labels = c("Direct", "Model-based")) +               
             xlab(label_ind$line["x_lab"]) + ylab(label_ind$line["y_lab"]) + 
             ggtitle(label_ind$line["title"]) + gg_theme)
-    #cat("Press [enter] to continue")
-    #line <- readline()
     
-    if (!ind == tail(selected_indicators,1)) {
+    if (!ind == tail(selected_indicators, 1)) {
       cat("Press [enter] to continue")
       line <- readline()
     }

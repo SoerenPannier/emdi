@@ -5,7 +5,7 @@ compare_plot_check <- function(direct, model, indicator, label, color, shape,
     stop('First object needs to be of class emdi, direct.')
   }
   if (!all(inherits(model, which = TRUE, c("emdi", "model")))) {
-    stop('First object needs to be of class emdi, model.')
+    stop('Second object needs to be of class emdi, model.')
   }
   if (is.null(indicator) || !(indicator == "all" || indicator == "Quantiles" 
                               || indicator == "quantiles"
@@ -41,5 +41,24 @@ compare_plot_check <- function(direct, model, indicator, label, color, shape,
   }
 }
 
-
+compare_plot_check2 <- function(ind_direct, ind_model) {
+  if (!any(ind_direct$Domain %in% ind_model$Domain)) {
+    stop("Domain identifiers between direct and model estimates never match.
+         Please verify you are comparing estimates obtained on the same sample.")
+  }
+  if (!all(ind_direct$Domain %in% ind_model$Domain)) {
+    warning(paste("Not all domains contained in the direct",
+                  "estimation have been found in the",
+                  "model estimation. Following plots will",
+                  "only contain results for estimates available",
+                  "in both objects."))
+  }
+  if (!all(ind_model$Domain %in% ind_direct$Domain )) {
+    cat(paste("Not all domains contained in the model",
+                  "estimation have been found in the",
+                  "direct estimation. Following plots will",
+                  "only contain results for estimates available",
+                  "in both objects."))
+  }
+}
 

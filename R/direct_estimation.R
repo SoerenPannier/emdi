@@ -150,9 +150,8 @@ direct <- function(y,
                   SIMPLIFY = F
   )
 
-
-  if(var == TRUE){
-    warnlist <- character()
+  warnlist <- character()
+  if (var == TRUE) {
     envir <- environment()
     res <- mapply(FUN = direct_variance,
                   direct_estimator =  framework$indicator_list,
@@ -199,8 +198,7 @@ direct <- function(y,
               )
       colnames(MSE) <- colnames(ind) <- c("Domain", framework$indicator_names)
     }
-  
-  direct_out <- list(
+   direct_out <- list(
     ind = ind, 
     MSE = MSE,
     framework = framework[c("N_dom_smp",
@@ -208,7 +206,7 @@ direct <- function(y,
                          "smp_domains",
                          "smp_domains_vec")],
     call = call,
-    domainWarnings = ifelse(length(warnlist) > 0, table(warnlist), NULL)
+    domainWarnings = table(warnlist)
     )
   
   class(direct_out) <- c("emdi", "direct")
