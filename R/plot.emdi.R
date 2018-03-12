@@ -13,7 +13,7 @@
 #' @param x an object of type "emdi", "model", representing point and, if chosen, 
 #' MSE estimates obtained by the EBP approach (see also \code{\link{ebp}}).
 #' @param label argument that enables to customize title and axis labels. There 
-#' are four options to label the diagsnostic plot: (i) original labels ("orig"), 
+#' are four options to label the diagnostic plot: (i) original labels ("orig"), 
 #' (ii) axis lables but no title ("no_title"), (iii) neither axis 
 #' labels nor title ("blank"), (iv) individual labels by a list that needs to 
 #' have below structure. Six elements can be defined called \code{qq_res, qq_ran, 
@@ -50,11 +50,11 @@
 #' get large. In these cases, \code{cooks} should be set to \code{FALSE}. It 
 #' defaults to \code{TRUE}.
 #' @param range optional sequence determining the range of the x-axis for plots
-#' of the optimal parameter that defaults to \code{NULL}. In that case a range 
-#' of the optimal parameter +2/-1 is used for the plots of the optimal parameter. 
-#' This leads in some cases to convergence problems such that is should be 
-#' changed to e.g. the selected \code{interval}. This means for the default 
-#' interval \code{seq(-1, 2, by = 0.05)}.
+#' of the optimal transformation parameter that defaults to \code{NULL}. In that 
+#' case a range of the optimal parameter +2/-1 is used for the plots of the 
+#' optimal parameter. This leads in some cases to convergence problems such that 
+#' it should be changed to e.g. the selected \code{interval}. This means for the 
+#' default interval \code{seq(-1, 2, by = 0.05)}.
 #' @param ... optional arguments passed to generic function.
 #' @return Two Q-Q plots in one grid, two density plots, a Cook' distance plot 
 #' and a likelihood plot for the optimal parameter of the Box-Cox transformation 

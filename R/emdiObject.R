@@ -17,12 +17,12 @@
 #'  \item{\code{framework}}{a list with following components:}
 #'
 #'  \tabular{rll}{
-#'      \tab \code{N_dom_smp} \tab number of domains in the sample \cr
+#'      \tab \code{N_dom_smp} \tab number of domains in the sample. \cr
 #'      \tab \code{N_dom_unobs} \tab number of out-of-sample domains. Not 
 #'              filled for class direct. \cr
 #'      \tab \code{N_pop} \tab total number of units in population. Not 
 #'              filled for class direct. \cr
-#'      \tab \code{N_smp} \tab total number of units in sample \cr
+#'      \tab \code{N_smp} \tab total number of units in sample. \cr
 #'      \tab \code{pop_domains_vec} \tab an arranged vector
 #'                     of the domain indicator variable. Not 
 #'              filled for class direct. \cr
@@ -31,9 +31,9 @@
 #'      \tab \code{smp_domains} \tab a character naming the
 #'                     domain indicator variable.\cr
 #'      \tab \code{smp_domains_vec} \tab an arranged vector of
-#'                     the domain indicator variable \cr
+#'                     the domain indicator variable. \cr
 #' }
-#' \item{\code{ind}}{data frame containing estimates for indicators per domain}
+#' \item{\code{ind}}{data frame containing estimates for indicators per domain.}
 #' \item{\code{method}}{character returning the method for estimation of
 #'    the optimal lambda, here "reml". Not 
 #'              filled for class direct.}
@@ -44,7 +44,8 @@
 #'              filled for class direct.}
 #' \item{\code{MSE}}{data frame containing MSE estimates corresponding to the
 #' point predictions in \code{ind} per indicator per domain if MSE is selected
-#' to be TRUE in function call. If FALSE, \code{MSE} is NULL.}
+#' to be \code{TRUE} in function call. If \code{FALSE}, \code{MSE} is 
+#' \code{NULL}.}
 #' \item{\code{transformation}}{character returning the selected transformation
 #' type (see also \code{transformation} in \code{\link{ebp}}). Not 
 #'              filled for class direct.}
@@ -56,7 +57,7 @@
 #'              filled for class direct.}
 #' @references
 #' Alfons, A. and Templ, M. (2013). Estimation of Social Exclusion Indicators
-#' from complex Surveys: The R package \pkg{laeken}. Journal of 
+#' from Complex Surveys: The \R Package \pkg{laeken}. Journal of 
 #' Statistical Software, 54(15), 1-25.  \cr \cr
 #' Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
 #' indicators. The Canadian Journal of Statistics, Vol. 38, No.3, 369-385.

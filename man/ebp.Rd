@@ -43,7 +43,7 @@ function will be evaluated once for the point estimation and in each iteration
 of the parametric bootstrap. A threshold is needed for calculation e.g. of 
 head count ratios and poverty gaps. The  argument defaults to \code{NULL}. 
 In this case the threshold is set to 60\% of the median of the variable that 
-is selected as dependent variable similary to the At-risk-of-poverty rate 
+is selected as dependent variable similary to the at-risk-of-poverty rate 
 used in the EU (see also \cite{Social Protection Committee 2001}). However, 
 any desired threshold can be chosen.}
 
@@ -75,14 +75,16 @@ procedures,currently a \code{"parametric"} and a semi-parametric \code{"wild"}
 bootstrap are possible. Defaults to \code{"parametric"}.}
 
 \item{parallel_mode}{modus of parallelization, defaults to an automatic selection 
-of a suitable mode, depending on the operating system, if the number of cpus is 
-chosen higher than 1. For details see \code{\link[parallelMap]{parallelStart}}}
+of a suitable mode, depending on the operating system, if the number of 
+\code{cpus} is chosen higher than 1. For details see 
+\code{\link[parallelMap]{parallelStart}}.}
 
 \item{cpus}{number determining the kernels that are used for the 
-parallelization. Defaults to 1. For details see \code{\link[parallelMap]{parallelStart}}}
+parallelization. Defaults to 1. For details see 
+\code{\link[parallelMap]{parallelStart}}.}
 
 \item{custom_indicator}{a list of functions containing the indicators to be
-calculated additionaly. Such functions must and must only depend on the
+calculated additionally. Such functions must and must only depend on the
 target variable \code{y} and the \code{threshold}. 
 Defaults to \code{NULL}.}
 
@@ -94,7 +96,7 @@ are required. Defaults to \code{FALSE}.}
 An object of class "emdi" that provides estimators for regional
 disaggregated indicators and optionally corresponding MSE estimates. Generic
 functions such as \code{\link{estimators}}, \code{\link{print}}, 
-\code{\link{plot}}, and \code{\link{summary}} have methods that can be used
+\code{\link{plot}} and \code{\link{summary}} have methods that can be used
 to obtain further information. See \code{\link{emdiObject}} for descriptions
 of components of objects of class "emdi".
 }
@@ -136,7 +138,7 @@ fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
 threshold = function(y){0.6 * median(y)}, transformation = "log", 
 L = 50, MSE = TRUE, boot_type = "wild", B = 50, custom_indicator = 
-list( my_max = function(y, threshold){max(y)},
+list(my_max = function(y, threshold){max(y)},
 my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 }
 }

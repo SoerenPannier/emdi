@@ -26,11 +26,11 @@ estimators <- function(object, ...) UseMethod("estimators")
 #' if chosen, MSE estimates.
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
-#' (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
+#' (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
 #' "Quantile_75", "Quantile_90", "Head_Count", 
 #' "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of 
 #' "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty", 
-#' "Inequality" or "Custom".If two of these groups are selected, only the first
+#' "Inequality" or "Custom". If two of these groups are selected, only the first
 #' one is returned. Defaults to "all". Note, additional custom indicators can be 
 #' defined as argument for model-based approaches (see also \code{\link{ebp}}) 
 #' and do not appear in groups of indicators even though these might belong to 
@@ -55,17 +55,17 @@ estimators <- function(object, ...) UseMethod("estimators")
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
 #'
-#' # generate emdi object with additional indicators; here via function ebp()
+#' # Generate emdi object with additional indicators; here via function ebp()
 #' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 #' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
 #' threshold = 11064.82, transformation = "box.cox", 
 #' L = 50, MSE = TRUE, B = 50, custom_indicator = 
-#' list( my_max = function(y, threshold){max(y)},
+#' list(my_max = function(y, threshold){max(y)},
 #' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 #' 
-#' # Example 1: Choose Gini coefficient and MSE and CV
+#' # Example 1: Choose Gini coefficient, MSE and CV
 #' estimators(emdi_model, indicator = "Gini", MSE = TRUE, CV = TRUE)
 #' 
 #' # Example 2: Choose custom indicators without MSE and CV
@@ -135,8 +135,8 @@ print.estimators.emdi <- function(x,...) {
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
 #' 
-#' # generate emdi object with deleting missing values; here via function ebp()
-#' emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 
+#' # Generate emdi object with deleting missing values; here via function ebp()
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj,
 #' pop_data = eusilcA_pop, pop_domains = "district",
@@ -171,8 +171,8 @@ head.estimators.emdi <- function(x, n = 6L, addrownums=NULL, ...) {
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
 #' 
-#' # generate emdi object with deleting missing values; here via function ebp()
-#' emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 
+#' # Generate emdi object with deleting missing values; here via function ebp()
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj,
 #' pop_data = eusilcA_pop, pop_domains = "district",
@@ -222,7 +222,7 @@ as.data.frame.estimators.emdi <- function(x,...) {
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
 #' 
-#' # generate emdi object with deleting missing values; here via function ebp()
+#' # Generate emdi object with deleting missing values; here via function ebp()
 #' emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj,
