@@ -2,14 +2,14 @@
 #'
 #' For all indicators or a selection of indicators two plots are returned. The 
 #' first plot is a scatter plot of the direct and model-based point estimates 
-#' and the second is a line plots with both point estimates. 
+#' and the second is a line plot with both point estimates. 
 #' @param direct an object of type "emdi","direct", representing point and MSE
 #' estimates. 
 #' @param model an object of type "emdi","model", representing point and MSE
 #' estimates. 
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
-#' (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
+#' (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
 #' "Quantile_75", "Quantile_90", "Head_Count", 
 #' "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of 
 #' "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty", 
@@ -37,7 +37,7 @@
 #' @param gg_theme \code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
 #' @return A scatter plot and a line plot comparing direct and model-based 
 #' estimators for each selected indicator obtained by \code{\link{ggplot}}.
-#' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
+#' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}} 
 #' @examples
 #' \dontrun{
 #' # Loading data - population and sample data

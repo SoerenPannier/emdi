@@ -7,7 +7,7 @@
 #' conducted by using a parametric bootstrap approach (\cite{Gonzalez-Manteiga et al. 2008}). 
 #' Furthermore, a mapping tool for plotting the estimates on their geographic 
 #' regions is provided. Point and uncertainty measures as well as diagnostic 
-#' tests can be easily extracted to excel.
+#' tests can be easily extracted to Excel.
 #'
 #' @details
 #' The two estimation functions are called \code{\link{direct}} and 
