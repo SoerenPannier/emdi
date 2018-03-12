@@ -59,7 +59,7 @@
 #' of components of objects of class "emdi".
 #' @details The set of predefined indicators includes the mean, median, four 
 #' further quantiles (10\%, 25\%, 75\% and 90\%), head count ratio, poverty gap, 
-#' Gini coefficient and the quintile share ratio.
+#' Gini coefficient and the quintile share ratio. 
 #' @references
 #' Alfons, A. and Templ, M. (2013). Estimation of Social Exclusion Indicators
 #' from Complex Surveys: The \R Package \pkg{laeken}. Journal of 
@@ -176,9 +176,10 @@ direct <- function(y,
     if (length(warnlist) > 0) {
       warning(paste0("For the following domains at least one bootstrap failed ",
                      ", this may be due to a very small sample size. For these domains ",
-                     "no MSE estimate is displayed. ", paste0(unique(warnlist), collapse = ", ") ,
-                     "To see the number of failed bootstrap iterations for each domain have a look at",
-                     "the value domainWarnings in the returned object"))
+                     "the variance estimation is based on a reduced number of ",
+                     "bootstrap iteration. To see the number of succesfull" ,
+                     " bootstrap iterations for each domain and indicator, have a look at",
+                     " the value succesfulBootstraps in the returned object."))
     }
   } else {
     res <- result_point
@@ -198,6 +199,28 @@ direct <- function(y,
               )
       colnames(MSE) <- colnames(ind) <- c("Domain", framework$indicator_names)
     }
+  
+  if (length(warnlist) > 0) {
+    failed_BS <- do.call(rbind, lapply(strsplit(warnlist, split = ":_:"), t))
+    colnames(failed_BS) <- c("Domain", "Indicator")
+    failed_BS <- as.data.frame(failed_BS)
+    failed_BS$Domain <- factor(failed_BS$Domain, 
+                               levels = levels(framework$smp_domains_vec))
+    failed_BS$Indicator <- factor(failed_BS$Indicator, 
+                                  levels = framework$indicator_names)
+    sucInd <- B - table(failed_BS$Domain, failed_BS$Indicator)
+  }
+  else {
+    failed_BS <- matrix(data = 0, 
+                        nrow = length(levels(framework$smp_domains_vec)),
+                        ncol = length(framework$indicator_names),
+                        dimnames = list(levels(framework$smp_domains_vec), 
+                                        framework$indicator_names)
+                        )
+    sucInd <- B - failed_BS
+    
+  }
+  
    direct_out <- list(
     ind = ind, 
     MSE = MSE,
@@ -206,7 +229,7 @@ direct <- function(y,
                          "smp_domains",
                          "smp_domains_vec")],
     call = call,
-    domainWarnings = table(warnlist)
+    succesfulBootstraps = sucInd
     )
   
   class(direct_out) <- c("emdi", "direct")

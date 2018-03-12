@@ -380,7 +380,7 @@ mse_estim_wrapper <-  function(i,
                            remaining %% 60 %/% 1) # seconds)
 
       cat('\r', i, " of ", B, " Bootstrap iterations completed \t Approximately ",
-          remaining, " remaining")
+          remaining, " remaining \n")
       if (.Platform$OS.type == "windows") flush.console()
     }
   }

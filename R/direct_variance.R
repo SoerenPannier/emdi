@@ -94,7 +94,8 @@ direct_variance <- function(direct_estimator,
                      aux = X_calib, 
                      totals = totals, 
                      rs = rs,
-                     envir = envir)
+                     envir = envir,
+                     indicator_name = indicator_name)
                      #, ...)
 
   # if variance is calculated by domain
@@ -117,9 +118,9 @@ direct_variance <- function(direct_estimator,
 }
 
 
-getFun2 <- function(byDomain, direct_estimator, envir){
+getFun2 <- function(byDomain, direct_estimator, envir, indicator_name){
   if (byDomain) {
-    function(x, threshold, rs, envir) {
+    function(x, threshold, rs, envir, indicator_name) {
       if (inherits(threshold, "function")) {
         threshold <- threshold(x$y, x$weight)
       }
@@ -129,7 +130,7 @@ getFun2 <- function(byDomain, direct_estimator, envir){
         if (!sum(i) > 0)
         {
           assign("warnlist", c(get("warnlist", envir = envir), 
-                               as.character(r)), 
+                               paste0(as.character(r), ":_:",indicator_name)), 
                  envir = envir)
           NA
         } else {
@@ -150,27 +151,29 @@ getFun2 <- function(byDomain, direct_estimator, envir){
 }
 
 # Function in order to select between naive and calibrate bootstrap
-getBootFun2  <- function(calibrate, fun, envir) {
+getBootFun2  <- function(calibrate, fun, envir, indicator_name) {
   if (calibrate) {
-    function(x, i, threshold, aux, totals, rs, envir, ...) {
+    function(x, i, threshold, aux, totals, rs, envir, indicator_name,  ...) {
       x <- x[i, , drop = FALSE]
       aux <- aux[i, , drop = FALSE]
       g <- calibWeights(aux, x$weight, totals, ...)
       x$weight <- g * x$weight
-      fun(x, threshold, rs, envir)
+      fun(x, threshold, rs, envir, indicator_name)
     }
   } else {
-    function(x, i, threshold, aux, totals, rs, envir, ...) {
+    function(x, i, threshold, aux, totals, rs, envir, indicator_name, ...) {
       x <- x[i, , drop = FALSE]
-      fun(x, threshold, rs, envir)
+      fun(x, threshold, rs, envir, indicator_name)
     }
   }
 }
 
 # Wrapper function for bootstrap function (for possible extensions)
-clusterBoot2 <- function(data, statistic, ..., domain, threshold, cluster = NULL, envir){
+clusterBoot2 <- function(data, statistic, ..., domain, threshold, cluster = NULL, 
+                         envir, indicator_name){
   if (is.null(cluster)) {
-    boot(data, statistic,  threshold = threshold, ..., domain = domain, envir = envir)
+    boot(data, statistic,  threshold = threshold, ..., domain = domain, 
+         envir = envir, indicator_name = indicator_name)
   } else {
     fun <- function(cluster, i, ..., .data, .statistic) {
       i <- do.call(c, split(seq_len(nrow(.data)), .data$cluster)[i])
@@ -178,7 +181,7 @@ clusterBoot2 <- function(data, statistic, ..., domain, threshold, cluster = NULL
     }
     keep <- !duplicated(cluster)
     boot(cluster[keep], fun, ..., domain = domain[keep], threshold = threshold,
-         .data = data, .statistic = statistic, envir = envir)
+         .data = data, .statistic = statistic, envir = envir, indicator_name)
   }
 }
 
