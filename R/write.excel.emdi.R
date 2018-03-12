@@ -1,12 +1,15 @@
-#' Exports an emdiObject to an excel file
+#' Exports an emdiObject to an excel file or OpenDocument Spreadsheet 
 #'
 #' Function \code{write.excel} enables the user to export point and MSE 
 #' estimates as well as diagnostics from \code{summary.emdi} to an excel file. 
 #' The user can choose if the results should be reported in one or several excel 
 #' sheets. Furthermore, a selection of indicators can be specified. 
+#' Respectively the function \code{write.ods} enables the export to a OpenDocument
+#' Spreadsheets. Note that while \code{write.exel} will create a single document 
+#' \code{write.ods} will create a group of files containing the same information. 
 #' @param object an object of type "emdi", representing point and
 #' MSE estimates.
-#' @param file path and filename of the spreadsheet to create. It should end on .xlsx.
+#' @param file path and filename of the spreadsheet to create. It should end on .xlsx or .ods respectively.
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
 #' (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
@@ -25,7 +28,7 @@
 #' to different sheets in the excel file. Defaults to \code{FALSE}.
 #' @return An excel file is created in your working directory, or at the given
 #' path.
-#' @details This function creates an excel file via the package
+#' @details The function \code{write.excel} creates an excel file via the package
 #' \code{\link{openxlsx}}. The \code{\link{openxlsx}} package requires a zip 
 #' application to be available to R. If this is not the case the authors of 
 #' \code{\link{openxlsx}} suggest the first of the two following ways. 
@@ -38,6 +41,7 @@
 #' }
 #' To check if a zip application is available they recommend the command 
 #' \code{shell("zip")}.
+#' For the function \code{write.ods} those dependencies are unnecessary
 #' @seealso \code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}}
 #' @examples 
 #' \dontrun{
@@ -62,7 +66,12 @@
 #' # Example 2: Single excel sheets for point, MSE and CV estimates
 #' write.excel(emdi_model, file = "excel_output_all_split.xlsx", indicator = "all", 
 #' MSE = TRUE, CV = TRUE, split = TRUE)
+#' 
+#' # Example 3: Same as example 1 but for an ODS output
+#' write.ods(emdi_model, file = "ods_output_all.ods", indicator = "all", 
+#' MSE = TRUE, CV = TRUE)
 #' }
+#' 
 #' @export
 #' @importFrom openxlsx createWorkbook createStyle freezePane
 #' @importFrom openxlsx addWorksheet writeData saveWorkbook

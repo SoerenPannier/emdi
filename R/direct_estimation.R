@@ -174,10 +174,12 @@ direct <- function(y,
                            ),
                   SIMPLIFY = F
     )
-    if(length(warnlist) >0){
+    if (length(warnlist) > 0) {
       warning(paste0("For the following domains at least one bootstrap failed ",
                      ", this may be due to a very small sample size. For these domains ",
-                     "no MSE estimate is displayed. ", paste0(unique(warnlist), collapse = ", ")))
+                     "no MSE estimate is displayed. ", paste0(unique(warnlist), collapse = ", ") ,
+                     "To see the number of failed bootstrap iterations for each domain have a look at",
+                     "the value domainWarnings in the returned object"))
     }
   } else {
     res <- result_point
@@ -188,7 +190,7 @@ direct <- function(y,
   ind <- cbind(res[[1]]$valueByDomain$Domain, 
               as.data.frame(lapply(res, function(erg){erg$valueByDomain[,2]}))
   )
-  if(!var) {
+  if (!var) {
     MSE <- NULL 
     colnames(ind) <- c("Domain", framework$indicator_names)
     } else {
@@ -201,11 +203,13 @@ direct <- function(y,
   direct_out <- list(
     ind = ind, 
     MSE = MSE,
-    framework=framework[c("N_dom_smp",
+    framework = framework[c("N_dom_smp",
                          "N_smp",
                          "smp_domains",
                          "smp_domains_vec")],
-    call = call)
+    call = call,
+    domainWarnings = ifelse(length(warnlist) > 0, table(warnlist), NULL)
+    )
   
   class(direct_out) <- c("emdi", "direct")
   return(direct_out)
