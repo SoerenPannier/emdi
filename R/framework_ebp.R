@@ -28,7 +28,7 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
   if (na.rm == TRUE) {
     pop_data <- na.omit(pop_data)
     smp_data <- na.omit(smp_data)
-  } else if(any(is.na(pop_data)) || any(is.na(smp_data))){
+  } else if (any(is.na(pop_data)) || any(is.na(smp_data))){
     stop('EBP does not work with missing values. Set na.rm = TRUE in function 
           ebp.')
   }
