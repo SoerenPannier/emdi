@@ -57,17 +57,21 @@ add_summary_ods <- function(object, wb, headlines_cs) {
                          "in sample domains",
                          "out of sample observations",
                          "in sample observations")
+  df_nobs <- cbind.data.frame(rownames(df_nobs), df_nobs)
   readODS::write_ods(x = df_nobs, path = paste0(wb, "_sumObs", ".ods"))
   
   df_size_dom <- as.data.frame(su$size_dom)
+  df_size_dom <- cbind.data.frame(rownames(df_size_dom), df_size_dom)
   readODS::write_ods(x = df_size_dom, path = paste0(wb, "_sumDom", ".ods"))
 
   if (!is.null(su$transform)) {
     readODS::write_ods(x = su$transform, path = paste0(wb, "_sumTrafo", ".ods"))
   }
+  su$normality <-  cbind.data.frame(rownames(su$normality), su$normality)
   readODS::write_ods(x = su$normality, path = paste0(wb, "_sumNorm", ".ods"))
 
-  readODS::write_ods(x = su$coeff_determ, path = paste0(wb, "_sumCoef", ".ods"))
+  su$coeff_determ <-  cbind.data.frame("Coefficients of determination", su$coeff_determ)
+  readODS::write_ods(x = su$coeff_determ, path = paste0(wb, "_sumCoefDet", ".ods"))
   
   return(NULL)
 }
@@ -79,13 +83,16 @@ add_summary_direct_ods <- function(object, wb, headlines_cs) {
   df_nobs <- data.frame(Count = c(su$in_smp, su$size_smp))
   rownames(df_nobs) <- c("in sample domains",
                          "in sample observations")
+  df_nobs <- cbind.data.frame(rownames(df_nobs), df_nobs)
   readODS::write_ods(x = df_nobs, path = paste0(wb, "_sumObs", ".ods"))
   
   df_size_dom <- as.data.frame(su$size_dom)
+  df_size_dom <- cbind.data.frame(rownames(df_size_dom), df_size_dom)
   readODS::write_ods(x = df_size_dom, path = paste0(wb, "_sumDom", ".ods"))
   
   df_smp_sizes <- as.data.frame(su$smp_size_tab)
   colnames(df_smp_sizes) <- c("Domain", "Frequency")
+  df_smp_sizes <- cbind.data.frame(rownames(df_smp_sizes), df_smp_sizes)
   readODS::write_ods(x = df_smp_sizes, path = paste0(wb, "_sumSmpsize", ".ods"))
   
   return(NULL)

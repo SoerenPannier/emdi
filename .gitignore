@@ -12,3 +12,10 @@ Mexico City
 /excel_output.xlsx
 ~$test.xlsx
 .RData
+excel_output_all_split.xlsx
+ods_output_all_estim.ods
+ods_output_all_sumCoefDet.ods
+ods_output_all_sumDom.ods
+ods_output_all_sumNorm.ods
+ods_output_all_sumObs.ods
+ods_output_all_sumTrafo.ods
