@@ -23,9 +23,9 @@ defined as argument for model-based approaches (see also \code{\link{ebp}})
 and do not appear in groups of indicators even though these might belong to 
 one of the groups.}
 
-\item{MSE}{optional logical. If TRUE, the MSE is also visualized.}
+\item{MSE}{optional logical. If \code{TRUE}, the MSE is also visualized.}
 
-\item{CV}{optional logical. If TRUE, the CV is also visualized.}
+\item{CV}{optional logical. If \code{TRUE}, the CV is also visualized.}
 
 \item{map_obj}{an \code{SpatialPolygonsDataFrame} object as defined by the
 \pkg{sp} package on which the data should be visualized.}
@@ -64,26 +64,41 @@ obtained by small area estimation methods or direct estimation.
 }
 \examples{
 \dontrun{
-# Loading data - population and sample data
 data("eusilcA_pop")
 data("eusilcA_smp")
 
 # Generate emdi object with additional indicators; here via function ebp()
 emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
-self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
-fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-threshold = 11064.82, transformation = "box.cox", L= 50, MSE = TRUE, B = 50, 
-custom_indicator = list(my_max = function(y, threshold){max(y)},
-my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
+                    self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
+                    fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+                  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+                  threshold = 11064.82, transformation = "box.cox", L= 5, MSE = TRUE, B = 5)
 
 # Load shape file
 load_shapeaustria()
 
 # Create map plot for mean indicator - point and MSE estimates but no CV
 map_plot(object = emdi_model, MSE = TRUE, CV = FALSE, 
-        map_obj = shape_austria_dis, indicator = c("Mean"), 
-        map_dom_id = "PB")
+         map_obj = shape_austria_dis, indicator = c("Mean"), 
+         map_dom_id = "PB")
+
+# Create a suitable mapping table to use numerical identifiers of the shape 
+# file
+
+# First find the right order
+dom_ord <- match(shape_austria_dis@data$PB, emdi_model$ind$Domain)
+
+# Create the mapping table based on the order obtained above
+map_tab <- data.frame(pop_data_id = emdi_model$ind$Domain[dom_ord],
+                      shape_id = shape_austria_dis@data$BKZ)
+
+# Create map plot for mean indicator - point and CV estimates but no MSE
+# using the numerical domain identifiers of the shape file
+
+map_plot(object = emdi_model, MSE = FALSE, CV = TRUE, 
+         map_obj = shape_austria_dis, indicator = c("Mean"), 
+         map_dom_id = "BKZ", map_tab = map_tab)
+
         }
 }
 \seealso{

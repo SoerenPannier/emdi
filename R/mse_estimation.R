@@ -216,7 +216,9 @@ superpopulation_wild <-  function(framework, model_par, gen_model, lambda, shift
   # income without individual errors
   Y_pop_b <- gen_model$mu_fixed + vu_pop
   
-  indexer <- vapply(Y_pop_b, function(x) {which.min(abs(x - fitted_s))})
+  indexer <- vapply(Y_pop_b, 
+                    function(x) {which.min(abs(x - fitted_s))}, 
+                    FUN.VALUE = integer(1))
   
   # superpopulation individual errors
   eps <- res_s[indexer]
