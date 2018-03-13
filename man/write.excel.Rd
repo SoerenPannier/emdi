@@ -39,7 +39,7 @@ to different sheets in the Excel file. Defaults to \code{FALSE}.}
 }
 \value{
 An Excel file is created in your working directory, or at the given
-path.
+path. Alternatively multiple ODS files are created at the given path.
 }
 \description{
 Function \code{write.excel} enables the user to export point and MSE 

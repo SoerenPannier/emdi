@@ -51,7 +51,7 @@ second type for the model-based estimates. The options are: "twodash",
 }
 \value{
 A scatter plot and a line plot comparing direct and model-based 
-estimators for each selected indicator obtained by \code{\link{ggplot}}.
+estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
 }
 \description{
 For all indicators or a selection of indicators two plots are returned. The 

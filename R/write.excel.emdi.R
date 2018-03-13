@@ -27,7 +27,7 @@
 #' @param split logical. If \code{TRUE}, point estimates, MSE and CV are written 
 #' to different sheets in the Excel file. Defaults to \code{FALSE}.
 #' @return An Excel file is created in your working directory, or at the given
-#' path.
+#' path. Alternatively multiple ODS files are created at the given path.
 #' @details This function creates an Excel file via the package
 #' \pkg{\link{openxlsx}}. The \pkg{\link{openxlsx}} package requires a zip 
 #' application to be available to \R. If this is not the case the authors of 

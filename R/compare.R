@@ -36,7 +36,7 @@
 #' "solid", "longdash", "dotted", "dotdash", "dashed" and "blank". 
 #' @param gg_theme \code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
 #' @return A scatter plot and a line plot comparing direct and model-based 
-#' estimators for each selected indicator obtained by \code{\link{ggplot}}.
+#' estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
 #' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}} 
 #' @examples
 #' \dontrun{

@@ -8,7 +8,7 @@
 #' depends on the transformation such that a plot for the optimal parameter is 
 #' only returned in case a Box-Cox transformation is chosen. The range of the 
 #' x-axis is optional but necessary to change if there are convergence problems. 
-#' All plots are obtained by \code{\link{ggplot}}.
+#' All plots are obtained by \code{\link[ggplot2]{ggplot}}.
 
 #' @param x an object of type "emdi", "model", representing point and, if chosen, 
 #' MSE estimates obtained by the EBP approach (see also \code{\link{ebp}}).
@@ -58,7 +58,7 @@
 #' @param ... optional arguments passed to generic function.
 #' @return Two Q-Q plots in one grid, two density plots, a Cook' distance plot 
 #' and a likelihood plot for the optimal parameter of the Box-Cox transformation 
-#' obtained by \code{\link{ggplot}}.
+#' obtained by \code{\link[ggplot2]{ggplot}}.
 #' @seealso \code{\link{emdiObject}}, \code{\link{ebp}}
 #' @examples
 #' \dontrun{

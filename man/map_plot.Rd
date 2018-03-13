@@ -56,7 +56,8 @@ easily be obtained from this data frame via the package \pkg{ggplot2}. Defaults
 to \code{FALSE}.}
 }
 \value{
-Creates the plots demanded.
+Creates the plots demanded, and, if selected, a fortified data.frame
+containing the mapdata and chosen indicators.
 }
 \description{
 Function \code{map_plot} creates spatial visualizations of the estimates

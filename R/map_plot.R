@@ -40,7 +40,8 @@
 #' map data as well as the chosen indicators is returned. Customized maps can 
 #' easily be obtained from this data frame via the package \pkg{ggplot2}. Defaults 
 #' to \code{FALSE}.
-#' @return Creates the plots demanded.
+#' @return Creates the plots demanded, and, if selected, a fortified data.frame
+#' containing the mapdata and chosen indicators. 
 #' @seealso \code{\link{ebp}}, \code{\link{emdiObject}},
 #' \code{\link[maptools]{readShapePoly}}
 #' @examples 
