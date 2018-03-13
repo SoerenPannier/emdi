@@ -1,39 +1,38 @@
-# #' Presents point estimates of an emdiObject
-# #'
-# #' Function \code{point_emdi} presents point estimates for regional
-# #' disaggregated indicators. This method enables to select for which indicators
-# #' the point estimates shall be returned. The returned object is suitable for
-# #' printing with the \code{print.point.emdi} method.
-# #' @param object an object of type "emdi", representing point and
-# #' MSE estimates.
-# #' @param indicator optional character vector that selects which indicators
-# #' shall be returned: (i) all calculated indicators ("all");
-# #' (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
-# #' "Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini", 
-# #' "Quintile_Share" or the function name/s of "custom_indicator/s"; 
-# #' (ii) groups of indicators: "Quantiles", "Poverty" or 
-# #' "Inequality". Defaults to "all". Note, additional custom indicators can be 
-# #' defined as argument for model-based approaches (\code{link{ebp}}) and do not 
-# #' appear in groups of indicators even though these might belong to one of the 
-# #' groups.  
-# #' @return
-# #' an object of type "point.emdi" with point estimates per domain
-# #' obtained from \code{emdiObject$ind}. These objects contain two elements,
-# #' one data frame \code{ind} and a character naming the indicator or indicator
-# #' group \code{ind_name}.
-# #' @seealso \code{\link{emdiObject}}, \code{\link{ebp}}
-# #' @examples
-# #' # Loading data
-# #' data("Xoutsamp_AuxVar")
-# #' data("incomedata")
-# #'
-# #' # generate emdi object
-# #' set.seed(100); ebp <- ebp(income~educ1, Xoutsamp_AuxVar, "provlab",
-# #' incomedata, "provlab", 4500, "no", L = 2, MSE = TRUE, B = 2)
-# #'
-# #' # choose Gini coefficient
-# #' point(ebp, indicator = "gini")
-# # #' @export
+# # Presents point estimates of an emdiObject
+# #
+# # Function \code{point_emdi} presents point estimates for regional
+# # disaggregated indicators. This method enables to select for which indicators
+# # the point estimates shall be returned. 
+# # @param object an object of type "emdi", representing point and
+# # MSE estimates.
+# # @param indicator optional character vector that selects which indicators
+# # shall be returned: (i) all calculated indicators ("all");
+# # (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
+# # "Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini", 
+# # "Quintile_Share" or the function name/s of "custom_indicator/s"; 
+# # (ii) groups of indicators: "Quantiles", "Poverty" or 
+# # "Inequality". Defaults to "all". Note, additional custom indicators can be 
+# # defined as argument for model-based approaches (\code{link{ebp}}) and do not 
+# # appear in groups of indicators even though these might belong to one of the 
+# # groups.  
+# # @return
+# # an object of type "point.emdi" with point estimates per domain
+# # obtained from \code{emdiObject$ind}. These objects contain two elements,
+# # one data frame \code{ind} and a character naming the indicator or indicator
+# # group \code{ind_name}.
+# # @seealso \code{\link{emdiObject}}, \code{\link{ebp}}
+# # @examples
+# # # Loading data
+# # data("Xoutsamp_AuxVar")
+# # data("incomedata")
+# #
+# # # generate emdi object
+# # set.seed(100); ebp <- ebp(income~educ1, Xoutsamp_AuxVar, "provlab",
+# # incomedata, "provlab", 4500, "no", L = 2, MSE = TRUE, B = 2)
+# #
+# # # choose Gini coefficient
+# # point(ebp, indicator = "gini")
+# # # @export
 
 
 point_emdi <- function(object, indicator = "all") {
