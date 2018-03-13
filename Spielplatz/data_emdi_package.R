@@ -39,7 +39,7 @@ class(eusilcA_pop$eqIncome)
 
 # Sample ziehen auf Haushaltsebene
 set.seed(1)
-sample_id <- sample(1:25000, 1000, replace=FALSE, prob=NULL)
+sample_id <- sample(seq_len(25000), 1000, replace=FALSE, prob=NULL)
 
 ############################### NEW ############################################
 # Inverse Ziehungswahrscheinlichekeiten nach districts

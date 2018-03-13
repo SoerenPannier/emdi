@@ -100,11 +100,11 @@ direct_variance <- function(direct_estimator,
 
   # if variance is calculated by domain
   if (byDomain) {
-    var <- apply(b$t, 2, var, na.rm = T)
+    var <- apply(b$t, 2, var, na.rm = TRUE)
     varByDomain <- data.frame(Domain = rs, var = var[-1])
     var <- var[1]
   } else {
-    var <- var(b$t[, 1], na.rm = T)
+    var <- var(b$t[, 1], na.rm = TRUE)
   }
   
   # preparation of return
@@ -257,7 +257,7 @@ calibWeights <- function(X_calib,
     else {
       if (length(bounds) < 2) 
         stop("'bounds' must be a vector of length 2")
-      else bounds <- bounds[1:2]
+      else bounds <- bounds[seq_len(2)]
       if (bounds[1] >= 1) 
         stop("the lower bound must be smaller than 1")
       if (bounds[2] <= 1) 

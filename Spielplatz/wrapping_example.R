@@ -27,7 +27,7 @@ emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
                    na.rm = TRUE,
                    L = 5, 
                    B = 5, 
-                   MSE = T, 
+                   MSE = TRUE, 
                    threshold = my_threshold,
                    custom_indicator = my_indicators
 )
@@ -51,7 +51,7 @@ emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
                   smp_data = eusilcA_smp,
                   smp_domains = "district",
                   na.rm = TRUE,
-                  MSE = T, 
+                  MSE = TRUE, 
                   custom_indicator = list(theil = function(y, threshold){ineq(x = y, type = "Theil")})
 )
 
