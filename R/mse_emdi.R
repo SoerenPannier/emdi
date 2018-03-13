@@ -51,10 +51,4 @@ mse_emdi <- function(object, indicator = "all", CV = FALSE) {
   return(mse_emdi)
 }
 
-print.mse.emdi <- function(x,...) {
 
-  cat(paste0("MSE estimates: ", x$ind_name, "\n"))
-  print(x$ind)
-  cat(paste0("CV estimates: ", x$ind_name, "\n"))
-  print(x$ind_cv)
-}

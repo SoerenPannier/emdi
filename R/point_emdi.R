@@ -81,12 +81,4 @@ point_emdi <- function(object, indicator = "all") {
   return(point_emdi)
 }
 
-# #' Prints point.emdi objects
-# #'
-# #' @param object an object of type "point.emdi".
-# #' @export
 
-print.point.emdi <- function(x,...) {
-  cat(paste0("Point estimates: ", x$ind_name, "\n"))
-  print(x$ind)
-}
