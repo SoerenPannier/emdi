@@ -45,7 +45,7 @@ generic_opt <- function(lambda,
 
   #Definition of optimization function for finding the optimal lambda
   #Preperation to easily implement further methods here
-  optimization <- if(T) {
+  optimization <- if (TRUE) {
         reml(fixed          = fixed,
              smp_data       = smp_data,
              smp_domains    = smp_domains,

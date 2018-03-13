@@ -135,7 +135,7 @@ plot.emdi <- function(x,
                     "avoid this message and improve computation time."))
     } else{
       cook_df <- data.frame(index = seq_along(cooksdist), cooksdist)
-      indexer <- cook_df[order(cooksdist, decreasing = TRUE),][1:3,]
+      indexer <- cook_df[order(cooksdist, decreasing = TRUE),][seq_len(3),]
     }
   }
   if (x$transformation == "box.cox")

@@ -88,10 +88,10 @@ plot(emdi_mexico)#, range=seq(0.15,0.4,by=0.03)) # does not work
 
 
 # Selection of indicators
-estimators(object = emdi_mexico, MSE = T, CV = T)
-estimators(object = emdi_mexico, MSE = T, CV = T, indicator = "Poverty")
-estimators(object = emdi_mexico, MSE = T, CV = T, indicator = "Custom")
-estimators(object = emdi_mexico, MSE = T, CV = T, indicator = "Quantiles")
+estimators(object = emdi_mexico, MSE = TRUE, CV = TRUE)
+estimators(object = emdi_mexico, MSE = TRUE, CV = TRUE, indicator = "Poverty")
+estimators(object = emdi_mexico, MSE = TRUE, CV = TRUE, indicator = "Custom")
+estimators(object = emdi_mexico, MSE = TRUE, CV = TRUE, indicator = "Quantiles")
 
 
 # Read in shapefile
@@ -105,7 +105,7 @@ unique(census_mex$ent)
 mapping_table <- data.frame(unique(census_mex$ent), shape_mexico$ID_1)
 
 
-map_plot(emdi_mexico, indicator = "Mean", MSE = T, CV = T, 
+map_plot(emdi_mexico, indicator = "Mean", MSE = TRUE, CV = TRUE, 
          map_obj = shape_mexico, map_dom_id = "ID_1", map_tab = mapping_table)
 
 
@@ -116,12 +116,12 @@ map_plot(emdi_mexico, indicator = "Mean", MSE = T, CV = T,
 direct_mexico <- direct(y = "inglabpc", 
                         smp_data = survey_mex,#[filt,], 
                         smp_domains = "ent", 
-                        weights=NULL, threshold=900.8202, var=T, 
-                        bootType = "naive", B=5, 
+                        weights=NULL, threshold=900.8202, var = TRUE, 
+                        bootType = "naive", B = 5, 
                         seed=123, X = NULL, totals = NULL, 
                         custom_indicator = list( my_max = function(y,weights, threshold){max(y)},
                                                  my_min = function(y, weights,threshold){min(y)})
-                                                 ,na.rm=T)
+                                                 ,na.rm=TRUE)
 
 
 # Use methods for emdi objects
@@ -129,10 +129,10 @@ print(direct_mexico)
 summary(direct_mexico)
 
 # Selection of indicators
-estimators(object = direct_mexico, MSE = T, CV = T)
-estimators(object = direct_mexico, MSE = T, CV = T, indicator = "Poverty")
-estimators(object = direct_mexico, MSE = T, CV = T, indicator = "Custom")
-estimators(object = direct_mexico, MSE = T, CV = T, indicator = "Quantiles")
+estimators(object = direct_mexico, MSE = TRUE, CV = TRUE)
+estimators(object = direct_mexico, MSE = TRUE, CV = TRUE, indicator = "Poverty")
+estimators(object = direct_mexico, MSE = TRUE, CV = TRUE, indicator = "Custom")
+estimators(object = direct_mexico, MSE = TRUE, CV = TRUE, indicator = "Quantiles")
 
 
 # Read in shapefile
@@ -146,15 +146,15 @@ unique(census_mex$ent)
 mapping_table <- data.frame(unique(survey_mex$ent), as.integer(unique(survey_mex$ent)))
 
 
-map_plot(direct_mexico, indicator = "Median", MSE = T, CV = T, 
+map_plot(direct_mexico, indicator = "Median", MSE = TRUE, CV = TRUE, 
          map_obj = shape_mexico, map_dom_id = "ID_1", map_tab = mapping_table)
 
 
 
 # Export to excel
 write.excel(emdi_mexico, file ="excel_output.xlsx", 
-            indicator = c("Mean", "Head_Count"), MSE = T, CV = T)
+            indicator = c("Mean", "Head_Count"), MSE = TRUE, CV = TRUE)
 
 write.excel(direct_mexico, file ="excel_output_direct.xlsx", 
-            indicator = c("Mean", "Head_Count"), MSE = T, CV = T)
+            indicator = c("Mean", "Head_Count"), MSE = TRUE, CV = TRUE)
 

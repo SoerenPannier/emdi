@@ -59,9 +59,9 @@ plot(emdi_direct)
 
 
 # Choose indicators
-estimators(object = emdi_direct, MSE = F, CV = F, indicator = "all")
-head(estimators(object = emdi_direct, MSE = F, CV = T, indicator = c("Head_Count","Poverty_Gap")))
-tail(estimators(object = emdi_direct, MSE = T, CV = T, indicator = c("Head_Count","Poverty_Gap")))
+estimators(object = emdi_direct, MSE = FALSE, CV = FALSE, indicator = "all")
+head(estimators(object = emdi_direct, MSE = FALSE, CV = TRUE, indicator = c("Head_Count","Poverty_Gap")))
+tail(estimators(object = emdi_direct, MSE = TRUE, CV = TRUE, indicator = c("Head_Count","Poverty_Gap")))
 
 
 
@@ -121,7 +121,7 @@ emdi_model_varth <- ebp( fixed = eqIncome ~ gender + eqsize + cash + self_empl +
                    smp_domains = "district",
                    na.rm = TRUE,
                    threshold = function(y){0.6 * median(y)},
-                   L = 5, B = 5, MSE = T
+                   L = 5, B = 5, MSE = TRUE
 )
 
 
@@ -155,9 +155,9 @@ summary(emdi_model2)
 plot(emdi_model2)
 
 # Choose indicators
-estimators(object = emdi_model2, MSE = F, CV = F, indicator = "all")
-head(estimators(object = emdi_model2, MSE = F, CV = T, indicator = c("Head_Count","Poverty_Gap")))
-tail(estimators(object = emdi_model2, MSE = T, CV = T, indicator = c("Head_Count","Poverty_Gap")))
+estimators(object = emdi_model2, MSE = FALSE, CV = FALSE, indicator = "all")
+head(estimators(object = emdi_model2, MSE = FALSE, CV = TRUE, indicator = c("Head_Count","Poverty_Gap")))
+tail(estimators(object = emdi_model2, MSE = TRUE, CV = TRUE, indicator = c("Head_Count","Poverty_Gap")))
 
 
 

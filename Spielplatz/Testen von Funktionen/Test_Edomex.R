@@ -374,15 +374,17 @@ write.excel(direct_edomex, file ="excel_output_direct.xlsx", indicator = "Povert
 write.excel(ebp, file ="excel_output_incl_MSE.xlsx", 
             indicator = "all", MSE = TRUE, CV = FALSE)
 
-write.excel(ebp, file ="excel_output_all.xlsx", indicator = "Poverty", MSE = T, CV = T)
+write.excel(ebp, file ="excel_output_all.xlsx", indicator = "Poverty", 
+            MSE = TRUE, CV = TRUE)
 
 
 
-write.excel(ebp, file ="excel_output_all_sep.xlsx", indicator = "all", MSE = T, CV = T, split = T)
+write.excel(ebp, file ="excel_output_all_sep.xlsx", indicator = "all", 
+            MSE = TRUE, CV = TRUE, split = TRUE)
 
 # plot daten gives some graphs to analyse normal assumption, as well as if chosen,
 # the estimation of the pover parameter of an underlying box-cox transformation
-theme_set(theme_gray(base_size=18))
+theme_set(theme_gray(base_size = 18))
 plot(ebp_edomex, label = "blank", color = c(1, 2), cooks = FALSE)
 
 
@@ -404,12 +406,12 @@ map_table <- data.frame(Domain = unique(census_edomex$mun),
 #' #when rgeos is not available, polygon geometry 	computations in maptools depends on the package gpclib,
 #' #which has a restricted licence. It is disabled by default; to enable gpclib, type gpclibPermit()
 gpclibPermit() 
-theme_set(theme_gray(base_size=18))
-map_plot(object = ebp_edomex, MSE = T, CV = T, map_obj = shp_mex,
+theme_set(theme_gray(base_size = 18))
+map_plot(object = ebp_edomex, MSE = TRUE, CV = TRUE, map_obj = shp_mex,
          indicator = "Custom", map_dom_id = "mun", map_tab = map_table)
 
 
-map_plot(object = direct_edomex, MSE = T, CV = T, map_obj = shp_mex,
+map_plot(object = direct_edomex, MSE = TRUE, CV = TRUE, map_obj = shp_mex,
          indicator = "Head_Count", map_dom_id = "mun", map_tab = map_table)
 
 

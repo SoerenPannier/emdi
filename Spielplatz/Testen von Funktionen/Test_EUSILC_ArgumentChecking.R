@@ -62,7 +62,7 @@ list_poss <- list(num_skalar,
 0.6 * laeken::weightedMedian(eusilcA_smp$eqIncome, weights = eusilcA_smp$weight)
 
 
-for (i in 1:14) {
+for (i in seq_len(14)) {
   
 emdi_directNEU <- direct(y = "eqIncome", 
                       smp_data = eusilcA_smp, 
@@ -227,8 +227,8 @@ estimators(object = emdi_direct, MSE = F, CV = F, indicator = names(emdi_direct$
 # names of estimated indicators or 'all' or indicator groups as described in 
 # help(estimators.emdi).
 
-head(estimators(object = emdi_direct, MSE = F, CV = F, indicator = list_poss[[6]]))
-tail(estimators(object = emdi_direct, MSE = T, CV = FALSE, indicator = c("Gini", "Mean")))
+head(estimators(object = emdi_direct, MSE = FALSE, CV = FALSE, indicator = list_poss[[6]]))
+tail(estimators(object = emdi_direct, MSE = TRUE, CV = FALSE, indicator = c("Gini", "Mean")))
 
 
 
@@ -444,9 +444,9 @@ plot(emdi_model, label = "orig", color = c("green","yellow"))
 
 
 # Choose indicators
-estimators(object = emdi_model, MSE = T, CV = F, indicator = "all")
-head(estimators(object = emdi_model, MSE = T, CV = T, indicator = c("Gini", "Median")))
-tail(estimators(object = emdi_model, MSE = T, CV = T, indicator = c("Head_Count","Poverty_Gap")))
+estimators(object = emdi_model, MSE = TRUE, CV = FALSE, indicator = "all")
+head(estimators(object = emdi_model, MSE = TRUE, CV = TRUE, indicator = c("Gini", "Median")))
+tail(estimators(object = emdi_model, MSE = TRUE, CV = TRUE, indicator = c("Head_Count","Poverty_Gap")))
 
 
 
@@ -455,11 +455,11 @@ mapping_table <- data.frame(unique(eusilcA_pop$district),
                             unique(shape_austria_dis$NAME_2))
 
 
-map_plot(object = emdi_model, MSE = T, CV = FALSE, map_obj = shape_austria_dis,
+map_plot(object = emdi_model, MSE = TRUE, CV = FALSE, map_obj = shape_austria_dis,
     indicator = "Gini", map_dom_id = "NAME_2", map_tab = mapping_table)
 
 
 # Export to excel
-write.excel(emdi_model, indicator = c("Mean", "Median"), MSE = T, CV = F, file = "excel_output.xlsx", 
-            split = FALSE)
+write.excel(emdi_model, indicator = c("Mean", "Median"), MSE = TRUE, CV = FALSE, 
+            file = "excel_output.xlsx", split = FALSE)
 
