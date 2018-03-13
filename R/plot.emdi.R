@@ -46,9 +46,9 @@
 #' the Box-Cox plot. The second element defines the color for the densities. 
 #' @param gg_theme \code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}. 
 #' @param cooks if \code{TRUE}, a Cook's distance plot is returned. The used 
-#' method \code{\link[HLMdiag]{cooks.distance.lme}} struggles when data sets 
-#' get large. In these cases, \code{cooks} should be set to \code{FALSE}. It 
-#' defaults to \code{TRUE}.
+#' method \code{\link[HLMdiag]{cooks.distance.lme}} 
+#' struggles when data sets get large. In these cases, \code{cooks} should be 
+#' set to \code{FALSE}. It defaults to \code{TRUE}.
 #' @param range optional sequence determining the range of the x-axis for plots
 #' of the optimal transformation parameter that defaults to \code{NULL}. In that 
 #' case a range of the optimal parameter +2/-1 is used for the plots of the 

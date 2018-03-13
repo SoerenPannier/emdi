@@ -31,7 +31,8 @@
 #' @return An Excel file is created in your working directory, or at the given
 #' path. Alternatively multiple ODS files are created at the given path.
 #' @details These functions create an Excel file via the package
-#' \pkg{\link{openxlsx}} respectively ODS files via the package \pkg{\link{readODS}}.
+#' \pkg{\link{openxlsx}} respectively ODS files via the package 
+#' \pkg{\link{readODS}}.
 #' Both packages requires a zip application to be available to \R. If this is not 
 #' the case the authors of \pkg{\link{openxlsx}} suggest the first of the two following ways. 
 #' \itemize{
