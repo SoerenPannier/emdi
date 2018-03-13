@@ -43,7 +43,6 @@ Imports:
     readODS
 Suggests:
     testthat,
-    ggmap,
     R.rsp,
     simFrame,
     laeken

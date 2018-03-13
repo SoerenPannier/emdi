@@ -89,7 +89,6 @@
 #' }
 #' @export
 #' @method plot emdi
-# @import graphics
 #' @importFrom ggplot2 qplot geom_abline ggtitle ylab xlab ggplot stat_qq 
 #' @importFrom ggplot2 aes geom_point geom_smooth coord_fixed geom_line
 #' @importFrom ggplot2 scale_color_manual scale_fill_manual geom_segment

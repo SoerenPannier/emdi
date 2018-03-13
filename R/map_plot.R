@@ -38,7 +38,7 @@
 #' Possible values are "none", "colourbar", and "legend".
 #' @param return_data if set to \code{TRUE} a fortified data frame including the 
 #' map data as well as the chosen indicators is returned. Customized maps can 
-#' easily be obtained from this data frame via the package \pkg{ggmap}. Defaults 
+#' easily be obtained from this data frame via the package \pkg{ggplot2}. Defaults 
 #' to \code{FALSE}.
 #' @return Creates the plots demanded.
 #' @seealso \code{\link{ebp}}, \code{\link{emdiObject}},
@@ -71,7 +71,7 @@
 #' @importFrom reshape2 melt
 #' @importFrom ggplot2 aes geom_polygon facet_wrap fortify coord_equal labs
 #' @importFrom ggplot2 theme element_blank guides scale_fill_gradient
-
+#' @importFrom ggplot2 scale_colour_gradient
 
 map_plot <- function(object,
                      indicator = "all",

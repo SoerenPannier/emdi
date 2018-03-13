@@ -52,7 +52,7 @@ Possible values are "none", "colourbar", and "legend".}
 
 \item{return_data}{if set to \code{TRUE} a fortified data frame including the 
 map data as well as the chosen indicators is returned. Customized maps can 
-easily be obtained from this data frame via the package \pkg{ggmap}. Defaults 
+easily be obtained from this data frame via the package \pkg{ggplot2}. Defaults 
 to \code{FALSE}.}
 }
 \value{
