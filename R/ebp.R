@@ -236,7 +236,8 @@ ebp <- function(fixed,
                     transformation  = transformation,
                     method          = "reml",
                     fixed           = fixed,
-                    call            = call
+                    call            = call,
+                    succesfulBootstraps = NULL
                     )
   } else {
 
@@ -255,7 +256,8 @@ ebp <- function(fixed,
                     transformation  = transformation,
                     method          = "reml",
                     fixed           = fixed,
-                    call            = call
+                    call            = call,
+                    succesfulBootstraps = NULL
                     )
   }
   
