@@ -5,7 +5,7 @@
 \title{Visualizes regional disaggregrated estimates on a map}
 \usage{
 map_plot(object, indicator = "all", MSE = FALSE, CV = FALSE,
-  map_obj = NULL, map_dom_id = NULL, map_tab = NULL, col = c("white",
+  map_obj = NULL, map_dom_id = NULL, map_tab = NULL, color = c("white",
   "red4"), scale_points = NULL, guide = "colourbar", return_data = FALSE)
 }
 \arguments{
@@ -38,7 +38,7 @@ domain variable from the census data set (first column) with the domain
 variable in the map_obj (second column). This should only be used if the IDs 
 in both objects differ.}
 
-\item{col}{a \code{vector} of length 2 defining the lowest and highest 
+\item{color}{a \code{vector} of length 2 defining the lowest and highest 
 color in the plots.}
 
 \item{scale_points}{a structure defining the lowest, the mid and the highest 

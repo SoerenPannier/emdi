@@ -27,7 +27,7 @@
 #' domain variable from the census data set (first column) with the domain 
 #' variable in the map_obj (second column). This should only be used if the IDs 
 #' in both objects differ.
-#' @param col a \code{vector} of length 2 defining the lowest and highest 
+#' @param color a \code{vector} of length 2 defining the lowest and highest 
 #' color in the plots.
 #' @param scale_points a structure defining the lowest, the mid and the highest 
 #' value of the colorscale. If a numeric vector of length two is given, this scale
@@ -80,7 +80,7 @@ map_plot <- function(object,
                      map_obj = NULL,
                      map_dom_id = NULL,
                      map_tab = NULL,
-                     col = c("white", "red4"),
+                     color = c("white", "red4"),
                      scale_points = NULL,
                      guide = "colourbar",
                      return_data = FALSE
@@ -106,7 +106,7 @@ map_plot <- function(object,
               map_obj = map_obj,
               map_dom_id = map_dom_id,
               map_tab = map_tab,
-              col = col,
+              col = color,
               scale_points = scale_points,
               return_data = return_data,
               guide = guide
