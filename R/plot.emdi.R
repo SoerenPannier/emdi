@@ -110,7 +110,7 @@ plot.emdi <- function(x,
   plot_check(x = x, label = label, color = color, cooks = cooks, range = range)
   plotList <- vector(mode = "list", length = 5)
   plotList <- lapply(plotList, function(x) NA)
-  names(plotList) <- c("QQPlots", "DensitiyResid","DensitiyRand", 
+  names(plotList) <- c("QQPlots", "DensityResid","DensityRand", 
                        "CooksDistance", "Likelihood")
   Residuals <- Random <- index <- lambda <- log_likelihood <- NULL 
   # avoid note due to ggplot2
