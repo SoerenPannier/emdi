@@ -3,6 +3,57 @@
 \name{emdiObject}
 \alias{emdiObject}
 \title{Fitted emdiObject}
+\value{
+The following components are always included in an emdi object:
+\item{\code{call}}{a list containing an image of the function call that
+                   produced the object.}
+\item{\code{fixed}}{a formula of fixed effects used in the nested error linear
+             regression (see also \code{fixed} in \code{\link{ebp}}). Not 
+             filled for class direct.}
+ \item{\code{framework}}{a list with following components:}
+
+ \tabular{rll}{
+     \tab \code{N_dom_smp} \tab number of domains in the sample. \cr
+     \tab \code{N_dom_unobs} \tab number of out-of-sample domains. Not 
+             filled for class direct. \cr
+     \tab \code{N_pop} \tab total number of units in population. Not 
+             filled for class direct. \cr
+     \tab \code{N_smp} \tab total number of units in sample. \cr
+     \tab \code{pop_domains_vec} \tab an arranged vector
+                    of the domain indicator variable. Not 
+             filled for class direct. \cr
+     \tab \code{smp_data} \tab an arranged data set of sample data. Not 
+             filled for class direct. \cr
+     \tab \code{smp_domains} \tab a character naming the
+                    domain indicator variable.\cr
+     \tab \code{smp_domains_vec} \tab an arranged vector of
+                    the domain indicator variable. \cr
+}
+\item{\code{ind}}{data frame containing estimates for indicators per domain.}
+\item{\code{method}}{character returning the method for estimation of
+   the optimal lambda, here "reml". Not 
+             filled for class direct.}
+\item{\code{model}}{an object returned by the lme function of type "lme" 
+   and representing a fitted linear mixed-effects model (for
+   further explanations see \code{\link[nlme]{lme}} and
+   \code{\link[nlme]{lmeObject}}). Not 
+             filled for class direct.}
+\item{\code{MSE}}{data frame containing MSE estimates corresponding to the
+point predictions in \code{ind} per indicator per domain if MSE is selected
+to be \code{TRUE} in function call. If \code{FALSE}, \code{MSE} is 
+\code{NULL}.}
+\item{\code{transformation}}{character returning the selected transformation
+type (see also \code{transformation} in \code{\link{ebp}}). Not 
+             filled for class direct.}
+\item{\code{transform_param}}{a list with two elements, \code{optimal_lambda}
+   and \code{shift_par}, where the first contains the optimal parameter for a
+   Box-Cox transformation or NULL for no and log transformation and the
+   second the potential shift parameter in the log or Box-Cox transformation
+   and NULL for no transformation. Not filled for class direct.}
+\item{\code{succesfulBootstraps}}{A matrix with domains as rows and indicators
+     as columns. The cells contain the number of succesful bootstraps for each 
+     combination. Not filled for class model.}
+}
 \description{
 An object of class emdi that represents point predictions of regional 
 disaggregated indicators. Optionally it also contains corresponding MSE 
