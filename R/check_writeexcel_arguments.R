@@ -22,4 +22,9 @@ writeods_check <- function(object, file, split){
     stop("file must to be a character string that determines a path and 
          filename. It should end on .ods")
   }
+  testZIP <- 1
+  try(testZIP <- shell("zip"), silent = TRUE)
+  if (testZIP == 1) {
+    stop("No zipping application was found, see details in help(write.ods) for details.")
+  }
 }

@@ -4,9 +4,9 @@
 #' estimates as well as diagnostics from \code{summary.emdi} to an Excel file. 
 #' The user can choose if the results should be reported in one or several Excel 
 #' sheets. Furthermore, a selection of indicators can be specified. 
-#' Respectively the function \code{write.ods} enables the export to a OpenDocument
+#' Respectively the function \code{write.ods} enables the export to OpenDocument
 #' Spreadsheets. Note that while \code{write.exel} will create a single document 
-#' \code{write.ods} will create a group of files containing the same information. 
+#' \code{write.ods} will create a group of files. 
 #' @param object an object of type "emdi", representing point and
 #' MSE estimates.
 #' @param file path and filename of the spreadsheet to create. It should end on .xlsx or .ods respectively.
@@ -25,13 +25,15 @@
 #' @param CV logical. If \code{TRUE}, the CV of the emdiObject is exported. 
 #' Defaults to \code{FALSE}.
 #' @param split logical. If \code{TRUE}, point estimates, MSE and CV are written 
-#' to different sheets in the Excel file. Defaults to \code{FALSE}.
+#' to different sheets in the Excel file. In \code{write.ods} \code{TRUE} will
+#' result in differnt files for point estimates and their precisions.
+#' Defaults to \code{FALSE}.
 #' @return An Excel file is created in your working directory, or at the given
 #' path. Alternatively multiple ODS files are created at the given path.
-#' @details This function creates an Excel file via the package
-#' \pkg{\link{openxlsx}}. The \pkg{\link{openxlsx}} package requires a zip 
-#' application to be available to \R. If this is not the case the authors of 
-#' \pkg{\link{openxlsx}} suggest the first of the two following ways. 
+#' @details These functions create an Excel file via the package
+#' \pkg{\link{openxlsx}} respectively ODS files via the package \pkg{\link{readODS}}.
+#' Both packages requires a zip application to be available to \R. If this is not 
+#' the case the authors of \pkg{\link{openxlsx}} suggest the first of the two following ways. 
 #' \itemize{
 #' \item Install Rtools from: http://cran.r-project.org/bin/windows/Rtools/ and
 #' modify the system PATH during installation.
@@ -41,7 +43,6 @@
 #' }
 #' To check if a zip application is available they recommend the command 
 #' \code{shell("zip")}.
-#' For the function \code{write.ods} those dependencies are unnecessary
 #' @seealso \code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}}
 #' @examples 
 #' \dontrun{
