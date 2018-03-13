@@ -55,7 +55,7 @@ Spreadsheets. Note that while \code{write.exel} will create a single document
 \details{
 These functions create an Excel file via the package
 \pkg{\link{openxlsx}} respectively ODS files via the package 
-\pkg{\link{readODS}}.
+\pkg{readODS}.
 Both packages requires a zip application to be available to \R. If this is not 
 the case the authors of \pkg{\link{openxlsx}} suggest the first of the two following ways. 
 \itemize{

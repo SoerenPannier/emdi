@@ -49,8 +49,10 @@ type (see also \code{transformation} in \code{\link{ebp}}). Not
    and \code{shift_par}, where the first contains the optimal parameter for a
    Box-Cox transformation or NULL for no and log transformation and the
    second the potential shift parameter in the log or Box-Cox transformation
-   and NULL for no transformation. Not 
-             filled for class direct.}
+   and NULL for no transformation. Not filled for class direct.}
+\item{\code{succesfulBootstraps}}{A matrix with domains as rows and indicators
+     as columns. The cells contain the number of succesful bootstraps for each 
+     combination. Not filled for class model.}
 }
 \description{
 An object of class emdi that represents point predictions of regional 

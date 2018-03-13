@@ -31,7 +31,11 @@ ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L){
     stop('L needs to be a single value, interpreted as an integer, determining 
           the number of Monte-Carlo simulations. See also help(ebp).')
   }
-  
+  if (!all(unique(as.character(smp_data[[smp_domains]])) %in% 
+      unique(as.character(pop_data[[pop_domains]])))) {
+    stop('The sample data contains domains that are
+         not contained in the population data.')
+  }
 }
 
 ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B, 
