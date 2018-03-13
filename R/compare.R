@@ -98,8 +98,10 @@ compare_plot <- function(direct, model, indicator = "all", label = "orig",
   Data$smp_size <- as.numeric(smp_size)[matcher]
   selection_indicators <- selected_model %in% selected_direct
   selected_indicators <- selected_direct[selection_indicators]
-  
-  
+  plotList <- vector(mode = "list", length = length(selected_indicators) * 2)
+  names(plotList) <- paste(rep(c("scatter", "line"), length(selected_indicators)),
+                               rep(selected_indicators, each = 2), sep = "_")
+  #scatter line
   for (ind in selected_indicators) {
     
     label_ind <- define_evallabel(label = label, indi = ind)
@@ -108,7 +110,8 @@ compare_plot <- function(direct, model, indicator = "all", label = "orig",
                            Model_based = Data[, paste0(ind, "_Model")],
                            smp_size = Data$smp_size)
     
-    print(ggplot(data_tmp, aes(x = Direct, y = Model_based)) + 
+    print((plotList[[paste("scatter", ind, sep = "_")]] <- 
+          ggplot(data_tmp, aes(x = Direct, y = Model_based)) + 
             geom_point() +
             geom_smooth(method = lm, color = color[1], 
                         se = FALSE
@@ -120,7 +123,7 @@ compare_plot <- function(direct, model, indicator = "all", label = "orig",
                  max(max(data_tmp$Direct), max(data_tmp$Model_based))) +
             ggtitle(label_ind$scatter["title"]) + 
             ylab(label_ind$scatter["y_lab"]) + 
-      xlab(label_ind$scatter["x_lab"]) + gg_theme)
+      xlab(label_ind$scatter["x_lab"]) + gg_theme))
     cat("Press [enter] to continue")
     line <- readline()
     
@@ -130,7 +133,8 @@ compare_plot <- function(direct, model, indicator = "all", label = "orig",
     data_shaped <- melt(data_tmp, id.vars = "ID")
     names(data_shaped) <- c("ID", "Method", "value")
     
-    print(ggplot(data = data_shaped, aes(x = ID, 
+    print((plotList[[paste("line", ind, sep = "_")]] <- 
+          ggplot(data = data_shaped, aes(x = ID, 
                                          y = value, group = Method, 
                                          colour = Method)) +
             geom_line(aes(linetype = Method), size = 0.7) +
@@ -148,13 +152,14 @@ compare_plot <- function(direct, model, indicator = "all", label = "orig",
                               breaks = c("Direct", "Model_based"),
                               labels = c("Direct", "Model-based")) +               
             xlab(label_ind$line["x_lab"]) + ylab(label_ind$line["y_lab"]) + 
-            ggtitle(label_ind$line["title"]) + gg_theme)
+            ggtitle(label_ind$line["title"]) + gg_theme))
     
     if (!ind == tail(selected_indicators, 1)) {
       cat("Press [enter] to continue")
       line <- readline()
     }
   }
+  invisible(plotList)
 }
 
 define_evallabel <- function(label, indi){

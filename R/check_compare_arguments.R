@@ -58,7 +58,7 @@ compare_plot_check2 <- function(ind_direct, ind_model) {
                   "estimation have been found in the",
                   "direct estimation. Following plots will",
                   "only contain results for estimates available",
-                  "in both objects."))
+                  "in both objects. \n"))
   }
 }
 
