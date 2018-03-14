@@ -206,8 +206,8 @@ ebp <- function(fixed,
 
   if (MSE == TRUE) {
     if (transformation == "box.cox") {
-      intervalBS <- c(point_estim$optimal_lambda - 0.15, 
-                    point_estim$optimal_lambda + 0.15) 
+      intervalBS <- c(point_estim$optimal_lambda - 0.1, 
+                    point_estim$optimal_lambda + 0.1) 
     }
   # The function parametric_bootstrap can be found in script mse_estimation.R
     mse_estimates <- parametric_bootstrap(framework      = framework,
