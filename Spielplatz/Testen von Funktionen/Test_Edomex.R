@@ -403,9 +403,7 @@ load("H:/Ann-Kristin/Masterarbeit/Paket/Example/shp_mex.RData")
 map_table <- data.frame(Domain = unique(census_edomex$mun), 
                         mun = sort(shp_mex$mun))
 
-#' #when rgeos is not available, polygon geometry 	computations in maptools depends on the package gpclib,
-#' #which has a restricted licence. It is disabled by default; to enable gpclib, type gpclibPermit()
-gpclibPermit() 
+
 theme_set(theme_gray(base_size = 18))
 map_plot(object = ebp_edomex, MSE = TRUE, CV = TRUE, map_obj = shp_mex,
          indicator = "Custom", map_dom_id = "mun", map_tab = map_table)
