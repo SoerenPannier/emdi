@@ -56,3 +56,21 @@ used_packages_adj_split <- data.frame(used_packages_adj_split[1:40,],
 
 tex_packages_split <- xtable(used_packages_adj_split)
 print(tex_packages_split, include.rownames = FALSE)
+
+
+# Abgleich packages
+used_packages2 <- installed.packages(lib = .libPaths())
+used_packages2_adj_split <- as.data.frame(used_packages2)
+dim(used_packages2_adj_split)
+
+used_packages2_adj_split <- used_packages2_adj_split[, c("Package", "Version")]
+
+
+compare_lib <- merge(used_packages2_adj_split, as.data.frame(used_packages_adj), by = "Package" ,
+      all = FALSE)
+
+all.equal(as.character(compare_lib$Version.x), as.character(compare_lib$Version.y))
+
+compare_lib$Version.x[as.character(compare_lib$Version.x) != as.character(compare_lib$Version.y)]
+
+
