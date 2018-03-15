@@ -91,13 +91,12 @@ compare_plot <- function(direct, model, indicator = "all", label = "orig",
   
   compare_plot_check2(ind_direct, ind_model)
   
-  Data <- merge(ind_direct, ind_model, by = "Domain")
-  
+  Data <- merge(ind_direct, ind_model, by = "Domain" )
 
   matcher <- match(Data$Domain, names(smp_size))
   Data$smp_size <- as.numeric(smp_size)[matcher]
-  selection_indicators <- selected_model %in% selected_direct
-  selected_indicators <- selected_direct[selection_indicators]
+  selected_indicators <- selected_model[selected_model %in% selected_direct]
+  
   plotList <- vector(mode = "list", length = length(selected_indicators) * 2)
   names(plotList) <- paste(rep(c("scatter", "line"), length(selected_indicators)),
                                rep(selected_indicators, each = 2), sep = "_")

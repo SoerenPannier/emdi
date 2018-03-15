@@ -34,7 +34,8 @@
 #' will be used for every plot. Alternatively a list defining colors for each 
 #' plot separately may be given. Please see the details section and examples for 
 #' this. 
-#' @param guide character passed to \code{\link[ggplot2]{scale_colour_gradient}}.
+#' @param guide character passed to 
+#' \code{\link[ggplot2-scale_colour_gradient]{ggplot2::scale_colour_gradient()}}.
 #' Possible values are "none", "colourbar", and "legend".
 #' @param return_data if set to \code{TRUE} a fortified data frame including the 
 #' map data as well as the chosen indicators is returned. Customized maps can 
