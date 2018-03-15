@@ -39,6 +39,7 @@ compare_plot_check <- function(direct, model, indicator, label, color, shape,
     stop("An element in argument line_type is not a valid option. 
                 See help(evaluate_plot) for valid options.")
   }
+
 }
 
 compare_plot_check2 <- function(ind_direct, ind_model) {

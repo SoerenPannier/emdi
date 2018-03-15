@@ -59,7 +59,7 @@ print(tex_packages_split, include.rownames = FALSE)
 
 
 # Abgleich packages
-used_packages2 <- installed.packages(lib = .libPaths())
+used_packages2 <- installed.packages(lib = .libPaths()[2])
 used_packages2_adj_split <- as.data.frame(used_packages2)
 dim(used_packages2_adj_split)
 
@@ -72,5 +72,7 @@ compare_lib <- merge(used_packages2_adj_split, as.data.frame(used_packages_adj),
 all.equal(as.character(compare_lib$Version.x), as.character(compare_lib$Version.y))
 
 compare_lib$Version.x[as.character(compare_lib$Version.x) != as.character(compare_lib$Version.y)]
+
+
 
 

@@ -50,7 +50,7 @@ type (see also \code{transformation} in \code{\link{ebp}}). Not
    Box-Cox transformation or NULL for no and log transformation and the
    second the potential shift parameter in the log or Box-Cox transformation
    and NULL for no transformation. Not filled for class direct.}
-\item{\code{succesfulBootstraps}}{A matrix with domains as rows and indicators
+\item{\code{succesfulBootstraps}}{a matrix with domains as rows and indicators
      as columns. The cells contain the number of succesful bootstraps for each 
      combination. Not filled for class model.}
 }

@@ -5,7 +5,7 @@
 # Function called in ebp
 ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L){
   
-  
+
   if (is.null(fixed)  || !inherits(fixed, "formula")) {
     stop('Fixed must be a formula object. See also help(ebp).')
   } 
@@ -27,9 +27,11 @@ ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L){
           specifying the variable (name)  of a numeric or factor variable 
           indicating domains in the sample data. See also help(ebp).')
   }
-  if (!is.numeric(L) || length(L) != 1) {
+
+  if (!is.numeric(L) || length(L) != 1 || L < 1) {
     stop('L needs to be a single value, interpreted as an integer, determining 
-          the number of Monte-Carlo simulations. See also help(ebp).')
+          the number of Monte-Carlo simulations. The value must be at least 
+          1. See also help(ebp).')
   }
   if (!all(unique(as.character(smp_data[[smp_domains]])) %in% 
       unique(as.character(pop_data[[pop_domains]])))) {
@@ -72,9 +74,9 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
                                    || boot_type == "wild"))) {
     stop("The two bootstrap procedures are ''parametric'' or ''wild''." )
   }
-  if (MSE == TRUE && !(is.numeric(B) && length(B) == 1)) {
+  if (MSE == TRUE && !(is.numeric(B) && length(B) == 1  && B > 1)) {
     stop('If MSE is set to TRUE, a single numeric value for the number of bootstrap
-         sample needs to be chosen. See also help(ebp).')
+         sample needs to be chosen that is greater than 1. See also help(ebp).')
   }
   if (!is.numeric(cpus) || !(is.numeric(cpus) && length(cpus) == 1)) {
     stop("Cpus must be a single number determining the number of kernels for the
@@ -117,7 +119,8 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
 
 # Functions called in notation
 fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data, 
-                      fixed, smp_domains) {
+                      fixed, smp_domains, threshold) {
+  
   if (!all(mod_vars %in% colnames(pop_data))) {
     stop(paste0("Variable ", mod_vars[which(!(mod_vars %in% colnames(smp_data)))], " is not contained in pop_data.
                 Please provide valid variable names for the explanatory variables."))
@@ -142,7 +145,19 @@ fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data,
  if (!is.numeric(smp_data[[paste(fixed[2])]])) {
    stop(paste0(as.character(fixed[2])," must be the name of a variable that 
                is a numeric vector."))
+ }
+  
+ if (dim(pop_data)[1] < dim(smp_data)[1]) {
+    stop("The population data set cannot have less observations than the 
+         sample data set.")
+ }
+
+  if (inherits(threshold, "function") && (!is.numeric(threshold(smp_data[[paste(fixed[2])]])) 
+      || length(threshold(smp_data[[paste(fixed[2])]])) != 1)) {
+    stop("The threshold function must return a single numeric value when evaluated
+         with the dependent variable.")
   }
+  
 }
 
 

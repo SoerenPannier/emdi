@@ -18,7 +18,8 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
   pop_vars <- c(mod_vars, pop_domains)
   smp_data <- smp_data[, smp_vars]
   fw_check1(pop_data = pop_data, mod_vars = mod_vars, pop_domains = pop_domains, 
-           smp_data = smp_data, fixed = fixed, smp_domains = smp_domains)
+           smp_data = smp_data, fixed = fixed, smp_domains = smp_domains, 
+           threshold = threshold)
  
 
   pop_data <- pop_data[, pop_vars]

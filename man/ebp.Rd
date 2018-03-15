@@ -34,8 +34,10 @@ that indicates domains in the sample data. The variable can be numeric or a
 factor but needs to be of the same class as the variable named in
 \code{pop_domains}.}
 
-\item{L}{a number determining the number of Monte-Carlo simulations. Defaults
-to 50.}
+\item{L}{a number determining the number of Monte-Carlo simulations that 
+must be at least 1. Defaults to 50. For practical applications, values 
+larger than 200 are recommended (see also 
+\cite{Molina, I. and Rao, J.N.K. (2010)}).}
 
 \item{threshold}{a number defining a threshold. Alternatively, a threshold may 
 be defined as a \code{function} of \code{y} returning a numeric value. Such a 
@@ -53,10 +55,12 @@ types for the dependent variable can be chosen (i) no transformation ("no");
 Defaults to \code{"box.cox"}.}
 
 \item{interval}{a numeric vector containing a lower and upper limit
-determining an interval for the estimation of the optimal parameter. Defaults
-to c(-1,2). If the convergence fails, it is often advisable to choose a smaller
-more suitable interval. For right skewed distributions the negative values may be
-excluded, also values larger than 1 are seldom observed.}
+determining an interval for the estimation of the optimal parameter. The 
+interval is passed to function \code{\link[stats]{optimize}} for the 
+optimization. Defaults to c(-1,2). If the convergence fails, it is often 
+advisable to choose a smaller more suitable interval. For right skewed 
+distributions the negative values may be excluded, also values larger than 1 
+are seldom observed.}
 
 \item{MSE}{if \code{TRUE}, MSE estimates using a parametric bootstrap approach
 are calculated (see also \cite{Gonzalez-Manteiga et al. (2008)}). Defaults
@@ -64,7 +68,9 @@ to \code{FALSE}.}
 
 \item{B}{a number determining the number of bootstrap populations in the
 parametric bootstrap approach (see also \cite{Gonzalez-Manteiga et al. (2008)})
-used in the MSE estimation. Defaults to 50.}
+used in the MSE estimation. The number must be greater than 1. Defaults to 50.
+For practical applications, values larger than 200 are recommended (see also 
+\cite{Molina, I. and Rao, J.N.K. (2010)}).}
 
 \item{seed}{an integer to set the seed for the random number generator. For 
 the usage of random number generation see details. If seed is set to 
@@ -106,7 +112,8 @@ approach by \cite{Molina and Rao (2010)}. Point predictions of indicators are
 obtained by Monte-Carlo approximations. Additionally, mean squared error (MSE)
 estimation can be conducted by using a parametric bootstrap approach (see
 also \cite{Gonzalez-Manteiga et al. (2008)}). The unit-level model of
-\cite{Battese, Harter and Fuller (1988)} is fitted by REML method and one of
+\cite{Battese, Harter and Fuller (1988)} is fitted by the restricted maximum
+likelihood (REML) method and one of
 three different transformation types for the dependent variable can be chosen.
 }
 \details{
@@ -123,7 +130,7 @@ and the quintile share ratio.
 data("eusilcA_pop")
 data("eusilcA_smp")
 
-# Example 1: With default setting but na.rm=TRUE
+# Example 1: With default setting but na.rm=TRUE 
 emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
 unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
 house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
@@ -131,7 +138,9 @@ pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
 na.rm = TRUE)
 
 
-# Example 2: With MSE, two additional indicators and function as threshold
+# Example 2: With MSE, two additional indicators and function as threshold -
+# Please note that the example runs for several minutes. For a short check
+# change L and B to lower values.
 emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
 self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,

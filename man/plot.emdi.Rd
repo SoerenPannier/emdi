@@ -45,7 +45,9 @@ need to be specified. \cr
 the color for the line in the QQ-plots, for the Cook's Distance plot and for
 the Box-Cox plot. The second element defines the color for the densities.}
 
-\item{gg_theme}{\code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.}
+\item{gg_theme}{\code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
+For using this argument, package \pkg{ggplot2} must be loaded via 
+\code{library(ggplot2)}. See also Example 4.}
 
 \item{cooks}{if \code{TRUE}, a Cook's distance plot is returned. The used 
 method \code{\link[HLMdiag-mdffits.default]{HLMdiag::cooks.distance.lme()}} 
@@ -102,6 +104,12 @@ plot(emdi_model, label = "no_title", color = c("red", "yellow"), cooks = FALSE)
 plot(emdi_model, label = list(qq_res = c(title = "Pearson resid.", 
 y_lab = "Quant.", x_lab = "Theo. Quant.")), color = c("red", "yellow"), 
 cooks = FALSE)
+
+# Example 4: Usage of theme from ggplot2 within plot.emdi
+library(ggplot2)
+plot(emdi_model, gg_theme = theme(panel.background = element_rect(fill = "white", 
+colour = "white"), plot.title = element_text(face = "bold"),
+title = element_text(color = "navy")))
 
 }
 }

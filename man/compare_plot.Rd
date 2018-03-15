@@ -28,7 +28,7 @@ and do not appear in groups of indicators even though these might belong to
 one of the groups.}
 
 \item{label}{argument that enables to customize title and axis labels. There 
-are four options to label the evaluation plots: (i) original labels ("orig"), 
+are three options to label the evaluation plots: (i) original labels ("orig"), 
 (ii) axis lables but no title ("no_title"), (iii) neither axis 
 labels nor title ("blank").}
 
@@ -47,7 +47,9 @@ determines the type of the line for the direct estimates and the
 second type for the model-based estimates. The options are: "twodash", 
 "solid", "longdash", "dotted", "dotdash", "dashed" and "blank".}
 
-\item{gg_theme}{\code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.}
+\item{gg_theme}{\code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
+For using this argument, package \pkg{ggplot2} must be loaded via 
+\code{library(ggplot2)}. See also Example 2.}
 }
 \value{
 A scatter plot and a line plot comparing direct and model-based 
@@ -73,11 +75,18 @@ threshold = function(y){0.6 * median(y)}, L = 50, MSE = TRUE,
 na.rm = TRUE, cpus = 1)
 
 emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
-smp_domains = "district", weights = "weight", threshold = 10989.28,
+smp_domains = "district", weights = "weight", threshold = 11161.44,
 var = TRUE, boot_type = "naive", B = 50, seed = 123, na.rm = TRUE)
 
-# Receive first overview
+# Example 1: Receive first overview
 compare_plot(direct = emdi_direct, model = emdi_model)
+
+# Example 2: Change plot theme
+library(ggplot2)
+compare_plot(emdi_direct, emdi_model, indicator = "Median",
+gg_theme = theme(axis.line = element_line(size = 3, colour = "grey80"),
+plot.background = element_rect(fill = "lightblue3"),
+legend.position = "none"))
 }
 }
 \seealso{

@@ -74,6 +74,14 @@ direct_check <- function(y,
           it is NULL 60% of the median of the target variable is selected as 
           threshold. See also help(direct).')
   }
+  
+  if (inherits(threshold, "function") && 
+      (!is.numeric(threshold(smp_data[[y]], smp_data[[weights]])) 
+       || length(threshold(smp_data[[y]], smp_data[[weights]])) != 1)) {
+    stop("The threshold function must return a single numeric value when evaluated
+         with the dependent variable and the weights, if present.")
+  }
+  
   if (!is.logical(var) || length(var) != 1) {
     stop("Var must be a logical value. Set Var to TRUE or FALSE. See also
          help(direct).")
