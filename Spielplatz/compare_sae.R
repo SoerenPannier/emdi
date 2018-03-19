@@ -14,7 +14,7 @@ data(eusilcA_pop)
 # Define Head Count Ratio (HCR) for the ebBHF function corresponding to HCR in 
 # emdi
 povertyincidence <- function(y) {
-  result <- mean(y < 11161.44)
+  result <- mean(y < 10885.33)
   return(result)
 }
 
@@ -28,14 +28,14 @@ rownames(Xoutsamp_AuxVar) <- NULL
 # Get EBP estimates using ebBHF function
 set.seed(123)
 EB <- ebBHF(eqIncome ~ cash, dom = district,
-selectdom = provincelabels, Xnonsample = Xoutsamp_AuxVar, MC = 5000,
+selectdom = provincelabels, Xnonsample = Xoutsamp_AuxVar, MC = 50000,
 constant = 0, indicator = povertyincidence, data = eusilcA_smp)
 
 # Get EBP estimates using ebp function
 EBP <- ebp(eqIncome ~ cash, pop_data = eusilcA_pop, pop_domains = "district", 
     smp_data = eusilcA_smp, smp_domains = "district", transformation = "log", 
-    threshold = 11161.44, seed = 123, 
-    L = 5000)
+    threshold = 10885.33, seed = 123, 
+    L = 50000)
 
 
 
