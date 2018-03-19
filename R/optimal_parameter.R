@@ -77,8 +77,8 @@ reml <- function(fixed          = fixed,
                         data      = sd_transformed_data,
                         random    = as.formula(paste0("~ 1 | as.factor(", smp_domains, ")")),
                         method    = "REML",
-                        keep.data = FALSE), silent=TRUE)
-  if(is.null(model_REML)){
+                        keep.data = FALSE), silent = FALSE)
+  if (is.null(model_REML)) {
     stop("For some lambda in the interval, the likelihood does not converge.
          Choose another interval. See also help(ebp).")
   } else {
