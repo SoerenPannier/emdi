@@ -77,8 +77,8 @@ reml <- function(fixed          = fixed,
                         data      = sd_transformed_data,
                         random    = as.formula(paste0("~ 1 | as.factor(", smp_domains, ")")),
                         method    = "REML",
-                        keep.data = FALSE), silent=TRUE)
-  if(is.null(model_REML)){
+                        keep.data = FALSE), silent = TRUE)
+  if(is.null(model_REML)) {
     stop("The likelihood does not converge. One reason could be that the 
           interval for the estimation of an optimal transformation parameter is 
           not appropriate. Try another interval. See also help(ebp).")
