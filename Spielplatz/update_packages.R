@@ -12,6 +12,7 @@ update.packages()
 
 # Add a new libPath that only contains dependencies of emdi and their 
 # dependencies
+# packrat::snapshot()
 
 install.packages("emdi", lib = .libPaths()[1])
 install.packages("readODS", lib = .libPaths()[1])
@@ -21,7 +22,7 @@ library(emdi)
 library(xtable)
 
 
-installed.packages()
+View(installed.packages())
 
 View(installed.packages(lib = .libPaths()[1]))
 View(installed.packages(lib = .libPaths()[2]))
