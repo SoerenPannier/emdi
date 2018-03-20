@@ -5,5 +5,8 @@
 ^.*\.xlsx$
 cran-comments.md
 Spielplatz
+packrat
 revdep
 ^revdep$
+^packrat/
+^\.Rprofile$

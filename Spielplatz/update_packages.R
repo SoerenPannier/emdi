@@ -10,11 +10,9 @@ old.packages()
 # Update all packages
 update.packages()
 
-
 # Add a new libPath that only contains dependencies of emdi and their 
 # dependencies
-.libPaths("./Spielplatz/RepLib")
-.libPaths()
+
 install.packages("emdi", lib = .libPaths()[1])
 install.packages("readODS", lib = .libPaths()[1])
 devtools::install_github("soerenpannier/emdi")
