@@ -48,7 +48,7 @@ plot separately may be given. Please see the details section and examples for
 this.}
 
 \item{guide}{character passed to 
-\code{\link[ggplot2-scale_colour_gradient]{ggplot2::scale_colour_gradient()}}.
+\code{scale_colour_gradient} from \pkg{ggplot2}.
 Possible values are "none", "colourbar", and "legend".}
 
 \item{return_data}{if set to \code{TRUE} a fortified data frame including the 

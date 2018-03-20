@@ -50,7 +50,7 @@ For using this argument, package \pkg{ggplot2} must be loaded via
 \code{library(ggplot2)}. See also Example 4.}
 
 \item{cooks}{if \code{TRUE}, a Cook's distance plot is returned. The used 
-method \code{\link[HLMdiag-mdffits.default]{HLMdiag::cooks.distance.lme()}} 
+method \code{mdffits.default} from the package \pkg{HLMdiag}
 struggles when data sets get large. In these cases, \code{cooks} should be 
 set to \code{FALSE}. It defaults to \code{TRUE}.}
 
