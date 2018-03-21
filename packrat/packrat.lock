@@ -227,6 +227,11 @@ Version: 1.3.1
 Hash: 2d32e01e53d532c812052e27a1021441
 Requires: R6, curl, jsonlite, mime, openssl
 
+Package: ineq
+Source: CRAN
+Version: 0.2-13
+Hash: f6fb24cdf453b705896a8accbcc3c644
+
 Package: jsonlite
 Source: CRAN
 Version: 1.5
