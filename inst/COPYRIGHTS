@@ -22,3 +22,9 @@ Bezirksgrenzen, Data from 1.04.2017,
 http://data-synergis.opendata.arcgis.com/datasets/bb4acc011100469185d2e59fa4cae5fc_0, 
 by SynerGIS, CC BY-SA 2.0 (https://creativecommons.org/licenses/by-sa/2.0/), 
 accessed the 07.02.2018.
+
+Several versions of synthetic EU-SILC data are used (eusilc from package laeken 
+and eusilcP from package simFrame) and the data set eusilcA_pop, a modified 
+version of eusilcP, is included in the package. eusilc and eusilcP are public-use 
+files (under GPL-2) published in the Journal of Statistical Software, 
+Vol 54 (2013), Issue 15, and Vol 37 (2010), Issue 3.
