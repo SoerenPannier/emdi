@@ -1,0 +1,15 @@
+year <- sub("-.*", "", meta$Date)
+note <- sprintf("R package version %s", meta$Version)
+url <- "https://cran.r-project.org/package=emdi"
+
+bibentry(bibtype = "Manual",
+         title = "{emdi}: Estimating and Mapping Disaggregated Indicators",
+         author = c(person("Ann-Kristin", "Kreutzmann"),
+                    person("Soeren", "Pannier"),
+                    person("Natalia", "Rojas-Perilla"),
+                    person("Timo", "Schmid"),
+                    person("Matthias", "Templ"),
+                    person("Nikos", "Tzavidis")),
+         year = year,
+         note = note,
+         url = url)
