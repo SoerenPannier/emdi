@@ -54,8 +54,8 @@
 #'    Box-Cox transformation or NULL for no and log transformation and the
 #'    second the potential shift parameter in the log or Box-Cox transformation
 #'    and NULL for no transformation. Not filled for class direct.}
-#' \item{\code{succesfulBootstraps}}{a matrix with domains as rows and indicators
-#'      as columns. The cells contain the number of succesful bootstraps for each 
+#' \item{\code{successful_bootstraps}}{a matrix with domains as rows and indicators
+#'      as columns. The cells contain the number of successful bootstraps for each 
 #'      combination. Not filled for class model.}
 #' @references
 #' Alfons, A. and Templ, M. (2013). Estimation of Social Exclusion Indicators

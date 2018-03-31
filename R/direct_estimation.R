@@ -177,9 +177,9 @@ direct <- function(y,
       warning(paste0("For the following domains at least one bootstrap failed ",
                      ", this may be due to a very small sample size. For these domains ",
                      "the variance estimation is based on a reduced number of ",
-                     "bootstrap iteration. To see the number of succesfull" ,
+                     "bootstrap iteration. To see the number of successful" ,
                      " bootstrap iterations for each domain and indicator, have a look at",
-                     " the value succesfulBootstraps in the returned object."))
+                     " the value successful_bootstraps in the returned object."))
     }
   } else {
     res <- result_point
@@ -229,7 +229,7 @@ direct <- function(y,
                          "smp_domains",
                          "smp_domains_vec")],
     call = call,
-    succesfulBootstraps = sucInd
+    successful_bootstraps = sucInd
     )
   
   class(direct_out) <- c("emdi", "direct")
