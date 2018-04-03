@@ -53,16 +53,18 @@ framework_dir <- function(y, smp_data, smp_domains, weights,
 
   
   
-  if(is.null(threshold)){
-    if(is.null(weights)){
+  if (is.null(threshold)) {
+    if (is.null(weights)) {
       threshold <- 0.6 * median(y_vec)
-    } else if (!is.null(weights)){
+      cat("The threshold for the HCR and the PG is automatically set to 60% of 
+        the median of the dependent variable and equals",threshold, "\n")
+    } else if (!is.null(weights)) {
       threshold <- 0.6 * wtd.quantile(x = y_vec, 
                                      weights = weights_vec,
                                      probs = .5)
+      cat("The threshold for the HCR and the PG is automatically set to 60% of 
+        the weighted median of the dependent variable and equals",threshold, "\n")
     }
-    cat("The threshold for the HCR and the PG is automatically set to 60% of 
-        the estimated median of the dependent variable and equals",threshold, "\n")
   }
 
   indicator_list <- getIndicatorList_fixed()
