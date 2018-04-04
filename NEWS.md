@@ -1,3 +1,13 @@
+# emdi 1.1.2
+
+* The function `compare_plot` has been added to allow for an easy comparison 
+between direct and model based estimates.
+* Argument checks have been added, and improved
+* Additional example in `map_plot` in order to explain the mapping table
+* The datasets have been improved to allow for more realistic examples
+* Small bug fixes
+* Updated Vignette
+
 # emdi 1.1.1
 
 * The function `ebp` benefits from a new parameter called `seed` that allows 
