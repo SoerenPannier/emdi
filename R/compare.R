@@ -121,11 +121,11 @@ compare_plot <- function(direct, model, indicator = "all", label = "orig",
     
     print((plotList[[paste("scatter", ind, sep = "_")]] <- 
           ggplot(data_tmp, aes(x = Direct, y = Model_based)) + 
-            geom_point() +
+            geom_point(shape = shape[1]) +
             geom_smooth(method = lm, color = color[1], 
-                        se = FALSE
+                        se = FALSE, lty = line_type[1]
             ) + geom_abline(intercept = 0, slope = 1, size = 1, 
-                            color = color[2]) +
+                            color = color[2], lty = line_type[2]) +
             xlim(min(min(data_tmp$Direct), min(data_tmp$Model_based)), 
                      max(max(data_tmp$Direct), max(data_tmp$Model_based))) +
             ylim(min(min(data_tmp$Direct), min(data_tmp$Model_based)), 
