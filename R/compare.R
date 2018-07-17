@@ -84,7 +84,9 @@ compare_plot <- function(direct, model, indicator = "all", label = "orig",
   ID <- NULL
   value <- NULL
   Method <- NULL
-
+  slope <- NULL
+  intercept <- NULL
+  
   compare_plot_check(direct = direct, model = model, indicator = indicator, 
                       label = label, color = color, shape = shape, 
                       line_type = line_type, gg_theme = gg_theme)
@@ -122,17 +124,21 @@ compare_plot <- function(direct, model, indicator = "all", label = "orig",
     print((plotList[[paste("scatter", ind, sep = "_")]] <- 
           ggplot(data_tmp, aes(x = Direct, y = Model_based)) + 
             geom_point() +
-            geom_smooth(method = lm, color = color[1], 
-                        se = FALSE
-            ) + geom_abline(intercept = 0, slope = 1, size = 1, 
-                            color = color[2]) +
+            geom_smooth(method = lm, se = FALSE, inherit.aes = FALSE,
+                        aes(colour = "reg. Line", x = Direct, y = Model_based)) + 
+            geom_abline(mapping = aes(colour = "Intersection", 
+                                      slope = slope, intercept = intercept),
+                            data.frame(slope = 1, intercept = 0)) +
             xlim(min(min(data_tmp$Direct), min(data_tmp$Model_based)), 
                      max(max(data_tmp$Direct), max(data_tmp$Model_based))) +
             ylim(min(min(data_tmp$Direct), min(data_tmp$Model_based)), 
                  max(max(data_tmp$Direct), max(data_tmp$Model_based))) +
             ggtitle(label_ind$scatter["title"]) + 
             ylab(label_ind$scatter["y_lab"]) + 
-      xlab(label_ind$scatter["x_lab"]) + gg_theme))
+      xlab(label_ind$scatter["x_lab"]) +
+        scale_color_manual(values = c("Intersection" = color[2], 
+                                       "reg. Line" = color[1])) +  
+        gg_theme))
     cat("Press [enter] to continue")
     line <- readline()
     
@@ -171,7 +177,7 @@ compare_plot <- function(direct, model, indicator = "all", label = "orig",
   invisible(plotList)
 }
 
-define_evallabel <- function(label, indi){
+define_evallabel <- function(label, indi) {
   if (!inherits(label, "list")) {
     if (label == "orig") {
       label <- list(scatter = c(title = indi, 
@@ -236,7 +242,7 @@ define_evallabel <- function(label, indi){
   }
   
   return(label)
-    }
+}
 
 
 
