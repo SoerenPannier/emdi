@@ -126,7 +126,7 @@ compare_plot <- function(direct, model, indicator = "all", label = "orig",
             geom_point(shape = shape[1]) +
             geom_smooth(method = lm, se = FALSE, inherit.aes = FALSE, 
                         lty = line_type[1],
-                        aes(colour = "reg. Line", x = Direct, y = Model_based)) + 
+                        aes(colour = "Reg. line", x = Direct, y = Model_based)) + 
             geom_abline(mapping = aes(colour = "Intersection", 
                                       slope = slope, intercept = intercept),
                             data.frame(slope = 1, intercept = 0), 
@@ -138,8 +138,8 @@ compare_plot <- function(direct, model, indicator = "all", label = "orig",
             ggtitle(label_ind$scatter["title"]) + 
             ylab(label_ind$scatter["y_lab"]) + 
       xlab(label_ind$scatter["x_lab"]) +
-        scale_color_manual(values = c("Intersection" = color[2], 
-                                       "reg. Line" = color[1])) +  
+        scale_color_manual(name = "",values = c("Intersection" = color[2], 
+                                       "Reg. line" = color[1])) +  
         gg_theme))
     cat("Press [enter] to continue")
     line <- readline()
