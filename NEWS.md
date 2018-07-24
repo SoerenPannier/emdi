@@ -1,3 +1,9 @@
+# emdi 1.1.3
+
+* The function `compare_plot` now benefits from a legend in all plots.
+* Changes to be compatible with the forthcoming version of the MuMIn package.
+
+
 # emdi 1.1.2
 
 * The function `compare_plot` has been added to allow for an easy comparison 
