@@ -145,8 +145,13 @@ summary.emdi <- function(object, ...) {
     )
     
     r_squared <- r.squaredGLMM(object$model)
-    r_marginal <- r_squared[1]
-    r_conditional <- r_squared[2]
+    if (is.matrix(r_squared)) {
+      r_marginal <- r_squared["delta", 1]
+      r_conditional <- r_squared["delta", 2]
+    } else {
+      r_marginal <- r_squared[1]
+      r_conditional <- r_squared[2]
+    }
     icc_mixed <- icc(object$model)
     
     coeff_det <- data.frame(#R2             = r_squared,
