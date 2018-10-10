@@ -172,7 +172,10 @@ ebp <- function(fixed,
   # Save function call ---------------------------------------------------------
 
   call <- match.call()
-  
+  if(inherits(call$fixed, "name"))
+  {
+    call$fixed <- fixed
+  }
   # Data manipulation and notational framework ---------------------------------
   if(!is.null(seed)) {
     if (cpus > 1 && parallel_mode != "socket") {

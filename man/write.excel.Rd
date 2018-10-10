@@ -8,8 +8,8 @@
 write.excel(object, file = "excel_output.xlsx", indicator = "all",
   MSE = FALSE, CV = FALSE, split = FALSE)
 
-write.ods(object, file = "ods_output.ods", indicator = "all", MSE = FALSE,
-  CV = FALSE, split = FALSE)
+write.ods(object, file = "ods_output.ods", indicator = "all",
+  MSE = FALSE, CV = FALSE, split = FALSE)
 }
 \arguments{
 \item{object}{an object of type "emdi", representing point and

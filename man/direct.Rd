@@ -6,8 +6,8 @@
 \usage{
 direct(y, smp_data, smp_domains, weights = NULL, design = NULL,
   threshold = NULL, var = FALSE, boot_type = "naive", B = 50,
-  seed = 123, X_calib = NULL, totals = NULL, custom_indicator = NULL,
-  na.rm = FALSE)
+  seed = 123, X_calib = NULL, totals = NULL,
+  custom_indicator = NULL, na.rm = FALSE)
 }
 \arguments{
 \item{y}{a character string indicating the variable that is used for 

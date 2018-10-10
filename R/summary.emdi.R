@@ -143,19 +143,19 @@ summary.emdi <- function(object, ...) {
                        Shapiro_p = c(shapiro_p_res, shapiro_p_ran),
                        row.names = c("Error", "Random_effect")
     )
-    
-    r_squared <- r.squaredGLMM(object$model)
+    tempMod <- object$model
+    tempMod$call$fixed <- object$fixed
+    r_squared <- r.squaredGLMM(tempMod)
     if (is.matrix(r_squared)) {
-      r_marginal <- r_squared["delta", 1]
-      r_conditional <- r_squared["delta", 2]
+      r_marginal <- r_squared[1, 1]
+      r_conditional <- r_squared[1, 2]
     } else {
       r_marginal <- r_squared[1]
       r_conditional <- r_squared[2]
     }
     icc_mixed <- icc(object$model)
     
-    coeff_det <- data.frame(#R2             = r_squared,
-      #ICC            = icc_mixed,
+    coeff_det <- data.frame(
       Marginal_R2    = r_marginal,
       Conditional_R2 = r_conditional,
       row.names      = ""
