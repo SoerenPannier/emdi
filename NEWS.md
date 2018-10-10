@@ -1,3 +1,8 @@
+# emdi 1.1.4
+ 
+* Fixed Bug in summary: R2 calculation with MuMIn is now fully working
+* Added feature: formula used in fixed is now preserved, even if passed to ebp as a variable
+
 # emdi 1.1.3
 
 * The function `compare_plot` now benefits from a legend in all plots.
