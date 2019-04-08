@@ -9,9 +9,9 @@ load("EBP/Xoutsamp_AuxVar.RData")
 
 
 test_that("Does monte_carlo function give benchmark results?", {
-  
+  suppressWarnings(RNGversion("3.5.0"))
   # Single elements needed in monte_carlo()
-  framework <- framework_ebp(income~educ1,
+  framework <- framework_ebp(income ~ educ1,
                         Xoutsamp_AuxVar, 
                         "provlab", 
                         incomedata,
@@ -20,14 +20,14 @@ test_that("Does monte_carlo function give benchmark results?", {
                         custom_indicator = NULL,
                         na.rm = TRUE)
   # Fixed optimal parameter and shift (benchmark values)
-  ebp_optpar_bc <- read.csv2("EBP/ebp_optpar_bc.csv", sep=",")  
-  ebp_shift_bc  <- read.csv2("EBP/ebp_shift_bc.csv", sep=",")
+  ebp_optpar_bc <- read.csv2("EBP/ebp_optpar_bc.csv", sep = ",")  
+  ebp_shift_bc  <- read.csv2("EBP/ebp_shift_bc.csv", sep = ",")
   
   lambda <- as.numeric(as.character(ebp_optpar_bc[,"Optpar"]))
   shift  <- as.numeric(as.character(ebp_shift_bc))
   
   # Conduct transformation using the optimal parameter
-  transformation_par <- data_transformation(fixed          = income~educ1,
+  transformation_par <- data_transformation(fixed          = income ~ educ1,
                                             smp_data       = framework$smp_data,
                                             transformation = "box.cox",
                                             lambda         = lambda
@@ -52,17 +52,18 @@ test_that("Does monte_carlo function give benchmark results?", {
   
   
   
-  set.seed(100); point <- monte_carlo(transformation="box.cox",
-                                      L=2,
-                                      framework=framework,
-                                      lambda=lambda,
-                                      shift=shift,
-                                      model_par=est_par,
-                                      gen_model=gen_par
+  set.seed(100) 
+  point <- monte_carlo(transformation = "box.cox",
+                                      L = 2,
+                                      framework = framework,
+                                      lambda = lambda,
+                                      shift = shift,
+                                      model_par = est_par,
+                                      gen_model = gen_par
                                       )
 
   # Load benchmark point estimates
-  ebp_point_bc <- read.csv2("EBP/ebp_point_bc.csv", sep=",")
+  ebp_point_bc <- read.csv2("EBP/ebp_point_bc.csv", sep = ",")
  
   # compare 10% quantile
   expect_equal(point[,"Quantile_10"],
