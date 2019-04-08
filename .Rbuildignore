@@ -10,3 +10,4 @@ revdep
 ^revdep$
 ^packrat/
 ^\.Rprofile$
+^CRAN-RELEASE$
