@@ -25,7 +25,7 @@ equivalent to \code{N_dom_unobs} (see \code{\link{emdiObject}}).}
 \item{size_pop}{if model-based estimation, number of units in population equivalent to \code{N_pop}
 (see \code{\link{emdiObject}}).}
 \item{size_dom}{a data frame with rows Sample_domains and Population_domains 
-(if model-based estimation) representing summary statisitics of the sample 
+(if model-based estimation) representing summary statistics of the sample 
 sizes across domains of sample and population data, respectively.}
 \item{transform}{if model-based estimation, a data frame with columns 
                  Transformation, Method, Optimal_lambda and Shift_parameter representing the
@@ -40,7 +40,7 @@ sizes across domains of sample and population data, respectively.}
                  the package \pkg{moments}. Details for the Shapiro-Wilks-Test
                  are provided by \code{\link{shapiro.test}}.}
 \item{icc}{if model-based estimation, the value of the intraclass coefficient.}
-\item{coeff_determ}{if model-based estimation, a data frame with colums 
+\item{coeff_determ}{if model-based estimation, a data frame with columns 
                     Marginal_R2 and Conditional_R2 representing two R2 measures
                     for linear mixed models from the \pkg{MuMIn} package
                     obtained by function \code{\link[MuMIn]{r.squaredGLMM}}.}                  

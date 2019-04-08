@@ -36,7 +36,7 @@ Defaults to \code{FALSE}.}
 
 \item{split}{logical. If \code{TRUE}, point estimates, MSE and CV are written 
 to different sheets in the Excel file. In \code{write.ods} \code{TRUE} will
-result in differnt files for point estimates and their precisions.
+result in different files for point estimates and their precisions.
 Defaults to \code{FALSE}.}
 }
 \value{

@@ -26,7 +26,7 @@
 #' Defaults to \code{FALSE}.
 #' @param split logical. If \code{TRUE}, point estimates, MSE and CV are written 
 #' to different sheets in the Excel file. In \code{write.ods} \code{TRUE} will
-#' result in differnt files for point estimates and their precisions.
+#' result in different files for point estimates and their precisions.
 #' Defaults to \code{FALSE}.
 #' @return An Excel file is created in your working directory, or at the given
 #' path. Alternatively multiple ODS files are created at the given path.
