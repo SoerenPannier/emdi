@@ -1,8 +1,6 @@
 ## Test environments
-* Ubuntu 14.04.5 LTS (on travis-ci), 3.5.1
-* Windows7  R 3.4.4 local development environment
-* Windows10 R 3.5.1 local development environment
-* Ubuntu 16.04 LTS R 3.4.4 virtual machine testing environment
+* Ubuntu 14.04.5 LTS (on travis-ci), 3.5.2
+* Windows10 R 3.5.3 local development environment
 
 ## R CMD check results
 
