@@ -86,7 +86,7 @@ compare_plot <- function(direct, model, indicator = "all", label = "orig",
   Method <- NULL
   slope <- NULL
   intercept <- NULL
-  
+   
   compare_plot_check(direct = direct, model = model, indicator = indicator, 
                       label = label, color = color, shape = shape, 
                       line_type = line_type, gg_theme = gg_theme)
