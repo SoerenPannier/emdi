@@ -58,22 +58,22 @@ parametric_bootstrap <- function(framework,
             )
     parallelMap::parallelStop()
   } else{
-      mses <- simplify2array(lapply(        X               = seq_len(B),  
-                                            FUN             = mse_estim_wrapper,
-                                            B               = B,
-                                            framework       = framework,
-                                            lambda          = point_estim$optimal_lambda,
-                                            shift           = point_estim$shift_par,
-                                            model_par       = point_estim$model_par,
-                                            gen_model       = point_estim$gen_model,
-                                            fixed           = fixed,
-                                            transformation  = transformation,
-                                            interval        = interval,
-                                            L               = L,
-                                            res_s           = res_s,
-                                            fitted_s        = fitted_s,
-                                            start_time      = start_time,
-                                            boot_type       = boot_type
+    mses <- simplify2array( lapply(X               = seq_len(B),  
+                                   FUN             = mse_estim_wrapper,
+                                   B               = B,
+                                   framework       = framework,
+                                   lambda          = point_estim$optimal_lambda,
+                                   shift           = point_estim$shift_par,
+                                   model_par       = point_estim$model_par,
+                                   gen_model       = point_estim$gen_model,
+                                   fixed           = fixed,
+                                   transformation  = transformation,
+                                   interval        = interval,
+                                   L               = L,
+                                   res_s           = res_s,
+                                   fitted_s        = fitted_s,
+                                   start_time      = start_time,
+                                   boot_type       = boot_type
         )
       )
   }
@@ -82,7 +82,11 @@ parametric_bootstrap <- function(framework,
   if (.Platform$OS.type == "windows") {
     flush.console()
   }
-  mses <- apply(mses, c(1,2), mean)
+  if (any(tmp <- apply(mses, 3, function(x) (all(is.na(x)))))) {
+    warning("One or more bootstraps failed. The calculated MSE is based on",
+            " less BS iterations.", "\n Number of failed BS: ", sum(tmp))
+  }
+  mses <- apply(mses, c(1,2), mean, na.rm = TRUE)
   mses <- data.frame(Domain = unique(framework$pop_domains_vec), mses)
 
   return(mses)
@@ -355,21 +359,22 @@ mse_estim_wrapper <-  function(i,
                                start_time,
                                boot_type,
                                seedvec) {
-  
-  tmp <- mse_estim(framework       = framework,
-                   lambda          = lambda,
-                   shift           = shift,
-                   model_par       = model_par,
-                   gen_model       = gen_model,
-                   res_s           = res_s,
-                   fitted_s        = fitted_s, 
-                   fixed           = fixed,
-                   transformation  = transformation,
-                   interval        = interval,
-                   L               = L, 
-                   boot_type       = boot_type
-                   )
-
+  tmp <- NULL
+  try(
+    tmp <- mse_estim(framework       = framework,
+                     lambda          = lambda,
+                     shift           = shift,
+                     model_par       = model_par,
+                     gen_model       = gen_model,
+                     res_s           = res_s,
+                     fitted_s        = fitted_s, 
+                     fixed           = fixed,
+                     transformation  = transformation,
+                     interval        = interval,
+                     L               = L, 
+                     boot_type       = boot_type
+                     )
+  )
   if (i %% 10 == 0) {
     if (i != B) {
       delta <- difftime(Sys.time(), start_time, units = "secs")
@@ -386,36 +391,12 @@ mse_estim_wrapper <-  function(i,
       if (.Platform$OS.type == "windows") flush.console()
     }
   }
-  return(tmp)
+  if (!is.null(tmp)) {
+    return(tmp)
+  } else {
+    return(matrix(data = NA, 
+                  nrow = framework$N_dom_pop, 
+                  ncol = length(framework$indicator_names)))
+  }
+  
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
