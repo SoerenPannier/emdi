@@ -8,7 +8,7 @@
 }
 \arguments{
 \item{object}{an object of type "emdi", representing point and MSE
-estimates. Objects differ depending on the estimation method: direct 
+estimates. Objects differ depending on the estimation method: direct
 vs. model-based.}
 
 \item{...}{additional arguments that are not used in this method.}
@@ -16,22 +16,22 @@ vs. model-based.}
 \value{
 an object of type "summary.emdi" with following
 components:
-\item{out_of_smp}{if model-based estimation, number of out-of-sample domains 
+\item{out_of_smp}{if model-based estimation, number of out-of-sample domains
 equivalent to \code{N_dom_unobs} (see \code{\link{emdiObject}}).}
 \item{in_smp}{number of in-sample domains equivalent to \code{N_dom_smp}
              (see \code{\link{emdiObject}}).}
 \item{size_smp}{number of units in sample equivalent to \code{N_smp}
 (see \code{\link{emdiObject}}).}
-\item{size_pop}{if model-based estimation, number of units in population equivalent to \code{N_pop}
-(see \code{\link{emdiObject}}).}
-\item{size_dom}{a data frame with rows Sample_domains and Population_domains 
-(if model-based estimation) representing summary statistics of the sample 
+\item{size_pop}{if empirical best prediction, number of units in population
+equivalent to \code{N_pop} (see \code{\link{emdiObject}}).}
+\item{size_dom}{a data frame with rows Sample_domains and Population_domains
+(if ebp) representing summary statistics of the sample
 sizes across domains of sample and population data, respectively.}
-\item{transform}{if model-based estimation, a data frame with columns 
+\item{transform}{if model-based estimation, a data frame with columns
                  Transformation, Method, Optimal_lambda and Shift_parameter representing the
                  chosen transformation type and estimation method for lambda
                  as well as their results.}
-\item{normality}{if model-based estimation, a data frame with columns Skewness, 
+\item{normality}{if model-based estimation, a data frame with columns Skewness,
                  Kurtosis, Shapiro_W and Shapiro_p where the latter two represent
                  the results of a Shapiro-Wilks-Test for normality.
                  Rows correspond to Pearson residuals and random effects
@@ -39,17 +39,19 @@ sizes across domains of sample and population data, respectively.}
                  \code{\link{skewness}} and \code{\link{kurtosis}} are from
                  the package \pkg{moments}. Details for the Shapiro-Wilks-Test
                  are provided by \code{\link{shapiro.test}}.}
-\item{icc}{if model-based estimation, the value of the intraclass coefficient.}
-\item{coeff_determ}{if model-based estimation, a data frame with columns 
+\item{icc}{if empirical best prediction, the value of the intraclass coefficient.}
+\item{coeff_determ}{if empirical best prediction, a data frame with columns
                     Marginal_R2 and Conditional_R2 representing two R2 measures
                     for linear mixed models from the \pkg{MuMIn} package
-                    obtained by function \code{\link[MuMIn]{r.squaredGLMM}}.}                  
+                    obtained by function \code{\link[MuMIn]{r.squaredGLMM}}.}
+\item{model}{if Fay-Herriot, a list with model components such as information
+criteria, coefficients of determination or variance and MSE estimation methods.}
 \item{call}{a list containing an image of the function call that produced the
             object.}
 }
 \description{
-Additional information about the data and model in small area estimation 
-methods and components of an emdi object are extracted. The returned object 
+Additional information about the data and model in small area estimation
+methods and components of an emdi object are extracted. The returned object
 is suitable for printing  with the \code{print.summary.emdi} method.
 }
 \examples{
@@ -57,22 +59,40 @@ is suitable for printing  with the \code{print.summary.emdi} method.
 # Loading data - population and sample data
 data("eusilcA_pop")
 data("eusilcA_smp")
-  
+
 # Example with two additional indicators
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
-self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
+emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
+self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
 fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-threshold = function(y){0.6 * median(y)}, L = 50, MSE = TRUE, B = 50, 
+threshold = function(y){0.6 * median(y)}, L = 50, MSE = TRUE, B = 50,
 custom_indicator = list( my_max = function(y, threshold){max(y)},
 my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 
 # Receive first overview
 summary(emdi_model)
+
+
+# Load aggregated data ------------------------------------------------------
+data("eusilcA_popAgg")
+data("eusilcA_smpAgg")
+
+# Combine sample and population data ----------------------------------------
+combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
+                              smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+
+# Estimation of EBLUP means without transformation --------------------------
+
+# REML
+fh_reml <- fh(fixed = Mean ~ eqsize + cash + self_empl, vardir = "Var_Mean",
+              combined_data = combined_data, domains = "Domain",
+              method = "reml", interval = c(0, 100000000))
+# Receive first overview
+summary(fh_reml)
 }
 }
 \seealso{
-\code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
-\code{\link[MuMIn]{r.squaredGLMM}}, \code{\link[moments]{skewness}}, 
+\code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}},
+\code{\link[MuMIn]{r.squaredGLMM}}, \code{\link[moments]{skewness}},
 \code{\link[moments]{kurtosis}}, \code{\link[stats]{shapiro.test}}
 }

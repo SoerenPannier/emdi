@@ -11,6 +11,10 @@ mse_emdi <- function(object, indicator = "all", CV = FALSE) {
   }
 
   # Calculation of CVs
+  if(inherits(object, "fh")) {
+    object$MSE <- object$MSE[, c("Domain", "Direct", "FH")]
+    object$ind <- object$ind[, c("Domain", "Direct", "FH")]
+  }
   all_cv <- sqrt(object$MSE[,-1]) / object$ind[,-1]
 
   if (any(indicator == "Quantiles") || any(indicator == "quantiles")) {
@@ -31,8 +35,15 @@ mse_emdi <- function(object, indicator = "all", CV = FALSE) {
     ind <- object$MSE
     ind_cv <- cbind(Domain = object$MSE[,1], all_cv)
     ind_name <- "All indicators"
-  }
-  else {
+  } else if (any(indicator == "fh") || any(indicator == "FH" )) {
+    ind <- object$MSE[, c("Domain", "FH")]
+    ind_cv <- cbind(Domain = object$MSE[,1], all_cv)
+    ind_name <- "Fay-Herriot estimates"
+  } else if (any(indicator == "Direct") || any(indicator == "direct" )) {
+    ind <- object$MSE[, c("Domain", "Direct")]
+    ind_cv <- cbind(Domain = object$MSE[,1], all_cv)
+    ind_name <- "Direct estimates used in Fay-Herriot approach"
+  } else {
     selection = colnames(object$MSE[-1]) %in% indicator
     ind <- object$MSE[,c(TRUE, selection)]
     ind_cv <- data.frame(Domain = object$MSE[,1], all_cv[, selection])

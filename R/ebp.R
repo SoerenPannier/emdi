@@ -276,6 +276,6 @@ ebp <- function(fixed,
   if (cpus > 1 && parallel_mode != "socket") {
     RNGkind(RNG_kind[1]) # restoring RNG type
   }
-  class(ebp_out) <- c("emdi", "model")
+  class(ebp_out) <- c("emdi", "model", "ebp")
   return(ebp_out)
 }

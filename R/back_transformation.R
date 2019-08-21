@@ -21,7 +21,7 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
       # any adjustment.
       EBLUP_data$FH <- exp(eblup$EBLUP_data$FH)
 
-      if (MSE) {
+      if (MSE == TRUE) {
         estim_MSE <- analytical_mse(framework = framework, sigmau2 = sigmau2,
                                     combined_data = combined_data,
                                     method = method)
@@ -42,7 +42,7 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
       # of the term. This enables to get estimates also for out-of-sample estimates.
       EBLUP_data$FH <- exp(eblup$EBLUP_data$FH + 0.5 * estim_MSE$MSE_data$FH)
 
-      if (MSE) {
+      if (MSE == TRUE) {
         # The MSE is backtransformed following ?? Rao??
         MSE_data$FH <- exp(eblup$EBLUP_data$FH)^2 * estim_MSE$MSE_data$FH
         MSE_method <- estim_MSE$MSE_method
@@ -106,12 +106,12 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
             jack_mse <- wrapper_MSE(framework = framework, combined_data = combined_data,
                                     sigmau2 = sigmau2, vardir = vardir, eblup = eblup,
                                     transformation = transformation, method = method,
-                                    interval = interval, MSE = MSE)
+                                    interval = interval, mse_type = mse_type)
           } else if (mse_type == "weighted_jackknife") {
             jack_mse <- wrapper_MSE(framework = framework, combined_data = combined_data,
                                     sigmau2 = sigmau2, vardir = vardir, eblup = eblup,
                                     transformation = transformation, method = method,
-                                    interval = interval, MSE = MSE)
+                                    interval = interval, mse_type = mse_type)
           }
 
 
@@ -177,12 +177,12 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
             jack_mse <- wrapper_MSE(framework = framework, combined_data = combined_data,
                                     sigmau2 = sigmau2, vardir = vardir, eblup = eblup,
                                     transformation = transformation, method = method,
-                                    interval = interval, MSE = MSE)
+                                    interval = interval, mse_type = mse_type)
           } else if (mse_type == "weighted_jackknife") {
             jack_mse <- wrapper_MSE(framework = framework, combined_data = combined_data,
                                     sigmau2 = sigmau2, vardir = vardir, eblup = eblup,
                                     transformation = transformation, method = method,
-                                    interval = interval, MSE = MSE)
+                                    interval = interval, mse_type = mse_type)
           }
 
 
