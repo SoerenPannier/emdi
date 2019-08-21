@@ -106,7 +106,7 @@ compare_plot_ebp <- function(direct, model, indicator = "all", MSE = FALSE,
   selected_indicators <- selected_model[selected_model %in% selected_direct]
 
   compare_plots(object = Data, type = "unit", selected_indicators = selected_indicators,
-                MSE = MSE, CV = MSE, label = label, color = color,
+                MSE = MSE, CV = CV, label = label, color = color,
                 shape = shape, line_type = line_type, gg_theme = gg_theme)
 
 }
@@ -219,6 +219,7 @@ compare_plot.emdi <- function(direct, model = NULL, indicator = "all",
 
   if(inherits(direct, "direct") & inherits(model, "ebp")) {
     compare_plot_ebp(direct = direct, model = model, indicator = indicator,
+                     MSE = MSE, CV = CV,
                      label = label, color = color, shape = shape,
                      line_type = line_type, gg_theme = gg_theme)
   } else if(inherits(direct, "fh")) {
