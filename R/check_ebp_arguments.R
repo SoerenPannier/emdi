@@ -5,6 +5,7 @@
 # Function called in ebp
 ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L){
   
+  
 
   if (is.null(fixed)  || !inherits(fixed, "formula")) {
     stop('Fixed must be a formula object. See also help(ebp).')
