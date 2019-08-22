@@ -84,13 +84,14 @@ compare_plot_ebp <- function(direct, model, indicator = "all", MSE = FALSE,
   Data$smp_size <- as.numeric(smp_size)[matcher]
 
   if (MSE == TRUE || CV == TRUE ) {
+    
     precisions_direct <- mse_emdi(object = direct, indicator = indicator, CV = TRUE)
-    colnames(precisions_direct$ind) <- paste0(colnames(precisions_direct$ind), "Direct_MSE")
-    colnames(precisions_direct$ind_cv) <- paste0(colnames(precisions_direct$ind_cv), "Direct_CV")
+    colnames(precisions_direct$ind) <- c("Domain", paste0(colnames(precisions_direct$ind)[-1], "_Direct_MSE"))
+    colnames(precisions_direct$ind_cv) <- c("Domain", paste0(colnames(precisions_direct$ind_cv)[-1], "_Direct_CV"))
 
     precisions_model <- mse_emdi(object = model, indicator = indicator, CV = TRUE)
-    colnames(precisions_model$ind) <- paste0(colnames(precisions_model$ind), "Direct_MSE")
-    colnames(precisions_model$ind_cv) <- paste0(colnames(precisions_model$ind_cv), "Direct_CV")
+    colnames(precisions_model$ind) <- c("Domain", paste0(colnames(precisions_model$ind)[-1], "_Model_MSE"))
+    colnames(precisions_model$ind_cv) <- c("Domain", paste0(colnames(precisions_model$ind_cv)[-1], "_Model_CV"))
 
     if (MSE == TRUE) {
       Data <- merge(Data, precisions_direct$ind, id = "Domain")
@@ -99,6 +100,7 @@ compare_plot_ebp <- function(direct, model, indicator = "all", MSE = FALSE,
     if (CV == TRUE) {
       Data <- merge(Data, precisions_direct$ind_cv, id = "Domain")
       Data <- merge(Data, precisions_model$ind_cv, id = "Domain")
+      Data$smp_size2 <- Data$smp_size
     }
 
   }
@@ -246,13 +248,13 @@ define_evallabel <- function(type, label, indi){
                                x_lab = "Domain (ordered by sample size)"),
                       boxplot_MSE = c(title = indi,
                                y_lab = "MSE",
-                               x_lab = "Domain (ordered by sample size)"),
+                               x_lab = ""),
                       ordered_MSE = c(title = indi,
                                y_lab = "MSE",
                                x_lab = "Domain (ordered by sample size)"),
                       boxplot_CV = c(title = indi,
                                   y_lab = "CV",
-                                  x_lab = "Domain (ordered by sample size)"),
+                                  x_lab = ""),
                       ordered_CV = c(title = indi,
                                   y_lab = "CV",
                                   x_lab = "Domain (ordered by sample size)"))
@@ -307,13 +309,13 @@ define_evallabel <- function(type, label, indi){
                                x_lab = "Domain (ordered by sample size)"),
                       boxplot_MSE = c(title = "",
                                       y_lab = "MSE",
-                                      x_lab = "Domain (ordered by sample size)"),
+                                      x_lab = ""),
                       ordered_MSE = c(title = "",
                                       y_lab = "MSE",
                                       x_lab = "Domain (ordered by sample size)"),
                       boxplot_CV = c(title = "",
                                      y_lab = "CV",
-                                     x_lab = "Domain (ordered by sample size)"),
+                                     x_lab = ""),
                       ordered_CV = c(title = "",
                                      y_lab = "CV",
                                      x_lab = "Domain (ordered by sample size)"))
@@ -453,25 +455,36 @@ compare_plots <- function(object, type, selected_indicators, MSE, CV, label, col
       data_tmp <- data_tmp[order(data_tmp$smp_size), ]
       data_tmp$smp_size <- NULL
     }
-
-
-    print((plotList[[paste("scatter", ind, sep = "_")]] <- ggplot(data_tmp,
-                                                                  aes(x = Direct, y = Model_based)) + geom_point() +
-             geom_smooth(method = lm, color = color[1], se = FALSE) +
-             geom_abline(intercept = 0, slope = 1, size = 1, color = color[2]) +
-             xlim(min(min(data_tmp$Direct), min(data_tmp$Model_based)),
-                  max(max(data_tmp$Direct), max(data_tmp$Model_based))) +
-             ylim(min(min(data_tmp$Direct), min(data_tmp$Model_based)),
-                  max(max(data_tmp$Direct), max(data_tmp$Model_based))) +
-             ggtitle(label_ind$scatter["title"]) + ylab(label_ind$scatter["y_lab"]) +
-             xlab(label_ind$scatter["x_lab"]) + gg_theme))
-    cat("Press [enter] to continue")
-    line <- readline()
-
-
+    
     data_tmp$ID <- seq_along(object$Domain)
     data_shaped <- melt(data_tmp, id.vars = "ID")
     names(data_shaped) <- c("ID", "Method", "value")
+
+
+    print((plotList[[paste("scatter", ind, sep = "_")]] <- 
+             ggplot(data_tmp, aes(x = Direct, y = Model_based)) + 
+             geom_point(shape = shape[1]) +
+             geom_smooth(method = lm, se = FALSE, inherit.aes = FALSE, 
+                         lty = line_type[1],
+                         aes(colour = "Reg. line", x = Direct, y = Model_based)) + 
+             geom_abline(mapping = aes(colour = "Intersection", 
+                                       slope = slope, intercept = intercept),
+                         data.frame(slope = 1, intercept = 0), 
+                         lty = line_type[2]) +
+             xlim(min(min(data_tmp$Direct), min(data_tmp$Model_based)), 
+                  max(max(data_tmp$Direct), max(data_tmp$Model_based))) +
+             ylim(min(min(data_tmp$Direct), min(data_tmp$Model_based)), 
+                  max(max(data_tmp$Direct), max(data_tmp$Model_based))) +
+             ggtitle(label_ind$scatter["title"]) + 
+             ylab(label_ind$scatter["y_lab"]) + 
+             xlab(label_ind$scatter["x_lab"]) +
+             scale_color_manual(name = "",values = c("Intersection" = color[2], 
+                                                     "Reg. line" = color[1])) +  
+             gg_theme))
+    
+    cat("Press [enter] to continue")
+    line <- readline()
+
 
     print((plotList[[paste("line", ind, sep = "_")]] <-
              ggplot(data = data_shaped, aes(x = ID,
