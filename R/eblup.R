@@ -39,7 +39,7 @@ eblup_FH <- function(framework, sigmau2, combined_data) {
 
   if (all(framework$obs_dom == TRUE)) {
     EBLUP_data$FH[framework$obs_dom == TRUE] <- framework$model_X%*%Beta.hat + D%*%u.hat
-    EBLUP_data$ind[framework$obs_dom == TRUE] <- 0
+    EBLUP_data$Out[framework$obs_dom == TRUE] <- 0
   } else {
     # Prediction
     pred_data_tmp <- combined_data[framework$obs_dom == FALSE,]
@@ -54,8 +54,8 @@ eblup_FH <- function(framework, sigmau2, combined_data) {
     # Small area mean
     EBLUP_data$FH[framework$obs_dom == TRUE] <- framework$model_X%*%Beta.hat + D%*%u.hat
     EBLUP_data$FH[framework$obs_dom == FALSE] <- pred_y
-    EBLUP_data$ind[framework$obs_dom == TRUE] <- 0
-    EBLUP_data$ind[framework$obs_dom == FALSE] <- 1
+    EBLUP_data$Out[framework$obs_dom == TRUE] <- 0
+    EBLUP_data$Out[framework$obs_dom == FALSE] <- 1
   }
 
   eblup_out <- list(EBLUP_data = EBLUP_data,

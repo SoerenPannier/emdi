@@ -37,7 +37,7 @@ prasad_rao <- function(framework, sigmau2, combined_data) {
 
   # Small area MSE
   MSE_data$FH[framework$obs_dom == TRUE] <- mse
-  MSE_data$ind[framework$obs_dom == TRUE] <- 0
+  MSE_data$Out[framework$obs_dom == TRUE] <- 0
 
 
   if (!all(framework$obs_dom == TRUE)) {
@@ -57,7 +57,7 @@ prasad_rao <- function(framework, sigmau2, combined_data) {
     }
 
     MSE_data$FH[framework$obs_dom == FALSE] <- mse_out
-    MSE_data$ind[framework$obs_dom == FALSE] <- 1
+    MSE_data$Out[framework$obs_dom == FALSE] <- 1
   }
 
 
@@ -94,7 +94,7 @@ datta_lahiri <- function(framework, sigmau2, combined_data) {
 
   # Small area MSE
   MSE_data$FH[framework$obs_dom == TRUE] <- mse
-  MSE_data$ind[framework$obs_dom == TRUE] <- 0
+  MSE_data$Out[framework$obs_dom == TRUE] <- 0
 
   if (!all(framework$obs_dom == TRUE)) {
     h <- rep(0, framework$M - framework$m)
@@ -113,7 +113,7 @@ datta_lahiri <- function(framework, sigmau2, combined_data) {
     }
 
     MSE_data$FH[framework$obs_dom == FALSE] <- mse_out
-    MSE_data$ind[framework$obs_dom == FALSE] <- 1
+    MSE_data$Out[framework$obs_dom == FALSE] <- 1
   }
 
   return(MSE_data)
@@ -158,12 +158,12 @@ li_lahiri <- function(framework, sigmau2, combined_data, method) {
 
     MSE_data <- prasad_rao
     MSE_data$FH[framework$obs_dom == TRUE] <- mse
-    MSE_data$ind[framework$obs_dom == TRUE] <- 0
+    MSE_data$Out[framework$obs_dom == TRUE] <- 0
 
 
     if (!all(framework$obs_dom == TRUE)) {
       MSE_data$FH[framework$obs_dom == FALSE] <- NA
-      MSE_data$ind[framework$obs_dom == FALSE] <- 1
+      MSE_data$Out[framework$obs_dom == FALSE] <- 1
 
     cat("Please note that only for in-sample-domains a correction following
         Li and Lahiri (2010) is implemented. For the out-of-sample domains,
@@ -207,12 +207,12 @@ yoshimori_lahiri <- function(framework, sigmau2, combined_data, method) {
 
   MSE_data <- prasad_rao
   MSE_data$FH[framework$obs_dom == TRUE] <- mse
-  MSE_data$ind[framework$obs_dom == TRUE] <- 0
+  MSE_data$Out[framework$obs_dom == TRUE] <- 0
 
 
   if (!all(framework$obs_dom == TRUE)) {
     MSE_data$FH[framework$obs_dom == FALSE] <- NA
-    MSE_data$ind[framework$obs_dom == FALSE] <- 1
+    MSE_data$Out[framework$obs_dom == FALSE] <- 1
 
     cat("Please note that only for in-sample-domains a correction following
         Yoshimori and Lahiri (2014) is implemented. For the out-of-sample domains,
@@ -271,11 +271,11 @@ slud_maiti <- function(framework, sigmau2, eblup, combined_data) {
   MSE_data$Direct <- NA
   MSE_data$Direct[framework$obs_dom == TRUE] <- framework$vardir
   MSE_data$FH[framework$obs_dom == TRUE] <- mse
-  MSE_data$ind[framework$obs_dom == TRUE] <- 0
+  MSE_data$Out[framework$obs_dom == TRUE] <- 0
 
   if (!all(framework$obs_dom == TRUE)) {
     MSE_data$FH[framework$obs_dom == FALSE] <- NA
-    MSE_data$ind[framework$obs_dom == FALSE] <- 1
+    MSE_data$Out[framework$obs_dom == FALSE] <- 1
 
     cat("Please note that a MSE is only returned for in-sample domains.
         For more information see help(FH_AK).")
@@ -572,8 +572,8 @@ boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
 
   # Small area MSE
   MSE_data$MSE <- mse
-  MSE_data$ind[framework$obs_dom == TRUE] <- 0
-  MSE_data$ind[framework$obs_dom == FALSE] <- 1
+  MSE_data$Out[framework$obs_dom == TRUE] <- 0
+  MSE_data$Out[framework$obs_dom == FALSE] <- 1
 
   return(list(conf_int, MSE_data))
 
@@ -640,7 +640,7 @@ jiang_jackknife <- function(framework, combined_data, sigmau2, eblup, transforma
                                        eff_smpsize = framework$eff_smpsize)
     eblup_tmp <- eblup_FH(framework = framework_insample, sigmau2 = sigmau2_tmp,
                       combined_data = data_insample)
-    diff_jack_eblups[, paste0(domain)] <- eblup_tmp$EBLUP_data$FH - eblup$EBLUP_data$FH[eblup$EBLUP_data$ind == 0]
+    diff_jack_eblups[, paste0(domain)] <- eblup_tmp$EBLUP_data$FH - eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]
   }
 
   jack_mse <- g1 - ((m - 1)/m) * rowSums(diff_jack_g1) + ((m - 1)/m) * rowSums(diff_jack_eblups^2)
@@ -652,12 +652,12 @@ jiang_jackknife <- function(framework, combined_data, sigmau2, eblup, transforma
 
   # Jackknife MSE
   MSE_data$FH[framework$obs_dom == TRUE] <- jack_mse
-  MSE_data$ind[framework$obs_dom == TRUE] <- 0
+  MSE_data$Out[framework$obs_dom == TRUE] <- 0
 
 
   if (!all(framework$obs_dom == TRUE)) {
     MSE_data$FH[framework$obs_dom == FALSE] <- NA
-    MSE_data$ind[framework$obs_dom == FALSE] <- 1
+    MSE_data$Out[framework$obs_dom == FALSE] <- 1
 
     cat("Please note that the jackknife MSE is only available for in-sample
         domains.")
@@ -764,7 +764,7 @@ chen_weighted_jackknife <- function(framework, combined_data, sigmau2, eblup, tr
                                        eff_smpsize = framework$eff_smpsize)
     eblup_tmp <- eblup_FH(framework = framework_insample, sigmau2 = sigmau2_tmp,
                           combined_data = data_insample)
-    diff_jack_eblups[, paste0(domain)] <- eblup_tmp$EBLUP_data$FH - eblup$EBLUP_data$FH[eblup$EBLUP_data$ind == 0]
+    diff_jack_eblups[, paste0(domain)] <- eblup_tmp$EBLUP_data$FH - eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]
   }
 
   w_u  <- c()
@@ -817,12 +817,12 @@ chen_weighted_jackknife <- function(framework, combined_data, sigmau2, eblup, tr
 
   # Jackknife MSE
   MSE_data$FH[framework$obs_dom == TRUE] <- jack_mse_weighted
-  MSE_data$ind[framework$obs_dom == TRUE] <- 0
+  MSE_data$Out[framework$obs_dom == TRUE] <- 0
 
 
   if (!all(framework$obs_dom == TRUE)) {
     MSE_data$FH[framework$obs_dom == FALSE] <- NA
-    MSE_data$ind[framework$obs_dom == FALSE] <- 1
+    MSE_data$Out[framework$obs_dom == FALSE] <- 1
 
     cat("Please note that the jackknife MSE is only available for in-sample
         domains.")

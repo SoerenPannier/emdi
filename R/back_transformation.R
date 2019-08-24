@@ -116,7 +116,7 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
 
 
           # Following which paper??
-          back_jack_mse <- 2 * sin(eblup$EBLUP_data$FH[eblup$EBLUP_data$ind == 0]) * cos(eblup$EBLUP_data$FH[eblup$EBLUP_data$ind == 0]) * jack_mse$MSE_data$FH[jack_mse$MSE_data$ind == 0]
+          back_jack_mse <- 2 * sin(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]) * cos(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]) * jack_mse$MSE_data$FH[jack_mse$MSE_data$Out == 0]
 
           MSE_data$FH[framework$obs_dom == TRUE] <- back_jack_mse
           MSE_data$FH[framework$obs_dom == FALSE] <- NA
@@ -133,7 +133,7 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
       int_value <- NULL
       for (i in 1:framework$m) {
 
-        mu_dri <- eblup$EBLUP_data$FH[eblup$EBLUP_data$ind == 0]
+        mu_dri <- eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]
         mu_dri <- mu_dri[i]
 
         Var_dri <- sigmau2 * (1 - eblup$gamma)
@@ -152,8 +152,8 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
                                             upper = pi/2)$value)
       }
 
-      EBLUP_data$FH[eblup$EBLUP_data$ind == 0] <- int_value
-      EBLUP_data$FH[eblup$EBLUP_data$ind == 1] <- (sin(eblup$EBLUP_data$FH[eblup$EBLUP_data$ind == 1]))^2
+      EBLUP_data$FH[eblup$EBLUP_data$Out == 0] <- int_value
+      EBLUP_data$FH[eblup$EBLUP_data$Out == 1] <- (sin(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 1]))^2
 
 
       if (MSE == TRUE) {
@@ -187,7 +187,7 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
 
 
           # Following which paper??
-          back_jack_mse <- 2 * sin(eblup$EBLUP_data$FH[eblup$EBLUP_data$ind == 0]) * cos(eblup$EBLUP_data$FH[eblup$EBLUP_data$ind == 0]) * jack_mse$MSE_data$FH[jack_mse$MSE_data$ind == 0]
+          back_jack_mse <- 2 * sin(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]) * cos(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]) * jack_mse$MSE_data$FH[jack_mse$MSE_data$Out == 0]
 
           MSE_data$FH[framework$obs_dom == TRUE] <- back_jack_mse
           MSE_data$FH[framework$obs_dom == FALSE] <- NA
@@ -204,11 +204,11 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
   }
 
 
-  EBLUP_data$ind[framework$obs_dom == TRUE] <- 0
-  EBLUP_data$ind[framework$obs_dom == FALSE] <- 1
+  EBLUP_data$Out[framework$obs_dom == TRUE] <- 0
+  EBLUP_data$Out[framework$obs_dom == FALSE] <- 1
   if (MSE == TRUE) {
-    MSE_data$ind[framework$obs_dom == TRUE] <- 0
-    MSE_data$ind[framework$obs_dom == FALSE] <- 1
+    MSE_data$Out[framework$obs_dom == TRUE] <- 0
+    MSE_data$Out[framework$obs_dom == FALSE] <- 1
   }
 
 
