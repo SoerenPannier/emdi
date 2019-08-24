@@ -70,7 +70,7 @@ print.emdi <- function(x, ...) {
       cat(paste0(toupper(substring(x$model$correlation, 1, 1)), 
                  substring(x$model$correlation, 2)), "correlation assumed\n")
       if (x$model$correlation == "temporal" | x$model$correlation == "spatio-temporal"){
-        cat("Number of time periods: ", x$model$nTime, "\n")
+        cat("Number of time periods: ", x$model$n_time, "\n")
       }
       cat("\n")
       cat("Variance and MSE estimation:\n")

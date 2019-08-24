@@ -56,7 +56,7 @@
 #' @param alpha a numeric value that determines the confidence level for the
 #' confidence intervals.
 #' @return fitted FH model.
-#' @import formula.tools
+#' @importFrom formula.tools lhs
 #' @importFrom stats median model.frame model.matrix model.response optimize
 #' @importFrom stats pnorm rnorm
 #' @export
@@ -66,7 +66,7 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                interval = c(0, 1000), transformation = "no",
                backtransformation = NULL, eff_smpsize = NULL,
                MSE = FALSE, mse_type = "analytical", B = NULL, alpha = 0.05, 
-               correlation = "no", corMatrix = NULL, time = NULL, predType = "reblup", 
+               correlation = "no", corMatrix = NULL, time = NULL,
                c = 1) {
 
 
@@ -79,7 +79,7 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                             transformation = transformation,
                             eff_smpsize = eff_smpsize)
 
-  if (correlation == "no") {
+  if (!(method == "reblup" | method == "reblupbc")) {
     # Estimate sigma u -----------------------------------------------------------
     sigmau2 <- wrapper_estsigmau2(framework = framework, method = method,
                                   interval = interval)
@@ -174,10 +174,10 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                   call = call,
                   successful_bootstraps = NULL)
     }
-  } else if (correlation != "no") {
+  } else if (method == "reblup" | method == "reblupbc") {
     
     # Standard EBLUP -----------------------------------------------------------
-    eblup <- eblup_robust(framework = framework, k = 1000, predType = predType, 
+    eblup <- eblup_robust(framework = framework, k = 1000, predType = method, 
                           vardir = vardir, combined_data = combined_data, c = c, 
                           correlation = correlation, corMatrix = corMatrix,
                           time = time)
@@ -186,7 +186,7 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
     if (MSE == TRUE) {
       MSE_data <- wrapper_MSE(framework = framework, combined_data = combined_data,
                               vardir = vardir, eblup = eblup,
-                              mse_type = mse_type, predType = predType, B = B)
+                              mse_type = mse_type, predType = method, B = B)
       MSE <- MSE_data$MSE_data
       MSE_method <- MSE_data$MSE_method
     } else {
@@ -206,17 +206,17 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                              model_select = NULL,
                              correlation = correlation,
                              W = eblup$W,
-                             nTime = eblup$nTime,
+                             n_time = eblup$nTime,
                              scores = eblup$scores,
                              iterations = eblup$iterations,
-                             maxIter = eblup$maxIter,
-                             maxIterParam = eblup$maxIterParam,
-                             maxIterRe = eblup$maxIterRe),
+                             max_iter = eblup$maxIter,
+                             max_iter_param = eblup$maxIterParam,
+                             max_iter_re = eblup$maxIterRe),
                 framework = framework[c("direct", "vardir", "N_dom_smp",
                                         "N_dom_unobs")],
                 transformation = list(transformation = transformation,
                                       backtransformation = backtransformation),
-                method = list(method = "Sebis Diss",
+                method = list(method = method,
                               MSE_method = MSE_method),
                 fixed = fixed,
                 call = call,
