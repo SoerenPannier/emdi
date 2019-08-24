@@ -4,10 +4,12 @@
 \alias{fh}
 \title{Standard Fay-Herriot model for disaggregated indicators}
 \usage{
-fh(fixed, vardir, combined_data, domains = NULL, method = "reml",
+fh(fixed, vardir, combined_data, domains, method = "reml",
   interval = c(0, 1000), transformation = "no",
   backtransformation = NULL, eff_smpsize = NULL, MSE = FALSE,
-  mse_type = "analytical", B = NULL, alpha = 0.05)
+  mse_type = "analytical", B = NULL, alpha = 0.05,
+  correlation = "no", corMatrix = NULL, time = NULL,
+  predType = "reblup", c = 1)
 }
 \arguments{
 \item{fixed}{a two-sided linear formula object describing the

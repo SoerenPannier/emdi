@@ -62,10 +62,12 @@
 #' @export
 
 
-fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
+fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                interval = c(0, 1000), transformation = "no",
                backtransformation = NULL, eff_smpsize = NULL,
-               MSE = FALSE, mse_type = "analytical", B = NULL, alpha = 0.05) {
+               MSE = FALSE, mse_type = "analytical", B = NULL, alpha = 0.05, 
+               correlation = "no", corMatrix = NULL, time = NULL, predType = "reblup", 
+               c = 1) {
 
 
   # Save function call ---------------------------------------------------------
@@ -77,99 +79,152 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                             transformation = transformation,
                             eff_smpsize = eff_smpsize)
 
-
-  # Estimate sigma u -----------------------------------------------------------
-  sigmau2 <- wrapper_estsigmau2(framework = framework, method = method,
-                                interval = interval)
-
-
-  # Standard EBLUP -------------------------------------------------------------
-  eblup <- eblup_FH(framework = framework, sigmau2 = sigmau2,
-                    combined_data = combined_data)
-
-
-  # Criteria for model selection -----------------------------------------------
-  criteria <- model_select(framework = framework, sigmau2 = sigmau2,
-                           real_res = eblup$real_res)
-
-
-  if (transformation == "no") {
-
-    # Analytical MSE
+  if (correlation == "no") {
+    # Estimate sigma u -----------------------------------------------------------
+    sigmau2 <- wrapper_estsigmau2(framework = framework, method = method,
+                                  interval = interval)
+    
+    
+    # Standard EBLUP -------------------------------------------------------------
+    eblup <- eblup_FH(framework = framework, sigmau2 = sigmau2,
+                      combined_data = combined_data)
+    
+    
+    # Criteria for model selection -----------------------------------------------
+    criteria <- model_select(framework = framework, sigmau2 = sigmau2,
+                             real_res = eblup$real_res)
+    
+    
+    if (transformation == "no") {
+      
+      # Analytical MSE
+      if (MSE == TRUE) {
+        MSE_data <- wrapper_MSE(framework = framework, combined_data = combined_data,
+                                sigmau2 = sigmau2, vardir = vardir, eblup = eblup,
+                                transformation = transformation, method = method,
+                                interval = interval, mse_type = mse_type)
+        MSE <- MSE_data$MSE_data
+        MSE_method <- MSE_data$MSE_method
+      } else {
+        MSE <- NULL
+        MSE_method <- "no mse estimated"
+      }
+      
+      
+      # Shrinkage factor
+      Gamma <- data.frame(Domain = framework$data[[framework$domains]],
+                          Gamma = eblup$gamma)
+      
+      out <- list(ind = eblup$EBLUP_data,
+                  MSE = MSE,
+                  transform_param = NULL,
+                  model = list(coefficients = eblup$coefficients,
+                               sigmau2 = sigmau2,
+                               random_effects = eblup$random_effects,
+                               real_residuals = eblup$real_res,
+                               std_real_residuals = eblup$std_real_res,
+                               gamma = Gamma,
+                               model_select = criteria,
+                               correlation = correlation),
+                  framework = framework[c("direct", "vardir", "N_dom_smp",
+                                          "N_dom_unobs")],
+                  transformation = list(transformation = transformation,
+                                        backtransformation = backtransformation),
+                  method = list(method = method,
+                                MSE_method = MSE_method),
+                  fixed = fixed,
+                  call = call,
+                  successful_bootstraps = NULL
+      )
+    } else if (transformation != "no") {
+      
+      # Shrinkage factor
+      Gamma <- data.frame(Domain = framework$data[[framework$domains]],
+                          Gamma = as.numeric(eblup$gamma))
+      
+      # Back-transformation
+      result_data <- backtransformed(framework = framework,
+                                     sigmau2 = sigmau2, eblup = eblup,
+                                     transformation = transformation,
+                                     backtransformation = backtransformation,
+                                     combined_data = combined_data,
+                                     method = method, interval = interval,
+                                     MSE = MSE,
+                                     mse_type = mse_type,
+                                     B = B, alpha = alpha)
+      
+      out <- list(ind = result_data$EBLUP_data,
+                  MSE = result_data$MSE_data,
+                  transform_param = NULL,
+                  model = list(coefficients = eblup$coefficients,
+                               sigmau2 = sigmau2,
+                               random_effects = eblup$random_effects[, 1],
+                               real_residuals = eblup$real_res[, 1],
+                               std_real_residuals = eblup$std_real_res[, 1],
+                               gamma = Gamma,
+                               model_select = criteria, 
+                               correlation = correlation),
+                  framework = framework[c("direct", "vardir", "N_dom_smp",
+                                          "N_dom_unobs")],
+                  transformation = list(transformation = transformation,
+                                        backtransformation = backtransformation),
+                  method = list(method = method,
+                                MSE_method = result_data$MSE_method),
+                  fixed = fixed,
+                  call = call,
+                  successful_bootstraps = NULL)
+    }
+  } else if (correlation != "no") {
+    
+    # Standard EBLUP -----------------------------------------------------------
+    eblup <- eblup_robust(framework = framework, k = 1000, predType = predType, 
+                          vardir = vardir, combined_data = combined_data, c = c, 
+                          correlation = correlation, corMatrix = corMatrix,
+                          time = time)
+    
+    # MSE ----------------------------------------------------------------------
     if (MSE == TRUE) {
       MSE_data <- wrapper_MSE(framework = framework, combined_data = combined_data,
-                              sigmau2 = sigmau2, vardir = vardir, eblup = eblup,
-                              transformation = transformation, method = method,
-                              interval = interval, mse_type = mse_type)
+                              vardir = vardir, eblup = eblup,
+                              mse_type = mse_type, predType = predType, B = B)
       MSE <- MSE_data$MSE_data
       MSE_method <- MSE_data$MSE_method
     } else {
       MSE <- NULL
       MSE_method <- "no mse estimated"
     }
-
-
-    # Shrinkage factor
-    Gamma <- data.frame(Domain = framework$data[[framework$domains]],
-                        Gamma = eblup$gamma)
-
+    
+    
     out <- list(ind = eblup$EBLUP_data,
                 MSE = MSE,
                 transform_param = NULL,
                 model = list(coefficients = eblup$coefficients,
-                             sigmau2 = sigmau2,
-                             random_effects = eblup$random_effects,
-                             real_residuals = eblup$real_res,
-                             std_real_residuals = eblup$std_real_res,
-                             gamma = Gamma,
-                             model_select = criteria),
+                             variance = eblup$variance,
+                             random_effects = as.matrix(eblup$random_effects),
+                             real_residuals = as.matrix(eblup$real_res),
+                             std_real_residuals = as.matrix(eblup$std_real_res),
+                             model_select = NULL,
+                             correlation = correlation,
+                             W = eblup$W,
+                             nTime = eblup$nTime,
+                             scores = eblup$scores,
+                             iterations = eblup$iterations,
+                             maxIter = eblup$maxIter,
+                             maxIterParam = eblup$maxIterParam,
+                             maxIterRe = eblup$maxIterRe),
                 framework = framework[c("direct", "vardir", "N_dom_smp",
                                         "N_dom_unobs")],
                 transformation = list(transformation = transformation,
                                       backtransformation = backtransformation),
-                method = list(method = method,
+                method = list(method = "Sebis Diss",
                               MSE_method = MSE_method),
                 fixed = fixed,
                 call = call,
-                successful_bootstraps = NULL
-                )
-  } else if (transformation != "no") {
+                successful_bootstraps = NULL)
+    
 
-    # Shrinkage factor
-    Gamma <- data.frame(Domain = framework$data[[framework$domains]],
-                        Gamma = as.numeric(eblup$gamma))
-
-    # Back-transformation
-    result_data <- backtransformed(framework = framework,
-                                   sigmau2 = sigmau2, eblup = eblup,
-                                   transformation = transformation,
-                                   backtransformation = backtransformation,
-                                   combined_data = combined_data,
-                                   method = method, interval = interval,
-                                   MSE = MSE,
-                                   mse_type = mse_type,
-                                   B = B, alpha = alpha)
-
-    out <- list(ind = result_data$EBLUP_data,
-                MSE = result_data$MSE_data,
-                transform_param = NULL,
-                model = list(coefficients = eblup$coefficients,
-                             sigmau2 = sigmau2,
-                             random_effects = eblup$random_effects[, 1],
-                             real_residuals = eblup$real_res[, 1],
-                             std_real_residuals = eblup$std_real_res[, 1],
-                             gamma = Gamma,
-                             model_select = criteria),
-                framework = framework[c("direct", "vardir", "N_dom_smp",
-                                        "N_dom_unobs")],
-                transformation = list(transformation = transformation,
-                                      backtransformation = backtransformation),
-                method = list(method = method,
-                              MSE_method = result_data$MSE_method),
-               fixed = fixed,
-               call = call,
-               successful_bootstraps = NULL)
   }
+  
 
   class(out) <- c("emdi", "model", "fh")
 

@@ -153,13 +153,12 @@ compare_plot_fh <- function(direct, model, indicator = "all", MSE = FALSE, CV = 
   #compare_plot_check(direct = direct, model = model, indicator = indicator,
   #                   label = label, color = color, shape = shape,
   #                   line_type = line_type, gg_theme = gg_theme)
-
-  Data <- direct$ind[direct$ind$ind == 0,]
-  names(Data) <- c("Domain", "FH_Direct", "FH_Model", "ind")
+  Data <- direct$ind[direct$ind$Out == 0,]
+  names(Data) <- c("Domain", "FH_Direct", "FH_Model", "Out")
   if (is.null(direct$MSE)) {
     Data$smp_size <- NULL
   } else {
-    Data$smp_size <- -direct$MSE$Direct[direct$MSE$ind == 0]
+    Data$smp_size <- -direct$MSE$Direct[direct$MSE$Out == 0]
   }
   selected_indicators <- "FH"
 
@@ -459,7 +458,7 @@ compare_plots <- function(object, type, selected_indicators, MSE, CV, label, col
     data_tmp$ID <- seq_along(object$Domain)
     data_shaped <- melt(data_tmp, id.vars = "ID")
     names(data_shaped) <- c("ID", "Method", "value")
-
+    
 
     print((plotList[[paste("scatter", ind, sep = "_")]] <- 
              ggplot(data_tmp, aes(x = Direct, y = Model_based)) + 

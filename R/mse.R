@@ -835,11 +835,39 @@ chen_weighted_jackknife <- function(framework, combined_data, sigmau2, eblup, tr
 }
 
 
+################################################################################
+### MSE estimators taken from saeRobust
+pseudo <- function(framework, combined_data, eblup, mse_type, predType){
+  MSE <- saeRobust::mse(object = eblup$eblupobject, type = mse_type, predType = predType)
+  MSE_data <- data.frame(Domain = combined_data[[framework$domains]])
+  MSE_data$Direct <- NA
+  MSE_data$Direct[framework$obs_dom == TRUE] <- framework$vardir
+  if (is.element("reblup", predType)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$pseudo
+  if (is.element("reblupbc", predType)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$pseudobc
+  MSE_data$Out[framework$obs_dom == TRUE] <- 0
+  
+  MSE_data <- list(MSE_data = MSE_data,
+                   MSE_method = "pseudo linearization")
+}
+
+robustboot <- function(framework, combined_data, eblup, mse_type, B, predType){
+  MSE <- saeRobust::mse(object = eblup$eblupobject, type = mse_type, predType = predType, B = B)
+  MSE_data <- data.frame(Domain = combined_data[[framework$domains]])
+  MSE_data$Direct <- NA
+  MSE_data$Direct[framework$obs_dom == TRUE] <- framework$vardir
+  if (is.element("reblup", predType)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$boot
+  if (is.element("reblupbc", predType)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$bootbc
+  MSE_data$Out[framework$obs_dom == TRUE] <- 0
+  MSE_data <- list(MSE_data = MSE_data,
+                   MSE_method = "bootstrap")
+}
+
 
 
 
 wrapper_MSE <- function(framework, combined_data, sigmau2, vardir, eblup,
-                        transformation, method, interval, mse_type) {
+                        transformation, method, interval, mse_type, predType = NULL,
+                        B = NULL) {
   MSE_data <- if (mse_type == "analytical") {
     analytical_mse(framework = framework, sigmau2 = sigmau2,
                    combined_data = combined_data, method = method)
@@ -853,6 +881,13 @@ wrapper_MSE <- function(framework, combined_data, sigmau2, vardir, eblup,
                             sigmau2 = sigmau2, eblup = eblup, vardir = vardir,
                             transformation = transformation, method = method,
                             interval = interval)
+  } else if (mse_type == "pseudo"){
+    pseudo(framework = framework, combined_data = combined_data, eblup = eblup, 
+           mse_type = "pseudo", predType = predType)
+  } else if (mse_type == "boot" & !is.null(predType)){
+    robustboot(framework = framework, combined_data = combined_data, eblup = eblup, 
+               mse_type = "boot", predType = predType,
+               B = B)
   }
 
   return(MSE_data)

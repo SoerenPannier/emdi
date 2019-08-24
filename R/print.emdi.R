@@ -61,16 +61,28 @@ print.emdi <- function(x, ...) {
     cat("Units in each Domain:")
     print(table(x$framework$smp_domains_vec))
   } else if (inherits(x, "fh")) {
+    
       cat("Empirical Best Linear Unbiased Prediction (Fay-Herriot)\n")
       cat("\n")
       cat("Out-of-sample domains: ", x$framework$N_dom_unobs, "\n")
       cat("In-sample domains: ", x$framework$N_dom_smp, "\n")
       cat("\n")
+      cat(paste0(toupper(substring(x$model$correlation, 1, 1)), 
+                 substring(x$model$correlation, 2)), "correlation assumed\n")
+      if (x$model$correlation == "temporal" | x$model$correlation == "spatio-temporal"){
+        cat("Number of time periods: ", x$model$nTime, "\n")
+      }
+      cat("\n")
       cat("Variance and MSE estimation:\n")
       cat("Variance estimation method: ", x$method$method,
           "\n")
-      cat("Estimated variance of random effects: ", x$model$sigmau2,
-          "\n")
+      if (x$model$correlation == "no") {
+        cat("Estimated variance of random effects: ", x$model$sigmau2, "\n")
+      } else if (x$model$correlation != "no") {
+        cat("Variance component(s): ","\n")
+        print(x$model$variance)
+        cat("\n")
+      }
       cat("MSE method: ", x$method$MSE_method, "\n")
       cat("\n")
       if (x$transformation$transformation == "no") {

@@ -284,11 +284,6 @@ summary.emdi <- function(object, ...) {
                      coeff_determ = NULL,
                      model        = object$model,
                      method       = object$method,
-                     #variance_estimation_method = object$method$method,
-                     #MSE_method = object$method$MSE_method,
-                     #coefficients = object$model$coefficients,
-                     #sigmau2 = object$model$sigmau2,
-                     #model_select = object$model$model_select,
                      call = object$call)
   }
 
@@ -356,13 +351,23 @@ print.summary.emdi <- function(x,...) {
     print(x$call)
     cat("\n")
     cat("In-sample domains: ", x$in_smp, "\n")
-    cat("Out-of-sample domains: ", x$out_of_smp,
-        "\n")
+    cat("Out-of-sample domains: ", x$out_of_smp, "\n")
+    cat("\n")
+    cat(paste0(toupper(substring(x$model$correlation, 1, 1)), 
+               substring(x$model$correlation, 2)), "correlation assumed\n")
+    if (x$model$correlation == "temporal" | x$model$correlation == "spatio-temporal"){
+      cat("Number of time periods: ", x$model$nTime, "\n")
+    }
     cat("\n")
     cat("Variance estimation method: ", x$method$method,
         "\n")
-    cat("Estimated variance of random effects: ", x$model$sigmau2,
-        "\n")
+    if (x$model$correlation == "no") {
+      cat("Estimated variance of random effects: ", x$model$sigmau2, "\n")
+    } else if (x$model$correlation != "no") {
+      cat("Variance components: ","\n")
+      print(x$model$variance)
+      cat("\n")
+    }
     cat("MSE method: ", x$method$MSE_method, "\n")
     cat("\n")
     cat("Coefficients:\n")
