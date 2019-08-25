@@ -34,13 +34,19 @@ the variance of the random effects. Methods that can be chosen
 (ii) maximum likelihood method ("\code{ml}"),
 (iii) adjusted REML following \cite{Li and Lahiri (2010)} ("\code{amrl}"),
 (iv) adjusted ML following \cite{Li and Lahiri (2010)} ("\code{ampl}"),
-(v) adjusted REML following \cite{Yoshimori and Lahiri (2014)}
-("\code{amrl_yl}"),
-(vi) adjusted ML following \cite{Yoshimori and Lahiri (2014)}
-("\code{ampl_yl}").
+(v) adjusted REML following \cite{Yoshimori and Lahiri (2014)} ("\code{amrl_yl}"),
+(vi) adjusted ML following \cite{Yoshimori and Lahiri (2014)} ("\code{ampl_yl}"),
+(vi) robustified maximum likelihood with robust eblup prediction following
+\cite{Warnholz (2017)} ("\code{reblup}"), 
+(vi) robustified maximum likelihood with robust and bias-corrected eblup 
+prediction following \cite{Warnholz (2017)} ("\code{reblupbc}").
  Defaults to "\code{reml}".}
 
 \item{interval}{interval for the estimation of sigmau2.}
+
+\item{k}{parameter for robustification}
+
+\item{c}{parameter for bias-correction}
 
 \item{transformation}{a character that determines the type of transformation
 and back-transformation. Methods that can be chosen
@@ -54,6 +60,21 @@ and (v) arcsin transformation with naive back-transformation ("\code{arcsin}")}
 \item{backtransformation}{a character that determines the type of bracktransformation}
 
 \item{eff_smpsize}{Effective sample size.}
+
+\item{correlation}{a character string determining the correlation structure.}
+
+\item{corMatrix}{proximity matrix.}
+
+\item{time}{a character string indicating the name of the variable containing
+the time variable that is included in \code{combined_data}.}
+
+\item{Ci}{MSE array of explanatory variables.}
+
+\item{tol}{tolerance value for the convergence of weights for the estimation 
+of sigmau2 and the betas.}
+
+\item{maxit}{maximum number of iterations in the convergence of weights for 
+the estimation of sigmau2 and the betas.}
 
 \item{MSE}{if \code{TRUE}, MSE estimates are calculated. Defaults
 to \code{FALSE}.}

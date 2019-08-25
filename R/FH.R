@@ -26,12 +26,16 @@
 #' (ii) maximum likelihood method ("\code{ml}"),
 #' (iii) adjusted REML following \cite{Li and Lahiri (2010)} ("\code{amrl}"),
 #' (iv) adjusted ML following \cite{Li and Lahiri (2010)} ("\code{ampl}"),
-#' (v) adjusted REML following \cite{Yoshimori and Lahiri (2014)}
-#' ("\code{amrl_yl}"),
-#' (vi) adjusted ML following \cite{Yoshimori and Lahiri (2014)}
-#' ("\code{ampl_yl}").
+#' (v) adjusted REML following \cite{Yoshimori and Lahiri (2014)} ("\code{amrl_yl}"),
+#' (vi) adjusted ML following \cite{Yoshimori and Lahiri (2014)} ("\code{ampl_yl}"),
+#' (vi) robustified maximum likelihood with robust eblup prediction following
+#' \cite{Warnholz (2017)} ("\code{reblup}"), 
+#' (vi) robustified maximum likelihood with robust and bias-corrected eblup 
+#' prediction following \cite{Warnholz (2017)} ("\code{reblupbc}").
 #'  Defaults to "\code{reml}".
 #' @param interval interval for the estimation of sigmau2.
+#' @param k parameter for robustification
+#' @param c parameter for bias-correction
 #' @param transformation a character that determines the type of transformation
 #' and back-transformation. Methods that can be chosen
 #' (i) no transformation ("\code{no}")
@@ -42,6 +46,15 @@
 #' and (v) arcsin transformation with naive back-transformation ("\code{arcsin}")
 #' @param backtransformation a character that determines the type of bracktransformation
 #' @param eff_smpsize Effective sample size.
+#' @param correlation a character string determining the correlation structure.
+#' @param corMatrix  proximity matrix.
+#' @param time a character string indicating the name of the variable containing
+#' the time variable that is included in \code{combined_data}.
+#' @param Ci MSE array of explanatory variables.
+#' @param tol tolerance value for the convergence of weights for the estimation 
+#' of sigmau2 and the betas.
+#' @param maxit maximum number of iterations in the convergence of weights for 
+#' the estimation of sigmau2 and the betas.
 #' @param MSE if \code{TRUE}, MSE estimates are calculated. Defaults
 #' to \code{FALSE}.
 #' @param mse_type a character string determining the estimation method of the MSE.
