@@ -1,4 +1,4 @@
-eblup_robust <- function(framework, combined_data, predType, k = 1.345, vardir, c,
+eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, c,
                          correlation, corMatrix, time) {
   
   if (correlation == "no"){
@@ -31,9 +31,9 @@ eblup_robust <- function(framework, combined_data, predType, k = 1.345, vardir, 
   EBLUP_data$Direct[framework$obs_dom == TRUE] <- framework$direct
   #eblup
   # bias corrected prediction
-  if (is.element("linear", predType)) EBLUP_data$FH[framework$obs_dom == TRUE] <- eblupobject$linear
-  if (is.element("reblup", predType)) EBLUP_data$FH[framework$obs_dom == TRUE] <- eblupobject$reblup
-  if (is.element("reblupbc", predType)) EBLUP_data$FH[framework$obs_dom == TRUE] <- eblupobject$reblupbc
+  if (is.element("linear", method)) EBLUP_data$FH[framework$obs_dom == TRUE] <- eblupobject$linear
+  if (is.element("reblup", method)) EBLUP_data$FH[framework$obs_dom == TRUE] <- eblupobject$reblup
+  if (is.element("reblupbc", method)) EBLUP_data$FH[framework$obs_dom == TRUE] <- eblupobject$reblupbc
   EBLUP_data$Out[framework$obs_dom == TRUE] <- 0
  
   # Scores

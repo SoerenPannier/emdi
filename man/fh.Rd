@@ -5,11 +5,11 @@
 \title{Standard Fay-Herriot model for disaggregated indicators}
 \usage{
 fh(fixed, vardir, combined_data, domains, method = "reml",
-  interval = c(0, 1000), transformation = "no",
-  backtransformation = NULL, eff_smpsize = NULL, MSE = FALSE,
-  mse_type = "analytical", B = NULL, alpha = 0.05,
-  correlation = "no", corMatrix = NULL, time = NULL,
-  predType = "reblup", c = 1)
+  interval = c(0, 1000), k = 10000, c = 1, transformation = "no",
+  backtransformation = NULL, eff_smpsize = NULL, correlation = "no",
+  corMatrix = NULL, time = NULL, Ci = NULL, tol = NULL,
+  maxit = NULL, MSE = FALSE, mse_type = "analytical", B = NULL,
+  alpha = 0.05)
 }
 \arguments{
 \item{fixed}{a two-sided linear formula object describing the

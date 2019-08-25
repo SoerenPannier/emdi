@@ -834,29 +834,148 @@ chen_weighted_jackknife <- function(framework, combined_data, sigmau2, eblup, tr
   return(mse_out)
 }
 
+### Jackknife MSE estimator (Ybarra-Lohr model)
 
-################################################################################
-### MSE estimators taken from saeRobust
-pseudo <- function(framework, combined_data, eblup, mse_type, predType){
-  MSE <- saeRobust::mse(object = eblup$eblupobject, type = mse_type, predType = predType)
+jiang_jackknife_yl  <- function(framework, combined_data, sigmau2, eblup, method,
+                                transformation, vardir, Ci) {
+  
+  
+  # this MSE estimator can leed to negative values
+  m <- framework$m
+  jack_sigmau2 <- vector(length = m)
+  diff_jack_eblups <- data.frame(row.names = 1:m)
+  diff_jack_g1 <- data.frame(row.names = 1:m)
+  g1 <- rep(0, framework$m)
+  jack_mse <- rep(0, framework$m)
+  gamma_tmp <- matrix(0,framework$m, framework$m)
+  sigmau2_tmp<- matrix(0,framework$m)
+  jack_sigmau2<- matrix(0,framework$m)
+  # Inverse of total variance
+  #Vi <- 1/(sigmau2 + framework$vardir)
+  # Shrinkage factor
+  Bd <- 1- eblup$gamma
+  
+  g1_tmp <- matrix(0,framework$m, framework$m)
+  for (d in 1:framework$m) {
+    # Variance due to random effects: vardir * gamma
+    g1[d] <- framework$vardir[d] * (1 - Bd[d])
+  }
+  
+  for (domain in 1:m) {
+    print(domain)
+    
+    
+    data_insample <- combined_data[framework$obs_dom,]
+    data_tmp <- data_insample[-domain,]
+    
+    # Framework with temporary data
+    framework_tmp <- framework_FH(combined_data = data_tmp,
+                                     fixed = framework$formula,
+                                     vardir = vardir, Ci = Ci,
+                                     domains = framework$domains,
+                                     transformation = "no", 
+                                     eff_smpsize = framework$eff_smpsize,
+                                     tol = framework$tol, maxit = framework$maxit)
+    
+    # Estimate sigma u
+    sigmau2_tmp<- wrapper_estsigmau2(framework = framework_tmp, method = method)
+    jack_sigmau2[domain] <- sigmau2_tmp$sigmau_YL
+    
+    #Vi_tmp <- 1/(sigmau2_tmp + framework$vardir)
+    
+    # Shrinkage factor
+    #Bd_tmp <- 1- eblup_tmp$gamma
+    
+    framework_insample <- framework_FH(combined_data = data_insample, 
+                                          fixed = framework$formula,
+                                          vardir = vardir, Ci = Ci, 
+                                          domains = framework$domains,
+                                          transformation = "no",
+                                          eff_smpsize = framework$eff_smpsize,
+                                          tol = framework$tol, maxit = framework$maxit)
+    
+    thbCihb<-NULL
+    for(i in 1:framework_insample$m){
+      thbCihb[i]<-t(sigmau2_tmp$betahatw)%*%framework_insample$Ci[,,i]%*%sigmau2_tmp$betahatw
+    }
+    
+    gamma_tmp[, domain] <- (sigmau2_tmp$sigmau_YL+thbCihb)/
+      (sigmau2_tmp$sigmau_YL+thbCihb+ framework_insample$vardir)
+    
+    
+    
+    for (d_tmp in 1:framework$m) {
+      g1_tmp[d_tmp,] <- framework$vardir[d_tmp] * gamma_tmp[d_tmp,] #(1 - Bd_tmp[d_tmp])
+    }
+    
+    
+    # G1
+    diff_jack_g1[, paste0(domain)] <- g1_tmp[, domain] - g1
+    
+    # Standard EBLUP
+    
+    eblup_tmp <- eblup_YL(framework = framework_insample, sigmau2 = sigmau2_tmp,
+                          combined_data = data_insample) #data_insample framework_insample
+    
+    diff_jack_eblups[, paste0(domain)] <- eblup_tmp$EBLUP_data$FH - 
+      eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]
+    
+    
+  }
+  
+  jack_mse <- g1 - ((m - 1)/m) * rowSums(diff_jack_g1) + 
+    ((m - 1)/m) * rowSums(diff_jack_eblups^2)
+  
+  
   MSE_data <- data.frame(Domain = combined_data[[framework$domains]])
   MSE_data$Direct <- NA
   MSE_data$Direct[framework$obs_dom == TRUE] <- framework$vardir
-  if (is.element("reblup", predType)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$pseudo
-  if (is.element("reblupbc", predType)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$pseudobc
+
+  # Jackknife MSE
+  MSE_data$FH[framework$obs_dom == TRUE] <- jack_mse
+  MSE_data$Out[framework$obs_dom == TRUE] <- 0
+  
+  
+  if (!all(framework$obs_dom == TRUE)) {
+    MSE_data$FH[framework$obs_dom == FALSE] <- NA
+    MSE_data$Out[framework$obs_dom == FALSE] <- 1
+    
+    cat("Please note that the jackknife MSE is only available for in-sample
+        domains.")
+  }
+  
+  mse_out <- list(MSE_data = MSE_data,
+                  MSE_method = "jackknife",
+                  g1 = g1,
+                  diff_jack_g1 = jack_sigmau2,
+                  diff_jack_eblups = diff_jack_eblups)
+  
+  return(mse_out)
+  }
+
+
+################################################################################
+### MSE estimators taken from saeRobust
+pseudo <- function(framework, combined_data, eblup, mse_type, method){
+  MSE <- saeRobust::mse(object = eblup$eblupobject, type = mse_type, predType = method)
+  MSE_data <- data.frame(Domain = combined_data[[framework$domains]])
+  MSE_data$Direct <- NA
+  MSE_data$Direct[framework$obs_dom == TRUE] <- framework$vardir
+  if (is.element("reblup", method)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$pseudo
+  if (is.element("reblupbc", method)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$pseudobc
   MSE_data$Out[framework$obs_dom == TRUE] <- 0
   
   MSE_data <- list(MSE_data = MSE_data,
                    MSE_method = "pseudo linearization")
 }
 
-robustboot <- function(framework, combined_data, eblup, mse_type, B, predType){
-  MSE <- saeRobust::mse(object = eblup$eblupobject, type = mse_type, predType = predType, B = B)
+robustboot <- function(framework, combined_data, eblup, mse_type, B, method){
+  MSE <- saeRobust::mse(object = eblup$eblupobject, type = mse_type, predType = method, B = B)
   MSE_data <- data.frame(Domain = combined_data[[framework$domains]])
   MSE_data$Direct <- NA
   MSE_data$Direct[framework$obs_dom == TRUE] <- framework$vardir
-  if (is.element("reblup", predType)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$boot
-  if (is.element("reblupbc", predType)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$bootbc
+  if (is.element("reblup", method)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$boot
+  if (is.element("reblupbc", method)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$bootbc
   MSE_data$Out[framework$obs_dom == TRUE] <- 0
   MSE_data <- list(MSE_data = MSE_data,
                    MSE_method = "bootstrap")
@@ -865,17 +984,23 @@ robustboot <- function(framework, combined_data, eblup, mse_type, B, predType){
 
 
 
-wrapper_MSE <- function(framework, combined_data, sigmau2, vardir, eblup,
-                        transformation, method, interval, mse_type, predType = NULL,
+wrapper_MSE <- function(framework, combined_data, sigmau2, vardir, Ci, eblup,
+                        transformation, method, interval, mse_type, 
                         B = NULL) {
   MSE_data <- if (mse_type == "analytical") {
     analytical_mse(framework = framework, sigmau2 = sigmau2,
                    combined_data = combined_data, method = method)
   } else if (mse_type == "jackknife") {
-    jiang_jackknife(framework = framework, combined_data = combined_data,
-                    sigmau2 = sigmau2, vardir = vardir, eblup = eblup,
-                    transformation = transformation, method = method,
-                    interval = interval)
+    if (method == "moment") {
+      jiang_jackknife_yl(framework = framework, combined_data = combined_data,
+                         sigmau2 = sigmau2, vardir = vardir, Ci = Ci, eblup = eblup,
+                         transformation = transformation, method = method)
+    } else {
+      jiang_jackknife(framework = framework, combined_data = combined_data,
+                      sigmau2 = sigmau2, vardir = vardir, eblup = eblup,
+                      transformation = transformation, method = method,
+                      interval = interval) 
+    }
   } else if (mse_type == "weighted_jackknife"){
     chen_weighted_jackknife(framework = framework, combined_data = combined_data,
                             sigmau2 = sigmau2, eblup = eblup, vardir = vardir,
@@ -883,10 +1008,10 @@ wrapper_MSE <- function(framework, combined_data, sigmau2, vardir, eblup,
                             interval = interval)
   } else if (mse_type == "pseudo"){
     pseudo(framework = framework, combined_data = combined_data, eblup = eblup, 
-           mse_type = "pseudo", predType = predType)
-  } else if (mse_type == "boot" & !is.null(predType)){
+           mse_type = "pseudo", method = method)
+  } else if (mse_type == "boot") {
     robustboot(framework = framework, combined_data = combined_data, eblup = eblup, 
-               mse_type = "boot", predType = predType,
+               mse_type = "boot", method = method,
                B = B)
   }
 

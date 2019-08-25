@@ -65,23 +65,32 @@ print.emdi <- function(x, ...) {
       cat("Empirical Best Linear Unbiased Prediction (Fay-Herriot)\n")
       cat("\n")
       cat("Out-of-sample domains: ", x$framework$N_dom_unobs, "\n")
-      cat("In-sample domains: ", x$framework$N_dom_smp, "\n")
-      cat("\n")
-      cat(paste0(toupper(substring(x$model$correlation, 1, 1)), 
-                 substring(x$model$correlation, 2)), "correlation assumed\n")
-      if (x$model$correlation == "temporal" | x$model$correlation == "spatio-temporal"){
+      if (x$model$correlation == "temporal" | x$model$correlation == "spatio-temporal") {
+        cat("In-sample domains: ", x$framework$N_dom_smp / x$model$n_time, "\n")
         cat("Number of time periods: ", x$model$n_time, "\n")
-      }
-      cat("\n")
-      cat("Variance and MSE estimation:\n")
-      cat("Variance estimation method: ", x$method$method,
-          "\n")
-      if (x$model$correlation == "no") {
-        cat("Estimated variance of random effects: ", x$model$sigmau2, "\n")
-      } else if (x$model$correlation != "no") {
-        cat("Variance component(s): ","\n")
-        print(x$model$variance)
         cat("\n")
+      } else {
+        cat("In-sample domains: ", x$framework$N_dom_smp, "\n")
+        cat("\n")
+      }
+      cat("Variance and MSE estimation:\n")
+      if (x$method$method == "reblup" | x$method$method == "reblupbc") {
+        cat("Variance estimation method: robustified ml,", x$method$method, "\n")
+        
+        if (x$method$method == "reblup") {
+          cat("k = ", x$model$k, "\n")
+        } else if (x$method$method == "reblupbc") {
+          cat("k = ", x$model$k, ", c = ", x$model$c, "\n")
+        }
+      } else {
+        cat("Variance estimation method: ", x$method$method, "\n")
+      }
+      
+      if (x$model$correlation == "no") {
+        cat("Estimated variance component(s): ", x$model$variance, "\n")
+      } else {
+        cat("Estimated variance component(s): ", x$model$correlation, "correlation assumed\n")
+        print(x$model$variance) 
       }
       cat("MSE method: ", x$method$MSE_method, "\n")
       cat("\n")

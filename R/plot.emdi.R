@@ -156,7 +156,15 @@ plot.emdi <- function(x,
     model <- x$model
     model$call$fixed <- x$fixed
   } else if (inherits(x, "fh")) {
-    residuals <- x$model$std_real_residuals
+    
+    if(any(is.na(x$model$std_real_residuals))) {
+      residuals <- x$model$std_real_residuals[!is.na(x$model$std_real_residuals)]
+      warning("At least one value in the standardized realized residuals is NA. Only
+              numerical values are plotted.")
+    } else {
+      residuals <- x$model$std_real_residuals
+    }
+    # ?? Sollten wir das machen?
     residuals <- (residuals - mean(residuals)) / sd(residuals)
     rand.eff <- x$model$random_effects
     srand.eff <- (rand.eff - mean(rand.eff)) / sd(rand.eff)

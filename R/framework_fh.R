@@ -1,5 +1,5 @@
 framework_FH <- function(combined_data, fixed, vardir, domains,
-                         transformation, eff_smpsize) {
+                         transformation, eff_smpsize, Ci, tol = tol, maxit = maxit) {
   # Get sample and population data
   obs_dom <- !is.na(combined_data[[paste(lhs(fixed))]])
 
@@ -31,7 +31,7 @@ framework_FH <- function(combined_data, fixed, vardir, domains,
     data$domains <- 1:length(direct)
     domains <- "domains"
   }
-
+  
   # Number of areas
   m <- length(direct)
   M <- length(combined_data[[paste(lhs(fixed))]])
@@ -39,9 +39,21 @@ framework_FH <- function(combined_data, fixed, vardir, domains,
   N_dom_unobs <- M - m
   # Number of covariates
   p <- ncol(model_X)
-
-
-
+  
+  if (!is.null(Ci)){
+    model_X <- as.matrix(makeXY(fixed, data)$x) ### ACHTUNG as.matrix ergänzt
+    p <- ncol(model_X)
+    # ??? Added this line, correct?
+    Ci_tmp <- combined_data[[Ci]]
+    #Ci: array of Ci matrixes pxpxm
+    Ci_array <- array(data = 0,dim = c(p, p, M) # Vorsicht, vlt m
+    )
+    
+    for(i in 1:M){
+      Ci_array[p,p,i] <- Ci_tmp[i] 
+    }
+    Ci <- Ci_array
+  }
 
   framework_out <- list(obs_dom = obs_dom,
                         N_dom_smp = m,
@@ -57,7 +69,10 @@ framework_FH <- function(combined_data, fixed, vardir, domains,
                         domains = domains,
                         m = m,
                         M = M,
-                        p = p)
+                        p = p,
+                        Ci = Ci,
+                        tol = tol,
+                        maxit = maxit)
 
   return(framework_out)
   }

@@ -273,6 +273,95 @@ MPL <- function(interval, direct, x, vardir, areanumber) {
   return(sigmau_mpl = estsigma2u)
 }
 
+#' Function for estimating sigmau2 and beta following Ybarra and Lohr.
+#'
+#' @param direct direct estimator.
+#' @param x matrix with explanatory variables.
+#' @param vardir direct variance.
+#' @param Ci mean squared error of x.
+#' @param areanumber number of domains.
+#' @param p number of covariates.
+#' @param tol tolerance value for the convergence of weights.
+#' @param maxit maximum number of iterations.
+#' @return estimated sigmau2 and estimated beta coefficients.
+#' @keywords internal
+
+ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
+  
+  hatwi <- rep(1,areanumber) 
+  eps <- 1
+  it <- 0
+  x <- t(x)
+  
+  sqrtinv.matrix <- function(mat,maxiter=50) {
+    stopifnot(nrow(mat) == ncol(mat))
+    niter <- 0
+    direct <- mat
+    z <- diag(rep(1,nrow(mat)))
+    for (niter in 1:maxiter) {
+      direct.temp <- 0.5*(direct + ginv(z))
+      z <- 0.5*(z + ginv(direct))
+      direct <- direct.temp
+    }
+    return(list(sqrt=direct, sqrt.inv=z))
+  }#WORKS ONLY WITH SYMMETRIC AND POSITIVE DEFINITE MATRIX
+  
+  while(eps > tol & it < maxit){ # Loops end when tolerance value for the convergence
+    # of weights is reached and max number of iterations
+    
+    hatwi.old <- hatwi 
+    CC <- matrix(0,p,p) 
+    for(i in 1:areanumber){ 
+      CC <- CC + hatwi[i]*Ci[,,i]
+    }
+    
+    G <- t(hatwi*t(x))%*%t(x) # G = Sum over m(w times X^T X)
+    
+    
+    G.sqrtinv <- sqrtinv.matrix(G)$sqrt.inv 
+    GG <- G.sqrtinv %*% CC %*% G.sqrtinv 
+    
+    decomp <- eigen(GG)
+    P <- decomp$vectors
+    Lambda <- diag(decomp$values)
+    
+    dd <- which((1-decomp$values)>1/areanumber)
+    Lambdajj <- rep(0,p)
+    Lambdajj[dd] <- 1/(1-decomp$values[dd])
+    D <- diag(Lambdajj) 
+    
+    wXdirect <- t(t(as.matrix(hatwi*direct,areanumber,1))%*%t(x)) 
+    
+    # Beta estimate
+    Beta.hat.w <- G.sqrtinv %*% P %*% D %*% t(P) %*% G.sqrtinv %*% wXdirect
+    
+    thbCihb <- NULL
+    for(i in 1:areanumber){
+      thbCihb[i] <- t(Beta.hat.w)%*%Ci[,,i]%*%Beta.hat.w 
+    }
+    
+    # Estimate variance of the random effect
+    sigmau2 <- (1/(areanumber - p))* sum((direct-t(x)%*%Beta.hat.w)^2 - vardir - thbCihb)
+    
+    # Truncation to zero
+    if (sigmau2 <= 0) sigmau2<-0
+    
+    # Update hatwi
+    hatwi <- 1/(sigmau2 + vardir + thbCihb)
+    
+    # Check convergence
+    eps <- mean(abs(hatwi - hatwi.old))
+    it <- it + 1
+    
+  }#End while
+  
+  estsigma2u <- sigmau2
+  
+  return(list(sigmau_YL = estsigma2u, betahatw = Beta.hat.w, thbCihb = thbCihb)) 
+  
+}
+
+
 
 
 #' Wrapper function for the estmation of sigmau2
@@ -309,6 +398,10 @@ wrapper_estsigmau2 <- function(framework, method, interval) {
   } else if (method == "ml") {
     MPL(interval = interval, vardir = framework$vardir, x = framework$model_X,
          direct = framework$direct, areanumber = framework$m)
+  } else if (method == "moment") {
+    ybarralohr(vardir = framework$vardir, direct = framework$direct, x = framework$model_X,
+       Ci = framework$Ci, tol = framework$tol, maxit = framework$maxit, 
+       p = framework$p, areanumber = framework$m)
   }
 
   return(sigmau2)

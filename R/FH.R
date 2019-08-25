@@ -56,18 +56,19 @@
 #' @param alpha a numeric value that determines the confidence level for the
 #' confidence intervals.
 #' @return fitted FH model.
-#' @importFrom formula.tools lhs
+#' @import saeRobust
+#' @import formula.tools 
 #' @importFrom stats median model.frame model.matrix model.response optimize
 #' @importFrom stats pnorm rnorm
 #' @export
 
 
 fh <- function(fixed, vardir, combined_data, domains, method = "reml",
-               interval = c(0, 1000), transformation = "no",
+               interval = c(0, 1000), k = 10000, c = 1, transformation = "no",
                backtransformation = NULL, eff_smpsize = NULL,
-               MSE = FALSE, mse_type = "analytical", B = NULL, alpha = 0.05, 
                correlation = "no", corMatrix = NULL, time = NULL,
-               c = 1) {
+               Ci = NULL, tol = NULL, maxit = NULL,
+               MSE = FALSE, mse_type = "analytical", B = NULL, alpha = 0.05) {
 
 
   # Save function call ---------------------------------------------------------
@@ -77,7 +78,8 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
   framework <- framework_FH(combined_data = combined_data, fixed = fixed,
                             vardir = vardir, domains = domains,
                             transformation = transformation,
-                            eff_smpsize = eff_smpsize)
+                            eff_smpsize = eff_smpsize,
+                            Ci = Ci, tol = tol, maxit = maxit)
 
   if (!(method == "reblup" | method == "reblupbc")) {
     # Estimate sigma u -----------------------------------------------------------
@@ -85,14 +87,21 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                                   interval = interval)
     
     
-    # Standard EBLUP -------------------------------------------------------------
-    eblup <- eblup_FH(framework = framework, sigmau2 = sigmau2,
-                      combined_data = combined_data)
+    if (method != "moment") {
+      # Standard EBLUP -------------------------------------------------------------
+      eblup <- eblup_FH(framework = framework, sigmau2 = sigmau2,
+                        combined_data = combined_data)
+      
+      
+      # Criteria for model selection -----------------------------------------------
+      criteria <- model_select(framework = framework, sigmau2 = sigmau2,
+                               real_res = eblup$real_res)
+    } else if (method == "moment") {
+      # Standard EBLUP -------------------------------------------------------------
+      eblup <- eblup_YL(framework = framework, sigmau2 = sigmau2,
+                        combined_data = combined_data)
+    }
     
-    
-    # Criteria for model selection -----------------------------------------------
-    criteria <- model_select(framework = framework, sigmau2 = sigmau2,
-                             real_res = eblup$real_res)
     
     
     if (transformation == "no") {
@@ -100,7 +109,7 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
       # Analytical MSE
       if (MSE == TRUE) {
         MSE_data <- wrapper_MSE(framework = framework, combined_data = combined_data,
-                                sigmau2 = sigmau2, vardir = vardir, eblup = eblup,
+                                sigmau2 = sigmau2, vardir = vardir, Ci = Ci, eblup = eblup,
                                 transformation = transformation, method = method,
                                 interval = interval, mse_type = mse_type)
         MSE <- MSE_data$MSE_data
@@ -115,27 +124,55 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
       Gamma <- data.frame(Domain = framework$data[[framework$domains]],
                           Gamma = eblup$gamma)
       
-      out <- list(ind = eblup$EBLUP_data,
-                  MSE = MSE,
-                  transform_param = NULL,
-                  model = list(coefficients = eblup$coefficients,
-                               sigmau2 = sigmau2,
-                               random_effects = eblup$random_effects,
-                               real_residuals = eblup$real_res,
-                               std_real_residuals = eblup$std_real_res,
-                               gamma = Gamma,
-                               model_select = criteria,
-                               correlation = correlation),
-                  framework = framework[c("direct", "vardir", "N_dom_smp",
-                                          "N_dom_unobs")],
-                  transformation = list(transformation = transformation,
-                                        backtransformation = backtransformation),
-                  method = list(method = method,
-                                MSE_method = MSE_method),
-                  fixed = fixed,
-                  call = call,
-                  successful_bootstraps = NULL
-      )
+      if (method != "moment") {
+        out <- list(ind = eblup$EBLUP_data,
+                    MSE = MSE,
+                    transform_param = NULL,
+                    model = list(coefficients = eblup$coefficients,
+                                 variance = sigmau2,
+                                 random_effects = eblup$random_effects,
+                                 real_residuals = eblup$real_res,
+                                 std_real_residuals = eblup$std_real_res,
+                                 gamma = Gamma,
+                                 model_select = criteria,
+                                 correlation = correlation),
+                    framework = framework[c("direct", "vardir", "N_dom_smp",
+                                            "N_dom_unobs")],
+                    transformation = list(transformation = transformation,
+                                          backtransformation = backtransformation),
+                    method = list(method = method,
+                                  MSE_method = MSE_method),
+                    fixed = fixed,
+                    call = call,
+                    successful_bootstraps = NULL
+        )
+        
+      } else if (method == "moment") {
+        out <- list(ind = eblup$EBLUP_data,
+                    MSE = MSE,
+                    transform_param = NULL,
+                    model = list(coefficients = eblup$coefficients,
+                                 variance = sigmau2$sigmau_YL,
+                                 random_effects = eblup$random_effects,
+                                 real_residuals = eblup$real_res,
+                                 std_real_residuals = eblup$std_real_res,
+                                 gamma = Gamma,
+                                 model_select = NULL,
+                                 correlation = correlation),
+                    framework = framework[c("direct", "vardir", "N_dom_smp",
+                                            "N_dom_unobs")],
+                    transformation = list(transformation = transformation,
+                                          backtransformation = backtransformation),
+                    method = list(method = method,
+                                  MSE_method = MSE_method),
+                    fixed = fixed,
+                    call = call,
+                    successful_bootstraps = NULL
+        )
+        
+      }
+      
+      
     } else if (transformation != "no") {
       
       # Shrinkage factor
@@ -157,7 +194,7 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                   MSE = result_data$MSE_data,
                   transform_param = NULL,
                   model = list(coefficients = eblup$coefficients,
-                               sigmau2 = sigmau2,
+                               variance = sigmau2,
                                random_effects = eblup$random_effects[, 1],
                                real_residuals = eblup$real_res[, 1],
                                std_real_residuals = eblup$std_real_res[, 1],
@@ -177,8 +214,8 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
   } else if (method == "reblup" | method == "reblupbc") {
     
     # Standard EBLUP -----------------------------------------------------------
-    eblup <- eblup_robust(framework = framework, k = 1000, predType = method, 
-                          vardir = vardir, combined_data = combined_data, c = c, 
+    eblup <- eblup_robust(framework = framework, vardir = vardir, combined_data = combined_data,
+                          method = method, k = k, c = c, 
                           correlation = correlation, corMatrix = corMatrix,
                           time = time)
     
@@ -186,7 +223,7 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
     if (MSE == TRUE) {
       MSE_data <- wrapper_MSE(framework = framework, combined_data = combined_data,
                               vardir = vardir, eblup = eblup,
-                              mse_type = mse_type, predType = method, B = B)
+                              mse_type = mse_type, method = method, B = B)
       MSE <- MSE_data$MSE_data
       MSE_method <- MSE_data$MSE_method
     } else {
@@ -207,6 +244,8 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                              correlation = correlation,
                              W = eblup$W,
                              n_time = eblup$nTime,
+                             k = k,
+                             c = c,
                              scores = eblup$scores,
                              iterations = eblup$iterations,
                              max_iter = eblup$maxIter,

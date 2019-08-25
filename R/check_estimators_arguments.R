@@ -13,7 +13,8 @@ estimators_check <- function(object,
   if (!(inherits(CV, "logical") && length(CV) == 1)) {
     stop("CV must be a logical value. Set CV to TRUE or FALSE.")
   }
-  if (is.null(indicator) || !(indicator == "all" || indicator == "Quantiles" 
+  if (is.null(indicator) || !(indicator == "all" || indicator == "All" || 
+                              indicator == "Quantiles" 
        || indicator == "quantiles"
        || indicator == "Poverty" || indicator == "poverty" 
        || indicator == "Inequality" || indicator == "inequality" 

@@ -221,8 +221,8 @@ summary.emdi <- function(object, ...) {
     N_dom_smp <-   object$framework$N_dom_smp
 
     # Normaly checks for standardized realized residuals
-    skewness_stdres <- skewness(object$model$std_real_residuals)
-    kurtosis_stdres <- kurtosis(object$model$std_real_residuals)
+    skewness_stdres <- skewness(object$model$std_real_residuals, na.rm = TRUE)
+    kurtosis_stdres <- kurtosis(object$model$std_real_residuals, na.rm = TRUE)
     if (length(object$model$std_real_residuals) >= 3 & length(object$model$std_real_residuals) <
         5000) {
       shapiro_stdres_W <- shapiro.test(object$model$std_real_residuals)[[1]]
@@ -235,8 +235,8 @@ summary.emdi <- function(object, ...) {
     }
 
     # Normality checks for random effects
-    skewness_random <- skewness(object$model$random_effects)
-    kurtosis_random <- kurtosis(object$model$random_effects)
+    skewness_random <- skewness(object$model$random_effects, na.rm = TRUE)
+    kurtosis_random <- kurtosis(object$model$random_effects, na.rm = TRUE)
     if (length(object$model$random_effects) >= 3 & length(object$model$random_effects) <
         5000) {
       shapiro_random_W <- shapiro.test(object$model$random_effects)[[1]]
@@ -350,23 +350,33 @@ print.summary.emdi <- function(x,...) {
     cat("Call:\n ")
     print(x$call)
     cat("\n")
-    cat("In-sample domains: ", x$in_smp, "\n")
     cat("Out-of-sample domains: ", x$out_of_smp, "\n")
-    cat("\n")
-    cat(paste0(toupper(substring(x$model$correlation, 1, 1)), 
-               substring(x$model$correlation, 2)), "correlation assumed\n")
     if (x$model$correlation == "temporal" | x$model$correlation == "spatio-temporal"){
-      cat("Number of time periods: ", x$model$nTime, "\n")
-    }
-    cat("\n")
-    cat("Variance estimation method: ", x$method$method,
-        "\n")
-    if (x$model$correlation == "no") {
-      cat("Estimated variance of random effects: ", x$model$sigmau2, "\n")
-    } else if (x$model$correlation != "no") {
-      cat("Variance components: ","\n")
-      print(x$model$variance)
+      cat("In-sample domains: ", x$in_smp / x$model$n_time, "\n")
+      cat("Number of time periods: ", x$model$n_time, "\n")
       cat("\n")
+    } else {
+      cat("In-sample domains: ", x$in_smp, "\n")
+      cat("\n")
+    }
+    cat("Variance and MSE estimation:\n")
+    if (x$method$method == "reblup" | x$method$method == "reblupbc") {
+      cat("Variance estimation method: robustified ml,", x$method$method, "\n")
+      
+      if (x$method$method == "reblup") {
+        cat("k = ", x$model$k, "\n")
+      } else if (x$method$method == "reblupbc") {
+        cat("k = ", x$model$k, ", c = ", x$model$c, "\n")
+      }
+      
+    } else {
+      cat("Variance estimation method: ", x$method$method, "\n")
+    }
+    if (x$model$correlation == "no") {
+      cat("Estimated variance component(s): ", x$model$variance, "\n")
+    } else {
+      cat("Estimated variance component(s): ", x$model$correlation, "correlation assumed\n")
+      print(x$model$variance) 
     }
     cat("MSE method: ", x$method$MSE_method, "\n")
     cat("\n")
@@ -376,7 +386,11 @@ print.summary.emdi <- function(x,...) {
     #cat("Signif. codes: ", x$legend, "\n")
     cat("\n")
     cat("Explanatory measures:\n")
-    print(x$model$model_select)
+    if (is.null(x$model$model_select)) {
+      cat("No explanatory measures provided \n")
+    } else {
+      print(x$model$model_select)
+    }
     cat("\n")
     cat("Residual diagnostics:\n")
     print(x$normality)
