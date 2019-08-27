@@ -28,6 +28,8 @@ step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "bac
                      keep = NULL, steps = 1000, 
                   ...) 
 {
+  
+
   step.fh_check(object = object, scope = scope, direction = direction,
                 keep = keep, steps = steps)
   
@@ -96,7 +98,7 @@ step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "bac
   models <- vector("list", steps)
   if (!is.null(keep)) 
     keep.list <- vector("list", steps)
-  n <- object$framework$m
+  n <- object$framework$N_dom_smp
   fit <- object 
   if (criteria == "AIC"){
     bAIC <- fit$model$model_select$AIC
@@ -193,7 +195,8 @@ step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "bac
     fit$call$formula <- NULL  
     fit <- eval(fit$call)
 
-    nnew <- fit$framework$m 
+
+    nnew <- fit$framework$N_dom_smp 
     if (all(is.finite(c(n, nnew))) && nnew != n) 
       stop("number of rows in use has changed: remove missing values?")
     Terms <- terms(fit$fixed)
@@ -236,6 +239,10 @@ step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "bac
   results
 }
 
+#' Prints step function result
+#'
+#' @param x Return from step function.
+#' @export
 
 print.step.fh <- function(x)
 {
