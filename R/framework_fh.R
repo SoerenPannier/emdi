@@ -1,5 +1,5 @@
 framework_FH <- function(combined_data, fixed, vardir, domains,
-                         transformation, eff_smpsize, Ci, tol = tol, maxit = maxit) {
+                         transformation, eff_smpsize, Ci, tol, maxit) {
   # Get sample and population data
   obs_dom <- !is.na(combined_data[[paste(lhs(fixed))]])
 

@@ -615,7 +615,8 @@ jiang_jackknife <- function(framework, combined_data, sigmau2, eblup, transforma
     framework_tmp <- framework_FH(combined_data = data_tmp, fixed = framework$formula,
                               vardir = vardir, domains = framework$domains,
                               transformation = transformation,
-                              eff_smpsize = framework$eff_smpsize)
+                              eff_smpsize = framework$eff_smpsize, Ci = NULL, 
+                              tol = NULL, maxit = NULL)
     # Estimate sigma u
     sigmau2_tmp <- wrapper_estsigmau2(framework = framework_tmp, method = method,
                                   interval = interval)
@@ -637,7 +638,8 @@ jiang_jackknife <- function(framework, combined_data, sigmau2, eblup, transforma
     framework_insample <- framework_FH(combined_data = data_insample, fixed = framework$formula,
                                        vardir = vardir, domains = framework$domains,
                                        transformation = transformation,
-                                       eff_smpsize = framework$eff_smpsize)
+                                       eff_smpsize = framework$eff_smpsize, Ci = NULL, 
+                                       tol = NULL, maxit = NULL)
     eblup_tmp <- eblup_FH(framework = framework_insample, sigmau2 = sigmau2_tmp,
                       combined_data = data_insample)
     diff_jack_eblups[, paste0(domain)] <- eblup_tmp$EBLUP_data$FH - eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]
@@ -724,7 +726,8 @@ chen_weighted_jackknife <- function(framework, combined_data, sigmau2, eblup, tr
     framework_tmp <- framework_FH(combined_data = data_tmp, fixed = framework$formula,
                                   vardir = vardir, domains = framework$domains,
                                   transformation = transformation,
-                                  eff_smpsize = framework$eff_smpsize)
+                                  eff_smpsize = framework$eff_smpsize, Ci = NULL, 
+                                  tol = NULL, maxit = NULL)
     # Estimate sigma u
     sigmau2_tmp <- wrapper_estsigmau2(framework = framework_tmp, method = method,
                                       interval = interval)
@@ -761,7 +764,8 @@ chen_weighted_jackknife <- function(framework, combined_data, sigmau2, eblup, tr
     framework_insample <- framework_FH(combined_data = data_insample, fixed = framework$formula,
                                        vardir = vardir, domains = framework$domains,
                                        transformation = transformation,
-                                       eff_smpsize = framework$eff_smpsize)
+                                       eff_smpsize = framework$eff_smpsize, Ci = NULL, 
+                                       tol = NULL, maxit = NULL)
     eblup_tmp <- eblup_FH(framework = framework_insample, sigmau2 = sigmau2_tmp,
                           combined_data = data_insample)
     diff_jack_eblups[, paste0(domain)] <- eblup_tmp$EBLUP_data$FH - eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]
