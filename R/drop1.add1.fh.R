@@ -26,7 +26,7 @@ drop1.fh <- function(object,criteria, scope,...)
     ans[1, ] <- c(length(attr(terms(object$fixed), "term.labels")) + 1, 
                   object$model$model_select$BIC)
   }
-  n0 <- object$framework$m
+  n0 <- object$framework$N_dom_smp
 
   for(i in seq_len(ns)) {
     tt <- scope[i]
@@ -44,7 +44,7 @@ drop1.fh <- function(object,criteria, scope,...)
       ans[i+1, ] <- c(length(attr(terms(nfit$fixed), "term.labels")) + 1, 
                       nfit$model$model_select$BIC)
     }
-    nnew <- nfit$framework$m
+    nnew <- nfit$framework$N_dom_smp
     if(all(is.finite(c(n0, nnew))) && nnew != n0)
       stop("number of rows in use has changed: remove missing values?")
   }
@@ -92,7 +92,7 @@ add1.fh <- function(object, criteria, scope,trace = 1)
     ans[1, ] <- c(length(attr(terms(object$fixed), "term.labels")) + 1, 
                   object$model$model_select$BIC)
   }
-  n0 <- object$framework$m
+  n0 <- object$framework$N_dom_smp
   for(i in seq_len(ns)) {
     tt <- scope[i]
     if(trace > 1) {
@@ -110,7 +110,7 @@ add1.fh <- function(object, criteria, scope,trace = 1)
     if (criteria == "BIC"){
       ans[i+1L, ] <- nfit$model$model_select$BIC
     }
-    nnew <- nfit$framework$m
+    nnew <- nfit$framework$N_dom_smp
     if(all(is.finite(c(n0, nnew))) && nnew != n0)
       stop("number of rows in use has changed: remove missing values?")
   }
