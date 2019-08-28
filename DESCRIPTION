@@ -1,6 +1,6 @@
 Package: emdi
 Title: Estimating and Mapping Disaggregated Indicators
-Version: 1.1.5
+Version: 1.2.9000
 Date: 2019-04-08
 Authors@R: c(person("Ann-Kristin", "Kreutzmann", role="aut", email="ann-kristin.kreutzmann@fu-berlin.de"),
     person("Soeren", "Pannier", role=c("aut", "cre"), email="soeren.pannier@fu-berlin.de"),
@@ -21,6 +21,7 @@ Depends:
 License: GPL-2
 URL: https://github.com/SoerenPannier/emdi
 LazyData: true
+Encoding: UTF-8
 Copyright: inst/COPYRIGHTS
 RoxygenNote: 6.1.1
 Imports:
@@ -40,7 +41,10 @@ Imports:
     rgeos,
     maptools,
     MASS,
-    readODS
+    readODS,
+    formula.tools,
+    saeRobust,
+    spdep
 Suggests:
     testthat,
     R.rsp,
