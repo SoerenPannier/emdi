@@ -92,6 +92,10 @@
 #' (10\%, 25\%, 75\% and 90\%), head count ratio, poverty gap, Gini coefficient
 #' and the quintile share ratio.
 #' @references
+#' Kreutzmann, A., Pannier, S., Rojas-Perilla, N., Schmid, T., Templ, M. 
+#' and Tzavidis, N. (2019). The {R} Package {emdi} for Estimating and 
+#' Mapping Regionally Disaggregated Indicators, Journal of Statistical Software,
+#' Vol. 91, No. 7, 1--33, <doi:10.18637/jss.v091.i07> \cr \cr
 #' Battese, G.E., Harter, R.M. and Fuller, W.A. (1988). An Error-Components
 #' Model for Predictions of County Crop Areas Using Survey and Satellite Data.
 #' Journal of the American Statistical Association, Vol.83, No. 401, 28-36. \cr \cr
