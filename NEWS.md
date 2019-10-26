@@ -1,3 +1,7 @@
+# emdi 1.1.6
+ 
+* New and updated references.
+
 # emdi 1.1.5
  
 * Tests updated to deal with new random number generation in R
