@@ -167,8 +167,8 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
           MSE_boot <- tmp_out[[2]]
 
           MSE_data$FH <- MSE_boot$MSE
-          #MSE_data$FH_LCI <- conf_int$Li
-          #MSE_data$FH_UCI <- conf_int$Ui
+          MSE_data$FH_LCI <- conf_int$Li
+          MSE_data$FH_UCI <- conf_int$Ui
           MSE_method <- "bootstrap"
 
         } else if (mse_type == "jackknife" | mse_type == "weighted_jackknife") {
