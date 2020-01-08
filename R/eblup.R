@@ -68,6 +68,82 @@ eblup_FH <- function(framework, sigmau2, combined_data) {
   return(eblup_out)
 }
 
+eblup_SFH <- function(framework, sigmau2, combined_data) {
+  
+  # Estimation of the regression coefficients
+  # Identity matrix mxm
+  D <- diag(1, framework$m)
+  Wt <- t(framework$W)
+  A <- solve((D - sigmau2$rho*Wt)%*%(D - sigmau2$rho*framework$W))
+  G <- sigmau2$sigmau2*A
+  # Total variance-covariance matrix 
+  V <- G + D*framework$vardir
+  # Inverse of the total variance
+  Vi <- solve(V)
+  # Inverse of X'ViX
+  Q <- solve(t(framework$model_X)%*%Vi%*%framework$model_X)
+  # Beta by (X'ViX)^-1 X'Viy
+  Beta.hat <- Q%*%t(framework$model_X)%*%Vi%*%framework$direct
+  
+  # Inference for coefficients
+  std.errorbeta <- sqrt(diag(Q))
+  tvalue <- Beta.hat/std.errorbeta
+  pvalue <- 2 * pnorm(abs(tvalue), lower.tail = FALSE)
+  
+  eblup_coef <- data.frame(coefficients = Beta.hat,
+                           std.error = std.errorbeta,
+                           t.value = tvalue,
+                           p.value = pvalue)
+  
+  # Computation of the EBLUP
+  res <- framework$direct - c(framework$model_X%*%Beta.hat) 
+  #sigmau2Diag <- sigmau2$sigmau2*D
+  
+  # Computation of the random effect
+  u.hat <- G%*%Vi%*%res
+  
+  # Computation of the residuals
+  real_res <- framework$direct - (framework$model_X%*%Beta.hat + G%*%Vi%*%res)
+  std_real_res <- real_res / sqrt(framework$vardir) # Achtung nochmal prüfen
+  
+  EBLUP_data <- data.frame(Domain = combined_data[[framework$domains]])
+  EBLUP_data$Direct <- NA
+  EBLUP_data$Direct[framework$obs_dom == TRUE] <- framework$direct
+  
+  if (all(framework$obs_dom == TRUE)) {
+    EBLUP_data$FH[framework$obs_dom == TRUE] <- (framework$model_X%*%Beta.hat +
+                                                   G%*%Vi%*%res)
+    EBLUP_data$Out[framework$obs_dom == TRUE] <- 0
+  } else {
+    # Prediction
+    pred_data_tmp <- combined_data[framework$obs_dom == FALSE,]
+    
+    pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1,0,1))
+    lhs(framework$formula) <- quote(helper)
+    pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
+    
+    pred_X <- pred_data$x
+    pred_y <- pred_X %*% Beta.hat
+    
+    # Small area mean
+    EBLUP_data$FH[framework$obs_dom == TRUE] <- (framework$model_X%*%Beta.hat + 
+                                                   G%*%Vi%*%res)
+    EBLUP_data$FH[framework$obs_dom == FALSE] <- pred_y
+    EBLUP_data$Out[framework$obs_dom == TRUE] <- 0
+    EBLUP_data$Out[framework$obs_dom == FALSE] <- 1
+  }
+  
+  eblup_out <- list(EBLUP_data = EBLUP_data,
+                    coefficients = eblup_coef,
+                    real_res = res,
+                    V = V,
+                    std_real_res = std_real_res,
+                    random_effects = u.hat)
+  
+  return(eblup_out)
+}
+
+
 eblup_YL <- function(framework, sigmau2, combined_data) {
   
   # Estimation of the regression coefficients
@@ -77,10 +153,11 @@ eblup_YL <- function(framework, sigmau2, combined_data) {
   # independence of error terms
   thbCihb <- NULL
   for(i in 1:framework$m){
-    thbCihb[i] <- t(sigmau2$betahatw)%*%framework$Ci[,,i]%*%sigmau2$betahatw# beta times Ci times beta
+    thbCihb[i] <- t(sigmau2$betahatw)%*%framework$Ci[,,i]%*%sigmau2$betahatw
   }
-  V <- sigmau2$sigmau_YL * D%*%t(D) + diag(as.numeric(framework$vardir)) +
+  V <- sigmau2$sigmau_YL * D%*%t(D) + diag(as.numeric(framework$vardir)) + 
     diag(as.numeric(thbCihb))
+  
   # Inverse of the total variance
   Vi <- solve(V)
   # Inverse of X'ViX
@@ -95,9 +172,6 @@ eblup_YL <- function(framework, sigmau2, combined_data) {
                            std.error = std.errorbeta,
                            t.value = tvalue,
                            p.value = pvalue)
-  
-  
-  
   
   # Computation of the EBLUP
   
@@ -116,28 +190,27 @@ eblup_YL <- function(framework, sigmau2, combined_data) {
   EBLUP_data$Direct <- NA
   EBLUP_data$Direct[framework$obs_dom == TRUE] <- framework$direct
   
-  #if (all(framework$obs_dom == TRUE)) {
+  if (all(framework$obs_dom == TRUE)) {
   EBLUP_data$FH[framework$obs_dom == TRUE] <- gamma*framework$direct + 
     (1-gamma)* framework$model_X%*%sigmau2$betahatw[,1] #t(framework$model_X)
   EBLUP_data$Out[framework$obs_dom == TRUE] <- 0
-  # } else {
-  #   # Prediction
-  #   pred_data_tmp <- combined_data[framework$obs_dom == FALSE,]
+   } else {
+  # Prediction
+     pred_data_tmp <- combined_data[framework$obs_dom == FALSE,]
   
-  #   pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1,0,1))
-  #   lhs(framework$formula) <- quote(helper)
-  #   pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
-  
-  #    pred_X <- pred_data$x
-  #   pred_y <- pred_X %*% sigmau2$betahatw
+     pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1,0,1))
+     lhs(framework$formula) <- quote(helper)
+     pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
+     pred_X <- pred_data$x
+     pred_y <- pred_X %*% sigmau2$betahatw
   
   # Small area mean
-  #EBLUP_data$EBLUP[framework$obs_dom == TRUE] <- gamma*framework$direct + 
-  #   (1-gamma)* framework$model_X%*%sigmau2$betahatw[,1]
-  # EBLUP_data$EBLUP[framework$obs_dom == FALSE] <- pred_y
-  # EBLUP_data$ind[framework$obs_dom == TRUE] <- 0
-  # EBLUP_data$ind[framework$obs_dom == FALSE] <- 1
-  #}
+  EBLUP_data$EBLUP[framework$obs_dom == TRUE] <- gamma*framework$direct + 
+    (1-gamma)* framework$model_X%*%sigmau2$betahatw[,1]
+  EBLUP_data$EBLUP[framework$obs_dom == FALSE] <- pred_y
+  EBLUP_data$ind[framework$obs_dom == TRUE] <- 0
+  EBLUP_data$ind[framework$obs_dom == FALSE] <- 1
+  }
   
   eblup_out <- list(EBLUP_data = EBLUP_data,
                     gamma = gamma,

@@ -41,6 +41,10 @@
 #' criteria, coefficients of determination or variance and MSE estimation methods.}
 #' \item{call}{a list containing an image of the function call that produced the
 #'             object.}
+#' @references 
+#' Lahiri, P. and Suntornchost, J. (2015), Variable selection for linear mixed
+#' models with applications in small area estimation, The Indian Journal of 
+#' Statistics 77-B(2), 312-320. 
 #' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}},
 #' \code{\link[MuMIn]{r.squaredGLMM}}, \code{\link[moments]{skewness}},
 #' \code{\link[moments]{kurtosis}}, \code{\link[stats]{shapiro.test}}

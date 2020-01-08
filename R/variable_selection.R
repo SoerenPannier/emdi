@@ -1,13 +1,24 @@
-model_select <- function(framework, sigmau2, real_res) {
+model_select <- function(framework, sigmau2, real_res, V = NULL) {
 
   m <- nrow(framework$model_X)
   p <- ncol(framework$model_X)
-
+ 
+  
   # Criteria for model selection
-  loglike <- (-0.5) * (sum(log(2 * pi * (sigmau2 + framework$vardir)) +
-                             (real_res^2)/(sigmau2 + framework$vardir)))
-  AIC <- (-2) * loglike + 2 * (p + 1)
-  BIC <- (-2) * loglike + (p + 1) * log(framework$m)
+  if (framework$correlation == "spatial"){
+    Vi  <-solve(V)
+    loglike<- (-0.5) * ( m * log(2*pi) + determinant(V,logarithm=TRUE)$modulus +
+                           t(real_res)%*%Vi%*%real_res)
+    AIC    <-(-2) * loglike + 2 * (p + 2)
+    BIC    <- (-2) * loglike + (p + 2) * log(m)
+  } else {
+    loglike <- (-0.5) * (sum(log(2 * pi * (sigmau2 + framework$vardir)) +
+                               (real_res^2)/(sigmau2 + framework$vardir)))
+    AIC <- (-2) * loglike + 2 * (p + 1)
+    BIC <- (-2) * loglike + (p + 1) * log(m)
+  }
+
+  
 
   # Calculation R2
   P <- framework$model_X%*%solve(t(framework$model_X)%*%framework$model_X)%*%t(framework$model_X)

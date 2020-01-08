@@ -161,7 +161,7 @@ step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "bac
     }
     if (is.null(change)) {
       if (forward && length(scope$add)) {
-        aodf <- add1.fh(fit, criteria = criteria,scope = scope$add, scale = 0)
+        aodf <- add1.fh(fit, criteria = criteria,scope = scope$add)
         rn <- row.names(aodf)
         row.names(aodf) <- c(rn[1L], paste("+", rn[-1L]))
         aod <- if (is.null(aod)) 

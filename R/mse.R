@@ -222,6 +222,157 @@ yoshimori_lahiri <- function(framework, sigmau2, combined_data, method) {
   return(MSE_data)
 }
 
+prasad_rao_spatial <- function(framework, sigmau2, combined_data, method) {
+  
+  g1 <- rep(0, framework$m)
+  g2 <- rep(0, framework$m)
+  g3 <- rep(0, framework$m)
+  g4 <- rep(0, framework$m)
+  mse.help <- rep(0, framework$m)
+  mse <- rep(0, framework$m)
+  
+  
+  # Auxiliary calculations
+  D <- diag(1, framework$m)
+  Xt <- t(framework$model_X)
+  Wt <- t(framework$W)
+  A <- solve((D - sigmau2$rho*Wt)%*%(D - sigmau2$rho*framework$W))
+  G <- sigmau2$sigmau2*A
+  # Total variance
+  V<- G + D*framework$vardir
+  # Inverse of total variance
+  Vi<-solve(V)
+  # Inverse of X'ViX
+  XtVi<-Xt%*%Vi
+  Q <- solve(t(framework$model_X)%*%Vi%*%framework$model_X)
+  
+  Ga <- G - G%*%Vi%*%G
+  
+  # g1
+  for (d in 1:framework$m){
+    g1[d]<-Ga[d,d]} # g1sp contains the diagonal elements of Ga
+
+  Gb <- G%*%Vi%*%framework$model_X
+  Xa <- matrix(0,1,framework$p)
+  
+  # g2
+  for (d in 1:framework$m){
+    Xa[1,] <- framework$model_X[d,]-Gb[d,]
+    g2[d] <- Xa%*%Q%*%t(Xa)}
+  
+  # Auxiliary calculations for g3
+  derRho<-2*sigmau2$rho*Wt%*%framework$W-framework$W-Wt
+  Amat <- (-1)*sigmau2$sigmau2*(A%*%derRho%*%A)
+  P <- Vi-t(XtVi)%*%Q%*%XtVi
+  PA <- P%*%A
+  PAmat <- P%*%Amat
+  
+  Idev<-matrix(0,2,2)
+  Idev[1,1] <- (0.5)*sum(diag((PA%*%PA)))
+  Idev[1,2] <- (0.5)*sum(diag((PA%*%PAmat)))
+  Idev[2,1] <- Idev[1,2]
+  Idev[2,2] <- (0.5)*sum(diag((PAmat%*%PAmat)))
+  Idevi <- solve(Idev)
+ 
+  ViA <- Vi%*%A
+  ViAmat<-Vi%*%Amat
+  
+  #g3
+  l1 <- ViA - sigmau2$sigmau2*ViA%*%ViA
+  l1t<-t(l1)
+  l2<-ViAmat - sigmau2$sigmau2*ViAmat%*%ViA
+  l2t<-t(l2)
+  L<-matrix(0,2,framework$m)
+  
+  # Anfang
+  # Calculation of g3
+  for (d in 1:framework$m)
+  {
+    L[1,]<-l1t[d,]
+    L[2,]<-l2t[d,]
+    g3[d] <- sum(diag(L%*%V%*%t(L)%*%Idevi))
+  }
+  mse.help <- g1 + g2 + 2*g3
+
+  ######## Bias correction of Singh et al
+  psi <- diag(c(framework$vardir),framework$m)
+  D12aux <- (-1)*(A%*%derRho%*%A)
+  D22aux <- 2*sigmau2$sigmau2*A%*%derRho%*%A%*%derRho%*%A-2*sigmau2$sigmau2*A%*%Wt%*%framework$W%*%A
+  D <- (psi%*%Vi%*%D12aux%*%Vi%*%psi)*(Idevi[1,2]+Idevi[2,1])+psi%*%Vi%*%D22aux%*%Vi%*%psi*Idevi[2,2]
+  
+  for (d in 1:framework$m){
+    g4[d]<-(0.5)*D[d,d]
+  }
+  
+  # Computation of estimated MSE of Singh et al
+  mse <- mse.help - g4
+  
+  if (method == "ml"){
+    # Calculate bML
+    QXtVi <- Q%*%XtVi
+    ViX   <- Vi%*%framework$model_X
+    h1    <- (-1)*sum(diag(QXtVi%*%A%*%ViX))
+    h2    <- (-1)*sum(diag(QXtVi%*%Amat%*%ViX))
+    h     <- matrix(c(h1,h2),nrow=2,ncol=1)
+    bML   <- (Idevi%*%h)/2 
+    tbML  <- t(bML)
+    
+    # Calculate gradient of g1d
+    GVi     <- G%*%Vi   # G<-A*Ci
+    GViA   <- GVi%*%A
+    GViAmat <- GVi%*%Amat
+    ViA    <- Vi%*%A
+    dg1_dA  <- A   - 2*GViA   + sigmau2$sigmau2*GViA%*%ViA
+    dg1_dp  <- Amat - 2*GViAmat + sigmau2$sigmau2*GViAmat%*%ViA
+    gradg1d <- matrix(0,nrow=2,ncol=1) 
+    
+    bMLgradg1 <- rep(0,framework$m)   
+    for (d in 1:framework$m)
+    {
+      gradg1d[1,1] <- dg1_dA[d,d]
+      gradg1d[2,1] <- dg1_dp[d,d]
+      bMLgradg1[d] <- tbML%*%gradg1d             
+    }
+    mse <- mse - bMLgradg1
+  }
+  
+  
+  
+  MSE_data <- data.frame(Domain = combined_data[[framework$domains]])
+  MSE_data$Direct <- NA
+  MSE_data$Direct[framework$obs_dom == TRUE] <- framework$vardir
+  
+  # Small area MSE
+  MSE_data$FH[framework$obs_dom == TRUE] <- mse
+  MSE_data$Out[framework$obs_dom == TRUE] <- 0
+  
+  
+  #if (!all(framework$obs_dom == TRUE)) {
+   # h <- rep(0, framework$M - framework$m)
+   # mse_out <- rep(0, framework$M - framework$m)
+    # Covariates for out-of-sample domains
+   # pred_data_tmp <- combined_data[framework$obs_dom == FALSE,]
+   # pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1,0,1))
+   # lhs(framework$formula) <- quote(helper)
+   # pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
+   # pred_X <- pred_data$x
+    
+   # for (d_out in 1:(framework$M - framework$m)) {
+   #   xd_out <- matrix(pred_X[d_out, ], nrow = 1, ncol = framework$p)
+   #   h[d_out] <- xd_out %*% Q %*% t(xd_out)
+   #   mse_out[d_out] <- sigmau2 + h[d_out]
+   # }
+    
+    MSE_data$FH[framework$obs_dom == FALSE] <- NA
+    MSE_data$Out[framework$obs_dom == FALSE] <- 1
+ # }
+  
+  
+  return(MSE_data)
+}
+
+
+
 
 slud_maiti <- function(framework, sigmau2, eblup, combined_data) {
 
@@ -290,7 +441,10 @@ slud_maiti <- function(framework, sigmau2, eblup, combined_data) {
 analytical_mse <- function(framework, sigmau2, combined_data,
                            method) {
 
-    if (method == "reml") {
+  if (framework$correlation == "spatial"){
+    MSE_data <- prasad_rao_spatial(framework = framework, sigmau2, combined_data, method)
+    MSE_method <- "prasad-rao-Singh"
+    } else if (method == "reml") {
       MSE_data <- prasad_rao(framework = framework, sigmau2 = sigmau2,
                              combined_data = combined_data)
       MSE_method <- "prasad-rao"
@@ -579,7 +733,407 @@ boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
 
 }
 
+nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
+                          eblup, B, transformation, method) {
+  
+  
+  g1 <- rep(0, framework$m)
+  g2 <- rep(0, framework$m)
+  mse <- rep(0, framework$M)
+  
+  BCoef.boot <- eblup$coefficients$coefficients         
+  rho.boot   <- sigmau2$rho
+  sigma2.boot <- sigmau2$sigmau2
+  
+  D <- diag(1,framework$m)
+  Xt <- t(framework$model_X)
+  Wt <- t(framework$W)
+  W <- framework$W
+  DrhoW <- D - rho.boot*W
+  DrhoWt <- t(DrhoW)
+  Ar <- solve(DrhoWt%*%DrhoW)
+  Gr <- sigmau2$sigmau2*Ar
+  Vr <- Gr + D*framework$vardir
+  Vri <- solve(Vr)
+  Qr <- solve(t(framework$model_X)%*%Vri%*%framework$model_X)
+  
+  # Residual vectors
+  res <- framework$direct - framework$model_X%*%BCoef.boot
+  vstim <- Gr%*%Vri%*%res
+  
+  # Calculate covariance matrices of residual vectors
+  VG <- Vr-Gr
+  P <- Vri-Vri%*%framework$model_X%*%Qr%*%t(framework$model_X)%*%Vri
+  Ve <- VG%*%P%*%VG
+  Vu <- DrhoW%*%Gr%*%P%*%Gr%*%DrhoWt
+  
+  XtVri <- Xt%*%Vri
+  Qr <- solve(XtVri%*%framework$model_X)
+  
+  # Calculate g1 and g2
+  
+  Ga <- Gr - Gr%*%Vri%*%Gr
+  Gb <- Gr%*%t(XtVri)
+  Xa <- matrix(0,1,framework$p)
+  
+  for (d in 1:framework$m) {
+    g1[d]<-Ga[d,d]
+    Xa[1,]<-framework$model_X[d,] - Gb[d,]
+    g2[d] <- Xa%*%Qr%*%t(Xa)
+  }
+  
+  # Square roots of covariance matrices
+  VecVe0 <- eigen(Ve)$vectors
+  VecVe <- VecVe0[,1:(framework$m - framework$p)]
+  ValVe0 <- eigen(Ve)$values
+  Valve <- diag(sqrt(1/ValVe0[1:(framework$m - framework$p)]))
+  Vei05 <- VecVe%*%Valve%*%t(VecVe)
+  
+  VecVu0 <- eigen(Vu)$vectors
+  VecVu <- VecVu0[,1:(framework$m - framework$p)]
+  ValVu0 <- 1/(eigen(Vu)$values)
+  ValVu <- diag(sqrt(ValVu0[1:(framework$m - framework$p)]))
+  Vui05 <- VecVu%*%ValVu%*%t(VecVu)
+  
+  # Standardize residual vectors
+  ustim <- as.vector(Vui05%*%((DrhoW)%*%vstim))
+  estim <- as.vector(Vei05%*%(res-vstim))
+  sdu <- sqrt(sigma2.boot)
+  
+  u.std <- rep(0,framework$m)
+  for (d in 1:framework$m){
+    u.std[d] <- (sdu*(ustim[d]-mean(ustim)))/sqrt(mean((ustim-mean(ustim))^2))
+    }
+  
+  e.std <- rep(0,framework$m)
+  for (d in 1:framework$m){
+    e.std[d] <- (estim[d]-mean(estim))/sqrt(mean((estim-mean(estim))^2))
+    }
+  
+  # Create results matrices
+  bootstrapMSE <- matrix(0, framework$M, B)
+  estTheta <- matrix(0, framework$M, B)
+  trueTheta <- matrix(0, framework$M, B)
+  difmse.npb <- matrix(0,framework$M,1)
+  #difmse.npb1=matrix(0,nrow(b1),1)
+  #difg3Spat.npb1=matrix(0,nrow(b1),1)
+  g1.help <- matrix(0,framework$m,1)
+  g2.help <- matrix(0,framework$m,1)
+  difg1.npb <- matrix(0,framework$m,1)
+  difg2.npb <- matrix(0,framework$m,1)
+  difg3.npb <- matrix(0,framework$m,1)
+  difmse.npbBC <- matrix(0,framework$M,1)
+  
+  # Bootstrap algorithm
+  b <- 1
+  while (b<=B) 
+  {
+    
+    # Bootstrap data
+    u.boot <- sample(u.std,framework$m,replace=TRUE)
+    e.samp <- sample(e.std,framework$m,replace=TRUE)
+    e.boot <- sqrt(framework$vardir)*e.samp
+    v.boot <- solve(D-rho.boot*W)%*%u.boot
+    
+    if (all(framework$obs_dom == TRUE)) {
+      data_tmp <- data.frame(Domain = combined_data[[framework$domains]])
+      data_tmp$theta.boot[framework$obs_dom == TRUE] <- as.numeric(framework$model_X%*%BCoef.boot + v.boot) 
+    } else {
+      data_tmp <- data.frame(Domain = combined_data[[framework$domains]])
+      data_tmp$theta.boot[framework$obs_dom == TRUE] <- as.numeric(framework$model_X%*%BCoef.boot + v.boot) 
+      # Prediction (Out-of-sample)
+      pred_data_tmp <- combined_data[framework$obs_dom == FALSE,]
+      pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1,0,1))
+      lhs(framework$formula) <- quote(helper)
+      pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
+      pred_X <- pred_data$x
+      pred_y <- pred_X %*% BCoef.boot
+      data_tmp$theta.boot[framework$obs_dom == FALSE] <- as.numeric(pred_y)
+    }
+    
+    #theta.boot1=Xpop1%*%Bstim.boot
+    direct.boot <- as.numeric(data_tmp$theta.boot[framework$obs_dom == TRUE] + e.boot)
+    combined_data$direct.boot[framework$obs_dom == TRUE] <- direct.boot
+    combined_data$direct.boot <- as.numeric(combined_data$direct.boot)
+    # Estimation procedure
+    Terms <- terms(framework$formula)
+    formula.tmp <- as.formula(paste("direct.boot ~", paste(attr(Terms, "term.labels"), collapse="+", "- 1"))) 
+    framework.boot <- framework_FH(combined_data = combined_data,
+                                   fixed = formula.tmp,
+                                   vardir = vardir,
+                                   domains = framework$domains,
+                                   transformation = transformation,
+                                   eff_smpsize = framework$eff_smpsize,
+                                   correlation = framework$correlation,
+                                   corMatrix = framework$W,
+                                   Ci = framework$Ci,
+                                   tol = framework$tol,
+                                   maxit = framework$maxit)
+    
+    sigmau2.boot <- wrapper_estsigmau2(framework = framework.boot, 
+                                       method = method,
+                                       interval = interval)
+    
+    eblupSFH.boot <- eblup_SFH(framework = framework.boot, 
+                               sigmau2 = sigmau2.boot,
+                               combined_data = combined_data) 
+      
+    
+    # Generate a new sample if estimators are not satisfactory
+    if (sigmau2.boot$convergence==FALSE | sigmau2.boot$sigmau2 <0 | 
+        sigmau2.boot$rho <(-1) | sigmau2.boot$rho>1)
+    next
+    
+    cat("b =",b,"\n")
+    
+   # Bstim.ML.boot <- results.SpFH.boot$fit$estcoef[,1]                                   
+    rho.tmp.boot <- sigmau2.boot$rho
+    sigma2.tmp.boot <- sigmau2.boot$sigmau2                                        
+    thetaSFH.boot <-  eblupSFH.boot$EBLUP_data$FH   
+    
+    # Nonparametric bootstrap estimator of g3
+    Bstim.sblup <- Qr%*%XtVri%*%direct.boot
+    
+    if (all(framework$obs_dom == TRUE)) {
+      data_tmp$thetaSFH.sblup.boot[framework$obs_dom == TRUE] <- framework$model_X%*%Bstim.sblup + Gr%*%Vri%*%
+        (direct.boot-framework$model_X%*%Bstim.sblup) 
+    } else {
+    data_tmp$thetaSFH.sblup.boot[framework$obs_dom == TRUE] <- framework$model_X%*%Bstim.sblup + Gr%*%Vri%*%
+      (direct.boot-framework$model_X%*%Bstim.sblup)
+    
+    # Prediction (Out-of-sample)
+    pred_data_tmp <- combined_data[framework$obs_dom == FALSE,]
+    pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1,0,1))
+    lhs(framework$formula) <- quote(helper)
+    pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
+    pred_X <- pred_data$x
+    pred_y <- pred_X %*% Bstim.sblup
+    data_tmp$thetaSFH.sblup.boot[framework$obs_dom == FALSE] <- pred_y
+    }
+    thetaSFH.boot.in <-  eblupSFH.boot$EBLUP_data$FH[eblupSFH.boot$EBLUP_data$Out == 0]
+    difg3.npb[,1] <- difg3.npb[,1] + (thetaSFH.boot.in - data_tmp$thetaSFH.sblup.boot[framework$obs_dom == TRUE])^2
+    
+    # Naive nonparametric bootstrap MSE
+    estTheta[,b] <- thetaSFH.boot # estimated values
+    trueTheta[,b] <- data_tmp$theta.boot # true values
+    bootstrapMSE[, b] <- (thetaSFH.boot - data_tmp$theta.boot)^2
+    difmse.npb[,1] <- difmse.npb[,1] + (thetaSFH.boot - data_tmp$theta.boot)^2
+    #difmse.npb1[,1]<-difmse.npb1[,1]+(thetaEBLUPSpat.boot1[,1]-theta.boot1)^2
+    
+    # g1 and g2 for each bootstrap sample
+    A <- solve((D - rho.tmp.boot*Wt)%*%(D - rho.tmp.boot*W))
+    G <- sigma2.tmp.boot*A
+    V <- G + D*framework$vardir
+    Vi<-solve(V)
+    XtVi<-Xt%*%Vi
+    Q<-solve(XtVi%*%framework$model_X)
+    
+    Ga <- G-G%*%Vi%*%G
+    Gb <- G%*%Vi%*%framework$model_X
+    Xa <- matrix(0,1,framework$p)
+    
+    for (d in 1:framework$m){
+      g1.help[d] <- Ga[d,d] 
+      Xa[1,] <- framework$model_X[d,] - Gb[d,]
+      g2.help[d] <- Xa%*%Q%*%t(Xa)
+    }
+    
+    difg1.npb <- difg1.npb + g1.help
+    difg2.npb <- difg2.npb + g2.help
+    
+    b <- b + 1
+  }
+  # Final naive nonparametric bootstrap MSE estimator
+  mse.npb <- difmse.npb[,1]/B
+  
+  # Final bias-corrected nonparametric bootstrap MSE estimator
+  g3.npb <- difg3.npb/B
+  g1.npb  <-difg1.npb/B
+  g2.npb <- difg2.npb/B
+  mse.npbBC <- 2*(g1 + g2) - difg1.npb[,1]/B - difg2.npb[,1]/B + difg3.npb[,1]/B
+  
+ 
+  
+  MSE_data <- data.frame(Domain = combined_data[[framework$domains]])
+  MSE_data$Var <- NA
+  MSE_data$Var[framework$obs_dom == TRUE] <- framework$vardir
+  
+  # Small area MSE
+  MSE_data$MSE <- mse.npb
+  MSE_data$MSE.BC <- NA
+  MSE_data$MSE.BC[framework$obs_dom == TRUE] <- mse.npbBC
+  MSE_data$Out[framework$obs_dom == TRUE] <- 0
+  MSE_data$Out[framework$obs_dom == FALSE] <- 1
+  
+  MSE_data <- list(MSE_data = MSE_data,
+                  MSE_method = "non-parametric bootstrap",
+                  bootstrapMSE = bootstrapMSE,
+                  estTheta = estTheta,
+                  trueTheta = trueTheta)
 
+}
+
+parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
+                                      eblup, B, transformation, method) {
+  
+  
+  g1 <- rep(0, framework$m)
+  g2 <- rep(0, framework$m)
+  mse <- rep(0, framework$m)
+  
+  BCoef.boot <- eblup$coefficients$coefficients         
+  rho.boot   <- sigmau2$rho
+  sigma2.boot <- sigmau2$sigmau2
+  
+  D <- diag(1,framework$m)
+  Xt <- t(framework$model_X)
+  Wt <- t(framework$W)
+  W <- framework$W
+  DrhoW <- D - rho.boot*W
+  DrhoWt <- t(DrhoW)
+  Ar <- solve(DrhoWt%*%DrhoW)
+  Gr <- sigmau2$sigmau2*Ar
+  Vr <- Gr + D*framework$vardir
+  Vri <- solve(Vr)
+  Qr <- solve(t(framework$model_X)%*%Vri%*%framework$model_X)
+  
+  # Residual vectors
+  res <- framework$direct - framework$model_X%*%BCoef.boot
+  vstim <- Gr%*%Vri%*%res
+ 
+  XtVri <- Xt%*%Vri
+  Qr <- solve(XtVri%*%framework$model_X)
+  
+  # Calculate g1 and g2
+  
+  Ga <- Gr - Gr%*%Vri%*%Gr
+  Gb <- Gr%*%t(XtVri)
+  Xa <- matrix(0,1,framework$p)
+  
+  for (d in 1:framework$m) {
+    g1[d]<-Ga[d,d]
+    Xa[1,]<-framework$model_X[d,] - Gb[d,]
+    g2[d] <- Xa%*%Qr%*%t(Xa)
+  }
+  
+  # Create results matrices
+  
+  difmse.pb <- matrix(0,framework$m,1)
+  #difmse.npb1=matrix(0,nrow(b1),1)
+  #difg3Spat.npb1=matrix(0,nrow(b1),1)
+  g1.help <- matrix(0,framework$m,1)
+  g2.help <- matrix(0,framework$m,1)
+  difg1.pb <- matrix(0,framework$m,1)
+  difg2.pb <- matrix(0,framework$m,1)
+  difg3.pb <- matrix(0,framework$m,1)
+  difmse.pbBC <- matrix(0,framework$m,1)
+  
+  # Bootstrap algorithm
+  for (b in 1:B){
+    
+    # Bootstrap data
+    u.boot     <-rnorm(framework$m,0,sqrt(sigma2.boot))
+    v.boot     <-solve(D - rho.boot*W)%*%u.boot
+    theta.boot <- framework$model_X%*%BCoef.boot + v.boot
+    e.boot     <-rnorm(framework$m,0,sqrt(framework$vardir))
+    direct.boot <- theta.boot + e.boot
+    combined_data$direct.boot <- direct.boot
+    
+    # Estimation procedure
+    Terms <- terms(framework$formula)
+    formula.tmp <- as.formula(paste("direct.boot ~", paste(attr(Terms, "term.labels"), collapse="+"), "- 1"))
+    framework.boot <- framework_FH(combined_data = combined_data,
+                                   fixed = formula.tmp,
+                                   vardir = vardir,
+                                   domains = framework$domains,
+                                   transformation = transformation,
+                                   eff_smpsize = framework$eff_smpsize,
+                                   correlation = framework$correlation,
+                                   corMatrix = framework$W,
+                                   Ci = framework$Ci,
+                                   tol = framework$tol,
+                                   maxit = framework$maxit)
+    
+    sigmau2.boot <- wrapper_estsigmau2(framework = framework.boot, 
+                                       method = method,
+                                       interval = interval)
+    
+    eblupSFH.boot <- eblup_SFH(framework = framework.boot, 
+                               sigmau2 = sigmau2.boot,
+                               combined_data = combined_data) 
+    
+    
+    # Generate a new sample if estimators are not satisfactory
+     if (sigmau2.boot$convergence==FALSE | sigmau2.boot$sigmau2 <0 | 
+         sigmau2.boot$rho <(-1) | sigmau2.boot$rho>1)
+     next
+    
+    cat("b =",b,"\n")
+    
+    # Bstim.ML.boot <- results.SpFH.boot$fit$estcoef[,1]                                   
+    rho.tmp.boot <- sigmau2.boot$rho
+    sigma2.tmp.boot <- sigmau2.boot$sigmau2  
+    BCoef.tmp.boot <- eblupSFH.boot$coefficients$coefficients  
+    thetaSFH.boot <-  eblupSFH.boot$EBLUP_data$FH   
+    
+    # Nonparametric bootstrap estimator of g3
+    Bstim.sblup <- Qr%*%XtVri%*%direct.boot
+    thetaSFH.sblup.boot <- framework$model_X%*%Bstim.sblup + Gr%*%Vri%*%
+      (direct.boot-framework$model_X%*%Bstim.sblup)
+    
+    difg3.pb[,1] <- difg3.pb[,1] + (thetaSFH.boot - thetaSFH.sblup.boot)^2
+    
+    # Naive parametric bootstrap MSE
+    difmse.pb[,1] <- difmse.pb[,1] + (thetaSFH.boot - theta.boot)^2
+    #difmse.npb1[,1]<-difmse.npb1[,1]+(thetaEBLUPSpat.boot1[,1]-theta.boot1)^2
+    
+    # g1 and g2 for each bootstrap sample
+    A <- solve((D - rho.tmp.boot*Wt)%*%(D - rho.tmp.boot*W))
+    G <- sigma2.tmp.boot*A
+    V <- G + D*framework$vardir
+    Vi<-solve(V)
+    XtVi<-Xt%*%Vi
+    Q<-solve(XtVi%*%framework$model_X)
+    
+    Ga <- G-G%*%Vi%*%G
+    Gb <- G%*%Vi%*%framework$model_X
+    Xa <- matrix(0,1,framework$p)
+    
+    for (d in 1:framework$m){
+      g1.help[d] <- Ga[d,d] 
+      Xa[1,] <- framework$model_X[d,] - Gb[d,]
+      g2.help[d] <- Xa%*%Q%*%t(Xa)
+    }
+    
+    difg1.pb <- difg1.pb + g1.help
+    difg2.pb <- difg2.pb + g2.help
+  }
+  # Final naive nonparametric bootstrap MSE estimator
+  mse.pb <- difmse.pb[,1]/B
+  
+  # Final bias-corrected nonparametric bootstrap MSE estimator
+  g1.pb  <-difg1.pb/B
+  g2.pb <- difg2.pb/B
+  g3.pb <- difg3.pb/B
+  
+  mse.pbBC <- 2*(g1 + g2) - difg1.pb[,1]/B - difg2.pb[,1]/B + difg3.pb[,1]/B
+  
+  
+  
+  MSE_data <- data.frame(Domain = combined_data[[framework$domains]])
+  MSE_data$Var <- NA
+  MSE_data$Var[framework$obs_dom == TRUE] <- framework$vardir
+  
+  # Small area MSE
+  MSE_data$MSE <- mse.pb
+  MSE_data$MSE.BC <- mse.pbBC
+  MSE_data$Out[framework$obs_dom == TRUE] <- 0
+  MSE_data$Out[framework$obs_dom == FALSE] <- 1
+  
+  MSE_data <- list(MSE_data = MSE_data,
+                   MSE_method = "parametric bootstrap")
+  
+}
 
 jiang_jackknife <- function(framework, combined_data, sigmau2, eblup, transformation,
                             vardir, method, interval) {
@@ -615,6 +1169,8 @@ jiang_jackknife <- function(framework, combined_data, sigmau2, eblup, transforma
     framework_tmp <- framework_FH(combined_data = data_tmp, fixed = framework$formula,
                               vardir = vardir, domains = framework$domains,
                               transformation = transformation,
+                              correlation = framework$correlation,
+                              corMatrix = framework$corMatrix,
                               eff_smpsize = framework$eff_smpsize, Ci = NULL, 
                               tol = NULL, maxit = NULL)
     # Estimate sigma u
@@ -638,6 +1194,8 @@ jiang_jackknife <- function(framework, combined_data, sigmau2, eblup, transforma
     framework_insample <- framework_FH(combined_data = data_insample, fixed = framework$formula,
                                        vardir = vardir, domains = framework$domains,
                                        transformation = transformation,
+                                       correlation = framework$correlation,
+                                       corMatrix = framework$corMatrix,
                                        eff_smpsize = framework$eff_smpsize, Ci = NULL, 
                                        tol = NULL, maxit = NULL)
     eblup_tmp <- eblup_FH(framework = framework_insample, sigmau2 = sigmau2_tmp,
@@ -725,7 +1283,9 @@ chen_weighted_jackknife <- function(framework, combined_data, sigmau2, eblup, tr
     # Framework with temporary data
     framework_tmp <- framework_FH(combined_data = data_tmp, fixed = framework$formula,
                                   vardir = vardir, domains = framework$domains,
-                                  transformation = transformation,
+                                  transformation = transformation, 
+                                  correlation = framework$correlation, 
+                                  corMatrix = framework$corMatrix,
                                   eff_smpsize = framework$eff_smpsize, Ci = NULL, 
                                   tol = NULL, maxit = NULL)
     # Estimate sigma u
@@ -764,8 +1324,10 @@ chen_weighted_jackknife <- function(framework, combined_data, sigmau2, eblup, tr
     framework_insample <- framework_FH(combined_data = data_insample, fixed = framework$formula,
                                        vardir = vardir, domains = framework$domains,
                                        transformation = transformation,
-                                       eff_smpsize = framework$eff_smpsize, Ci = NULL, 
-                                       tol = NULL, maxit = NULL)
+                                       eff_smpsize = framework$eff_smpsize, 
+                                       correlation = framework$correlation,
+                                       corMatrix = framework$corMatrix, 
+                                       Ci = NULL, tol = NULL, maxit = NULL)
     eblup_tmp <- eblup_FH(framework = framework_insample, sigmau2 = sigmau2_tmp,
                           combined_data = data_insample)
     diff_jack_eblups[, paste0(domain)] <- eblup_tmp$EBLUP_data$FH - eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]
@@ -874,13 +1436,18 @@ jiang_jackknife_yl  <- function(framework, combined_data, sigmau2, eblup, method
     
     # Framework with temporary data
     framework_tmp <- framework_FH(combined_data = data_tmp,
-                                     fixed = framework$formula,
-                                     vardir = vardir, Ci = Ci,
-                                     domains = framework$domains,
-                                     transformation = "no", 
-                                     eff_smpsize = framework$eff_smpsize,
-                                     tol = framework$tol, maxit = framework$maxit)
+                                  fixed = framework$formula,
+                                  vardir = vardir, 
+                                  domains = framework$domains,
+                                  transformation = "no",
+                                  eff_smpsize = framework$eff_smpsize,
+                                  correlation = framework$correlation,
+                                  corMatrix = framework$corMatrix, 
+                                  Ci = Ci,
+                                  tol = framework$tol, 
+                                  maxit = framework$maxit)
     
+
     # Estimate sigma u
     sigmau2_tmp<- wrapper_estsigmau2(framework = framework_tmp, method = method)
     jack_sigmau2[domain] <- sigmau2_tmp$sigmau_YL
@@ -891,12 +1458,17 @@ jiang_jackknife_yl  <- function(framework, combined_data, sigmau2, eblup, method
     #Bd_tmp <- 1- eblup_tmp$gamma
     
     framework_insample <- framework_FH(combined_data = data_insample, 
-                                          fixed = framework$formula,
-                                          vardir = vardir, Ci = Ci, 
-                                          domains = framework$domains,
-                                          transformation = "no",
-                                          eff_smpsize = framework$eff_smpsize,
-                                          tol = framework$tol, maxit = framework$maxit)
+                                       fixed = framework$formula,
+                                       vardir = vardir, 
+                                       domains = framework$domains,
+                                       transformation = "no",
+                                       eff_smpsize = framework$eff_smpsize,
+                                       correlation = framework$correlation,
+                                       corMatrix = framework$corMatrix, 
+                                       Ci = Ci,
+                                       tol = framework$tol, 
+                                       maxit = framework$maxit)
+    
     
     thbCihb<-NULL
     for(i in 1:framework_insample$m){
@@ -1017,6 +1589,16 @@ wrapper_MSE <- function(framework, combined_data, sigmau2, vardir, Ci, eblup,
     robustboot(framework = framework, combined_data = combined_data, eblup = eblup, 
                mse_type = "boot", method = method,
                B = B)
+  } else if (mse_type == "spatialnonparboot"){
+    nonparametricboot_spatial(framework = framework, combined_data = combined_data,
+                              sigmau2 = sigmau2, eblup = eblup, B = B, 
+                              method = method,
+                              vardir = vardir, transformation = transformation) 
+  } else if (mse_type == "spatialparboot"){
+    parametricboot_spatial(framework = framework, combined_data = combined_data,
+                              sigmau2 = sigmau2, eblup = eblup, B = B, 
+                              method = method,
+                              vardir = vardir, transformation = transformation) 
   }
 
   return(MSE_data)

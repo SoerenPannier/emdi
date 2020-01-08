@@ -6,7 +6,9 @@
 #' @param direct a vector containing the direct estimates of the Fay-Herriot model.
 #' @param corMatrix proximity matrix or data frame.
 #' @return The values of the test statistics their corresponding p values.
-#' @import spdep
+#' @references Bivand, R. (2019), spdep: Spatial Dependence: Weighting Schemes, 
+#' Statistics. R package.
+#' @importFrom spdep geary.test mat2listw moran.test
 #' @export
 
 

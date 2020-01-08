@@ -107,8 +107,10 @@ write.excel <- function(object,
                              wb = wb, 
                              headlines_cs = headlines_cs)
   }
-  else if (inherits(object, "model"))  {
-    wb <- add_summary(object = object, wb = wb, headlines_cs = headlines_cs)
+  else if (inherits(object, "ebp"))  {
+    wb <- add_summary_ebp(object = object, wb = wb, headlines_cs = headlines_cs)
+  } else if (inherits(object, "fh")) {
+    wb <- add_summary_fh(object = object, wb = wb, headlines_cs = headlines_cs)
   }
 
   if (!split & (MSE | CV)) {
@@ -138,7 +140,7 @@ write.excel <- function(object,
   saveWorkbook(wb, file, overwrite = TRUE)
 }
 
-add_summary <- function(object, wb, headlines_cs) {
+add_summary_ebp <- function(object, wb, headlines_cs) {
   su <- summary(object)
 
   title_cs <- createStyle(fontSize = 14,
@@ -241,6 +243,111 @@ add_summary <- function(object, wb, headlines_cs) {
   )
   return(wb)
 
+}
+
+add_summary_fh <- function(object, wb, headlines_cs) {
+  su <- summary(object)
+  
+  title_cs <- createStyle(fontSize = 14,
+                          border = "Bottom",
+                          halign = "left",
+                          borderStyle = "thick",
+                          textDecoration = "bold")
+  
+  df_nobs <- data.frame(Count = c(su$out_of_smp,
+                                  su$in_smp)
+  )
+  rownames(df_nobs) <- c("out of sample domains",
+                         "in sample domains")
+  
+  addWorksheet(wb, sheetName = "summary", gridLines = FALSE)
+  
+  writeData(wb = wb, sheet = "summary", x = "Fay-Herriot Approach", colNames = FALSE)
+  addStyle(wb = wb, sheet = "summary", cols = 1, rows = 1, style = title_cs, stack = TRUE)
+  
+  starting_row <- 5
+  writeDataTable(x = df_nobs,
+                 withFilter = FALSE,
+                 wb = wb,
+                 sheet = "summary",
+                 startRow = starting_row,
+                 startCol = 3,
+                 rowNames = TRUE,
+                 headerStyle = headlines_cs,
+                 colNames = TRUE,
+                 tableStyle = "TableStyleMedium2"
+  )
+  
+  starting_row <- starting_row + 2 + nrow(df_nobs)
+  
+  estimMethods <- data.frame(su$method$method, su$model$variance, su$method$MSE_method, 
+                             row.names = "")
+  names(estimMethods) <- c("Variance estimation", "Estimated variance", "MSE estimation")
+  
+  writeDataTable(x = estimMethods,
+                 wb = wb,
+                 withFilter = FALSE,
+                 sheet = "summary",
+                 startRow = starting_row,
+                 startCol = 3,
+                 rowNames = FALSE,
+                 headerStyle = headlines_cs,
+                 colNames = TRUE,
+                 tableStyle = "TableStyleMedium2"
+  )
+  
+  starting_row <- starting_row + 2 + nrow(estimMethods)
+  
+  
+  if (!is.null(su$transform)) {
+    
+    writeDataTable(x = su$transform,
+                   wb = wb,
+                   withFilter = FALSE,
+                   sheet = "summary",
+                   startRow = starting_row,
+                   startCol = 3,
+                   rowNames = FALSE,
+                   headerStyle = headlines_cs,
+                   colNames = TRUE,
+                   tableStyle = "TableStyleMedium2"
+    )
+    
+    starting_row <- starting_row + 2 + nrow(su$transform)
+  }
+  
+  
+  writeDataTable(x = su$normality,
+                 wb = wb,
+                 withFilter = FALSE,
+                 sheet = "summary",
+                 startRow = starting_row,
+                 startCol = 3,
+                 rowNames = TRUE,
+                 headerStyle = headlines_cs,
+                 colNames = TRUE,
+                 tableStyle = "TableStyleMedium2"
+  )
+  starting_row <- starting_row + 2 + nrow(su$normality)
+  writeDataTable(x = su$model$model_select,
+                 wb = wb,
+                 withFilter = FALSE,
+                 sheet = "summary",
+                 startRow = starting_row,
+                 startCol = 3,
+                 rowNames = FALSE,
+                 headerStyle = headlines_cs,
+                 colNames = TRUE,
+                 tableStyle = "TableStyleMedium2"
+  )
+  
+  setColWidths(wb = wb,
+               sheet = "summary",
+               cols = 3:9,
+               widths = "auto"
+  )
+  return(wb)
+  
 }
 
 add_summary_direct <- function(object, wb, headlines_cs) {

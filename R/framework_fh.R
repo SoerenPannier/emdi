@@ -1,5 +1,6 @@
 framework_FH <- function(combined_data, fixed, vardir, domains,
-                         transformation, eff_smpsize, Ci, tol, maxit) {
+                         transformation, eff_smpsize, correlation, corMatrix,
+                         Ci, tol, maxit) {
   # Get sample and population data
   obs_dom <- !is.na(combined_data[[paste(lhs(fixed))]])
 
@@ -40,21 +41,29 @@ framework_FH <- function(combined_data, fixed, vardir, domains,
   # Number of covariates
   p <- ncol(model_X)
   
-  if (!is.null(Ci)){
-    model_X <- as.matrix(makeXY(fixed, data)$x) ### ACHTUNG as.matrix ergänzt
-    p <- ncol(model_X)
-    # ??? Added this line, correct?
-    Ci_tmp <- combined_data[[Ci]]
-    #Ci: array of Ci matrixes pxpxm
-    Ci_array <- array(data = 0,dim = c(p, p, M) # Vorsicht, vlt m
-    )
+ # if (!is.null(Ci)){
+ #   model_X <- as.matrix(makeXY(fixed, data)$x) ### ACHTUNG as.matrix ergänzt
+ #   p <- ncol(model_X)
+ #   # ??? Added this line, correct?
+  #  Ci_tmp <- combined_data[[Ci]]
+ #   #Ci: array of Ci matrixes pxpxm
+ #   Ci_array <- array(data = 0,dim = c(p, p, M) # Vorsicht, vlt m
+ #   )
     
-    for(i in 1:M){
-      Ci_array[p,p,i] <- Ci_tmp[i] 
-    }
-    Ci <- Ci_array
-  }
+ #   for(i in 1:M){
+ #     Ci_array[p,p,i] <- Ci_tmp[i] 
+ #   }
+ #   Ci <- Ci_array
+ # }
 
+  if (!is.null(corMatrix)){
+    corMatrix <- corMatrix
+  }
+  
+  if (!is.null(Ci)){
+    Ci <- Ci
+  }
+  
   framework_out <- list(obs_dom = obs_dom,
                         N_dom_smp = m,
                         N_dom_unobs = N_dom_unobs,
@@ -70,6 +79,8 @@ framework_FH <- function(combined_data, fixed, vardir, domains,
                         m = m,
                         M = M,
                         p = p,
+                        correlation = correlation,
+                        W = corMatrix,
                         Ci = Ci,
                         tol = tol,
                         maxit = maxit)

@@ -1,24 +1,34 @@
-#' Standard Fay-Herriot model for disaggregated indicators
+#' Standard and extended Fay-Herriot models for disaggregated indicators like 
+#' means and ratios
 #'
 #' Function \code{fh} estimates indicators using the Fay-Herriot approach by
-#' \cite{Fay and Herriot (1979)}. Point estimates of indicators are
-#' empirical best linear unbiased predictors (EBLUPs). Additionally, mean squared
-#' error (MSE) estimation can be conducted which depends on the chosen estimation
-#' approach for the variance of the random effect. For this estimation, six different
-#' approaches are provided (see also \code{method}). Three different transformation
-#' types for the dependent variable can be chosen.
+#' \cite{Fay and Herriot (1979)}. Empirical best linear unbiased predictors 
+#' (EBLUPs) and mean squared error (MSE) estimates are provided. Additionally, 
+#' different extensions of the standard Fay-Herriot model are available: \cr 
+#' Adjusted estimation methods for the variance of the random effects (see also \cite{Li 
+#' and Lahiri (2010)} and \cite{Yoshimori and Lahiri (2014)}) are offered. Log 
+#' and arcsin transformation for the dependent variable and for the log 
+#' transformation two types of backtransformation can be chosen - a crude version
+#' and the one introduced by \cite{Slud and Maiti (2006)}. A spatial extension 
+#' to the Fay-Herriot model following \cite{Pratesi and Salvati (2008)} is also 
+#' included. In addition, it is possible to estimate a robust version of the 
+#' standard and of the spatial model (see also \cite{Warnholz (2017)}). Finally, 
+#' a Fay-Herriot model can be estimated when the auxiliary information is measured 
+#' with error following \cite{Ybarra and Lohr (2008)}.
 #'
 #' @param fixed a two-sided linear formula object describing the
-#' fixed-effects part of the nested error linear regression model with the
+#' fixed-effects part of the linear mixed regression model with the
 #' dependent variable on the left of a ~ operator and the explanatory
 #' variables on the right, separated by + operators.
 #' @param vardir a character string indicating the name of the variable containing
-#' the domain-specific sampling variances of the direct estimators that are
+#' the domain-specific sampling variances of the direct estimates that are
 #' included in \cr \code{combined_data}.
-#' @param combined_data a data set containing the direct estimates,
-#' the sampling variances, the explanatory variables and the domains.
+#' @param combined_data a data set containing all the input variables that are 
+#' needed for the estimation of the Fay-Herriot model: the direct estimates,
+#' the sampling variances, the explanatory variables and the domains. In addition, 
+#' depending on the extension the effective sample size XXX needs to be included.
 #' @param domains a character string indicating the domain variable that is
-#' included in \cr \code{combined_data}. If \code{NULL}, the domains are numbered
+#' included in \code{combined_data}. If \code{NULL}, the domains are numbered
 #' consecutively.
 #' @param method a character string describing the method for the estimation of
 #' the variance of the random effects. Methods that can be chosen
@@ -28,33 +38,75 @@
 #' (iv) adjusted ML following \cite{Li and Lahiri (2010)} ("\code{ampl}"),
 #' (v) adjusted REML following \cite{Yoshimori and Lahiri (2014)} ("\code{amrl_yl}"),
 #' (vi) adjusted ML following \cite{Yoshimori and Lahiri (2014)} ("\code{ampl_yl}"),
-#' (vi) robustified maximum likelihood with robust eblup prediction following
+#' (vii) robustified maximum likelihood with robust eblup prediction following
 #' \cite{Warnholz (2017)} ("\code{reblup}"), 
-#' (vi) robustified maximum likelihood with robust and bias-corrected eblup 
-#' prediction following \cite{Warnholz (2017)} ("\code{reblupbc}").
-#'  Defaults to "\code{reml}".
-#' @param interval interval for the estimation of sigmau2.
-#' @param k parameter for robustification
-#' @param c parameter for bias-correction
-#' @param transformation a character that determines the type of transformation
-#' and back-transformation. Methods that can be chosen
-#' (i) no transformation ("\code{no}")
-#' (ii) log transformation with naive back-transformation, i.e. simply taking the
-#' exponential ("\code{log_naive}"),
-#' (iii) log transformation with crude back-transformation ("\code{log_crude}"),
-#' (iv) log transformation with Slud-Maiti back-transformation ("\code{log_SM}")
-#' and (v) arcsin transformation with naive back-transformation ("\code{arcsin}")
-#' @param backtransformation a character that determines the type of bracktransformation
-#' @param eff_smpsize Effective sample size.
-#' @param correlation a character string determining the correlation structure.
-#' @param corMatrix  proximity matrix.
-#' @param time a character string indicating the name of the variable containing
-#' the time variable that is included in \code{combined_data}.
-#' @param Ci MSE array of explanatory variables.
-#' @param tol tolerance value for the convergence of weights for the estimation 
-#' of sigmau2 and the betas.
-#' @param maxit maximum number of iterations in the convergence of weights for 
-#' the estimation of sigmau2 and the betas.
+#' (viii) robustified maximum likelihood with robust and bias-corrected eblup 
+#' prediction following \cite{Warnholz (2017)} ("\code{reblupbc}"),
+#' (ix) moment estimator for the estimation of the model of \cite{Ybarra and Lohr 
+#' (2008)} ("\code{moment}"). Defaults to "\code{reml}".
+#' @param interval a numeric vector containing a lower and upper limit for the
+#'  estimation of the variance of the random effects. Defaults to \code{c(0,1000)}. 
+#'  In some cases it may be more suitable to choose a larger interval. 
+#' Required argument when method "\code{reml}" and  "\code{ml}" in combination 
+#' with \code{correlation} equals "\code{no}" is choosen or for the adjusted 
+#' variance estimation methods "\code{amrl}", "\code{amrl_yl}", "\code{ampl}" 
+#' and "\code{ampl_yl}". Defaults to \code{c(0, 1000)}.
+#' @param k numeric tuning constant. Required argument when the robust version of 
+#' the standard or spatial Fay-Herriot model is choosen. Defaults to \code{1.345}. 
+#' For detailed information please refer to \cite{Warnholz (2016)}.
+#' @param c numeric multiplyer constant used in the bias corrected version of the 
+#' robust estimation methods. Required argument when the robust version of 
+#' the standard or spatial Fay-Herriot model is choosen. Default is to make no 
+#' correction for realisations of direct estimator within \code{c = 1} times the 
+#' standard deviation of direct estimator. For detailed information please refer 
+#' to \cite{Warnholz (2016)}.
+#' @param transformation a character that determines the type of transformation 
+#' of the dependent variable and of the sampling variances. Methods that can be chosen
+#' (i) no transformation ("\code{no}"),
+#' (ii) log transformation ("\code{log}") of the dependent variable and of 
+#' the sampling variances following \cite{Neves et al. (2013)}, 
+#' (iii) arcsin transformation ("\code{arcsin}") of the dependent variable and of 
+#' the sampling variances following \cite{Jiang et al. (2001)}. Defaults to "\code{no}".
+#' @param backtransformation a character that determines the type of bracktransformation 
+#' of the EBLUPs and MSE estimates. Required argument when a transformation is choosen. 
+#' Available methods are 
+#' (i) crude bias-correction ("\code{crude}") following \cite{Neves et al. (2013)} 
+#' and \cite{Rao and Molina (2015)} when the log transformation is choosen,
+#' (ii) naive back transformation ("\code{naive}") when the arcsin transformation 
+#' is choosen,
+#' (iii) bias-correction following \cite{Slud and Maiti (2006)} ("\code{sm}") 
+#' when the log or arcsin transformations are choosen. Defaults to \code{NULL}.
+#' @param eff_smpsize a character string indicating the name of the variable containing
+#' the effective sample sizes that are included in \code{combined_data}. Required 
+#' argument when the arcsin transformation is choosen in combination with 
+#' \code{mse_type = boot}. Defaults to \code{NULL}.
+#' @param correlation a character determining the correlation structure of the 
+#' random effects. Possible correlations are
+#' (i) no correlation ("\code{no}"), 
+#' (ii) incorporation of a spatial correlation in the random effects 
+#' ("\code{spatial}"). Defaults to "\code{no}".
+#' @param corMatrix matrix or data frame with dimensions number of areas times 
+#' number of areas containing the row-standardized proximities between the 
+#' domains. Values must lie between \code{0} and \code{1}. The columns and rows 
+#' must be sorted like the domains in \code{fixed}. For an example how to create 
+#' the proximity matrix please refer to the Vignette. Required argument when the 
+#' correlation is set to "\code{spatial}". Defaults to \code{NULL}.
+#' @param Ci array with dimension number of estimated regression coefficients times 
+#' number of estimated regression coefficients times number of areas containing 
+#' the variance-covariance matrix of the explanatory variables for each area. 
+#' For an example how to create the array please refer to the Vignette. 
+#' Required argument within the Ybarra-Lohr model (\code{method = moment}). 
+#' Defaults to \code{NULL}. 
+#' @param tol a number determining the tolerance value for the estimation of the
+#' variance of the random effects. Required argument when method "\code{reml}" and 
+#' "\code{ml}" in combination with \code{correlation = "spatial"} are choosen or 
+#' for the variance estimation methods "\code{reblup}", "\code{reblupbc}" and 
+#' "\code{moment}". Defaults to \code{NULL}.
+#' @param maxit a number determining the maximum number of iterations for the 
+#' estimation of the variance of the random effects. Required argument when method 
+#' "\code{reml}" and  "\code{ml}" in combination with \code{correlation} equals 
+#' "\code{spatial}" is choosen or for the variance estimation methods "\code{reblup}", 
+#' "\code{reblupbc}" and "\code{moment}". Defaults to \code{NULL}.
 #' @param MSE if \code{TRUE}, MSE estimates are calculated. Defaults
 #' to \code{FALSE}.
 #' @param mse_type a character string determining the estimation method of the MSE.
@@ -62,57 +114,224 @@
 #' (i) analytical MSE depending on the estimation method of the variance of the
 #' random effect ("\code{analytical}"),
 #' (ii) a jackknife MSE ("\code{jackknife}"),
-#' (ii) a weighted jackknife MSE ("\code{weighted_jackknife}"),
-#' (iii) and a bootstrap ("\code{boot}"). The latter three options are of interest
-#' when the arcsin transformation is selected.
-#' @param B numeric value that determines the number of bootstrap iterations.
+#' (iii) a weighted jackknife MSE ("\code{weighted_jackknife}"),
+#' (iv) bootstrap ("\code{boot}"), 
+#' (v)  approximation of the MSE based on a pseudo linearisation 
+#' ("\code{pseudo}"),
+#' (vi) parametric bootstrap for the spatial Fay-Herriot model 
+#' ("\code{spatialparboot}"),
+#' (vii) nonparametric bootstrap for the spatial Fay-Herriot model 
+#' ("\code{spatialnonparboot}")
+#' Options (ii)-(iv) are of interest when the arcsin transformation is selected. 
+#' Option (ii) must be chosen when an Ybarra-Lohr model is selected 
+#' (\code{method = moment}). Options (iv) and (v) are the MSE options for the 
+#' robust extensions of the Fay-Herriot model. For an extensive overview of the possible 
+#' MSE options please refer to the Vignette. Required argument when 
+#' \code{MSE = TRUE}. Defaults to "\code{analytical}".
+#' @param B a number determining the number of bootstrap iterations when a bootstrap 
+#' MSE estimator is choosen. The number must be greater than 1. Defaults to \code{NULL}.
+#' For practical applications, values larger than 200 are recommended.
 #' @param alpha a numeric value that determines the confidence level for the
 #' confidence intervals.
-#' @return fitted FH model.
-#' @import saeRobust
+#' @param seed an integer to set the seed for the random number generator. For 
+#' the usage of random number generation see details. If seed is set to 
+#' \code{NULL}, seed is chosen randomly. Defaults to \code{NULL}.
+#' @return An object of class "fh", "model" and "emdi" that provides estimators 
+#' for regional disaggregated indicators like means and ratios and optionally 
+#' corresponding MSE estimates. Generic functions such as \code{\link{estimators}}, 
+#' \code{\link{print}}, \code{\link{plot}} and \code{\link{summary}} have methods 
+#' that can be used to obtain further information. Additionally, for the standard 
+#' Fay-Herriot model that is estimated via ML variance estimation a model selection 
+#' function is provided (\code{\link{step.fh}}). See \code{\link{fhObject}} for 
+#' descriptions of components of objects of class "fh".
+#' @details In the bootstrap approaches random number generation is used. Thus, a 
+#' seed is set by the argument \code{seed}. \cr \cr
+#' Out-of-sample EBLUPs are available for the standard Fay-Herriot model with 
+#' REML and ML variance estimation, for the crude backtransformation in case of 
+#' log transformation, for the spatial Fay-Herriot model and the Ybarra-Lohr model. \cr 
+#' Out-of-sample MSEs are available for the analytical MSE estimator of the 
+#' standard Fay-Herriot model with REML and ML variance estimation and the crude 
+#' backtransformation in case of log transformation, for the nonparametric 
+#' bootstrap estimator within the spatial Fay-Herriot model framework and for the 
+#' bootstrap estimator withi.
+#' @references 
+#' Chandra, H., Aditya, K. and Kumar, S. (2017), Small-area estimation under a 
+#' log-transformed area-level model, Journal of Statistical Theory and 
+#' Practice 12(3), 497-505. \cr \cr
+#' Chen S., Lahiri P. (2002), A Weighted Jackknife MSPE Estimator in Small-Area 
+#' Estimation, "Proceeding of the Section on Survey Research Methods", American 
+#' Statistical Association, 473 - 477. \cr \cr
+#' Datta, G. S. and Lahiri, P. (2000), A unified measure of uncertainty of 
+#' estimated best linear unbiased predictors in small area estimation problems, 
+#' Statistica Sinica 10(2), 613-627. \cr \cr
+#' Fay, R. E. and Herriot, R. A. (1979), Estimates of income for small places:
+#' An application of James-Stein procedures to census data, Journal of the 
+#' American Statistical Association 74(366), 269-277. \cr \cr
+#' González-Manteiga, W., Lombardía, M. J., Molina, I., Morales, D. and 
+#' Santamaría, L. (2008) Analytic and bootstrap approximations of prediction 
+#' errors under a multivariate Fay-Herriot model. Computational Statistics & 
+#' Data Analysis, 52, 5242–5252. \cr \cr
+#' Jiang, J., Lahiri, P., Wan, S.-M. and Wu, C.-H. (2001), Jackknifing in the 
+#' Fay–Herriot model with an example. In Proc. Sem. Funding Opportunity in 
+#' Survey Research, Washington DC: Bureau of Labor Statistics, 75–97. \cr \cr
+#' Jiang, J., Lahiri, P.,Wan, S.-M. (2002), A unified jackknife theory for 
+#' empirical best prediction with M-estimation, Ann. Statist., 30, 1782-810. \cr \cr
+#' Li, H. and Lahiri, P. (2010), An adjusted maximum likelihood method for 
+#' solving small area estimation problems, Journal of Multivariate Analyis 101,
+#' 882-902. \cr \cr
+#' Neves, A., Silva, D. and Correa, S. (2013), Small domain estimation for the
+#' Brazilian service sector survey, ESTADISTICA 65(185), 13-37. \cr \cr
+#' Prasad, N. and Rao, J. (1990), The estimation of the mean squared error of 
+#' small-area estimation, Journal of the American Statistical Association 85(409),
+#' 163-171. \cr \cr
+#' Pratesi, M. and Salvati, N. (2008), Small area estimation: the EBLUP estimator based 
+#' on spatially correlated random area effects. Stat. Meth. & Appl., 17(1), 113–141. \cr \cr
+#' Rao, J. N. K. and Molina, I. (2015), Small area estimation, New York: Wiley. \cr \cr
+#' Slud, E. and Maiti, T. (2006), Mean-squared error estimation in transformed
+#' Fay-Herriot models, Journal of the Royal Statistical Society:Series B 68(2),
+#' 239-257.\cr \cr
+#' Warnholz, S. (2016), saeRobust: Robust small area estimation. R package. \cr \cr
+#' Ybarra, L. and Lohr, S. (2008), Small area estimation when auxiliary 
+#' information is measured with error, Biometrika, 95(4), 919-931.\cr \cr
+#' Yoshimori, M. and Lahiri, P. (2014), A new adjusted maximum likelihood method
+#' for the Fay-Herriot small area model, Journal of Multivariate Analysis 124, 
+#' 281-294. \cr \cr
+#' Warnholz, S. (2016b). Small area estimation using robust extensions to area 
+#' level models. Ph.D. thesis, Freie Universitaet Berlin.
+#' @examples
+#' \dontrun{
+#' # Loading data - population and sample data
+#' data("eusilcA_popAgg")
+#' data("eusilcA_smpAgg")
+#' 
+#' # Combine sample and population data -------------------------------------------
+#' combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
+#'                              smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+#'
+#' # Example 1: Standard Fay-Herriot model and analytical MSE
+#' fh_std <- fh(fixed = Mean ~ eqsize + cash + self_empl, vardir = "Var_Mean",
+#' combined_data = combined_data, domains = "Domain",
+#' method = "reml", interval = c(0, 100000000), MSE = TRUE)
+#' 
+#' # Example 2: arcsin transformation of the dependent variable
+#' fh_arcsin <- fh(fixed = MTMED ~ cash + age_ben + rent + house_allow,
+#' vardir = "Var_MTMED", combined_data = combined_data_arc, domains = "Domain", 
+#' method = "ml", interval = c(0, 100000000), transformation = "arcsin", 
+#' backtransformation = "sm", eff_smpsize = "n", MSE = TRUE, mse_type = "boot", 
+#' B = 50)
+#' 
+#' # Example 3: Spatial Fay-Herriot model
+#' fh_spatial <- fh(fixed = Mean ~ eqsize + cash, vardir = "Var_Mean", 
+#' tol = 0.00000001, maxit = 2000, combined_data = combined_data_in, 
+#' domains = "Domain", method = "reml", correlation = "spatial", 
+#' corMatrix = euSilcA_prox, MSE = TRUE, mse_type = "analytical")
+#' 
+#' # Example 4: Robust Fay-Herriot model 
+#' Please note that the example runs for several minutes. For a short check
+#' change B to a lower value.
+#' fh_robust <- fh(fixed = Mean ~ eqsize + cash, vardir = "Var_Mean", 
+#' combined_data = combined_data, domains = "Domain", method = "reblupbc", 
+#' tol=0.000001, maxit= 1000, k = 1.345, c = 1, MSE = TRUE, mse_type = "boot", 
+#' B = 50)
+#' 
+#' # Example 5: Ybarra-Lohr model
+#' # Create MSE array
+#' P <- 1
+#' M <- length(eusilcA_smpAgg$Mean)
+#' Ci_array <- array(data = 0, dim=c(P+1,P+1,M))
+#' for(i in 1:M){
+#'  Ci_array[2,2,i] <- eusilcA_smpAgg$VarCash[i]/eusilcA_smpAgg$n[i]
+#' }
+#' fh_yl <- fh(fixed = Mean ~ MeanCash, vardir= "Var_Mean",
+#' combined_data = eusilcA_smpAgg, domains ="Domain", method = "moment", 
+#' Ci = Ci_array, tol=0.00000001, maxit= 2000, MSE = TRUE, mse_type = "jackknife")
+#' }
+#' @export
 #' @import formula.tools 
+#' @import saeRobust  
 #' @importFrom stats median model.frame model.matrix model.response optimize
 #' @importFrom stats pnorm rnorm
-#' @export
+
 
 
 fh <- function(fixed, vardir, combined_data, domains, method = "reml",
-               interval = c(0, 1000), k = 10000, c = 1, transformation = "no",
+               interval = c(0, 1000), k = 1.345, c = 1, transformation = "no",
                backtransformation = NULL, eff_smpsize = NULL,
                correlation = "no", corMatrix = NULL, time = NULL,
-               Ci = NULL, tol = NULL, maxit = NULL,
-               MSE = FALSE, mse_type = "analytical", B = NULL, alpha = 0.05) {
+               Ci = NULL, tol = 1e-06, maxit = 100,
+               MSE = FALSE, mse_type = "analytical", B = NULL, seed = NULL, 
+               alpha = 0.05) {
 
-
+  # Agrument checking ----------------------------------------------------------
+  fh_combinations(fixed = fixed, vardir = vardir, combined_data = combined_data, 
+                  domains = domains, method = method, interval = interval, k = k, 
+                  c = c, transformation = transformation, 
+                  backtransformation = backtransformation, eff_smpsize = eff_smpsize, 
+                  correlation = correlation, corMatrix = corMatrix, time = time, 
+                  Ci = Ci, tol = tol, maxit = maxit, MSE = MSE, mse_type = mse_type, 
+                  B = B, seed = seed, alpha = alpha)
+  
+  fh_check(fixed = fixed, vardir = vardir, combined_data = combined_data, 
+           domains = domains, method = method, interval = interval, k = k, 
+           c = c, transformation = transformation, 
+           backtransformation = backtransformation, eff_smpsize = eff_smpsize, 
+           correlation = correlation, corMatrix = corMatrix, time = time, 
+           Ci = Ci, tol = tol, maxit = maxit, MSE = MSE, mse_type = mse_type, 
+           B = B, seed = seed, alpha = alpha)
+  
+ 
+  
+  
+  
+  
   # Save function call ---------------------------------------------------------
   call <- match.call()
 
+  # Set seed if desired
+  if(!is.null(seed)) {
+      set.seed(seed)
+  }
+  
   # Notational framework -------------------------------------------------------
   framework <- framework_FH(combined_data = combined_data, fixed = fixed,
-                            vardir = vardir, domains = domains,
+                            vardir = vardir, domains = domains, 
                             transformation = transformation,
-                            eff_smpsize = eff_smpsize,
-                            Ci = Ci, tol = tol, maxit = maxit)
+                            eff_smpsize = eff_smpsize, correlation = correlation,
+                            corMatrix = corMatrix, Ci = Ci, tol = tol,
+                            maxit = maxit)
 
   if (!(method == "reblup" | method == "reblupbc")) {
-    # Estimate sigma u -----------------------------------------------------------
+    # Estimate sigma u ---------------------------------------------------------
     sigmau2 <- wrapper_estsigmau2(framework = framework, method = method,
                                   interval = interval)
     
     
     if (method != "moment") {
-      # Standard EBLUP -------------------------------------------------------------
-      eblup <- eblup_FH(framework = framework, sigmau2 = sigmau2,
-                        combined_data = combined_data)
-      
-      
-      # Criteria for model selection -----------------------------------------------
-      criteria <- model_select(framework = framework, sigmau2 = sigmau2,
-                               real_res = eblup$real_res)
+      if (correlation == "no"){
+        # Standard EBLUP -------------------------------------------------------
+        eblup <- eblup_FH(framework = framework, sigmau2 = sigmau2,
+                          combined_data = combined_data)
+        
+        Gamma <- data.frame(Domain = framework$data[[framework$domains]],
+                            Gamma = as.numeric(eblup$gamma))
+        # Criteria for model selection -----------------------------------------
+         criteria <- model_select(framework = framework, sigmau2 = sigmau2,
+             real_res = eblup$real_res)
+      }
+      if ((method == "ml" | method == "reml") & correlation == "spatial"){
+        # Spatial EBLUP --------------------------------------------------------
+        eblup <- eblup_SFH(framework = framework, sigmau2 = sigmau2,
+                           combined_data = combined_data)
+        # Criteria for model selection -----------------------------------------
+        criteria <- model_select(framework = framework, sigmau2 = sigmau2,
+                                 real_res = eblup$real_res, V = eblup$V)
+      }
     } else if (method == "moment") {
-      # Standard EBLUP -------------------------------------------------------------
+      # Standard EBLUP ---------------------------------------------------------
       eblup <- eblup_YL(framework = framework, sigmau2 = sigmau2,
                         combined_data = combined_data)
+      Gamma <- data.frame(Domain = framework$data[[framework$domains]],
+                          Gamma = as.numeric(eblup$gamma))
     }
     
     
@@ -122,11 +341,18 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
       # Analytical MSE
       if (MSE == TRUE) {
         MSE_data <- wrapper_MSE(framework = framework, combined_data = combined_data,
-                                sigmau2 = sigmau2, vardir = vardir, Ci = Ci, eblup = eblup,
-                                transformation = transformation, method = method,
-                                interval = interval, mse_type = mse_type)
+                                sigmau2 = sigmau2, vardir = vardir, Ci = Ci,
+                                eblup = eblup, transformation = transformation,
+                                method = method, interval = interval,
+                                mse_type = mse_type, B = B)
         MSE <- MSE_data$MSE_data
         MSE_method <- MSE_data$MSE_method
+        if (mse_type == "spatialnonparboot"){
+          MSE_boot <- MSE_data$bootstrapMSE
+          estTheta <- MSE_data$estTheta
+          trueTheta <- MSE_data$trueTheta
+        }
+        
       } else {
         MSE <- NULL
         MSE_method <- "no mse estimated"
@@ -134,12 +360,39 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
       
       
       # Shrinkage factor
-      Gamma <- data.frame(Domain = framework$data[[framework$domains]],
-                          Gamma = eblup$gamma)
+      #Gamma <- data.frame(Domain = framework$data[[framework$domains]],
+         #                 Gamma = eblup$gamma)
       
       if (method != "moment") {
+        if (mse_type == "spatialnonparboot"){
+          out <- list(ind = eblup$EBLUP_data,
+                      MSE = MSE,
+                      MSE_boot = MSE_boot,
+                      estTheta = estTheta,
+                      trueTheta = trueTheta,
+                      transform_param = NULL,
+                      model = list(coefficients = eblup$coefficients,
+                                   variance = sigmau2,
+                                   random_effects = eblup$random_effects,
+                                   real_residuals = eblup$real_res,
+                                   std_real_residuals = eblup$std_real_res,
+                                   #gamma = Gamma,
+                                   model_select = criteria,
+                                   correlation = correlation),
+                      framework = framework[c("direct", "vardir", "N_dom_smp",
+                                              "N_dom_unobs")],
+                      transformation = list(transformation = transformation,
+                                            backtransformation = backtransformation),
+                      method = list(method = method,
+                                    MSE_method = MSE_method),
+                      fixed = fixed,
+                      call = call,
+                      successful_bootstraps = NULL
+          )
+        } else 
         out <- list(ind = eblup$EBLUP_data,
                     MSE = MSE,
+                    #MSE_boot = MSE_boot,
                     transform_param = NULL,
                     model = list(coefficients = eblup$coefficients,
                                  variance = sigmau2,
@@ -228,7 +481,7 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
     
     # Standard EBLUP -----------------------------------------------------------
     eblup <- eblup_robust(framework = framework, vardir = vardir, combined_data = combined_data,
-                          method = method, k = k, c = c, 
+                          method = method, k = k, tol = tol, maxit = maxit, c = c, 
                           correlation = correlation, corMatrix = corMatrix,
                           time = time)
     

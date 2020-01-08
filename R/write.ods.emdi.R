@@ -18,8 +18,11 @@ write.ods <- function(object,
     add_summary_direct_ods(object = object, 
                              wb = wb)
   }
-  else if (inherits(object, "model"))  {
-    add_summary_ods(object = object, wb = wb)
+  else if (inherits(object, "ebp"))  {
+    add_summary_ods_ebp(object = object, wb = wb)
+  }
+  else if (inherits(object, "fh"))  {
+    add_summary_ods_fh(object = object, wb = wb)
   }
   
   if (!split & (MSE | CV)) {
@@ -46,7 +49,7 @@ write.ods <- function(object,
   
 }
 
-add_summary_ods <- function(object, wb, headlines_cs) {
+add_summary_ods_ebp <- function(object, wb, headlines_cs) {
   su <- summary(object)
   
   df_nobs <- data.frame(Count = c(su$out_of_smp,
@@ -72,6 +75,34 @@ add_summary_ods <- function(object, wb, headlines_cs) {
 
   su$coeff_determ <-  cbind.data.frame("Coefficients of determination", su$coeff_determ)
   readODS::write_ods(x = su$coeff_determ, path = paste0(wb, "_sumCoefDet", ".ods"))
+  
+  return(NULL)
+}
+
+add_summary_ods_fh <- function(object, wb, headlines_cs) {
+  su <- summary(object)
+  
+  df_nobs <- data.frame(Count = c(su$out_of_smp,
+                                  su$in_smp)
+  )
+  rownames(df_nobs) <- c("out of sample domains",
+                         "in sample domains")
+  
+  df_nobs <- cbind.data.frame(rownames(df_nobs), df_nobs)
+  readODS::write_ods(x = df_nobs, path = paste0(wb, "_sumObs", ".ods"))
+  
+  estimMethods <- data.frame(su$method$method, su$model$variance, su$method$MSE_method, 
+                             row.names = "")
+  names(estimMethods) <- c("Variance estimation", "Estimated variance", "MSE estimation")
+  readODS::write_ods(x = estimMethods, path = paste0(wb, "_sumEstimMethods", ".ods"))
+  
+  if (!is.null(su$transform)) {
+    readODS::write_ods(x = su$transform, path = paste0(wb, "_sumTrafo", ".ods"))
+  }
+  su$normality <-  cbind.data.frame(rownames(su$normality), su$normality)
+  readODS::write_ods(x = su$normality, path = paste0(wb, "_sumNorm", ".ods"))
+
+  readODS::write_ods(x = su$model$model_select, path = paste0(wb, "_sumModelSelect", ".ods"))
   
   return(NULL)
 }

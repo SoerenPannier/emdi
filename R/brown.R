@@ -59,7 +59,12 @@ brown.fh <- function(object){
 
 print.brown.fh <- function(x)
 {
-  cat("Brown Test: ","\n")
+  cat("\n")
+  cat("         Brown test ","\n")
+  cat("\n")
+  cat("Null hypothesis: EBLUP estimates do not differ significantly from the 
+      direct estimates","\n")
+  cat("\n")
   print(data.frame(W.value = x$W,
                    Df = x$Df,
                    p.value = x$p.value,

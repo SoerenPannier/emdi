@@ -18,3 +18,7 @@ The values of the test statistics their corresponding p values.
 This function computes two spatial autocorrelation tests: Moran's I and 
 Geary's C.
 }
+\references{
+Bivand, R. (2019), spdep: Spatial Dependence: Weighting Schemes, 
+Statistics. R package.
+}
