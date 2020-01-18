@@ -87,10 +87,19 @@ print.emdi <- function(x, ...) {
       }
       
       if (x$model$correlation == "no") {
-        cat("Estimated variance component(s): ", x$model$variance, "\n")
+        cat("Variance of random effects: ", x$model$variance, "\n")
       } else {
         cat("Estimated variance component(s): ", x$model$correlation, "correlation assumed\n")
-        print(x$model$variance) 
+        if (x$method$method == "reblup" | x$method$method == "reblupbc") {
+          cat("Variance of random effects: ", unname(x$model$variance[2]),"\n")
+          cat("Spatial correlation parameter: ", unname(x$model$variance[1]),"\n")
+        }
+        else {
+          cat("Variance of random effects: ", x$model$variance$sigmau2,"\n")
+          cat("Spatial correlation parameter: ", x$model$variance$rho,"\n")
+          #print(x$model$variance) 
+        }
+        
       }
       cat("MSE method: ", x$method$MSE_method, "\n")
       cat("\n")
