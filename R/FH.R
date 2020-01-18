@@ -481,7 +481,7 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
     
     # Standard EBLUP -----------------------------------------------------------
     eblup <- eblup_robust(framework = framework, vardir = vardir, combined_data = combined_data,
-                          method = method, k = k, tol = tol, maxit = maxit, c = c, 
+                          method = method, k = k, c = c, 
                           correlation = correlation, corMatrix = corMatrix,
                           time = time)
     

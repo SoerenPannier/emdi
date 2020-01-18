@@ -280,9 +280,18 @@ add_summary_fh <- function(object, wb, headlines_cs) {
   
   starting_row <- starting_row + 2 + nrow(df_nobs)
   
-  estimMethods <- data.frame(su$method$method, su$model$variance, su$method$MSE_method, 
-                             row.names = "")
-  names(estimMethods) <- c("Variance estimation", "Estimated variance", "MSE estimation")
+  if (su$model$correlation == 'no') {
+    estimMethods <- data.frame(su$method$method, su$model$variance, su$method$MSE_method, 
+                               row.names = "")
+    names(estimMethods) <- c("Variance estimation", "Estimated variance", "MSE estimation")
+  } else if (su$model$correlation == 'spatial') {
+    estimMethods <- data.frame(su$method$method, su$model$variance['variance'], 
+                               summa$model$variance['correlation'], su$method$MSE_method, 
+                               row.names = "")
+    names(estimMethods) <- c("Variance estimation", "Estimated variance", 
+                             "Spatial correlation", "MSE estimation")
+  }
+    
   
   writeDataTable(x = estimMethods,
                  wb = wb,
@@ -329,17 +338,21 @@ add_summary_fh <- function(object, wb, headlines_cs) {
                  tableStyle = "TableStyleMedium2"
   )
   starting_row <- starting_row + 2 + nrow(su$normality)
-  writeDataTable(x = su$model$model_select,
-                 wb = wb,
-                 withFilter = FALSE,
-                 sheet = "summary",
-                 startRow = starting_row,
-                 startCol = 3,
-                 rowNames = FALSE,
-                 headerStyle = headlines_cs,
-                 colNames = TRUE,
-                 tableStyle = "TableStyleMedium2"
-  )
+  
+  if (su$model$correlation == 'no') {
+    writeDataTable(x = su$model$model_select,
+                   wb = wb,
+                   withFilter = FALSE,
+                   sheet = "summary",
+                   startRow = starting_row,
+                   startCol = 3,
+                   rowNames = FALSE,
+                   headerStyle = headlines_cs,
+                   colNames = TRUE,
+                   tableStyle = "TableStyleMedium2"
+    )
+  }
+
   
   setColWidths(wb = wb,
                sheet = "summary",
