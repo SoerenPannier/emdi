@@ -355,14 +355,8 @@ print.summary.emdi <- function(x,...) {
     print(x$call)
     cat("\n")
     cat("Out-of-sample domains: ", x$out_of_smp, "\n")
-    if (x$model$correlation == "temporal" | x$model$correlation == "spatio-temporal"){
-      cat("In-sample domains: ", x$in_smp / x$model$n_time, "\n")
-      cat("Number of time periods: ", x$model$n_time, "\n")
-      cat("\n")
-    } else {
-      cat("In-sample domains: ", x$in_smp, "\n")
-      cat("\n")
-    }
+    cat("In-sample domains: ", x$in_smp, "\n")
+    cat("\n")
     cat("Variance and MSE estimation:\n")
     if (x$method$method == "reblup" | x$method$method == "reblupbc") {
       cat("Variance estimation method: robustified ml,", x$method$method, "\n")

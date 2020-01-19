@@ -284,12 +284,32 @@ add_summary_fh <- function(object, wb, headlines_cs) {
     estimMethods <- data.frame(su$method$method, su$model$variance, su$method$MSE_method, 
                                row.names = "")
     names(estimMethods) <- c("Variance estimation", "Estimated variance", "MSE estimation")
+    if (su$method$method == "reblup") {
+      estimMethods$k <- su$model$k 
+      estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
+                                       "k", "MSE estimation")]
+    } else if (su$method$method == "reblupbc") {
+      estimMethods$k <- su$model$k
+      estimMethods$c <- su$model$c
+      estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
+                                       "k", "c", "MSE estimation")]
+    }
   } else if (su$model$correlation == 'spatial') {
     estimMethods <- data.frame(su$method$method, su$model$variance['variance'], 
                                summa$model$variance['correlation'], su$method$MSE_method, 
                                row.names = "")
     names(estimMethods) <- c("Variance estimation", "Estimated variance", 
                              "Spatial correlation", "MSE estimation")
+    if (su$method$method == "reblup") {
+      estimMethods$k <- su$model$k 
+      estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
+                                       "k", "Spatial correlation", "MSE estimation")]
+    } else if (su$method$method == "reblupbc") {
+      estimMethods$k <- su$model$k
+      estimMethods$c <- su$model$c
+      estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
+                                       "k", "c", "Spatial correlation", "MSE estimation")]
+    }
   }
     
   
@@ -338,8 +358,8 @@ add_summary_fh <- function(object, wb, headlines_cs) {
                  tableStyle = "TableStyleMedium2"
   )
   starting_row <- starting_row + 2 + nrow(su$normality)
-  
-  if (su$model$correlation == 'no') {
+
+  if (su$model$correlation == "no" & !(su$method$method %in% c("reblup", "reblupbc") | su$method$method == "moment")) {
     writeDataTable(x = su$model$model_select,
                    wb = wb,
                    withFilter = FALSE,

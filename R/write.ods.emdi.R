@@ -91,9 +91,37 @@ add_summary_ods_fh <- function(object, wb, headlines_cs) {
   df_nobs <- cbind.data.frame(rownames(df_nobs), df_nobs)
   readODS::write_ods(x = df_nobs, path = paste0(wb, "_sumObs", ".ods"))
   
-  estimMethods <- data.frame(su$method$method, su$model$variance, su$method$MSE_method, 
-                             row.names = "")
-  names(estimMethods) <- c("Variance estimation", "Estimated variance", "MSE estimation")
+  if (su$model$correlation == 'no') {
+    estimMethods <- data.frame(su$method$method, su$model$variance, su$method$MSE_method, 
+                               row.names = "")
+    names(estimMethods) <- c("Variance estimation", "Estimated variance", "MSE estimation")
+    if (su$method$method == "reblup") {
+      estimMethods$k <- su$model$k 
+      estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
+                                       "k", "MSE estimation")]
+    } else if (su$method$method == "reblupbc") {
+      estimMethods$k <- su$model$k
+      estimMethods$c <- su$model$c
+      estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
+                                       "k", "c", "MSE estimation")]
+    }
+  } else if (su$model$correlation == 'spatial') {
+    estimMethods <- data.frame(su$method$method, su$model$variance['variance'], 
+                               summa$model$variance['correlation'], su$method$MSE_method, 
+                               row.names = "")
+    names(estimMethods) <- c("Variance estimation", "Estimated variance", 
+                             "Spatial correlation", "MSE estimation")
+    if (su$method$method == "reblup") {
+      estimMethods$k <- su$model$k 
+      estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
+                                       "k", "Spatial correlation", "MSE estimation")]
+    } else if (su$method$method == "reblupbc") {
+      estimMethods$k <- su$model$k
+      estimMethods$c <- su$model$c
+      estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
+                                       "k", "c", "Spatial correlation", "MSE estimation")]
+    }
+  }
   readODS::write_ods(x = estimMethods, path = paste0(wb, "_sumEstimMethods", ".ods"))
   
   if (!is.null(su$transform)) {
@@ -102,7 +130,10 @@ add_summary_ods_fh <- function(object, wb, headlines_cs) {
   su$normality <-  cbind.data.frame(rownames(su$normality), su$normality)
   readODS::write_ods(x = su$normality, path = paste0(wb, "_sumNorm", ".ods"))
 
-  readODS::write_ods(x = su$model$model_select, path = paste0(wb, "_sumModelSelect", ".ods"))
+  if (su$model$correlation == "no" & !(su$method$method %in% c("reblup", "reblupbc") | 
+                                       su$method$method == "moment")) {
+    readODS::write_ods(x = su$model$model_select, path = paste0(wb, "_sumModelSelect", ".ods"))
+  }
   
   return(NULL)
 }
