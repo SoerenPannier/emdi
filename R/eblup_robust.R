@@ -22,8 +22,8 @@ eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, c,
                        k = k)
   }
   
-  eblupobject$linear <- saeRobust::predict(eblupobject, type = "linear")$linear
-  eblupobject$reblupbc <- saeRobust::predict(eblupobject, type = "reblupbc", c = c)$reblupbc
+  eblupobject$linear <- predict(eblupobject, type = "linear")$linear
+  eblupobject$reblupbc <- predict(eblupobject, type = "reblupbc", c = c)$reblupbc
   # Inference for coefficients
   eblup_coef <- data.frame(coefficients = eblupobject$coefficients)
   
@@ -39,7 +39,7 @@ eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, c,
   EBLUP_data$Out[framework$obs_dom == TRUE] <- 0
  
   # Scores
-  eblupobject$score <- score(eblupobject)
+  eblupobject$score <- saeRobust::score(eblupobject)
   names(eblupobject$score) <- c("coefficients", "variance", "re")
   names(eblupobject$score$coefficients) <- names(coefficients(eblupobject))
   names(eblupobject$score$variance) <- names(eblupobject$variance)
