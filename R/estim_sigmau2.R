@@ -122,8 +122,8 @@ AMRL_YL <- function(interval, direct, x, vardir, areanumber) {
     Bd <- diag(vardir/(sigma.u_log + vardir))
 
     ee <- eigen(V)
-    #atan(sum(diag((I - Bd))))^(1/areanumber) * (2*pi)^(-(areanumber/2)) * exp(-0.5 * sum(log(ee$value))) * exp(-(0.5) * log(det(t(X)%*%Vi%*%X))) * exp(-(0.5) * t(Y)%*%P%*%Y)
-    (1/areanumber) * log((atan(sum(diag(I - Bd)))^-1)) - (areanumber/2) * log(2*pi) - 0.5 * sum(log(ee$value)) - (0.5) * log(det(t(X)%*%Vi%*%X)) - (0.5) * t(Y)%*%P%*%Y
+    atan(sum(diag((I - Bd))))^(1/areanumber) * (2*pi)^(-(areanumber/2)) * exp(-0.5 * sum(log(ee$value))) * exp(-(0.5) * log(det(t(X)%*%Vi%*%X))) * exp(-(0.5) * t(Y)%*%P%*%Y)
+    #(1/areanumber) * log((atan(sum(diag(I - Bd)))^-1)) - (areanumber/2) * log(2*pi) - 0.5 * sum(log(ee$value)) - (0.5) * log(det(t(X)%*%Vi%*%X)) - (0.5) * t(Y)%*%P%*%Y
   }
 
   ottimo <- optimize(AR_YL, interval, maximum = TRUE,
