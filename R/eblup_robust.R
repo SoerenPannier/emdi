@@ -2,28 +2,28 @@ eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, c,
                          correlation, corMatrix, time) {
   
   if (correlation == "no"){
-    eblupobject <- rfh(framework$formula, data = framework$data,
+    eblupobject <- saeRobust::rfh(framework$formula, data = framework$data,
                        samplingVar = vardir,
                        tol = framework$tol, maxIter = framework$maxit)
   } else if (correlation == "spatial"){
     if (is.matrix(corMatrix) == FALSE){corMatrix <- as.matrix(corMatrix)}
-    eblupobject <- rfh(framework$formula, data = framework$data,
+    eblupobject <- saeRobust::rfh(framework$formula, data = framework$data,
                        samplingVar = vardir, corSAR1(corMatrix), k = k,
                        tol = framework$tol, maxIter = framework$maxit)
   } else if (correlation == "temporal"){
     nTime <- length(unique(framework$data[[time]]))
-    eblupobject <- rfh(framework$formula, data = framework$data,
+    eblupobject <- saeRobust::rfh(framework$formula, data = framework$data,
                        samplingVar = vardir, corAR1(nTime = nTime), k = k)
   } else if (correlation == "spatio-temporal"){
     if (is.matrix(corMatrix) == FALSE){corMatrix <- as.matrix(corMatrix)}
     nTime <- length(unique(framework$data[[time]]))
-    eblupobject <- rfh(framework$formula, data = framework$data,
+    eblupobject <- saeRobust::rfh(framework$formula, data = framework$data,
                        samplingVar = vardir, corSAR1AR1(W = corMatrix,nTime = nTime),
                        k = k)
   }
   
-  eblupobject$linear <- predict(eblupobject, type = "linear")$linear
-  eblupobject$reblupbc <- predict(eblupobject, type = "reblupbc", c = c)$reblupbc
+  eblupobject$linear <- saeRobust::predict(eblupobject, type = "linear")$linear
+  eblupobject$reblupbc <- saeRobust::predict(eblupobject, type = "reblupbc", c = c)$reblupbc
   # Inference for coefficients
   eblup_coef <- data.frame(coefficients = eblupobject$coefficients)
   

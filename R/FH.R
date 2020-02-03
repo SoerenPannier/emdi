@@ -248,7 +248,6 @@
 #' }
 #' @export
 #' @import formula.tools 
-#' @import saeRobust  
 #' @importFrom stats median model.frame model.matrix model.response optimize
 #' @importFrom stats pnorm rnorm
 
