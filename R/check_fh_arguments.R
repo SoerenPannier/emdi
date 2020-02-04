@@ -82,9 +82,9 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
   }
   estcoef <- makeXY(formula = fixed, data = combined_data)
   if (method == "moment" && !is.null(Ci) &&
-      (!(dim(Ci_array)[1] == dim(estcoef$x)[2]) || 
-       !(dim(Ci_array)[2] == dim(estcoef$x)[2]) || 
-       !(dim(Ci_array)[3] == dim(estcoef$x)[1]))){
+      (!(dim(Ci)[1] == dim(estcoef$x)[2]) || 
+       !(dim(Ci)[2] == dim(estcoef$x)[2]) || 
+       !(dim(Ci)[3] == dim(estcoef$x)[1]))){
    stop('Ci must be an array with dimension number of estimated regression 
         coefficients times number of estimated regression coefficients times 
         number of areas containing the variance-covariance matrix of the 

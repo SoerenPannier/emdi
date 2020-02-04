@@ -1433,6 +1433,7 @@ jiang_jackknife_yl  <- function(framework, combined_data, sigmau2, eblup, method
     
     data_insample <- combined_data[framework$obs_dom,]
     data_tmp <- data_insample[-domain,]
+    Ci_tmp <- Ci[,,-domain]
     
     # Framework with temporary data
     framework_tmp <- framework_FH(combined_data = data_tmp,
@@ -1443,7 +1444,7 @@ jiang_jackknife_yl  <- function(framework, combined_data, sigmau2, eblup, method
                                   eff_smpsize = framework$eff_smpsize,
                                   correlation = framework$correlation,
                                   corMatrix = framework$corMatrix, 
-                                  Ci = Ci,
+                                  Ci = Ci_tmp,
                                   tol = framework$tol, 
                                   maxit = framework$maxit)
     
