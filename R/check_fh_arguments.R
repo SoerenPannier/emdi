@@ -114,9 +114,12 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
                                || mse_type == "boot" 
                                || mse_type == "pseudo" 
                                || mse_type == "jackknife"
-                               || mse_type == "weighted_jackknife")))) {
-    stop("The five mse types are ''analytical'', ''boot'', ''pseudo'', 
-         ''jackknife'' or ''weighted_jackknife''." )
+                               || mse_type == "weighted_jackknife"
+                               || mse_type == "spatialnonparboot"
+                               || mse_type == "spatialparboot")))) {
+    stop("The seven mse types are ''analytical'', ''boot'', ''pseudo'', 
+         ''jackknife'', ''weighted_jackknife'', ''spatialnonparboot'' or 
+         ''spatialparboot''." )
   } 
   if (MSE == TRUE && (mse_type == "boot" || mse_type == "spatialparboot" || 
                       mse_type == "spatialnonparboot") && is.null(B)){
