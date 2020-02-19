@@ -314,8 +314,10 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
         Gamma <- data.frame(Domain = framework$data[[framework$domains]],
                             Gamma = as.numeric(eblup$gamma))
         # Criteria for model selection -----------------------------------------
-         criteria <- model_select(framework = framework, sigmau2 = sigmau2,
-             real_res = eblup$real_res)
+         criteria <- model_select(framework = framework, sigmau2 = sigmau2, 
+                                  method = method, interval = interval, 
+                                  eblup = eblup, B = B, vardir = vardir,
+                                  transformation = transformation)
       }
       if ((method == "ml" | method == "reml") & correlation == "spatial"){
         # Spatial EBLUP --------------------------------------------------------
@@ -323,7 +325,9 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                            combined_data = combined_data)
         # Criteria for model selection -----------------------------------------
         criteria <- model_select(framework = framework, sigmau2 = sigmau2,
-                                 real_res = eblup$real_res, V = eblup$V)
+                                 method = method, interval = interval, 
+                                 eblup = eblup, B = B, vardir = vardir,
+                                 transformation = transformation)
       }
     } else if (method == "moment") {
       # Standard EBLUP ---------------------------------------------------------

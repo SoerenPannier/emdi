@@ -28,7 +28,6 @@ step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "bac
                      keep = NULL, steps = 1000, 
                   ...) 
 {
-  
 
   step.fh_check(object = object, scope = scope, direction = direction,
                 keep = keep, steps = steps)
@@ -50,19 +49,12 @@ step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "bac
     change <- sapply(models, "[[", "change")
     rdf <- sapply(models, "[[", "df.resid")
     ddf <- c(NA, diff(rdf))
-    AIC <- sapply(models, "[[", "AIC")
-    BIC <- sapply(models, "[[", "BIC")
+    infcriteria <- sapply(models, "[[", "criteria")
     heading <- c("Stepwise Model Path \nAnalysis of Deviance Table", 
                  "\nInitial Model:", deparse(object$fixed), "\nFinal Model:", 
                  deparse(fit$fixed), "\n")
-    if (criteria == "AIC"){
-      aod <- data.frame(Step = I(change), Df = ddf, AIC = AIC, 
-                        check.names = FALSE)  
-    }
-    if (criteria == "BIC"){
-      aod <- data.frame(Step = I(change), Df = ddf, BIC = BIC, 
-                        check.names = FALSE) 
-    }
+    aod <- data.frame(Step = I(change), Df = ddf, criteria = infcriteria, 
+                         check.names = FALSE)  
     attr(aod, "heading") <- heading
     fit$anova <- aod
     list(Call = fit$call,
@@ -100,57 +92,32 @@ step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "bac
     keep.list <- vector("list", steps)
   n <- object$framework$N_dom_smp
   fit <- object 
-  if (criteria == "AIC"){
-    bAIC <- fit$model$model_select$AIC
+  bcriteria <- fit$model$model_select[[criteria]]
     edf <- length(attr(terms(object$fixed), "term.labels")) + 1 
-    if (is.na(bAIC)) 
-      stop("AIC is not defined for this model, so 'step' cannot proceed")
-    if (bAIC == -Inf) 
-      stop("AIC is -infinity for this model, so 'step' cannot proceed")
+    if (is.na(bcriteria)) 
+      stop(criteria, "is not defined for this model, so 'step' cannot proceed", sep = " ")
+    if (bcriteria == -Inf) 
+      stop(criteria, "is -infinity for this model, so 'step' cannot proceed", sep = " ")
     nm <- 1
     if (trace) {
-      cat("Start:  AIC=", format(round(bAIC, 2)), "\n", 
+      cat("Start: ", criteria, " = ",format(round(bcriteria, 2)), "\n", 
           cut.string(deparse(fit$fixed)), "\n\n", sep = "")
       flush.console()
     }
     models[[nm]] <- list(df.resid = n - 
-                           edf,change = "", AIC = bAIC) 
+                           edf,change = "", criteria = bcriteria) 
     if (!is.null(keep)) 
-      keep.list[[nm]] <- keep(fit, bAIC)
-  }
-  else if (criteria == "BIC"){
-    bBIC <- fit$model$model_select$BIC
-    edf <- length(attr(terms(object$fixed), "term.labels")) + 1
-    if (is.na(bBIC)) 
-      stop("BIC is not defined for this model, so 'step' cannot proceed")
-    if (bBIC == -Inf) 
-      stop("BIC is -infinity for this model, so 'step' cannot proceed")
-    nm <- 1
-    if (trace) {
-      cat("Start:  BIC=", format(round(bBIC, 2)), "\n", 
-          cut.string(deparse(fit$fixed)), "\n\n", sep = "")
-      flush.console()
-    }
-    models[[nm]] <- list(df.resid = n - 
-                           edf,change = "", BIC = bBIC)   
-    if (!is.null(keep)) 
-      keep.list[[nm]] <- keep(fit, bBIC)
-  }
-
+      keep.list[[nm]] <- keep(fit, bcriteria)
+  
   while (steps > 0) {
     steps <- steps - 1
-    if (criteria == "AIC"){
-      AIC <- bAIC
-    }
-    if (criteria == "BIC"){
-      BIC <- bBIC
-    }
+    infcriteria <- bcriteria
     ffac <- attr(Terms, "factors")
     scope <- factor.scope(ffac, list(add = fadd, drop = fdrop))
     aod <- NULL
     change <- NULL
     if (backward && length(scope$drop)) {
-      aod <- drop1.fh(fit, criteria = criteria,scope = scope$drop,
+      aod <- drop1.fh(fit, criteria = criteria, scope = scope$drop,
                       scale = 0, data = data, interval = interval)
       rn <- row.names(aod)
       row.names(aod) <- c(rn[1L], paste("-", rn[-1L]))
@@ -174,14 +141,10 @@ step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "bac
       aod <- aod[nzdf, ]
       if (is.null(aod) || ncol(aod) == 0) 
         break
-      if (criteria == "AIC"){
-        nc <- match("AIC", names(aod)) #"Cp", match(c("AIC"), names(aod)) #"Cp", 
-      }
-      if (criteria == "BIC"){
-        nc <- match("BIC", names(aod)) #"Cp", match(c("AIC"), names(aod)) #"Cp", 
-      }
+      nc <- match("criteria", names(aod)) #"Cp", match(c("AIC"), names(aod)) #"Cp",
       nc <- nc[!is.na(nc)][1L]
       o <- order(aod[, nc])
+      names(aod) <- c("df", criteria)
       if (trace) 
         print(aod[o, ])
       if (o[1L] == 1) 
@@ -191,7 +154,7 @@ step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "bac
     
     fit$call$fixed <- update(fit$fixed, as.formula(paste("~ . ", change)),
                              evaluate = FALSE) 
-    
+    fit$call$MSE <- FALSE
     fit$call$formula <- NULL  
     fit <- eval(fit$call)
 
@@ -200,37 +163,20 @@ step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "bac
     if (all(is.finite(c(n, nnew))) && nnew != n) 
       stop("number of rows in use has changed: remove missing values?")
     Terms <- terms(fit$fixed)
-    if (criteria == "AIC"){
-      bAIC <- fit$model$model_select$AIC
-      edf <- length(attr(terms(fit$fixed), "term.labels")) + 1 
-      if (trace) {
-        cat("\nStep:  AIC=", format(round(bAIC, 2)), "\n", 
-            cut.string(deparse(fit$fixed)), "\n\n", sep = "")
-        flush.console()
-      }
-      if (bAIC >= AIC + 1e-07) 
-        break
-      nm <- nm + 1
-      models[[nm]] <- list(df.resid = n - edf,change = "", AIC = bAIC)
-      if (!is.null(keep)) 
-        keep.list[[nm]] <- keep(fit, bAIC)
+    
+    bcriteria <- fit$model$model_select[[criteria]]
+    edf <- length(attr(terms(fit$fixed), "term.labels")) + 1 
+    if (trace) {
+      cat("\nStep: ", criteria, " = ", format(round(bcriteria, 2)), "\n", 
+          cut.string(deparse(fit$fixed)), "\n\n", sep = "")
+      flush.console()
     }
-    else if (criteria == "BIC"){
-      bAIC <- fit$model$model_select$BIC
-      edf <- length(attr(terms(fit$fixed), "term.labels")) + 1 
-      if (trace) {
-        cat("\nStep:  BIC=", format(round(bAIC, 2)), "\n", 
-            cut.string(deparse(fit$fixed)), "\n\n", sep = "")
-        flush.console()
-      }
-      if (bBIC >= BIC + 1e-07) 
-        break
-      nm <- nm + 1
-      models[[nm]] <- list(df.resid = n - 
-                             edf,change = "", BIC = bBIC)
-      if (!is.null(keep)) 
-        keep.list[[nm]] <- keep(fit, bBIC)
-    }
+    if (bcriteria >= infcriteria + 1e-07) 
+      break
+    nm <- nm + 1
+    models[[nm]] <- list(df.resid = n - edf,change = "", criteria = bcriteria)
+    if (!is.null(keep)) 
+      keep.list[[nm]] <- keep(fit, bcriteria)
   }
   if (!is.null(keep)) 
     fit$keep <- re.arrange(keep.list[seq(nm)])
@@ -254,7 +200,7 @@ print.step.fh <- function(x)
   print(x$Coefficients)
 }
 
-step.fh_check <- function(object, scope, direction, trace,keep,
+step.fh_check <- function(object, scope, direction, trace, keep,
                           steps){
   
   if(!inherits(object, "fh")){

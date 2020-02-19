@@ -4,7 +4,6 @@
 
 drop1.fh <- function(object,criteria, scope,...)
 {
-  
   tl <- attr(terms(object$fixed), "term.labels") 
   if(missing(scope)) 
     scope <- drop.scope(object$fixed)
@@ -16,16 +15,11 @@ drop1.fh <- function(object,criteria, scope,...)
   }
   ns <- length(scope)
   ans <- matrix(nrow = ns + 1L, ncol = 2L,
-                dimnames = list(c("<none>", scope), c("df", criteria)))
+                dimnames = list(c("<none>", scope), c("df", "criteria")))
 
-  if (criteria == "AIC"){
-    ans[1, ] <- c(length(attr(terms(object$fixed), "term.labels")) + 1, 
-                  object$model$model_select$AIC) ##### ACHTUNG
-  }
-  else if (criteria == "BIC"){
-    ans[1, ] <- c(length(attr(terms(object$fixed), "term.labels")) + 1, 
-                  object$model$model_select$BIC)
-  }
+  ans[1, ] <- c(length(attr(terms(object$fixed), "term.labels")) + 1, 
+                object$model$model_select[[criteria]]) ##### ACHTUNG
+
   n0 <- object$framework$N_dom_smp
 
   for(i in seq_len(ns)) {
@@ -36,27 +30,15 @@ drop1.fh <- function(object,criteria, scope,...)
     nfit$call$formula <- NULL
     nfit <- eval(nfit$call)
     
-    if (criteria == "AIC"){
-      ans[i+1, ] <- c(length(attr(terms(nfit$fixed), "term.labels")) + 1,
-                      nfit$model$model_select$AIC)
-    }
-    else if (criteria == "BIC"){
-      ans[i+1, ] <- c(length(attr(terms(nfit$fixed), "term.labels")) + 1, 
-                      nfit$model$model_select$BIC)
-    }
+    ans[i+1, ] <- c(length(attr(terms(nfit$fixed), "term.labels")) + 1,
+                    nfit$model$model_select[[criteria]])
     nnew <- nfit$framework$N_dom_smp
     if(all(is.finite(c(n0, nnew))) && nnew != n0)
       stop("number of rows in use has changed: remove missing values?")
   }
   dfs <- ans[1L , 1L] - ans[, 1L]
   dfs[1L] <- NA
-  if (criteria == "AIC"){
-    aod <- data.frame(Df = dfs, AIC = ans[,2])
-  }
-  else if (criteria == "BIC"){
-    aod <- data.frame(Df = dfs, BIC = ans[,2])
-  }
-  
+  aod <- data.frame(Df = dfs, criteria = ans[,2])
   head <- c("Single term deletions", "\nModel:", deparse(formula(object$fixed)))
   class(aod) <- c("anova", "data.frame")
   attr(aod, "heading") <- head
@@ -84,14 +66,8 @@ add1.fh <- function(object, criteria, scope,trace = 1)
   ns <- length(scope)
   ans <- matrix(nrow = ns + 1L, ncol = 2L,
                 dimnames = list(c("<none>", scope), c("df", criteria)))
-  if (criteria == "AIC"){
-    ans[1, ] <- c(length(attr(terms(object$fixed), "term.labels")) + 1, 
-                  object$model$model_select$AIC)
-  }
-  if (criteria == "BIC"){
-    ans[1, ] <- c(length(attr(terms(object$fixed), "term.labels")) + 1, 
-                  object$model$model_select$BIC)
-  }
+  ans[1, ] <- c(length(attr(terms(object$fixed), "term.labels")) + 1, 
+                object$model$model_select[[criteria]])
   n0 <- object$framework$N_dom_smp
   for(i in seq_len(ns)) {
     tt <- scope[i]
@@ -104,12 +80,7 @@ add1.fh <- function(object, criteria, scope,trace = 1)
                               evaluate = FALSE)
     nfit$call$formula <- NULL
     nfit <- eval(nfit$call)
-    if (criteria == "AIC"){
-      ans[i+1L, ] <- nfit$model$model_select$AIC
-    }
-    if (criteria == "BIC"){
-      ans[i+1L, ] <- nfit$model$model_select$BIC
-    }
+    ans[i+1L, ] <- nfit$model$model_select[[criteria]]
     nnew <- nfit$framework$N_dom_smp
     if(all(is.finite(c(n0, nnew))) && nnew != n0)
       stop("number of rows in use has changed: remove missing values?")
@@ -117,12 +88,7 @@ add1.fh <- function(object, criteria, scope,trace = 1)
   
   dfs <- ans[, 1L] - ans[1L, 1L]
   dfs[1L] <- NA
-  if (criteria == "AIC"){
-    aod <- data.frame(Df = dfs, AIC = ans[, 2L])
-  }
-  if (criteria == "BIC"){
-    aod <- data.frame(Df = dfs, BIC = ans[, 2L])
-  }
+  aod <- data.frame(Df = dfs, criteria = ans[, 2L])
   head <- c("Single term additions", "\nModel:", deparse(formula(object$fixed)))
   class(aod) <- c("anova", "data.frame")
   attr(aod, "heading") <- head

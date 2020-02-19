@@ -135,7 +135,7 @@ eblup_SFH <- function(framework, sigmau2, combined_data) {
   
   eblup_out <- list(EBLUP_data = EBLUP_data,
                     coefficients = eblup_coef,
-                    real_res = res,
+                    real_res = real_res,
                     V = V,
                     std_real_res = std_real_res,
                     random_effects = u.hat)
