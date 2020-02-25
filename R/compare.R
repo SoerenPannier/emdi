@@ -36,6 +36,7 @@ compare <- function(object, ...) UseMethod("compare")
 #' LFS. Symposium 2001 - Achieving Data Quality in a Statistical Agency: A 
 #' Methodological Perspective, Statistics Canada.
 #' @export
+#' @importFrom stats cor pchisq
 
 compare.fh <- function(object, ...){
 

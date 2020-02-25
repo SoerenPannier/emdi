@@ -1,6 +1,18 @@
-################################################################################
-################################################################################
-#### drop1 Method for fh function
+#' drop1 method for fh function
+#'
+#' @param object interval for the algorithm.
+#' @param criteria a character string describing the model selection criterion. 
+#' Criteria that can be chosen are "\code{AIC}", "\code{AICc}", "\code{AICb1}", 
+#' "\code{AICb2}", "\code{BIC}", "\code{KIC}", "\code{KICc}", "\code{KICb1}", 
+#' or "\code{KICb2}". Defaults to "\code{AIC}".
+#' @param scope formula or a list including two formulas(\code{upper} and 
+#' \code{lower}) specifying the models considered in the step function.
+#' @param ... further arguments passed to or from other methods.
+#' @param areanumber number of domains.
+#' @return value of chosen criteria for the different variable combinations when 
+#' one variable is dropped.
+#' @keywords internal
+#' @importFrom stats terms drop.scope update.formula update formula
 
 drop1.fh <- function(object,criteria, scope,...)
 {
@@ -46,11 +58,25 @@ drop1.fh <- function(object,criteria, scope,...)
 }
 
 
-################################################################################
-################################################################################
-#### add1 Method for fh function
+#' add1 method for fh function
+#'
+#' @param object interval for the algorithm.
+#' @param criteria a character string describing the model selection criterion. 
+#' Criteria that can be chosen are "\code{AIC}", "\code{AICc}", "\code{AICb1}", 
+#' "\code{AICb2}", "\code{BIC}", "\code{KIC}", "\code{KICc}", "\code{KICb1}", 
+#' or "\code{KICb2}". Defaults to "\code{AIC}".
+#' @param scope formula or a list including two formulas(\code{upper} and 
+#' \code{lower}) specifying the models considered in the step function.
+#' @param trace a number. If positive, information about the single steps is 
+#' provided during the stepwise procedure. Defaults to \code{1}.
+#' @param ... further arguments passed to or from other methods.
+#' @param areanumber number of domains.
+#' @return value of chosen criteria for the different variable combinations when 
+#' one variable is added.
+#' @keywords internal
+#' @importFrom stats terms drop.scope update.formula update formula
 
-add1.fh <- function(object, criteria, scope,trace = 1)
+add1.fh <- function(object, criteria, scope, trace = 1, ...)
 {
   if(missing(scope) || is.null(scope)) stop("no terms in scope")
   if(!is.character(scope))

@@ -24,7 +24,7 @@
 #' information criterion: 
 #' \item{\code{call}}{a list containing an image of the function call that
 #'                    produced the object.}
-#' \item{\code{coefficients}}{\tab data frame containing the estimated regression 
+#' \item{\code{coefficients}}{data frame containing the estimated regression 
 #' coefficients, the standard errors and the \code{t}- and \code{p}-values of 
 #' the explanatory variables.} 
 #' @export
@@ -32,8 +32,7 @@
 
 step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "backward", 
                                                           "forward"), trace = 1,
-                     keep = NULL, steps = 1000, 
-                  ...) 
+                     keep = NULL, steps = 1000) 
 {
 
   step.fh_check(object = object, scope = scope, direction = direction,
@@ -195,9 +194,10 @@ step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "bac
 #' Prints step function result
 #'
 #' @param x Return from step function.
+#' @param ... further arguments passed to or from other methods.
 #' @export
 
-print.step.fh <- function(x)
+print.step.fh <- function(x, ...)
 {
   cat("\n")
   cat("Call:\n ")

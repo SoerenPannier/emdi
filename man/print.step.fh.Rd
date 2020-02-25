@@ -4,10 +4,12 @@
 \alias{print.step.fh}
 \title{Prints step function result}
 \usage{
-\method{print}{step.fh}(x)
+\method{print}{step.fh}(x, ...)
 }
 \arguments{
 \item{x}{Return from step function.}
+
+\item{...}{further arguments passed to or from other methods.}
 }
 \description{
 Prints step function result

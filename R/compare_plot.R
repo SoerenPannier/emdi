@@ -203,6 +203,7 @@ compare_plot_fh <- function(direct, model, indicator = "all", MSE = FALSE, CV = 
 #' defined as argument for model-based approaches (see also \code{\link{ebp}})
 #' and do not appear in groups of indicators even though these might belong to
 #' one of the groups.
+#' @param ... further arguments passed to or from other methods.
 #' @return A scatter plot and a line plot comparing direct and model-based
 #' estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
 #' @export
@@ -216,7 +217,7 @@ compare_plot.emdi <- function(direct, model = NULL, indicator = "all",
                               MSE = FALSE, CV = FALSE, label = "orig",
                             color = c("blue", "lightblue3"),
                             shape = c(16, 16), line_type = c("solid", "solid"),
-                            gg_theme = NULL) {
+                            gg_theme = NULL, ...) {
 
   if(inherits(direct, "direct") & inherits(model, "ebp")) {
     compare_plot_ebp(direct = direct, model = model, indicator = indicator,

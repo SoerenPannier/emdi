@@ -248,8 +248,8 @@
 #' }
 #' @export
 #' @import formula.tools 
-#' @importFrom stats median model.frame model.matrix model.response optimize
-#' @importFrom stats pnorm rnorm
+#' @importFrom stats integrate median model.frame model.matrix model.response 
+#' @importFrom stats optimize pnorm rnorm terms update
 
 
 

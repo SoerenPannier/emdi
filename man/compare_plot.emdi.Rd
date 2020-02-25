@@ -7,7 +7,7 @@
 \method{compare_plot}{emdi}(direct, model = NULL, indicator = "all",
   MSE = FALSE, CV = FALSE, label = "orig", color = c("blue",
   "lightblue3"), shape = c(16, 16), line_type = c("solid", "solid"),
-  gg_theme = NULL)
+  gg_theme = NULL, ...)
 }
 \arguments{
 \item{direct}{optional, an object of type "emdi","direct", representing point
@@ -27,6 +27,8 @@ one is returned. Defaults to "all". Note, additional custom indicators can be
 defined as argument for model-based approaches (see also \code{\link{ebp}})
 and do not appear in groups of indicators even though these might belong to
 one of the groups.}
+
+\item{...}{further arguments passed to or from other methods.}
 }
 \value{
 A scatter plot and a line plot comparing direct and model-based
