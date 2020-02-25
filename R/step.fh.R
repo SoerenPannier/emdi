@@ -2,24 +2,31 @@
 #'
 #' This function selects a model by different criteria in a stepwise algorithm.
 #'
-#' @param object fitted FH model.
-#' @param scope defines the range of models examined in the stepwise search. 
-#' This should be either a single formula, or a list containing components
-#' \code{upper} and \code{lower}, both formulae.
-#' @param critera a character string describing the model selection criterion. 
-#' Criteria that can be chosen are "\code{AIC}" or "\code{BIC}". Defaults to
-#' "\code{AIC}".
-#' @param direction the mode of stepwise search, can be one of "\code{both}",
-#' "\code{backward}", or "\code{forward}", with a default of "\code{both}".
-#' If the scope argument is missing the default for direction is "\code{backward}".
-#' @param trace if positive, information is printed during the running of \code{step}.
-#' Defaults to 1.
+#' @param object an object of type "fh".
+#' @param scope formula or a list including two formulas(\code{upper} and 
+#' \code{lower}) specifying the models considered in the step function. 
+#' @param criteria a character string describing the model selection criterion. 
+#' Criteria that can be chosen are "\code{AIC}", "\code{AICc}", "\code{AICb1}", 
+#' "\code{AICb2}", "\code{BIC}", "\code{KIC}", "\code{KICc}", "\code{KICb1}", 
+#' or "\code{KICb2}". Defaults to "\code{AIC}".
+#' @param direction a character string describing the direction of stepwise 
+#' algorithm. Directions that can be chosen are "\code{both}", "\code{backward}" 
+#' or "\code{forward}". Defaults to "\code{both}". If no \code{scope} argument is 
+#' provided, the default is "\code{backward}".
+#' @param trace a number. If positive, information about the single steps is 
+#' provided during the stepwise procedure. Defaults to \code{1}.
 #' @param keep a filter function whose input is a fitted model object and the 
 #' associated \code{AIC} statistic, and whose output is arbitrary. Typically 
 #' \code{keep} will select a subset of the components of the object and return 
 #' them. The default is not to keep anything.
-#' @param steps the maximum number of steps to be considered. The default is 1000.
-#' @return Call and coefficients of the best model due to information criterion.
+#' @param steps a number determining the maximum number of steps. Defaults to 1000.
+#' @return Information about the resulting "best" model due to the chosen 
+#' information criterion: 
+#' \item{\code{call}}{a list containing an image of the function call that
+#'                    produced the object.}
+#' \item{\code{coefficients}}{\tab data frame containing the estimated regression 
+#' coefficients, the standard errors and the \code{t}- and \code{p}-values of 
+#' the explanatory variables.} 
 #' @export
 
 
