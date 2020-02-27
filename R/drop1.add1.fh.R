@@ -74,7 +74,7 @@ drop1.fh <- function(object,criteria, scope,...)
 #' @return value of chosen criteria for the different variable combinations when 
 #' one variable is added.
 #' @keywords internal
-#' @importFrom stats terms drop.scope update.formula update formula
+#' @importFrom stats add.scope drop.scope formula update.formula update terms
 
 add1.fh <- function(object, criteria, scope, trace = 1, ...)
 {

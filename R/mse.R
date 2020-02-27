@@ -871,8 +871,7 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
                                    maxit = framework$maxit)
     
     sigmau2.boot <- wrapper_estsigmau2(framework = framework.boot, 
-                                       method = method,
-                                       interval = interval)
+                                       method = method) 
     
     eblupSFH.boot <- eblup_SFH(framework = framework.boot, 
                                sigmau2 = sigmau2.boot,
@@ -1055,8 +1054,7 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
                                    maxit = framework$maxit)
     
     sigmau2.boot <- wrapper_estsigmau2(framework = framework.boot, 
-                                       method = method,
-                                       interval = interval)
+                                       method = method) 
     
     eblupSFH.boot <- eblup_SFH(framework = framework.boot, 
                                sigmau2 = sigmau2.boot,

@@ -248,8 +248,8 @@
 #' }
 #' @export
 #' @import formula.tools 
-#' @importFrom stats integrate median model.frame model.matrix model.response 
-#' @importFrom stats optimize pnorm rnorm terms update
+#' @importFrom stats coefficients integrate median model.frame model.matrix  
+#' @importFrom stats model.response optimize pnorm rnorm terms update
 
 
 

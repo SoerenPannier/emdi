@@ -28,7 +28,7 @@
 #' coefficients, the standard errors and the \code{t}- and \code{p}-values of 
 #' the explanatory variables.} 
 #' @export
-
+#' @importFrom stats factor.scope 
 
 step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "backward", 
                                                           "forward"), trace = 1,
@@ -124,7 +124,7 @@ step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "bac
     change <- NULL
     if (backward && length(scope$drop)) {
       aod <- drop1.fh(fit, criteria = criteria, scope = scope$drop,
-                      scale = 0, data = data, interval = interval)
+                      scale = 0, data = data)
       rn <- row.names(aod)
       row.names(aod) <- c(rn[1L], paste("-", rn[-1L]))
       if (any(aod$Df == 0, na.rm = TRUE)) {

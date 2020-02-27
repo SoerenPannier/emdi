@@ -171,11 +171,7 @@ fh_fw_check1 <- function(fixed, vardir, combined_data, domains, eff_smpsize = NU
     stop(paste0(as.character(fixed[2])," must be the name of a variable that 
                is a numeric vector."))
   }
-  
-  if (dim(pop_data)[1] < dim(smp_data)[1]) {
-    stop("The population data set cannot have less observations than the 
-         sample data set.")
-  }
+
 }
 
 
