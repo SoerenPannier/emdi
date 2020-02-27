@@ -256,7 +256,7 @@
 fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                interval = c(0, 1000), k = 1.345, c = 1, transformation = "no",
                backtransformation = NULL, eff_smpsize = NULL,
-               correlation = "no", corMatrix = NULL, time = NULL,
+               correlation = "no", corMatrix = NULL, 
                Ci = NULL, tol = 1e-06, maxit = 100,
                MSE = FALSE, mse_type = "analytical", B = NULL, seed = NULL, 
                alpha = 0.05) {
@@ -266,7 +266,7 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                   domains = domains, method = method, interval = interval, k = k, 
                   c = c, transformation = transformation, 
                   backtransformation = backtransformation, eff_smpsize = eff_smpsize, 
-                  correlation = correlation, corMatrix = corMatrix, time = time, 
+                  correlation = correlation, corMatrix = corMatrix,  
                   Ci = Ci, tol = tol, maxit = maxit, MSE = MSE, mse_type = mse_type, 
                   B = B, seed = seed, alpha = alpha)
   
@@ -274,7 +274,7 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
            domains = domains, method = method, interval = interval, k = k, 
            c = c, transformation = transformation, 
            backtransformation = backtransformation, eff_smpsize = eff_smpsize, 
-           correlation = correlation, corMatrix = corMatrix, time = time, 
+           correlation = correlation, corMatrix = corMatrix, 
            Ci = Ci, tol = tol, maxit = maxit, MSE = MSE, mse_type = mse_type, 
            B = B, seed = seed, alpha = alpha)
   
@@ -485,8 +485,7 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
     # Standard EBLUP -----------------------------------------------------------
     eblup <- eblup_robust(framework = framework, vardir = vardir, combined_data = combined_data,
                           method = method, k = k, c = c, 
-                          correlation = correlation, corMatrix = corMatrix,
-                          time = time)
+                          correlation = correlation, corMatrix = corMatrix)
     
     # MSE ----------------------------------------------------------------------
     if (MSE == TRUE) {
@@ -512,7 +511,6 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                              model_select = NULL,
                              correlation = correlation,
                              W = eblup$W,
-                             n_time = eblup$nTime,
                              k = k,
                              c = c,
                              scores = eblup$scores,

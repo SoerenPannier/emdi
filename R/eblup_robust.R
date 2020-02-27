@@ -1,5 +1,5 @@
 eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, c,
-                         correlation, corMatrix, time) {
+                         correlation, corMatrix) {
   
   if (correlation == "no"){
     eblupobject <- saeRobust::rfh(framework$formula, data = framework$data,
@@ -10,17 +10,7 @@ eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, c,
     eblupobject <- saeRobust::rfh(framework$formula, data = framework$data,
                        samplingVar = vardir, saeRobust::corSAR1(corMatrix), k = k,
                        tol = framework$tol, maxIter = framework$maxit)
-  } else if (correlation == "temporal"){
-    nTime <- length(unique(framework$data[[time]]))
-    eblupobject <- saeRobust::rfh(framework$formula, data = framework$data,
-                       samplingVar = vardir, saeRobust::corAR1(nTime = nTime), k = k)
-  } else if (correlation == "spatio-temporal"){
-    if (is.matrix(corMatrix) == FALSE){corMatrix <- as.matrix(corMatrix)}
-    nTime <- length(unique(framework$data[[time]]))
-    eblupobject <- saeRobust::rfh(framework$formula, data = framework$data,
-                       samplingVar = vardir, saeRobust::corSAR1AR1(W = corMatrix,nTime = nTime),
-                       k = k)
-  }
+  } 
   
   eblupobject$linear <- stats::predict(eblupobject, type = "linear")$linear
   eblupobject$reblupbc <- stats::predict(eblupobject, type = "reblupbc", c = c)$reblupbc
@@ -60,7 +50,6 @@ eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, c,
                     eblupobject = eblupobject,
                     variance = eblupobject$variance,
                     W = eblupobject$W,
-                    nTime = eblupobject$nTime,
                     scores = eblupobject$score,
                     iterations = eblupobject$iter,
                     maxIter = eblupobject$maxIter,

@@ -5,7 +5,7 @@
 
 fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k, 
                      c, transformation, backtransformation, eff_smpsize,
-                     correlation, corMatrix, time, Ci, tol, maxit, MSE, 
+                     correlation, corMatrix, Ci, tol, maxit, MSE, 
                      mse_type, B, seed, alpha){
   
   if (is.null(fixed) || !inherits(fixed, "formula")) {
@@ -78,7 +78,7 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
      (!(is.matrix(corMatrix) || is.data.frame(corMatrix)))) {
     stop('corMatrix must be a data frame or matrix containing the row-standardised 
           proximity matrix. See also help(fh). A description how a proximity matrix
-          can be computed can be found in the vignette.') ## evtl. ergänzen
+          can be computed can be found in the vignette.') 
   }
   estcoef <- makeXY(formula = fixed, data = combined_data)
   if (method == "moment" && !is.null(Ci) &&
@@ -142,7 +142,7 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
 
 # Functions called in notation (framework)
 fh_fw_check1 <- function(fixed, vardir, combined_data, domains, eff_smpsize = NULL,
-                         time = NULL, Ci = NULL){
+                         Ci = NULL){
   
   if (!(domains %in% colnames(combined_data))) {
     stop(paste0("The domain variable ",domains, " is not contained in combined_data.
@@ -186,7 +186,7 @@ fh_fw_check1 <- function(fixed, vardir, combined_data, domains, eff_smpsize = NU
 
 fh_combinations <- function(fixed, vardir, combined_data, domains, method, 
                             interval, k, c, transformation, backtransformation, 
-                            eff_smpsize, correlation, corMatrix, time, Ci, tol, 
+                            eff_smpsize, correlation, corMatrix, Ci, tol, 
                             maxit, MSE, mse_type, B, seed, alpha){
   if ((method == "reml" || method == "ml") && correlation == "no" && 
       transformation == "no" && MSE == TRUE && mse_type != "analytical"){

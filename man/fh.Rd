@@ -8,9 +8,9 @@ means and ratios}
 fh(fixed, vardir, combined_data, domains, method = "reml",
   interval = c(0, 1000), k = 1.345, c = 1, transformation = "no",
   backtransformation = NULL, eff_smpsize = NULL, correlation = "no",
-  corMatrix = NULL, time = NULL, Ci = NULL, tol = 1e-06,
-  maxit = 100, MSE = FALSE, mse_type = "analytical", B = NULL,
-  seed = NULL, alpha = 0.05)
+  corMatrix = NULL, Ci = NULL, tol = 1e-06, maxit = 100,
+  MSE = FALSE, mse_type = "analytical", B = NULL, seed = NULL,
+  alpha = 0.05)
 }
 \arguments{
 \item{fixed}{a two-sided linear formula object describing the
