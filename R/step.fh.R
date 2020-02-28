@@ -124,7 +124,7 @@ step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "bac
     change <- NULL
     if (backward && length(scope$drop)) {
       aod <- drop1.fh(fit, criteria = criteria, scope = scope$drop,
-                      scale = 0, data = data)
+                      scale = 0)
       rn <- row.names(aod)
       row.names(aod) <- c(rn[1L], paste("-", rn[-1L]))
       if (any(aod$Df == 0, na.rm = TRUE)) {
