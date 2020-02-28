@@ -107,7 +107,7 @@ add_summary_ods_fh <- function(object, wb, headlines_cs) {
     }
   } else if (su$model$correlation == 'spatial') {
     estimMethods <- data.frame(su$method$method, su$model$variance['variance'], 
-                               summa$model$variance['correlation'], su$method$MSE_method, 
+                               su$model$variance['correlation'], su$method$MSE_method, 
                                row.names = "")
     names(estimMethods) <- c("Variance estimation", "Estimated variance", 
                              "Spatial correlation", "MSE estimation")
