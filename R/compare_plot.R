@@ -3,10 +3,11 @@
 #' For all indicators or a selection of indicators two plots are returned. The
 #' first plot is a scatter plot of estimates to compare and the second is a line
 #' plot with these estimates.
-#' @param direct optional, an object of type "emdi","direct", representing point
-#' and MSE estimates.
-#' @param model an object of type "emdi","model", representing point and MSE
+#' @param object an object of type "emdi","model", representing point and MSE
 #' estimates.
+#' @param direct optional, an object of type "emdi","direct", representing point
+#' and MSE estimates. If the input argument \code{object} is of type "model","ebp",
+#' \code{direct} is required.
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
 #' (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
@@ -18,11 +19,12 @@
 #' defined as argument for model-based approaches (see also \code{\link{ebp}})
 #' and do not appear in groups of indicators even though these might belong to
 #' one of the groups.
+#' @param ... further arguments passed to or from other methods.
 #' @return A scatter plot and a line plot comparing direct and model-based
 #' estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
 #' @export
 
-compare_plot <- function(object, indicator, ...) UseMethod("compare_plot")
+compare_plot <- function(object, direct, indicator, ...) UseMethod("compare_plot")
 
 
 
@@ -31,10 +33,11 @@ compare_plot <- function(object, indicator, ...) UseMethod("compare_plot")
 #' For all indicators or a selection of indicators two plots are returned. The
 #' first plot is a scatter plot of estimates to compare and the second is a line
 #' plot with these estimates.
-#' @param direct optional, an object of type "emdi","direct", representing point
-#' and MSE estimates.
-#' @param model an object of type "emdi","model", representing point and MSE
+#' @param object an object of type "emdi","model", representing point and MSE
 #' estimates.
+#' @param direct optional, an object of type "emdi","direct", representing point
+#' and MSE estimates. If the input argument \code{object} is of type "model","ebp",
+#' \code{direct} is required.
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
 #' (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
@@ -55,7 +58,7 @@ compare_plot_ebp <- function(direct, model, indicator = "all", MSE = FALSE,
                              color = c("blue", "lightblue3"),
                              shape = c(16, 16), line_type = c("solid", "solid"),
                              gg_theme = NULL) {
-
+  
   Direct <- NULL
   Model_based <- NULL
   ID <- NULL
@@ -144,6 +147,7 @@ compare_plot_fh <- function(direct, model, indicator = "all", MSE = FALSE, CV = 
                              shape = c(16, 16), line_type = c("solid", "solid"),
                              gg_theme = NULL) {
 
+  
   Direct <- NULL
   Model_based <- NULL
   ID <- NULL
@@ -188,10 +192,11 @@ compare_plot_fh <- function(direct, model, indicator = "all", MSE = FALSE, CV = 
 #' For all indicators or a selection of indicators two plots are returned. The
 #' first plot is a scatter plot of estimates to compare and the second is a line
 #' plot with these estimates.
-#' @param direct optional, an object of type "emdi","direct", representing point
-#' and MSE estimates.
-#' @param model an object of type "emdi","model", representing point and MSE
+#' @param object an object of type "emdi","model", representing point and MSE
 #' estimates.
+#' @param direct optional, an object of type "emdi","direct", representing point
+#' and MSE estimates. If the input argument \code{object} is of type "model","ebp",
+#' \code{direct} is required.
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
 #' (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
@@ -203,9 +208,63 @@ compare_plot_fh <- function(direct, model, indicator = "all", MSE = FALSE, CV = 
 #' defined as argument for model-based approaches (see also \code{\link{ebp}})
 #' and do not appear in groups of indicators even though these might belong to
 #' one of the groups.
+#' @param MSE optional logical. If \code{TRUE}, the MSE estimates of the direct 
+#' and model-based estimates are compared via boxplots and ordered scatterplots.
+#' @param CV optional logical. If \code{TRUE}, the coefficient of variation 
+#' estimates of the direct and model-based estimates are compared via boxplots 
+#' and ordered scatterplots.
+#' @param label argument that enables to customize title and axis labels. There 
+#' are three options to label the evaluation plots: (i) original labels ("orig"), 
+#' (ii) axis lables but no title ("no_title"), (iii) neither axis 
+#' labels nor title ("blank").
+#' @param color a vector with two elements. The first color determines
+#' the color of the line in the scatter plot and the color for the direct 
+#' estimates in the line plot. The second color specifies the color of the line
+#' for the model-based estimates.
+#' @param shape a numeric vector with two elements. The first shape determines
+#' the shape of the points in the line plot for the direct estimates and the 
+#' second shape for the model-based estimates. The options are numbered from 
+#' 0 to 25. 
+#' @param line_type a character vector with two elements. The first line type 
+#' determines the type of the line for the direct estimates and the 
+#' second type for the model-based estimates. The options are: "twodash", 
+#' "solid", "longdash", "dotted", "dotdash", "dashed" and "blank".
+#' @param gg_theme \code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
+#' For using this argument, package \pkg{ggplot2} must be loaded via 
+#' \code{library(ggplot2)}. See also Example 2.
 #' @param ... further arguments passed to or from other methods.
 #' @return A scatter plot and a line plot comparing direct and model-based
 #' estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
+#' @seealso \code{\link{emdiObject}}, \code{\link{fhObject}}, \code{\link{fh}},
+#' \code{\link{direct}}, \code{\link{ebp}} 
+#' @examples
+#' \dontrun{
+#' # Loading data - population and sample data
+#' data("eusilcA_pop")
+#' data("eusilcA_smp")
+#'   
+#' # Generation of two emdi objects
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
+#' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
+#' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#' threshold = function(y){0.6 * median(y)}, L = 50, MSE = TRUE,
+#' na.rm = TRUE, cpus = 1)
+#' 
+#' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
+#' smp_domains = "district", weights = "weight", threshold = 11161.44,
+#' var = TRUE, boot_type = "naive", B = 50, seed = 123, na.rm = TRUE)
+#' 
+#' # Example 1: Receive first overview
+#' compare_plot(direct = emdi_direct, model = emdi_model)
+#' 
+#' # Example 2: Change plot theme
+#' library(ggplot2)
+#' compare_plot(emdi_direct, emdi_model, indicator = "Median",
+#' gg_theme = theme(axis.line = element_line(size = 3, colour = "grey80"),
+#' plot.background = element_rect(fill = "lightblue3"),
+#' legend.position = "none"))
+#' }
 #' @export
 #' @importFrom reshape2 melt
 #' @importFrom ggplot2 geom_point geom_smooth geom_line geom_boxplot
@@ -213,19 +272,19 @@ compare_plot_fh <- function(direct, model, indicator = "all", MSE = FALSE, CV = 
 #' @importFrom ggplot2 scale_color_manual scale_fill_manual
 
 
-compare_plot.emdi <- function(direct, model = NULL, indicator = "all",
+compare_plot.emdi <- function(object, direct = NULL, indicator = "all",
                               MSE = FALSE, CV = FALSE, label = "orig",
                             color = c("blue", "lightblue3"),
                             shape = c(16, 16), line_type = c("solid", "solid"),
                             gg_theme = NULL, ...) {
 
-  if(inherits(direct, "direct") & inherits(model, "ebp")) {
-    compare_plot_ebp(direct = direct, model = model, indicator = indicator,
+  if(inherits(direct, "direct") & inherits(object, "ebp")) {
+    compare_plot_ebp(direct = direct, model = object, indicator = indicator,
                      MSE = MSE, CV = CV,
                      label = label, color = color, shape = shape,
                      line_type = line_type, gg_theme = gg_theme)
-  } else if(inherits(direct, "fh")) {
-    compare_plot_fh(direct = direct, model = model, indicator = indicator,
+  } else if(inherits(object, "fh")) {
+    compare_plot_fh(direct = object, model = object, indicator = indicator,
                     MSE = MSE, CV = CV,
                      label = label, color = color, shape = shape,
                      line_type = line_type, gg_theme = gg_theme)
@@ -424,7 +483,16 @@ define_evallabel <- function(type, label, indi){
 compare_plots <- function(object, type, selected_indicators, MSE, CV, label, color,
                           shape, line_type, gg_theme,...) {
 
-
+  Direct <- NULL
+  Model_based <- NULL
+  ID <- NULL
+  value <- NULL
+  Method <- NULL
+  slope <- NULL
+  intercept <- NULL
+  area <- NULL
+  
+  
   if (MSE == FALSE & CV == FALSE) {
     plotList <- vector(mode = "list", length = length(selected_indicators) * 2)
     names(plotList) <- paste(rep(c("scatter", "line"), length(selected_indicators)),
