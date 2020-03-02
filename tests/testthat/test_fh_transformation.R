@@ -2,8 +2,8 @@
 # transformations
 
 # Loading data - population and sample data
-data("eusilcA_popAgg")
-data("eusilcA_smpAgg")
+load("FH/eusilcA_popAgg.RData")
+load("FH/eusilcA_smpAgg.RData")
 
 # Combine sample and population data 
 combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
@@ -110,9 +110,13 @@ test_that("Does the fh function with a arcsin transformation return the same
             # MSE weighted jackknife
             expect_equal(fh_arcsin_naive_wjack$MSE$FH, 
                          transf_arcsin_naive$MSE_wjack)
-            # MSE bootstrap
-            expect_equal(fh_arcsin_naive_boot$MSE$FH, 
-                         transf_arcsin_naive$MSE_boot)
+            # MSE bootstrap confidence intervals
+            # LCI
+            expect_equal(fh_arcsin_naive_boot$MSE$FH_LCI, 
+                         transf_arcsin_naive$LCI)
+            # UCI
+            expect_equal(fh_arcsin_naive_boot$MSE$FH_UCI, 
+                         transf_arcsin_naive$UCI)
             # Variance
             expect_equal(fh_arcsin_naive_jack$model$variance, 
                          transf_arcsin_naive$variance[1])
@@ -149,7 +153,7 @@ test_that("Does the fh function with a arcsin transformation return the same
            
             # Status quo (benchmark)
             transf_arcsin_sm <- read.csv("FH/transf_arcsin_sm.csv", sep = ",")  
-            
+           
             # Compare results from current version and benchmark
             # EBLUP
             expect_equal(fh_arcsin_sm_jack$ind[, c("Domain","FH")], 

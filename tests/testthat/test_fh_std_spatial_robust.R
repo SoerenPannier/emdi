@@ -1,9 +1,6 @@
 # Test if the same variance, EBLUP and MSE results are obtained as with 
 # the sae package
 
-# Load needed package
-#install.packages("sae")
-library("sae")
 
 ########################## Standard Fay-Herriot model ##########################
 
