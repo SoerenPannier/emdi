@@ -10,3 +10,5 @@ addons:
   apt:
     packages:
       - libudunits2-dev
+      - libgdal1
+      - libgdal1-dev
