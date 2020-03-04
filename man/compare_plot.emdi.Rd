@@ -4,18 +4,20 @@
 \alias{compare_plot.emdi}
 \title{Shows plots for the comparison of estimates}
 \usage{
-\method{compare_plot}{emdi}(object, direct = NULL, indicator = "all",
+\method{compare_plot}{emdi}(direct = NULL, model, indicator = "all",
   MSE = FALSE, CV = FALSE, label = "orig", color = c("blue",
   "lightblue3"), shape = c(16, 16), line_type = c("solid", "solid"),
   gg_theme = NULL, ...)
 }
 \arguments{
-\item{object}{an object of type "emdi","model", representing point and MSE
-estimates.}
-
 \item{direct}{optional, an object of type "emdi","direct", representing point
-and MSE estimates. If the input argument \code{object} is of type "model","ebp",
-\code{direct} is required.}
+and MSE estimates. If the input argument \code{model} is of type "model","ebp",
+\code{direct} is required. If the input argument \code{model} is of type 
+"model","fh", the \code{direct} component is already included in the input 
+argument \code{model}.}
+
+\item{model}{an object of type "emdi","model", representing point and MSE
+estimates.}
 
 \item{indicator}{optional character vector that selects which indicators
 shall be returned: (i) all calculated indicators ("all");

@@ -3,11 +3,13 @@
 #' For all indicators or a selection of indicators two plots are returned. The
 #' first plot is a scatter plot of estimates to compare and the second is a line
 #' plot with these estimates.
-#' @param object an object of type "emdi","model", representing point and MSE
+#' #' @param direct optional, an object of type "emdi","direct", representing point
+#' and MSE estimates. If the input argument \code{model} is of type "model","ebp",
+#' \code{direct} is required. If the input argument \code{model} is of type 
+#' "model","fh", the \code{direct} component is already included in the input 
+#' argument \code{model}.
+#' @param model an object of type "emdi","model", representing point and MSE
 #' estimates.
-#' @param direct optional, an object of type "emdi","direct", representing point
-#' and MSE estimates. If the input argument \code{object} is of type "model","ebp",
-#' \code{direct} is required.
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
 #' (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
@@ -24,7 +26,7 @@
 #' estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
 #' @export
 
-compare_plot <- function(object, direct, indicator, ...) UseMethod("compare_plot")
+compare_plot <- function(direct, model, indicator, ...) UseMethod("compare_plot")
 
 
 
@@ -33,11 +35,13 @@ compare_plot <- function(object, direct, indicator, ...) UseMethod("compare_plot
 #' For all indicators or a selection of indicators two plots are returned. The
 #' first plot is a scatter plot of estimates to compare and the second is a line
 #' plot with these estimates.
-#' @param object an object of type "emdi","model", representing point and MSE
-#' estimates.
 #' @param direct optional, an object of type "emdi","direct", representing point
-#' and MSE estimates. If the input argument \code{object} is of type "model","ebp",
-#' \code{direct} is required.
+#' and MSE estimates. If the input argument \code{model} is of type "model","ebp",
+#' \code{direct} is required. If the input argument \code{model} is of type 
+#' "model","fh", the \code{direct} component is already included in the input 
+#' argument \code{model}.
+#' @param model an object of type "emdi","model", representing point and MSE
+#' estimates.
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
 #' (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
@@ -192,11 +196,13 @@ compare_plot_fh <- function(direct, model, indicator = "all", MSE = FALSE, CV = 
 #' For all indicators or a selection of indicators two plots are returned. The
 #' first plot is a scatter plot of estimates to compare and the second is a line
 #' plot with these estimates.
-#' @param object an object of type "emdi","model", representing point and MSE
-#' estimates.
 #' @param direct optional, an object of type "emdi","direct", representing point
-#' and MSE estimates. If the input argument \code{object} is of type "model","ebp",
-#' \code{direct} is required.
+#' and MSE estimates. If the input argument \code{model} is of type "model","ebp",
+#' \code{direct} is required. If the input argument \code{model} is of type 
+#' "model","fh", the \code{direct} component is already included in the input 
+#' argument \code{model}.
+#' @param model an object of type "emdi","model", representing point and MSE
+#' estimates.
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
 #' (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
@@ -272,24 +278,40 @@ compare_plot_fh <- function(direct, model, indicator = "all", MSE = FALSE, CV = 
 #' @importFrom ggplot2 scale_color_manual scale_fill_manual
 
 
-compare_plot.emdi <- function(object, direct = NULL, indicator = "all",
+compare_plot.emdi <- function(direct = NULL, model = NULL, indicator = "all",
                               MSE = FALSE, CV = FALSE, label = "orig",
                             color = c("blue", "lightblue3"),
                             shape = c(16, 16), line_type = c("solid", "solid"),
                             gg_theme = NULL, ...) {
 
-  if(inherits(direct, "direct") & inherits(object, "ebp")) {
-    compare_plot_ebp(direct = direct, model = object, indicator = indicator,
+  if(is.null(direct) | is.null(model)){
+    if(is.null(model) & inherits(direct, "fh") ){
+      model <- direct
+    } else if(is.null(model) & inherits(direct, "direct")){
+      stop(paste0("If the direct argument is of type 'emdi','direct', the input 
+                    argument model is required.")) 
+    } else if(is.null(model) & inherits(direct, "ebp")){
+      stop(paste0("If the model argument is of type 'emdi','ebp', the input 
+                    argument direct is required.")) 
+    }
+    if(inherits(model, "fh")){
+      compare_plot_fh(direct = model, model = model, indicator = indicator,
+                      MSE = MSE, CV = CV,
+                      label = label, color = color, shape = shape,
+                      line_type = line_type, gg_theme = gg_theme)
+    } else if(inherits(model, "ebp")) {
+      stop(paste0("If the model is of type 'model','ebp', the input argument 
+                  direct is required."))
+    }
+  } else if(inherits(direct, "direct") & inherits(model, "fh")) {
+    stop(paste0("It is not possible to compare the point and MSE estimates of a
+model of type 'model','fh', to the point and MSE estimates of a 'direct' object."))
+  } else if(inherits(direct, "direct") & inherits(model, "ebp")) {
+    compare_plot_ebp(direct = direct, model = model, indicator = indicator,
                      MSE = MSE, CV = CV,
                      label = label, color = color, shape = shape,
-                     line_type = line_type, gg_theme = gg_theme)
-  } else if(inherits(object, "fh")) {
-    compare_plot_fh(direct = object, model = object, indicator = indicator,
-                    MSE = MSE, CV = CV,
-                     label = label, color = color, shape = shape,
-                     line_type = line_type, gg_theme = gg_theme)
-  }
-
+                     line_type = line_type, gg_theme = gg_theme) 
+  } 
 }
 
 

@@ -11,8 +11,13 @@ compare_plot_ebp(direct, model, indicator = "all", MSE = FALSE,
 }
 \arguments{
 \item{direct}{optional, an object of type "emdi","direct", representing point
-and MSE estimates. If the input argument \code{object} is of type "model","ebp",
-\code{direct} is required.}
+and MSE estimates. If the input argument \code{model} is of type "model","ebp",
+\code{direct} is required. If the input argument \code{model} is of type 
+"model","fh", the \code{direct} component is already included in the input 
+argument \code{model}.}
+
+\item{model}{an object of type "emdi","model", representing point and MSE
+estimates.}
 
 \item{indicator}{optional character vector that selects which indicators
 shall be returned: (i) all calculated indicators ("all");
@@ -25,9 +30,6 @@ one is returned. Defaults to "all". Note, additional custom indicators can be
 defined as argument for model-based approaches (see also \code{\link{ebp}})
 and do not appear in groups of indicators even though these might belong to
 one of the groups.}
-
-\item{object}{an object of type "emdi","model", representing point and MSE
-estimates.}
 }
 \value{
 A scatter plot and a line plot comparing direct and model-based
