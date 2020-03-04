@@ -5,7 +5,7 @@
 #' Brown et al. (2001) and by computing the correlation between the 
 #' regression-synthetic part of the Fay-Herriot model and the direct estimates.
 #'
-#' @param object an object of type "fh".
+#' @param model an object of type "model","fh".
 #' @param ... further arguments passed to or from other methods.
 #' @return The null hypothesis, the value W of the test statistic, the degrees 
 #' of freedom and the p value of the Brown test and the correlation coefficient 
@@ -17,7 +17,7 @@
 #' Methodological Perspective, Statistics Canada.
 #' @export
 
-compare <- function(object, ...) UseMethod("compare")
+compare <- function(model, ...) UseMethod("compare")
 #' Compare function
 #'
 #' This function assesses the quality of the model-based estimates by comparing 
@@ -25,7 +25,7 @@ compare <- function(object, ...) UseMethod("compare")
 #' Brown et al. (2001) and by computing the correlation between the 
 #' regression-synthetic part of the Fay-Herriot model and the direct estimates.
 #'
-#' @param object an object of type "fh".
+#' @param model an object of type "model","fh".
 #' @param ... further arguments passed to or from other methods.
 #' @return The null hypothesis, the value W of the test statistic, the degrees 
 #' of freedom and the p value of the Brown test and the correlation coefficient 
@@ -38,15 +38,15 @@ compare <- function(object, ...) UseMethod("compare")
 #' @export
 #' @importFrom stats cor pchisq
 
-compare.fh <- function(object, ...){
+compare.fh <- function(model, ...){
 
-  W_BL <- sum((object$ind$Direct[object$ind$Out == 0] - 
-                 object$ind$FH[object$ind$Out == 0])^2 /
-              (object$MSE$Direct[object$MSE$Out == 0] + 
-                 object$MSE$FH[object$MSE$Out == 0]))
+  W_BL <- sum((model$ind$Direct[model$ind$Out == 0] - 
+                 model$ind$FH[model$ind$Out == 0])^2 /
+              (model$MSE$Direct[model$MSE$Out == 0] + 
+                 model$MSE$FH[model$MSE$Out == 0]))
   
  # Degress of freedom
- df_BL <- object$framework$N_dom_smp
+ df_BL <- model$framework$N_dom_smp
  
  # p Value
  p_value_BL <- 1 - pchisq(W_BL, df_BL)
@@ -56,12 +56,12 @@ compare.fh <- function(object, ...){
                            p.value = p_value_BL)
  
  # Extraction of the regression part
- xb <- (object$ind$FH[object$ind$Out == 0] - 
-          object$model$gamma$Gamma *
-          object$ind$Direct[object$ind$Out == 0]) /
-   (1 - object$model$gamma$Gamma)
+ xb <- (model$ind$FH[model$ind$Out == 0] - 
+          model$model$gamma$Gamma *
+          model$ind$Direct[model$ind$Out == 0]) /
+   (1 - model$model$gamma$Gamma)
  # Direkt estimator
- direct_insample <- object$ind$Direct[object$ind$Out == 0]
+ direct_insample <- model$ind$Direct[model$ind$Out == 0]
  # Correlation
  syndircor <- cor(xb, direct_insample)
  

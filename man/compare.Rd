@@ -4,10 +4,10 @@
 \alias{compare}
 \title{Compare function}
 \usage{
-compare(object, ...)
+compare(model, ...)
 }
 \arguments{
-\item{object}{an object of type "fh".}
+\item{model}{an object of type "model","fh".}
 
 \item{...}{further arguments passed to or from other methods.}
 }
