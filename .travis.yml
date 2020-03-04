@@ -9,4 +9,4 @@ r_github_packages:
 addons:
   apt:
     packages:
-      - libudunits2-de
+      - libudunits2-dev
