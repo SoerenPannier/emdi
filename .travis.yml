@@ -1,6 +1,4 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
-before_install:
-  - sudo apt-get update
 language: R
 sudo: false
 cache: packages
@@ -10,5 +8,4 @@ addons:
   apt:
     packages:
       - libudunits2-dev
-      - libgdal1
-      - libgdal1-dev
+
