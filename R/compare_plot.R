@@ -3,7 +3,7 @@
 #' For all indicators or a selection of indicators two plots are returned. The
 #' first plot is a scatter plot of estimates to compare and the second is a line
 #' plot with these estimates.
-#' #' @param direct optional, an object of type "emdi","direct", representing point
+#' @param direct optional, an object of type "emdi","direct", representing point
 #' and MSE estimates. If the input argument \code{model} is of type "model","ebp",
 #' \code{direct} is required. If the input argument \code{model} is of type 
 #' "model","fh", the \code{direct} component is already included in the input 
