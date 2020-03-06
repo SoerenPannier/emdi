@@ -168,7 +168,7 @@ eblup_YL <- function(framework, sigmau2, combined_data) {
   tvalue <- sigmau2$betahatw/std.errorbeta
   pvalue <- 2 * pnorm(abs(tvalue), lower.tail = FALSE)
   
-  eblup_coef <- data.frame(coefficients = sigmau2$betahatw, #[,1] 
+  eblup_coef <- data.frame(coefficients = sigmau2$betahatw,  
                            std.error = std.errorbeta,
                            t.value = tvalue,
                            p.value = pvalue)

@@ -137,7 +137,6 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
     stop("The seed must be a single value, interpreted as an integer, or NULL
          See also help(fh).")
   }
-  ### alpha Argument fehlt. Konfidenzintervalle werden evtl noch rausgenommen.
 }
 
 # Functions called in notation (framework)

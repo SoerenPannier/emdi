@@ -557,8 +557,7 @@ ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
     return(list(sqrt=direct, sqrt.inv=z))
   }#WORKS ONLY WITH SYMMETRIC AND POSITIVE DEFINITE MATRIX
   
-  while(eps > tol & it < maxit){ # Loops end when tolerance value for the convergence
-    # of weights is reached and max number of iterations
+  while(eps > tol & it < maxit){ 
     
     hatwi.old <- hatwi 
     CC <- matrix(0,p,p) 
@@ -566,7 +565,7 @@ ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
       CC <- CC + hatwi[i]*Ci[,,i]
     }
     
-    G <- t(hatwi*t(x))%*%t(x) # G = Sum over m(w times X^T X)
+    G <- t(hatwi*t(x))%*%t(x) 
     
     
     G.sqrtinv <- sqrtinv.matrix(G)$sqrt.inv 

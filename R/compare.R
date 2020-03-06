@@ -40,6 +40,9 @@ compare <- function(model, ...) UseMethod("compare")
 
 compare.fh <- function(model, ...){
 
+  if(!inherits(object, "fh")){
+    stop('Object needs to be of class fh.')
+  }
   W_BL <- sum((model$ind$Direct[model$ind$Out == 0] - 
                  model$ind$FH[model$ind$Out == 0])^2 /
               (model$MSE$Direct[model$MSE$Out == 0] + 
