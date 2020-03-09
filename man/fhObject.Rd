@@ -10,14 +10,13 @@ The following components are always included in a fh object:
 \item{\code{fixed}}{a formula of fixed effects used in the linear mixed
              regression (see also \code{fixed} in \code{\link{fh}}).}
  \item{\code{framework}}{a list with following components:}
-
- \tabular{rll}{
-     \tab \code{direct} \tab an arranged vector containing the direct 
+ \tabular{ll}{
+     \code{direct} \tab an arranged vector containing the direct 
      estimates. \cr
-     \tab \code{vardir} \tab an arranged vector containing the direct 
+     \code{vardir} \tab an arranged vector containing the direct 
      variances. \cr
-     \tab \code{N_dom_smp} \tab number of domains in the sample. \cr
-     \tab \code{N_dom_unobs} \tab number of out-of-sample domains. \cr
+     \code{N_dom_smp} \tab number of domains in the sample. \cr
+     \code{N_dom_unobs} \tab number of out-of-sample domains. \cr
 }
 \item{\code{ind}}{data frame containing a domain indicator \code{Domain}, 
 direct estimates \code{Direct}, a variable indicating out-of-sample domains 

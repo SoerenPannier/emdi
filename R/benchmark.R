@@ -12,11 +12,14 @@
 #' (ii) Ratio adjustment ("\code{ratio}"),
 #' (iii) MSE adjustment ("\code{MSE_adj}")
 #' @return a list with following components: 
-#' \tabular{rll}{
-#'      \tab \code{benchmark_data} \tab data frame containing a domain indicator Domain, direct estimates 
-#' Direct, point predictions (FH), benchmarked point predictions (FHBENCH) and 
-#' a variable indicating out-of-sample domains Out (1 for out-of-sample, 0 for 
-#' in-sample). \cr
+#' \tabular{lll}{
+#'      \tab \code{benchmark_data} \tab data frame containing a domain indicator 
+#'      (Domain), direct estimates (Direct),  \cr
+#'    \tab \tab point predictions (FH), benchmarked point predictions (FHBENCH) and 
+#' a  \cr
+#' \tab \tab variable indicating out-of-sample domains Out (1 for out-of-sample, 0 for 
+#' in- \cr
+#' \tab \tab sample) .\cr
 #'      \tab \code{benchmark_type} \tab character returning the type of the 
 #'      benchmark method. \cr
 #' }
