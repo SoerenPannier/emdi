@@ -5,12 +5,29 @@
 \title{Standard and extended Fay-Herriot models for disaggregated indicators like 
 means and ratios}
 \usage{
-fh(fixed, vardir, combined_data, domains, method = "reml",
-  interval = c(0, 1000), k = 1.345, c = 1, transformation = "no",
-  backtransformation = NULL, eff_smpsize = NULL, correlation = "no",
-  corMatrix = NULL, Ci = NULL, tol = 1e-06, maxit = 100,
-  MSE = FALSE, mse_type = "analytical", B = NULL, seed = NULL,
-  alpha = 0.05)
+fh(
+  fixed,
+  vardir,
+  combined_data,
+  domains,
+  method = "reml",
+  interval = c(0, 1000),
+  k = 1.345,
+  c = 1,
+  transformation = "no",
+  backtransformation = NULL,
+  eff_smpsize = NULL,
+  correlation = "no",
+  corMatrix = NULL,
+  Ci = NULL,
+  tol = 1e-06,
+  maxit = 100,
+  MSE = FALSE,
+  mse_type = "analytical",
+  B = NULL,
+  seed = NULL,
+  alpha = 0.05
+)
 }
 \arguments{
 \item{fixed}{a two-sided linear formula object describing the
@@ -203,27 +220,27 @@ combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
                              smp_data = eusilcA_smpAgg, smp_domains = "Domain")
 
 # Example 1: Standard Fay-Herriot model and analytical MSE
-fh_std <- fh(fixed = Mean ~ eqsize + cash + self_empl, vardir = "Var_Mean",
-combined_data = combined_data, domains = "Domain",
-method = "reml", interval = c(0, 100000000), MSE = TRUE)
+fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+combined_data = combined_data, domains = "Domain", method = "ml", 
+interval = c(0, 100000000), MSE = TRUE)
 
 # Example 2: arcsin transformation of the dependent variable
 fh_arcsin <- fh(fixed = MTMED ~ cash + age_ben + rent + house_allow,
-vardir = "Var_MTMED", combined_data = combined_data_arc, domains = "Domain", 
+vardir = "Var_MTMED", combined_data = combined_data, domains = "Domain", 
 method = "ml", interval = c(0, 100000000), transformation = "arcsin", 
 backtransformation = "sm", eff_smpsize = "n", MSE = TRUE, mse_type = "boot", 
 B = 50)
 
 # Example 3: Spatial Fay-Herriot model
-fh_spatial <- fh(fixed = Mean ~ eqsize + cash, vardir = "Var_Mean", 
-tol = 0.00000001, maxit = 2000, combined_data = combined_data_in, 
+fh_spatial <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
+tol = 0.00000001, maxit = 2000, combined_data = combined_data, 
 domains = "Domain", method = "reml", correlation = "spatial", 
 corMatrix = euSilcA_prox, MSE = TRUE, mse_type = "analytical")
 
 # Example 4: Robust Fay-Herriot model 
 Please note that the example runs for several minutes. For a short check
 change B to a lower value.
-fh_robust <- fh(fixed = Mean ~ eqsize + cash, vardir = "Var_Mean", 
+fh_robust <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
 combined_data = combined_data, domains = "Domain", method = "reblupbc", 
 tol=0.000001, maxit= 1000, k = 1.345, c = 1, MSE = TRUE, mse_type = "boot", 
 B = 50)
@@ -234,9 +251,9 @@ P <- 1
 M <- length(eusilcA_smpAgg$Mean)
 Ci_array <- array(data = 0, dim=c(P+1,P+1,M))
 for(i in 1:M){
- Ci_array[2,2,i] <- eusilcA_smpAgg$VarCash[i]/eusilcA_smpAgg$n[i]
+ Ci_array[2,2,i] <- eusilcA_smpAgg$Var_Cash[i]/eusilcA_smpAgg$n[i]
 }
-fh_yl <- fh(fixed = Mean ~ MeanCash, vardir= "Var_Mean",
+fh_yl <- fh(fixed = Mean ~ Cash, vardir= "Var_Mean",
 combined_data = eusilcA_smpAgg, domains ="Domain", method = "moment", 
 Ci = Ci_array, tol=0.00000001, maxit= 2000, MSE = TRUE, mse_type = "jackknife")
 }

@@ -4,8 +4,15 @@
 \alias{step.fh}
 \title{Step function}
 \usage{
-step.fh(object, scope, criteria = "AIC", direction = c("both",
-  "backward", "forward"), trace = 1, keep = NULL, steps = 1000)
+step.fh(
+  object,
+  scope,
+  criteria = "AIC",
+  direction = c("both", "backward", "forward"),
+  trace = 1,
+  keep = NULL,
+  steps = 1000
+)
 }
 \arguments{
 \item{object}{an object of type "fh".}
