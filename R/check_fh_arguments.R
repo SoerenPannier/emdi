@@ -11,6 +11,9 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
   if (is.null(fixed) || !inherits(fixed, "formula")) {
     stop('Fixed must be a formula object. See also help(fh).')
   }
+  if (!all(!is.na(combined_data[attr(terms(fixed), "term.labels")]))) {
+    stop(paste0("The auxiliary variables cannot contain NAs.")) 
+  }
   if (is.null(vardir) || !(vardir %in% colnames(combined_data))) {
     stop(paste0("The sampling variances variable ",vardir, " is not contained in
                  combined_data. Please provide valid variable name for the

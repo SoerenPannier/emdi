@@ -6,15 +6,21 @@ framework_FH <- function(combined_data, fixed, vardir, domains,
 
   data <- combined_data[obs_dom == TRUE,]
 
-
   # Get response variable and model matrix from formula and data
   direct <- makeXY(fixed, data)$y
   model_X <- makeXY(fixed, data)$x
+  vardirname <- vardir
   vardir <- data[, vardir]
   direct_orig <- NULL
   vardir_orig <- NULL
   #direct_orig <- direct
   #vardir_orig <- vardir
+  
+  if (!all(is.na(vardir) ==  is.na(direct))) {
+    stop(paste0("Except for out-of-sample domains the variable ",vardirname, " 
+                containing the domain-specific sampling variances must not have
+                NAs.")) 
+  }
 
   if (transformation == "log" | transformation == "log" | transformation == "log") {
     direct_orig <- direct
