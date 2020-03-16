@@ -260,7 +260,7 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
   if ((correlation == "spatial") && (is.null(corMatrix) || is.null(tol) || 
                                      is.null(maxit))){
     stop("If correlation is set to ''spatial'' the arguments corMatrix, tol and 
-         are required and cannot be ''NULL''. See also help(fh).")
+         maxit are required and cannot be ''NULL''. See also help(fh).")
   }
   if ((correlation == "spatial") && (transformation != "no")){
     stop("If correlation is set to ''spatial'', it is not possible to apply a 
