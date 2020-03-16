@@ -4,7 +4,8 @@
 \name{eusilcA_pop}
 \alias{eusilcA_pop}
 \title{Simulated eusilc data - population data}
-\format{A data frame with 25000 observations and 17 variables:
+\format{
+A data frame with 25000 observations and 17 variables:
 \describe{
 \item{eqIncome}{numeric; a simplified version of the equivalized household income.}
 \item{eqsize}{numeric; the equivalized household size according to the 
@@ -25,7 +26,8 @@ modified OECD scale.}
 \item{tax_adj}{numeric; repayments/receipts for tax adjustment (net).}
 \item{state}{factor; state (nine levels).}
 \item{district}{factor; districts (94 levels).}
-}}
+}
+}
 \usage{
 eusilcA_pop
 }
