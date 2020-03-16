@@ -392,7 +392,30 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                       call = call,
                       successful_bootstraps = NULL
           )
-        } else 
+        } else if (correlation == "spatial"){
+          out <- list(ind = eblup$EBLUP_data,
+                      MSE = MSE,
+                      #MSE_boot = MSE_boot,
+                      transform_param = NULL,
+                      model = list(coefficients = eblup$coefficients,
+                                   variance = sigmau2,
+                                   random_effects = eblup$random_effects,
+                                   real_residuals = eblup$real_res,
+                                   std_real_residuals = eblup$std_real_res,
+                                  # gamma = Gamma,
+                                   model_select = criteria,
+                                   correlation = correlation),
+                      framework = framework[c("direct", "vardir", "N_dom_smp",
+                                              "N_dom_unobs")],
+                      transformation = list(transformation = transformation,
+                                            backtransformation = backtransformation),
+                      method = list(method = method,
+                                    MSE_method = MSE_method),
+                      fixed = fixed,
+                      call = call,
+                      successful_bootstraps = NULL
+                      )
+        } else
         out <- list(ind = eblup$EBLUP_data,
                     MSE = MSE,
                     #MSE_boot = MSE_boot,
