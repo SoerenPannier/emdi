@@ -208,8 +208,8 @@ eblup_YL <- function(framework, sigmau2, combined_data) {
   EBLUP_data$EBLUP[framework$obs_dom == TRUE] <- gamma*framework$direct + 
     (1-gamma)* framework$model_X%*%sigmau2$betahatw[,1]
   EBLUP_data$EBLUP[framework$obs_dom == FALSE] <- pred_y
-  EBLUP_data$ind[framework$obs_dom == TRUE] <- 0
-  EBLUP_data$ind[framework$obs_dom == FALSE] <- 1
+  EBLUP_data$Out[framework$obs_dom == TRUE] <- 0
+  EBLUP_data$Out[framework$obs_dom == FALSE] <- 1
   }
   
   eblup_out <- list(EBLUP_data = EBLUP_data,
