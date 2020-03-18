@@ -44,7 +44,7 @@
 #' eta = eusilcA_popAgg$ratio_n, type = "ratio")
 #' 
 #' # Example 2: overwrite the point estimates of the fh object with their benchmarked 
-#' results
+#' # results
 #' fh_bench <- benchmark(fh_std, benchmark = 20140.09, 
 #' eta = eusilcA_popAgg$ratio_n, type = "ratio", overwrite = TRUE)
 #' @export
