@@ -40,7 +40,7 @@ compare <- function(model, ...) UseMethod("compare")
 
 compare.fh <- function(model, ...){
 
-  if(!inherits(object, "fh")){
+  if(!inherits(model, "fh")){
     stop('Object needs to be of class fh.')
   }
   W_BL <- sum((model$ind$Direct[model$ind$Out == 0] - 
