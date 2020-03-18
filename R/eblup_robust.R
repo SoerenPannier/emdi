@@ -29,16 +29,16 @@ eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, c,
   EBLUP_data$Out[framework$obs_dom == TRUE] <- 0
  
   # Scores
-  eblupobject$score <- saeRobust::score(eblupobject)
-  names(eblupobject$score) <- c("coefficients", "variance", "re")
-  names(eblupobject$score$coefficients) <- names(coefficients(eblupobject))
-  names(eblupobject$score$variance) <- names(eblupobject$variance)
+ # eblupobject$score <- saeRobust::score(eblupobject)
+ # names(eblupobject$score) <- c("coefficients", "variance", "re")
+ # names(eblupobject$score$coefficients) <- names(coefficients(eblupobject))
+ # names(eblupobject$score$variance) <- names(eblupobject$variance)
   
   # Iterations:
-  eblupobject$iter <- c(
-    "model parameter" = NROW(eblupobject$iterations$coefficients),
-    "random effects" = NROW(eblupobject$iterations$re)
-  )
+ # eblupobject$iter <- c(
+  #  "model parameter" = NROW(eblupobject$iterations$coefficients),
+  #  "random effects" = NROW(eblupobject$iterations$re)
+ # )
   
   
   eblup_out <- list(EBLUP_data = EBLUP_data,
@@ -48,13 +48,13 @@ eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, c,
                     std_real_res = eblupobject$residuals/sqrt(eblupobject$samplingVar),
                     random_effects = eblupobject$re,
                     eblupobject = eblupobject,
-                    variance = eblupobject$variance,
-                    W = eblupobject$W,
-                    scores = eblupobject$score,
-                    iterations = eblupobject$iter,
-                    maxIter = eblupobject$maxIter,
-                    maxIterParam = eblupobject$maxIterParam,
-                    maxIterRe = eblupobject$maxIterRe)
+                    variance = eblupobject$variance) #,
+                   # W = eblupobject$W,
+                   # scores = eblupobject$score,
+                   # iterations = eblupobject$iter,
+                   # maxIter = eblupobject$maxIter,
+                   # maxIterParam = eblupobject$maxIterParam,
+                   # maxIterRe = eblupobject$maxIterRe)
   
   return(eblup_out)
 }
