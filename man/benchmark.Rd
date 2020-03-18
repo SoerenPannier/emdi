@@ -4,7 +4,7 @@
 \alias{benchmark}
 \title{Benchmark function}
 \usage{
-benchmark(object, benchmark, eta, type, overwrite = FALSE)
+benchmark(object, benchmark, eta, type = "raking", overwrite = FALSE)
 }
 \arguments{
 \item{object}{an object of type "fh".}
@@ -18,14 +18,14 @@ the fh object.}
 \item{type}{Character indicating the type of benchmarking. Types that can be chosen
 (i) Raking ("\code{raking}"),
 (ii) Ratio adjustment ("\code{ratio}"),
-(iii) MSE adjustment ("\code{MSE_adj}")}
+(iii) MSE adjustment ("\code{MSE_adj}"). Defaults to \code{raking}".}
 
 \item{overwrite}{if \code{TRUE}, the EBLUP results of the fh object are 
 substituted by the respective benchmarked results. Defaults
 to \code{FALSE}.}
 }
 \value{
-a data frame containing a domain indicator (Domain), direct estimates 
+A data frame containing a domain indicator (Domain), direct estimates 
 (Direct), point predictions (FH), benchmarked point predictions (FHBENCH) and 
 a variable indicating out-of-sample domains Out (1 for out-of-sample, 0 for 
 in-sample) . If overwrite is set to TRUE, the fh object is returned, but the 
@@ -34,6 +34,10 @@ results.
 }
 \description{
 This function benchmarks the EBLUP estimates.
+}
+\details{
+The benchmarking algorithm does not work, if no out-of-sample point estimates 
+are available.
 }
 \examples{
 # Loading data - population and sample data
