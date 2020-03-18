@@ -14,7 +14,7 @@
 #' MSE estimates obtained by the EBP approach (see also \code{\link{ebp}}).
 #' @param label argument that enables to customize title and axis labels. There 
 #' are four options to label the diagnostic plot: (i) original labels ("orig"), 
-#' (ii) axis lables but no title ("no_title"), (iii) neither axis 
+#' (ii) axis labels but no title ("no_title"), (iii) neither axis 
 #' labels nor title ("blank"), (iv) individual labels by a list that needs to 
 #' have below structure. Six elements can be defined called \code{qq_res, qq_ran, 
 #' d_res, d_ran, cooks} and \code{box_cox} for the six different plots and these 

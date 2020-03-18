@@ -20,7 +20,7 @@
 #' one of the groups.
 #' @param label argument that enables to customize title and axis labels. There 
 #' are three options to label the evaluation plots: (i) original labels ("orig"), 
-#' (ii) axis lables but no title ("no_title"), (iii) neither axis 
+#' (ii) axis labels but no title ("no_title"), (iii) neither axis 
 #' labels nor title ("blank").  
 #' @param color a vector with two elements. The first color determines
 #' the color of the line in the scatter plot and the color for the direct 
