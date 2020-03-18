@@ -10,7 +10,8 @@ load("EBP/Xoutsamp_AuxVar.RData")
 test_that("Does function optimal_parameter() return the benchmark lambda?", {
             
   # Fixed optimal parameter and shift (benchmark values)
-  ebp_optpar_bc <- read.csv2("EBP/ebp_optpar_bc.csv", sep=",")  
+  ebp_optpar_bc <- read.csv2("EBP/ebp_optpar_bc.csv", sep=",", 
+                             stringsAsFactors = TRUE)  
   
   lambda <- as.numeric(as.character(ebp_optpar_bc[,"Optpar"]))
             

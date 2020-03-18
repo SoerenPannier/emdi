@@ -25,8 +25,8 @@ test_that("Does the direct estimation in emdi return the point and variance
                              na.rm = TRUE)
   
   # HCR from laeken package (benchmark)
-  arpr_all <- read.csv2("Direct/arpr_all.csv", sep = ",")  
-  arpr_all_naive  <- read.csv2("Direct/arpr_all_naive.csv", sep = ",")
+  arpr_all <- read.csv2("Direct/arpr_all.csv", sep = ",", stringsAsFactors = TRUE)  
+  arpr_all_naive  <- read.csv2("Direct/arpr_all_naive.csv", sep = ",", stringsAsFactors = TRUE)
   arpr_all$Head_Count <- as.numeric(as.character(arpr_all$Head_Count)) / 100
   arpr_all_naive$Head_Count <-
     as.numeric(as.character(arpr_all_naive$Head_Count)) / 10000
@@ -39,8 +39,8 @@ test_that("Does the direct estimation in emdi return the point and variance
   
   
   # Gini from laeken package (benchmark)
-  gini_all <- read.csv2("Direct/gini_all.csv", sep = ",")  
-  gini_all_naive  <- read.csv2("Direct/gini_all_naive.csv", sep = ",")
+  gini_all <- read.csv2("Direct/gini_all.csv", sep = ",", stringsAsFactors = TRUE)  
+  gini_all_naive  <- read.csv2("Direct/gini_all_naive.csv", sep = ",", stringsAsFactors = TRUE)
   gini_all$Gini <- as.numeric(as.character(gini_all$Gini)) / 100
   gini_all_naive$Gini <- as.numeric(as.character(gini_all_naive$Gini)) / 10000
 
@@ -52,8 +52,8 @@ test_that("Does the direct estimation in emdi return the point and variance
   
   
   # QSR from laeken package (benchmark)
-  qsr_all <- read.csv2("Direct/qsr_all.csv", sep = ",")  
-  qsr_all_naive  <- read.csv2("Direct/qsr_all_naive.csv", sep = ",")
+  qsr_all <- read.csv2("Direct/qsr_all.csv", sep = ",", stringsAsFactors = TRUE)  
+  qsr_all_naive  <- read.csv2("Direct/qsr_all_naive.csv", sep = ",", stringsAsFactors = TRUE)
   qsr_all$Quintile_Share <- as.numeric(as.character(qsr_all$Quintile_Share))
   qsr_all_naive$Quintile_Share <- 
     as.numeric(as.character(qsr_all_naive$Quintile_Share))
@@ -87,7 +87,8 @@ test_that("Does the direct estimation in emdi return the point and variance
                                        na.rm = TRUE)
             
             # Gini from laeken package (benchmark)
-            gini_all_cali  <- read.csv2("Direct/gini_all_cali.csv", sep = ",")
+            gini_all_cali  <- read.csv2("Direct/gini_all_cali.csv", sep = ",", 
+                                        stringsAsFactors = TRUE)
             gini_all_cali$Gini <- 
               as.numeric(as.character(gini_all_cali$Gini)) / 10000
             
@@ -97,7 +98,8 @@ test_that("Does the direct estimation in emdi return the point and variance
             
             
             # QSR from laeken package (benchmark)
-            qsr_all_cali  <- read.csv2("Direct/qsr_all_cali.csv", sep = ",")
+            qsr_all_cali  <- read.csv2("Direct/qsr_all_cali.csv", sep = ",", 
+                                       stringsAsFactors = TRUE)
             qsr_all_cali$Quintile_Share <- 
               as.numeric(as.character(qsr_all_cali$Quintile_Share))
             

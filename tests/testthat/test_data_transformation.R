@@ -35,10 +35,10 @@ test_that("Test that transformed_data is data_frame", {
 # Test if the data frame returns 9 variables or rather a variable y
 
 # Load benchmark transformed data or rather y vector and lambda
-data_bc <- read.csv2("EBP/data_bc.csv", sep=",")
-data_bc_std <- read.csv2("EBP/data_bc_std.csv", sep=",")
-data_log <- read.csv2("EBP/data_log.csv", sep=",")
-ebp_optpar_bc <- read.csv2("EBP/ebp_optpar_bc.csv", sep=",")
+data_bc <- read.csv2("EBP/data_bc.csv", sep = ",", stringsAsFactors = TRUE)
+data_bc_std <- read.csv2("EBP/data_bc_std.csv", sep = ",", stringsAsFactors = TRUE)
+data_log <- read.csv2("EBP/data_log.csv", sep = ",", stringsAsFactors = TRUE)
+ebp_optpar_bc <- read.csv2("EBP/ebp_optpar_bc.csv", sep = ",", stringsAsFactors = TRUE)
 
 test_that("Test if data_transformation returns correctly 
           transformed y and a correct shift paramter",{
@@ -108,11 +108,7 @@ test_that("Test if data_transformation returns correctly
 test_that("Does back transformation gives sample value?", {
   
   # Load benchmark transformed data or rather y vector and lambda
-  #data_bc <- read.csv2("./data/data_bc.csv", sep=",")
-  #data_bc_std <- read.csv2("./data/data_bc_std.csv", sep=",")
-  #data_log <- read.csv2("./data/data_log.csv", sep=",")
-  #ebp_optpar_bc <- read.csv2("./data/ebp_optpar_bc.csv", sep=",")
-  
+
   lambda <- as.numeric(as.character(ebp_optpar_bc[,"Optpar"]))
   
   
