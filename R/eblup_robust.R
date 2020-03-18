@@ -27,6 +27,7 @@ eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, c,
   if (is.element("reblup", method)) EBLUP_data$FH[framework$obs_dom == TRUE] <- eblupobject$reblup
   if (is.element("reblupbc", method)) EBLUP_data$FH[framework$obs_dom == TRUE] <- eblupobject$reblupbc
   EBLUP_data$Out[framework$obs_dom == TRUE] <- 0
+  EBLUP_data$Out[framework$obs_dom == FALSE] <- 1
  
   # Scores
  # eblupobject$score <- saeRobust::score(eblupobject)

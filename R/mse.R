@@ -1539,6 +1539,7 @@ pseudo <- function(framework, combined_data, eblup, mse_type, method){
   if (is.element("reblup", method)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$pseudo
   if (is.element("reblupbc", method)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$pseudobc
   MSE_data$Out[framework$obs_dom == TRUE] <- 0
+  MSE_data$Out[framework$obs_dom == FALSE] <- 1
   
   MSE_data <- list(MSE_data = MSE_data,
                    MSE_method = "pseudo linearization")
@@ -1552,6 +1553,8 @@ robustboot <- function(framework, combined_data, eblup, mse_type, B, method){
   if (is.element("reblup", method)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$boot
   if (is.element("reblupbc", method)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$bootbc
   MSE_data$Out[framework$obs_dom == TRUE] <- 0
+  MSE_data$Out[framework$obs_dom == FALSE] <- 1
+  
   MSE_data <- list(MSE_data = MSE_data,
                    MSE_method = "bootstrap")
 }
