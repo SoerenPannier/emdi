@@ -473,7 +473,8 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
       
       # Back-transformation
       result_data <- backtransformed(framework = framework,
-                                     sigmau2 = sigmau2, eblup = eblup,
+                                     sigmau2 = sigmau2, vardir = vardir,
+                                     eblup = eblup,
                                      transformation = transformation,
                                      backtransformation = backtransformation,
                                      combined_data = combined_data,
