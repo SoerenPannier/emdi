@@ -15,10 +15,11 @@ step.fh(
 )
 }
 \arguments{
-\item{object}{an object of type "fh".}
+\item{object}{an object of type "fh" that contains the chosen information 
+criteria.}
 
-\item{scope}{formula or a list including two formulas(\code{upper} and 
-\code{lower}) specifying the models considered in the step function.}
+\item{scope}{formula or a list including two formulas (\code{lower} and 
+\code{upper}) specifying the models considered in the step function.}
 
 \item{criteria}{a character string describing the model selection criterion. 
 Criteria that can be chosen are "\code{AIC}", "\code{AICc}", "\code{AICb1}", 

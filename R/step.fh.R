@@ -2,9 +2,11 @@
 #'
 #' This function selects a model by different criteria in a stepwise algorithm.
 #'
-#' @param object an object of type "fh".
-#' @param scope formula or a list including two formulas(\code{upper} and 
-#' \code{lower}) specifying the models considered in the step function. 
+#' @param object an object of type "fh" that contains the chosen information 
+#' criteria.
+#' @param scope formula or a list including two formulas (\code{lower} and 
+#' \code{upper}) specifying the models considered in the step function. 
+#' Defaults to \code{NULL}.
 #' @param criteria a character string describing the model selection criterion. 
 #' Criteria that can be chosen are "\code{AIC}", "\code{AICc}", "\code{AICb1}", 
 #' "\code{AICb2}", "\code{BIC}", "\code{KIC}", "\code{KICc}", "\code{KICb1}", 
@@ -13,8 +15,8 @@
 #' algorithm. Directions that can be chosen are "\code{both}", "\code{backward}" 
 #' or "\code{forward}". Defaults to "\code{both}". If no \code{scope} argument is 
 #' provided, the default is "\code{backward}".
-#' @param trace a number. If positive, information about the single steps is 
-#' provided during the stepwise procedure. Defaults to \code{1}.
+#' @param trace if \code{TRUE}, information about the single steps is 
+#' provided during the stepwise procedure. Defaults to \code{TRUE}.
 #' @param keep a filter function whose input is a fitted model object and the 
 #' associated \code{AIC} statistic, and whose output is arbitrary. Typically 
 #' \code{keep} will select a subset of the components of the object and return 
@@ -30,12 +32,13 @@
 #' @export
 #' @importFrom stats factor.scope 
 
-step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "backward", 
-                                                          "forward"), trace = 1,
+step.fh <- function (object, scope = NULL, criteria = "AIC", 
+                     direction = c("both", "backward","forward"), trace = TRUE,
                      keep = NULL, steps = 1000) 
 {
 
-  step.fh_check(object = object, scope = scope, direction = direction,
+  step.fh_check(object = object, scope = scope, criteria = criteria,
+                direction = direction, trace = trace,
                 keep = keep, steps = steps)
   
   cut.string <- function(string) {
@@ -100,12 +103,12 @@ step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "bac
   fit <- object 
   bcriteria <- fit$model$model_select[[criteria]]
     edf <- length(attr(terms(object$fixed), "term.labels")) + 1 
-    if (is.na(bcriteria)) 
-      stop(criteria, "is not defined for this model, so 'step' cannot proceed", sep = " ")
+   # if (is.na(bcriteria)) 
+     # stop(criteria, "is not defined for this model, so 'step' cannot proceed", sep = " ")
     if (bcriteria == -Inf) 
       stop(criteria, "is -infinity for this model, so 'step' cannot proceed", sep = " ")
     nm <- 1
-    if (trace) {
+    if (trace == TRUE) {
       cat("Start: ", criteria, " = ",format(round(bcriteria, 2)), "\n", 
           cut.string(deparse(fit$fixed)), "\n\n", sep = "")
       flush.console()
@@ -151,7 +154,7 @@ step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "bac
       nc <- nc[!is.na(nc)][1L]
       o <- order(aod[, nc])
       names(aod) <- c("df", criteria)
-      if (trace) 
+      if (trace == TRUE) 
         print(aod[o, ])
       if (o[1L] == 1) 
         break
@@ -172,7 +175,7 @@ step.fh <- function (object, scope, criteria = "AIC", direction = c("both", "bac
     
     bcriteria <- fit$model$model_select[[criteria]]
     edf <- length(attr(terms(fit$fixed), "term.labels")) + 1 
-    if (trace) {
+    if (trace == TRUE) {
       cat("\nStep: ", criteria, " = ", format(round(bcriteria, 2)), "\n", 
           cut.string(deparse(fit$fixed)), "\n\n", sep = "")
       flush.console()
@@ -207,7 +210,7 @@ print.step.fh <- function(x, ...)
   print(x$Coefficients)
 }
 
-step.fh_check <- function(object, scope, direction, trace, keep,
+step.fh_check <- function(object, scope, criteria, direction, trace, keep,
                           steps){
   
   if(!inherits(object, "fh")){
@@ -217,16 +220,47 @@ step.fh_check <- function(object, scope, direction, trace, keep,
     stop('The variance estimation method of the random effect has to be ml. Otherwise
          the information criteria are not valid.')
   }
+  if (is.null(criteria) || !(criteria == "AIC" 
+                             || criteria == "AICc" 
+                             || criteria == "AICb1"
+                             || criteria == "AICb2"
+                             || criteria == "BIC"
+                             || criteria == "KIC"
+                             || criteria == "KICc"
+                             || criteria == "KICb1"
+                             || criteria == "KICb2"))  {
+    stop("The nine options for criteria are ''AIC', ''AICc'', ''AICb1'', ''AICb2'',
+         ''BIC'', ''KIC'', ''KICc'', ''KICb1'', ''KICb2''.")
+  }
+  if (is.null(object$model$model_select[[criteria]])){
+    stop("The fh object does not contain the chosen criterion. Please set the 
+         input argument B of the fh function to a positive number to receive 
+         results for all of the information criteria. For some model extensions of 
+         the fh model the information criteria are not defined. Check the 
+         model_select component of the fh object. If no criteria are provided, 
+         it is not possible to apply the stepwise variable selection algorithm.")
+  }
   if (is.null(direction) || !(direction == "forward" 
                               || direction == "backward" 
                               || direction == "both")) {
     stop("The three options for direction are ''forward', ''backward'',
          ''both''.")
   }
-  
+  if (!is.logical(trace) || length(trace) != 1) {
+    stop("trace must be a logical value. Set MSE to TRUE or FALSE. The default is 
+          set to TRUE. See also help(step.fh).")
+  }
+  if (!is.null(scope) && ((!inherits(scope, "formula")) && 
+      (!inherits(scope, "list") || (!inherits(scope[[1]], "formula") ||
+                                   !inherits(scope[[2]], "formula")) ))){
+    stop('Scope must be a formula or a list including two formulas 
+         (lower and upper).')
+  }
   if (!is.numeric(steps) || !(is.numeric(steps) && length(steps) == 1)) {
     stop("steps must be a single number determining the maximum number of steps.
          See help(step.fh).")
   }
   
 }
+
+

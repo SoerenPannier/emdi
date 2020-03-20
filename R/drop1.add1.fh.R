@@ -67,8 +67,8 @@ drop1.fh <- function(object,criteria, scope,...)
 #' or "\code{KICb2}". Defaults to "\code{AIC}".
 #' @param scope formula or a list including two formulas(\code{upper} and 
 #' \code{lower}) specifying the models considered in the step function.
-#' @param trace a number. If positive, information about the single steps is 
-#' provided during the stepwise procedure. Defaults to \code{1}.
+#' @param trace if \code{TRUE}, information about the single steps is 
+#' provided during the stepwise procedure. Defaults to \code{TRUE}.
 #' @param ... further arguments passed to or from other methods.
 #' @param areanumber number of domains.
 #' @return value of chosen criteria for the different variable combinations when 
@@ -76,7 +76,7 @@ drop1.fh <- function(object,criteria, scope,...)
 #' @keywords internal
 #' @importFrom stats add.scope drop.scope formula update.formula update terms
 
-add1.fh <- function(object, criteria, scope, trace = 1, ...)
+add1.fh <- function(object, criteria, scope, trace = TRUE, ...)
 {
   if(missing(scope) || is.null(scope)) stop("no terms in scope")
   if(!is.character(scope))
@@ -97,10 +97,6 @@ add1.fh <- function(object, criteria, scope, trace = 1, ...)
   n0 <- object$framework$N_dom_smp
   for(i in seq_len(ns)) {
     tt <- scope[i]
-    if(trace > 1) {
-      cat("trying +", tt, "\n", sep = "")
-      flush.console()
-    }
     nfit <- object
     nfit$call$fixed <- update(object$fixed, as.formula(paste("~ . +", tt)),
                               evaluate = FALSE)
