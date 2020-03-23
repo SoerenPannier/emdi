@@ -102,7 +102,8 @@ add1.fh <- function(object, criteria, scope, trace = TRUE, ...)
                               evaluate = FALSE)
     nfit$call$formula <- NULL
     nfit <- eval(nfit$call)
-    ans[i+1L, ] <- nfit$model$model_select[[criteria]]
+    ans[i+1L, ] <- c(length(attr(terms(nfit$fixed), "term.labels")) + 1,
+                     nfit$model$model_select[[criteria]]) 
     nnew <- nfit$framework$N_dom_smp
     if(all(is.finite(c(n0, nnew))) && nnew != n0)
       stop("number of rows in use has changed: remove missing values?")
