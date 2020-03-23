@@ -4,7 +4,7 @@
 \alias{add1.fh}
 \title{add1 method for fh function}
 \usage{
-\method{add1}{fh}(object, criteria, scope, trace = 1, ...)
+\method{add1}{fh}(object, criteria, scope, trace = TRUE, ...)
 }
 \arguments{
 \item{object}{interval for the algorithm.}
@@ -17,8 +17,8 @@ or "\code{KICb2}". Defaults to "\code{AIC}".}
 \item{scope}{formula or a list including two formulas(\code{upper} and 
 \code{lower}) specifying the models considered in the step function.}
 
-\item{trace}{a number. If positive, information about the single steps is 
-provided during the stepwise procedure. Defaults to \code{1}.}
+\item{trace}{if \code{TRUE}, information about the single steps is 
+provided during the stepwise procedure. Defaults to \code{TRUE}.}
 
 \item{...}{further arguments passed to or from other methods.}
 

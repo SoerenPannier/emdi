@@ -6,10 +6,10 @@
 \usage{
 step.fh(
   object,
-  scope,
+  scope = NULL,
   criteria = "AIC",
   direction = c("both", "backward", "forward"),
-  trace = 1,
+  trace = TRUE,
   keep = NULL,
   steps = 1000
 )
@@ -19,7 +19,8 @@ step.fh(
 criteria.}
 
 \item{scope}{formula or a list including two formulas (\code{lower} and 
-\code{upper}) specifying the models considered in the step function.}
+\code{upper}) specifying the models considered in the step function. 
+Defaults to \code{NULL}.}
 
 \item{criteria}{a character string describing the model selection criterion. 
 Criteria that can be chosen are "\code{AIC}", "\code{AICc}", "\code{AICb1}", 
@@ -31,8 +32,8 @@ algorithm. Directions that can be chosen are "\code{both}", "\code{backward}"
 or "\code{forward}". Defaults to "\code{both}". If no \code{scope} argument is 
 provided, the default is "\code{backward}".}
 
-\item{trace}{a number. If positive, information about the single steps is 
-provided during the stepwise procedure. Defaults to \code{1}.}
+\item{trace}{if \code{TRUE}, information about the single steps is 
+provided during the stepwise procedure. Defaults to \code{TRUE}.}
 
 \item{keep}{a filter function whose input is a fitted model object and the 
 associated \code{AIC} statistic, and whose output is arbitrary. Typically 
