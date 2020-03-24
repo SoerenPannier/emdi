@@ -43,6 +43,7 @@ compare.fh <- function(model, ...){
   if(!inherits(model, "fh")){
     stop('Object needs to be of class fh.')
   }
+  
   W_BL <- sum((model$ind$Direct[model$ind$Out == 0] - 
                  model$ind$FH[model$ind$Out == 0])^2 /
               (model$MSE$Direct[model$MSE$Out == 0] + 
@@ -58,18 +59,40 @@ compare.fh <- function(model, ...){
                            Df = df_BL,
                            p.value = p_value_BL)
  
- # Extraction of the regression part
- xb <- (model$ind$FH[model$ind$Out == 0] - 
-          model$model$gamma$Gamma *
-          model$ind$Direct[model$ind$Out == 0]) /
-   (1 - model$model$gamma$Gamma)
- # Direkt estimator
- direct_insample <- model$ind$Direct[model$ind$Out == 0]
- # Correlation
- syndircor <- cor(xb, direct_insample)
+ if (model$method$method == "reblupbc"){
+   results <- list(Brown = testresults)
+   cat("Please note that for the bias-corrected robust EBLUP ('reblupbc') only 
+       the goodness-of-fit test proposed by Brown et al. (2001) is provided and 
+       not the correlation coefficient of the synthetic part and the direct 
+       estimator.")
+ } else {
+   # Extraction of the regression part
+   if (!is.null(model$model$gamma)){
+     xb <- (model$ind$FH[model$ind$Out == 0] - 
+              model$model$gamma$Gamma[model$ind$Out == 0] *
+              model$ind$Direct[model$ind$Out == 0]) /
+       (1 - model$model$gamma$Gamma[model$ind$Out == 0]) 
+   } 
+   if (is.null(model$model$gamma)){
+     xb <- model$ind$FH[model$ind$Out == 0] - 
+       model$model$random_effects[model$ind$Out == 0]
+   }
+   
+   
+   # Direkt estimator
+   direct_insample <- model$ind$Direct[model$ind$Out == 0]
+   # Correlation
+   syndircor <- cor(xb, direct_insample)
+   
+   results <- list(Brown = testresults, syndir = syndircor)
+ }
  
- results <- list(Brown = testresults, syndir = syndircor)
  class(results) <- "compare.fh"
+ 
+ if (model$framework$N_dom_unobs > 0) {
+   cat("Please note that the computation of both test statistics is only based 
+       on in-sample domains.")
+ }
  return(results)
 }
 
@@ -91,9 +114,11 @@ print.compare.fh <- function(x, ...)
                    Df = x[[1]]$Df,
                    p.value = x[[1]]$p.value,
                    row.names = ""))
+  if (length(x) == 2){
   cat("\n")
   cat("Correlation between synthetic part and direct estimator: ", 
       round(x[[2]],2),"\n")
+  }
 }
 
 
