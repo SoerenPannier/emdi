@@ -51,6 +51,8 @@
 #' If the input arguments MSE and CV are set to TRUE two extra plots are created, 
 #' respectively: the MSE/CV estimates of the direct and model-based estimates are 
 #' compared by boxplots and scatterplots.
+#' @details Since all of the comparisons need a direct estimator, the plots are 
+#' only created for in-sample domains.
 #' @seealso \code{\link{emdiObject}}, \code{\link{fhObject}}, \code{\link{fh}},
 #' \code{\link{direct}}, \code{\link{ebp}} 
 #' @examples
@@ -243,7 +245,12 @@ compare_plot_fh <- function(direct, model, indicator = "all", MSE = FALSE, CV = 
   }
 
   #compare_plot_check2(ind_direct, ind_model)
-
+  
+  if (model$framework$N_dom_unobs > 0) {
+    cat("Please not that since all of the comparisons need a direct estimator, 
+  the plots are only created for in-sample domains. \n \n")
+  }
+  
   compare_plots(object = Data, type = "area", selected_indicators = selected_indicators,
                 MSE = MSE, CV = CV, label = label, color = color,
                 shape = shape, line_type = line_type, gg_theme = gg_theme)
