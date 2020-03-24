@@ -57,10 +57,11 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
   if (is.null(c)  || !(is.numeric(c) && length(c) == 1)) { 
     stop("c needs to be a single numeric value. See also help(fh).")
   }
-  if (is.null(transformation) || !(transformation == "arcsin" 
-                                   || transformation == "log" 
-                                   || transformation == "no")) {
-    stop("The three options for transformation are ''no'', ''log'' or ''arcsin''." )
+  if (is.null(transformation) ||  !is.character(transformation) || 
+      !(transformation == "arcsin" || transformation == "log" 
+        || transformation == "no")) {
+    stop("transformation must be a character. The three options are ''no'', 
+         ''log'' or ''arcsin''." )
   }
   if (!is.null(backtransformation) && !(backtransformation == "naive" 
                                    || backtransformation == "crude" 
@@ -186,6 +187,13 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
                             interval, k, c, transformation, backtransformation, 
                             eff_smpsize, correlation, corMatrix, Ci, tol, 
                             maxit, MSE, mse_type, B, seed, alpha){
+  
+  if (is.null(transformation) ||  !is.character(transformation) || 
+      !(transformation == "arcsin" || transformation == "log" 
+        || transformation == "no")) {
+    stop("transformation must be a character. The three options are ''no'', 
+         ''log'' or ''arcsin''." )
+  }
   if ((method == "reml" || method == "ml") && correlation == "no" && 
       transformation == "no" && MSE == TRUE && mse_type != "analytical"){
     stop("For the ''reml'' and ''ml'' variance estimation methods without 
