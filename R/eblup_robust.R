@@ -28,7 +28,11 @@ eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, c,
   if (is.element("reblupbc", method)) EBLUP_data$FH[framework$obs_dom == TRUE] <- eblupobject$reblupbc
   EBLUP_data$Out[framework$obs_dom == TRUE] <- 0
   EBLUP_data$Out[framework$obs_dom == FALSE] <- 1
- 
+  
+  if (!all(framework$obs_dom == TRUE)) {
+    cat("Please note that the results are only returned for in-sample domains.
+        For more information see help(fh).")
+  }
   # Scores
  # eblupobject$score <- saeRobust::score(eblupobject)
  # names(eblupobject$score) <- c("coefficients", "variance", "re")
