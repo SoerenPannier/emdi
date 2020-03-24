@@ -167,7 +167,7 @@ li_lahiri <- function(framework, sigmau2, combined_data, method) {
 
     cat("Please note that only for in-sample-domains a correction following
         Li and Lahiri (2010) is implemented. For the out-of-sample domains,
-        no estimate for the MSE is returned. For the reference see help(FH_AK).")
+        no estimate for the MSE is returned. For the reference see help(fh).")
     }
 
     return(MSE_data)
@@ -216,7 +216,7 @@ yoshimori_lahiri <- function(framework, sigmau2, combined_data, method) {
 
     cat("Please note that only for in-sample-domains a correction following
         Yoshimori and Lahiri (2014) is implemented. For the out-of-sample domains,
-        no estimate for the MSE is returned. For the reference see help(FH_AK).")
+        no estimate for the MSE is returned. For the reference see help(fh).")
   }
 
   return(MSE_data)
@@ -429,7 +429,7 @@ slud_maiti <- function(framework, sigmau2, eblup, combined_data) {
     MSE_data$Out[framework$obs_dom == FALSE] <- 1
 
     cat("Please note that a MSE is only returned for in-sample domains.
-        For more information see help(FH_AK).")
+        For more information see help(fh).")
   }
 
   return(MSE_data)
