@@ -7,16 +7,21 @@
 spatialcor.tests(direct, corMatrix)
 }
 \arguments{
-\item{direct}{a vector containing the direct estimates of the Fay-Herriot model.}
+\item{direct}{a vector containing direct estimates.}
 
 \item{corMatrix}{proximity matrix or data frame.}
 }
 \value{
-The values of the test statistics their corresponding p values.
+The values of the test statistics and their corresponding p values.
 }
 \description{
 This function computes two spatial autocorrelation tests: Moran's I and 
 Geary's C.
+}
+\details{
+When creating the proximity matrix \code{corMatrix}, please make 
+sure that the elements of \code{direct} and \code{corMatrix} are sorted 
+equally.
 }
 \references{
 Bivand, R. (2019), spdep: Spatial Dependence: Weighting Schemes, 
