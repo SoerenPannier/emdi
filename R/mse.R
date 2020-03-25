@@ -763,7 +763,7 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   
   # Calculate covariance matrices of residual vectors
   VG <- Vr-Gr
-  P <- Vri-Vri%*%framework$model_X%*%Qr%*%t(framework$model_X)%*%Vri
+  P <- Vri-Vri%*%framework$model_X%*%Qr%*%Xt%*%Vri
   Ve <- VG%*%P%*%VG
   Vu <- DrhoW%*%Gr%*%P%*%Gr%*%DrhoWt
   
@@ -857,7 +857,7 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     combined_data$direct.boot <- as.numeric(combined_data$direct.boot)
     # Estimation procedure
     Terms <- terms(framework$formula)
-    formula.tmp <- as.formula(paste("direct.boot ~", paste(attr(Terms, "term.labels"), collapse="+", "- 1"))) 
+    formula.tmp <- update.formula(framework$formula, direct.boot ~ .)
     framework.boot <- framework_FH(combined_data = combined_data,
                                    fixed = formula.tmp,
                                    vardir = vardir,
@@ -1040,7 +1040,7 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     
     # Estimation procedure
     Terms <- terms(framework$formula)
-    formula.tmp <- as.formula(paste("direct.boot ~", paste(attr(Terms, "term.labels"), collapse="+"), "- 1"))
+    formula.tmp <- update.formula(framework$formula, direct.boot ~ .)
     framework.boot <- framework_FH(combined_data = combined_data,
                                    fixed = formula.tmp,
                                    vardir = vardir,
