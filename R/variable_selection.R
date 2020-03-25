@@ -1,5 +1,6 @@
 model_select <- function(framework, sigmau2, method, interval,
-                         eblup, B, vardir = vardir, transformation) {
+                         eblup, B, vardir = vardir, transformation,
+                         combined_data) {
   
   m <- nrow(framework$model_X)
   p <- ncol(framework$model_X)
