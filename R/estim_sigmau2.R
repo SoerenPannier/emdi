@@ -27,7 +27,7 @@ Reml <- function(interval, direct, x, vardir, areanumber) {
     XVi <- Xt%*%Vi
     Q <- solve(XVi%*%X)
     P <- Vi - (Vi%*%X%*%Q%*%XVi)
-    b.s <- Q%*%XVi%*%Y
+    Beta.hat <- Q%*%XVi%*%Y
 
     ee = eigen(V)
     -(areanumber/2) * log(2*pi) - 0.5 * sum(log(ee$value)) - (0.5) * log(det(t(X)%*%Vi%*%X)) - (0.5) * t(Y)%*%P%*%Y
@@ -72,7 +72,7 @@ AMRL <- function(interval, direct, x, vardir, areanumber) {
     XVi <- Xt%*%Vi
     Q <- solve(XVi%*%X)
     P <- Vi - (Vi%*%X%*%Q%*%XVi)
-    b.s <- Q%*%XVi%*%Y
+    Beta.hat <- Q%*%XVi%*%Y
 
     ee <- eigen(V)
     log(sigma.u_log) - (areanumber/2) * log(2*pi) - 0.5 * sum(log(ee$value)) - (0.5) * log(det(t(X)%*%Vi%*%X)) - (0.5) * t(Y)%*%P%*%Y
@@ -118,7 +118,7 @@ AMRL_YL <- function(interval, direct, x, vardir, areanumber) {
     XVi <- Xt%*%Vi
     Q <- solve(XVi%*%X)
     P <- Vi - (Vi%*%X%*%Q%*%XVi)
-    b.s <- Q%*%XVi%*%Y
+    Beta.hat <- Q%*%XVi%*%Y
     Bd <- diag(vardir/(sigma.u_log + vardir))
 
     ee <- eigen(V)
@@ -165,7 +165,7 @@ AMPL <- function(interval, direct, x, vardir, areanumber) {
     XVi <- Xt%*%Vi
     Q <- solve(XVi%*%X)
     P <- Vi - (Vi%*%X%*%Q%*%XVi)
-    b.s <- Q%*%XVi%*%Y
+    Beta.hat <- Q%*%XVi%*%Y
 
     ee = eigen(V)
     log(sigma.u_log) - (areanumber/2) * log(2*pi) - 0.5 * sum(log(ee$value)) - (0.5) * t(Y)%*%P%*%Y
@@ -210,7 +210,7 @@ AMPL_YL <- function(interval, direct, x, vardir, areanumber) {
     XVi <- Xt%*%Vi
     Q <- solve(XVi%*%X)
     P <- Vi - (Vi%*%X%*%Q%*%XVi)
-    b.s <- Q%*%XVi%*%Y
+    Beta.hat <- Q%*%XVi%*%Y
     Bd <- diag(vardir/(sigma.u_log + vardir))
 
     ee = eigen(V)
@@ -257,7 +257,7 @@ MPL <- function(interval, direct, x, vardir, areanumber) {
     XVi <- Xt%*%Vi
     Q <- solve(XVi%*%X)
     P <- Vi - (Vi%*%X%*%Q%*%XVi)
-    b.s <- Q%*%XVi%*%Y
+    Beta.hat <- Q%*%XVi%*%Y
 
     ee = eigen(V)
     -(areanumber/2) * log(2*pi) - 0.5 * sum(log(ee$value)) - (0.5) * t(Y)%*%P%*%Y
@@ -278,121 +278,112 @@ MPL <- function(interval, direct, x, vardir, areanumber) {
 #' @param direct direct estimator.
 #' @param x matrix with explanatory variables.
 #' @param vardir direct variance.
-#' @param Ci mean squared error of x.
 #' @param areanumber number of domains.
-#' @param p number of covariates.
-#' @param tol tolerance value for the convergence of weights.
-#' @param maxit maximum number of iterations.
-#' @return estimated sigmau2 and estimated beta coefficients.
+#' @param W proximity matrix.
+#' @param maxit maximum number of iterations for the estimation of the variance.
+#' @param tol tolerance value for the estimation of the variance.
+#' @return estimated sigmau2 and beta coefficients and convergence (TRUE/FALSE).
 #' @keywords internal
 
 SML <- function(direct, X, vardir, areanumber, W, maxit, tol){
-  # p <-dim(X)[2]  # Num. of X columns of num. of auxiliary variables (including intercept)
+  
   Xt <-t(X)
   tdirect <-t(direct)
   Wt<-t(W)
   I <-diag(1,areanumber)
   
-  # Initialize vectors containing estimators of variance and spatial correlation
-  par.stim <-matrix(0,2,1)
-  stime.fin<-matrix(0,2,1)
+  # Variance and spatial correlation vectors
+  est.param <- matrix(0,2,1)
+  final.param <- matrix(0,2,1)
   
-  # Initialize scores vector and Fisher information matrix
-  s<-matrix(0,2,1)
-  Idev<-matrix(0,2,2)
+  # Scores vector and Fisher information matrix
+  score.vec <- matrix(0,2,1)
+  fisher <- matrix(0,2,2)
   
-  # Initial value of variance set to the mean of sampling variances vardir
-  # Initial value of spatial correlation set to 0.5
-  sigma2.u.stim.S <- 0
-  rho.stim.S <- 0
-  
-  sigma2.u.stim.S[1] <- median(vardir)
-  rho.stim.S[1] <- 0.5
+  # Set initial values
+  est.sigma2 <- 0
+  est.rho <- 0
+  est.sigma2[1] <- median(vardir)
+  est.rho[1] <- 0.5
   
   # Fisher-scoring algorithm
-  k<-0
-  diff.S <- tol + 1
-  while ((diff.S>tol) & (k<maxit))
+  it<-0
+  eps <- tol + 1
+  while ((eps>tol) & (it<maxit))
   {
-    k <- k + 1
+    it <- it + 1
     
-    # Derivative of covariance matrix V with respect to variance
-    derSigma <- solve((I-rho.stim.S[k]*Wt)%*%(I-rho.stim.S[k]*W))
+    # Derivative of covariance matrix V: variance
+    der.sigma <- solve((I-est.rho[it]*Wt)%*%(I-est.rho[it]*W))
     
-    # Derivative of covariance matrix V with respect to spatial correlation parameter
-    derRho<-2*rho.stim.S[k]*Wt%*%W-W-Wt
-    derVRho<-(-1)*sigma2.u.stim.S[k]*(derSigma%*%derRho%*%derSigma)
+    # Derivative of covariance matrix V: spatial correlation parameter
+    der.rho <- 2*est.rho[it]*Wt%*%W-W-Wt
+    der.vrho <- (-1)*est.sigma2[it]*(der.sigma%*%der.rho%*%der.sigma)
     
     # Covariance matrix
-    V<-sigma2.u.stim.S[k]*derSigma+I*vardir
-    
+    V <- est.sigma2[it]*der.sigma+I*vardir
     # Inverse of covariance matrix
-    Vi<-solve(V)
+    Vi <- solve(V)
     
-    # Inverse of X'ViX
-    #Q <- solve(t(framework$model_X)%*%Vi%*%framework$model_X)
-    XVi<-Xt%*%Vi
-    Q<-solve(XVi%*%X)
-    P<-Vi-(Vi%*%X%*%Q%*%XVi)
-    b.s<-Q%*%XVi%*%direct
-    
-    # Terms involved in scores vector and Fisher information matrix
-    PD<-P%*%derSigma
-    PR<-P%*%derVRho
-    Pdir<-P%*%direct
-    ViD<-Vi%*%derSigma
-    ViR<-Vi%*%derVRho
+    # Computation of the regression coefficients
+    XVi <- Xt%*%Vi
+    Q <- solve(XVi%*%X)
+    P <- Vi-(Vi%*%X%*%Q%*%XVi)
+    Beta.hat <- Q%*%XVi%*%direct
     
     # Scores vector
-    s[1,1]<-(-0.5)*sum(diag(ViD))+(0.5)*(tdirect%*%PD%*%Pdir)
-    s[2,1]<-(-0.5)*sum(diag(ViR))+(0.5)*(tdirect%*%PR%*%Pdir)
+    P.der.sigma <- P%*%der.sigma
+    P.der.rho <- P%*%der.vrho
+    P.direct <- P%*%direct
+    Vi.der.sigma <- Vi%*%der.sigma
+    Vi.der.vrho <- Vi%*%der.vrho
+    
+    # Scores vector
+    score.vec[1,1] <- (-0.5)*sum(diag(Vi.der.sigma)) +
+      (0.5)*(tdirect%*%P.der.sigma%*%P.direct)
+    score.vec[2,1] <- (-0.5)*sum(diag(Vi.der.vrho)) +
+      (0.5)*(tdirect%*%P.der.rho%*%P.direct)
     
     # Fisher information matrix
-    Idev[1,1]<-(0.5)*sum(diag(ViD%*%ViD))
-    Idev[1,2]<-(0.5)*sum(diag(ViD%*%ViR))
-    Idev[2,1]<-(0.5)*sum(diag(ViR%*%ViD))
-    Idev[2,2]<-(0.5)*sum(diag(ViR%*%ViR))
+    fisher[1,1] <- (0.5)*sum(diag(Vi.der.sigma%*%Vi.der.sigma))
+    fisher[1,2] <- (0.5)*sum(diag(Vi.der.sigma%*%Vi.der.vrho))
+    fisher[2,1] <- (0.5)*sum(diag(Vi.der.vrho%*%Vi.der.sigma))
+    fisher[2,2] <- (0.5)*sum(diag(Vi.der.vrho%*%Vi.der.vrho))
     
     # Updating equations
-    par.stim[1,1]<-sigma2.u.stim.S[k]
-    par.stim[2,1]<-rho.stim.S[k]
-    stime.fin<-par.stim+solve(Idev)%*%s
+    est.param[1,1] <- est.sigma2[it]
+    est.param[2,1] <- est.rho[it]
+    final.param <- est.param + solve(fisher)%*%score.vec
     
     # Restricting the spatial correlation to (-0.999,0.999)
-    if (stime.fin[2,1]<=-1)
-      stime.fin[2,1] <- -0.999
-    if (stime.fin[2,1]>=1)
-      stime.fin[2,1] <- 0.999
+    if (final.param[2,1] <= -1)
+      final.param[2,1] <- -0.999
+    if (final.param[2,1] >= 1)
+      final.param[2,1] <- 0.999
     
-    sigma2.u.stim.S[k+1]<-stime.fin[1,1]
-    rho.stim.S[k+1]<-stime.fin[2,1]
-    diff.S<-max(abs(stime.fin-par.stim)/par.stim)
+    est.sigma2[it+1] <- final.param[1,1]
+    est.rho[it+1] <- final.param[2,1]
+    eps <- max(abs(final.param-est.param)/est.param)
   }
   
-  # Final values of estimators
-  if (rho.stim.S[k+1]==-0.999)
-    rho.stim.S[k+1] <- -1
-  else if (rho.stim.S[k+1]==0.999)
-    rho.stim.S[k+1] <- 1
-  rho <-rho.stim.S[k+1]
+  # Final estimators
+  if (est.rho[it+1] == -0.999)
+    est.rho[it+1] <- -1
+  else if (est.rho[it+1] == 0.999)
+    est.rho[it+1] <- 1
+  rho <-est.rho[it+1]
   
-  sigma2.u.stim.S[k+1]<-max(sigma2.u.stim.S[k+1],0)
-  sigma2u <- sigma2.u.stim.S[k+1]
+  est.sigma2[it+1] <- max(est.sigma2[it+1],0)
+  sigma2u <- est.sigma2[it+1]
   
-  # Indicator of convergence
+  # Convergence
   
-  if(k>=maxit && diff.S>=tol) 
+  if(it >= maxit && eps >= tol) 
   {
     convergence <- FALSE
     print("The variance estimation algorithm did not converge.")
   } else
     convergence <- TRUE
-  
-  if (sigma2u<0 || rho<(-1) || rho>1 )  # COMPROBAR
-  {
-    print("eblupSFH: este mensaje no debe salir")
-    
-  }
   
   return(list(sigmau2 = sigma2u, rho = rho, convergence = convergence))
   
@@ -403,121 +394,110 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol){
 #' @param direct direct estimator.
 #' @param x matrix with explanatory variables.
 #' @param vardir direct variance.
-#' @param Ci mean squared error of x.
 #' @param areanumber number of domains.
-#' @param p number of covariates.
-#' @param tol tolerance value for the convergence of weights.
-#' @param maxit maximum number of iterations.
-#' @return estimated sigmau2 and estimated beta coefficients.
+#' @param W proximity matrix.
+#' @param maxit maximum number of iterations for the estimation of the variance.
+#' @param tol tolerance value for the estimation of the variance.
+#' @return estimated sigmau2 and beta coefficients and convergence (TRUE/FALSE).
 #' @keywords internal
-#' 
+ 
 SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
- # p <-dim(X)[2]  # Num. of X columns of num. of auxiliary variables (including intercept)
-  Xt <-t(X)
-  tdirect <-t(direct)
-  Wt<-t(W)
-  I <-diag(1,areanumber)
   
-  # Initialize vectors containing estimators of variance and spatial correlation
-  par.stim <-matrix(0,2,1)
-  stime.fin<-matrix(0,2,1)
+  Xt <- t(X)
+  tdirect <- t(direct)
+  Wt <- t(W)
+  I <- diag(1,areanumber)
   
-  # Initialize scores vector and Fisher information matrix
-  s<-matrix(0,2,1)
-  Idev<-matrix(0,2,2)
+  # Variance and spatial correlation vectors
+  est.param <- matrix(0,2,1)
+  final.param <- matrix(0,2,1)
   
-  # Initial value of variance set to the mean of sampling variances vardir
-  # Initial value of spatial correlation set to 0.5
-  sigma2.u.stim.S <- 0
-  rho.stim.S <- 0
+  # Scores vector and Fisher information matrix
+  score.vec <- matrix(0,2,1)
+  fisher <- matrix(0,2,2)
   
-  sigma2.u.stim.S[1] <- median(vardir)
-  rho.stim.S[1] <- 0.5
+  # Set initial values
+  est.sigma2 <- 0
+  est.rho <- 0
+  est.sigma2[1] <- median(vardir)
+  est.rho[1] <- 0.5
   
   # Fisher-scoring algorithm
-  k<-0
-  diff.S <- tol + 1
-  while ((diff.S>tol) & (k<maxit))
+  it <- 0
+  eps <- tol + 1
+  while ((eps > tol) & (it < maxit))
   {
-    k <- k + 1
+    it <- it + 1
     
-    # Derivative of covariance matrix V with respect to variance
-    derSigma <- solve((I-rho.stim.S[k]*Wt)%*%(I-rho.stim.S[k]*W))
+    # Derivative of covariance matrix V: variance
+    der.sigma <- solve((I-est.rho[it]*Wt)%*%(I-est.rho[it]*W))
     
-    # Derivative of covariance matrix V with respect to spatial correlation parameter
-    derRho<-2*rho.stim.S[k]*Wt%*%W-W-Wt
-    derVRho<-(-1)*sigma2.u.stim.S[k]*(derSigma%*%derRho%*%derSigma)
+    # Derivative of covariance matrix V: spatial correlation parameter
+    der.rho <- 2*est.rho[it]*Wt%*%W-W-Wt
+    der.vrho <- (-1)*est.sigma2[it]*(der.sigma%*%der.rho%*%der.sigma)
     
     # Covariance matrix
-    V<-sigma2.u.stim.S[k]*derSigma+I*vardir
-    
+    V <- est.sigma2[it]*der.sigma+I*vardir
     # Inverse of covariance matrix
-    Vi<-solve(V)
+    Vi <- solve(V)
     
-    # Inverse of X'ViX
-   #Q <- solve(t(framework$model_X)%*%Vi%*%framework$model_X)
-    XVi<-Xt%*%Vi
-    Q<-solve(XVi%*%X)
-    P<-Vi-(Vi%*%X%*%Q%*%XVi)
-    b.s<-Q%*%XVi%*%direct
-    
-    # Terms involved in scores vector and Fisher information matrix
-    PD<-P%*%derSigma
-    PR<-P%*%derVRho
-    Pdir<-P%*%direct
+    # Computation of the regression coefficients
+    XVi <- Xt%*%Vi # Inverse of X'ViX
+    Q <- solve(XVi%*%X)
+    P <- Vi-(Vi%*%X%*%Q%*%XVi)
+    Beta.hat <- Q%*%XVi%*%direct
     
     # Scores vector
-    s[1,1]<-(-0.5)*sum(diag(PD))+(0.5)*(tdirect%*%PD%*%Pdir)
-    s[2,1]<-(-0.5)*sum(diag(PR))+(0.5)*(tdirect%*%PR%*%Pdir)
+    P.der.sigma <- P%*%der.sigma
+    P.der.rho <- P%*%der.vrho
+    P.direct <- P%*%direct
+    score.vec[1,1] <- (-0.5)*sum(diag(P.der.sigma)) +
+      (0.5)*(tdirect%*%P.der.sigma%*%P.direct)
+    score.vec[2,1] <- (-0.5)*sum(diag(P.der.rho)) +
+      (0.5)*(tdirect%*%P.der.rho%*%P.direct)
     
     # Fisher information matrix
-    Idev[1,1]<-(0.5)*sum(diag((PD%*%PD)))
-    Idev[1,2]<-(0.5)*sum(diag((PD%*%PR)))
-    Idev[2,1]<-(0.5)*sum(diag((PR%*%PD)))
-    Idev[2,2]<-(0.5)*sum(diag((PR%*%PR)))
+    fisher[1,1] <- (0.5)*sum(diag((P.der.sigma%*%P.der.sigma)))
+    fisher[1,2] <- (0.5)*sum(diag((P.der.sigma%*%P.der.rho)))
+    fisher[2,1] <- (0.5)*sum(diag((P.der.rho%*%P.der.sigma)))
+    fisher[2,2] <- (0.5)*sum(diag((P.der.rho%*%P.der.rho)))
     
     # Updating equations
-    par.stim[1,1]<-sigma2.u.stim.S[k]
-    par.stim[2,1]<-rho.stim.S[k]
-    stime.fin<-par.stim+solve(Idev)%*%s
+    est.param[1,1] <- est.sigma2[it]
+    est.param[2,1] <- est.rho[it]
+    final.param <- est.param + solve(fisher)%*%score.vec
     
     # Restricting the spatial correlation to (-0.999,0.999)
-    if (stime.fin[2,1]<=-1)
-      stime.fin[2,1] <- -0.999
-    if (stime.fin[2,1]>=1)
-      stime.fin[2,1] <- 0.999
+    if (final.param[2,1] <= -1)
+      final.param[2,1] <- -0.999
+    if (final.param[2,1] >= 1)
+      final.param[2,1] <- 0.999
 
     
-   sigma2.u.stim.S[k+1]<-stime.fin[1,1]
-  rho.stim.S[k+1]<-stime.fin[2,1]
-    diff.S<-max(abs(stime.fin-par.stim)/par.stim)
+    est.sigma2[it+1] <- final.param[1,1]
+    est.rho[it+1] <- final.param[2,1]
+    eps <- max(abs(final.param-est.param)/est.param)
   }
     
-    # Final values of estimators
-    if (rho.stim.S[k+1]==-0.999)
-      rho.stim.S[k+1] <- -1
-    else if (rho.stim.S[k+1]==0.999)
-      rho.stim.S[k+1] <- 1
-    rho <-rho.stim.S[k+1]
+    # Final estimators
+    if (est.rho[it+1] == -0.999)
+      est.rho[it+1] <- -1
+    else if (est.rho[it+1] == 0.999)
+      est.rho[it+1] <- 1
+    rho <- est.rho[it+1]
     
-    sigma2.u.stim.S[k+1]<-max(sigma2.u.stim.S[k+1],0)
-    sigma2u <- sigma2.u.stim.S[k+1]
+    est.sigma2[it+1] <- max(est.sigma2[it+1],0)
+    sigma2u <- est.sigma2[it+1]
     
-    # Indicator of convergence
+    # Convergence
       
-    if(k>=maxit && diff.S>=tol) 
+    if(it >= maxit && eps >= tol) 
     {
       convergence <- FALSE
       print("The variance estimation algorithm did not converge.")
     } else
       convergence <- TRUE
-    
-    if (sigma2u<0 || rho<(-1) || rho>1 )  # COMPROBAR
-    {
-      print("eblupSFH: este mensaje no debe salir")
-      
-    }
-    
+
     return(list(sigmau2 = sigma2u, rho = rho, convergence = convergence))
     
   
@@ -596,7 +576,7 @@ ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
     # Truncation to zero
     if (sigmau2 <= 0) sigmau2<-0
     
-    # Update hatwi
+    # UP.der.sigmaate hatwi
     hatwi <- 1/(sigmau2 + vardir + thbCihb)
     
     # Check convergence
