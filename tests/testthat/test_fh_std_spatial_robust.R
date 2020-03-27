@@ -148,10 +148,10 @@ test_that("Does the fh function in emdi return the same variance, correlation
   expect_equal(fh_spatial_reml_npb$ind$FH, 
                as.vector(fh_spatial_reml_npb_sae$EBLUP))
   # MSE
-  expect_equal(fh_spatial_reml_npb$MSE$MSE, 
+  expect_equal(fh_spatial_reml_npb$MSE$FH, 
                fh_spatial_reml_npb_sae$MSE, tolerance = 0.000001)
   # MSE bias corrected
-  expect_equal(fh_spatial_reml_npb$MSE$MSE.BC, 
+  expect_equal(fh_spatial_reml_npb$MSE$FH.BC, 
                fh_spatial_reml_npb_sae$MSE.BC, tolerance = 0.000001)
 })
 
@@ -185,10 +185,10 @@ test_that("Does the fh function in emdi return the same variance, correlation
   expect_equal(fh_spatial_reml_pb$ind$FH, 
                as.vector(fh_spatial_reml_pb_sae$EBLUP))
   # MSE
-  expect_equal(fh_spatial_reml_pb$MSE$MSE, 
+  expect_equal(fh_spatial_reml_pb$MSE$FH, 
                fh_spatial_reml_pb_sae$MSE)
   # MSE bias corrected
-  expect_equal(fh_spatial_reml_pb$MSE$MSE.BC, 
+  expect_equal(fh_spatial_reml_pb$MSE$FH.BC, 
                fh_spatial_reml_pb_sae$MSE.BC)
   
   ############################ ML variance estimation ##########################
@@ -215,10 +215,10 @@ test_that("Does the fh function in emdi return the same variance, correlation
   expect_equal(fh_spatial_ml_pb$ind$FH, 
                fh_spatial_ml_pb_sae$EBLUP)
   # MSE
-  expect_equal(fh_spatial_ml_pb$MSE$MSE, 
+  expect_equal(fh_spatial_ml_pb$MSE$FH, 
                fh_spatial_ml_pb_sae$MSE)
   # MSE bias corrected
-  expect_equal(fh_spatial_ml_pb$MSE$MSE.BC, 
+  expect_equal(fh_spatial_ml_pb$MSE$FH.BC, 
                fh_spatial_ml_pb_sae$MSE.BC)
 })
 
