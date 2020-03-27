@@ -290,7 +290,7 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol){
   Xt <-t(X)
   tdirect <-t(direct)
   Wt<-t(W)
-  I <-diag(1,areanumber)
+  D <-diag(1,areanumber)
   
   # Variance and spatial correlation vectors
   est.param <- matrix(0,2,1)
@@ -314,14 +314,14 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol){
     it <- it + 1
     
     # Derivative of covariance matrix V: variance
-    der.sigma <- solve((I-est.rho[it]*Wt)%*%(I-est.rho[it]*W))
+    der.sigma <- solve((D-est.rho[it]*Wt)%*%(D-est.rho[it]*W))
     
     # Derivative of covariance matrix V: spatial correlation parameter
     der.rho <- 2*est.rho[it]*Wt%*%W-W-Wt
     der.vrho <- (-1)*est.sigma2[it]*(der.sigma%*%der.rho%*%der.sigma)
     
     # Covariance matrix
-    V <- est.sigma2[it]*der.sigma+I*vardir
+    V <- est.sigma2[it]*der.sigma + D*vardir
     # Inverse of covariance matrix
     Vi <- solve(V)
     
@@ -406,7 +406,7 @@ SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
   Xt <- t(X)
   tdirect <- t(direct)
   Wt <- t(W)
-  I <- diag(1,areanumber)
+  D <- diag(1,areanumber)
   
   # Variance and spatial correlation vectors
   est.param <- matrix(0,2,1)
@@ -430,14 +430,14 @@ SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
     it <- it + 1
     
     # Derivative of covariance matrix V: variance
-    der.sigma <- solve((I-est.rho[it]*Wt)%*%(I-est.rho[it]*W))
+    der.sigma <- solve((D-est.rho[it]*Wt)%*%(D-est.rho[it]*W))
     
     # Derivative of covariance matrix V: spatial correlation parameter
-    der.rho <- 2*est.rho[it]*Wt%*%W-W-Wt
+    der.rho <- 2*est.rho[it]*Wt%*%W - W - Wt
     der.vrho <- (-1)*est.sigma2[it]*(der.sigma%*%der.rho%*%der.sigma)
     
     # Covariance matrix
-    V <- est.sigma2[it]*der.sigma+I*vardir
+    V <- est.sigma2[it]*der.sigma + D*vardir
     # Inverse of covariance matrix
     Vi <- solve(V)
     

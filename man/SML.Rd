@@ -13,18 +13,16 @@ SML(direct, X, vardir, areanumber, W, maxit, tol)
 
 \item{areanumber}{number of domains.}
 
-\item{maxit}{maximum number of iterations.}
+\item{W}{proximity matrix.}
 
-\item{tol}{tolerance value for the convergence of weights.}
+\item{maxit}{maximum number of iterations for the estimation of the variance.}
+
+\item{tol}{tolerance value for the estimation of the variance.}
 
 \item{x}{matrix with explanatory variables.}
-
-\item{Ci}{mean squared error of x.}
-
-\item{p}{number of covariates.}
 }
 \value{
-estimated sigmau2 and estimated beta coefficients.
+estimated sigmau2 and beta coefficients and convergence (TRUE/FALSE).
 }
 \description{
 Function for estimating sigmau2 and rho for the spatial FH model (ML).

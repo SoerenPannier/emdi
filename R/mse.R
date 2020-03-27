@@ -224,6 +224,7 @@ yoshimori_lahiri <- function(framework, sigmau2, combined_data, method) {
 
 prasad_rao_spatial <- function(framework, sigmau2, combined_data, method) {
   
+  # MSE components
   g1 <- rep(0, framework$m)
   g2 <- rep(0, framework$m)
   g3 <- rep(0, framework$m)
@@ -231,109 +232,107 @@ prasad_rao_spatial <- function(framework, sigmau2, combined_data, method) {
   mse.help <- rep(0, framework$m)
   mse <- rep(0, framework$m)
   
-  
-  # Auxiliary calculations
   D <- diag(1, framework$m)
   Xt <- t(framework$model_X)
   Wt <- t(framework$W)
-  A <- solve((D - sigmau2$rho*Wt)%*%(D - sigmau2$rho*framework$W))
-  G <- sigmau2$sigmau2*A
+  DrhoWDrhoWt <- solve((D - sigmau2$rho*Wt)%*%(D - sigmau2$rho*framework$W))
+  var.DrhoW <- sigmau2$sigmau2*DrhoWDrhoWt
   # Total variance
-  V<- G + D*framework$vardir
+  V.rho <- var.DrhoW + D*framework$vardir
   # Inverse of total variance
-  Vi<-solve(V)
-  # Inverse of X'ViX
-  XtVi<-Xt%*%Vi
-  Q <- solve(t(framework$model_X)%*%Vi%*%framework$model_X)
+  V.rhoi <- solve(V.rho)
+  # Inverse of X'V.rhoiX
+  XtV.rhoi<-Xt%*%V.rhoi
+  Q.rho <- solve(t(framework$model_X)%*%V.rhoi%*%framework$model_X)
   
-  Ga <- G - G%*%Vi%*%G
+  G1 <- var.DrhoW - var.DrhoW%*%V.rhoi%*%var.DrhoW
+  G2 <- var.DrhoW%*%V.rhoi%*%framework$model_X
+  Xcoef <- matrix(0,1,framework$p)
   
-  # g1
+  # Computation of g1 and g2
   for (d in 1:framework$m){
-    g1[d]<-Ga[d,d]} # g1sp contains the diagonal elements of Ga
+    g1[d]<- G1[d,d]
+    Xcoef[1,] <- framework$model_X[d,]-G2[d,]
+    g2[d] <- Xcoef%*%Q.rho%*%t(Xcoef)
+  } 
 
-  Gb <- G%*%Vi%*%framework$model_X
-  Xa <- matrix(0,1,framework$p)
+  # Derivative of covariance matrix V: spatial correlation parameter
+  der.rho <- 2*sigmau2$rho*Wt%*%framework$W - framework$W - Wt
+  DrhoWDrhoWtmat <- (-1)*sigmau2$sigmau2*(DrhoWDrhoWt%*%der.rho%*%DrhoWDrhoWt)
+  P <- V.rhoi - t(XtV.rhoi)%*%Q.rho%*%XtV.rhoi
+  PDrhoWDrhoWt <- P%*%DrhoWDrhoWt
+  PDrhoWDrhoWtmat <- P%*%DrhoWDrhoWtmat
   
-  # g2
-  for (d in 1:framework$m){
-    Xa[1,] <- framework$model_X[d,]-Gb[d,]
-    g2[d] <- Xa%*%Q%*%t(Xa)}
-  
-  # Auxiliary calculations for g3
-  derRho<-2*sigmau2$rho*Wt%*%framework$W-framework$W-Wt
-  Amat <- (-1)*sigmau2$sigmau2*(A%*%derRho%*%A)
-  P <- Vi-t(XtVi)%*%Q%*%XtVi
-  PA <- P%*%A
-  PAmat <- P%*%Amat
-  
-  Idev<-matrix(0,2,2)
-  Idev[1,1] <- (0.5)*sum(diag((PA%*%PA)))
-  Idev[1,2] <- (0.5)*sum(diag((PA%*%PAmat)))
-  Idev[2,1] <- Idev[1,2]
-  Idev[2,2] <- (0.5)*sum(diag((PAmat%*%PAmat)))
-  Idevi <- solve(Idev)
+  # Fisher information matrix
+  fisher <- matrix(0,2,2)
+  fisher[1,1] <- (0.5)*sum(diag((PDrhoWDrhoWt%*%PDrhoWDrhoWt)))
+  fisher[1,2] <- (0.5)*sum(diag((PDrhoWDrhoWt%*%PDrhoWDrhoWtmat)))
+  fisher[2,1] <- fisher[1,2]
+  fisher[2,2] <- (0.5)*sum(diag((PDrhoWDrhoWtmat%*%PDrhoWDrhoWtmat)))
+  fisheri <- solve(fisher)
  
-  ViA <- Vi%*%A
-  ViAmat<-Vi%*%Amat
+  V.rhoiDrhoWDrhoWt <- V.rhoi%*%DrhoWDrhoWt
+  V.rhoiDrhoWDrhoWtmat<- V.rhoi%*%DrhoWDrhoWtmat
   
-  #g3
-  l1 <- ViA - sigmau2$sigmau2*ViA%*%ViA
-  l1t<-t(l1)
-  l2<-ViAmat - sigmau2$sigmau2*ViAmat%*%ViA
-  l2t<-t(l2)
-  L<-matrix(0,2,framework$m)
+  # Computation of g3
+  line1 <- V.rhoiDrhoWDrhoWt - sigmau2$sigmau2*V.rhoiDrhoWDrhoWt%*%V.rhoiDrhoWDrhoWt
+  line1t <- t(line1)
+  line2 <- V.rhoiDrhoWDrhoWtmat - 
+    sigmau2$sigmau2*V.rhoiDrhoWDrhoWtmat%*%V.rhoiDrhoWDrhoWt
+  line2t <- t(line2)
   
-  # Anfang
-  # Calculation of g3
+  lines <- matrix(0, 2, framework$m)
   for (d in 1:framework$m)
   {
-    L[1,]<-l1t[d,]
-    L[2,]<-l2t[d,]
-    g3[d] <- sum(diag(L%*%V%*%t(L)%*%Idevi))
+    lines[1,] <- line1t[d,]
+    lines[2,] <- line2t[d,]
+    g3[d] <- sum(diag(lines%*%V.rho%*%t(lines)%*%fisheri))
   }
+  
   mse.help <- g1 + g2 + 2*g3
 
   ######## Bias correction of Singh et al
   psi <- diag(c(framework$vardir),framework$m)
-  D12aux <- (-1)*(A%*%derRho%*%A)
-  D22aux <- 2*sigmau2$sigmau2*A%*%derRho%*%A%*%derRho%*%A-2*sigmau2$sigmau2*A%*%Wt%*%framework$W%*%A
-  D <- (psi%*%Vi%*%D12aux%*%Vi%*%psi)*(Idevi[1,2]+Idevi[2,1])+psi%*%Vi%*%D22aux%*%Vi%*%psi*Idevi[2,2]
+  D1help <- (-1) * (DrhoWDrhoWt%*%der.rho%*%DrhoWDrhoWt)
+  D2help <- 2 * sigmau2$sigmau2 * DrhoWDrhoWt%*%der.rho%*%DrhoWDrhoWt%*%der.rho%*%DrhoWDrhoWt - 
+    2 * sigmau2$sigmau2*DrhoWDrhoWt%*%Wt%*%framework$W%*%DrhoWDrhoWt
+  D <- (psi%*%V.rhoi%*%D1help%*%V.rhoi%*%psi) * (fisheri[1,2]+fisheri[2,1]) + 
+    psi%*%V.rhoi%*%D2help%*%V.rhoi%*%psi*fisheri[2,2]
   
   for (d in 1:framework$m){
-    g4[d]<-(0.5)*D[d,d]
+    g4[d] <- (0.5) * D[d, d]
   }
   
   # Computation of estimated MSE of Singh et al
   mse <- mse.help - g4
   
   if (method == "ml"){
-    # Calculate bML
-    QXtVi <- Q%*%XtVi
-    ViX   <- Vi%*%framework$model_X
-    h1    <- (-1)*sum(diag(QXtVi%*%A%*%ViX))
-    h2    <- (-1)*sum(diag(QXtVi%*%Amat%*%ViX))
-    h     <- matrix(c(h1,h2),nrow=2,ncol=1)
-    bML   <- (Idevi%*%h)/2 
+    # Computation of bML
+    Q.rhoXtV.rhoi <- Q.rho%*%XtV.rhoi
+    V.rhoiX   <- V.rhoi%*%framework$model_X
+    h1    <- (-1)*sum(diag(Q.rhoXtV.rhoi%*%DrhoWDrhoWt%*%V.rhoiX))
+    h2    <- (-1)*sum(diag(Q.rhoXtV.rhoi%*%DrhoWDrhoWtmat%*%V.rhoiX))
+    h     <- matrix(c(h1,h2), nrow=2, ncol=1)
+    bML   <- (fisheri%*%h)/2 
     tbML  <- t(bML)
     
-    # Calculate gradient of g1d
-    GVi     <- G%*%Vi   # G<-A*Ci
-    GViA   <- GVi%*%A
-    GViAmat <- GVi%*%Amat
-    ViA    <- Vi%*%A
-    dg1_dA  <- A   - 2*GViA   + sigmau2$sigmau2*GViA%*%ViA
-    dg1_dp  <- Amat - 2*GViAmat + sigmau2$sigmau2*GViAmat%*%ViA
-    gradg1d <- matrix(0,nrow=2,ncol=1) 
+    # Gradient of g1d
+    GV.rhoi     <- var.DrhoW%*%V.rhoi
+    GV.rhoiDrhoWDrhoWt   <- GV.rhoi%*%DrhoWDrhoWt
+    GV.rhoiDrhoWDrhoWtmat <- GV.rhoi%*%DrhoWDrhoWtmat
+    V.rhoiDrhoWDrhoWt    <- V.rhoi%*%DrhoWDrhoWt
+    dg1_dDrhoWDrhoWt  <- DrhoWDrhoWt   - 2*GV.rhoiDrhoWDrhoWt   + sigmau2$sigmau2*GV.rhoiDrhoWDrhoWt%*%V.rhoiDrhoWDrhoWt
+    dg1_dp  <- DrhoWDrhoWtmat - 2*GV.rhoiDrhoWDrhoWtmat + sigmau2$sigmau2*GV.rhoiDrhoWDrhoWtmat%*%V.rhoiDrhoWDrhoWt
+    grad.g1d <- matrix(0, nrow=2, ncol=1) 
     
-    bMLgradg1 <- rep(0,framework$m)   
+    bMLgrad.g1 <- rep(0, framework$m)   
     for (d in 1:framework$m)
     {
-      gradg1d[1,1] <- dg1_dA[d,d]
-      gradg1d[2,1] <- dg1_dp[d,d]
-      bMLgradg1[d] <- tbML%*%gradg1d             
+      grad.g1d[1,1] <- dg1_dDrhoWDrhoWt[d,d]
+      grad.g1d[2,1] <- dg1_dp[d,d]
+      bMLgrad.g1[d] <- tbML%*%grad.g1d             
     }
-    mse <- mse - bMLgradg1
+    mse <- mse - bMLgrad.g1
   }
   
   
@@ -345,26 +344,8 @@ prasad_rao_spatial <- function(framework, sigmau2, combined_data, method) {
   # Small area MSE
   MSE_data$FH[framework$obs_dom == TRUE] <- mse
   MSE_data$Out[framework$obs_dom == TRUE] <- 0
-  
-  
-  #if (!all(framework$obs_dom == TRUE)) {
-   # h <- rep(0, framework$M - framework$m)
-   # mse_out <- rep(0, framework$M - framework$m)
-    # Covariates for out-of-sample domains
-   # pred_data_tmp <- combined_data[framework$obs_dom == FALSE,]
-   # pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1,0,1))
-   # lhs(framework$formula) <- quote(helper)
-   # pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
-   # pred_X <- pred_data$x
-    
-   # for (d_out in 1:(framework$M - framework$m)) {
-   #   xd_out <- matrix(pred_X[d_out, ], nrow = 1, ncol = framework$p)
-   #   h[d_out] <- xd_out %*% Q %*% t(xd_out)
-   #   mse_out[d_out] <- sigmau2 + h[d_out]
-   # }
-    
-    MSE_data$FH[framework$obs_dom == FALSE] <- NA
-    MSE_data$Out[framework$obs_dom == FALSE] <- 1
+  MSE_data$FH[framework$obs_dom == FALSE] <- NA
+  MSE_data$Out[framework$obs_dom == FALSE] <- 1
  # }
   
   
@@ -534,7 +515,7 @@ boot_arcsin <- function(sigmau2, vardir, combined_data, framework,
                                     interval = interval)
 
 
-      ## Computation of the coefficients'estimator (Bstim)
+      ## Computation of the coefficients'estimator (est.coef)
       D <- diag(1, m)
       V <- sigmau2_boot*D%*%t(D) + diag(as.numeric(vardir))
       Vi <- solve(V)
@@ -599,117 +580,117 @@ boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
   vardir <- framework$vardir
   eff_smpsize <- framework$eff_smpsize
   x <- framework$model_X
-
+  
   ### Bootstrap
   in_sample <- framework$obs_dom == TRUE
   out_sample <- framework$obs_dom == FALSE
-
+  
   # Ergebnissmatrixen
   true_value_boot <- matrix(NA, ncol = B, nrow = M)
   est_value_boot  <- matrix(NA, ncol = B, nrow = M)
-
+  
   for (b in 1:B){
-
+    
     #set.seed(b)
-
+    
     v_boot <- rnorm(M, 0, sqrt(sigmau2))
     e_boot <- rnorm(m, 0, sqrt(vardir))
-
+    
     # Get covariates for all domains
     pred_data_tmp <- combined_data
     pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1,0,1))
     lhs(framework$formula) <- quote(helper)
     pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
-
+    
     pred_X <- pred_data$x
-
+    
     Xbeta_boot <- pred_X %*% eblup$coefficients$coefficients
-
+    
     ## True Value for bootstraps
     ## Truncation
     true_value_boot_trans <- Xbeta_boot + v_boot
     true_value_boot_trans[true_value_boot_trans < 0] <- 0
     true_value_boot_trans[true_value_boot_trans > (pi / 2)] <- (pi / 2)
-
+    
     ## Back-transformation
     ## true values without correction
     true_value_boot[,b] <- (sin(true_value_boot_trans))^2
-
+    
     ystar_trans <- Xbeta_boot[in_sample] + v_boot[in_sample] + e_boot
-
+    
     ## Estimation of sigmau2_boot auf transformierter Ebene
     framework2 <- framework
     framework2$direct <- ystar_trans
     sigmau2_boot <- wrapper_estsigmau2(framework = framework2, method = method,
                                        interval = interval)
-
+    
     ## Computation of the coefficients'estimator (Bstim)
     D <- diag(1, m)
     V <- sigmau2_boot*D%*%t(D) + diag(as.numeric(vardir))
     Vi <- solve(V)
     Q <- solve(t(x)%*%Vi%*%x)
     Beta.hat_boot <- Q%*%t(x)%*%Vi%*%ystar_trans
-
+    
     ## Computation of the EBLUP
     res <- ystar_trans - c(x%*%Beta.hat_boot)
     Sigma.u <- sigmau2_boot*D
     u.hat <- Sigma.u%*%t(D)%*%Vi%*%res
-
+    
     ## Estimated Small area mean on transformed scale for the out and in sample values
     est_mean_boot_trans <- x%*%Beta.hat_boot+D%*%u.hat
     pred_out_boot_trans <- pred_X%*%Beta.hat_boot
-
+    
     est_value_boot_trans <- rep(NA, M)
     est_value_boot_trans[in_sample] <- est_mean_boot_trans
     est_value_boot_trans[out_sample]<- pred_out_boot_trans[out_sample]
-
+    
     gamma_trans <- as.numeric(vardir)/(sigmau2_boot + as.numeric(vardir))
     est_value_boot_trans_var <- sigmau2_boot * gamma_trans
     est_value_boot_trans_var_<- rep(0, M)
     est_value_boot_trans_var_[in_sample] <- est_value_boot_trans_var
-
+    
     # backtransformation
     int_value <- NULL
     for (i in 1:M) {
-
+      
       if(in_sample[i] == T){
         mu_dri <- est_value_boot_trans
         # Get value of first domain
         mu_dri <- mu_dri[i]
-
+        
         Var_dri <- est_value_boot_trans_var_
         Var_dri <- as.numeric(Var_dri[i])
-
+        
         integrand <- function(x, mean, sd){sin(x)^2 * dnorm(x, mean = mu_dri,
                                                             sd = sqrt(Var_dri))}
-
+        
         upper_bound <- min(mean(framework$direct) + 10 * sd(framework$direct),
                            mu_dri + 100 * sqrt(Var_dri))
         lower_bound <- max(mean(framework$direct) - 10 * sd(framework$direct),
                            mu_dri - 100 * sqrt(Var_dri))
-
+        
         int_value <- c(int_value, integrate(integrand, lower = 0, upper = pi/2)$value)
       }else{
         int_value <- c(int_value, (sin(est_value_boot_trans[i]))^2)
       }
     }
-
+    
     est_value_boot[,b] <- int_value
-
+    
     print(b)
   } # End of bootstrap runs
-
+  
   # KI
   Li <- rep(NA, M)
   Ui <- rep(NA, M)
-
+  
   for(ii in 1:M){
     Li[ii] <- eblup_corr[ii] + quantile(est_value_boot[ii,] - true_value_boot[ii,], 0.025)
     Ui[ii] <- eblup_corr[ii] + quantile(est_value_boot[ii,] - true_value_boot[ii,], 0.975)
   }
-
+  
   conf_int <- data.frame(Li = Li, Ui = Ui)
-
+  
   Quality_MSE<-function(estimator, TrueVal, B){
     RMSE<-rep(NA,dim(estimator)[1])
     for(ii in 1:dim(estimator)[1]){
@@ -717,30 +698,31 @@ boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
     }
     RMSE
   }
-
+  
   mse <- Quality_MSE(est_value_boot, true_value_boot, B)
-
+  
   MSE_data <- data.frame(Domain = combined_data[[framework$domains]])
   MSE_data$Var <- NA
   MSE_data$Var[framework$obs_dom == TRUE] <- framework$vardir
-
+  
   # Small area MSE
   MSE_data$MSE <- mse
   MSE_data$Out[framework$obs_dom == TRUE] <- 0
   MSE_data$Out[framework$obs_dom == FALSE] <- 1
-
+  
   return(list(conf_int, MSE_data))
-
+  
 }
 
 nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
                           eblup, B, transformation, method) {
   
-  
+  # MSE components
   g1 <- rep(0, framework$m)
   g2 <- rep(0, framework$m)
   mse <- rep(0, framework$M)
   
+  # True values
   BCoef.boot <- eblup$coefficients$coefficients         
   rho.boot   <- sigmau2$rho
   sigma2.boot <- sigmau2$sigmau2
@@ -751,63 +733,63 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   W <- framework$W
   DrhoW <- D - rho.boot*W
   DrhoWt <- t(DrhoW)
-  Ar <- solve(DrhoWt%*%DrhoW)
-  Gr <- sigmau2$sigmau2*Ar
-  Vr <- Gr + D*framework$vardir
-  Vri <- solve(Vr)
-  Qr <- solve(t(framework$model_X)%*%Vri%*%framework$model_X)
+  DrhoWDrhoWt <- solve(DrhoWt%*%DrhoW)
+  var.DrhoW <- sigmau2$sigmau2*DrhoWDrhoWt
+  V.rho <- var.DrhoW + D*framework$vardir
+  V.rhoi <- solve(V.rho)
+  Q.rho <- solve(t(framework$model_X)%*%V.rhoi%*%framework$model_X)
   
   # Residual vectors
   res <- framework$direct - framework$model_X%*%BCoef.boot
-  vstim <- Gr%*%Vri%*%res
+  u.hat <- var.DrhoW%*%V.rhoi%*%res
   
-  # Calculate covariance matrices of residual vectors
-  VG <- Vr-Gr
-  P <- Vri-Vri%*%framework$model_X%*%Qr%*%Xt%*%Vri
+  # Computation of covariance matrices of residual vectors
+  VG <- V.rho - var.DrhoW
+  P <- V.rhoi - V.rhoi%*%framework$model_X%*%Q.rho%*%Xt%*%V.rhoi
   Ve <- VG%*%P%*%VG
-  Vu <- DrhoW%*%Gr%*%P%*%Gr%*%DrhoWt
+  Vu <- DrhoW%*%var.DrhoW%*%P%*%var.DrhoW%*%DrhoWt
   
-  XtVri <- Xt%*%Vri
-  Qr <- solve(XtVri%*%framework$model_X)
+  XtV.rhoi <- Xt%*%V.rhoi
+  Q.rho <- solve(XtV.rhoi%*%framework$model_X)
   
-  # Calculate g1 and g2
+  # Computation of g1 and g2
   
-  Ga <- Gr - Gr%*%Vri%*%Gr
-  Gb <- Gr%*%t(XtVri)
-  Xa <- matrix(0,1,framework$p)
+  G1 <- var.DrhoW - var.DrhoW%*%V.rhoi%*%var.DrhoW
+  G2 <- var.DrhoW%*%t(XtV.rhoi)
+  Xcoef <- matrix(0,1,framework$p)
   
   for (d in 1:framework$m) {
-    g1[d]<-Ga[d,d]
-    Xa[1,]<-framework$model_X[d,] - Gb[d,]
-    g2[d] <- Xa%*%Qr%*%t(Xa)
+    g1[d] <- G1[d,d]
+    Xcoef[1,] <- framework$model_X[d,] - G2[d,]
+    g2[d] <- Xcoef%*%Q.rho%*%t(Xcoef)
   }
   
   # Square roots of covariance matrices
-  VecVe0 <- eigen(Ve)$vectors
-  VecVe <- VecVe0[,1:(framework$m - framework$p)]
-  ValVe0 <- eigen(Ve)$values
-  Valve <- diag(sqrt(1/ValVe0[1:(framework$m - framework$p)]))
-  Vei05 <- VecVe%*%Valve%*%t(VecVe)
+  eigenVecVe0 <- eigen(Ve)$vectors
+  eigenVecVe <- eigenVecVe0[, 1:(framework$m - framework$p)]
+  eigenValVe0 <- eigen(Ve)$values
+  eigenValVe <- diag(sqrt(1/eigenValVe0[1:(framework$m - framework$p)]))
+  Vei <- eigenVecVe%*%eigenValVe%*%t(eigenVecVe)
   
-  VecVu0 <- eigen(Vu)$vectors
-  VecVu <- VecVu0[,1:(framework$m - framework$p)]
-  ValVu0 <- 1/(eigen(Vu)$values)
-  ValVu <- diag(sqrt(ValVu0[1:(framework$m - framework$p)]))
-  Vui05 <- VecVu%*%ValVu%*%t(VecVu)
+  eigenVecVu0 <- eigen(Vu)$vectors
+  eigenVecVu <- eigenVecVu0[, 1:(framework$m - framework$p)]
+  eigenValVu0 <- 1/(eigen(Vu)$values)
+  eigenValVu <- diag(sqrt(eigenValVu0[1:(framework$m - framework$p)]))
+  Vui <- eigenVecVu%*%eigenValVu%*%t(eigenVecVu)
   
   # Standardize residual vectors
-  ustim <- as.vector(Vui05%*%((DrhoW)%*%vstim))
-  estim <- as.vector(Vei05%*%(res-vstim))
+  est.u <- as.vector(Vui%*%((DrhoW)%*%u.hat))
+  est.e <- as.vector(Vei%*%(res - u.hat))
   sdu <- sqrt(sigma2.boot)
   
-  u.std <- rep(0,framework$m)
+  std.u <- rep(0,framework$m)
   for (d in 1:framework$m){
-    u.std[d] <- (sdu*(ustim[d]-mean(ustim)))/sqrt(mean((ustim-mean(ustim))^2))
+    std.u[d] <- (sdu*(est.u[d]-mean(est.u)))/sqrt(mean((est.u-mean(est.u))^2))
     }
   
-  e.std <- rep(0,framework$m)
+  std.e <- rep(0,framework$m)
   for (d in 1:framework$m){
-    e.std[d] <- (estim[d]-mean(estim))/sqrt(mean((estim-mean(estim))^2))
+    std.e[d] <- (est.e[d]-mean(est.e))/sqrt(mean((est.e-mean(est.e))^2))
     }
   
   # Create results matrices
@@ -826,22 +808,26 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   
   # Bootstrap algorithm
   b <- 1
-  while (b<=B) 
+  while (b <= B) 
   {
     
     # Bootstrap data
-    u.boot <- sample(u.std,framework$m,replace=TRUE)
-    e.samp <- sample(e.std,framework$m,replace=TRUE)
+    u.boot <- sample(std.u,framework$m,replace=TRUE)
+    e.samp <- sample(std.e,framework$m,replace=TRUE)
     e.boot <- sqrt(framework$vardir)*e.samp
     v.boot <- solve(D-rho.boot*W)%*%u.boot
     
     if (all(framework$obs_dom == TRUE)) {
       data_tmp <- data.frame(Domain = combined_data[[framework$domains]])
-      data_tmp$theta.boot[framework$obs_dom == TRUE] <- as.numeric(framework$model_X%*%BCoef.boot + v.boot) 
+      data_tmp$theta.boot[framework$obs_dom == TRUE] <- 
+        as.numeric(framework$model_X%*%BCoef.boot + v.boot) 
     } else {
       data_tmp <- data.frame(Domain = combined_data[[framework$domains]])
-      data_tmp$theta.boot[framework$obs_dom == TRUE] <- as.numeric(framework$model_X%*%BCoef.boot + v.boot) 
+      data_tmp$theta.boot[framework$obs_dom == TRUE] <- 
+        as.numeric(framework$model_X%*%BCoef.boot + v.boot) 
+      
       # Prediction (Out-of-sample)
+      
       pred_data_tmp <- combined_data[framework$obs_dom == FALSE,]
       pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1,0,1))
       lhs(framework$formula) <- quote(helper)
@@ -851,11 +837,13 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
       data_tmp$theta.boot[framework$obs_dom == FALSE] <- as.numeric(pred_y)
     }
     
-    #theta.boot1=Xpop1%*%Bstim.boot
-    direct.boot <- as.numeric(data_tmp$theta.boot[framework$obs_dom == TRUE] + e.boot)
+    direct.boot <- as.numeric(data_tmp$theta.boot[framework$obs_dom == TRUE] + 
+                                e.boot)
     combined_data$direct.boot[framework$obs_dom == TRUE] <- direct.boot
     combined_data$direct.boot <- as.numeric(combined_data$direct.boot)
+    
     # Estimation procedure
+    
     Terms <- terms(framework$formula)
     formula.tmp <- update.formula(framework$formula, direct.boot ~ .)
     framework.boot <- framework_FH(combined_data = combined_data,
@@ -878,27 +866,29 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
                                combined_data = combined_data) 
       
     
-    # Generate a new sample if estimators are not satisfactory
+    # New sample if estimated parameters are not acceptable 
     if (sigmau2.boot$convergence==FALSE | sigmau2.boot$sigmau2 <0 | 
         sigmau2.boot$rho <(-1) | sigmau2.boot$rho>1)
     next
     
     cat("b =",b,"\n")
-    
-   # Bstim.ML.boot <- results.SpFH.boot$fit$estcoef[,1]                                   
+  
+    # Bootstrap values                                   
     rho.tmp.boot <- sigmau2.boot$rho
     sigma2.tmp.boot <- sigmau2.boot$sigmau2                                        
     thetaSFH.boot <-  eblupSFH.boot$EBLUP_data$FH   
     
-    # Nonparametric bootstrap estimator of g3
-    Bstim.sblup <- Qr%*%XtVri%*%direct.boot
+    # Computation of nonparametric bootstrap estimator of g3
+    est.coef.sblup <- Q.rho%*%XtV.rhoi%*%direct.boot
     
     if (all(framework$obs_dom == TRUE)) {
-      data_tmp$thetaSFH.sblup.boot[framework$obs_dom == TRUE] <- framework$model_X%*%Bstim.sblup + Gr%*%Vri%*%
-        (direct.boot-framework$model_X%*%Bstim.sblup) 
+      data_tmp$thetaSFH.sblup.boot[framework$obs_dom == TRUE] <- 
+        framework$model_X%*%est.coef.sblup + var.DrhoW%*%V.rhoi%*%
+        (direct.boot-framework$model_X%*%est.coef.sblup) 
     } else {
-    data_tmp$thetaSFH.sblup.boot[framework$obs_dom == TRUE] <- framework$model_X%*%Bstim.sblup + Gr%*%Vri%*%
-      (direct.boot-framework$model_X%*%Bstim.sblup)
+    data_tmp$thetaSFH.sblup.boot[framework$obs_dom == TRUE] <- 
+      framework$model_X%*%est.coef.sblup + var.DrhoW%*%V.rhoi%*%
+      (direct.boot-framework$model_X%*%est.coef.sblup)
     
     # Prediction (Out-of-sample)
     pred_data_tmp <- combined_data[framework$obs_dom == FALSE,]
@@ -906,7 +896,7 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     lhs(framework$formula) <- quote(helper)
     pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
     pred_X <- pred_data$x
-    pred_y <- pred_X %*% Bstim.sblup
+    pred_y <- pred_X %*% est.coef.sblup
     data_tmp$thetaSFH.sblup.boot[framework$obs_dom == FALSE] <- pred_y
     }
     thetaSFH.boot.in <-  eblupSFH.boot$EBLUP_data$FH[eblupSFH.boot$EBLUP_data$Out == 0]
@@ -919,22 +909,22 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     difmse.npb[,1] <- difmse.npb[,1] + (thetaSFH.boot - data_tmp$theta.boot)^2
     #difmse.npb1[,1]<-difmse.npb1[,1]+(thetaEBLUPSpat.boot1[,1]-theta.boot1)^2
     
-    # g1 and g2 for each bootstrap sample
+    # Computation of g1 and g2
     A <- solve((D - rho.tmp.boot*Wt)%*%(D - rho.tmp.boot*W))
-    G <- sigma2.tmp.boot*A
-    V <- G + D*framework$vardir
-    Vi<-solve(V)
-    XtVi<-Xt%*%Vi
-    Q<-solve(XtVi%*%framework$model_X)
-    
-    Ga <- G-G%*%Vi%*%G
-    Gb <- G%*%Vi%*%framework$model_X
-    Xa <- matrix(0,1,framework$p)
+    var.DrhoW.boot <- sigma2.tmp.boot*A
+    V.rho.boot <- var.DrhoW.boot + D*framework$vardir
+    Vi.rho.boot <- solve(V.rho.boot)
+    XtVi.rho.boot <- Xt%*%Vi.rho.boot
+    Q.rho.boot <- solve(XtVi.rho.boot%*%framework$model_X)
+
+    G1 <- var.DrhoW.boot  - var.DrhoW.boot %*%Vi.rho.boot%*%var.DrhoW.boot 
+    G2 <- var.DrhoW.boot%*%Vi.rho.boot%*%framework$model_X
+    Xcoef <- matrix(0,1,framework$p)
     
     for (d in 1:framework$m){
-      g1.help[d] <- Ga[d,d] 
-      Xa[1,] <- framework$model_X[d,] - Gb[d,]
-      g2.help[d] <- Xa%*%Q%*%t(Xa)
+      g1.help[d] <- G1[d,d] 
+      Xcoef[1,] <- framework$model_X[d,] - G2[d,]
+      g2.help[d] <- Xcoef%*%Q.rho.boot%*%t(Xcoef)
     }
     
     difg1.npb <- difg1.npb + g1.help
@@ -942,44 +932,43 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     
     b <- b + 1
   }
-  # Final naive nonparametric bootstrap MSE estimator
+  # Naive nonparametric bootstrap MSE estimator
   mse.npb <- difmse.npb[,1]/B
   
-  # Final bias-corrected nonparametric bootstrap MSE estimator
+  # Bias-corrected nonparametric bootstrap MSE estimator
   g3.npb <- difg3.npb/B
   g1.npb  <-difg1.npb/B
   g2.npb <- difg2.npb/B
   mse.npbBC <- 2*(g1 + g2) - difg1.npb[,1]/B - difg2.npb[,1]/B + difg3.npb[,1]/B
-  
  
-  
   MSE_data <- data.frame(Domain = combined_data[[framework$domains]])
   MSE_data$Var <- NA
   MSE_data$Var[framework$obs_dom == TRUE] <- framework$vardir
   
   # Small area MSE
-  MSE_data$MSE <- mse.npb
-  MSE_data$MSE.BC <- NA
-  MSE_data$MSE.BC[framework$obs_dom == TRUE] <- mse.npbBC
+  MSE_data$FH <- mse.npb
+  MSE_data$FH.BC <- NA
+  MSE_data$FH.BC[framework$obs_dom == TRUE] <- mse.npbBC
   MSE_data$Out[framework$obs_dom == TRUE] <- 0
   MSE_data$Out[framework$obs_dom == FALSE] <- 1
   
   MSE_data <- list(MSE_data = MSE_data,
-                  MSE_method = "non-parametric bootstrap",
-                  bootstrapMSE = bootstrapMSE,
-                  estTheta = estTheta,
-                  trueTheta = trueTheta)
+                   MSE_method = "non-parametric bootstrap",
+                   bootstrapMSE = bootstrapMSE,
+                   estTheta = estTheta,
+                   trueTheta = trueTheta)
 
 }
 
 parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
                                       eblup, B, transformation, method) {
   
-  
+  # MSE components
   g1 <- rep(0, framework$m)
   g2 <- rep(0, framework$m)
   mse <- rep(0, framework$m)
   
+  # True values
   BCoef.boot <- eblup$coefficients$coefficients         
   rho.boot   <- sigmau2$rho
   sigma2.boot <- sigmau2$sigmau2
@@ -990,42 +979,40 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   W <- framework$W
   DrhoW <- D - rho.boot*W
   DrhoWt <- t(DrhoW)
-  Ar <- solve(DrhoWt%*%DrhoW)
-  Gr <- sigmau2$sigmau2*Ar
-  Vr <- Gr + D*framework$vardir
-  Vri <- solve(Vr)
-  Qr <- solve(t(framework$model_X)%*%Vri%*%framework$model_X)
+  DrhoWDrhoWt <- solve(DrhoWt%*%DrhoW)
+  var.DrhoW <- sigmau2$sigmau2*DrhoWDrhoWt
+  V.rho <- var.DrhoW + D*framework$vardir
+  V.rhoi <- solve(V.rho)
+  Q.rho <- solve(t(framework$model_X)%*%V.rhoi%*%framework$model_X)
   
   # Residual vectors
   res <- framework$direct - framework$model_X%*%BCoef.boot
-  vstim <- Gr%*%Vri%*%res
+  u.hat <- var.DrhoW%*%V.rhoi%*%res
  
-  XtVri <- Xt%*%Vri
-  Qr <- solve(XtVri%*%framework$model_X)
+  XtV.rhoi <- Xt%*%V.rhoi
+  Q.rho <- solve(XtV.rhoi%*%framework$model_X)
   
-  # Calculate g1 and g2
+  # Computation of g1 and g2
   
-  Ga <- Gr - Gr%*%Vri%*%Gr
-  Gb <- Gr%*%t(XtVri)
-  Xa <- matrix(0,1,framework$p)
+  G1 <- var.DrhoW - var.DrhoW%*%V.rhoi%*%var.DrhoW
+  G2 <- var.DrhoW%*%t(XtV.rhoi)
+  Xcoef <- matrix(0, 1, framework$p)
   
   for (d in 1:framework$m) {
-    g1[d]<-Ga[d,d]
-    Xa[1,]<-framework$model_X[d,] - Gb[d,]
-    g2[d] <- Xa%*%Qr%*%t(Xa)
+    g1[d]<-G1[d,d]
+    Xcoef[1,]<-framework$model_X[d,] - G2[d,]
+    g2[d] <- Xcoef%*%Q.rho%*%t(Xcoef)
   }
   
-  # Create results matrices
+  # Create result matrices
   
-  difmse.pb <- matrix(0,framework$m,1)
-  #difmse.npb1=matrix(0,nrow(b1),1)
-  #difg3Spat.npb1=matrix(0,nrow(b1),1)
-  g1.help <- matrix(0,framework$m,1)
-  g2.help <- matrix(0,framework$m,1)
-  difg1.pb <- matrix(0,framework$m,1)
-  difg2.pb <- matrix(0,framework$m,1)
-  difg3.pb <- matrix(0,framework$m,1)
-  difmse.pbBC <- matrix(0,framework$m,1)
+  difmse.pb <- matrix(0, framework$m, 1)
+  g1.help <- matrix(0, framework$m, 1)
+  g2.help <- matrix(0, framework$m, 1)
+  difg1.pb <- matrix(0, framework$m, 1)
+  difg2.pb <- matrix(0, framework$m, 1)
+  difg3.pb <- matrix(0, framework$m, 1)
+  difmse.pbBC <- matrix(0, framework$m, 1)
   
   # Bootstrap algorithm
   for (b in 1:B){
@@ -1061,55 +1048,53 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
                                combined_data = combined_data) 
     
     
-    # Generate a new sample if estimators are not satisfactory
+    # New sample if estimated parameters are not acceptable 
      if (sigmau2.boot$convergence==FALSE | sigmau2.boot$sigmau2 <0 | 
          sigmau2.boot$rho <(-1) | sigmau2.boot$rho>1)
      next
     
     cat("b =",b,"\n")
     
-    # Bstim.ML.boot <- results.SpFH.boot$fit$estcoef[,1]                                   
     rho.tmp.boot <- sigmau2.boot$rho
     sigma2.tmp.boot <- sigmau2.boot$sigmau2  
     BCoef.tmp.boot <- eblupSFH.boot$coefficients$coefficients  
     thetaSFH.boot <-  eblupSFH.boot$EBLUP_data$FH   
     
-    # Nonparametric bootstrap estimator of g3
-    Bstim.sblup <- Qr%*%XtVri%*%direct.boot
-    thetaSFH.sblup.boot <- framework$model_X%*%Bstim.sblup + Gr%*%Vri%*%
-      (direct.boot-framework$model_X%*%Bstim.sblup)
+    # Parametric bootstrap estimator of g3
+    est.coef.sblup <- Q.rho%*%XtV.rhoi%*%direct.boot
+    thetaSFH.sblup.boot <- framework$model_X%*%est.coef.sblup + var.DrhoW%*%V.rhoi%*%
+      (direct.boot-framework$model_X%*%est.coef.sblup)
     
     difg3.pb[,1] <- difg3.pb[,1] + (thetaSFH.boot - thetaSFH.sblup.boot)^2
     
     # Naive parametric bootstrap MSE
     difmse.pb[,1] <- difmse.pb[,1] + (thetaSFH.boot - theta.boot)^2
-    #difmse.npb1[,1]<-difmse.npb1[,1]+(thetaEBLUPSpat.boot1[,1]-theta.boot1)^2
     
-    # g1 and g2 for each bootstrap sample
+    # Computation of g1 and g2
     A <- solve((D - rho.tmp.boot*Wt)%*%(D - rho.tmp.boot*W))
-    G <- sigma2.tmp.boot*A
-    V <- G + D*framework$vardir
-    Vi<-solve(V)
-    XtVi<-Xt%*%Vi
-    Q<-solve(XtVi%*%framework$model_X)
+    var.DrhoW.boot  <- sigma2.tmp.boot*A
+    V.rho.boot  <- var.DrhoW.boot  + D*framework$vardir
+    Vi.rho.boot <- solve(V.rho.boot)
+    XtVi.rho.boot  <- Xt%*%Vi.rho.boot 
+    Q.rho.boot  <- solve(XtVi.rho.boot %*%framework$model_X)
     
-    Ga <- G-G%*%Vi%*%G
-    Gb <- G%*%Vi%*%framework$model_X
-    Xa <- matrix(0,1,framework$p)
+    G1 <- var.DrhoW.boot - var.DrhoW.boot%*%Vi.rho.boot%*%var.DrhoW.boot 
+    G2 <- var.DrhoW.boot %*%Vi.rho.boot%*%framework$model_X
+    Xcoef <- matrix(0,1,framework$p)
     
     for (d in 1:framework$m){
-      g1.help[d] <- Ga[d,d] 
-      Xa[1,] <- framework$model_X[d,] - Gb[d,]
-      g2.help[d] <- Xa%*%Q%*%t(Xa)
+      g1.help[d] <- G1[d,d] 
+      Xcoef[1,] <- framework$model_X[d,] - G2[d,]
+      g2.help[d] <- Xcoef%*%Q.rho.boot %*%t(Xcoef)
     }
     
     difg1.pb <- difg1.pb + g1.help
     difg2.pb <- difg2.pb + g2.help
   }
-  # Final naive nonparametric bootstrap MSE estimator
+  # Naive parametric bootstrap MSE estimator
   mse.pb <- difmse.pb[,1]/B
   
-  # Final bias-corrected nonparametric bootstrap MSE estimator
+  # Bias-corrected parametric bootstrap MSE estimator
   g1.pb  <-difg1.pb/B
   g2.pb <- difg2.pb/B
   g3.pb <- difg3.pb/B
@@ -1123,8 +1108,8 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   MSE_data$Var[framework$obs_dom == TRUE] <- framework$vardir
   
   # Small area MSE
-  MSE_data$MSE <- mse.pb
-  MSE_data$MSE.BC <- mse.pbBC
+  MSE_data$FH <- mse.pb
+  MSE_data$FH.BC <- mse.pbBC
   MSE_data$Out[framework$obs_dom == TRUE] <- 0
   MSE_data$Out[framework$obs_dom == FALSE] <- 1
   
