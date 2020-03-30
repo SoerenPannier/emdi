@@ -114,7 +114,7 @@ model_select <- function(framework, sigmau2, method, interval,
   
   if (!all(framework$obs_dom == TRUE)) {
     cat("Please note that the model selection criteria are only computed based on 
-       the in-sample domains.")
+       the in-sample domains. \n \n")
   }
   
   if (framework$correlation == "spatial" | transformation != "no"){
