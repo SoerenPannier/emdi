@@ -36,7 +36,7 @@ one of the groups.}
 
 \item{label}{argument that enables to customize title and axis labels. There 
 are three options to label the evaluation plots: (i) original labels ("orig"), 
-(ii) axis lables but no title ("no_title"), (iii) neither axis 
+(ii) axis labels but no title ("no_title"), (iii) neither axis 
 labels nor title ("blank").}
 
 \item{color}{a vector with two elements. The first color determines
