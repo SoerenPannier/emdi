@@ -3,6 +3,7 @@
 \docType{package}
 \name{emdi}
 \alias{emdi}
+\alias{emdi-package}
 \title{A package for estimating and mapping disaggregated indicators}
 \description{
 The package \pkg{emdi} supports estimating and mapping regional

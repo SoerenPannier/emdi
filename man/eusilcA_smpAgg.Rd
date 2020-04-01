@@ -4,8 +4,7 @@
 \name{eusilcA_smpAgg}
 \alias{eusilcA_smpAgg}
 \title{Simulated eusilc data - aggregated sample data}
-\format{
-A data frame with 94 observations and 10 variables:
+\format{A data frame with 94 observations and 10 variables:
 \describe{
 \item{Mean}{numeric; a simplified version of the equivalized household income.}
 \item{Head_Count}{numeric; head count ratio.}
@@ -19,8 +18,7 @@ than the national median income.}
 \item{Var_Cash}{numeric; variance of the employee cash or near cash income.}
 \item{n}{numeric; effective sample sizes.}
 \item{Domain}{factor; Austrian districts (94 levels).}
-}
-}
+}}
 \usage{
 eusilcA_smpAgg
 }
