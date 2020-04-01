@@ -15,25 +15,7 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
   MSE_data$Direct[framework$obs_dom == TRUE] <- framework$vardir_orig
 
   if (transformation == "log") {
-    if (backtransformation == "naive") {
-
-      # The point estimator is simply backtransformed by the exponential without
-      # any adjustment.
-      EBLUP_data$FH <- exp(eblup$EBLUP_data$FH)
-
-      if (MSE == TRUE) {
-        estim_MSE <- analytical_mse(framework = framework, sigmau2 = sigmau2,
-                                    combined_data = combined_data,
-                                    method = method)
-        MSE_data$FH <- exp(eblup$EBLUP_data$FH)^2 * estim_MSE$MSE_data$FH
-        MSE_method <- estim_MSE$MSE_method
-      } else {
-        MSE_data <- NULL
-        MSE_method <- "no mse estimated"
-      }
-
-
-    } else if (backtransformation == "crude") {
+    if (backtransformation == "crude") {
       estim_MSE <- analytical_mse(framework = framework, sigmau2 = sigmau2,
                                   combined_data = combined_data,
                                   method = method)
@@ -50,7 +32,6 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
         MSE_data <- NULL
         MSE_method <- "no mse estimated"
       }
-
 
     } else if (backtransformation == "sm") {
       estim_MSE <- analytical_mse(framework = framework, sigmau2 = sigmau2,
