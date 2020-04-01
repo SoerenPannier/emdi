@@ -6,7 +6,7 @@
 #' \code{\link{plot}} and \code{\link{summary}} have methods that can be used to 
 #' obtain further information. Additionally, for the standard Fay-Herriot model 
 #' that is estimated via ML variance estimation a model selection function is 
-#' provided (\code{\link{step.fh}}).
+#' provided (\code{\link{step_fh}}).
 #'
 #' @return
 #' The following components are always included in a fh object:

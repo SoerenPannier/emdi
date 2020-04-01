@@ -17,10 +17,6 @@
 #' provided, the default is "\code{backward}".
 #' @param trace if \code{TRUE}, information about the single steps is 
 #' provided during the stepwise procedure. Defaults to \code{TRUE}.
-#' @param keep a filter function whose input is a fitted model object and the 
-#' associated \code{AIC} statistic, and whose output is arbitrary. Typically 
-#' \code{keep} will select a subset of the components of the object and return 
-#' them. The default is not to keep anything.
 #' @param steps a number determining the maximum number of steps. Defaults to 1000.
 #' @return Information about the resulting "best" model due to the chosen 
 #' information criterion: 
@@ -32,27 +28,18 @@
 #' @export
 #' @importFrom stats factor.scope 
 
-step.fh <- function (object, scope = NULL, criteria = "AIC", 
+step_fh <- function (object, scope = NULL, criteria = "AIC", 
                      direction = c("both", "backward","forward"), trace = TRUE,
-                     keep = NULL, steps = 1000) 
+                     steps = 1000) 
 {
 
-  step.fh_check(object = object, scope = scope, criteria = criteria,
-                direction = direction, trace = trace,
-                keep = keep, steps = steps)
+  step_fh_check(object = object, scope = scope, criteria = criteria,
+                direction = direction, trace = trace, steps = steps)
   
   cut.string <- function(string) {
     if (length(string) > 1L) 
       string[-1L] <- paste0("\n", string[-1L])
     string
-  }
-  re.arrange <- function(keep) {
-    namr <- names(k1 <- keep[[1L]])
-    namc <- names(keep)
-    nc <- length(keep)
-    nr <- length(k1)
-    array(unlist(keep, recursive = FALSE), c(nr, nc), list(namr, 
-                                                           namc))
   }
   step.results <- function(models, fit, object) { 
     change <- sapply(models, "[[", "change")
@@ -97,8 +84,6 @@ step.fh <- function (object, scope = NULL, criteria = "AIC",
     }
   }
   models <- vector("list", steps)
-  if (!is.null(keep)) 
-    keep.list <- vector("list", steps)
   n <- object$framework$N_dom_smp
   fit <- object 
   bcriteria <- fit$model$model_select[[criteria]]
@@ -115,8 +100,6 @@ step.fh <- function (object, scope = NULL, criteria = "AIC",
     }
     models[[nm]] <- list(df.resid = n - 
                            edf,change = "", criteria = bcriteria) 
-    if (!is.null(keep)) 
-      keep.list[[nm]] <- keep(fit, bcriteria)
   
   while (steps > 0) {
     steps <- steps - 1
@@ -184,13 +167,9 @@ step.fh <- function (object, scope = NULL, criteria = "AIC",
       break
     nm <- nm + 1
     models[[nm]] <- list(df.resid = n - edf,change = "", criteria = bcriteria)
-    if (!is.null(keep)) 
-      keep.list[[nm]] <- keep(fit, bcriteria)
   }
-  if (!is.null(keep)) 
-    fit$keep <- re.arrange(keep.list[seq(nm)])
   results <- step.results(models = models[seq(nm)], fit, object) 
-  class(results) <- "step.fh"
+  class(results) <- "step_fh"
   results
 }
 
@@ -200,7 +179,7 @@ step.fh <- function (object, scope = NULL, criteria = "AIC",
 #' @param ... further arguments passed to or from other methods.
 #' @export
 
-print.step.fh <- function(x, ...)
+print.step_fh <- function(x, ...)
 {
   cat("\n")
   cat("Call:\n ")
@@ -210,15 +189,15 @@ print.step.fh <- function(x, ...)
   print(x$Coefficients)
 }
 
-step.fh_check <- function(object, scope, criteria, direction, trace, keep,
+step_fh_check <- function(object, scope, criteria, direction, trace, 
                           steps){
   
   if(!inherits(object, "fh")){
     stop('Object needs to be fh object.')
   }
   if (!(object$method$method == "ml")){
-    stop('The variance estimation method of the random effect has to be ml. Otherwise
-         the information criteria are not valid.')
+    stop('The variance estimation method of the random effect has to be ml. 
+Otherwise the comparison of models based on information criteria would not be valid.')
   }
   if (is.null(criteria) || !(criteria == "AIC" 
                              || criteria == "AICc" 
@@ -248,7 +227,7 @@ step.fh_check <- function(object, scope, criteria, direction, trace, keep,
   }
   if (!is.logical(trace) || length(trace) != 1) {
     stop("trace must be a logical value. Set MSE to TRUE or FALSE. The default is 
-          set to TRUE. See also help(step.fh).")
+          set to TRUE. See also help(step_fh).")
   }
   if (!is.null(scope) && ((!inherits(scope, "formula")) && 
       (!inherits(scope, "list") || (!inherits(scope[[1]], "formula") ||
@@ -258,7 +237,7 @@ step.fh_check <- function(object, scope, criteria, direction, trace, keep,
   }
   if (!is.numeric(steps) || !(is.numeric(steps) && length(steps) == 1)) {
     stop("steps must be a single number determining the maximum number of steps.
-         See help(step.fh).")
+         See help(step_fh).")
   }
   
 }
