@@ -85,7 +85,7 @@ Generic functions such as \code{\link{estimators}}, \code{\link{print}},
 \code{\link{plot}} and \code{\link{summary}} have methods that can be used to 
 obtain further information. Additionally, for the standard Fay-Herriot model 
 that is estimated via ML variance estimation a model selection function is 
-provided (\code{\link{step.fh}}).
+provided (\code{\link{step_fh}}).
 }
 \references{
 Lahiri, P. and Suntornchost, J. (2015), Variable selection for linear mixed

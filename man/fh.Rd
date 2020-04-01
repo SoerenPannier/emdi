@@ -161,7 +161,7 @@ corresponding MSE estimates. Generic functions such as \code{\link{estimators}},
 \code{\link{print}}, \code{\link{plot}} and \code{\link{summary}} have methods 
 that can be used to obtain further information. Additionally, for the standard 
 Fay-Herriot model that is estimated via ML variance estimation a model selection 
-function is provided (\code{\link{step.fh}}). See \code{\link{fhObject}} for 
+function is provided (\code{\link{step_fh}}). See \code{\link{fhObject}} for 
 descriptions of components of objects of class "fh".
 }
 \description{
