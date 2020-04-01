@@ -91,13 +91,12 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
 
       if (MSE == TRUE) {
         if (mse_type == "boot") {
-          conf_int <- boot_arcsin2(sigmau2 = sigmau2, combined_data = combined_data,
-                                  framework = framework, eblup = eblup,
-                                  method = method, interval = interval,
-                                  B = B, alpha = alpha, backtransformation = backtransformation)
-          MSE_data$FH <- NA
-          #MSE_data$FH_LCI <- conf_int$Li
-          #MSE_data$FH_UCI <- conf_int$Ui
+          tmp_out <- boot_arcsin_2(sigmau2 = sigmau2, combined_data = combined_data,
+                                   framework = framework, eblup = eblup,
+                                   eblup_corr = EBLUP_data$FH,
+                                   method = method, interval = interval,
+                                   B = B, alpha = alpha, backtransformation = backtransformation)
+          MSE_boot <- tmp_out[[2]]
           MSE_method <- "bootstrap"
 
         } else if (mse_type == "jackknife" | mse_type == "weighted_jackknife") {
@@ -162,13 +161,10 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
                                    framework = framework, eblup = eblup,
                                    eblup_corr = EBLUP_data$FH,
                                    method = method, interval = interval,
-                                   B = B, alpha = alpha)
-          #conf_int <- tmp_out[[1]]
+                                   B = B, alpha = alpha, backtransformation = backtransformation)
           MSE_boot <- tmp_out[[2]]
 
           MSE_data$FH <- MSE_boot$MSE
-          #MSE_data$FH_LCI <- conf_int$Li
-          #MSE_data$FH_UCI <- conf_int$Ui
           MSE_method <- "bootstrap"
 
         } else if (mse_type == "jackknife" | mse_type == "weighted_jackknife") {
