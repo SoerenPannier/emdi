@@ -453,125 +453,9 @@ analytical_mse <- function(framework, sigmau2, combined_data,
   }
 
 
-boot_arcsin <- function(sigmau2, vardir, combined_data, framework,
-                        eblup, B, method,
-                        interval, alpha) {
-
-
-  M <- framework$M
-  m <- framework$m
-  vardir <- framework$vardir
-  eff_smpsize <- framework$eff_smpsize
-  x <- framework$model_X
-
-  Li <- rep(NA, M)
-  Ui <- rep(NA, M)
-
-  ### Bootstrap
-    ti <- matrix(NA, M, B)
-    boots_est <- matrix(NA, M, B)
-    boots_par <- matrix(NA, M, B)
-    in_sample <- framework$obs_dom == TRUE
-    out_sample <- framework$obs_dom == FALSE
-
-    for (b in 1:B){
-
-      #set.seed(b)
-
-      v_boot <- rnorm(M, 0, sqrt(sigmau2))
-      e_boot <- rnorm(m, 0, sqrt(vardir))
-
-      # Get covariates for all domains
-      pred_data_tmp <- combined_data
-      pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1,0,1))
-      lhs(framework$formula) <- quote(helper)
-      pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
-
-      pred_X <- pred_data$x
-
-
-      Xbeta_boot <- pred_X %*% eblup$coefficients$coefficients
-
-
-      ## Theta under transformation
-      theta <- Xbeta_boot[, 1] + v_boot
-
-      ## Truncation
-      true_value_boot <- Xbeta_boot + v_boot
-      true_value_boot[true_value_boot < 0] <- 0
-      true_value_boot[true_value_boot > (pi / 2)] <- (pi / 2)
-
-      ## Back-transformation
-      true_value_boot <- (sin(true_value_boot))^2
-      boots_par[,b] <- true_value_boot
-      boots_par[,b] <- Xbeta_boot + v_boot
-
-      ystar <- Xbeta_boot[in_sample] + v_boot[in_sample] + e_boot
-
-      ## Estimation of beta_boot
-      framework2 <- framework
-      framework2$direct <- ystar
-      sigmau2_boot <- wrapper_estsigmau2(framework = framework2, method = method,
-                                    interval = interval)
-
-
-      ## Computation of the coefficients'estimator (est.coef)
-      D <- diag(1, m)
-      V <- sigmau2_boot*D%*%t(D) + diag(as.numeric(vardir))
-      Vi <- solve(V)
-      Q <- solve(t(x)%*%Vi%*%x)
-      Beta.hat_boot <- Q%*%t(x)%*%Vi%*%ystar
-
-      ## Computation of the EBLUP
-      res <- ystar - c(x%*%Beta.hat_boot)
-      Sigma.u <- sigmau2_boot*D
-      u.hat <- Sigma.u%*%t(D)%*%Vi%*%res
-
-      ## Small area mean
-      est_mean_boot <- x%*%Beta.hat_boot+D%*%u.hat
-      Bi <- as.numeric(vardir)/(sigmau2_boot + as.numeric(vardir))
-      ti[in_sample, b] <- (theta[in_sample] - est_mean_boot)/sqrt(as.numeric(vardir)*(1 - Bi))
-
-      ## Synthetic prediction for out-of-sample
-      pred_out_boot <- pred_X%*%Beta.hat_boot
-      ti[out_sample, b]<-(theta[out_sample] - pred_out_boot[out_sample])/sqrt(sigmau2_boot)
-
-      print(b)
-    } # End of bootstrap runs
-
-    qi <- matrix(NA, M, 2)
-
-    for (i in 1:M) {
-      qi[i,1] <- quantile(ti[i,], prob = alpha/2, na.rm = T)
-      qi[i,2] <- quantile(ti[i,], prob = (1 - alpha/2), na.rm = T)
-    }
-
-    Li <- matrix(NA, M, 1)
-    Ui <- matrix(NA, M, 1)
-
-    Di <- rep(NA, M)
-    Di[in_sample] <- vardir
-    Di[out_sample] <- (1 / (4 * mean(combined_data[in_sample, eff_smpsize])))
-    Bi.tot <- as.numeric(Di) / (sigmau2 + as.numeric(Di))
-
-
-    Li <- (eblup$EBLUP_data$FH + qi * sqrt(Di * (1 - Bi.tot)))[,1]
-    Ui <- (eblup$EBLUP_data$FH + qi * sqrt(Di * (1 - Bi.tot)))[,2]
-
-    ### Truncation
-    Li[Li < 0] <- 0
-    Ui[Ui > (pi / 2)] <- (pi / 2)
-
-    ### Back-transformation
-    Li <- (sin(Li))^2
-    Ui <- (sin(Ui))^2
-
-    conf_int <- data.frame(Li = Li, Ui = Ui)
-}
-
 boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
                           eblup, eblup_corr, B, method,
-                          interval, alpha) {
+                          interval, alpha, backtransformation) {
 
 
   # Gonzales Bootstrap fuer arcsin
@@ -650,27 +534,34 @@ boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
     est_value_boot_trans_var_[in_sample] <- est_value_boot_trans_var
     
     # backtransformation
-    int_value <- NULL
-    for (i in 1:M) {
-      
-      if(in_sample[i] == T){
-        mu_dri <- est_value_boot_trans
-        # Get value of first domain
-        mu_dri <- mu_dri[i]
+    if (backtranformation == "sm") {
+      int_value <- NULL
+      for (i in 1:M) {
         
-        Var_dri <- est_value_boot_trans_var_
-        Var_dri <- as.numeric(Var_dri[i])
-        
-        integrand <- function(x, mean, sd){sin(x)^2 * dnorm(x, mean = mu_dri,
-                                                            sd = sqrt(Var_dri))}
-        
-        upper_bound <- min(mean(framework$direct) + 10 * sd(framework$direct),
-                           mu_dri + 100 * sqrt(Var_dri))
-        lower_bound <- max(mean(framework$direct) - 10 * sd(framework$direct),
-                           mu_dri - 100 * sqrt(Var_dri))
-        
-        int_value <- c(int_value, integrate(integrand, lower = 0, upper = pi/2)$value)
-      }else{
+        if(in_sample[i] == T){
+          mu_dri <- est_value_boot_trans
+          # Get value of first domain
+          mu_dri <- mu_dri[i]
+          
+          Var_dri <- est_value_boot_trans_var_
+          Var_dri <- as.numeric(Var_dri[i])
+          
+          integrand <- function(x, mean, sd){sin(x)^2 * dnorm(x, mean = mu_dri,
+                                                              sd = sqrt(Var_dri))}
+          
+          upper_bound <- min(mean(framework$direct) + 10 * sd(framework$direct),
+                             mu_dri + 100 * sqrt(Var_dri))
+          lower_bound <- max(mean(framework$direct) - 10 * sd(framework$direct),
+                             mu_dri - 100 * sqrt(Var_dri))
+          
+          int_value <- c(int_value, integrate(integrand, lower = 0, upper = pi/2)$value)
+        }else{
+          int_value <- c(int_value, (sin(est_value_boot_trans[i]))^2)
+        }
+      }
+    } else if (backtransformation == "naive") {
+      int_value <- NULL
+      for (i in 1:M) {
         int_value <- c(int_value, (sin(est_value_boot_trans[i]))^2)
       }
     }
