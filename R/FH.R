@@ -128,9 +128,12 @@
 #' robust extensions of the Fay-Herriot model. For an extensive overview of the possible 
 #' MSE options please refer to the Vignette. Required argument when 
 #' \code{MSE = TRUE}. Defaults to "\code{analytical}".
-#' @param B a number determining the number of bootstrap iterations when a bootstrap 
-#' MSE estimator is choosen. The number must be greater than 1. Defaults to \code{NULL}.
-#' For practical applications, values larger than 200 are recommended.
+#' @param B a number determining the number of bootstrap iterations. When a 
+#' bootstrap MSE estimator is choosen, \code{B} regulates the MSE estimation. 
+#' When the standard FH model is applied and \code{B} is not \code{NULL}, the 
+#' information criteria by Marhuenda et al. (2014) are computed. The number must 
+#' be greater than 1. Defaults to \code{NULL}. For practical applications, 
+#' values larger than 200 are recommended.
 #' @param alpha a numeric value that determines the confidence level for the
 #' confidence intervals.
 #' @param seed an integer to set the seed for the random number generator. For 
@@ -179,6 +182,9 @@
 #' Li, H. and Lahiri, P. (2010), An adjusted maximum likelihood method for 
 #' solving small area estimation problems, Journal of Multivariate Analyis 101,
 #' 882-902. \cr \cr
+#' Marhuenda, Y., Morales, D. and Pardo, M.C. (2014). Information criteria for 
+#' Fay-Herriot model selection. Computational Statistics and Data Analysis 70, 
+#' 268-280. \cr \cr
 #' Neves, A., Silva, D. and Correa, S. (2013), Small domain estimation for the
 #' Brazilian service sector survey, ESTADISTICA 65(185), 13-37. \cr \cr
 #' Prasad, N. and Rao, J. (1990), The estimation of the mean squared error of 
