@@ -381,7 +381,7 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol){
   if(it >= maxit && eps >= tol) 
   {
     convergence <- FALSE
-    print("The variance estimation algorithm did not converge.")
+    #print("The variance estimation algorithm did not converge.")
   } else
     convergence <- TRUE
   
@@ -494,7 +494,7 @@ SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
     if(it >= maxit && eps >= tol) 
     {
       convergence <- FALSE
-      print("The variance estimation algorithm did not converge.")
+      #print("The variance estimation algorithm did not converge.")
     } else
       convergence <- TRUE
 

@@ -358,10 +358,8 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                                 mse_type = mse_type, B = B)
         MSE <- MSE_data$MSE_data
         MSE_method <- MSE_data$MSE_method
-        if (mse_type == "spatialnonparboot"){
-          MSE_boot <- MSE_data$bootstrapMSE
-          estTheta <- MSE_data$estTheta
-          trueTheta <- MSE_data$trueTheta
+        if (mse_type == "spatialnonparboot" | mse_type == "spatialparboot"){
+          successful_bootstraps <- MSE_data$successful_bootstraps
         }
         
       } else {
@@ -375,12 +373,9 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
          #                 Gamma = eblup$gamma)
       
       if (method != "moment") {
-        if (mse_type == "spatialnonparboot"){
+        if (mse_type == "spatialnonparboot" | mse_type == "spatialparboot"){
           out <- list(ind = eblup$EBLUP_data,
                       MSE = MSE,
-                      MSE_boot = MSE_boot,
-                      estTheta = estTheta,
-                      trueTheta = trueTheta,
                       transform_param = NULL,
                       model = list(coefficients = eblup$coefficients,
                                    variance = sigmau2,
@@ -398,7 +393,7 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                                     MSE_method = MSE_method),
                       fixed = fixed,
                       call = call,
-                      successful_bootstraps = NULL
+                      successful_bootstraps = successful_bootstraps
           )
         } else if (correlation == "spatial"){
           out <- list(ind = eblup$EBLUP_data,

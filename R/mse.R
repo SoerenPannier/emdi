@@ -321,8 +321,10 @@ prasad_rao_spatial <- function(framework, sigmau2, combined_data, method) {
     GV.rhoiDrhoWDrhoWt   <- GV.rhoi%*%DrhoWDrhoWt
     GV.rhoiDrhoWDrhoWtmat <- GV.rhoi%*%DrhoWDrhoWtmat
     V.rhoiDrhoWDrhoWt    <- V.rhoi%*%DrhoWDrhoWt
-    dg1_dDrhoWDrhoWt  <- DrhoWDrhoWt   - 2*GV.rhoiDrhoWDrhoWt   + sigmau2$sigmau2*GV.rhoiDrhoWDrhoWt%*%V.rhoiDrhoWDrhoWt
-    dg1_dp  <- DrhoWDrhoWtmat - 2*GV.rhoiDrhoWDrhoWtmat + sigmau2$sigmau2*GV.rhoiDrhoWDrhoWtmat%*%V.rhoiDrhoWDrhoWt
+    dg1_dDrhoWDrhoWt  <- DrhoWDrhoWt   - 2*GV.rhoiDrhoWDrhoWt   + 
+      sigmau2$sigmau2*GV.rhoiDrhoWDrhoWt%*%V.rhoiDrhoWDrhoWt
+    dg1_dp  <- DrhoWDrhoWtmat - 2*GV.rhoiDrhoWDrhoWtmat + 
+      sigmau2$sigmau2*GV.rhoiDrhoWDrhoWtmat%*%V.rhoiDrhoWDrhoWt
     grad.g1d <- matrix(0, nrow=2, ncol=1) 
     
     bMLgrad.g1 <- rep(0, framework$m)   
@@ -344,8 +346,15 @@ prasad_rao_spatial <- function(framework, sigmau2, combined_data, method) {
   # Small area MSE
   MSE_data$FH[framework$obs_dom == TRUE] <- mse
   MSE_data$Out[framework$obs_dom == TRUE] <- 0
-  MSE_data$FH[framework$obs_dom == FALSE] <- NA
-  MSE_data$Out[framework$obs_dom == FALSE] <- 1
+  
+  if (!all(framework$obs_dom == TRUE)) {
+    MSE_data$FH[framework$obs_dom == FALSE] <- NA
+    MSE_data$Out[framework$obs_dom == FALSE] <- 1
+    
+    cat("Please note that only for in-sample-domains an analytical MSE for the 
+spatial FH model is implemented. For the out-of-sample domains,
+        no estimate for the MSE is returned. For the reference see help(fh).")
+  }
  # }
   
   
@@ -688,19 +697,17 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   estTheta <- matrix(0, framework$M, B)
   trueTheta <- matrix(0, framework$M, B)
   difmse.npb <- matrix(0,framework$M,1)
-  #difmse.npb1=matrix(0,nrow(b1),1)
-  #difg3Spat.npb1=matrix(0,nrow(b1),1)
   g1.help <- matrix(0,framework$m,1)
   g2.help <- matrix(0,framework$m,1)
   difg1.npb <- matrix(0,framework$m,1)
   difg2.npb <- matrix(0,framework$m,1)
   difg3.npb <- matrix(0,framework$m,1)
   difmse.npbBC <- matrix(0,framework$M,1)
+  # Successfull bootstraps
+  notSuc <- matrix(0,B,1)
   
   # Bootstrap algorithm
-  b <- 1
-  while (b <= B) 
-  {
+  for (b in 1:B){
     
     # Bootstrap data
     u.boot <- sample(std.u,framework$m,replace=TRUE)
@@ -759,8 +766,10 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     
     # New sample if estimated parameters are not acceptable 
     if (sigmau2.boot$convergence==FALSE | sigmau2.boot$sigmau2 <0 | 
-        sigmau2.boot$rho <(-1) | sigmau2.boot$rho>1)
-    next
+        sigmau2.boot$rho <(-1) | sigmau2.boot$rho>1){
+      notSuc[b,] <- 1 
+      next
+    }  
     
     cat("b =",b,"\n")
   
@@ -820,17 +829,20 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     
     difg1.npb <- difg1.npb + g1.help
     difg2.npb <- difg2.npb + g2.help
-    
-    b <- b + 1
+  
   }
   # Naive nonparametric bootstrap MSE estimator
   mse.npb <- difmse.npb[,1]/B
   
+  # Number of successful bootstrap iterations
+  NoSuc <- (B - sum(notSuc[,1]))
+  
   # Bias-corrected nonparametric bootstrap MSE estimator
-  g3.npb <- difg3.npb/B
-  g1.npb  <-difg1.npb/B
-  g2.npb <- difg2.npb/B
-  mse.npbBC <- 2*(g1 + g2) - difg1.npb[,1]/B - difg2.npb[,1]/B + difg3.npb[,1]/B
+  g3.npb <- difg3.npb/NoSuc
+  g1.npb  <-difg1.npb/NoSuc
+  g2.npb <- difg2.npb/NoSuc
+  mse.npbBC <- 2*(g1 + g2) - difg1.npb[,1]/NoSuc - difg2.npb[,1]/NoSuc + 
+    difg3.npb[,1]/NoSuc
  
   MSE_data <- data.frame(Domain = combined_data[[framework$domains]])
   MSE_data$Var <- NA
@@ -843,11 +855,11 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   MSE_data$Out[framework$obs_dom == TRUE] <- 0
   MSE_data$Out[framework$obs_dom == FALSE] <- 1
   
+  notSuc <- paste(NoSuc,"out of", B)
+  
   MSE_data <- list(MSE_data = MSE_data,
                    MSE_method = "non-parametric bootstrap",
-                   bootstrapMSE = bootstrapMSE,
-                   estTheta = estTheta,
-                   trueTheta = trueTheta)
+                   successful_bootstraps = notSuc)
 
 }
 
@@ -1002,7 +1014,15 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   MSE_data$FH <- mse.pb
   MSE_data$FH.BC <- mse.pbBC
   MSE_data$Out[framework$obs_dom == TRUE] <- 0
-  MSE_data$Out[framework$obs_dom == FALSE] <- 1
+  
+  if (!all(framework$obs_dom == TRUE)) {
+    MSE_data$FH[framework$obs_dom == FALSE] <- NA
+    MSE_data$Out[framework$obs_dom == FALSE] <- 1
+    
+    cat("Please note that only for in-sample-domains the parametric bootstrap MSE 
+estimator for the spatial FH model is implemented. For the out-of-sample domains, 
+        no estimate for the MSE is returned. For the reference see help(fh).")
+  }
   
   MSE_data <- list(MSE_data = MSE_data,
                    MSE_method = "parametric bootstrap")
@@ -1415,7 +1435,14 @@ pseudo <- function(framework, combined_data, eblup, mse_type, method){
   if (is.element("reblup", method)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$pseudo
   if (is.element("reblupbc", method)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$pseudobc
   MSE_data$Out[framework$obs_dom == TRUE] <- 0
-  MSE_data$Out[framework$obs_dom == FALSE] <- 1
+  if (!all(framework$obs_dom == TRUE)) {
+    MSE_data$FH[framework$obs_dom == FALSE] <- NA
+    MSE_data$Out[framework$obs_dom == FALSE] <- 1
+    
+    cat("Please note that only for in-sample-domains the pseudo MSE estimator 
+for the robust FH model is implemented. For the out-of-sample domains, 
+        no estimate for the MSE is returned. For the reference see help(fh).")
+  }
   
   MSE_data <- list(MSE_data = MSE_data,
                    MSE_method = "pseudo linearization")
@@ -1429,7 +1456,14 @@ robustboot <- function(framework, combined_data, eblup, mse_type, B, method){
   if (is.element("reblup", method)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$boot
   if (is.element("reblupbc", method)) MSE_data$FH[framework$obs_dom == TRUE] <- MSE$bootbc
   MSE_data$Out[framework$obs_dom == TRUE] <- 0
-  MSE_data$Out[framework$obs_dom == FALSE] <- 1
+  if (!all(framework$obs_dom == TRUE)) {
+    MSE_data$FH[framework$obs_dom == FALSE] <- NA
+    MSE_data$Out[framework$obs_dom == FALSE] <- 1
+    
+    cat("Please note that only for in-sample-domains the bootstrap MSE estimator 
+for the robust FH model is implemented. For the out-of-sample domains, 
+        no estimate for the MSE is returned. For the reference see help(fh).")
+  }
   
   MSE_data <- list(MSE_data = MSE_data,
                    MSE_method = "bootstrap")
