@@ -4,6 +4,7 @@
 \alias{step_fh}
 \title{Step function}
 \usage{
+<<<<<<< HEAD:man/step_fh.Rd
 step_fh(
   object,
   scope = NULL,
@@ -12,6 +13,10 @@ step_fh(
   trace = TRUE,
   steps = 1000
 )
+=======
+step_fh(object, scope = NULL, criteria = "AIC", direction = c("both",
+  "backward", "forward"), trace = TRUE, steps = 1000)
+>>>>>>> 8c88fdf6392c0329342e98e7a539c9627cdc8f6c:man/step.fh.Rd
 }
 \arguments{
 \item{object}{an object of type "fh" that contains the chosen information 
