@@ -78,6 +78,7 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
                                    method = method, interval = interval,
                                    B = B, alpha = alpha, backtransformation = backtransformation)
           MSE_boot <- tmp_out[[2]]
+          MSE_data$FH <- MSE_boot$MSE
           MSE_method <- "bootstrap"
 
         } else if (mse_type == "jackknife" | mse_type == "weighted_jackknife") {
