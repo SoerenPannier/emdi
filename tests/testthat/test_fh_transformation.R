@@ -86,16 +86,6 @@ test_that("Does the fh function with a arcsin transformation return the same
                                        backtransformation = "naive", 
                                        eff_smpsize = "n", MSE = TRUE,
                                        mse_type = "weighted_jackknife")
-            fh_arcsin_naive_boot <- fh(fixed = MTMED ~ cash + age_ben + rent + 
-                                         house_allow, 
-                                        vardir = "Var_MTMED", 
-                                        combined_data = combined_data, 
-                                        domains = "Domain",
-                                        method = "ml", interval = c(0, 10000000), 
-                                        transformation = "arcsin", 
-                                        backtransformation = "naive", 
-                                        eff_smpsize = "n", MSE = TRUE,
-                                        mse_type = "boot", B = 3, seed = 123)
             
             # Status quo (benchmark)
             transf_arcsin_naive <- read.csv("FH/transf_arcsin_naive.csv", sep = ",")  
@@ -110,13 +100,6 @@ test_that("Does the fh function with a arcsin transformation return the same
             # MSE weighted jackknife
             expect_equal(fh_arcsin_naive_wjack$MSE$FH, 
                          transf_arcsin_naive$MSE_wjack)
-            # MSE bootstrap confidence intervals
-            # LCI
-            expect_equal(fh_arcsin_naive_boot$MSE$FH_LCI, 
-                         transf_arcsin_naive$LCI)
-            # UCI
-            expect_equal(fh_arcsin_naive_boot$MSE$FH_UCI, 
-                         transf_arcsin_naive$UCI)
             # Variance
             expect_equal(fh_arcsin_naive_jack$model$variance, 
                          transf_arcsin_naive$variance[1])
