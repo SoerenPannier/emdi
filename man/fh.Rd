@@ -5,12 +5,29 @@
 \title{Standard and extended Fay-Herriot models for disaggregated indicators like 
 means and ratios}
 \usage{
-fh(fixed, vardir, combined_data, domains, method = "reml",
-  interval = c(0, 1000), k = 1.345, c = 1, transformation = "no",
-  backtransformation = NULL, eff_smpsize = NULL, correlation = "no",
-  corMatrix = NULL, Ci = NULL, tol = 1e-06, maxit = 100,
-  MSE = FALSE, mse_type = "analytical", B = NULL, seed = NULL,
-  alpha = 0.05)
+fh(
+  fixed,
+  vardir,
+  combined_data,
+  domains,
+  method = "reml",
+  interval = c(0, 1000),
+  k = 1.345,
+  c = 1,
+  transformation = "no",
+  backtransformation = NULL,
+  eff_smpsize = NULL,
+  correlation = "no",
+  corMatrix = NULL,
+  Ci = NULL,
+  tol = 1e-06,
+  maxit = 100,
+  MSE = FALSE,
+  mse_type = "analytical",
+  B = NULL,
+  seed = NULL,
+  alpha = 0.05
+)
 }
 \arguments{
 \item{fixed}{a two-sided linear formula object describing the
@@ -161,7 +178,7 @@ corresponding MSE estimates. Generic functions such as \code{\link{estimators}},
 \code{\link{print}}, \code{\link{plot}} and \code{\link{summary}} have methods 
 that can be used to obtain further information. Additionally, for the standard 
 Fay-Herriot model that is estimated via ML variance estimation a model selection 
-function is provided (\code{\link{step.fh}}). See \code{\link{fhObject}} for 
+function is provided (\code{\link{step_fh}}). See \code{\link{fhObject}} for 
 descriptions of components of objects of class "fh".
 }
 \description{
