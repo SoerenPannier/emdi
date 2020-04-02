@@ -18,7 +18,8 @@ test_that("Does the fh function in emdi return the same variance, EBLUP and MSE
                          method = "reml", interval = c(0, 1000), MSE = TRUE)
   
   # Estimation with mseFH of sae (benchmark)
-  fh_reml_sae <- read.csv("FH/fh_reml_sae.csv", sep = ",") 
+  fh_reml_sae <- read.csv("FH/fh_reml_sae.csv", sep = ",", 
+                          stringsAsFactors = TRUE) 
   
   # Comparison
   # Variance
@@ -35,7 +36,8 @@ test_that("Does the fh function in emdi return the same variance, EBLUP and MSE
                 method = "ml", interval = c(0, 1000), MSE = TRUE)
   
   # Estimation with mseFH of sae (benchmark)
-  fh_ml_sae <- read.csv("FH/fh_ml_sae.csv", sep = ",") 
+  fh_ml_sae <- read.csv("FH/fh_ml_sae.csv", sep = ",", 
+                        stringsAsFactors = TRUE) 
 
   # Comparison
   # Variance
@@ -75,7 +77,8 @@ test_that("Does the fh function in emdi return the same variance, correlation
  
   # Estimation with mseFH of sae (benchmark)
   fh_spatial_reml_analytical_sae <- read.csv("FH/fh_spatial_reml_analytical_sae.csv", 
-                                             sep = ",") 
+                                             sep = ",", 
+                                             stringsAsFactors = TRUE) 
   
   # Comparison
   # Variance
@@ -101,7 +104,9 @@ test_that("Does the fh function in emdi return the same variance, correlation
                                    mse_type = "analytical")
   
   # Estimation with mseFH of sae (benchmark)
-  fh_spatial_ml_analytical_sae <- read.csv("FH/fh_spatial_ml_analytical_sae.csv", sep = ",") 
+  fh_spatial_ml_analytical_sae <- read.csv("FH/fh_spatial_ml_analytical_sae.csv", 
+                                           sep = ",", 
+                                           stringsAsFactors = TRUE) 
   
   # Comparison
   # Variance
@@ -135,7 +140,9 @@ test_that("Does the fh function in emdi return the same variance, correlation
                             mse_type = "spatialnonparboot", B = 3, seed = 123)
             
  # Estimation with mseFH of sae (benchmark)
-  fh_spatial_reml_npb_sae <- read.csv("FH/fh_spatial_reml_npb_sae.csv", sep = ",") 
+  fh_spatial_reml_npb_sae <- read.csv("FH/fh_spatial_reml_npb_sae.csv", 
+                                      sep = ",", 
+                                      stringsAsFactors = TRUE) 
  
   # Comparison
   # Variance
@@ -172,7 +179,8 @@ test_that("Does the fh function in emdi return the same variance, correlation
                            mse_type = "spatialparboot", B = 3, seed = 123)
             
   # Estimation with mseFH of sae (benchmark)
-  fh_spatial_reml_pb_sae <- read.csv("FH/fh_spatial_reml_pb_sae.csv", sep = ",") 
+  fh_spatial_reml_pb_sae <- read.csv("FH/fh_spatial_reml_pb_sae.csv", sep = ",", 
+                                     stringsAsFactors = TRUE) 
           
   # Comparison
   # Variance
@@ -202,7 +210,8 @@ test_that("Does the fh function in emdi return the same variance, correlation
                          mse_type = "spatialparboot", B = 3, seed = 123)
   
   # Estimation with mseFH of sae (benchmark)
-  fh_spatial_ml_pb_sae <- read.csv("FH/fh_spatial_ml_pb_sae.csv", sep = ",") 
+  fh_spatial_ml_pb_sae <- read.csv("FH/fh_spatial_ml_pb_sae.csv", sep = ",", 
+                                   stringsAsFactors = TRUE) 
     
   # Comparison
   # Variance
@@ -244,7 +253,8 @@ test_that("Does the fh function in emdi return the same variance, EBLUP and MSE
                           MSE = TRUE, mse_type = "pseudo")
            
   # Estimation with mseFH of sae (benchmark)
-  fh_robust_saeRobust <- read.csv("FH/fh_robust_saeRobust.csv", sep = ",") 
+  fh_robust_saeRobust <- read.csv("FH/fh_robust_saeRobust.csv", sep = ",", 
+                                  stringsAsFactors = TRUE) 
   
   # Comparison
   # Variance
@@ -264,7 +274,8 @@ test_that("Does the fh function in emdi return the same variance, EBLUP and MSE
                   c = 2, MSE = TRUE, mse_type = "pseudo")
   
   # Estimation with fitRFH of saeRobust (benchmark)
-  fh_robustbc_saeRobust <- read.csv("FH/fh_robustbc_saeRobust.csv", sep = ",") 
+  fh_robustbc_saeRobust <- read.csv("FH/fh_robustbc_saeRobust.csv", sep = ",", 
+                                    stringsAsFactors = TRUE) 
 
   # Comparison
   # Variance
@@ -291,7 +302,9 @@ test_that("Does the fh function in emdi return the same variance, EBLUP and MSE
                           MSE = TRUE, mse_type = "boot", B = 3, seed = 123)
             
   # Estimation with fitRFH of saeRobust (benchmark)
-  fh_robust_boot_saeRobust <- read.csv("FH/fh_robust_boot_saeRobust.csv", sep = ",") 
+  fh_robust_boot_saeRobust <- read.csv("FH/fh_robust_boot_saeRobust.csv", 
+                                       sep = ",", 
+                                       stringsAsFactors = TRUE) 
   
   # Comparison
   # Variance
@@ -311,7 +324,9 @@ test_that("Does the fh function in emdi return the same variance, EBLUP and MSE
                          c = 2, MSE = TRUE, mse_type = "boot", B = 3, seed = 123)
             
   # Estimation with fitRFH of saeRobust (benchmark)
-  fh_robustbc_boot_saeRobust <- read.csv("FH/fh_robustbc_boot_saeRobust.csv", sep = ",") 
+  fh_robustbc_boot_saeRobust <- read.csv("FH/fh_robustbc_boot_saeRobust.csv", 
+                                         sep = ",", 
+                                         stringsAsFactors = TRUE) 
   
   # Comparison
   # Variance
@@ -342,7 +357,9 @@ test_that("Does the fh function in emdi return the same variance, correlation
                           MSE = TRUE, mse_type = "pseudo")
             
   # Estimation with fitRFH of saeRobust (benchmark)
-  fh_robust_spatial_saeRobust <- read.csv("FH/fh_robust_spatial_saeRobust.csv", sep = ",")
+  fh_robust_spatial_saeRobust <- read.csv("FH/fh_robust_spatial_saeRobust.csv", 
+                                          sep = ",", 
+                                          stringsAsFactors = TRUE)
   # Comparison
   # Variance
   expect_equal(unname(fh_robust_spatial$model$variance[2]), 
@@ -367,7 +384,9 @@ test_that("Does the fh function in emdi return the same variance, correlation
                              MSE = TRUE, mse_type = "pseudo")
             
   # Estimation with fitRFH of saeRobust (benchmark)
-  fh_robustbc_spatial_saeRobust <- read.csv("FH/fh_robustbc_spatial_saeRobust.csv", sep = ",") 
+  fh_robustbc_spatial_saeRobust <- read.csv("FH/fh_robustbc_spatial_saeRobust.csv", 
+                                            sep = ",", 
+                                            stringsAsFactors = TRUE) 
   
   # Comparison
   # Variance
@@ -403,7 +422,9 @@ test_that("Does the fh function in emdi return the same variance, correlation
                                MSE = TRUE, mse_type = "boot", B = 3, seed = 123)
             
   # Estimation with fitRFH of saeRobust (benchmark)
-  fh_robust_spatial_boot_saeRobust <- read.csv("FH/fh_robust_spatial_boot_saeRobust.csv", sep = ",") 
+  fh_robust_spatial_boot_saeRobust <- read.csv("FH/fh_robust_spatial_boot_saeRobust.csv", 
+                                               sep = ",", 
+                                               stringsAsFactors = TRUE) 
  
   # Comparison
   # Variance
@@ -432,7 +453,9 @@ test_that("Does the fh function in emdi return the same variance, correlation
                                   B = 3, seed = 123)
             
   # Estimation with fitRFH of saeRobust (benchmark)
-  fh_robust_spatial_bc_boot_saeRobust <- read.csv("FH/fh_robust_spatial_bc_boot_saeRobust.csv", sep = ",") 
+  fh_robust_spatial_bc_boot_saeRobust <- read.csv("FH/fh_robust_spatial_bc_boot_saeRobust.csv", 
+                                                  sep = ",", 
+                                                  stringsAsFactors = TRUE) 
  
   # Comparison
   # Variance

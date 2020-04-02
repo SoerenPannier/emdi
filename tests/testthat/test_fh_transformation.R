@@ -24,7 +24,8 @@ test_that("Does the fh function with a log transformation return the same
                                backtransformation = "crude", MSE = TRUE)
           
             # Status quo (benchmark)
-            transf_log_crude <- read.csv("FH/transf_log_crude.csv", sep = ",")  
+            transf_log_crude <- read.csv("FH/transf_log_crude.csv", sep = ",", 
+                                         stringsAsFactors = TRUE)  
             
             # Compare results from current version and benchmark
             # EBLUP
@@ -46,7 +47,8 @@ test_that("Does the fh function with a log transformation return the same
                             MSE = TRUE)
           
             # Status quo (benchmark)
-            transf_log_sm <- read.csv("FH/transf_log_sm.csv", sep = ",")  
+            transf_log_sm <- read.csv("FH/transf_log_sm.csv", sep = ",", 
+                                      stringsAsFactors = TRUE)  
             
             # Compare results from current version and benchmark
             # EBLUP
@@ -88,7 +90,9 @@ test_that("Does the fh function with a arcsin transformation return the same
                                        mse_type = "weighted_jackknife")
             
             # Status quo (benchmark)
-            transf_arcsin_naive <- read.csv("FH/transf_arcsin_naive.csv", sep = ",")  
+            transf_arcsin_naive <- read.csv("FH/transf_arcsin_naive.csv", 
+                                            sep = ",", 
+                                            stringsAsFactors = TRUE)  
             
             # Compare results from current version and benchmark
             # EBLUP
@@ -135,7 +139,8 @@ test_that("Does the fh function with a arcsin transformation return the same
                                     mse_type = "boot", B = 3, seed = 123)
            
             # Status quo (benchmark)
-            transf_arcsin_sm <- read.csv("FH/transf_arcsin_sm.csv", sep = ",")  
+            transf_arcsin_sm <- read.csv("FH/transf_arcsin_sm.csv", sep = ",", 
+                                         stringsAsFactors = TRUE)  
            
             # Compare results from current version and benchmark
             # EBLUP

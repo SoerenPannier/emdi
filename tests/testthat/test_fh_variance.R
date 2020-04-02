@@ -17,7 +17,8 @@ test_that("Does the variance estimation (and resulting EBLUPs and MSEs)
                         combined_data = combined_data, domains = "Domain",
                         method = "ml", interval = c(0, 10000000), MSE = TRUE)
             # ML model fitting status quo (benchmark)
-            ML_modelfit <- read.csv("FH/ML_modelfit.csv", sep = ",")  
+            ML_modelfit <- read.csv("FH/ML_modelfit.csv", sep = ",", 
+                                    stringsAsFactors = TRUE)  
             
             # Compare results from current version and benchmark
             # EBLUP
@@ -36,7 +37,8 @@ test_that("Does the variance estimation (and resulting EBLUPs and MSEs)
                           method = "reml", interval = c(0, 10000000), MSE = TRUE)
             
             # REML model fitting status quo (benchmark)
-            REML_modelfit <- read.csv("FH/REML_modelfit.csv", sep = ",")  
+            REML_modelfit <- read.csv("FH/REML_modelfit.csv", sep = ",", 
+                                      stringsAsFactors = TRUE)  
   
             # Compare results from current version and benchmark
             # EBLUP
@@ -54,7 +56,8 @@ test_that("Does the variance estimation (and resulting EBLUPs and MSEs)
                           method = "ampl", interval = c(0, 10000000), MSE = TRUE)
             
             # AMPL model fitting status quo (benchmark)
-            AMPL_modelfit <- read.csv("FH/AMPL_modelfit.csv", sep = ",")  
+            AMPL_modelfit <- read.csv("FH/AMPL_modelfit.csv", sep = ",", 
+                                      stringsAsFactors = TRUE)  
             
             # Compare results from current version and benchmark
             # EBLUP
@@ -72,7 +75,8 @@ test_that("Does the variance estimation (and resulting EBLUPs and MSEs)
                           method = "amrl", interval = c(0, 10000000), MSE = TRUE)
             
             # AMRL model fitting status quo (benchmark)
-            AMRL_modelfit <- read.csv("FH/AMRL_modelfit.csv", sep = ",")  
+            AMRL_modelfit <- read.csv("FH/AMRL_modelfit.csv", sep = ",", 
+                                      stringsAsFactors = TRUE)  
             
             # Compare results from current version and benchmark
             # EBLUP
@@ -90,7 +94,8 @@ test_that("Does the variance estimation (and resulting EBLUPs and MSEs)
                              method = "ampl_yl", interval = c(0, 10000000), MSE = TRUE)
             
             # AMPL model fitting status quo (benchmark)
-            AMPL_YL_modelfit <- read.csv("FH/AMPL_YL_modelfit.csv", sep = ",")  
+            AMPL_YL_modelfit <- read.csv("FH/AMPL_YL_modelfit.csv", sep = ",", 
+                                         stringsAsFactors = TRUE)  
             
             # Compare results from current version and benchmark
             # EBLUP
@@ -108,7 +113,8 @@ test_that("Does the variance estimation (and resulting EBLUPs and MSEs)
                              method = "amrl_yl", interval = c(0, 10000000), MSE = TRUE)
             
             # AMRL_YL model fitting status quo (benchmark)
-            AMRL_YL_modelfit <- read.csv("FH/AMRL_YL_modelfit.csv", sep = ",")  
+            AMRL_YL_modelfit <- read.csv("FH/AMRL_YL_modelfit.csv", sep = ",", 
+                                         stringsAsFactors = TRUE)  
 
             # Compare results from current version and benchmark
             # EBLUP
