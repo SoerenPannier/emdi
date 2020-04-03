@@ -8,7 +8,8 @@
 #' @return The values of the test statistics and their corresponding p values.
 #' @details When creating the proximity matrix \code{corMatrix}, please make 
 #' sure that the elements of \code{direct} and \code{corMatrix} are sorted 
-#' equally.
+#' equally and that \code{direct} and \code{corMatrix} do not contain any 
+#' \code{NA}s.
 #' @references Bivand, R. (2019), spdep: Spatial Dependence: Weighting Schemes, 
 #' Statistics. R package.
 #' @importFrom spdep geary.test mat2listw moran.test
