@@ -831,11 +831,11 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     difg2.npb <- difg2.npb + g2.help
   
   }
-  # Naive nonparametric bootstrap MSE estimator
-  mse.npb <- difmse.npb[,1]/B
-  
   # Number of successful bootstrap iterations
   NoSuc <- (B - sum(notSuc[,1]))
+  
+  # Naive nonparametric bootstrap MSE estimator
+  mse.npb <- difmse.npb[,1]/NoSuc
   
   # Bias-corrected nonparametric bootstrap MSE estimator
   g3.npb <- difg3.npb/NoSuc
@@ -916,6 +916,9 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   difg2.pb <- matrix(0, framework$m, 1)
   difg3.pb <- matrix(0, framework$m, 1)
   difmse.pbBC <- matrix(0, framework$m, 1)
+  # Successfull bootstraps
+  notSuc <- matrix(0,B,1)
+  
   
   # Bootstrap algorithm
   for (b in 1:B){
@@ -952,9 +955,13 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     
     
     # New sample if estimated parameters are not acceptable 
-     if (sigmau2.boot$convergence==FALSE | sigmau2.boot$sigmau2 <0 | 
-         sigmau2.boot$rho <(-1) | sigmau2.boot$rho>1)
-     next
+    # New sample if estimated parameters are not acceptable 
+    if (sigmau2.boot$convergence==FALSE | sigmau2.boot$sigmau2 <0 | 
+        sigmau2.boot$rho <(-1) | sigmau2.boot$rho>1){
+      notSuc[b,] <- 1 
+      next
+    }  
+    
     
     cat("b =",b,"\n")
     
@@ -994,15 +1001,19 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     difg1.pb <- difg1.pb + g1.help
     difg2.pb <- difg2.pb + g2.help
   }
+  
+  # Number of successful bootstrap iterations
+  NoSuc <- (B - sum(notSuc[,1]))
+  
   # Naive parametric bootstrap MSE estimator
-  mse.pb <- difmse.pb[,1]/B
+  mse.pb <- difmse.pb[,1]/NoSuc
   
   # Bias-corrected parametric bootstrap MSE estimator
-  g1.pb  <-difg1.pb/B
-  g2.pb <- difg2.pb/B
-  g3.pb <- difg3.pb/B
+  g1.pb  <-difg1.pb/NoSuc
+  g2.pb <- difg2.pb/NoSuc
+  g3.pb <- difg3.pb/NoSuc
   
-  mse.pbBC <- 2*(g1 + g2) - difg1.pb[,1]/B - difg2.pb[,1]/B + difg3.pb[,1]/B
+  mse.pbBC <- 2*(g1 + g2) - difg1.pb[,1]/NoSuc - difg2.pb[,1]/NoSuc + difg3.pb[,1]/NoSuc
   
   
   
@@ -1024,8 +1035,11 @@ estimator for the spatial FH model is implemented. For the out-of-sample domains
         no estimate for the MSE is returned. For the reference see help(fh).")
   }
   
+  notSuc <- paste(NoSuc,"out of", B)
+  
   MSE_data <- list(MSE_data = MSE_data,
-                   MSE_method = "parametric bootstrap")
+                   MSE_method = "parametric bootstrap",
+                   successful_bootstraps = notSuc)
   
 }
 
