@@ -120,18 +120,24 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
                                || mse_type == "jackknife"
                                || mse_type == "weighted_jackknife"
                                || mse_type == "spatialnonparboot"
-                               || mse_type == "spatialparboot")))) {
-    stop("The seven mse types are ''analytical'', ''boot'', ''pseudo'', 
-         ''jackknife'', ''weighted_jackknife'', ''spatialnonparboot'' or 
-         ''spatialparboot''." )
+                               || mse_type == "spatialnonparbootbc"
+                               || mse_type == "spatialparboot"
+                               || mse_type == "spatialparbootbc")))) {
+    stop("The nine mse types are ''analytical'', ''boot'', ''pseudo'', 
+         ''jackknife'', ''weighted_jackknife'', ''spatialnonparboot'', 
+''spatialnonparbootbc'', ''spatialparboot'' or ''spatialparbootbc''." )
   } 
   if (MSE == TRUE && (mse_type == "boot" || mse_type == "spatialparboot" || 
-                      mse_type == "spatialnonparboot") && is.null(B)){
+                      mse_type == "spatialparbootbc" || 
+                      mse_type == "spatialnonparboot" ||
+                      mse_type == "spatialnonparbootbc") && is.null(B)){
     stop('If MSE is set to TRUE and a bootstrap MSE estimation method is chosen, 
           the argument B is required and cannot be NULL. See also help(fh).')
   }
   if (MSE == TRUE && (mse_type == "boot" || mse_type == "spatialparboot" || 
-                      mse_type == "spatialnonparboot") && 
+                      mse_type == "spatialparbootbc" || 
+                      mse_type == "spatialnonparboot" ||
+                      mse_type == "spatialnonparbootbc") && 
       !(is.numeric(B) && length(B) == 1 && B > 1)) {
     stop('If MSE is set to TRUE and a bootstrap MSE estimation method is chosen, 
           A single numeric value for the number of bootstrap samples (B) needs 
@@ -279,16 +285,19 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
   }
   if ((correlation == "spatial") && method == "reml" && MSE == TRUE && 
       !(mse_type == "analytical" || mse_type == "spatialparboot" || 
-        mse_type == "spatialnonparboot")){
+        mse_type == "spatialparbootbc" || mse_type == "spatialnonparboot" ||
+        mse_type == "spatialnonparbootbc")){
     stop("If correlation is set to ''spatial'' and ''reml'' variance estimation 
           method is chosen, possible mse_types are ''analytical'', 
-          ''spatialparboot'' and ''spatialnonparboot''. See also help(fh).")
+          ''spatialparboot'', ''spatialparbootbc'', ''spatialnonparboot'' and 
+         ''spatialnonparbootbc''. See also help(fh).")
   }
   if ((correlation == "spatial") && method == "ml" && MSE == TRUE && 
-      !(mse_type == "analytical" || mse_type == "spatialparboot")){
+      !(mse_type == "analytical" || mse_type == "spatialparboot" || 
+        mse_type == "spatialparbootbc")){
     stop("If correlation is set to ''spatial'' and ''ml'' variance estimation 
-          method is chosen, possible mse_types are ''analytical'' and 
-          ''spatialparboot''. See also help(fh).")
+          method is chosen, possible mse_types are ''analytical'', 
+''spatialparboot'' and ''spatialparbootbc''. See also help(fh).")
   }
   if ((transformation != "no") && is.null(backtransformation)){
     stop("If a transformation is chosen, the argument backtransformation is 

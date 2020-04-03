@@ -149,10 +149,14 @@ random effect ("\code{analytical}"),
 (iv) bootstrap ("\code{boot}"), 
 (v)  approximation of the MSE based on a pseudo linearisation 
 ("\code{pseudo}"),
-(vi) parametric bootstrap for the spatial Fay-Herriot model 
+(vi) naive parametric bootstrap for the spatial Fay-Herriot model 
 ("\code{spatialparboot}"),
-(vii) nonparametric bootstrap for the spatial Fay-Herriot model 
-("\code{spatialnonparboot}")
+#' (vii) bias corrected parametric bootstrap for the spatial Fay-Herriot model 
+("\code{spatialparbootbc}"),
+(viii) naive nonparametric bootstrap for the spatial Fay-Herriot model 
+("\code{spatialnonparboot}"),
+#' (ix) bias corrected nonparametric bootstrap for the spatial Fay-Herriot model 
+("\code{spatialnonparbootbc}").
 Options (ii)-(iv) are of interest when the arcsin transformation is selected. 
 Option (ii) must be chosen when an Ybarra-Lohr model is selected 
 (\code{method = moment}). Options (iv) and (v) are the MSE options for the 

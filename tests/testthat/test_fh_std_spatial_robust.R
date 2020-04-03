@@ -138,6 +138,13 @@ test_that("Does the fh function in emdi return the same variance, correlation
                             method = "reml", correlation = "spatial", 
                             corMatrix = as.matrix(grapesprox), MSE = TRUE, 
                             mse_type = "spatialnonparboot", B = 3, seed = 123)
+  
+  fh_spatial_reml_npb_bc <- fh(fixed = grapehect ~ area + workdays - 1, 
+                            vardir = "var", tol = 0.0001, maxit = 100, 
+                            combined_data = grapes, domains = "Domain", 
+                            method = "reml", correlation = "spatial", 
+                            corMatrix = as.matrix(grapesprox), MSE = TRUE, 
+                            mse_type = "spatialnonparbootbc", B = 3, seed = 123)
             
  # Estimation with mseFH of sae (benchmark)
   fh_spatial_reml_npb_sae <- read.csv("FH/fh_spatial_reml_npb_sae.csv", 
@@ -158,7 +165,7 @@ test_that("Does the fh function in emdi return the same variance, correlation
   expect_equal(fh_spatial_reml_npb$MSE$FH, 
                fh_spatial_reml_npb_sae$MSE, tolerance = 0.000001)
   # MSE bias corrected
-  expect_equal(fh_spatial_reml_npb$MSE$FH.BC, 
+  expect_equal(fh_spatial_reml_npb_bc$MSE$FH, 
                fh_spatial_reml_npb_sae$MSE.BC, tolerance = 0.000001)
 })
 
@@ -177,6 +184,13 @@ test_that("Does the fh function in emdi return the same variance, correlation
                            method = "reml", correlation = "spatial", 
                            corMatrix = as.matrix(grapesprox), MSE = TRUE, 
                            mse_type = "spatialparboot", B = 3, seed = 123)
+  
+  fh_spatial_reml_pb_bc <- fh(fixed = grapehect ~ area + workdays - 1, 
+                           vardir = "var", tol = 0.0001, maxit = 100, 
+                           combined_data = grapes, domains = "Domain", 
+                           method = "reml", correlation = "spatial", 
+                           corMatrix = as.matrix(grapesprox), MSE = TRUE, 
+                           mse_type = "spatialparbootbc", B = 3, seed = 123)
             
   # Estimation with mseFH of sae (benchmark)
   fh_spatial_reml_pb_sae <- read.csv("FH/fh_spatial_reml_pb_sae.csv", sep = ",", 
@@ -196,7 +210,7 @@ test_that("Does the fh function in emdi return the same variance, correlation
   expect_equal(fh_spatial_reml_pb$MSE$FH, 
                fh_spatial_reml_pb_sae$MSE)
   # MSE bias corrected
-  expect_equal(fh_spatial_reml_pb$MSE$FH.BC, 
+  expect_equal(fh_spatial_reml_pb_bc$MSE$FH, 
                fh_spatial_reml_pb_sae$MSE.BC)
   
   ############################ ML variance estimation ##########################
@@ -208,6 +222,13 @@ test_that("Does the fh function in emdi return the same variance, correlation
                          method = "ml", correlation = "spatial", 
                          corMatrix = as.matrix(grapesprox), MSE = TRUE, 
                          mse_type = "spatialparboot", B = 3, seed = 123)
+  
+  fh_spatial_ml_pb_bc <- fh(fixed = grapehect ~ area + workdays - 1, 
+                         vardir = "var", tol = 0.0001, maxit = 100, 
+                         combined_data = grapes, domains = "Domain", 
+                         method = "ml", correlation = "spatial", 
+                         corMatrix = as.matrix(grapesprox), MSE = TRUE, 
+                         mse_type = "spatialparbootbc", B = 3, seed = 123)
   
   # Estimation with mseFH of sae (benchmark)
   fh_spatial_ml_pb_sae <- read.csv("FH/fh_spatial_ml_pb_sae.csv", sep = ",", 
@@ -227,7 +248,7 @@ test_that("Does the fh function in emdi return the same variance, correlation
   expect_equal(fh_spatial_ml_pb$MSE$FH, 
                fh_spatial_ml_pb_sae$MSE)
   # MSE bias corrected
-  expect_equal(fh_spatial_ml_pb$MSE$FH.BC, 
+  expect_equal(fh_spatial_ml_pb_bc$MSE$FH, 
                fh_spatial_ml_pb_sae$MSE.BC)
 })
 

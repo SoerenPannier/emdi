@@ -118,10 +118,14 @@
 #' (iv) bootstrap ("\code{boot}"), 
 #' (v)  approximation of the MSE based on a pseudo linearisation 
 #' ("\code{pseudo}"),
-#' (vi) parametric bootstrap for the spatial Fay-Herriot model 
+#' (vi) naive parametric bootstrap for the spatial Fay-Herriot model 
 #' ("\code{spatialparboot}"),
-#' (vii) nonparametric bootstrap for the spatial Fay-Herriot model 
-#' ("\code{spatialnonparboot}")
+#' #' (vii) bias corrected parametric bootstrap for the spatial Fay-Herriot model 
+#' ("\code{spatialparbootbc}"),
+#' (viii) naive nonparametric bootstrap for the spatial Fay-Herriot model 
+#' ("\code{spatialnonparboot}"),
+#' #' (ix) bias corrected nonparametric bootstrap for the spatial Fay-Herriot model 
+#' ("\code{spatialnonparbootbc}").
 #' Options (ii)-(iv) are of interest when the arcsin transformation is selected. 
 #' Option (ii) must be chosen when an Ybarra-Lohr model is selected 
 #' (\code{method = moment}). Options (iv) and (v) are the MSE options for the 
@@ -358,7 +362,8 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                                 mse_type = mse_type, B = B)
         MSE <- MSE_data$MSE_data
         MSE_method <- MSE_data$MSE_method
-        if (mse_type == "spatialnonparboot" | mse_type == "spatialparboot"){
+        if (mse_type == "spatialnonparboot" | mse_type == "spatialnonparbootbc" |
+            mse_type == "spatialparboot" | mse_type == "spatialparbootbc"){
           successful_bootstraps <- MSE_data$successful_bootstraps
         }
         
@@ -373,7 +378,8 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
          #                 Gamma = eblup$gamma)
       
       if (method != "moment") {
-        if (mse_type == "spatialnonparboot" | mse_type == "spatialparboot"){
+        if (mse_type == "spatialnonparboot" | mse_type == "spatialnonparbootbc" |
+            mse_type == "spatialparboot" | mse_type == "spatialparbootbc"){
           out <- list(ind = eblup$EBLUP_data,
                       MSE = MSE,
                       transform_param = NULL,

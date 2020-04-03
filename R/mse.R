@@ -615,7 +615,7 @@ boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
 }
 
 nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
-                          eblup, B, transformation, method) {
+                          eblup, B, transformation, method, mse_type) {
   
   # MSE components
   g1 <- rep(0, framework$m)
@@ -848,23 +848,36 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   MSE_data$Var <- NA
   MSE_data$Var[framework$obs_dom == TRUE] <- framework$vardir
   
-  # Small area MSE
-  MSE_data$FH <- mse.npb
-  MSE_data$FH.BC <- NA
-  MSE_data$FH.BC[framework$obs_dom == TRUE] <- mse.npbBC
-  MSE_data$Out[framework$obs_dom == TRUE] <- 0
-  MSE_data$Out[framework$obs_dom == FALSE] <- 1
-  
   notSuc <- paste(NoSuc,"out of", B)
   
-  MSE_data <- list(MSE_data = MSE_data,
-                   MSE_method = "non-parametric bootstrap",
-                   successful_bootstraps = notSuc)
-
+  # Small area MSE
+  if (mse_type == "spatialnonparboot"){
+    MSE_data$FH <- mse.npb
+    MSE_data$Out[framework$obs_dom == TRUE] <- 0
+    MSE_data$Out[framework$obs_dom == FALSE] <- 1
+    MSE_data <- list(MSE_data = MSE_data,
+                     MSE_method = "naive non-parametric bootstrap",
+                     successful_bootstraps = notSuc)
+  }
+  if (mse_type == "spatialnonparbootbc"){
+    MSE_data$FH.BC <- NA
+    MSE_data$FH.BC[framework$obs_dom == TRUE] <- mse.npbBC
+    MSE_data$Out[framework$obs_dom == TRUE] <- 0
+    MSE_data$Out[framework$obs_dom == FALSE] <- 1
+    MSE_data <- list(MSE_data = MSE_data,
+                     MSE_method = "bias corrected non-parametric bootstrap",
+                     successful_bootstraps = notSuc)
+    cat("Please note that only for in-sample-domains the bias corrected 
+non-parametric bootstrap MSE estimator for the spatial FH model is implemented. 
+For the out-of-sample domains, no estimate for the MSE is returned. For the 
+        reference see help(fh).")
+  }
+  return(MSE_data)
 }
 
-parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
-                                      eblup, B, transformation, method) {
+parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir, 
+                                   eblup, B, transformation, method,
+                                   mse_type) {
   
   # MSE components
   g1 <- rep(0, framework$m)
@@ -1021,26 +1034,37 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   MSE_data$Var <- NA
   MSE_data$Var[framework$obs_dom == TRUE] <- framework$vardir
   
-  # Small area MSE
-  MSE_data$FH <- mse.pb
-  MSE_data$FH.BC <- mse.pbBC
-  MSE_data$Out[framework$obs_dom == TRUE] <- 0
+  notSuc <- paste(NoSuc,"out of", B)
   
-  if (!all(framework$obs_dom == TRUE)) {
-    MSE_data$FH[framework$obs_dom == FALSE] <- NA
+  # Small area MSE
+  if (mse_type == "spatialparboot"){
+    MSE_data$FH <- NA
+    MSE_data$FH[framework$obs_dom == TRUE]  <- mse.pb
+    MSE_data$Out[framework$obs_dom == TRUE] <- 0
     MSE_data$Out[framework$obs_dom == FALSE] <- 1
     
-    cat("Please note that only for in-sample-domains the parametric bootstrap MSE 
+    MSE_data <- list(MSE_data = MSE_data,
+                     MSE_method = "naive parametric bootstrap",
+                     successful_bootstraps = notSuc)
+    cat("Please note that only for in-sample-domains the naive parametric bootstrap MSE 
 estimator for the spatial FH model is implemented. For the out-of-sample domains, 
         no estimate for the MSE is returned. For the reference see help(fh).")
   }
-  
-  notSuc <- paste(NoSuc,"out of", B)
-  
-  MSE_data <- list(MSE_data = MSE_data,
-                   MSE_method = "parametric bootstrap",
-                   successful_bootstraps = notSuc)
-  
+  if (mse_type == "spatialparbootbc"){
+    MSE_data$FH <- NA
+    MSE_data$FH[framework$obs_dom == TRUE]  <- mse.pbBC
+    MSE_data$Out[framework$obs_dom == TRUE] <- 0
+    MSE_data$Out[framework$obs_dom == FALSE] <- 1
+    
+    MSE_data <- list(MSE_data = MSE_data,
+                     MSE_method = "bias corrected parametric bootstrap",
+                     successful_bootstraps = notSuc)
+    cat("Please note that only for in-sample-domains the bias corrected parametric 
+bootstrap MSE estimator for the spatial FH model is implemented. For the 
+out-of-sample domains, no estimate for the MSE is returned. For the reference 
+        see help(fh).")
+  }
+  return(MSE_data)
 }
 
 jiang_jackknife <- function(framework, combined_data, sigmau2, eblup, transformation,
@@ -1513,18 +1537,19 @@ wrapper_MSE <- function(framework, combined_data, sigmau2, vardir, Ci, eblup,
            mse_type = "pseudo", method = method)
   } else if (mse_type == "boot") {
     robustboot(framework = framework, combined_data = combined_data, eblup = eblup, 
-               mse_type = "boot", method = method,
-               B = B)
-  } else if (mse_type == "spatialnonparboot"){
+               mse_type = "boot", method = method, B = B)
+  } else if (mse_type == "spatialnonparboot" || mse_type == "spatialnonparbootbc"){
     nonparametricboot_spatial(framework = framework, combined_data = combined_data,
                               sigmau2 = sigmau2, eblup = eblup, B = B, 
-                              method = method,
-                              vardir = vardir, transformation = transformation) 
-  } else if (mse_type == "spatialparboot"){
+                              method = method, vardir = vardir, 
+                              transformation = transformation,
+                              mse_type = mse_type) 
+  } else if (mse_type == "spatialparboot" || mse_type == "spatialparbootbc"){
     parametricboot_spatial(framework = framework, combined_data = combined_data,
-                              sigmau2 = sigmau2, eblup = eblup, B = B, 
-                              method = method,
-                              vardir = vardir, transformation = transformation) 
+                           sigmau2 = sigmau2, eblup = eblup, B = B, 
+                           method = method, vardir = vardir, 
+                           transformation = transformation,
+                           mse_type = mse_type) 
   }
 
   return(MSE_data)
