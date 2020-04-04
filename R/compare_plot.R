@@ -3,13 +3,13 @@
 #' For all indicators or a selection of indicators two plots are returned. The
 #' first plot is a scatter plot of estimates to compare and the second is a line
 #' plot with these estimates.
+#' @param model an object of type "emdi","model", representing point and MSE
+#' estimates.
 #' @param direct optional, an object of type "emdi","direct", representing point
 #' and MSE estimates. If the input argument \code{model} is of type "model","ebp",
 #' \code{direct} is required. If the input argument \code{model} is of type 
 #' "model","fh", the \code{direct} component is already included in the input 
 #' argument \code{model}.
-#' @param model an object of type "emdi","model", representing point and MSE
-#' estimates.
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
 #' (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
@@ -52,11 +52,16 @@
 #' respectively: the MSE/CV estimates of the direct and model-based estimates are 
 #' compared by boxplots and scatterplots.
 #' @details Since all of the comparisons need a direct estimator, the plots are 
-#' only created for in-sample domains.
+#' only created for in-sample domains. For the new package version the order of 
+#' the input arguments direct and model has been changed. In this version, it is 
+#' still possible to use the old order because the arguments are swapped 
+#' internally. From the next package version it will no longer be possible.
 #' @seealso \code{\link{emdiObject}}, \code{\link{fhObject}}, \code{\link{fh}},
 #' \code{\link{direct}}, \code{\link{ebp}} 
 #' @examples
 #' \dontrun{
+#' # Examples for comparisons of direct estimates and models of type ebp
+#' 
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
@@ -74,18 +79,38 @@
 #' var = TRUE, boot_type = "naive", B = 50, seed = 123, na.rm = TRUE)
 #' 
 #' # Example 1: Receive first overview
-#' compare_plot(direct = emdi_direct, model = emdi_model)
+#' compare_plot(model = emdi_model, direct = emdi_direct)
 #' 
 #' # Example 2: Change plot theme
 #' library(ggplot2)
-#' compare_plot(emdi_direct, emdi_model, indicator = "Median",
+#' compare_plot(emdi_model, emdi_direct, indicator = "Median",
 #' gg_theme = theme(axis.line = element_line(size = 3, colour = "grey80"),
 #' plot.background = element_rect(fill = "lightblue3"),
 #' legend.position = "none"))
+#' 
+#' # Example for comparison of direct estimates and models of type fh
+#' 
+#' # Loading data - population and sample data
+#' data("eusilcA_popAgg")
+#' data("eusilcA_smpAgg")
+#'
+#' # Combine sample and population data -------------------------------------------
+#' combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
+#'                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+#'
+#' # Generation of the emdi object
+#' fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+#'              combined_data = combined_data, domains = "Domain", method = "ml", 
+#'              interval = c(0, 100000000), MSE = TRUE)
+#' # Example 3: Receive first overview
+#' compare_plot(fh_std) 
+#' 
+#' # Example 4: Compare also MSE and CV estimates 
+#' compare_plot(fh_std, MSE = TRUE, CV = TRUE)                       
 #' }
 #' @export
 
-compare_plot <- function(direct, model,  indicator = "all", MSE = TRUE, 
+compare_plot <- function(model, direct,  indicator = "all", MSE = TRUE, 
                          CV = TRUE, label = "orig", color = c("blue", "lightblue3"), 
                          shape = c(16, 16), line_type = c("solid", "solid"), 
                          gg_theme = NULL, ...) UseMethod("compare_plot")
@@ -97,13 +122,13 @@ compare_plot <- function(direct, model,  indicator = "all", MSE = TRUE,
 #' For all indicators or a selection of indicators two plots are returned. The
 #' first plot is a scatter plot of estimates to compare and the second is a line
 #' plot with these estimates.
+#' @param model an object of type "emdi","model", representing point and MSE
+#' estimates
 #' @param direct optional, an object of type "emdi","direct", representing point
 #' and MSE estimates. If the input argument \code{model} is of type "model","ebp",
 #' \code{direct} is required. If the input argument \code{model} is of type 
 #' "model","fh", the \code{direct} component is already included in the input 
-#' argument \code{model}.
-#' @param model an object of type "emdi","model", representing point and MSE
-#' estimates.
+#' argument \code{model}..
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
 #' (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
@@ -119,21 +144,21 @@ compare_plot <- function(direct, model,  indicator = "all", MSE = TRUE,
 #' estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
 #' @keywords internal
 
-compare_plot_ebp <- function(direct, model, indicator = "all", MSE = FALSE,
+compare_plot_ebp <- function(model, direct, indicator = "all", MSE = FALSE,
                              CV = FALSE, label = "orig",
                              color = c("blue", "lightblue3"),
                              shape = c(16, 16), line_type = c("solid", "solid"),
                              gg_theme = NULL) {
   
-  Direct <- NULL
   Model_based <- NULL
+  Direct <- NULL
   ID <- NULL
   value <- NULL
   Method <- NULL
 
-  #compare_plot_check(direct = direct, model = model, indicator = indicator,
-  #                   label = label, color = color, shape = shape,
-  #                   line_type = line_type, gg_theme = gg_theme)
+  #compare_plot_check(model = model, indicator = indicator,
+   #                  label = label, color = color, shape = shape,
+     #                line_type = line_type, gg_theme = gg_theme)
 
 
   ind_direct <- point_emdi(object = direct, indicator = indicator)$ind
@@ -145,7 +170,7 @@ compare_plot_ebp <- function(direct, model, indicator = "all", MSE = FALSE,
   colnames(ind_model) <- c("Domain", paste0(colnames(ind_model)[-1], "_Model"))
   smp_size <- (table(direct$framework$smp_domains_vec))
 
-  #compare_plot_check2(ind_direct, ind_model)
+  compare_plot_check2(ind_direct, ind_model)
 
   Data <- merge(ind_direct, ind_model, by = "Domain" )
 
@@ -188,10 +213,10 @@ compare_plot_ebp <- function(direct, model, indicator = "all", MSE = FALSE,
 #' For all indicators or a selection of indicators two plots are returned. The
 #' first plot is a scatter plot of estimates to compare and the second is a line
 #' plot with these estimates.
-#' @param direct optional, an object of type "emdi","direct", representing point
-#' and MSE estimates.
 #' @param model an object of type "emdi","model", representing point and MSE
 #' estimates.
+#' @param direct optional, an object of type "emdi","direct", representing point
+#' and MSE estimates.
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
 #' (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
@@ -207,33 +232,34 @@ compare_plot_ebp <- function(direct, model, indicator = "all", MSE = FALSE,
 #' estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
 #' @keywords internal
 
-compare_plot_fh <- function(direct, model, indicator = "all", MSE = FALSE, CV = FALSE,
+compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = FALSE,
                             label = "orig",
                              color = c("blue", "lightblue3"),
                              shape = c(16, 16), line_type = c("solid", "solid"),
                              gg_theme = NULL) {
 
   
-  Direct <- NULL
   Model_based <- NULL
+  Direct <- NULL
   ID <- NULL
   value <- NULL
   Method <- NULL
 
-  #compare_plot_check(direct = direct, model = model, indicator = indicator,
-  #                   label = label, color = color, shape = shape,
-  #                   line_type = line_type, gg_theme = gg_theme)
-  Data <- direct$ind[direct$ind$Out == 0,]
+  #compare_plot_check(model = model, indicator = indicator,
+   #                  label = label, color = color, shape = shape,
+     #                line_type = line_type, gg_theme = gg_theme)
+  
+  Data <- model$ind[model$ind$Out == 0,]
   names(Data) <- c("Domain", "FH_Direct", "FH_Model", "Out")
-  if (is.null(direct$MSE)) {
+  if (is.null(model$MSE)) {
     Data$smp_size <- NULL
   } else {
-    Data$smp_size <- -direct$MSE$Direct[direct$MSE$Out == 0]
+    Data$smp_size <- -model$MSE$Direct[model$MSE$Out == 0]
   }
   selected_indicators <- "FH"
 
   if (MSE == TRUE || CV == TRUE) {
-    all_precisions <- mse_emdi(object = direct, indicator = "all", CV = TRUE)
+    all_precisions <- mse_emdi(object = model, indicator = "all", CV = TRUE)
     colnames(all_precisions$ind) <- c("Domain", paste0(c("FH_Direct", "FH_Model"), "_MSE"))
     colnames(all_precisions$ind_cv) <- c("Domain", paste0(c("FH_Direct", "FH_Model"), "_CV"))
     combined <- merge(all_precisions$ind, all_precisions$ind_cv, id = "Domain")
@@ -244,7 +270,7 @@ compare_plot_fh <- function(direct, model, indicator = "all", MSE = FALSE, CV = 
     Data$smp_size2 <- -Data$FH_Direct_CV
   }
 
-  #compare_plot_check2(ind_direct, ind_model)
+  #compare_plot_check2(ind_model, ind_direct)
   
   if (model$framework$N_dom_unobs > 0) {
     cat("Please not that since all of the comparisons need a direct estimator, 
@@ -263,13 +289,13 @@ compare_plot_fh <- function(direct, model, indicator = "all", MSE = FALSE, CV = 
 #' For all indicators or a selection of indicators two plots are returned. The
 #' first plot is a scatter plot of estimates to compare and the second is a line
 #' plot with these estimates.
+#' @param model an object of type "emdi","model", representing point and MSE
+#' estimates.
 #' @param direct optional, an object of type "emdi","direct", representing point
 #' and MSE estimates. If the input argument \code{model} is of type "model","ebp",
 #' \code{direct} is required. If the input argument \code{model} is of type 
 #' "model","fh", the \code{direct} component is already included in the input 
 #' argument \code{model}.
-#' @param model an object of type "emdi","model", representing point and MSE
-#' estimates.
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
 #' (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
@@ -308,10 +334,17 @@ compare_plot_fh <- function(direct, model, indicator = "all", MSE = FALSE, CV = 
 #' @param ... further arguments passed to or from other methods.
 #' @return A scatter plot and a line plot comparing direct and model-based
 #' estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
+#' @details Since all of the comparisons need a direct estimator, the plots are 
+#' only created for in-sample domains. For the new package version the order of 
+#' the input arguments direct and model has been changed. In this version, it is 
+#' still possible to use the old order because the arguments are swapped 
+#' internally. From the next package version it will no longer be possible.
 #' @seealso \code{\link{emdiObject}}, \code{\link{fhObject}}, \code{\link{fh}},
 #' \code{\link{direct}}, \code{\link{ebp}} 
 #' @examples
 #' \dontrun{
+#' # Examples for comparisons of direct estimates and models of type ebp
+#' 
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
@@ -329,14 +362,34 @@ compare_plot_fh <- function(direct, model, indicator = "all", MSE = FALSE, CV = 
 #' var = TRUE, boot_type = "naive", B = 50, seed = 123, na.rm = TRUE)
 #' 
 #' # Example 1: Receive first overview
-#' compare_plot(direct = emdi_direct, model = emdi_model)
+#' compare_plot(model = emdi_model, direct = emdi_direct)
 #' 
 #' # Example 2: Change plot theme
 #' library(ggplot2)
-#' compare_plot(emdi_direct, emdi_model, indicator = "Median",
+#' compare_plot(emdi_model, emdi_direct, indicator = "Median",
 #' gg_theme = theme(axis.line = element_line(size = 3, colour = "grey80"),
 #' plot.background = element_rect(fill = "lightblue3"),
 #' legend.position = "none"))
+#' 
+#' # Example for comparison of direct estimates and models of type fh
+#' 
+#' # Loading data - population and sample data
+#' data("eusilcA_popAgg")
+#' data("eusilcA_smpAgg")
+#'
+#' # Combine sample and population data -------------------------------------------
+#' combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
+#'                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+#'
+#' # Generation of the emdi object
+#' fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+#'              combined_data = combined_data, domains = "Domain", method = "ml", 
+#'              interval = c(0, 100000000), MSE = TRUE)
+#' # Example 3: Receive first overview
+#' compare_plot(fh_std) 
+#' 
+#' # Example 4: Compare also MSE and CV estimates 
+#' compare_plot(fh_std, MSE = TRUE, CV = TRUE)                       
 #' }
 #' @export
 #' @importFrom reshape2 melt
@@ -345,40 +398,58 @@ compare_plot_fh <- function(direct, model, indicator = "all", MSE = FALSE, CV = 
 #' @importFrom ggplot2 scale_color_manual scale_fill_manual
 
 
-compare_plot.emdi <- function(direct = NULL, model = NULL, indicator = "all",
+compare_plot.emdi <- function(model = NULL, direct = NULL, indicator = "all",
                               MSE = FALSE, CV = FALSE, label = "orig",
                             color = c("blue", "lightblue3"),
                             shape = c(16, 16), line_type = c("solid", "solid"),
                             gg_theme = NULL, ...) {
 
-  if(is.null(direct) | is.null(model)){
-    if(is.null(model) & inherits(direct, "fh") ){
+   if (inherits(model, "direct") & inherits(direct, "model")){
+     model_orig <- model
+     direct_orig <- direct
+     model <- direct_orig
+     direct <- model_orig
+     warning("Please note that for the new package version the order of the input 
+         arguments direct and model has been changed. In this version, it is 
+         still possible to use the old order because the arguments are swapped 
+         internally. From the next version it will no longer be possible.")
+   }
+  
+  if(is.null(model) & inherits(direct, "fh") ){
       model <- direct
-    } else if(is.null(model) & inherits(direct, "direct")){
-      stop(paste0("If the direct argument is of type 'emdi','direct', the input 
-                    argument model is required.")) 
-    } else if(is.null(model) & inherits(direct, "ebp")){
-      stop(paste0("If the model argument is of type 'emdi','ebp', the input 
-                    argument direct is required.")) 
-    }
-    if(inherits(model, "fh")){
-      compare_plot_fh(direct = model, model = model, indicator = indicator,
-                      MSE = MSE, CV = CV,
-                      label = label, color = color, shape = shape,
-                      line_type = line_type, gg_theme = gg_theme)
-    } else if(inherits(model, "ebp")) {
-      stop(paste0("If the model is of type 'model','ebp', the input argument 
-                  direct is required."))
-    }
-  } else if(inherits(direct, "direct") & inherits(model, "fh")) {
+  } 
+  
+  if((inherits(direct, "fh") & inherits(model, "ebp")) |
+    (inherits(direct, "ebp") & inherits(model, "fh"))) {
     stop(paste0("It is not possible to compare the point and MSE estimates of a
+model of type 'model','fh', to the point and MSE estimates of a 'model','ebp' object.")) 
+  }
+   if((is.null(model) & inherits(direct, "direct")) |
+      (is.null(direct) & inherits(model, "direct"))) {
+     stop(paste0("If the direct argument is of type 'emdi','direct', the input 
+                 argument model is required.")) 
+   } 
+   if(inherits(model, "fh")  & inherits(direct, "direct")) {
+      stop(paste0("It is not possible to compare the point and MSE estimates of a
 model of type 'model','fh', to the point and MSE estimates of a 'direct' object."))
-  } else if(inherits(direct, "direct") & inherits(model, "ebp")) {
-    compare_plot_ebp(direct = direct, model = model, indicator = indicator,
+   } else if(inherits(model, "fh")){
+     compare_plot_fh(model = model, direct = model, indicator = indicator,
                      MSE = MSE, CV = CV,
                      label = label, color = color, shape = shape,
-                     line_type = line_type, gg_theme = gg_theme) 
-  } 
+                     line_type = line_type, gg_theme = gg_theme)
+   }
+    
+  if((inherits(model, "ebp") & is.null(direct)) | 
+     (inherits(direct, "ebp") & is.null(model))) {
+      stop(paste0("If the model is of type 'model','ebp', the input argument 
+                  direct is required."))
+    } else if(inherits(model, "ebp") & inherits(direct, "direct")) {
+      compare_plot_ebp(model = model, direct = direct, indicator = indicator,
+                       MSE = MSE, CV = CV,
+                       label = label, color = color, shape = shape,
+                       line_type = line_type, gg_theme = gg_theme) 
+    }
+   
 }
 
 
@@ -572,8 +643,8 @@ define_evallabel <- function(type, label, indi){
 compare_plots <- function(object, type, selected_indicators, MSE, CV, label, color,
                           shape, line_type, gg_theme,...) {
 
-  Direct <- NULL
   Model_based <- NULL
+  Direct <- NULL
   ID <- NULL
   value <- NULL
   Method <- NULL

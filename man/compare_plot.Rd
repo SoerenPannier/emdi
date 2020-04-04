@@ -4,19 +4,29 @@
 \alias{compare_plot}
 \title{Shows plots for the comparison of estimates}
 \usage{
-compare_plot(direct, model, indicator = "all", MSE = TRUE, CV = TRUE,
-  label = "orig", color = c("blue", "lightblue3"), shape = c(16, 16),
-  line_type = c("solid", "solid"), gg_theme = NULL, ...)
+compare_plot(
+  model,
+  direct,
+  indicator = "all",
+  MSE = TRUE,
+  CV = TRUE,
+  label = "orig",
+  color = c("blue", "lightblue3"),
+  shape = c(16, 16),
+  line_type = c("solid", "solid"),
+  gg_theme = NULL,
+  ...
+)
 }
 \arguments{
+\item{model}{an object of type "emdi","model", representing point and MSE
+estimates.}
+
 \item{direct}{optional, an object of type "emdi","direct", representing point
 and MSE estimates. If the input argument \code{model} is of type "model","ebp",
 \code{direct} is required. If the input argument \code{model} is of type 
 "model","fh", the \code{direct} component is already included in the input 
 argument \code{model}.}
-
-\item{model}{an object of type "emdi","model", representing point and MSE
-estimates.}
 
 \item{indicator}{optional character vector that selects which indicators
 shall be returned: (i) all calculated indicators ("all");
@@ -77,10 +87,15 @@ plot with these estimates.
 }
 \details{
 Since all of the comparisons need a direct estimator, the plots are 
-only created for in-sample domains.
+only created for in-sample domains. For the new package version the order of 
+the input arguments direct and model has been changed. In this version, it is 
+still possible to use the old order because the arguments are swapped 
+internally. From the next package version it will no longer be possible.
 }
 \examples{
 \dontrun{
+# Examples for comparisons of direct estimates and models of type ebp
+
 # Loading data - population and sample data
 data("eusilcA_pop")
 data("eusilcA_smp")
@@ -98,14 +113,34 @@ smp_domains = "district", weights = "weight", threshold = 11161.44,
 var = TRUE, boot_type = "naive", B = 50, seed = 123, na.rm = TRUE)
 
 # Example 1: Receive first overview
-compare_plot(direct = emdi_direct, model = emdi_model)
+compare_plot(model = emdi_model, direct = emdi_direct)
 
 # Example 2: Change plot theme
 library(ggplot2)
-compare_plot(emdi_direct, emdi_model, indicator = "Median",
+compare_plot(emdi_model, emdi_direct, indicator = "Median",
 gg_theme = theme(axis.line = element_line(size = 3, colour = "grey80"),
 plot.background = element_rect(fill = "lightblue3"),
 legend.position = "none"))
+
+# Example for comparison of direct estimates and models of type fh
+
+# Loading data - population and sample data
+data("eusilcA_popAgg")
+data("eusilcA_smpAgg")
+
+# Combine sample and population data -------------------------------------------
+combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
+                              smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+
+# Generation of the emdi object
+fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+             combined_data = combined_data, domains = "Domain", method = "ml", 
+             interval = c(0, 100000000), MSE = TRUE)
+# Example 3: Receive first overview
+compare_plot(fh_std) 
+
+# Example 4: Compare also MSE and CV estimates 
+compare_plot(fh_std, MSE = TRUE, CV = TRUE)                       
 }
 }
 \seealso{
