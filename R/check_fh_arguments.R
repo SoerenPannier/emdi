@@ -38,11 +38,11 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
                            || method == "ampl" 
                            || method == "ampl_yl" 
                            || method == "ml"
-                           || method == "moment"
+                           || method == "me"
                            || method == "reblup"
                            || method == "reblupbc")) {
     stop("The nine options for method are ''reml'', ''amrl'', ''amrl_yl'',
-          ''ampl'', ''ampl_yl'', ''ml'', ''moment'',''reblup'' or ''reblupbc''.")
+          ''ampl'', ''ampl_yl'', ''ml'', ''me'',''reblup'' or ''reblupbc''.")
   }
   if (length(interval) != 2 || !is.vector(interval, mode = "numeric") ||
       !(interval[1] < interval[2])) {
@@ -85,7 +85,7 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
           can be computed can be found in the vignette.') 
   }
   estcoef <- makeXY(formula = fixed, data = combined_data)
-  if (method == "moment" && !is.null(Ci) &&
+  if (method == "me" && !is.null(Ci) &&
       (!(dim(Ci)[1] == dim(estcoef$x)[2]) || 
        !(dim(Ci)[2] == dim(estcoef$x)[2]) || 
        !(dim(Ci)[3] == length(combined_data$Domain)))){
@@ -96,13 +96,13 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
         combined_data. See also help(fh). For an example how to create the array 
         please refer to the Vignette.')
   }
-  if ((method == "moment") && (!is.numeric(tol) || !(is.numeric(tol) &&
+  if ((method == "me") && (!is.numeric(tol) || !(is.numeric(tol) &&
                                                      length(tol) == 1))) {
     stop("tol must be a single number determining the tolerance value for the 
           convergence of weights for the estimation of the variance of the random 
           effects and the beta coefficients. See help(fh).")
      }
-  if ((method == "moment") && (!is.numeric(maxit) || !(is.numeric(maxit) &&
+  if ((method == "me") && (!is.numeric(maxit) || !(is.numeric(maxit) &&
                                                          length(maxit) == 1))) {
     stop("maxit must be a single number determining the tolerance value for the 
           convergence of weights for the estimation of the variance of the random 
@@ -236,22 +236,22 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
     stop("For the adjusted variance estimation methods, the argument interval 
          is required and cannot be ''NULL''. See also help(fh).")
   }
-  if ((method == "moment") && (is.null(Ci) || is.null(tol) || is.null(maxit))){
-    stop("For the measurement error model (method = ''moment''), the arguments 
+  if ((method == "me") && (is.null(Ci) || is.null(tol) || is.null(maxit))){
+    stop("For the measurement error model (method = ''me''), the arguments 
          Ci, tol and maxit are required and cannot be ''NULL''. See also help(fh).")
   }
-  if ((method == "moment") && correlation != "no"){
-    stop("For the measurement error model (method = ''moment''), it is not 
+  if ((method == "me") && correlation != "no"){
+    stop("For the measurement error model (method = ''me''), it is not 
          possible to incorporate a correlation structure. Correlation must be 
          set to ''no''. See also help(fh).")
   }
-  if ((method == "moment") && transformation != "no"){
-    stop("For the measurement error model (method = ''moment''), it is not 
+  if ((method == "me") && transformation != "no"){
+    stop("For the measurement error model (method = ''me''), it is not 
          possible to apply a transformation. Transformation must be set to 
          ''no''. See also help(fh).")
   }
-  if ((method == "moment") && MSE == TRUE && mse_type != "jackknife"){
-    stop("For the measurement error model (method = ''moment''), mse_type must 
+  if ((method == "me") && MSE == TRUE && mse_type != "jackknife"){
+    stop("For the measurement error model (method = ''me''), mse_type must 
          be set to ''jackknife''. See also help(fh).")
   }
   if ((method == "reblup" || method == "reblupbc") && MSE == TRUE && 

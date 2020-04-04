@@ -42,8 +42,8 @@
 #' \cite{Warnholz (2017)} ("\code{reblup}"), 
 #' (viii) robustified maximum likelihood with robust and bias-corrected eblup 
 #' prediction following \cite{Warnholz (2017)} ("\code{reblupbc}"),
-#' (ix) moment estimator for the estimation of the model of \cite{Ybarra and Lohr 
-#' (2008)} ("\code{moment}"). Defaults to "\code{reml}".
+#' (ix) estimation of the measurement error model of \cite{Ybarra and Lohr 
+#' (2008)} ("\code{me}"). Defaults to "\code{reml}".
 #' @param interval a numeric vector containing a lower and upper limit for the
 #'  estimation of the variance of the random effects. Defaults to \code{c(0,1000)}. 
 #'  In some cases it may be more suitable to choose a larger interval. 
@@ -95,18 +95,18 @@
 #' number of estimated regression coefficients times number of areas containing 
 #' the variance-covariance matrix of the explanatory variables for each area. 
 #' For an example how to create the array please refer to the Vignette. 
-#' Required argument within the Ybarra-Lohr model (\code{method = moment}). 
+#' Required argument within the Ybarra-Lohr model (\code{method = me}). 
 #' Defaults to \code{NULL}. 
 #' @param tol a number determining the tolerance value for the estimation of the
 #' variance of the random effects. Required argument when method "\code{reml}" and 
 #' "\code{ml}" in combination with \code{correlation = "spatial"} are choosen or 
 #' for the variance estimation methods "\code{reblup}", "\code{reblupbc}" and 
-#' "\code{moment}". Defaults to \code{NULL}.
+#' "\code{me}". Defaults to \code{NULL}.
 #' @param maxit a number determining the maximum number of iterations for the 
 #' estimation of the variance of the random effects. Required argument when method 
 #' "\code{reml}" and  "\code{ml}" in combination with \code{correlation} equals 
 #' "\code{spatial}" is choosen or for the variance estimation methods "\code{reblup}", 
-#' "\code{reblupbc}" and "\code{moment}". Defaults to \code{NULL}.
+#' "\code{reblupbc}" and "\code{me}". Defaults to \code{NULL}.
 #' @param MSE if \code{TRUE}, MSE estimates are calculated. Defaults
 #' to \code{FALSE}.
 #' @param mse_type a character string determining the estimation method of the MSE.
@@ -128,7 +128,7 @@
 #' ("\code{spatialnonparbootbc}").
 #' Options (ii)-(iv) are of interest when the arcsin transformation is selected. 
 #' Option (ii) must be chosen when an Ybarra-Lohr model is selected 
-#' (\code{method = moment}). Options (iv) and (v) are the MSE options for the 
+#' (\code{method = me}). Options (iv) and (v) are the MSE options for the 
 #' robust extensions of the Fay-Herriot model. For an extensive overview of the possible 
 #' MSE options please refer to the Vignette. Required argument when 
 #' \code{MSE = TRUE}. Defaults to "\code{analytical}".
@@ -253,7 +253,7 @@
 #'  Ci_array[2,2,i] <- eusilcA_smpAgg$Var_Cash[i]/eusilcA_smpAgg$n[i]
 #' }
 #' fh_yl <- fh(fixed = Mean ~ Cash, vardir= "Var_Mean",
-#' combined_data = eusilcA_smpAgg, domains ="Domain", method = "moment", 
+#' combined_data = eusilcA_smpAgg, domains ="Domain", method = "me", 
 #' Ci = Ci_array, tol=0.00000001, maxit= 2000, MSE = TRUE, mse_type = "jackknife")
 #' }
 #' @export
@@ -315,7 +315,7 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                                   interval = interval)
     
     
-    if (method != "moment") {
+    if (method != "me") {
       if (correlation == "no"){
         # Standard EBLUP -------------------------------------------------------
         eblup <- eblup_FH(framework = framework, sigmau2 = sigmau2,
@@ -341,7 +341,7 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                                  transformation = transformation,
                                  combined_data = combined_data)
       }
-    } else if (method == "moment") {
+    } else if (method == "me") {
       # Standard EBLUP ---------------------------------------------------------
       eblup <- eblup_YL(framework = framework, sigmau2 = sigmau2,
                         combined_data = combined_data)
@@ -377,7 +377,7 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
       #Gamma <- data.frame(Domain = framework$data[[framework$domains]],
          #                 Gamma = eblup$gamma)
       
-      if (method != "moment") {
+      if (method != "me") {
         if (mse_type == "spatialnonparboot" | mse_type == "spatialnonparbootbc" |
             mse_type == "spatialparboot" | mse_type == "spatialparbootbc"){
           out <- list(ind = eblup$EBLUP_data,
@@ -448,7 +448,7 @@ fh <- function(fixed, vardir, combined_data, domains, method = "reml",
                     successful_bootstraps = NULL
         )
         
-      } else if (method == "moment") {
+      } else if (method == "me") {
         out <- list(ind = eblup$EBLUP_data,
                     MSE = MSE,
                     transform_param = NULL,

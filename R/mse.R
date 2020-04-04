@@ -1477,9 +1477,6 @@ pseudo <- function(framework, combined_data, eblup, mse_type, method){
     MSE_data$FH[framework$obs_dom == FALSE] <- NA
     MSE_data$Out[framework$obs_dom == FALSE] <- 1
     
-    cat("Please note that only for in-sample-domains the pseudo MSE estimator 
-for the robust FH model is implemented. For the out-of-sample domains, 
-        no estimate for the MSE is returned. For the reference see help(fh).")
   }
   
   MSE_data <- list(MSE_data = MSE_data,
@@ -1498,9 +1495,6 @@ robustboot <- function(framework, combined_data, eblup, mse_type, B, method){
     MSE_data$FH[framework$obs_dom == FALSE] <- NA
     MSE_data$Out[framework$obs_dom == FALSE] <- 1
     
-    cat("Please note that only for in-sample-domains the bootstrap MSE estimator 
-for the robust FH model is implemented. For the out-of-sample domains, 
-        no estimate for the MSE is returned. For the reference see help(fh).")
   }
   
   MSE_data <- list(MSE_data = MSE_data,
@@ -1517,7 +1511,7 @@ wrapper_MSE <- function(framework, combined_data, sigmau2, vardir, Ci, eblup,
     analytical_mse(framework = framework, sigmau2 = sigmau2,
                    combined_data = combined_data, method = method)
   } else if (mse_type == "jackknife") {
-    if (method == "moment") {
+    if (method == "me") {
       jiang_jackknife_yl(framework = framework, combined_data = combined_data,
                          sigmau2 = sigmau2, vardir = vardir, Ci = Ci, eblup = eblup,
                          transformation = transformation, method = method)

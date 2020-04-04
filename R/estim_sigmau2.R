@@ -636,7 +636,7 @@ wrapper_estsigmau2 <- function(framework, method, interval) {
     SREML(direct = framework$direct, X = framework$model_X, 
         vardir = framework$vardir, areanumber = framework$m, W = framework$W,
         tol = framework$tol, maxit = framework$maxit)
-  } else if (method == "moment") {
+  } else if (method == "me") {
     ybarralohr(vardir = framework$vardir, direct = framework$direct, x = framework$model_X,
        Ci = framework$Ci, tol = framework$tol, maxit = framework$maxit, 
        p = framework$p, areanumber = framework$m)
