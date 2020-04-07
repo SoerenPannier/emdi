@@ -21,7 +21,7 @@ test_that("Does the fh function with a log transformation return the same
                                combined_data = combined_data, domains = "Domain",
                                method = "ml", interval = c(0, 10000000), 
                                transformation = "log", 
-                               backtransformation = "crude", MSE = TRUE)
+                               backtransformation = "bc_crude", MSE = TRUE)
           
             # Status quo (benchmark)
             transf_log_crude <- read.csv("FH/transf_log_crude.csv", sep = ",", 
@@ -43,7 +43,7 @@ test_that("Does the fh function with a log transformation return the same
                             vardir = "Var_Mean", 
                             combined_data = combined_data, domains = "Domain",
                             method = "ml", interval = c(0, 10000000), 
-                            transformation = "log", backtransformation = "sm", 
+                            transformation = "log", backtransformation = "bc_sm", 
                             MSE = TRUE)
           
             # Status quo (benchmark)
@@ -116,7 +116,7 @@ test_that("Does the fh function with a arcsin transformation return the same
                                     domains = "Domain",
                                     method = "ml", interval = c(0, 10000000), 
                                     transformation = "arcsin", 
-                                    backtransformation = "sm", 
+                                    backtransformation = "bc", 
                                     eff_smpsize = "n", MSE = TRUE,
                                     mse_type = "jackknife")
             fh_arcsin_sm_wjack <- fh(fixed = MTMED ~ cash + age_ben + rent + house_allow, 
@@ -125,7 +125,7 @@ test_that("Does the fh function with a arcsin transformation return the same
                                      domains = "Domain",
                                      method = "ml", interval = c(0, 10000000), 
                                      transformation = "arcsin", 
-                                     backtransformation = "sm", 
+                                     backtransformation = "bc", 
                                      eff_smpsize = "n", MSE = TRUE,
                                      mse_type = "weighted_jackknife")
             fh_arcsin_sm_boot <- fh(fixed = MTMED ~ cash + age_ben + rent + house_allow, 
@@ -134,7 +134,7 @@ test_that("Does the fh function with a arcsin transformation return the same
                                     domains = "Domain",
                                     method = "ml", interval = c(0, 10000000), 
                                     transformation = "arcsin", 
-                                    backtransformation = "sm", 
+                                    backtransformation = "bc", 
                                     eff_smpsize = "n", MSE = TRUE,
                                     mse_type = "boot", B = 3, seed = 123)
            

@@ -2,12 +2,15 @@ Package: emdi
 Title: Estimating and Mapping Disaggregated Indicators
 Version: 1.2.9000
 Date: 2019-04-08
-Authors@R: c(person("Ann-Kristin", "Kreutzmann", role="aut", email="ann-kristin.kreutzmann@fu-berlin.de"),
+Authors@R: c(person("Sylvia", "Harmening", role="aut", email = "sylvia.harmening@fu-berlin.de"), 
+    person("Ann-Kristin", "Kreutzmann", role="aut", email="ann-kristin.kreutzmann@fu-berlin.de"),
     person("Soeren", "Pannier", role=c("aut", "cre"), email="soeren.pannier@fu-berlin.de"),
     person("Natalia", "Rojas-Perilla", role="aut", email = "natalia.rojas@fu-berlin.de"),
+    person("Nicola", "Salvati", role="aut", email = "nicola.salvati@unipi.it"),
     person("Timo", "Schmid", role="aut", email = "timo.schmid@fu-berlin.de"),
     person("Matthias", "Templ", role="aut", email = "templ@statistik.tuwien.ac.at"),
-    person("Nikos", "Tzavidis", role="aut", email = "N.TZAVIDIS@soton.ac.uk"))
+    person("Nikos", "Tzavidis", role="aut", email = "N.TZAVIDIS@soton.ac.uk"),
+    person("Nora", "Würz", role="aut", email = "nora.wuerz@fu-berlin.de"))
 Description: Functions that support estimating, assessing and mapping regional
     disaggregated indicators. So far, estimation methods comprise direct estimation
     and the model-based approach Empirical Best Prediction (see "Small area

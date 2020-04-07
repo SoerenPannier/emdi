@@ -60,8 +60,8 @@ the variance of the random effects. Methods that can be chosen
 \cite{Warnholz (2017)} ("\code{reblup}"), 
 (viii) robustified maximum likelihood with robust and bias-corrected eblup 
 prediction following \cite{Warnholz (2017)} ("\code{reblupbc}"),
-(ix) moment estimator for the estimation of the model of \cite{Ybarra and Lohr 
-(2008)} ("\code{moment}"). Defaults to "\code{reml}".}
+(ix) estimation of the measurement error model of \cite{Ybarra and Lohr 
+(2008)} ("\code{me}"). Defaults to "\code{reml}".}
 
 \item{interval}{a numeric vector containing a lower and upper limit for the
  estimation of the variance of the random effects. Defaults to \code{c(0,1000)}. 
@@ -93,12 +93,14 @@ the sampling variances following \cite{Jiang et al. (2001)}. Defaults to "\code{
 \item{backtransformation}{a character that determines the type of bracktransformation 
 of the EBLUPs and MSE estimates. Required argument when a transformation is choosen. 
 Available methods are 
-(i) crude bias-correction ("\code{crude}") following \cite{Neves et al. (2013)} 
+(i) crude bias-correction ("\code{bc_crude}") following \cite{Neves et al. (2013)} 
 and \cite{Rao and Molina (2015)} when the log transformation is choosen,
-(ii) naive back transformation ("\code{naive}") when the arcsin transformation 
+(ii) bias-correction following \cite{Slud and Maiti (2006)} ("\code{bc_sm}") 
+when the log transformations is choosen,
+(iii) naive back transformation ("\code{naive}") when the arcsin transformation 
 is choosen,
-(iii) bias-correction following \cite{Slud and Maiti (2006)} ("\code{sm}") 
-when the log or arcsin transformations are choosen. Defaults to \code{NULL}.}
+(iii) bias-corrected back transformation ("\code{bc}") 
+when the arcsin transformations is choosen. Defaults to \code{NULL}.}
 
 \item{eff_smpsize}{a character string indicating the name of the variable containing
 the effective sample sizes that are included in \code{combined_data}. Required 
@@ -122,20 +124,20 @@ correlation is set to "\code{spatial}". Defaults to \code{NULL}.}
 number of estimated regression coefficients times number of areas containing 
 the variance-covariance matrix of the explanatory variables for each area. 
 For an example how to create the array please refer to the Vignette. 
-Required argument within the Ybarra-Lohr model (\code{method = moment}). 
+Required argument within the Ybarra-Lohr model (\code{method = me}). 
 Defaults to \code{NULL}.}
 
 \item{tol}{a number determining the tolerance value for the estimation of the
 variance of the random effects. Required argument when method "\code{reml}" and 
 "\code{ml}" in combination with \code{correlation = "spatial"} are choosen or 
 for the variance estimation methods "\code{reblup}", "\code{reblupbc}" and 
-"\code{moment}". Defaults to \code{NULL}.}
+"\code{me}". Defaults to \code{NULL}.}
 
 \item{maxit}{a number determining the maximum number of iterations for the 
 estimation of the variance of the random effects. Required argument when method 
 "\code{reml}" and  "\code{ml}" in combination with \code{correlation} equals 
 "\code{spatial}" is choosen or for the variance estimation methods "\code{reblup}", 
-"\code{reblupbc}" and "\code{moment}". Defaults to \code{NULL}.}
+"\code{reblupbc}" and "\code{me}". Defaults to \code{NULL}.}
 
 \item{MSE}{if \code{TRUE}, MSE estimates are calculated. Defaults
 to \code{FALSE}.}
@@ -159,7 +161,7 @@ random effect ("\code{analytical}"),
 ("\code{spatialnonparbootbc}").
 Options (ii)-(iv) are of interest when the arcsin transformation is selected. 
 Option (ii) must be chosen when an Ybarra-Lohr model is selected 
-(\code{method = moment}). Options (iv) and (v) are the MSE options for the 
+(\code{method = me}). Options (iv) and (v) are the MSE options for the 
 robust extensions of the Fay-Herriot model. For an extensive overview of the possible 
 MSE options please refer to the Vignette. Required argument when 
 \code{MSE = TRUE}. Defaults to "\code{analytical}".}
@@ -261,7 +263,7 @@ for(i in 1:M){
  Ci_array[2,2,i] <- eusilcA_smpAgg$Var_Cash[i]/eusilcA_smpAgg$n[i]
 }
 fh_yl <- fh(fixed = Mean ~ Cash, vardir= "Var_Mean",
-combined_data = eusilcA_smpAgg, domains ="Domain", method = "moment", 
+combined_data = eusilcA_smpAgg, domains ="Domain", method = "me", 
 Ci = Ci_array, tol=0.00000001, maxit= 2000, MSE = TRUE, mse_type = "jackknife")
 }
 }
