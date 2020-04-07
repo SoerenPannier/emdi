@@ -543,7 +543,7 @@ boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
     est_value_boot_trans_var_[in_sample] <- est_value_boot_trans_var
     
     # backtransformation
-    if (backtransformation == "sm") {
+    if (backtransformation == "bc") {
       int_value <- NULL
       for (i in 1:M) {
         

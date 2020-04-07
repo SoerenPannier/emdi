@@ -70,12 +70,14 @@
 #' @param backtransformation a character that determines the type of bracktransformation 
 #' of the EBLUPs and MSE estimates. Required argument when a transformation is choosen. 
 #' Available methods are 
-#' (i) crude bias-correction ("\code{crude}") following \cite{Neves et al. (2013)} 
+#' (i) crude bias-correction ("\code{bc_crude}") following \cite{Neves et al. (2013)} 
 #' and \cite{Rao and Molina (2015)} when the log transformation is choosen,
-#' (ii) naive back transformation ("\code{naive}") when the arcsin transformation 
+#' (ii) bias-correction following \cite{Slud and Maiti (2006)} ("\code{bc_sm}") 
+#' when the log transformations is choosen,
+#' (iii) naive back transformation ("\code{naive}") when the arcsin transformation 
 #' is choosen,
-#' (iii) bias-correction following \cite{Slud and Maiti (2006)} ("\code{sm}") 
-#' when the log or arcsin transformations are choosen. Defaults to \code{NULL}.
+#' (iii) bias-corrected back transformation ("\code{bc}") 
+#' when the arcsin transformations is choosen. Defaults to \code{NULL}.
 #' @param eff_smpsize a character string indicating the name of the variable containing
 #' the effective sample sizes that are included in \code{combined_data}. Required 
 #' argument when the arcsin transformation is choosen in combination with 

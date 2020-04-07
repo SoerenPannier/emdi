@@ -64,10 +64,11 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
          ''log'' or ''arcsin''." )
   }
   if (!is.null(backtransformation) && !(backtransformation == "naive" 
-                                   || backtransformation == "crude" 
-                                   || backtransformation == "sm")) {
-    stop("The three options for backtransformation are ''naive'', ''crude'' or 
-         ''sm''." )
+                                   || backtransformation == "bc_crude" 
+                                   || backtransformation == "bc_sm"
+                                   || backtransformation == "bc")) {
+    stop("The four options for backtransformation are ''bc_crude'', ''bc_sm'', 
+         ''naive'' or ''bc''." )
   }
   if (!is.null(eff_smpsize) && !(eff_smpsize %in% colnames(combined_data))) {
     stop(paste0("The effective sample size variable ",eff_smpsize, " is not 
@@ -303,23 +304,23 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
     stop("If a transformation is chosen, the argument backtransformation is 
          required and cannot be NULL. See also help(fh).")
   }
-  if ((transformation == "log") && !(backtransformation == "crude" || 
-                                     backtransformation == "sm")){
+  if ((transformation == "log") && !(backtransformation == "bc_crude" || 
+                                     backtransformation == "bc_sm")){
     stop("If transformation is set to ''log'', possible backtransformations are 
-         ''crude'' and ''sm''. See also help(fh).")
+         ''bc_crude'' and ''bc_sm''. See also help(fh).")
   }
   if ((transformation == "log") && (MSE == TRUE) && mse_type != "analytical"){
     stop("If transformation is set to ''log'', the mse_type must be set to 
          ''analytical''. See also help(fh).")
   }
-  if ((transformation != "no") && (backtransformation == "sm") && method != "ml"){
+  if ((transformation != "no") && (backtransformation == "bc_sm") && method != "ml"){
     stop("If backtransformation is set to ''sm'', only ''ml'' variance estimation
          is possible. See also help(fh).")
   }
   if ((transformation == "arcsin") && !(backtransformation == "naive" || 
-                                     backtransformation == "sm")){
+                                     backtransformation == "bc")){
     stop("If transformation is set to ''arcsin'', possible backtransformations 
-         are ''naive'' and ''sm''. See also help(fh).")
+         are ''naive'' and ''bc''. See also help(fh).")
   }
   if ((transformation == "arcsin") && (MSE == TRUE) && 
       !(mse_type == "boot" || mse_type == "jackknife" || 

@@ -15,7 +15,7 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
   MSE_data$Direct[framework$obs_dom == TRUE] <- framework$vardir_orig
 
   if (transformation == "log") {
-    if (backtransformation == "crude") {
+    if (backtransformation == "bc_crude") {
       estim_MSE <- analytical_mse(framework = framework, sigmau2 = sigmau2,
                                   combined_data = combined_data,
                                   method = method)
@@ -33,7 +33,7 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
         MSE_method <- "no mse estimated"
       }
 
-    } else if (backtransformation == "sm") {
+    } else if (backtransformation == "bc_sm") {
       estim_MSE <- analytical_mse(framework = framework, sigmau2 = sigmau2,
                                   combined_data = combined_data,
                                   method = method)
@@ -108,7 +108,7 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
         MSE_method <- "no mse estimated"
       }
 
-    } else if (backtransformation == "sm") {
+    } else if (backtransformation == "bc") {
 
       # Use integral to solve the formula in Slud and Maiti
       int_value <- NULL
