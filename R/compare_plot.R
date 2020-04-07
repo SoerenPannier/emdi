@@ -156,10 +156,6 @@ compare_plot_ebp <- function(model, direct, indicator = "all", MSE = FALSE,
   value <- NULL
   Method <- NULL
 
-  #compare_plot_check(model = model, indicator = indicator,
-   #                  label = label, color = color, shape = shape,
-     #                line_type = line_type, gg_theme = gg_theme)
-
 
   ind_direct <- point_emdi(object = direct, indicator = indicator)$ind
   selected_direct <- colnames(ind_direct)[-1]
@@ -245,9 +241,6 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
   value <- NULL
   Method <- NULL
 
-  #compare_plot_check(model = model, indicator = indicator,
-   #                  label = label, color = color, shape = shape,
-     #                line_type = line_type, gg_theme = gg_theme)
   
   Data <- model$ind[model$ind$Out == 0,]
   names(Data) <- c("Domain", "FH_Direct", "FH_Model", "Out")
@@ -403,6 +396,10 @@ compare_plot.emdi <- function(model = NULL, direct = NULL, indicator = "all",
                             color = c("blue", "lightblue3"),
                             shape = c(16, 16), line_type = c("solid", "solid"),
                             gg_theme = NULL, ...) {
+  
+  compare_plot_check(model = model, indicator = indicator,
+                    label = label, color = color, shape = shape,
+                  line_type = line_type, gg_theme = gg_theme)
 
    if (inherits(model, "direct") & inherits(direct, "model")){
      model_orig <- model
