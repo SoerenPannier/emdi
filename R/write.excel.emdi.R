@@ -44,14 +44,15 @@
 #' }
 #' To check if a zip application is available they recommend the command 
 #' \code{shell("zip")}.
-#' @seealso \code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}}
+#' @seealso \code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}}, 
+#' \code{\link{fh}}
 #' @examples 
 #' \dontrun{
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
 #' 
-#' # Generate emdi object with two additional indicators
+#' # Generate emdi object with two additional indicators; here via function ebp() 
 #' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,

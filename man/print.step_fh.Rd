@@ -2,15 +2,15 @@
 % Please edit documentation in R/step_fh.R
 \name{print.step_fh}
 \alias{print.step_fh}
-\title{Prints step function result}
+\title{Prints step function results}
 \usage{
 \method{print}{step_fh}(x, ...)
 }
 \arguments{
-\item{x}{Return from step function.}
+\item{x}{an object of type "step_fh".}
 
 \item{...}{further arguments passed to or from other methods.}
 }
 \description{
-Prints step function result
+The elements described in step_fh are printed.
 }

@@ -1,11 +1,12 @@
 #' Compare function
 #'
-#' This function assesses the quality of the model-based estimates by comparing 
-#' them with the direct estimates based on a goodness-of-fit test proposed by
-#' Brown et al. (2001) and by computing the correlation between the 
-#' regression-synthetic part of the Fay-Herriot model and the direct estimates.
+#' Function \code{compare} is a generic function used to assess the quality of 
+#' the model-based estimates by comparing them with the direct estimates based 
+#' on a goodness-of-fit test proposed by Brown et al. (2001) and by computing 
+#' the correlation between the regression-synthetic part of the model and the 
+#' direct estimates.
 #'
-#' @param model an object of type "model","fh".
+#' @param model an object of type "emdi","model".
 #' @param ... further arguments passed to or from other methods.
 #' @return The null hypothesis, the value W of the test statistic, the degrees 
 #' of freedom and the p value of the Brown test and the correlation coefficient 
@@ -20,9 +21,9 @@
 compare <- function(model, ...) UseMethod("compare")
 #' Compare function
 #'
-#' This function assesses the quality of the model-based estimates by comparing 
-#' them with the direct estimates based on a goodness-of-fit test proposed by
-#' Brown et al. (2001) and by computing the correlation between the 
+#' Method \code{compare.fh} assesses the quality of the model-based estimates by 
+#' comparing them with the direct estimates based on a goodness-of-fit test 
+#' proposed by Brown et al. (2001) and by computing the correlation between the 
 #' regression-synthetic part of the Fay-Herriot model and the direct estimates.
 #'
 #' @param model an object of type "model","fh".

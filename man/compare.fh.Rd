@@ -17,9 +17,9 @@ of freedom and the p value of the Brown test and the correlation coefficient
 of the synthetic part and the direct estimator.
 }
 \description{
-This function assesses the quality of the model-based estimates by comparing 
-them with the direct estimates based on a goodness-of-fit test proposed by
-Brown et al. (2001) and by computing the correlation between the 
+Method \code{compare.fh} assesses the quality of the model-based estimates by 
+comparing them with the direct estimates based on a goodness-of-fit test 
+proposed by Brown et al. (2001) and by computing the correlation between the 
 regression-synthetic part of the Fay-Herriot model and the direct estimates.
 }
 \references{

@@ -7,7 +7,7 @@
 compare(model, ...)
 }
 \arguments{
-\item{model}{an object of type "model","fh".}
+\item{model}{an object of type "emdi","model".}
 
 \item{...}{further arguments passed to or from other methods.}
 }
@@ -17,10 +17,11 @@ of freedom and the p value of the Brown test and the correlation coefficient
 of the synthetic part and the direct estimator.
 }
 \description{
-This function assesses the quality of the model-based estimates by comparing 
-them with the direct estimates based on a goodness-of-fit test proposed by
-Brown et al. (2001) and by computing the correlation between the 
-regression-synthetic part of the Fay-Herriot model and the direct estimates.
+Function \code{compare} is a generic function used to assess the quality of 
+the model-based estimates by comparing them with the direct estimates based 
+on a goodness-of-fit test proposed by Brown et al. (2001) and by computing 
+the correlation between the regression-synthetic part of the model and the 
+direct estimates.
 }
 \references{
 Brown, G., R. Chambers, P. Heady, and D. Heasman (2001). Evaluation of small 

@@ -5,12 +5,29 @@
 \title{Standard and extended Fay-Herriot models for disaggregated indicators like 
 means and ratios}
 \usage{
-fh(fixed, vardir, combined_data, domains, method = "reml",
-  interval = c(0, 1000), k = 1.345, c = 1, transformation = "no",
-  backtransformation = NULL, eff_smpsize = NULL, correlation = "no",
-  corMatrix = NULL, Ci = NULL, tol = 1e-06, maxit = 100,
-  MSE = FALSE, mse_type = "analytical", B = NULL, seed = NULL,
-  alpha = 0.05)
+fh(
+  fixed,
+  vardir,
+  combined_data,
+  domains,
+  method = "reml",
+  interval = c(0, 1000),
+  k = 1.345,
+  c = 1,
+  transformation = "no",
+  backtransformation = NULL,
+  eff_smpsize = NULL,
+  correlation = "no",
+  corMatrix = NULL,
+  Ci = NULL,
+  tol = 1e-06,
+  maxit = 100,
+  MSE = FALSE,
+  mse_type = "analytical",
+  B = NULL,
+  seed = NULL,
+  alpha = 0.05
+)
 }
 \arguments{
 \item{fixed}{a two-sided linear formula object describing the
@@ -50,17 +67,17 @@ prediction following \cite{Warnholz (2017)} ("\code{reblupbc}"),
  estimation of the variance of the random effects. Defaults to \code{c(0,1000)}. 
  In some cases it may be more suitable to choose a larger interval. 
 Required argument when method "\code{reml}" and  "\code{ml}" in combination 
-with \code{correlation} equals "\code{no}" is choosen or for the adjusted 
+with \code{correlation} equals "\code{no}" is chosen or for the adjusted 
 variance estimation methods "\code{amrl}", "\code{amrl_yl}", "\code{ampl}" 
 and "\code{ampl_yl}". Defaults to \code{c(0, 1000)}.}
 
 \item{k}{numeric tuning constant. Required argument when the robust version of 
-the standard or spatial Fay-Herriot model is choosen. Defaults to \code{1.345}. 
+the standard or spatial Fay-Herriot model is chosen. Defaults to \code{1.345}. 
 For detailed information please refer to \cite{Warnholz (2016)}.}
 
 \item{c}{numeric multiplyer constant used in the bias corrected version of the 
 robust estimation methods. Required argument when the robust version of 
-the standard or spatial Fay-Herriot model is choosen. Default is to make no 
+the standard or spatial Fay-Herriot model is chosen. Default is to make no 
 correction for realisations of direct estimator within \code{c = 1} times the 
 standard deviation of direct estimator. For detailed information please refer 
 to \cite{Warnholz (2016)}.}
@@ -74,20 +91,20 @@ the sampling variances following \cite{Neves et al. (2013)},
 the sampling variances following \cite{Jiang et al. (2001)}. Defaults to "\code{no}".}
 
 \item{backtransformation}{a character that determines the type of bracktransformation 
-of the EBLUPs and MSE estimates. Required argument when a transformation is choosen. 
+of the EBLUPs and MSE estimates. Required argument when a transformation is chosen. 
 Available methods are 
 (i) crude bias-correction ("\code{bc_crude}") following \cite{Neves et al. (2013)} 
-and \cite{Rao and Molina (2015)} when the log transformation is choosen,
+and \cite{Rao and Molina (2015)} when the log transformation is chosen,
 (ii) bias-correction following \cite{Slud and Maiti (2006)} ("\code{bc_sm}") 
-when the log transformations is choosen,
+when the log transformations is chosen,
 (iii) naive back transformation ("\code{naive}") when the arcsin transformation 
-is choosen,
+is chosen,
 (iii) bias-corrected back transformation ("\code{bc}") 
-when the arcsin transformations is choosen. Defaults to \code{NULL}.}
+when the arcsin transformations is chosen. Defaults to \code{NULL}.}
 
 \item{eff_smpsize}{a character string indicating the name of the variable containing
 the effective sample sizes that are included in \code{combined_data}. Required 
-argument when the arcsin transformation is choosen in combination with 
+argument when the arcsin transformation is chosen in combination with 
 \code{mse_type = boot}. Defaults to \code{NULL}.}
 
 \item{correlation}{a character determining the correlation structure of the 
@@ -112,14 +129,14 @@ Defaults to \code{NULL}.}
 
 \item{tol}{a number determining the tolerance value for the estimation of the
 variance of the random effects. Required argument when method "\code{reml}" and 
-"\code{ml}" in combination with \code{correlation = "spatial"} are choosen or 
+"\code{ml}" in combination with \code{correlation =}"\code{spatial}" are chosen or 
 for the variance estimation methods "\code{reblup}", "\code{reblupbc}" and 
 "\code{me}". Defaults to \code{NULL}.}
 
 \item{maxit}{a number determining the maximum number of iterations for the 
 estimation of the variance of the random effects. Required argument when method 
 "\code{reml}" and  "\code{ml}" in combination with \code{correlation} equals 
-"\code{spatial}" is choosen or for the variance estimation methods "\code{reblup}", 
+"\code{spatial}" is chosen or for the variance estimation methods "\code{reblup}", 
 "\code{reblupbc}" and "\code{me}". Defaults to \code{NULL}.}
 
 \item{MSE}{if \code{TRUE}, MSE estimates are calculated. Defaults
@@ -136,11 +153,11 @@ random effect ("\code{analytical}"),
 ("\code{pseudo}"),
 (vi) naive parametric bootstrap for the spatial Fay-Herriot model 
 ("\code{spatialparboot}"),
-#' (vii) bias corrected parametric bootstrap for the spatial Fay-Herriot model 
+(vii) bias corrected parametric bootstrap for the spatial Fay-Herriot model 
 ("\code{spatialparbootbc}"),
 (viii) naive nonparametric bootstrap for the spatial Fay-Herriot model 
 ("\code{spatialnonparboot}"),
-#' (ix) bias corrected nonparametric bootstrap for the spatial Fay-Herriot model 
+(ix) bias corrected nonparametric bootstrap for the spatial Fay-Herriot model 
 ("\code{spatialnonparbootbc}").
 Options (ii)-(iv) are of interest when the arcsin transformation is selected. 
 Option (ii) must be chosen when an Ybarra-Lohr model is selected 
@@ -150,7 +167,7 @@ MSE options please refer to the Vignette. Required argument when
 \code{MSE = TRUE}. Defaults to "\code{analytical}".}
 
 \item{B}{a number determining the number of bootstrap iterations. When a 
-bootstrap MSE estimator is choosen, \code{B} regulates the MSE estimation. 
+bootstrap MSE estimator is chosen, \code{B} regulates the MSE estimation. 
 When the standard FH model is applied and \code{B} is not \code{NULL}, the 
 information criteria by Marhuenda et al. (2014) are computed. The number must 
 be greater than 1. Defaults to \code{NULL}. For practical applications, 
@@ -254,8 +271,8 @@ Ci = Ci_array, tol=0.00000001, maxit= 2000, MSE = TRUE, mse_type = "jackknife")
 Chandra, H., Aditya, K. and Kumar, S. (2017), Small-area estimation under a 
 log-transformed area-level model, Journal of Statistical Theory and 
 Practice 12(3), 497-505. \cr \cr
-Chen S., Lahiri P. (2002), A Weighted Jackknife MSPE Estimator in Small-Area 
-Estimation, "Proceeding of the Section on Survey Research Methods", American 
+Chen S., Lahiri P. (2002), A weighted jackknife MSPE estimator in small-area 
+estimation, "Proceeding of the Section on Survey Research Methods", American 
 Statistical Association, 473 - 477. \cr \cr
 Datta, G. S. and Lahiri, P. (2000), A unified measure of uncertainty of 
 estimated best linear unbiased predictors in small area estimation problems, 

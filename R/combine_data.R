@@ -3,15 +3,16 @@
 #' This function combines different data sets.
 #'
 #' @param pop_data a data frame with population data.
-#' @param pop_domains population domains.
-#' @param smp_data sample data.
-#' @param smp_domains sample domains.
-#' @param vardir direct variance.
-#' @return combined data set.
+#' @param pop_domains a character string indicating the domain variable that is
+#' included in \code{pop_data}.
+#' @param smp_data a data frame with sample data.
+#' @param smp_domains a character string indicating the domain variable that is 
+#' included in \code{smp_data}.
+#' @return a combined data set.
 #' @export
 
 
-combine_data <- function(pop_data, pop_domains, smp_data, smp_domains, vardir) {
+combine_data <- function(pop_data, pop_domains, smp_data, smp_domains) {
 
 
   smp_domains_vec <- smp_data[, smp_domains]

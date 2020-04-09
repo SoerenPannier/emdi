@@ -4,12 +4,18 @@
 \alias{step_fh}
 \title{Step function}
 \usage{
-step_fh(object, scope = NULL, criteria = "AIC", direction = c("both",
-  "backward", "forward"), trace = TRUE, steps = 1000)
+step_fh(
+  object,
+  scope = NULL,
+  criteria = "AIC",
+  direction = c("both"),
+  trace = TRUE,
+  steps = 1000
+)
 }
 \arguments{
-\item{object}{an object of type "fh" that contains the chosen information 
-criteria.}
+\item{object}{an object of type "model","fh" that contains the chosen 
+information criteria.}
 
 \item{scope}{formula or a list including two formulas (\code{lower} and 
 \code{upper}) specifying the models considered in the step function. 
@@ -40,5 +46,6 @@ coefficients, the standard errors and the \code{t}- and \code{p}-values of
 the explanatory variables.}
 }
 \description{
-This function selects a model by different criteria in a stepwise algorithm.
+This function selects a Fay-Herriot model by different criteria in a stepwise 
+algorithm.
 }

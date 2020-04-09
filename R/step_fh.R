@@ -1,9 +1,10 @@
 #' Step function
 #'
-#' This function selects a model by different criteria in a stepwise algorithm.
+#' This function selects a Fay-Herriot model by different criteria in a stepwise 
+#' algorithm.
 #'
-#' @param object an object of type "fh" that contains the chosen information 
-#' criteria.
+#' @param object an object of type "model","fh" that contains the chosen 
+#' information criteria.
 #' @param scope formula or a list including two formulas (\code{lower} and 
 #' \code{upper}) specifying the models considered in the step function. 
 #' Defaults to \code{NULL}.
@@ -29,7 +30,7 @@
 #' @importFrom stats factor.scope 
 
 step_fh <- function (object, scope = NULL, criteria = "AIC", 
-                     direction = c("both", "backward","forward"), trace = TRUE,
+                     direction = c("both"), trace = TRUE,
                      steps = 1000) 
 {
 
@@ -173,9 +174,10 @@ step_fh <- function (object, scope = NULL, criteria = "AIC",
   results
 }
 
-#' Prints step function result
+#' Prints step function results
 #'
-#' @param x Return from step function.
+#' The elements described in step_fh are printed.
+#' @param x an object of type "step_fh".
 #' @param ... further arguments passed to or from other methods.
 #' @export
 

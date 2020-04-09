@@ -1,9 +1,9 @@
 #' Plots for an emdi object
 #'
 #' Diagnostic plots of the underlying model in the EBP (see also
-#' \code{\link{ebp}}) or Fay-Herriot approach (see also
-#' \code{\link{fh}}) are obtained. These include Q-Q plots and density plots
-#' of residuals and random effects from the nested error linera regression model/
+#' \code{\link{ebp}}) or Fay-Herriot (see also \code{\link{fh}}) approaches are 
+#' obtained. These include Q-Q plots and density plots of residuals and random 
+#' effects from the nested error linear regression model/
 #' the Fay-Herriot model, a Cook's distance plot for detecting outliers and the
 #' log-likelihood of the estimation of the optimal parameter in Box-Cox
 #' transformations (the latter two only for ebp). The return depends on the

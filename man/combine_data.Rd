@@ -4,21 +4,21 @@
 \alias{combine_data}
 \title{Combines sample and population data}
 \usage{
-combine_data(pop_data, pop_domains, smp_data, smp_domains, vardir)
+combine_data(pop_data, pop_domains, smp_data, smp_domains)
 }
 \arguments{
 \item{pop_data}{a data frame with population data.}
 
-\item{pop_domains}{population domains.}
+\item{pop_domains}{a character string indicating the domain variable that is
+included in \code{pop_data}.}
 
-\item{smp_data}{sample data.}
+\item{smp_data}{a data frame with sample data.}
 
-\item{smp_domains}{sample domains.}
-
-\item{vardir}{direct variance.}
+\item{smp_domains}{a character string indicating the domain variable that is 
+included in \code{smp_data}.}
 }
 \value{
-combined data set.
+a combined data set.
 }
 \description{
 This function combines different data sets.

@@ -94,10 +94,13 @@ summary(fh_reml)
 \references{
 Lahiri, P. and Suntornchost, J. (2015), Variable selection for linear mixed
 models with applications in small area estimation, The Indian Journal of 
-Statistics 77-B(2), 312-320.
+Statistics 77-B(2), 312-320. \cr \cr
+Marhuenda, Y., Morales, D. and Pardo, M.C. (2014). Information criteria for 
+Fay-Herriot model selection. Computational Statistics and Data Analysis 70, 
+268-280.
 }
 \seealso{
 \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}},
-\code{\link[MuMIn]{r.squaredGLMM}}, \code{\link[moments]{skewness}},
+\code{\link{fh}}, \code{\link[MuMIn]{r.squaredGLMM}}, \code{\link[moments]{skewness}},
 \code{\link[moments]{kurtosis}}, \code{\link[stats]{shapiro.test}}
 }

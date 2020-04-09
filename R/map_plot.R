@@ -16,7 +16,8 @@
 #' "Inequality". Defaults to "all". Note, additional custom indicators can be 
 #' defined as argument for model-based approaches (see also \code{\link{ebp}}) 
 #' and do not appear in groups of indicators even though these might belong to 
-#' one of the groups.  
+#' one of the groups. If the \code{model} argument is of type "model","fh", 
+#' indicator can be set to "all", "FH" or "Direct". Defaults to "all". 
 #' @param MSE optional logical. If \code{TRUE}, the MSE is also visualized.
 #' @param CV optional logical. If \code{TRUE}, the CV is also visualized.
 #' @param map_obj an \code{SpatialPolygonsDataFrame} object as defined by the
@@ -43,7 +44,7 @@
 #' to \code{FALSE}.
 #' @return Creates the plots demanded, and, if selected, a fortified data.frame
 #' containing the mapdata and chosen indicators. 
-#' @seealso \code{\link{ebp}}, \code{\link{emdiObject}},
+#' @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link{emdiObject}},
 #' \code{\link[maptools]{readShapePoly}}
 #' @examples 
 #' \dontrun{

@@ -4,9 +4,19 @@
 \alias{compare_plot}
 \title{Shows plots for the comparison of estimates}
 \usage{
-compare_plot(model, direct, indicator = "all", MSE = TRUE, CV = TRUE,
-  label = "orig", color = c("blue", "lightblue3"), shape = c(16, 16),
-  line_type = c("solid", "solid"), gg_theme = NULL, ...)
+compare_plot(
+  model,
+  direct,
+  indicator = "all",
+  MSE = TRUE,
+  CV = TRUE,
+  label = "orig",
+  color = c("blue", "lightblue3"),
+  shape = c(16, 16),
+  line_type = c("solid", "solid"),
+  gg_theme = NULL,
+  ...
+)
 }
 \arguments{
 \item{model}{an object of type "emdi","model", representing point and MSE
@@ -24,9 +34,11 @@ shall be returned: (i) all calculated indicators ("all");
 "Quantile_75", "Quantile_90", "Head_Count",
 "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
 "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
-"Inequality" or "Custom".If two of these groups are selected, only the first
-one is returned. Defaults to "all". Note, additional custom indicators can be
-defined as argument for model-based approaches (see also \code{\link{ebp}})
+"Inequality" or "Custom". If two of these groups are selected, only the first
+one is returned. If the \code{model} argument is of type "model","fh", 
+indicator must be set to "all" and the comparison is done for the EBLUP 
+estimates. Defaults to "all". Note, additional custom indicators can be
+defined as argument for the EBP approaches (see also \code{\link{ebp}})
 and do not appear in groups of indicators even though these might belong to
 one of the groups.}
 
@@ -71,67 +83,17 @@ respectively: the MSE/CV estimates of the direct and model-based estimates are
 compared by boxplots and scatterplots.
 }
 \description{
-For all indicators or a selection of indicators two plots are returned. The
-first plot is a scatter plot of estimates to compare and the second is a line
-plot with these estimates.
+Function \code{compare_plot} is a generic function used to produce two plots 
+for all indicators or a selection of indicators. The first plot is a scatter 
+plot of estimates to compare and the second is a line plot with these estimates.
 }
 \details{
 Since all of the comparisons need a direct estimator, the plots are 
-only created for in-sample domains. For the new package version the order of 
-the input arguments direct and model has been changed. In this version, it is 
-still possible to use the old order because the arguments are swapped 
-internally. From the next package version it will no longer be possible.
-}
-\examples{
-\dontrun{
-# Examples for comparisons of direct estimates and models of type ebp
-
-# Loading data - population and sample data
-data("eusilcA_pop")
-data("eusilcA_smp")
-  
-# Generation of two emdi objects
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
-self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
-fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-threshold = function(y){0.6 * median(y)}, L = 50, MSE = TRUE,
-na.rm = TRUE, cpus = 1)
-
-emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
-smp_domains = "district", weights = "weight", threshold = 11161.44,
-var = TRUE, boot_type = "naive", B = 50, seed = 123, na.rm = TRUE)
-
-# Example 1: Receive first overview
-compare_plot(model = emdi_model, direct = emdi_direct)
-
-# Example 2: Change plot theme
-library(ggplot2)
-compare_plot(emdi_model, emdi_direct, indicator = "Median",
-gg_theme = theme(axis.line = element_line(size = 3, colour = "grey80"),
-plot.background = element_rect(fill = "lightblue3"),
-legend.position = "none"))
-
-# Example for comparison of direct estimates and models of type fh
-
-# Loading data - population and sample data
-data("eusilcA_popAgg")
-data("eusilcA_smpAgg")
-
-# Combine sample and population data -------------------------------------------
-combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
-                              smp_data = eusilcA_smpAgg, smp_domains = "Domain")
-
-# Generation of the emdi object
-fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-             combined_data = combined_data, domains = "Domain", method = "ml", 
-             interval = c(0, 100000000), MSE = TRUE)
-# Example 3: Receive first overview
-compare_plot(fh_std) 
-
-# Example 4: Compare also MSE and CV estimates 
-compare_plot(fh_std, MSE = TRUE, CV = TRUE)                       
-}
+only created for in-sample domains. For the new package version (2.0.0) the 
+order of the input arguments direct and model has been changed. In this 
+version (1.1.6), it is still possible to use the old order because the 
+arguments are swapped internally. From the next package version it will no 
+longer be possible.
 }
 \seealso{
 \code{\link{emdiObject}}, \code{\link{fhObject}}, \code{\link{fh}},

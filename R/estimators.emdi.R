@@ -11,11 +11,12 @@
 #' "Quantile_75", "Quantile_90", "Head_Count",
 #' "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
 #' "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
-#' "Inequality" or "Custom".If two of these groups are selected, only the first
-#' one is returned. Defaults to "all". Note, additional custom indicators can be
+#' "Inequality" or "Custom". If two of these groups are selected, only the first
+#' one is returned. Note, additional custom indicators can be
 #' defined as argument for model-based approaches (see also \code{\link{ebp}})
 #' and do not appear in groups of indicators even though these might belong to
-#' one of the groups.
+#' one of the groups. If the \code{model} argument is of type "model","fh", 
+#' indicator can be set to "all", "FH" or "Direct". Defaults to "all".
 #' @param MSE optional logical. If \code{TRUE}, MSE estimates for selected indicators
 #' per domain are added to the data frame of point estimates. Defaults to
 #' \code{FALSE}.
@@ -48,10 +49,11 @@ estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
 #' "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
 #' "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
 #' "Inequality" or "Custom". If two of these groups are selected, only the first
-#' one is returned. Defaults to "all". Note, additional custom indicators can be
+#' one is returned. Note, additional custom indicators can be
 #' defined as argument for model-based approaches (see also \code{\link{ebp}})
 #' and do not appear in groups of indicators even though these might belong to
-#' one of the groups.
+#' one of the groups. If the \code{model} argument is of type "model","fh", 
+#' indicator can be set to "all", "FH" or "Direct". Defaults to "all".
 #' @param MSE optional logical. If \code{TRUE}, MSE estimates for selected indicators
 #' per domain are added to the data frame of point estimates. Defaults to
 #' \code{FALSE}.
@@ -65,7 +67,8 @@ estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
 #' \code{emdiObject$ind} and, if chosen, \code{emdiObject$MSE}. These objects
 #' contain two elements, one data frame \code{ind} and a character naming the
 #' indicator or indicator group \code{ind_name}.
-#' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}
+#' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
+#' \code{\link{fh}},
 #' @examples
 #' \dontrun{
 #' # Loading data - population and sample data

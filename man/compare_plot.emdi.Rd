@@ -4,10 +4,19 @@
 \alias{compare_plot.emdi}
 \title{Shows plots for the comparison of estimates}
 \usage{
-\method{compare_plot}{emdi}(model = NULL, direct = NULL,
-  indicator = "all", MSE = FALSE, CV = FALSE, label = "orig",
-  color = c("blue", "lightblue3"), shape = c(16, 16),
-  line_type = c("solid", "solid"), gg_theme = NULL, ...)
+\method{compare_plot}{emdi}(
+  model = NULL,
+  direct = NULL,
+  indicator = "all",
+  MSE = FALSE,
+  CV = FALSE,
+  label = "orig",
+  color = c("blue", "lightblue3"),
+  shape = c(16, 16),
+  line_type = c("solid", "solid"),
+  gg_theme = NULL,
+  ...
+)
 }
 \arguments{
 \item{model}{an object of type "emdi","model", representing point and MSE
@@ -25,9 +34,11 @@ shall be returned: (i) all calculated indicators ("all");
 "Quantile_75", "Quantile_90", "Head_Count",
 "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
 "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
-"Inequality" or "Custom".If two of these groups are selected, only the first
-one is returned. Defaults to "all". Note, additional custom indicators can be
-defined as argument for model-based approaches (see also \code{\link{ebp}})
+"Inequality" or "Custom". If two of these groups are selected, only the first
+one is returned. If the \code{model} argument is of type "model","fh", 
+indicator must be set to "all" and the comparison is done for the EBLUP 
+estimates. Defaults to "all". Note, additional custom indicators can be
+defined as argument for the EBP approaches (see also \code{\link{ebp}})
 and do not appear in groups of indicators even though these might belong to
 one of the groups.}
 
@@ -69,16 +80,18 @@ A scatter plot and a line plot comparing direct and model-based
 estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
 }
 \description{
-For all indicators or a selection of indicators two plots are returned. The
+Method \code{compare_plot.emdi} produces two plots for all indicators or a 
+selection of indicators for objects of type "emdi". The
 first plot is a scatter plot of estimates to compare and the second is a line
 plot with these estimates.
 }
 \details{
 Since all of the comparisons need a direct estimator, the plots are 
-only created for in-sample domains. For the new package version the order of 
-the input arguments direct and model has been changed. In this version, it is 
-still possible to use the old order because the arguments are swapped 
-internally. From the next package version it will no longer be possible.
+only created for in-sample domains. For the new package version (2.0.0) the 
+order of the input arguments direct and model has been changed. In this 
+version (1.1.6), it is still possible to use the old order because the 
+arguments are swapped internally. From the next package version it will no 
+longer be possible.
 }
 \examples{
 \dontrun{

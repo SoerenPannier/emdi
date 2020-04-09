@@ -79,7 +79,7 @@ type (see also \code{transformation} in \code{\link{fh}}). \cr
      \code{successful_bootstraps} is \code{NULL}.}
 }
 \description{
-An object of class fh that provides estimators for regional disaggregated 
+An object of class "model","fh" that provides estimators for regional disaggregated 
 indicators like means and ratios and optionally corresponding MSE estimates. 
 Generic functions such as \code{\link{estimators}}, \code{\link{print}}, 
 \code{\link{plot}} and \code{\link{summary}} have methods that can be used to 

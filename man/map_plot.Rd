@@ -4,10 +4,19 @@
 \alias{map_plot}
 \title{Visualizes regional disaggregrated estimates on a map}
 \usage{
-map_plot(object, indicator = "all", MSE = FALSE, CV = FALSE,
-  map_obj = NULL, map_dom_id = NULL, map_tab = NULL,
-  color = c("white", "red4"), scale_points = NULL,
-  guide = "colourbar", return_data = FALSE)
+map_plot(
+  object,
+  indicator = "all",
+  MSE = FALSE,
+  CV = FALSE,
+  map_obj = NULL,
+  map_dom_id = NULL,
+  map_tab = NULL,
+  color = c("white", "red4"),
+  scale_points = NULL,
+  guide = "colourbar",
+  return_data = FALSE
+)
 }
 \arguments{
 \item{object}{an object of type emdi, containing the estimates to be 
@@ -22,7 +31,8 @@ shall be returned: (i) all calculated indicators ("all");
 "Inequality". Defaults to "all". Note, additional custom indicators can be 
 defined as argument for model-based approaches (see also \code{\link{ebp}}) 
 and do not appear in groups of indicators even though these might belong to 
-one of the groups.}
+one of the groups. If the \code{model} argument is of type "model","fh", 
+indicator can be set to "all", "FH" or "Direct". Defaults to "all".}
 
 \item{MSE}{optional logical. If \code{TRUE}, the MSE is also visualized.}
 
@@ -105,6 +115,6 @@ map_plot(object = emdi_model, MSE = FALSE, CV = TRUE,
         }
 }
 \seealso{
-\code{\link{ebp}}, \code{\link{emdiObject}},
+\code{\link{ebp}}, \code{\link{fh}}, \code{\link{emdiObject}},
 \code{\link[maptools]{readShapePoly}}
 }

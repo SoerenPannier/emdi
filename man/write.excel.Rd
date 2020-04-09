@@ -5,11 +5,23 @@
 \alias{write.ods}
 \title{Exports an emdiObject to an excel file or OpenDocument Spreadsheet}
 \usage{
-write.excel(object, file = "excel_output.xlsx", indicator = "all",
-  MSE = FALSE, CV = FALSE, split = FALSE)
+write.excel(
+  object,
+  file = "excel_output.xlsx",
+  indicator = "all",
+  MSE = FALSE,
+  CV = FALSE,
+  split = FALSE
+)
 
-write.ods(object, file = "ods_output.ods", indicator = "all",
-  MSE = FALSE, CV = FALSE, split = FALSE)
+write.ods(
+  object,
+  file = "ods_output.ods",
+  indicator = "all",
+  MSE = FALSE,
+  CV = FALSE,
+  split = FALSE
+)
 }
 \arguments{
 \item{object}{an object of type "emdi", representing point and
@@ -74,7 +86,7 @@ To check if a zip application is available they recommend the command
 data("eusilcA_pop")
 data("eusilcA_smp")
 
-# Generate emdi object with two additional indicators
+# Generate emdi object with two additional indicators; here via function ebp() 
 emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
 self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
@@ -99,5 +111,6 @@ MSE = TRUE, CV = TRUE)
 
 }
 \seealso{
-\code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}}
+\code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}}, 
+\code{\link{fh}}
 }

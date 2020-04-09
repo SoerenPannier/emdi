@@ -4,8 +4,7 @@
 \alias{estimators.emdi}
 \title{Presents point, MSE and/or CV estimates of an emdiObject}
 \usage{
-\method{estimators}{emdi}(object, indicator = "all", MSE = FALSE,
-  CV = FALSE, ...)
+\method{estimators}{emdi}(object, indicator = "all", MSE = FALSE, CV = FALSE, ...)
 }
 \arguments{
 \item{object}{an object of type "emdi", representing point and,
@@ -18,10 +17,11 @@ shall be returned: (i) all calculated indicators ("all");
 "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
 "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
 "Inequality" or "Custom". If two of these groups are selected, only the first
-one is returned. Defaults to "all". Note, additional custom indicators can be
+one is returned. Note, additional custom indicators can be
 defined as argument for model-based approaches (see also \code{\link{ebp}})
 and do not appear in groups of indicators even though these might belong to
-one of the groups.}
+one of the groups. If the \code{model} argument is of type "model","fh", 
+indicator can be set to "all", "FH" or "Direct". Defaults to "all".}
 
 \item{MSE}{optional logical. If \code{TRUE}, MSE estimates for selected indicators
 per domain are added to the data frame of point estimates. Defaults to
@@ -71,5 +71,6 @@ estimators(emdi_model, indicator = "Custom")
 }
 }
 \seealso{
-\code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}
+\code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
+\code{\link{fh}},
 }
