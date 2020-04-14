@@ -1,7 +1,7 @@
 backtransformed <- function(framework, sigmau2, eblup, transformation,
                             backtransformation,
                             combined_data, method, vardir,
-                            interval, B, alpha, MSE, mse_type) {
+                            interval, B, MSE, mse_type) {
 
 
   # Define return data frames with direct estimators
@@ -53,7 +53,7 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
                              eblup = eblup, combined_data = combined_data)
         MSE_data$FH[framework$obs_dom == TRUE] <- SM_MSE$FH[framework$obs_dom == TRUE]
         # MSE_data$MSE[framework$obs_dom == FALSE] <-  exp(eblup$EBLUP_data$EBLUP[framework$obs_dom == FALSE])^2 * estim_MSE$MSE_data$MSE[framework$obs_dom == FALSE]
-        MSE_data$FHE[framework$obs_dom == FALSE] <- NA
+       # MSE_data$FHE[framework$obs_dom == FALSE] <- NA
         MSE_method <- "slud-maiti"
       } else {
         MSE_data <- NULL
@@ -76,7 +76,7 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
                                    framework = framework, eblup = eblup,
                                    eblup_corr = EBLUP_data$FH,
                                    method = method, interval = interval,
-                                   B = B, alpha = alpha, backtransformation = backtransformation)
+                                   B = B, backtransformation = backtransformation)
           MSE_boot <- tmp_out[[2]]
           MSE_data$FH <- MSE_boot$MSE
           MSE_method <- "bootstrap"
@@ -143,7 +143,7 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
                                    framework = framework, eblup = eblup,
                                    eblup_corr = EBLUP_data$FH,
                                    method = method, interval = interval,
-                                   B = B, alpha = alpha, backtransformation = backtransformation)
+                                   B = B, backtransformation = backtransformation)
           MSE_boot <- tmp_out[[2]]
 
           MSE_data$FH <- MSE_boot$MSE

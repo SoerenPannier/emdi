@@ -418,8 +418,8 @@ slud_maiti <- function(framework, sigmau2, eblup, combined_data) {
     MSE_data$FH[framework$obs_dom == FALSE] <- NA
     MSE_data$Out[framework$obs_dom == FALSE] <- 1
 
-    cat("Please note that a MSE is only returned for in-sample domains.
-        For more information see help(fh).")
+    cat("Please note that EBLUP and MSE results are only returned for in-sample 
+domains. For more information see help(fh).")
   }
 
   return(MSE_data)
@@ -464,7 +464,7 @@ analytical_mse <- function(framework, sigmau2, combined_data,
 
 boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
                           eblup, eblup_corr, B, method,
-                          interval, alpha, backtransformation) {
+                          interval, backtransformation) {
 
 
   # Gonzales Bootstrap fuer arcsin

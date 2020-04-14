@@ -6,7 +6,7 @@
 fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k, 
                      c, transformation, backtransformation, eff_smpsize,
                      correlation, corMatrix, Ci, tol, maxit, MSE, 
-                     mse_type, B, seed, alpha){
+                     mse_type, B, seed){
   
   if (is.null(fixed) || !inherits(fixed, "formula")) {
     stop('Fixed must be a formula object. See also help(fh).')
@@ -25,11 +25,11 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
          the arcsin transformation in combination with bootstrap mse is chosen, 
          also eff_smpsize needs to be included. See also help(fh).') 
   }
-  if (!is.character(domains) || length(domains) != 1 || 
-      !(domains %in% colnames(combined_data))) {
+  if (!is.null(domains) && (!is.character(domains) || length(domains) != 1 || 
+      !(domains %in% colnames(combined_data)))) {
     stop('domains must be a vector of length 1 and of class character 
          specifying the variable name of a numeric or factor variable 
-         indicating domains in the combined_data. See also help(fh).')
+         indicating domains in the combined_data dataframe. See also help(fh).')
   }
   
   if (is.null(method) || !(method == "reml" 
@@ -193,7 +193,7 @@ fh_fw_check1 <- function(fixed, vardir, combined_data, domains, eff_smpsize = NU
 fh_combinations <- function(fixed, vardir, combined_data, domains, method, 
                             interval, k, c, transformation, backtransformation, 
                             eff_smpsize, correlation, corMatrix, Ci, tol, 
-                            maxit, MSE, mse_type, B, seed, alpha){
+                            maxit, MSE, mse_type, B, seed){
   
   if (is.null(transformation) ||  !is.character(transformation) || 
       !(transformation == "arcsin" || transformation == "log" 

@@ -53,6 +53,8 @@
 #' \code{\link[moments]{kurtosis}}, \code{\link[stats]{shapiro.test}}
 #' @examples
 #' \dontrun{
+#' # Example for models of type ebp
+#' 
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
@@ -66,26 +68,27 @@
 #' custom_indicator = list( my_max = function(y, threshold){max(y)},
 #' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 #'
-#' # Receive first overview
+#' # Example 1: Receive first overview
 #' summary(emdi_model)
 #'
 #'
-#' # Load aggregated data ------------------------------------------------------
+#' # Example for models of type fh
+#' 
+#' # Loading data - population and sample data
 #' data("eusilcA_popAgg")
 #' data("eusilcA_smpAgg")
 #'
-#' # Combine sample and population data ----------------------------------------
+#' # Combine sample and population data -------------------------------------------
 #' combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
 #'                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
 #'
-#' # Estimation of EBLUP means without transformation --------------------------
-#'
-#' # REML
-#' fh_reml <- fh(fixed = Mean ~ eqsize + cash + self_empl, vardir = "Var_Mean",
-#'               combined_data = combined_data, domains = "Domain",
-#'               method = "reml", interval = c(0, 100000000))
-#' # Receive first overview
-#' summary(fh_reml)
+#' # Generation of the emdi object
+#' fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+#'              combined_data = combined_data, domains = "Domain", method = "ml", 
+#'              interval = c(0, 100000000), MSE = TRUE)
+#'              
+#' # Example 2: Receive first overview
+#' summary(fh_std)
 #' }
 #' @export
 #' @importFrom moments skewness kurtosis
