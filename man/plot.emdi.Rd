@@ -93,6 +93,7 @@ All plots are obtained by \code{\link[ggplot2]{ggplot}}.
 }
 \examples{
 \dontrun{
+# Examples for models of type ebp
 # Loading data - population and sample data
 data("eusilcA_pop")
 data("eusilcA_smp")
@@ -123,22 +124,23 @@ plot(emdi_model, gg_theme = theme(panel.background = element_rect(fill = "white"
 colour = "white"), plot.title = element_text(face = "bold"),
 title = element_text(color = "navy")))
 
-# Load aggregated data ---------------------------------------------------------
+# Example for models of type fh
+
+# Loading data - population and sample data
 data("eusilcA_popAgg")
 data("eusilcA_smpAgg")
 
 # Combine sample and population data -------------------------------------------
 combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
-                             smp_data = eusilcA_smpAgg, smp_domains = "Domain")
-# Estimation of EBLUP means without transformation -----------------------------
+                              smp_data = eusilcA_smpAgg, smp_domains = "Domain")
 
-# REML
-fh_reml <- fh(fixed = Mean ~ eqsize + cash + self_empl, vardir = "Var_Mean",
-             combined_data = combined_data, domains = "Domain",
-             method = "reml", interval = c(0, 100000000))
+# Generation of the emdi object
+fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+             combined_data = combined_data, domains = "Domain", method = "ml", 
+             interval = c(0, 100000000), MSE = TRUE)
 
 # Example 5: Creation of default diagnostic plots for Fay-Herriot model
-plot(fh_reml)
+plot(fh_std)
 
 }
 }

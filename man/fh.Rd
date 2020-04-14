@@ -9,7 +9,7 @@ fh(
   fixed,
   vardir,
   combined_data,
-  domains,
+  domains = NULL,
   method = "reml",
   interval = c(0, 1000),
   k = 1.345,
@@ -25,8 +25,7 @@ fh(
   MSE = FALSE,
   mse_type = "analytical",
   B = NULL,
-  seed = NULL,
-  alpha = 0.05
+  seed = NULL
 )
 }
 \arguments{
@@ -42,7 +41,7 @@ included in \cr \code{combined_data}.}
 \item{combined_data}{a data set containing all the input variables that are 
 needed for the estimation of the Fay-Herriot model: the direct estimates,
 the sampling variances, the explanatory variables and the domains. In addition, 
-depending on the extension the effective sample size XXX needs to be included.}
+depending on the extension the effective sample size needs to be included.}
 
 \item{domains}{a character string indicating the domain variable that is
 included in \code{combined_data}. If \code{NULL}, the domains are numbered
@@ -100,7 +99,8 @@ when the log transformations is chosen,
 (iii) naive back transformation ("\code{naive}") when the arcsin transformation 
 is chosen,
 (iii) bias-corrected back transformation ("\code{bc}") 
-when the arcsin transformations is chosen. Defaults to \code{NULL}.}
+when the arcsin transformations is chosen (\cite{Hadem et al. (2020)}). 
+Defaults to \code{NULL}.}
 
 \item{eff_smpsize}{a character string indicating the name of the variable containing
 the effective sample sizes that are included in \code{combined_data}. Required 
@@ -176,9 +176,6 @@ values larger than 200 are recommended.}
 \item{seed}{an integer to set the seed for the random number generator. For 
 the usage of random number generation see details. If seed is set to 
 \code{NULL}, seed is chosen randomly. Defaults to \code{NULL}.}
-
-\item{alpha}{a numeric value that determines the confidence level for the
-confidence intervals.}
 }
 \value{
 An object of class "fh", "model" and "emdi" that provides estimators 
@@ -197,9 +194,11 @@ Function \code{fh} estimates indicators using the Fay-Herriot approach by
 different extensions of the standard Fay-Herriot model are available: \cr 
 Adjusted estimation methods for the variance of the random effects (see also \cite{Li 
 and Lahiri (2010)} and \cite{Yoshimori and Lahiri (2014)}) are offered. Log 
-and arcsin transformation for the dependent variable and for the log 
-transformation two types of backtransformation can be chosen - a crude version
-and the one introduced by \cite{Slud and Maiti (2006)}. A spatial extension 
+and arcsin transformation for the dependent variable and two types of 
+backtransformation can be chosen - a crude version
+and the one introduced by \cite{Slud and Maiti (2006)} for log transformed 
+variables and a naive and bias-corrected version following 
+\cite{Hadem et al. (2020)} for arcsin transformed variables. A spatial extension 
 to the Fay-Herriot model following \cite{Pratesi and Salvati (2008)} is also 
 included. In addition, it is possible to estimate a robust version of the 
 standard and of the spatial model (see also \cite{Warnholz (2017)}). Finally, 
@@ -209,14 +208,13 @@ with error following \cite{Ybarra and Lohr (2008)}.
 \details{
 In the bootstrap approaches random number generation is used. Thus, a 
 seed is set by the argument \code{seed}. \cr \cr
-Out-of-sample EBLUPs are available for the standard Fay-Herriot model with 
-REML and ML variance estimation, for the crude backtransformation in case of 
-log transformation, for the spatial Fay-Herriot model and the Ybarra-Lohr model. \cr 
+Out-of-sample EBLUPs are available for all area-level models except for the 
+\code{bc_sm} backtransformation and for the robust models. \cr 
 Out-of-sample MSEs are available for the analytical MSE estimator of the 
-standard Fay-Herriot model with REML and ML variance estimation and the crude 
-backtransformation in case of log transformation, for the nonparametric 
-bootstrap estimator within the spatial Fay-Herriot model framework and for the 
-bootstrap estimator withi.
+standard Fay-Herriot model with reml and ml variance estimation, the crude 
+backtransformation in case of log transformation, the bootstrap MSE estimator 
+for the arcsin transformation and for the nonparametric 
+bootstrap estimator within the spatial Fay-Herriot model framework.
 }
 \examples{
 \dontrun{
@@ -237,14 +235,14 @@ interval = c(0, 100000000), MSE = TRUE)
 fh_arcsin <- fh(fixed = MTMED ~ cash + age_ben + rent + house_allow,
 vardir = "Var_MTMED", combined_data = combined_data, domains = "Domain", 
 method = "ml", interval = c(0, 100000000), transformation = "arcsin", 
-backtransformation = "sm", eff_smpsize = "n", MSE = TRUE, mse_type = "boot", 
+backtransformation = "bc", eff_smpsize = "n", MSE = TRUE, mse_type = "boot", 
 B = 50)
 
 # Example 3: Spatial Fay-Herriot model
 fh_spatial <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
 tol = 0.00000001, maxit = 2000, combined_data = combined_data, 
 domains = "Domain", method = "reml", correlation = "spatial", 
-corMatrix = euSilcA_prox, MSE = TRUE, mse_type = "analytical")
+corMatrix = eusilcA_proxmat, MSE = TRUE, mse_type = "analytical")
 
 # Example 4: Robust Fay-Herriot model 
 Please note that the example runs for several minutes. For a short check
@@ -284,6 +282,9 @@ González-Manteiga, W., Lombardía, M. J., Molina, I., Morales, D. and
 Santamaría, L. (2008) Analytic and bootstrap approximations of prediction 
 errors under a multivariate Fay-Herriot model. Computational Statistics & 
 Data Analysis, 52, 5242–5252. \cr \cr
+Hadam, S., Wuerz, N., Kreutzmann, A.-K. and Schmid, T. (2020), Estimating 
+regional unemployment with mobile network data for Functional Urban Areas in 
+Germany, Freie Universitaet Berlin. \cr \cr
 Jiang, J., Lahiri, P., Wan, S.-M. and Wu, C.-H. (2001), Jackknifing in the 
 Fay–Herriot model with an example. In Proc. Sem. Funding Opportunity in 
 Survey Research, Washington DC: Bureau of Labor Statistics, 75–97. \cr \cr
@@ -302,6 +303,7 @@ small-area estimation, Journal of the American Statistical Association 85(409),
 163-171. \cr \cr
 Pratesi, M. and Salvati, N. (2008), Small area estimation: the EBLUP estimator based 
 on spatially correlated random area effects. Stat. Meth. & Appl., 17(1), 113–141. \cr \cr
+Rao, J. N. K. (2003), Small Area Estimation, New York: Wiley. \cr \cr
 Rao, J. N. K. and Molina, I. (2015), Small area estimation, New York: Wiley. \cr \cr
 Slud, E. and Maiti, T. (2006), Mean-squared error estimation in transformed
 Fay-Herriot models, Journal of the Royal Statistical Society:Series B 68(2),

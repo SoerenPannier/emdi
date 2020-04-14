@@ -240,7 +240,7 @@
 #' fh_spatial <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
 #' tol = 0.00000001, maxit = 2000, combined_data = combined_data, 
 #' domains = "Domain", method = "reml", correlation = "spatial", 
-#' corMatrix = euSilcA_proxmat, MSE = TRUE, mse_type = "analytical")
+#' corMatrix = eusilcA_proxmat, MSE = TRUE, mse_type = "analytical")
 #' 
 #' # Example 4: Robust Fay-Herriot model 
 #' Please note that the example runs for several minutes. For a short check
