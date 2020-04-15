@@ -98,6 +98,8 @@ compare.fh <- function(model, ...){
 }
 
 #' Prints compare.fh objects
+#' 
+#' compare.fh object is printed.
 #'
 #' @param x an object of type "compare.fh".
 #' @param ... further arguments passed to or from other methods.

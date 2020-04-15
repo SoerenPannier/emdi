@@ -17,12 +17,11 @@
 #' "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
 #' "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
 #' "Inequality" or "Custom". If two of these groups are selected, only the first
-#' one is returned. If the \code{model} argument is of type "model","fh", 
-#' indicator must be set to "all" and the comparison is done for the EBLUP 
-#' estimates. Defaults to "all". Note, additional custom indicators can be
+#' one is returned. Note, additional custom indicators can be
 #' defined as argument for the EBP approaches (see also \code{\link{ebp}})
 #' and do not appear in groups of indicators even though these might belong to
-#' one of the groups.
+#' one of the groups. If the \code{model} argument is of type "model","fh", 
+#' indicator can be set to "all", "FH" or "Direct". Defaults to "all".
 #' @param MSE optional logical. If \code{TRUE}, the MSE estimates of the direct 
 #' and model-based estimates are compared via boxplots and ordered scatterplots.
 #' @param CV optional logical. If \code{TRUE}, the coefficient of variation 
@@ -59,8 +58,8 @@
 #' version (1.1.6), it is still possible to use the old order because the 
 #' arguments are swapped internally. From the next package version it will no 
 #' longer be possible.
-#' @seealso \code{\link{emdiObject}}, \code{\link{fhObject}}, \code{\link{fh}},
-#' \code{\link{direct}}, \code{\link{ebp}} 
+#' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
+#' \code{\link{fh}}
 #' @export
 
 compare_plot <- function(model, direct,  indicator = "all", MSE = TRUE, 
@@ -250,12 +249,11 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
 #' "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
 #' "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
 #' "Inequality" or "Custom". If two of these groups are selected, only the first
-#' one is returned. If the \code{model} argument is of type "model","fh", 
-#' indicator must be set to "all" and the comparison is done for the EBLUP 
-#' estimates. Defaults to "all". Note, additional custom indicators can be
+#' one is returned. Note, additional custom indicators can be
 #' defined as argument for the EBP approaches (see also \code{\link{ebp}})
 #' and do not appear in groups of indicators even though these might belong to
-#' one of the groups.
+#' one of the groups. If the \code{model} argument is of type "model","fh", 
+#' indicator can be set to "all", "FH" or "Direct". Defaults to "all".
 #' @param MSE optional logical. If \code{TRUE}, the MSE estimates of the direct 
 #' and model-based estimates are compared via boxplots and ordered scatterplots.
 #' @param CV optional logical. If \code{TRUE}, the coefficient of variation 
@@ -289,8 +287,8 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
 #' version (1.1.6), it is still possible to use the old order because the 
 #' arguments are swapped internally. From the next package version it will no 
 #' longer be possible.
-#' @seealso \code{\link{emdiObject}}, \code{\link{fhObject}}, \code{\link{fh}},
-#' \code{\link{direct}}, \code{\link{ebp}} 
+#' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
+#' \code{\link{fh}} 
 #' @examples
 #' \dontrun{
 #' # Examples for comparisons of direct estimates and models of type ebp

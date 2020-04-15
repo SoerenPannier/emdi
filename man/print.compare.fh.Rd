@@ -12,5 +12,5 @@
 \item{...}{further arguments passed to or from other methods.}
 }
 \description{
-Prints compare.fh objects
+compare.fh object is printed.
 }

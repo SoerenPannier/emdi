@@ -8,7 +8,7 @@ step_fh(
   object,
   scope = NULL,
   criteria = "AIC",
-  direction = c("both"),
+  direction = "both",
   trace = TRUE,
   steps = 1000
 )

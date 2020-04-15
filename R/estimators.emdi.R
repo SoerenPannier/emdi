@@ -68,7 +68,7 @@ estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
 #' contain two elements, one data frame \code{ind} and a character naming the
 #' indicator or indicator group \code{ind_name}.
 #' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
-#' \code{\link{fh}},
+#' \code{\link{fh}}
 #' @examples
 #' \dontrun{
 #' # Loading data - population and sample data

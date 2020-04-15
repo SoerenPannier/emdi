@@ -21,16 +21,17 @@ equivalent to \code{N_dom_unobs} (see \code{\link{emdiObject}}).}
 \item{in_smp}{number of in-sample domains equivalent to \code{N_dom_smp}
              (see \code{\link{emdiObject}}).}
 \item{size_smp}{number of units in sample equivalent to \code{N_smp}
-(see \code{\link{emdiObject}}).}
+(see \code{\link{emdiObject}}). Not filled for class fh.}
 \item{size_pop}{if empirical best prediction, number of units in population
-equivalent to \code{N_pop} (see \code{\link{emdiObject}}).}
+equivalent to \code{N_pop} (see \code{\link{emdiObject}}).  Not filled for 
+class fh.}
 \item{size_dom}{a data frame with rows Sample_domains and Population_domains
 (if ebp) representing summary statistics of the sample
 sizes across domains of sample and population data, respectively.}
 \item{transform}{if model-based estimation, a data frame with columns
                  Transformation, Method, Optimal_lambda and Shift_parameter representing the
                  chosen transformation type and estimation method for lambda
-                 as well as their results.}
+                 as well as their results.  Not filled for class fh.}
 \item{normality}{if model-based estimation, a data frame with columns Skewness,
                  Kurtosis, Shapiro_W and Shapiro_p where the latter two represent
                  the results of a Shapiro-Wilks-Test for normality.

@@ -11,7 +11,7 @@
 #' backtransformation can be chosen - a crude version
 #' and the one introduced by \cite{Slud and Maiti (2006)} for log transformed 
 #' variables and a naive and bias-corrected version following 
-#' \cite{Hadem et al. (2020)} for arcsin transformed variables. A spatial extension 
+#' \cite{Hadam et al. (2020)} for arcsin transformed variables. A spatial extension 
 #' to the Fay-Herriot model following \cite{Pratesi and Salvati (2008)} is also 
 #' included. In addition, it is possible to estimate a robust version of the 
 #' standard and of the spatial model (see also \cite{Warnholz (2017)}). Finally, 
@@ -79,7 +79,7 @@
 #' (iii) naive back transformation ("\code{naive}") when the arcsin transformation 
 #' is chosen,
 #' (iii) bias-corrected back transformation ("\code{bc}") 
-#' when the arcsin transformations is chosen (\cite{Hadem et al. (2020)}). 
+#' when the arcsin transformations is chosen (\cite{Hadam et al. (2020)}). 
 #' Defaults to \code{NULL}.
 #' @param eff_smpsize a character string indicating the name of the variable containing
 #' the effective sample sizes that are included in \code{combined_data}. Required 
@@ -152,7 +152,7 @@
 #' \code{\link{print}}, \code{\link{plot}} and \code{\link{summary}} have methods 
 #' that can be used to obtain further information. Additionally, for the standard 
 #' Fay-Herriot model that is estimated via ML variance estimation a model selection 
-#' function is provided (\code{\link{step_fh}}). See \code{\link{fhObject}} for 
+#' function is provided (\code{\link{step_fh}}). See \code{\link{emdiObject}} for 
 #' descriptions of components of objects of class "fh".
 #' @details In the bootstrap approaches random number generation is used. Thus, a 
 #' seed is set by the argument \code{seed}. \cr \cr

@@ -5,7 +5,7 @@
 #' The data set is aggregated on the district level and contains different 
 #' variables that are related to income and a regional variable for the districts. 
 #'
-#' @format A data frame with 94 observations and 10 variables:
+#' @format A data frame with 94 observations and 8 variables:
 #' \describe{
 #' \item{Mean}{numeric; mean of a simplified version of the equivalized household 
 #' income.}

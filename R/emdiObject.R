@@ -16,7 +16,7 @@
 #' \item{\code{call}}{a list containing an image of the function call that
 #'                    produced the object.}
 #' \item{\code{fixed}}{For details, see \code{fixed} in \code{\link{fh}} and
-#'              \code{\link{ebp}}). Not filled for class direct.}
+#'              \code{\link{ebp}}. Not filled for class direct.}
 #'  \item{\code{framework}}{a list with components that describe the data
 #'  setup, e.g., number of domains in the sample.}
 #' \item{\code{ind}}{data frame containing estimates for indicators per domain.}
@@ -48,8 +48,8 @@
 #' Statistical Association, Vol. 74, 269–277.  \cr \cr
 #' Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
 #' indicators. The Canadian Journal of Statistics, Vol. 38, No.3, 369-385.
-#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{ \link[nlme]{lme}},
-#' \code{ \link[nlme]{lmeObject}}
+#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}, 
+#' \code{ \link[nlme]{lme}}, \code{ \link[nlme]{lmeObject}}
 #'
 #' @name emdiObject
 NULL

@@ -5,7 +5,7 @@
 \alias{eusilcA_smpAgg}
 \title{Simulated eusilc data - aggregated sample data}
 \format{
-A data frame with 94 observations and 10 variables:
+A data frame with 94 observations and 8 variables:
 \describe{
 \item{Mean}{numeric; mean of a simplified version of the equivalized household 
 income.}

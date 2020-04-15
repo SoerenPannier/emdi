@@ -18,9 +18,8 @@ Description: Functions that support estimating, assessing and mapping regional
     and the area-level model (see "Estimates of income for small places: An 
     application of James-Stein procedures to Census Data" by (Fay and Herriot 1979) 
     <doi:10.2307/2286322>) and various extensions (adjusted variance estimation methods, 
-    log and arcsin transformation, spatial, robust and measurement error models)
-    ) of it, as well as their precision estimates. 
-    The assessment of the used model
+    log and arcsin transformation, spatial, robust and measurement error models) of it, 
+    as well as their precision estimates. The assessment of the used model
     is supported by a summary and diagnostic plots. For a suitable presentation of
     estimates, map plots can be easily created. Furthermore, results can easily be
     exported to excel. Additionally, for the area-level models a stepwise variable 

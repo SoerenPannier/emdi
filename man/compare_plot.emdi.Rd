@@ -35,12 +35,11 @@ shall be returned: (i) all calculated indicators ("all");
 "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
 "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
 "Inequality" or "Custom". If two of these groups are selected, only the first
-one is returned. If the \code{model} argument is of type "model","fh", 
-indicator must be set to "all" and the comparison is done for the EBLUP 
-estimates. Defaults to "all". Note, additional custom indicators can be
+one is returned. Note, additional custom indicators can be
 defined as argument for the EBP approaches (see also \code{\link{ebp}})
 and do not appear in groups of indicators even though these might belong to
-one of the groups.}
+one of the groups. If the \code{model} argument is of type "model","fh", 
+indicator can be set to "all", "FH" or "Direct". Defaults to "all".}
 
 \item{MSE}{optional logical. If \code{TRUE}, the MSE estimates of the direct 
 and model-based estimates are compared via boxplots and ordered scatterplots.}
@@ -145,6 +144,6 @@ compare_plot(fh_std, MSE = TRUE, CV = TRUE)
 }
 }
 \seealso{
-\code{\link{emdiObject}}, \code{\link{fhObject}}, \code{\link{fh}},
-\code{\link{direct}}, \code{\link{ebp}}
+\code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
+\code{\link{fh}}
 }

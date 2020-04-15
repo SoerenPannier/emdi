@@ -30,7 +30,7 @@
 #' @importFrom stats factor.scope 
 
 step_fh <- function (object, scope = NULL, criteria = "AIC", 
-                     direction = c("both"), trace = TRUE,
+                     direction = "both", trace = TRUE,
                      steps = 1000) 
 {
 
