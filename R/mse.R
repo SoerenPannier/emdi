@@ -1345,9 +1345,9 @@ jiang_jackknife_yl  <- function(framework, combined_data, sigmau2, eblup, method
   diff_jack_g1 <- data.frame(row.names = 1:m)
   g1 <- rep(0, framework$m)
   jack_mse <- rep(0, framework$m)
-  gamma_tmp <- matrix(0,framework$m, framework$m)
-  sigmau2_tmp<- matrix(0,framework$m)
-  jack_sigmau2<- matrix(0,framework$m)
+  gamma_tmp <- matrix(0, framework$m, framework$m)
+  sigmau2_tmp<- matrix(0, framework$m)
+  jack_sigmau2<- matrix(0, framework$m)
   # Inverse of total variance
   #Vi <- 1/(sigmau2 + framework$vardir)
   # Shrinkage factor
@@ -1382,7 +1382,7 @@ jiang_jackknife_yl  <- function(framework, combined_data, sigmau2, eblup, method
     
 
     # Estimate sigma u
-    sigmau2_tmp<- wrapper_estsigmau2(framework = framework_tmp, method = method)
+    sigmau2_tmp <- wrapper_estsigmau2(framework = framework_tmp, method = method)
     jack_sigmau2[domain] <- sigmau2_tmp$sigmau_YL
     
     #Vi_tmp <- 1/(sigmau2_tmp + framework$vardir)
@@ -1403,13 +1403,14 @@ jiang_jackknife_yl  <- function(framework, combined_data, sigmau2, eblup, method
                                        maxit = framework$maxit)
     
     
-    thbCihb<-NULL
+    Beta.hat.tCiBeta.hat<-NULL
     for(i in 1:framework_insample$m){
-      thbCihb[i]<-t(sigmau2_tmp$betahatw)%*%framework_insample$Ci[,,i]%*%sigmau2_tmp$betahatw
+      Beta.hat.tCiBeta.hat[i]<-
+        t(sigmau2_tmp$betahatw)%*%framework_insample$Ci[,,i]%*%sigmau2_tmp$betahatw
     }
     
-    gamma_tmp[, domain] <- (sigmau2_tmp$sigmau_YL+thbCihb)/
-      (sigmau2_tmp$sigmau_YL+thbCihb+ framework_insample$vardir)
+    gamma_tmp[, domain] <- (sigmau2_tmp$sigmau_YL+Beta.hat.tCiBeta.hat)/
+      (sigmau2_tmp$sigmau_YL+Beta.hat.tCiBeta.hat+ framework_insample$vardir)
     
     
     

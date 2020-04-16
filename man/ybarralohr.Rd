@@ -19,7 +19,7 @@ ybarralohr(direct, x, vardir, Ci, areanumber, p, tol, maxit)
 
 \item{p}{number of covariates.}
 
-\item{tol}{tolerance value for the convergence of weights.}
+\item{tol}{tolerance value.}
 
 \item{maxit}{maximum number of iterations.}
 }

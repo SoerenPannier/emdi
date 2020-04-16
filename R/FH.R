@@ -180,7 +180,7 @@
 #' Santamaría, L. (2008) Analytic and bootstrap approximations of prediction 
 #' errors under a multivariate Fay-Herriot model. Computational Statistics & 
 #' Data Analysis, 52, 5242–5252. \cr \cr
-#' Hadam, S., Wuerz, N., Kreutzmann, A.-K. and Schmid, T. (2020), Estimating 
+#' Hadam, S., Wuerz, N. and Kreutzmann, A.-K. (2020), Estimating 
 #' regional unemployment with mobile network data for Functional Urban Areas in 
 #' Germany, Freie Universitaet Berlin. \cr \cr
 #' Jiang, J., Lahiri, P., Wan, S.-M. and Wu, C.-H. (2001), Jackknifing in the 

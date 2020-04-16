@@ -307,21 +307,21 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol){
   est.rho[1] <- 0.5
   
   # Fisher-scoring algorithm
-  it<-0
+  iter<-0
   eps <- tol + 1
-  while ((eps>tol) & (it<maxit))
+  while ((eps>tol) & (iter<maxit))
   {
-    it <- it + 1
+    iter <- iter + 1
     
     # Derivative of covariance matrix V: variance
-    der.sigma <- solve((D-est.rho[it]*Wt)%*%(D-est.rho[it]*W))
+    der.sigma <- solve((D-est.rho[iter]*Wt)%*%(D-est.rho[iter]*W))
     
     # Derivative of covariance matrix V: spatial correlation parameter
-    der.rho <- 2*est.rho[it]*Wt%*%W-W-Wt
-    der.vrho <- (-1)*est.sigma2[it]*(der.sigma%*%der.rho%*%der.sigma)
+    der.rho <- 2*est.rho[iter]*Wt%*%W-W-Wt
+    der.vrho <- (-1)*est.sigma2[iter]*(der.sigma%*%der.rho%*%der.sigma)
     
     # Covariance matrix
-    V <- est.sigma2[it]*der.sigma + D*vardir
+    V <- est.sigma2[iter]*der.sigma + D*vardir
     # Inverse of covariance matrix
     Vi <- solve(V)
     
@@ -351,8 +351,8 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol){
     fisher[2,2] <- (0.5)*sum(diag(Vi.der.vrho%*%Vi.der.vrho))
     
     # Updating equations
-    est.param[1,1] <- est.sigma2[it]
-    est.param[2,1] <- est.rho[it]
+    est.param[1,1] <- est.sigma2[iter]
+    est.param[2,1] <- est.rho[iter]
     final.param <- est.param + solve(fisher)%*%score.vec
     
     # Restricting the spatial correlation to (-0.999,0.999)
@@ -361,24 +361,24 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol){
     if (final.param[2,1] >= 1)
       final.param[2,1] <- 0.999
     
-    est.sigma2[it+1] <- final.param[1,1]
-    est.rho[it+1] <- final.param[2,1]
+    est.sigma2[iter+1] <- final.param[1,1]
+    est.rho[iter+1] <- final.param[2,1]
     eps <- max(abs(final.param-est.param)/est.param)
   }
   
   # Final estimators
-  if (est.rho[it+1] == -0.999)
-    est.rho[it+1] <- -1
-  else if (est.rho[it+1] == 0.999)
-    est.rho[it+1] <- 1
-  rho <-est.rho[it+1]
+  if (est.rho[iter+1] == -0.999)
+    est.rho[iter+1] <- -1
+  else if (est.rho[iter+1] == 0.999)
+    est.rho[iter+1] <- 1
+  rho <-est.rho[iter+1]
   
-  est.sigma2[it+1] <- max(est.sigma2[it+1],0)
-  sigma2u <- est.sigma2[it+1]
+  est.sigma2[iter+1] <- max(est.sigma2[iter+1],0)
+  sigma2u <- est.sigma2[iter+1]
   
   # Convergence
   
-  if(it >= maxit && eps >= tol) 
+  if(iter >= maxit && eps >= tol) 
   {
     convergence <- FALSE
     #print("The variance estimation algorithm did not converge.")
@@ -423,21 +423,21 @@ SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
   est.rho[1] <- 0.5
   
   # Fisher-scoring algorithm
-  it <- 0
+  iter <- 0
   eps <- tol + 1
-  while ((eps > tol) & (it < maxit))
+  while ((eps > tol) & (iter < maxit))
   {
-    it <- it + 1
+    iter <- iter + 1
     
     # Derivative of covariance matrix V: variance
-    der.sigma <- solve((D-est.rho[it]*Wt)%*%(D-est.rho[it]*W))
+    der.sigma <- solve((D-est.rho[iter]*Wt)%*%(D-est.rho[iter]*W))
     
     # Derivative of covariance matrix V: spatial correlation parameter
-    der.rho <- 2*est.rho[it]*Wt%*%W - W - Wt
-    der.vrho <- (-1)*est.sigma2[it]*(der.sigma%*%der.rho%*%der.sigma)
+    der.rho <- 2*est.rho[iter]*Wt%*%W - W - Wt
+    der.vrho <- (-1)*est.sigma2[iter]*(der.sigma%*%der.rho%*%der.sigma)
     
     # Covariance matrix
-    V <- est.sigma2[it]*der.sigma + D*vardir
+    V <- est.sigma2[iter]*der.sigma + D*vardir
     # Inverse of covariance matrix
     Vi <- solve(V)
     
@@ -463,8 +463,8 @@ SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
     fisher[2,2] <- (0.5)*sum(diag((P.der.rho%*%P.der.rho)))
     
     # Updating equations
-    est.param[1,1] <- est.sigma2[it]
-    est.param[2,1] <- est.rho[it]
+    est.param[1,1] <- est.sigma2[iter]
+    est.param[2,1] <- est.rho[iter]
     final.param <- est.param + solve(fisher)%*%score.vec
     
     # Restricting the spatial correlation to (-0.999,0.999)
@@ -474,24 +474,24 @@ SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
       final.param[2,1] <- 0.999
 
     
-    est.sigma2[it+1] <- final.param[1,1]
-    est.rho[it+1] <- final.param[2,1]
+    est.sigma2[iter+1] <- final.param[1,1]
+    est.rho[iter+1] <- final.param[2,1]
     eps <- max(abs(final.param-est.param)/est.param)
   }
     
     # Final estimators
-    if (est.rho[it+1] == -0.999)
-      est.rho[it+1] <- -1
-    else if (est.rho[it+1] == 0.999)
-      est.rho[it+1] <- 1
-    rho <- est.rho[it+1]
+    if (est.rho[iter+1] == -0.999)
+      est.rho[iter+1] <- -1
+    else if (est.rho[iter+1] == 0.999)
+      est.rho[iter+1] <- 1
+    rho <- est.rho[iter+1]
     
-    est.sigma2[it+1] <- max(est.sigma2[it+1],0)
-    sigma2u <- est.sigma2[it+1]
+    est.sigma2[iter+1] <- max(est.sigma2[iter+1],0)
+    sigma2u <- est.sigma2[iter+1]
     
     # Convergence
       
-    if(it >= maxit && eps >= tol) 
+    if(iter >= maxit && eps >= tol) 
     {
       convergence <- FALSE
       #print("The variance estimation algorithm did not converge.")
@@ -510,16 +510,16 @@ SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
 #' @param Ci mean squared error of x.
 #' @param areanumber number of domains.
 #' @param p number of covariates.
-#' @param tol tolerance value for the convergence of weights.
+#' @param tol tolerance value.
 #' @param maxit maximum number of iterations.
 #' @return estimated sigmau2 and estimated beta coefficients.
 #' @keywords internal
 
 ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
   
-  hatwi <- rep(1,areanumber) 
+  wi <- rep(1, areanumber) 
   eps <- 1
-  it <- 0
+  iter <- 0
   x <- as.matrix(x)
   x <- t(x)
   rownames(x) <- NULL
@@ -537,15 +537,16 @@ ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
     return(list(sqrt=direct, sqrt.inv=z))
   }#WORKS ONLY WITH SYMMETRIC AND POSITIVE DEFINITE MATRIX
   
-  while(eps > tol & it < maxit){ 
+  while(eps > tol & iter < maxit){ 
     
-    hatwi.old <- hatwi 
-    CC <- matrix(0,p,p) 
+    wi.tmp <- wi 
+    
+    CC <- matrix(0, p, p) 
     for(i in 1:areanumber){ 
-      CC <- CC + hatwi[i]*Ci[,,i]
+      CC <- CC + wi[i]*Ci[,,i]
     }
     
-    G <- t(hatwi*t(x))%*%t(x) 
+    G <- t(wi*t(x))%*%t(x) 
     
     
     G.sqrtinv <- sqrtinv.matrix(G)$sqrt.inv 
@@ -560,34 +561,37 @@ ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
     Lambdajj[dd] <- 1/(1-decomp$values[dd])
     D <- diag(Lambdajj) 
     
-    wXdirect <- t(t(as.matrix(hatwi*direct,areanumber,1))%*%t(x)) 
+    wXdirect <- t(t(as.matrix(wi*direct,areanumber,1))%*%t(x)) 
     
     # Beta estimate
     Beta.hat.w <- G.sqrtinv %*% P %*% D %*% t(P) %*% G.sqrtinv %*% wXdirect
     
-    thbCihb <- NULL
+    # b^tCib
+    Beta.hat.tCiBeta.hat <- NULL
     for(i in 1:areanumber){
-      thbCihb[i] <- t(Beta.hat.w)%*%Ci[,,i]%*%Beta.hat.w 
+      Beta.hat.tCiBeta.hat[i] <- t(Beta.hat.w)%*%Ci[,,i]%*%Beta.hat.w 
     }
     
     # Estimate variance of the random effect
-    sigmau2 <- (1/(areanumber - p))* sum((direct-t(x)%*%Beta.hat.w)^2 - vardir - thbCihb)
+    sigmau2 <- (1/(areanumber - p))* 
+      sum((direct-t(x)%*%Beta.hat.w)^2 - vardir - Beta.hat.tCiBeta.hat)
     
-    # Truncation to zero
+    # Truncation to zero, if variance estimate is negative
     if (sigmau2 <= 0) sigmau2<-0
     
-    # UP.der.sigmaate hatwi
-    hatwi <- 1/(sigmau2 + vardir + thbCihb)
+    # Weight (wi) estimate
+    wi <- 1/(sigmau2 + vardir + Beta.hat.tCiBeta.hat)
     
-    # Check convergence
-    eps <- mean(abs(hatwi - hatwi.old))
-    it <- it + 1
+    # Convergence
+    eps <- mean(abs(wi - wi.tmp))
+    iter <- iter + 1
     
-  }#End while
+  }
   
   estsigma2u <- sigmau2
   
-  return(list(sigmau_YL = estsigma2u, betahatw = Beta.hat.w, thbCihb = thbCihb)) 
+  return(list(sigmau_YL = estsigma2u, betahatw = Beta.hat.w, 
+              Beta.hat.tCiBeta.hat = Beta.hat.tCiBeta.hat)) 
   
 }
 

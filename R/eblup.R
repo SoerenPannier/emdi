@@ -146,20 +146,22 @@ eblup_SFH <- function(framework, sigmau2, combined_data) {
 
 eblup_YL <- function(framework, sigmau2, combined_data) {
   
-  # Estimation of the regression coefficients
   # Identity matrix mxm
   D <- diag(1, framework$m)
+  
   # Total variance-covariance matrix - only values on the diagonal due to
   # independence of error terms
-  thbCihb <- NULL
+  Beta.hat.tCiBeta.hat <- NULL
   for(i in 1:framework$m){
-    thbCihb[i] <- t(sigmau2$betahatw)%*%framework$Ci[,,i]%*%sigmau2$betahatw
+    Beta.hat.tCiBeta.hat[i] <- 
+      t(sigmau2$betahatw)%*%framework$Ci[,,i]%*%sigmau2$betahatw
   }
   V <- sigmau2$sigmau_YL * D%*%t(D) + diag(as.numeric(framework$vardir)) + 
-    diag(as.numeric(thbCihb))
+    diag(as.numeric(Beta.hat.tCiBeta.hat))
   
   # Inverse of the total variance
   Vi <- solve(V)
+  
   # Inverse of X'ViX
   Q <- solve(t(framework$model_X)%*%Vi%*%framework$model_X)
   
@@ -177,7 +179,8 @@ eblup_YL <- function(framework, sigmau2, combined_data) {
   
   # Computation of shrinkage factor
   
-  gamma <- (sigmau2$sigmau_YL + thbCihb)/(sigmau2$sigmau_YL + thbCihb + framework$vardir)	
+  gamma <- (sigmau2$sigmau_YL + Beta.hat.tCiBeta.hat)/
+    (sigmau2$sigmau_YL + Beta.hat.tCiBeta.hat + framework$vardir)	
   
   res <- framework$direct - c(framework$model_X%*%sigmau2$betahatw)
   # sigmau2Diag <- sigmau2*D
