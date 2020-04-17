@@ -308,8 +308,8 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol){
   
   # Fisher-scoring algorithm
   iter<-0
-  eps <- tol + 1
-  while ((eps>tol) & (iter<maxit))
+  conv <- tol + 1
+  while ((conv>tol) & (iter<maxit))
   {
     iter <- iter + 1
     
@@ -363,7 +363,7 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol){
     
     est.sigma2[iter+1] <- final.param[1,1]
     est.rho[iter+1] <- final.param[2,1]
-    eps <- max(abs(final.param-est.param)/est.param)
+    conv <- max(abs(final.param-est.param)/est.param)
   }
   
   # Final estimators
@@ -378,7 +378,7 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol){
   
   # Convergence
   
-  if(iter >= maxit && eps >= tol) 
+  if(iter >= maxit && conv >= tol) 
   {
     convergence <- FALSE
     #print("The variance estimation algorithm did not converge.")
@@ -424,8 +424,8 @@ SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
   
   # Fisher-scoring algorithm
   iter <- 0
-  eps <- tol + 1
-  while ((eps > tol) & (iter < maxit))
+  conv <- tol + 1
+  while ((conv > tol) & (iter < maxit))
   {
     iter <- iter + 1
     
@@ -476,7 +476,7 @@ SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
     
     est.sigma2[iter+1] <- final.param[1,1]
     est.rho[iter+1] <- final.param[2,1]
-    eps <- max(abs(final.param-est.param)/est.param)
+    conv <- max(abs(final.param-est.param)/est.param)
   }
     
     # Final estimators
@@ -491,7 +491,7 @@ SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
     
     # Convergence
       
-    if(iter >= maxit && eps >= tol) 
+    if(iter >= maxit && conv >= tol) 
     {
       convergence <- FALSE
       #print("The variance estimation algorithm did not converge.")
@@ -517,80 +517,87 @@ SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
 
 ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
   
+  # Paper pages 923-924
   wi <- rep(1, areanumber) 
-  eps <- 1
+  conv <- 1
   iter <- 0
   x <- as.matrix(x)
   x <- t(x)
   rownames(x) <- NULL
   
-  sqrtinv.matrix <- function(mat,maxiter=50) { 
-    stopifnot(nrow(mat) == ncol(mat))
-    niter <- 0
-    direct <- mat
-    z <- diag(rep(1,nrow(mat)))
-    for (niter in 1:maxiter) {
-      direct.temp <- 0.5*(direct + ginv(z))
-      z <- 0.5*(z + ginv(direct))
-      direct <- direct.temp
-    }
-    return(list(sqrt=direct, sqrt.inv=z))
-  }#WORKS ONLY WITH SYMMETRIC AND POSITIVE DEFINITE MATRIX
-  
-  while(eps > tol & iter < maxit){ 
+  while(conv > tol & iter < maxit){ 
     
     wi.tmp <- wi 
     
-    CC <- matrix(0, p, p) 
+    # wC
+    wC <- matrix(0, p, p)
     for(i in 1:areanumber){ 
-      CC <- CC + wi[i]*Ci[,,i]
+      wC <- wC + wi[i]*Ci[,,i]
     }
     
+    # G
     G <- t(wi*t(x))%*%t(x) 
     
+    # Inverse square root matrix of G
+    inverse.square.root.mat <- function(mat, maxiter = 50) { 
+      stopifnot(nrow(mat) == ncol(mat))
+      niter <- 0
+      z <- diag(rep(1, nrow(mat)))
+      for (niter in 1:maxiter) {
+        mat.tmp <- 0.5*(mat + ginv(z))
+        z <- 0.5*(z + ginv(mat))
+        mat <- mat.tmp
+      }
+      return(list(sqrt = mat, sqrt.inv = z))
+    }
+    Gi <- inverse.square.root.mat(G)$sqrt.inv 
     
-    G.sqrtinv <- sqrtinv.matrix(G)$sqrt.inv 
-    GG <- G.sqrtinv %*% CC %*% G.sqrtinv 
+    # GiwCGi
+    GiwCGi <- Gi %*% wC %*% Gi 
     
-    decomp <- eigen(GG)
+    # P
+    decomp <- eigen(GiwCGi)
     P <- decomp$vectors
+    
+    # Lambda
     Lambda <- diag(decomp$values)
     
-    dd <- which((1-decomp$values)>1/areanumber)
-    Lambdajj <- rep(0,p)
-    Lambdajj[dd] <- 1/(1-decomp$values[dd])
-    D <- diag(Lambdajj) 
-    
-    wXdirect <- t(t(as.matrix(wi*direct,areanumber,1))%*%t(x)) 
+    # D
+    Djj <- rep(0, p)
+    cond <- which((1-decomp$values)>1/areanumber)
+    Djj[cond] <- 1/(1-decomp$values[cond])
+    D <- diag(Djj) 
     
     # Beta estimate
-    Beta.hat.w <- G.sqrtinv %*% P %*% D %*% t(P) %*% G.sqrtinv %*% wXdirect
+    Beta.hat <- Gi%*%P%*%D%*%t(P)%*%Gi%*%t(t(as.matrix(wi*direct,areanumber,1))%*%t(x))
     
     # b^tCib
     Beta.hat.tCiBeta.hat <- NULL
     for(i in 1:areanumber){
-      Beta.hat.tCiBeta.hat[i] <- t(Beta.hat.w)%*%Ci[,,i]%*%Beta.hat.w 
+      Beta.hat.tCiBeta.hat[i] <- t(Beta.hat)%*%Ci[,,i]%*%Beta.hat 
     }
     
     # Estimate variance of the random effect
     sigmau2 <- (1/(areanumber - p))* 
-      sum((direct-t(x)%*%Beta.hat.w)^2 - vardir - Beta.hat.tCiBeta.hat)
+      sum((direct-t(x)%*%Beta.hat)^2 - vardir - Beta.hat.tCiBeta.hat)
     
     # Truncation to zero, if variance estimate is negative
-    if (sigmau2 <= 0) sigmau2<-0
+    if (sigmau2 <= 0){
+      sigmau2 <- 0
+    } 
     
     # Weight (wi) estimate
     wi <- 1/(sigmau2 + vardir + Beta.hat.tCiBeta.hat)
     
     # Convergence
-    eps <- mean(abs(wi - wi.tmp))
+    conv <- mean(abs(wi - wi.tmp))
     iter <- iter + 1
     
   }
   
   estsigma2u <- sigmau2
   
-  return(list(sigmau_YL = estsigma2u, betahatw = Beta.hat.w, 
+  return(list(sigmau_YL = estsigma2u, betahatw = Beta.hat, 
               Beta.hat.tCiBeta.hat = Beta.hat.tCiBeta.hat)) 
   
 }
