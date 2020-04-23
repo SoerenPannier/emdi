@@ -291,7 +291,7 @@ prasad_rao_spatial <- function(framework, sigmau2, combined_data, method) {
   
   mse.help <- g1 + g2 + 2*g3
 
-  ######## Bias correction of Singh et al
+  ######## Bias correction of Singh et al.
   psi <- diag(c(framework$vardir),framework$m)
   D1help <- (-1) * (DrhoWDrhoWt%*%der.rho%*%DrhoWDrhoWt)
   D2help <- 2 * sigmau2$sigmau2 * DrhoWDrhoWt%*%der.rho%*%DrhoWDrhoWt%*%der.rho%*%DrhoWDrhoWt - 
@@ -303,7 +303,7 @@ prasad_rao_spatial <- function(framework, sigmau2, combined_data, method) {
     g4[d] <- (0.5) * D[d, d]
   }
   
-  # Computation of estimated MSE of Singh et al
+  # Computation of estimated MSE of Singh et al.
   mse <- mse.help - g4
   
   if (method == "ml"){
