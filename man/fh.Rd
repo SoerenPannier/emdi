@@ -5,11 +5,28 @@
 \title{Standard and extended Fay-Herriot models for disaggregated indicators like 
 means and ratios}
 \usage{
-fh(fixed, vardir, combined_data, domains = NULL, method = "reml",
-  interval = c(0, 1000), k = 1.345, c = 1, transformation = "no",
-  backtransformation = NULL, eff_smpsize = NULL, correlation = "no",
-  corMatrix = NULL, Ci = NULL, tol = 1e-06, maxit = 100,
-  MSE = FALSE, mse_type = "analytical", B = NULL, seed = NULL)
+fh(
+  fixed,
+  vardir,
+  combined_data,
+  domains = NULL,
+  method = "reml",
+  interval = c(0, 1000),
+  k = 1.345,
+  c = 1,
+  transformation = "no",
+  backtransformation = NULL,
+  eff_smpsize = NULL,
+  correlation = "no",
+  corMatrix = NULL,
+  Ci = NULL,
+  tol = 1e-04,
+  maxit = 100,
+  MSE = FALSE,
+  mse_type = "analytical",
+  B = 50,
+  seed = NULL
+)
 }
 \arguments{
 \item{fixed}{a two-sided linear formula object describing the
@@ -114,13 +131,13 @@ Defaults to \code{NULL}.}
 variance of the random effects. Required argument when method "\code{reml}" and 
 "\code{ml}" in combination with \code{correlation =}"\code{spatial}" are chosen or 
 for the variance estimation methods "\code{reblup}", "\code{reblupbc}" and 
-"\code{me}". Defaults to \code{NULL}.}
+"\code{me}". Defaults to 0.0001.}
 
 \item{maxit}{a number determining the maximum number of iterations for the 
 estimation of the variance of the random effects. Required argument when method 
 "\code{reml}" and  "\code{ml}" in combination with \code{correlation} equals 
 "\code{spatial}" is chosen or for the variance estimation methods "\code{reblup}", 
-"\code{reblupbc}" and "\code{me}". Defaults to \code{NULL}.}
+"\code{reblupbc}" and "\code{me}". Defaults to 100.}
 
 \item{MSE}{if \code{TRUE}, MSE estimates are calculated. Defaults
 to \code{FALSE}.}
@@ -153,7 +170,7 @@ MSE options please refer to the Vignette. Required argument when
 bootstrap MSE estimator is chosen, \code{B} regulates the MSE estimation. 
 When the standard FH model is applied and \code{B} is not \code{NULL}, the 
 information criteria by Marhuenda et al. (2014) are computed. The number must 
-be greater than 1. Defaults to \code{NULL}. For practical applications, 
+be greater than 1. Defaults to 50. For practical applications, 
 values larger than 200 are recommended.}
 
 \item{seed}{an integer to set the seed for the random number generator. For 
@@ -212,18 +229,18 @@ combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
 # Example 1: Standard Fay-Herriot model and analytical MSE
 fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
 combined_data = combined_data, domains = "Domain", method = "ml", 
-interval = c(0, 100000000), MSE = TRUE)
+interval = c(0, 10000000), MSE = TRUE)
 
 # Example 2: arcsin transformation of the dependent variable
 fh_arcsin <- fh(fixed = MTMED ~ cash + age_ben + rent + house_allow,
 vardir = "Var_MTMED", combined_data = combined_data, domains = "Domain", 
-method = "ml", interval = c(0, 100000000), transformation = "arcsin", 
+method = "ml", interval = c(0, 10000000), transformation = "arcsin", 
 backtransformation = "bc", eff_smpsize = "n", MSE = TRUE, mse_type = "boot", 
 B = 50)
 
 # Example 3: Spatial Fay-Herriot model
 fh_spatial <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
-tol = 0.00000001, maxit = 2000, combined_data = combined_data, 
+tol = 0.0001, maxit = 100, combined_data = combined_data, 
 domains = "Domain", method = "reml", correlation = "spatial", 
 corMatrix = eusilcA_proxmat, MSE = TRUE, mse_type = "analytical")
 
@@ -232,7 +249,7 @@ Please note that the example runs for several minutes. For a short check
 change B to a lower value.
 fh_robust <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
 combined_data = combined_data, domains = "Domain", method = "reblupbc", 
-tol=0.000001, maxit= 1000, k = 1.345, c = 1, MSE = TRUE, mse_type = "boot", 
+tol = 0.0001, maxit= 100, k = 1.345, c = 1, MSE = TRUE, mse_type = "boot", 
 B = 50)
 
 # Example 5: Ybarra-Lohr model
@@ -245,7 +262,7 @@ for(i in 1:M){
 }
 fh_yl <- fh(fixed = Mean ~ Cash, vardir= "Var_Mean",
 combined_data = eusilcA_smpAgg, domains ="Domain", method = "me", 
-Ci = Ci_array, tol=0.00000001, maxit= 2000, MSE = TRUE, mse_type = "jackknife")
+Ci = Ci_array, tol = 0.0001, maxit= 100, MSE = TRUE, mse_type = "jackknife")
 }
 }
 \references{
