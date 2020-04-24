@@ -104,8 +104,7 @@ Defaults to \code{NULL}.}
 
 \item{eff_smpsize}{a character string indicating the name of the variable containing
 the effective sample sizes that are included in \code{combined_data}. Required 
-argument when the arcsin transformation is chosen in combination with 
-\code{mse_type = boot}. Defaults to \code{NULL}.}
+argument when the arcsin transformation is chosen. Defaults to \code{NULL}.}
 
 \item{correlation}{a character determining the correlation structure of the 
 random effects. Possible correlations are

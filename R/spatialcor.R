@@ -10,7 +10,7 @@
 #' sure that the elements of \code{direct} and \code{corMatrix} are sorted 
 #' equally and that \code{direct} and \code{corMatrix} do not contain any 
 #' \code{NA}s. For a description of how to create the proximity matrix see the 
-#' package vignette.
+#' package vignette. 
 #' @references Bivand, R. (2019), spdep: Spatial Dependence: Weighting Schemes, 
 #' Statistics. R package.
 #' @importFrom spdep geary.test mat2listw moran.test
@@ -23,10 +23,10 @@ spatialcor.tests <- function(direct, corMatrix){
   
   if (is.matrix(corMatrix) == FALSE){corMatrix <- as.matrix(corMatrix)}
   corMatrix_list <- mat2listw(corMatrix)
-  moran <- moran.test(direct, corMatrix_list, randomisation=TRUE, zero.policy=TRUE,
-             alternative="greater")
-  geary <- geary.test(direct, corMatrix_list, randomisation=TRUE, zero.policy=TRUE,
-             alternative="greater")
+  moran <- moran.test(direct, corMatrix_list, randomisation = TRUE, 
+                      zero.policy = TRUE, alternative = "greater")
+  geary <- geary.test(direct, corMatrix_list, randomisation=TRUE, 
+                      zero.policy = TRUE, alternative = "greater")
   out <- data.frame(Statistics = c("Moran's I", "Geary's C"), 
                     Value = c(unname(moran$estimate[1]), unname(geary$estimate[1])),
                     p.value = c(moran$p.value, geary$p.value))
