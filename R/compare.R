@@ -107,8 +107,8 @@ compare.fh <- function(model, ...){
 
 print.compare.fh <- function(x, ...)
 {
-  cat("\n")
-  cat("         Brown test ","\n")
+  #cat("\n")
+  cat("Brown test","\n")
   cat("\n")
   cat("Null hypothesis: EBLUP estimates do not differ significantly from the 
       direct estimates","\n")

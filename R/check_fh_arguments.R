@@ -317,22 +317,26 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
     stop("If backtransformation is set to ''sm'', only ''ml'' variance estimation
          is possible. See also help(fh).")
   }
+  if ((transformation == "arcsin") && is.null(eff_smpsize)){
+    stop("If transformation is set to ''arcsin'', the argument eff_smpsize is 
+         required and cannot be NULL. See also help(fh).")
+  }
   if ((transformation == "arcsin") && !(backtransformation == "naive" || 
                                      backtransformation == "bc")){
     stop("If transformation is set to ''arcsin'', possible backtransformations 
          are ''naive'' and ''bc''. See also help(fh).")
   }
-  if ((transformation == "arcsin") && (MSE == TRUE) && 
-      !(mse_type == "boot" || mse_type == "jackknife" || 
+  if ((transformation == "arcsin") && (backtransformation == "naive") && 
+      (MSE == TRUE) && !(mse_type == "boot" || mse_type == "jackknife" || 
         mse_type == "weighted_jackknife")){
-    stop("If transformation is set to ''arcsin'', the mse_type must be set to 
-         ''boot'', ''jackknife'' or ''weighted_jackknife''. See also help(fh).")
+    stop("If transformation is set to ''arcsin'' and backtransformation to ''naive'', 
+          the mse_type must be set to ''boot'', ''jackknife'' or 
+         ''weighted_jackknife''. See also help(fh).")
   }
-  if ((transformation == "arcsin") && (MSE == TRUE) && (mse_type == "boot") && 
-      is.null(eff_smpsize)){
-    stop("If transformation is set to ''arcsin'' and the mse_type ''boot'' is 
-         chosen, the argument eff_smpsize is required and cannot be NULL. 
-         See also help(fh).")
+  if ((transformation == "arcsin") && (backtransformation == "bc") && 
+      (MSE == TRUE) && !(mse_type == "boot")){
+    stop("If transformation is set to ''arcsin'' and backtransformation to ''bc'', 
+          the mse_type must be set to ''boot''. See also help(fh).")
   }
 }
 

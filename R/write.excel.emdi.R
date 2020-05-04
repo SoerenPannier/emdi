@@ -361,7 +361,7 @@ add_summary_fh <- function(object, wb, headlines_cs) {
   )
   starting_row <- starting_row + 2 + nrow(su$normality)
 
-  if (su$model$correlation == "no" & !(su$method$method %in% c("reblup", "reblupbc") | su$method$method == "moment")) {
+  if (su$model$correlation == "no" & !(su$method$method %in% c("reblup", "reblupbc") | su$method$method == "me")) {
     writeDataTable(x = su$model$model_select,
                    wb = wb,
                    withFilter = FALSE,

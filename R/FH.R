@@ -83,8 +83,7 @@
 #' Defaults to \code{NULL}.
 #' @param eff_smpsize a character string indicating the name of the variable containing
 #' the effective sample sizes that are included in \code{combined_data}. Required 
-#' argument when the arcsin transformation is chosen in combination with 
-#' \code{mse_type = boot}. Defaults to \code{NULL}.
+#' argument when the arcsin transformation is chosen. Defaults to \code{NULL}.
 #' @param correlation a character determining the correlation structure of the 
 #' random effects. Possible correlations are
 #' (i) no correlation ("\code{no}"), 
@@ -106,12 +105,12 @@
 #' variance of the random effects. Required argument when method "\code{reml}" and 
 #' "\code{ml}" in combination with \code{correlation =}"\code{spatial}" are chosen or 
 #' for the variance estimation methods "\code{reblup}", "\code{reblupbc}" and 
-#' "\code{me}". Defaults to \code{NULL}.
+#' "\code{me}". Defaults to 0.0001.
 #' @param maxit a number determining the maximum number of iterations for the 
 #' estimation of the variance of the random effects. Required argument when method 
 #' "\code{reml}" and  "\code{ml}" in combination with \code{correlation} equals 
 #' "\code{spatial}" is chosen or for the variance estimation methods "\code{reblup}", 
-#' "\code{reblupbc}" and "\code{me}". Defaults to \code{NULL}.
+#' "\code{reblupbc}" and "\code{me}". Defaults to 100.
 #' @param MSE if \code{TRUE}, MSE estimates are calculated. Defaults
 #' to \code{FALSE}.
 #' @param mse_type a character string determining the estimation method of the MSE.
@@ -141,7 +140,7 @@
 #' bootstrap MSE estimator is chosen, \code{B} regulates the MSE estimation. 
 #' When the standard FH model is applied and \code{B} is not \code{NULL}, the 
 #' information criteria by Marhuenda et al. (2014) are computed. The number must 
-#' be greater than 1. Defaults to \code{NULL}. For practical applications, 
+#' be greater than 1. Defaults to 50. For practical applications, 
 #' values larger than 200 are recommended.
 #' @param seed an integer to set the seed for the random number generator. For 
 #' the usage of random number generation see details. If seed is set to 
@@ -227,18 +226,18 @@
 #' # Example 1: Standard Fay-Herriot model and analytical MSE
 #' fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
 #' combined_data = combined_data, domains = "Domain", method = "ml", 
-#' interval = c(0, 100000000), MSE = TRUE)
+#' interval = c(0, 10000000), MSE = TRUE)
 #' 
 #' # Example 2: arcsin transformation of the dependent variable
 #' fh_arcsin <- fh(fixed = MTMED ~ cash + age_ben + rent + house_allow,
 #' vardir = "Var_MTMED", combined_data = combined_data, domains = "Domain", 
-#' method = "ml", interval = c(0, 100000000), transformation = "arcsin", 
+#' method = "ml", interval = c(0, 10000000), transformation = "arcsin", 
 #' backtransformation = "bc", eff_smpsize = "n", MSE = TRUE, mse_type = "boot", 
 #' B = 50)
 #' 
 #' # Example 3: Spatial Fay-Herriot model
 #' fh_spatial <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
-#' tol = 0.00000001, maxit = 2000, combined_data = combined_data, 
+#' tol = 0.0001, maxit = 100, combined_data = combined_data, 
 #' domains = "Domain", method = "reml", correlation = "spatial", 
 #' corMatrix = eusilcA_proxmat, MSE = TRUE, mse_type = "analytical")
 #' 
@@ -247,7 +246,7 @@
 #' change B to a lower value.
 #' fh_robust <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
 #' combined_data = combined_data, domains = "Domain", method = "reblupbc", 
-#' tol=0.000001, maxit= 1000, k = 1.345, c = 1, MSE = TRUE, mse_type = "boot", 
+#' tol = 0.0001, maxit= 100, k = 1.345, c = 1, MSE = TRUE, mse_type = "boot", 
 #' B = 50)
 #' 
 #' # Example 5: Ybarra-Lohr model
@@ -260,7 +259,7 @@
 #' }
 #' fh_yl <- fh(fixed = Mean ~ Cash, vardir= "Var_Mean",
 #' combined_data = eusilcA_smpAgg, domains ="Domain", method = "me", 
-#' Ci = Ci_array, tol=0.00000001, maxit= 2000, MSE = TRUE, mse_type = "jackknife")
+#' Ci = Ci_array, tol = 0.0001, maxit= 100, MSE = TRUE, mse_type = "jackknife")
 #' }
 #' @export
 #' @import formula.tools 
@@ -273,8 +272,8 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                interval = c(0, 1000), k = 1.345, c = 1, transformation = "no",
                backtransformation = NULL, eff_smpsize = NULL,
                correlation = "no", corMatrix = NULL, 
-               Ci = NULL, tol = 1e-06, maxit = 100,
-               MSE = FALSE, mse_type = "analytical", B = NULL, seed = NULL) {
+               Ci = NULL, tol = 0.0001, maxit = 100,
+               MSE = FALSE, mse_type = "analytical", B = 50, seed = NULL) {
 
   # Agrument checking ----------------------------------------------------------
   fh_combinations(fixed = fixed, vardir = vardir, combined_data = combined_data, 
@@ -407,6 +406,9 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                       successful_bootstraps = successful_bootstraps
           )
         } else if (correlation == "spatial"){
+          sigmau2 <- data.frame(correlation = sigmau2$rho, variance = sigmau2$sigmau2, 
+                                convergence = sigmau2$convergence)
+          row.names(sigmau2) <- ""
           out <- list(ind = eblup$EBLUP_data,
                       MSE = MSE,
                       #MSE_boot = MSE_boot,
@@ -521,7 +523,8 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
   } else if (method == "reblup" | method == "reblupbc") {
     
     # Standard EBLUP -----------------------------------------------------------
-    eblup <- eblup_robust(framework = framework, vardir = vardir, combined_data = combined_data,
+    eblup <- eblup_robust(framework = framework, vardir = vardir, 
+                          combined_data = combined_data,
                           method = method, k = k, c = c, 
                           correlation = correlation, corMatrix = corMatrix)
     
@@ -547,10 +550,10 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                              real_residuals = as.matrix(eblup$real_res),
                              std_real_residuals = as.matrix(eblup$std_real_res),
                              #model_select = NULL,
-                             correlation = correlation),
+                             correlation = correlation,
                              #W = eblup$W,
-                             #k = k,
-                             #c = c,
+                             k = k,
+                             c = c),
                             # scores = eblup$scores,
                              #iterations = eblup$iterations,
                             # max_iter = eblup$maxIter,
