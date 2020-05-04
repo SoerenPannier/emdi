@@ -131,7 +131,7 @@ add_summary_ods_fh <- function(object, wb, headlines_cs) {
   readODS::write_ods(x = su$normality, path = paste0(wb, "_sumNorm", ".ods"))
 
   if (su$model$correlation == "no" & !(su$method$method %in% c("reblup", "reblupbc") | 
-                                       su$method$method == "moment")) {
+                                       su$method$method == "me")) {
     readODS::write_ods(x = su$model$model_select, path = paste0(wb, "_sumModelSelect", ".ods"))
   }
   
