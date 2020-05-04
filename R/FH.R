@@ -312,6 +312,11 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                             eff_smpsize = eff_smpsize, correlation = correlation,
                             corMatrix = corMatrix, Ci = Ci, tol = tol,
                             maxit = maxit)
+  
+  if (is.null(domains)) {
+    combined_data$Domain <- 1:nrow(combined_data)
+    framework$domains <- "Domain"
+  }
 
   if (!(method == "reblup" | method == "reblupbc")) {
     # Estimate sigma u ---------------------------------------------------------

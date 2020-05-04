@@ -35,8 +35,8 @@ framework_FH <- function(combined_data, fixed, vardir, domains,
   }
 
   if (is.null(domains)) {
-    data$domains <- 1:length(direct)
-    domains <- "domains"
+    combined_data$Domain <- 1:nrow(combined_data)
+    domains <- "Domain"
   }
   
   # Number of areas
