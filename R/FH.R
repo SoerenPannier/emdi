@@ -406,6 +406,9 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                       successful_bootstraps = successful_bootstraps
           )
         } else if (correlation == "spatial"){
+          sigmau2 <- data.frame(correlation = sigmau2$rho, variance = sigmau2$sigmau2, 
+                                convergence = sigmau2$convergence)
+          row.names(sigmau2) <- ""
           out <- list(ind = eblup$EBLUP_data,
                       MSE = MSE,
                       #MSE_boot = MSE_boot,
@@ -520,7 +523,8 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
   } else if (method == "reblup" | method == "reblupbc") {
     
     # Standard EBLUP -----------------------------------------------------------
-    eblup <- eblup_robust(framework = framework, vardir = vardir, combined_data = combined_data,
+    eblup <- eblup_robust(framework = framework, vardir = vardir, 
+                          combined_data = combined_data,
                           method = method, k = k, c = c, 
                           correlation = correlation, corMatrix = corMatrix)
     
@@ -546,10 +550,10 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                              real_residuals = as.matrix(eblup$real_res),
                              std_real_residuals = as.matrix(eblup$std_real_res),
                              #model_select = NULL,
-                             correlation = correlation),
+                             correlation = correlation,
                              #W = eblup$W,
-                             #k = k,
-                             #c = c,
+                             k = k,
+                             c = c),
                             # scores = eblup$scores,
                              #iterations = eblup$iterations,
                             # max_iter = eblup$maxIter,
