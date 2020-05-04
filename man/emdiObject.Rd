@@ -30,9 +30,10 @@ transformation and, if appropriate, backtransformation. Not filled for class dir
    Box-Cox transformation or NULL for no and log transformation and the
    second the potential shift parameter in the log or Box-Cox transformation
    and NULL for no transformation. Not filled for class fh and direct.}
-\item{\code{successful_bootstraps}}{a matrix with domains as rows and indicators
-     as columns. The cells contain the number of successful bootstraps for each
-     combination. Not filled for class model.}
+\item{\code{successful_bootstraps}}{for class direct, a matrix with domains as 
+ rows and indicators as columns. The cells contain the number of successful 
+ bootstraps for each combination. For non-robust spatial Fay-Herriot, string
+ with number of successful bootstraps. Not filled for other models in class model.}
 }
 \description{
 An object of class emdi that represents point predictions of regional
