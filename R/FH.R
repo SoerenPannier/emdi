@@ -384,6 +384,11 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
       if (method != "me") {
         if (mse_type == "spatialnonparboot" | mse_type == "spatialnonparbootbc" |
             mse_type == "spatialparboot" | mse_type == "spatialparbootbc"){
+          
+          sigmau2 <- data.frame(correlation = sigmau2$rho, variance = sigmau2$sigmau2, 
+                                convergence = sigmau2$convergence)
+          row.names(sigmau2) <- ""
+          
           out <- list(ind = eblup$EBLUP_data,
                       MSE = MSE,
                       transform_param = NULL,
