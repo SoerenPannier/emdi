@@ -82,10 +82,10 @@ test_that("Does the fh function in emdi return the same variance, correlation
   
   # Comparison
   # Variance
-  expect_equal(fh_spatial_reml_analytical$model$variance$sigmau2, 
+  expect_equal(fh_spatial_reml_analytical$model$variance[1,2], 
                fh_spatial_reml_analytical_sae$variance[1])
   # Correlation parameter
-  expect_equal(fh_spatial_reml_analytical$model$variance$rho, 
+  expect_equal(fh_spatial_reml_analytical$model$variance[1,1], 
                fh_spatial_reml_analytical_sae$correlation[1])
   # EBLUP
   expect_equal(fh_spatial_reml_analytical$ind$FH, 
@@ -110,10 +110,10 @@ test_that("Does the fh function in emdi return the same variance, correlation
   
   # Comparison
   # Variance
-  expect_equal(fh_spatial_ml_analytical$model$variance$sigmau2, 
+  expect_equal(fh_spatial_ml_analytical$model$variance[1,2], 
                fh_spatial_ml_analytical_sae$variance[1])
   # Correlation parameter
-  expect_equal(fh_spatial_ml_analytical$model$variance$rho, 
+  expect_equal(fh_spatial_ml_analytical$model$variance[1,1], 
                fh_spatial_ml_analytical_sae$correlation[1])
   # EBLUP
   expect_equal(fh_spatial_ml_analytical$ind$FH, 
@@ -153,10 +153,10 @@ test_that("Does the fh function in emdi return the same variance, correlation
  
   # Comparison
   # Variance
-  expect_equal(fh_spatial_reml_npb$model$variance$sigmau2, 
+  expect_equal(fh_spatial_reml_npb$model$variance[1,2], 
                fh_spatial_reml_npb_sae$variance[1])
   # Correlation parameter
-  expect_equal(fh_spatial_reml_npb$model$variance$rho, 
+  expect_equal(fh_spatial_reml_npb$model$variance[1,1], 
                fh_spatial_reml_npb_sae$correlation[1])
   # EBLUP
   expect_equal(fh_spatial_reml_npb$ind$FH, 
@@ -198,10 +198,10 @@ test_that("Does the fh function in emdi return the same variance, correlation
           
   # Comparison
   # Variance
-  expect_equal(fh_spatial_reml_pb$model$variance$sigmau2, 
+  expect_equal(fh_spatial_reml_pb$model$variance[1,2], 
                fh_spatial_reml_pb_sae$variance[1])
   # Correlation parameter
-  expect_equal(fh_spatial_reml_pb$model$variance$rho, 
+  expect_equal(fh_spatial_reml_pb$model$variance[1,1], 
                fh_spatial_reml_pb_sae$correlation[1])
   # EBLUP
   expect_equal(fh_spatial_reml_pb$ind$FH, 
@@ -236,10 +236,10 @@ test_that("Does the fh function in emdi return the same variance, correlation
     
   # Comparison
   # Variance
-  expect_equal(fh_spatial_ml_pb$model$variance$sigmau2, 
+  expect_equal(fh_spatial_ml_pb$model$variance[1,2], 
                fh_spatial_ml_pb_sae$variance[1])
   # Correlation parameter
-  expect_equal(fh_spatial_ml_pb$model$variance$rho, 
+  expect_equal(fh_spatial_ml_pb$model$variance[1,1], 
                fh_spatial_ml_pb_sae$correlation[1])
   # EBLUP
   expect_equal(fh_spatial_ml_pb$ind$FH, 
@@ -279,7 +279,8 @@ test_that("Does the fh function in emdi return the same variance, EBLUP and MSE
   
   # Comparison
   # Variance
-  expect_equal(unname(fh_robust$model$variance), fh_robust_saeRobust$variance[1])
+  expect_equal(unname(fh_robust$model$variance), 
+               fh_robust_saeRobust$variance[1])
   # EBLUP
   expect_equal(fh_robust$ind$FH, fh_robust_saeRobust$EBLUP)
   # MSE
@@ -300,7 +301,8 @@ test_that("Does the fh function in emdi return the same variance, EBLUP and MSE
 
   # Comparison
   # Variance
-  expect_equal(unname(fh_robustbc$model$variance), fh_robust_saeRobust$variance[1])
+  expect_equal(unname(fh_robustbc$model$variance), 
+               fh_robust_saeRobust$variance[1])
   # EBLUP
   expect_equal(fh_robustbc$ind$FH, fh_robustbc_saeRobust$EBLUP)
   # MSE
@@ -329,7 +331,8 @@ test_that("Does the fh function in emdi return the same variance, EBLUP and MSE
   
   # Comparison
   # Variance
-  expect_equal(unname(fh_robust_boot$model$variance), fh_robust_boot_saeRobust$variance[1])
+  expect_equal(unname(fh_robust_boot$model$variance), 
+               fh_robust_boot_saeRobust$variance[1])
   # EBLUP
   expect_equal(fh_robust_boot$ind$FH, fh_robust_boot_saeRobust$EBLUP)
   # MSE
@@ -351,7 +354,8 @@ test_that("Does the fh function in emdi return the same variance, EBLUP and MSE
   
   # Comparison
   # Variance
-  expect_equal(unname(fh_robustbc_boot$model$variance), fh_robust_boot_saeRobust$variance[1])
+  expect_equal(unname(fh_robustbc_boot$model$variance), 
+               fh_robust_boot_saeRobust$variance[1])
   # EBLUP
   expect_equal(fh_robustbc_boot$ind$FH, fh_robustbc_boot_saeRobust$EBLUP)
   # MSE
