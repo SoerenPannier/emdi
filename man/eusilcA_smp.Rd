@@ -4,8 +4,7 @@
 \name{eusilcA_smp}
 \alias{eusilcA_smp}
 \title{Simulated eusilc data - sample data}
-\format{
-A data frame with 1000 observations and 18 variables:
+\format{A data frame with 1000 observations and 18 variables:
 \describe{
 \item{eqIncome}{numeric; a simplified version of the equivalized household income.}
 \item{eqsize}{numeric; the equivalized household size according to the 
@@ -27,8 +26,7 @@ modified OECD scale.}
 \item{state}{factor; state (nine levels).}
 \item{district}{factor; districts (94 levels).}
 \item{weight}{numeric; constant weight.}
-}
-}
+}}
 \usage{
 eusilcA_smp
 }
