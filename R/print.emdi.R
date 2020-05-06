@@ -95,8 +95,8 @@ print.emdi <- function(x, ...) {
           cat("Spatial correlation parameter: ", unname(x$model$variance[1]),"\n")
         }
         else {
-          cat("Variance of random effects: ", x$model$variance$sigmau2,"\n")
-          cat("Spatial correlation parameter: ", x$model$variance$rho,"\n")
+          cat("Variance of random effects: ", x$model$variance[1,2],"\n")
+          cat("Spatial correlation parameter: ", x$model$variance[1,1],"\n")
           #print(x$model$variance) 
         }
         
