@@ -4,10 +4,19 @@
 \alias{map_plot}
 \title{Visualizes regional disaggregrated estimates on a map}
 \usage{
-map_plot(object, indicator = "all", MSE = FALSE, CV = FALSE,
-  map_obj = NULL, map_dom_id = NULL, map_tab = NULL,
-  color = c("white", "red4"), scale_points = NULL,
-  guide = "colourbar", return_data = FALSE)
+map_plot(
+  object,
+  indicator = "all",
+  MSE = FALSE,
+  CV = FALSE,
+  map_obj = NULL,
+  map_dom_id = NULL,
+  map_tab = NULL,
+  color = c("white", "red4"),
+  scale_points = NULL,
+  guide = "colourbar",
+  return_data = FALSE
+)
 }
 \arguments{
 \item{object}{an object of type emdi, containing the estimates to be 

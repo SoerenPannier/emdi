@@ -4,8 +4,15 @@
 \alias{plot.emdi}
 \title{Plots for an emdi object}
 \usage{
-\method{plot}{emdi}(x, label = "orig", color = c("blue", "lightblue3"),
-  gg_theme = NULL, cooks = TRUE, range = NULL, ...)
+\method{plot}{emdi}(
+  x,
+  label = "orig",
+  color = c("blue", "lightblue3"),
+  gg_theme = NULL,
+  cooks = TRUE,
+  range = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{an object of type "emdi", "model", representing point and, if chosen,
