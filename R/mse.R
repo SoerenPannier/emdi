@@ -867,10 +867,12 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     MSE_data <- list(MSE_data = MSE_data,
                      MSE_method = "bias corrected non-parametric bootstrap",
                      successful_bootstraps = notSuc)
+    if (!all(framework$obs_dom == TRUE)) {
     cat("Please note that only for in-sample-domains the bias corrected 
 non-parametric bootstrap MSE estimator for the spatial FH model is implemented. 
 For the out-of-sample domains, no estimate for the MSE is returned. For the 
         reference see help(fh).")
+    }
   }
   return(MSE_data)
 }
