@@ -125,12 +125,12 @@ getIndicatorList_fixed <- function(){
       sum(weights  * (y < threshold) * (threshold - y) / threshold) / sw 
     },
     gini_wrap = function (y, 
-                          weights = NULL, 
-                          threshold = NULL) {
+                          weights, 
+                          threshold) {
 
       ord <- order(y)
       y <- y[ord]
-      if (!is.null(weights)){
+      if (!is.null(weights)) {
         weights <- weights[ord]
       }
       wy <- weights * y
