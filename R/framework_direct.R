@@ -130,9 +130,7 @@ getIndicatorList_fixed <- function(){
 
       ord <- order(y)
       y <- y[ord]
-      if (!is.null(weights)) {
-        weights <- weights[ord]
-      }
+      weights <- weights[ord]
       wy <- weights * y
       sw <- sum(weights)
       cw <- cumsum(weights)
