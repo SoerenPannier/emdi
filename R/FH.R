@@ -47,8 +47,8 @@
 #' (ix) estimation of the measurement error model of \cite{Ybarra and Lohr 
 #' (2008)} ("\code{me}"). Defaults to "\code{reml}".
 #' @param interval a numeric vector containing a lower and upper limit for the
-#'  estimation of the variance of the random effects. Defaults to \code{c(0,1000)}. 
-#'  In some cases it may be more suitable to choose a larger interval. 
+#'  estimation of the variance of the random effects. In some cases it 
+#'  may be more suitable to choose a larger interval. 
 #' Required argument when method "\code{reml}" and  "\code{ml}" in combination 
 #' with \code{correlation} equals "\code{no}" is chosen or for the adjusted 
 #' variance estimation methods "\code{amrl}", "\code{amrl_yl}", "\code{ampl}" 
@@ -255,7 +255,7 @@
 #' M <- length(eusilcA_smpAgg$Mean)
 #' Ci_array <- array(data = 0, dim=c(P+1,P+1,M))
 #' for(i in 1:M){
-#'  Ci_array[2,2,i] <- eusilcA_smpAgg$Var_Cash[i]/eusilcA_smpAgg$n[i]
+#'  Ci_array[2,2,i] <- eusilcA_smpAgg$Var_Cash[i]
 #' }
 #' fh_yl <- fh(fixed = Mean ~ Cash, vardir= "Var_Mean",
 #' combined_data = eusilcA_smpAgg, domains ="Domain", method = "me", 
