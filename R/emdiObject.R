@@ -15,7 +15,7 @@
 #' approach:
 #' \item{\code{call}}{a list containing an image of the function call that
 #'                    produced the object.}
-#' \item{\code{fixed}}{For details, see \code{fixed} in \code{\link{fh}} and
+#' \item{\code{fixed}}{for details, see \code{fixed} in \code{\link{fh}} and
 #'              \code{\link{ebp}}. Not filled for class direct.}
 #'  \item{\code{framework}}{a list with components that describe the data
 #'  setup, e.g., number of domains in the sample.}
