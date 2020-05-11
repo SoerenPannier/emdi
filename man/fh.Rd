@@ -122,7 +122,7 @@ correlation is set to "\code{spatial}". Defaults to \code{NULL}.}
 \item{Ci}{array with dimension number of estimated regression coefficients times 
 number of estimated regression coefficients times number of areas containing 
 the variance-covariance matrix of the explanatory variables for each area. 
-For an example how to create the array please refer to the Vignette. 
+For an example of how to create the array please refer to the Vignette. 
 Required argument within the Ybarra-Lohr model (\code{method = me}). 
 Defaults to \code{NULL}.}
 
