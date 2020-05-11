@@ -314,7 +314,7 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
          ''analytical''. See also help(fh).")
   }
   if ((transformation != "no") && (backtransformation == "bc_sm") && method != "ml"){
-    stop("If backtransformation is set to ''sm'', only ''ml'' variance estimation
+    stop("If backtransformation is set to ''bc_sm'', only ''ml'' variance estimation
          is possible. See also help(fh).")
   }
   if ((transformation == "arcsin") && is.null(eff_smpsize)){
