@@ -8,8 +8,8 @@ compare_plot(
   model,
   direct,
   indicator = "all",
-  MSE = TRUE,
-  CV = TRUE,
+  MSE = FALSE,
+  CV = FALSE,
   label = "orig",
   color = c("blue", "lightblue3"),
   shape = c(16, 16),
@@ -42,11 +42,12 @@ one of the groups. If the \code{model} argument is of type "model","fh",
 indicator can be set to "all", "FH" or "Direct". Defaults to "all".}
 
 \item{MSE}{optional logical. If \code{TRUE}, the MSE estimates of the direct 
-and model-based estimates are compared via boxplots and ordered scatterplots.}
+and model-based estimates are compared via boxplots and ordered scatterplots. 
+Defaults to \code{FALSE}.}
 
 \item{CV}{optional logical. If \code{TRUE}, the coefficient of variation 
 estimates of the direct and model-based estimates are compared via boxplots 
-and ordered scatterplots.}
+and ordered scatterplots. Defaults to \code{FALSE}.}
 
 \item{label}{argument that enables to customize title and axis labels. There 
 are three options to label the evaluation plots: (i) original labels ("orig"), 

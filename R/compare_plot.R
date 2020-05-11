@@ -23,10 +23,11 @@
 #' one of the groups. If the \code{model} argument is of type "model","fh", 
 #' indicator can be set to "all", "FH" or "Direct". Defaults to "all".
 #' @param MSE optional logical. If \code{TRUE}, the MSE estimates of the direct 
-#' and model-based estimates are compared via boxplots and ordered scatterplots.
+#' and model-based estimates are compared via boxplots and ordered scatterplots. 
+#' Defaults to \code{FALSE}.
 #' @param CV optional logical. If \code{TRUE}, the coefficient of variation 
 #' estimates of the direct and model-based estimates are compared via boxplots 
-#' and ordered scatterplots.
+#' and ordered scatterplots. Defaults to \code{FALSE}.
 #' @param label argument that enables to customize title and axis labels. There 
 #' are three options to label the evaluation plots: (i) original labels ("orig"), 
 #' (ii) axis lables but no title ("no_title"), (iii) neither axis 
@@ -62,8 +63,8 @@
 #' \code{\link{fh}}
 #' @export
 
-compare_plot <- function(model, direct,  indicator = "all", MSE = TRUE, 
-                         CV = TRUE, label = "orig", color = c("blue", "lightblue3"), 
+compare_plot <- function(model, direct,  indicator = "all", MSE = FALSE, 
+                         CV = FALSE, label = "orig", color = c("blue", "lightblue3"), 
                          shape = c(16, 16), line_type = c("solid", "solid"), 
                          gg_theme = NULL, ...) UseMethod("compare_plot")
 
