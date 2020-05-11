@@ -65,7 +65,7 @@ compare.fh <- function(model, ...){
    cat("Please note that for the bias-corrected robust EBLUP ('reblupbc') only 
        the goodness-of-fit test proposed by Brown et al. (2001) is provided and 
        not the correlation coefficient of the synthetic part and the direct 
-       estimator.")
+       estimator. \n")
  } else {
    # Extraction of the regression part
    if (!is.null(model$model$gamma)){
