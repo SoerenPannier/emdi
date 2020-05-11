@@ -61,7 +61,7 @@ step_fh <- function (object, scope = NULL, criteria = "AIC",
   Terms <- terms(object$fixed)
   object$call$formula <- object$formula <- Terms
   md <- missing(direction)
-  direction <- match.arg(direction)
+ # direction <- match.arg(direction)
   backward <- direction == "both" | direction == "backward"
   forward <- direction == "both" | direction == "forward"
   if (missing(scope)) {
@@ -218,8 +218,9 @@ Otherwise the comparison of models based on information criteria would not be va
          input argument B of the fh function to a positive number to receive 
          results for all of the information criteria. For some model extensions of 
          the fh model the information criteria are not defined. Check the 
-         model_select component of the fh object. If no criteria are provided, 
-         it is not possible to apply the stepwise variable selection algorithm.")
+         model_select component of the fh object (objectname$model$model_select). 
+         If no criteria are provided, it is not possible to apply the 
+         stepwise variable selection algorithm.")
   }
   if (is.null(direction) || !(direction == "forward" 
                               || direction == "backward" 
