@@ -18,8 +18,10 @@
 #' and do not appear in groups of indicators even though these might belong to 
 #' one of the groups. If the \code{model} argument is of type "model","fh", 
 #' indicator can be set to "all", "FH" or "Direct". Defaults to "all". 
-#' @param MSE optional logical. If \code{TRUE}, the MSE is also visualized.
-#' @param CV optional logical. If \code{TRUE}, the CV is also visualized.
+#' @param MSE optional logical. If \code{TRUE}, the MSE is also visualized. 
+#' Defaults to \code{FALSE}.
+#' @param CV optional logical. If \code{TRUE}, the CV is also visualized. 
+#' Defaults to \code{FALSE}.
 #' @param map_obj an \code{SpatialPolygonsDataFrame} object as defined by the
 #' \pkg{sp} package on which the data should be visualized.
 #' @param map_dom_id a character string containing the name of a variable in

@@ -34,9 +34,11 @@ and do not appear in groups of indicators even though these might belong to
 one of the groups. If the \code{model} argument is of type "model","fh", 
 indicator can be set to "all", "FH" or "Direct". Defaults to "all".}
 
-\item{MSE}{optional logical. If \code{TRUE}, the MSE is also visualized.}
+\item{MSE}{optional logical. If \code{TRUE}, the MSE is also visualized. 
+Defaults to \code{FALSE}.}
 
-\item{CV}{optional logical. If \code{TRUE}, the CV is also visualized.}
+\item{CV}{optional logical. If \code{TRUE}, the CV is also visualized. 
+Defaults to \code{FALSE}.}
 
 \item{map_obj}{an \code{SpatialPolygonsDataFrame} object as defined by the
 \pkg{sp} package on which the data should be visualized.}
