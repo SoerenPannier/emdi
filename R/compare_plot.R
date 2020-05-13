@@ -436,19 +436,19 @@ define_evallabel <- function(type, label, indi){
                                   x_lab = "Direct"),
                       line = c(title = indi,
                                y_lab = "Value",
-                               x_lab = "Domain (ordered by increasing MSE of Direct)"),
+                               x_lab = "Domain (ordered by decreasing MSE of Direct)"),
                       boxplot_MSE = c(title = indi,
                                       y_lab = "",
                                       x_lab = "MSE"),
                       ordered_MSE = c(title = indi,
                                       y_lab = "MSE",
-                                      x_lab = "Domain (ordered by increasing MSE of Direct)"),
+                                      x_lab = "Domain (ordered by decreasing MSE of Direct)"),
                       boxplot_CV = c(title = indi,
                                      y_lab = "CV",
                                      x_lab = ""),
                       ordered_CV = c(title = indi,
                                      y_lab = "CV",
-                                     x_lab = "Domain (ordered by increasing CV of Direct)"))
+                                     x_lab = "Domain (ordered by decreasing CV of Direct)"))
       }
 
     } else if (label == "blank") {
@@ -497,19 +497,19 @@ define_evallabel <- function(type, label, indi){
                                   x_lab = "Direct"),
                       line = c(title = "",
                                y_lab = "Value",
-                               x_lab = "Domain (ordered by increasing MSE of Direct)"),
+                               x_lab = "Domain (ordered by decreasing MSE of Direct)"),
                       boxplot_MSE = c(title = "",
                                       y_lab = "",
                                       x_lab = "MSE"),
                       ordered_MSE = c(title = "",
                                       y_lab = "MSE",
-                                      x_lab = "Domain (ordered by increasing MSE of Direct)"),
+                                      x_lab = "Domain (ordered by decreasing MSE of Direct)"),
                       boxplot_CV = c(title = "",
                                      y_lab = "CV",
                                      x_lab = ""),
                       ordered_CV = c(title = "",
                                      y_lab = "CV",
-                                     x_lab = "Domain (ordered by increasing CV of Direct)"))
+                                     x_lab = "Domain (ordered by decreasing CV of Direct)"))
       }
 
     }

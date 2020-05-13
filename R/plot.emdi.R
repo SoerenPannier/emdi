@@ -329,12 +329,12 @@ define_label <- function(x, label){
 
       } else if (inherits(x, "fh")) {
         label <- list(qq_res = c(title = "Realized residuals",
-                                 y_lab = "Quantiles of std. residuals/sqrt(vardir)",
+                                 y_lab = "Quantiles of std. residuals/sqrt(direct var.)",
                                  x_lab = "Theoretical quantiles"),
                       qq_ran = c(title = "Random effect",
                                  y_lab = "Quantiles of std. random effects",
                                  x_lab = "Theoretical quantiles"),
-                      d_res = c(title = "Density - Std. residuals/sqrt(vardir)",
+                      d_res = c(title = "Density - Std. residuals/sqrt(direct var.)",
                                 y_lab = "Density",
                                 x_lab = "Std. real. residuals"),
                       d_ran = c(title = "Density - Random effects",
@@ -392,7 +392,7 @@ define_label <- function(x, label){
 
       } else if (inherits(x, "fh")) {
         label <- list(qq_res = c(title = "",
-                                 y_lab = "Quantiles of std. residuals/sqrt(vardir)",
+                                 y_lab = "Quantiles of std. residuals/sqrt(direct var.)",
                                  x_lab = "Theoretical quantiles"),
                       qq_ran = c(title = "",
                                  y_lab = "Quantiles of std. random effects",
