@@ -125,10 +125,11 @@ test_that("Does the fh function in emdi return the same variance, correlation
 
 # Nonparametric bootstrap MSE 
 
+
 test_that("Does the fh function in emdi return the same variance, correlation 
           parameter, EBLUP and MSE estimates as the function npbmseSFH of package 
           sae?",{
-            
+            suppressWarnings(RNGversion("3.6.3"))  
             ############################ REML variance estimation ########################
             # Estimation with fh of emdi
             grapes$Domain <- c(1:274)
