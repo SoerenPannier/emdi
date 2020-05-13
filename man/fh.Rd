@@ -25,7 +25,7 @@ fh(
   MSE = FALSE,
   mse_type = "analytical",
   B = 50,
-  seed = NULL
+  seed = 123
 )
 }
 \arguments{
@@ -174,7 +174,7 @@ values larger than 200 are recommended.}
 
 \item{seed}{an integer to set the seed for the random number generator. For 
 the usage of random number generation see details. If seed is set to 
-\code{NULL}, seed is chosen randomly. Defaults to \code{NULL}.}
+\code{NULL}, seed is chosen randomly. Defaults to \code{123}.}
 }
 \value{
 An object of class "fh", "model" and "emdi" that provides estimators 
