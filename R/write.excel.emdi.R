@@ -1,4 +1,4 @@
-#' Exports an emdiObject to an excel file or OpenDocument Spreadsheet 
+#' Exports an emdiObject to an Excel file or OpenDocument Spreadsheet 
 #'
 #' Function \code{write.excel} enables the user to export point and MSE 
 #' estimates as well as diagnostics from \code{summary.emdi} to an Excel file. 
@@ -32,10 +32,10 @@
 #' @return An Excel file is created in your working directory, or at the given
 #' path. Alternatively multiple ODS files are created at the given path.
 #' @details These functions create an Excel file via the package
-#' \pkg{\link{openxlsx}} respectively ODS files via the package 
+#' \pkg{\link{openxlsx}} and ODS files via the package 
 #' \pkg{readODS}.
-#' Both packages requires a zip application to be available to \R. If this is not 
-#' the case the authors of \pkg{\link{openxlsx}} suggest the first of the two following ways. 
+#' Both packages require a zip application to be available to \R. If this is not 
+#' the case the authors of \pkg{\link{openxlsx}} suggest the first of the following two ways. 
 #' \itemize{
 #' \item Install Rtools from: http://cran.r-project.org/bin/windows/Rtools/ and
 #' modify the system PATH during installation.

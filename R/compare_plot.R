@@ -23,14 +23,14 @@
 #' one of the groups. If the \code{model} argument is of type "model","fh", 
 #' indicator can be set to "all", "FH" or "Direct". Defaults to "all".
 #' @param MSE optional logical. If \code{TRUE}, the MSE estimates of the direct 
-#' and model-based estimates are compared via boxplots and ordered scatterplots. 
+#' and model-based estimates are compared via boxplots and ordered scatter plots. 
 #' Defaults to \code{FALSE}.
 #' @param CV optional logical. If \code{TRUE}, the coefficient of variation 
 #' estimates of the direct and model-based estimates are compared via boxplots 
-#' and ordered scatterplots. Defaults to \code{FALSE}.
+#' and ordered scatter plots. Defaults to \code{FALSE}.
 #' @param label argument that enables to customize title and axis labels. There 
 #' are three options to label the evaluation plots: (i) original labels ("orig"), 
-#' (ii) axis lables but no title ("no_title"), (iii) neither axis 
+#' (ii) axis labels but no title ("no_title"), (iii) neither axis 
 #' labels nor title ("blank").
 #' @param color a vector with two elements. The first color determines
 #' the color of the line in the scatter plot and the color for the direct 
@@ -52,12 +52,12 @@
 #' estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
 #' If the input arguments MSE and CV are set to TRUE two extra plots are created, 
 #' respectively: the MSE/CV estimates of the direct and model-based estimates are 
-#' compared by boxplots and scatterplots.
+#' compared by boxplots and scatter plots.
 #' @details Since all of the comparisons need a direct estimator, the plots are 
 #' only created for in-sample domains. For the new package version (2.0.0) the 
 #' order of the input arguments direct and model has been changed. In this 
 #' version (1.1.6), it is still possible to use the old order because the 
-#' arguments are swapped internally. From the next package version it will no 
+#' arguments are swapped internally. From the next package version on it will no 
 #' longer be possible.
 #' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
 #' \code{\link{fh}}
@@ -256,13 +256,13 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
 #' one of the groups. If the \code{model} argument is of type "model","fh", 
 #' indicator can be set to "all", "FH" or "Direct". Defaults to "all".
 #' @param MSE optional logical. If \code{TRUE}, the MSE estimates of the direct 
-#' and model-based estimates are compared via boxplots and ordered scatterplots.
+#' and model-based estimates are compared via boxplots and ordered scatter plots.
 #' @param CV optional logical. If \code{TRUE}, the coefficient of variation 
 #' estimates of the direct and model-based estimates are compared via boxplots 
-#' and ordered scatterplots.
+#' and ordered scatter plots.
 #' @param label argument that enables to customize title and axis labels. There 
 #' are three options to label the evaluation plots: (i) original labels ("orig"), 
-#' (ii) axis lables but no title ("no_title"), (iii) neither axis 
+#' (ii) axis labels but no title ("no_title"), (iii) neither axis 
 #' labels nor title ("blank").
 #' @param color a vector with two elements. The first color determines
 #' the color of the line in the scatter plot and the color for the direct 
@@ -286,7 +286,7 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
 #' only created for in-sample domains. For the new package version (2.0.0) the 
 #' order of the input arguments direct and model has been changed. In this 
 #' version (1.1.6), it is still possible to use the old order because the 
-#' arguments are swapped internally. From the next package version it will no 
+#' arguments are swapped internally. From the next package version on it will no 
 #' longer be possible.
 #' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
 #' \code{\link{fh}} 
@@ -365,7 +365,7 @@ compare_plot.emdi <- function(model = NULL, direct = NULL, indicator = "all",
      warning("Please note that for the new package version (2.0.0) the order of the input 
          arguments direct and model has been changed. In this version (1.1.6), it is 
          still possible to use the old order because the arguments are swapped 
-         internally. From the next version it will no longer be possible.")
+         internally. From the next version on it will no longer be possible.")
    }
   
   if(is.null(model) & inherits(direct, "fh") ){

@@ -13,7 +13,7 @@
 }
 \value{
 The null hypothesis, the value W of the test statistic, the degrees 
-of freedom and the p value of the Brown test and the correlation coefficient 
+of freedom and the p value of the Brown test; And the correlation coefficient 
 of the synthetic part and the direct estimator.
 }
 \description{

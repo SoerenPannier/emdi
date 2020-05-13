@@ -3,7 +3,7 @@
 \name{write.excel}
 \alias{write.excel}
 \alias{write.ods}
-\title{Exports an emdiObject to an excel file or OpenDocument Spreadsheet}
+\title{Exports an emdiObject to an Excel file or OpenDocument Spreadsheet}
 \usage{
 write.excel(
   object,
@@ -67,10 +67,10 @@ Spreadsheets. Note that while \code{write.exel} will create a single document
 }
 \details{
 These functions create an Excel file via the package
-\pkg{\link{openxlsx}} respectively ODS files via the package 
+\pkg{\link{openxlsx}} and ODS files via the package 
 \pkg{readODS}.
-Both packages requires a zip application to be available to \R. If this is not 
-the case the authors of \pkg{\link{openxlsx}} suggest the first of the two following ways. 
+Both packages require a zip application to be available to \R. If this is not 
+the case the authors of \pkg{\link{openxlsx}} suggest the first of the following two ways. 
 \itemize{
 \item Install Rtools from: http://cran.r-project.org/bin/windows/Rtools/ and
 modify the system PATH during installation.

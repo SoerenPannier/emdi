@@ -29,7 +29,7 @@ compare <- function(model, ...) UseMethod("compare")
 #' @param model an object of type "model","fh".
 #' @param ... further arguments passed to or from other methods.
 #' @return The null hypothesis, the value W of the test statistic, the degrees 
-#' of freedom and the p value of the Brown test and the correlation coefficient 
+#' of freedom and the p value of the Brown test; And the correlation coefficient 
 #' of the synthetic part and the direct estimator.
 #' @references 
 #' Brown, G., R. Chambers, P. Heady, and D. Heasman (2001). Evaluation of small 

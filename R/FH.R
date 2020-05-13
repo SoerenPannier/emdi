@@ -56,10 +56,10 @@
 #' @param k numeric tuning constant. Required argument when the robust version of 
 #' the standard or spatial Fay-Herriot model is chosen. Defaults to \code{1.345}. 
 #' For detailed information please refer to \cite{Warnholz (2016)}.
-#' @param c numeric multiplyer constant used in the bias corrected version of the 
+#' @param c numeric multiplier constant used in the bias corrected version of the 
 #' robust estimation methods. Required argument when the robust version of 
 #' the standard or spatial Fay-Herriot model is chosen. Default is to make no 
-#' correction for realisations of direct estimator within \code{c = 1} times the 
+#' correction for realizations of direct estimator within \code{c = 1} times the 
 #' standard deviation of direct estimator. For detailed information please refer 
 #' to \cite{Warnholz (2016)}.
 #' @param transformation a character that determines the type of transformation 

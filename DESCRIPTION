@@ -22,7 +22,7 @@ Description: Functions that support estimating, assessing and mapping regional
     as well as their precision estimates. The assessment of the used model
     is supported by a summary and diagnostic plots. For a suitable presentation of
     estimates, map plots can be easily created. Furthermore, results can easily be
-    exported to excel. Additionally, for the area-level models a stepwise variable 
+    exported to Excel. Additionally, for the area-level models a stepwise variable 
     selection function and benchmarking options are provided.
 Depends:
     R (>= 3.3.0)

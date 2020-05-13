@@ -73,7 +73,7 @@ default interval \code{seq(-1, 2, by = 0.05)}.}
 \item{...}{optional arguments passed to generic function.}
 }
 \value{
-Two Q-Q plots in one grid, two density plots, a Cook' distance plot
+Two Q-Q plots in one grid, two density plots, a Cook's distance plot
 and a likelihood plot for the optimal parameter of the Box-Cox transformation
 obtained by \code{\link[ggplot2]{ggplot}}. The latter two plots are only provided
 for ebp object.

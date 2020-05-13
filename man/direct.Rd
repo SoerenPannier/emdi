@@ -47,7 +47,7 @@ estimation and in each iteration of the parametric bootstrap. See Example 2
 for using a function as threshold.  A threshold is needed for calculation e.g. 
 of head count ratios and poverty gaps. The argument defaults to \code{NULL}. 
 In this case the threshold is set to 60\% of the median of the variable that 
-is selected as \code{y} similary to the at-risk-of-poverty rate used in the 
+is selected as \code{y} similarly to the at-risk-of-poverty rate used in the 
 EU (see also \cite{Social Protection Committee 2001}). However, any desired 
 threshold can be chosen.}
 

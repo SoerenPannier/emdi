@@ -6,11 +6,11 @@
 #' and the area-level model by \cite{Fay and Herriot (1979)} and various 
 #' extensions (adjusted variance estimation methods, log and arcsin transformation, 
 #' spatial, robust and measurement error models) of it are provided. Depending on 
-#' the particular method analytical, bootstrap and jackknife MSE estimation 
+#' the particular method, analytical, bootstrap and jackknife MSE estimation 
 #' approaches are implemented. The assessment of the used model is supported by 
 #' a summary and diagnostic plots. For a suitable presentation of estimates, map 
 #' plots can be easily created. Furthermore, results can easily be exported to 
-#' excel. Additionally, for the area-level models a stepwise variable selection 
+#' Excel. Additionally, for the area-level models a stepwise variable selection 
 #' function, benchmarking options and spatial correlation tests are provided.
 #'
 #' @details

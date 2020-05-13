@@ -42,15 +42,15 @@ one of the groups. If the \code{model} argument is of type "model","fh",
 indicator can be set to "all", "FH" or "Direct". Defaults to "all".}
 
 \item{MSE}{optional logical. If \code{TRUE}, the MSE estimates of the direct 
-and model-based estimates are compared via boxplots and ordered scatterplots.}
+and model-based estimates are compared via boxplots and ordered scatter plots.}
 
 \item{CV}{optional logical. If \code{TRUE}, the coefficient of variation 
 estimates of the direct and model-based estimates are compared via boxplots 
-and ordered scatterplots.}
+and ordered scatter plots.}
 
 \item{label}{argument that enables to customize title and axis labels. There 
 are three options to label the evaluation plots: (i) original labels ("orig"), 
-(ii) axis lables but no title ("no_title"), (iii) neither axis 
+(ii) axis labels but no title ("no_title"), (iii) neither axis 
 labels nor title ("blank").}
 
 \item{color}{a vector with two elements. The first color determines
@@ -89,7 +89,7 @@ Since all of the comparisons need a direct estimator, the plots are
 only created for in-sample domains. For the new package version (2.0.0) the 
 order of the input arguments direct and model has been changed. In this 
 version (1.1.6), it is still possible to use the old order because the 
-arguments are swapped internally. From the next package version it will no 
+arguments are swapped internally. From the next package version on it will no 
 longer be possible.
 }
 \examples{

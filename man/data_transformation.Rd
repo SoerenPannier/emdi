@@ -15,7 +15,7 @@ to the argument \code{fixed} in function \code{\link[nlme]{lme}}.}
 
 \item{smp_data}{a data frame that needs to comprise all variables named in
 \code{fixed}. If transformed data is further used to fit a nested error
-linear regression model \code{smp_data} also needs to comprise the variable
+linear regression model, \code{smp_data} also needs to comprise the variable
 named in \code{smp_domains} (see \code{\link{ebp}}).}
 
 \item{transformation}{a character string. Three different transformation
