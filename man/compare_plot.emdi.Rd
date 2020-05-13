@@ -4,19 +4,10 @@
 \alias{compare_plot.emdi}
 \title{Shows plots for the comparison of estimates}
 \usage{
-\method{compare_plot}{emdi}(
-  model = NULL,
-  direct = NULL,
-  indicator = "all",
-  MSE = FALSE,
-  CV = FALSE,
-  label = "orig",
-  color = c("blue", "lightblue3"),
-  shape = c(16, 16),
-  line_type = c("solid", "solid"),
-  gg_theme = NULL,
-  ...
-)
+\method{compare_plot}{emdi}(model = NULL, direct = NULL,
+  indicator = "all", MSE = FALSE, CV = FALSE, label = "orig",
+  color = c("blue", "lightblue3"), shape = c(16, 16),
+  line_type = c("solid", "solid"), gg_theme = NULL, ...)
 }
 \arguments{
 \item{model}{an object of type "emdi","model", representing point and MSE

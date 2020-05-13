@@ -5,28 +5,11 @@
 \title{Standard and extended Fay-Herriot models for disaggregated indicators like 
 means and ratios}
 \usage{
-fh(
-  fixed,
-  vardir,
-  combined_data,
-  domains = NULL,
-  method = "reml",
-  interval = c(0, 1000),
-  k = 1.345,
-  c = 1,
-  transformation = "no",
-  backtransformation = NULL,
-  eff_smpsize = NULL,
-  correlation = "no",
-  corMatrix = NULL,
-  Ci = NULL,
-  tol = 1e-04,
-  maxit = 100,
-  MSE = FALSE,
-  mse_type = "analytical",
-  B = 50,
-  seed = 123
-)
+fh(fixed, vardir, combined_data, domains = NULL, method = "reml",
+  interval = c(0, 1000), k = 1.345, c = 1, transformation = "no",
+  backtransformation = NULL, eff_smpsize = NULL, correlation = "no",
+  corMatrix = NULL, Ci = NULL, tol = 1e-04, maxit = 100,
+  MSE = FALSE, mse_type = "analytical", B = 50, seed = 123)
 }
 \arguments{
 \item{fixed}{a two-sided linear formula object describing the
