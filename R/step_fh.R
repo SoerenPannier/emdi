@@ -31,11 +31,19 @@
 
 step_fh <- function (object, scope = NULL, criteria = "AIC", 
                      direction = "both", trace = TRUE,
-                     steps = 1000) 
-{
-
+                     steps = 1000) {
+  
   step_fh_check(object = object, scope = scope, criteria = criteria,
                 direction = direction, trace = trace, steps = steps)
+  
+  if ((criteria == "AICc" || criteria == "AICb1" || 
+       criteria == "AICb2"|| criteria == "KICc" || 
+       criteria == "KICb1"|| criteria == "KICb2") && 
+      (is.null(object$model$seed)))  {
+    object$call$seed <- 123
+    object <- eval(object$call)
+    cat("Seed in fh object not defined, 123 used as default seed. \n")
+  }
   
   cut.string <- function(string) {
     if (length(string) > 1L) 
@@ -51,17 +59,17 @@ step_fh <- function (object, scope = NULL, criteria = "AIC",
                  "\nInitial Model:", deparse(object$fixed), "\nFinal Model:", 
                  deparse(fit$fixed), "\n")
     aod <- data.frame(Step = I(change), Df = ddf, criteria = infcriteria, 
-                         check.names = FALSE)  
+                      check.names = FALSE)  
     attr(aod, "heading") <- heading
     fit$anova <- aod
     list(Call = fit$call,
-    Coefficients = fit$model$coefficients)
+         Coefficients = fit$model$coefficients)
     
   }
   Terms <- terms(object$fixed)
   object$call$formula <- object$formula <- Terms
   md <- missing(direction)
- # direction <- match.arg(direction)
+  # direction <- match.arg(direction)
   backward <- direction == "both" | direction == "backward"
   forward <- direction == "both" | direction == "forward"
   if (missing(scope)) {
@@ -88,19 +96,19 @@ step_fh <- function (object, scope = NULL, criteria = "AIC",
   n <- object$framework$N_dom_smp
   fit <- object 
   bcriteria <- fit$model$model_select[[criteria]]
-    edf <- length(attr(terms(object$fixed), "term.labels")) + 1 
-   # if (is.na(bcriteria)) 
-     # stop(criteria, "is not defined for this model, so 'step' cannot proceed", sep = " ")
-    if (bcriteria == -Inf) 
-      stop(criteria, "is -infinity for this model, so 'step' cannot proceed", sep = " ")
-    nm <- 1
-    if (trace == TRUE) {
-      cat("Start: ", criteria, " = ",format(round(bcriteria, 2)), "\n", 
-          cut.string(deparse(fit$fixed)), "\n\n", sep = "")
-      flush.console()
-    }
-    models[[nm]] <- list(df.resid = n - 
-                           edf,change = "", criteria = bcriteria) 
+  edf <- length(attr(terms(object$fixed), "term.labels")) + 1 
+  # if (is.na(bcriteria)) 
+  # stop(criteria, "is not defined for this model, so 'step' cannot proceed", sep = " ")
+  if (bcriteria == -Inf) 
+    stop(criteria, "is -infinity for this model, so 'step' cannot proceed", sep = " ")
+  nm <- 1
+  if (trace == TRUE) {
+    cat("Start: ", criteria, " = ",format(round(bcriteria, 2)), "\n", 
+        cut.string(deparse(fit$fixed)), "\n\n", sep = "")
+    flush.console()
+  }
+  models[[nm]] <- list(df.resid = n - 
+                         edf,change = "", criteria = bcriteria) 
   
   while (steps > 0) {
     steps <- steps - 1
@@ -150,8 +158,8 @@ step_fh <- function (object, scope = NULL, criteria = "AIC",
     fit$call$MSE <- FALSE
     fit$call$formula <- NULL  
     fit <- eval(fit$call)
-
-
+    
+    
     nnew <- fit$framework$N_dom_smp 
     if (all(is.finite(c(n, nnew))) && nnew != n) 
       stop("number of rows in use has changed: remove missing values?")
@@ -233,8 +241,8 @@ Otherwise the comparison of models based on information criteria would not be va
           set to TRUE. See also help(step_fh).")
   }
   if (!is.null(scope) && ((!inherits(scope, "formula")) && 
-      (!inherits(scope, "list") || (!inherits(scope[[1]], "formula") ||
-                                   !inherits(scope[[2]], "formula")) ))){
+                          (!inherits(scope, "list") || (!inherits(scope[[1]], "formula") ||
+                                                        !inherits(scope[[2]], "formula")) ))){
     stop('Scope must be a formula or a list including two formulas 
          (lower and upper).')
   }
@@ -244,5 +252,7 @@ Otherwise the comparison of models based on information criteria would not be va
   }
   
 }
+
+
 
 
