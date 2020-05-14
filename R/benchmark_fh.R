@@ -4,7 +4,7 @@
 #'
 #' @param object an object of type "model","fh".
 #' @param benchmark a number determining the benchmark value.
-#' @param eta a vector containing the ratios of the population size per area and 
+#' @param share a vector containing the shares of the population size per area and 
 #' the total population size (N_d/N).Values must be sorted like the domains in 
 #' the fh object.
 #' @param type Character indicating the type of benchmarking. Types that can be chosen
@@ -44,34 +44,34 @@
 #' # Benchmark the point estimates
 #' 
 #' # Example 1: Receive data frame with point estimates and their benchmarked results
-#' fh_bench <- benchmark(fh_std, benchmark = 20140.09, 
-#' eta = eusilcA_popAgg$ratio_n, type = "ratio")
+#' fh_bench <- benchmark_fh(fh_std, benchmark = 20140.09, 
+#' share = eusilcA_popAgg$ratio_n, type = "ratio")
 #' 
 #' # Example 2: Overwrite the point estimates of the fh object with their benchmarked 
 #' # results
-#' fh_bench <- benchmark(fh_std, benchmark = 20140.09, 
-#' eta = eusilcA_popAgg$ratio_n, type = "ratio", overwrite = TRUE)
+#' fh_bench <- benchmark_fh(fh_std, benchmark = 20140.09, 
+#' share = eusilcA_popAgg$ratio_n, type = "ratio", overwrite = TRUE)
 #' @export
 
 
-benchmark <- function(object, benchmark, eta, type = "raking", overwrite = FALSE) {
+benchmark_fh <- function(object, benchmark, share, type = "raking", overwrite = FALSE) {
   
-  check_benchmark_arguments(object = object, benchmark = benchmark, eta = eta, 
+  check_benchmark_arguments(object = object, benchmark = benchmark, share = share, 
                             type = type, overwrite = overwrite)
   
   estim <- object$ind$FH
   FH_bench <- rep(NA, length(object$ind$FH))
-  #benchmark <- sum(eta * object$ind$Direct)
+  #benchmark <- sum(share * object$ind$Direct)
   if (type == "raking"){
-    FH_bench <- estim + benchmark - sum(eta * estim)
+    FH_bench <- estim + benchmark - sum(share * estim)
   } else if (type == "ratio"){
-    phi <- eta/object$ind$FH
-    FH_bench <- estim + (1/(sum(eta^2/phi))) * 
-      (benchmark - sum(eta * estim)) * (eta / phi)
+    phi <- share/object$ind$FH
+    FH_bench <- estim + (1/(sum(share^2/phi))) * 
+      (benchmark - sum(share * estim)) * (share / phi)
   } else if (type == "MSE_adj"){
-    phi <- eta/object$MSE$FH
-    FH_bench <- estim + (1/(sum(eta^2/phi))) * 
-      (benchmark - sum(eta * estim)) * (eta / phi)
+    phi <- share/object$MSE$FH
+    FH_bench <- estim + (1/(sum(share^2/phi))) * 
+      (benchmark - sum(share * estim)) * (share / phi)
   }
   if (overwrite == FALSE){
     EBLUP_data_bench <- data.frame(Domain = object$ind$Domain)
@@ -91,7 +91,7 @@ benchmark <- function(object, benchmark, eta, type = "raking", overwrite = FALSE
 
 ################################################################################
 # Argument checking
-check_benchmark_arguments <- function(object, benchmark, eta, type, overwrite){
+check_benchmark_arguments <- function(object, benchmark, share, type, overwrite){
   if(!inherits(object, "fh")){
     stop('Object needs to be fh object.')
   }
@@ -118,12 +118,12 @@ check_benchmark_arguments <- function(object, benchmark, eta, type, overwrite){
   if (is.null(benchmark)  || !(is.numeric(benchmark) && length(benchmark) == 1)) { 
     stop("benchmark needs to be a single numeric value. See also help(benchmark).")
   }
-  if (!is.vector(eta) || length(eta) != length(object$ind$Domain)) {
-    stop("eta must be a vector with length equal to the number of domains. 
+  if (!is.vector(share) || length(share) != length(object$ind$Domain)) {
+    stop("share must be a vector with length equal to the number of domains. 
          See also help(benchmark).")
   } 
-  if (any(is.na(eta))) {
-    stop("eta must not contain NAs.")
+  if (any(is.na(share))) {
+    stop("share must not contain NAs.")
   }
   if (!is.logical(overwrite) || length(overwrite) != 1) {
     stop("overwrite must be a logical value. Set overwrite to TRUE or FALSE. The 
