@@ -3,7 +3,6 @@
 \docType{package}
 \name{emdi}
 \alias{emdi}
-\alias{emdi-package}
 \title{A package for estimating and mapping disaggregated indicators}
 \description{
 The package \pkg{emdi} supports estimating and mapping regional
@@ -28,7 +27,7 @@ available as \code{\link{estimators.emdi}}, \code{\link{compare_plot.emdi}},
 Furthermore, functions \code{\link{map_plot}} and \code{\link{write.excel}} 
 help to visualize and export results. For the estimation function \code{fh} 
 the stepwise variable selection function \code{\link{step_fh}}, benchmarking 
-options \code{\link{benchmark}} and a function to detect spatial structures 
+options \code{\link{benchmark_fh}} and a function to detect spatial structures 
 \code{\link{spatialcor.tests}} are provided.
 
 An overview of all currently provided functions can be requested by
