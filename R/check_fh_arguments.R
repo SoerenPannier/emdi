@@ -89,7 +89,7 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
   if (method == "me" && !is.null(Ci) &&
       (!(dim(Ci)[1] == dim(estcoef$x)[2]) || 
        !(dim(Ci)[2] == dim(estcoef$x)[2]) || 
-       !(dim(Ci)[3] == length(combined_data$Domain)))){
+       !(dim(Ci)[3] == dim(combined_data)[1]))){
    stop('Ci must be an array with dimension number of estimated regression 
         coefficients times number of estimated regression coefficients times 
         number of areas containing the variance-covariance matrix of the 
