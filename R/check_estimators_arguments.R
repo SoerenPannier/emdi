@@ -15,10 +15,12 @@ estimators_check <- function(object,
   }
   if (inherits(object, "fh")) {
     if (is.null(indicator) || !(indicator == "all" || indicator == "All" || 
-                                indicator == "FH" 
+                                indicator == "FH" || 
+                                indicator == "FH_Bench" 
                                 || indicator == "Direct")) {
       stop(paste0("The argument indicator is set to ", indicator, ". The argument 
-                  only allows to be set to all, FH or Direct."))
+                  only allows to be set to all, FH, Direct or FH_Bench (if benchmark
+                  function is used before)."))
     }
   } else {
     if (is.null(indicator) || !(indicator == "all" || indicator == "All" || 

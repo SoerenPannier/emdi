@@ -64,7 +64,8 @@ point_emdi <- function(object, indicator = "all") {
   }
 
   if(inherits(object, "fh")) {
-    object$ind <- object$ind[, c("Domain", "Direct", "FH")]
+    #object$ind <- object$ind[, c("Domain", "Direct", "FH")]
+    object$ind["Out"] <- NULL
   }
 
 
@@ -75,6 +76,9 @@ point_emdi <- function(object, indicator = "all") {
   } else if (any(indicator == "fh") || any(indicator == "FH" )) {
     ind <- object$ind[, c("Domain", "FH")]
     ind_name <- "Fay-Herriot estimates"
+  } else if (any(indicator == "fh_bench") || any(indicator == "FH_Bench" )) {
+    ind <- object$ind[, c("Domain", "FH_Bench")]
+    ind_name <- "Benchmarked Fay-Herriot estimates"
   } else if (any(indicator == "Direct") || any(indicator == "direct" )) {
     ind <- object$ind[, c("Domain", "Direct")]
     ind_name <- "Direct estimates used in Fay-Herriot approach"

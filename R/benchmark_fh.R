@@ -77,11 +77,25 @@ benchmark_fh <- function(object, benchmark, share, type = "raking", overwrite = 
     EBLUP_data_bench <- data.frame(Domain = object$ind$Domain)
     EBLUP_data_bench$Direct <- object$ind$Direct
     EBLUP_data_bench$FH <- object$ind$FH
-    EBLUP_data_bench$FHBENCH <- FH_bench
+    EBLUP_data_bench$FH_Bench <- FH_bench
     EBLUP_data_bench$Out <- object$ind$Out
     result <- EBLUP_data_bench
   } else {
-    object$ind$FH <- FH_bench
+    object$ind$FH_Bench <- FH_bench
+    object$ind <- object$ind[, c('Domain', 'Direct', 'FH', 'FH_Bench', 'Out')]
+    object['MSE'] <- list(NULL)
+    #out <- list(ind = object$ind,
+    #            MSE = NULL,
+    #            transform_param = object$transform_param,
+    #            model = object$model,
+    #            framework = object$framework,
+    #            transformation = object$transformation,
+    #            method = object$method,
+    #            fixed = object$fixed,
+    #            call = object$call,
+    #            successful_bootstraps = object$successful_bootstraps)
+    warning("Please note that only point estimates are benchmarked. Thus, the 
+            MSE element in the new emdi object is NULL.")
     result <- object
   }
   return(result)

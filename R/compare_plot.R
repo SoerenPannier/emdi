@@ -182,8 +182,7 @@ compare_plot_ebp <- function(model, direct, indicator = "all", MSE = FALSE,
 #' @keywords internal
 
 compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = FALSE,
-                            label = "orig",
-                             color = c("blue", "lightblue3"),
+                            label = "orig", color = c("blue", "lightblue3"),
                              shape = c(16, 16), line_type = c("solid", "solid"),
                              gg_theme = NULL) {
 
@@ -195,14 +194,33 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
   Method <- NULL
 
   
-  Data <- model$ind[model$ind$Out == 0,]
-  names(Data) <- c("Domain", "FH_Direct", "FH_Model", "Out")
+
+  Data <- point_emdi(object = model, indicator = "all")$ind
+  Data <- Data[!is.na(Data$Direct), ]
+  selected_indicators <- colnames(Data)[!(colnames(Data) %in% c('Domain', 'Direct'))]
+  colnames(Data) <- c("Domain", "FH_Direct",
+                            paste0(colnames(Data)[!(colnames(Data) %in% c('Domain', 'Direct'))], "_Model"))
+  if ("FH_Bench" %in% selected_indicators) {
+    Data$FH_Bench_Direct <- Data$FH_Direct
+  }
+  if ('FH_Bench' %in% indicator & !("FH_Bench" %in% selected_indicators)) {
+    warning('emdi object does not contain benchmarked fh estimates. Only 
+            FH estimates are compared with direct. See also help(benchmark_fh).')
+  }
+  
+  if (!(any(indicator == "all") || any(indicator == "direct") || any(indicator == "Direct"))) {
+    selected_indicators <- selected_indicators[selected_indicators %in% indicator]
+  }
+
   if (is.null(model$MSE)) {
     Data$smp_size <- NULL
-  } else {
-    Data$smp_size <- -model$MSE$Direct[model$MSE$Out == 0]
-  }
-  selected_indicators <- "FH"
+  } 
+  
+  # Streichen, wenn es nichts kaputt macht
+  #else {
+  #  Data$smp_size <- -model$MSE$Direct[model$MSE$Out == 0]
+  #}
+  
 
   if (MSE == TRUE || CV == TRUE) {
     all_precisions <- mse_emdi(object = model, indicator = "all", CV = TRUE)
