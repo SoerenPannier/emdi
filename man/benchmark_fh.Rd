@@ -4,8 +4,7 @@
 \alias{benchmark_fh}
 \title{Benchmark function}
 \usage{
-benchmark_fh(object, benchmark, share, type = "raking",
-  overwrite = FALSE)
+benchmark_fh(object, benchmark, share, type = "raking", overwrite = FALSE)
 }
 \arguments{
 \item{object}{an object of type "model","fh".}
