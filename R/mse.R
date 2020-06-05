@@ -577,7 +577,7 @@ boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
     
     est_value_boot[,b] <- int_value
     
-    print(b)
+    cat("b =",b,"\n")
   } # End of bootstrap runs
   
   # KI
@@ -1040,6 +1040,7 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   
   # Small area MSE
   if (mse_type == "spatialparboot"){
+    
     MSE_data$FH <- NA
     MSE_data$FH[framework$obs_dom == TRUE]  <- mse.pb
     MSE_data$Out[framework$obs_dom == TRUE] <- 0
@@ -1048,9 +1049,11 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     MSE_data <- list(MSE_data = MSE_data,
                      MSE_method = "naive parametric bootstrap",
                      successful_bootstraps = notSuc)
+    if (!all(framework$obs_dom == TRUE)) {
     cat("Please note that only for in-sample-domains the naive parametric bootstrap MSE 
 estimator for the spatial FH model is implemented. For the out-of-sample domains, 
         no estimate for the MSE is returned. For the reference see help(fh).")
+    }
   }
   if (mse_type == "spatialparbootbc"){
     MSE_data$FH <- NA
@@ -1061,10 +1064,12 @@ estimator for the spatial FH model is implemented. For the out-of-sample domains
     MSE_data <- list(MSE_data = MSE_data,
                      MSE_method = "bias corrected parametric bootstrap",
                      successful_bootstraps = notSuc)
+    if (!all(framework$obs_dom == TRUE)) {
     cat("Please note that only for in-sample-domains the bias corrected parametric 
 bootstrap MSE estimator for the spatial FH model is implemented. For the 
 out-of-sample domains, no estimate for the MSE is returned. For the reference 
         see help(fh).")
+    }
   }
   return(MSE_data)
 }
@@ -1093,7 +1098,7 @@ jiang_jackknife <- function(framework, combined_data, sigmau2, eblup, transforma
   }
 
   for (domain in 1:m) {
-    print(domain)
+    cat("domain =",domain,"\n") 
 
 
     data_insample <- combined_data[framework$obs_dom,]
@@ -1208,7 +1213,7 @@ chen_weighted_jackknife <- function(framework, combined_data, sigmau2, eblup, tr
   }
 
   for (domain in 1:m) {
-    print(domain)
+    cat("domain =",domain,"\n")
 
 
     data_insample <- combined_data[framework$obs_dom,]
@@ -1362,7 +1367,7 @@ jiang_jackknife_yl  <- function(framework, combined_data, sigmau2, eblup, method
   }
   
   for (domain in 1:m) {
-    print(domain)
+    cat("domain =",domain,"\n")
     
     
     data_insample <- combined_data[framework$obs_dom,]
