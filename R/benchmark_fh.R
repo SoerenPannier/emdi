@@ -11,9 +11,9 @@
 #' (i) Raking ("\code{raking}"),
 #' (ii) Ratio adjustment ("\code{ratio}"),
 #' (iii) MSE adjustment ("\code{MSE_adj}"). Defaults to "\code{raking}".
-#' @param overwrite if \code{TRUE}, the EBLUP results of the fh object are 
-#' substituted by the respective benchmarked results. Defaults
-#' to \code{FALSE}. 
+#' @param overwrite if \code{TRUE}, the benchmarked results are added to 
+#' the fh object and the MSE estimates of the FH estimates of fh object 
+#' are set to NULL. Defaults to \code{FALSE}. 
 #' @return A data frame containing a domain indicator (Domain), direct estimates 
 #' (Direct), point predictions (FH), benchmarked point predictions (FHBENCH) and 
 #' a variable indicating out-of-sample domains Out (1 for out-of-sample, 0 for 
@@ -39,7 +39,7 @@
 #' # Estimate Fay-Herriot model
 #' fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
 #' combined_data = combined_data, domains = "Domain", method = "ml", 
-#' interval = c(0, 100000000), MSE = TRUE)  
+#' MSE = TRUE)  
 #' 
 #' # Benchmark the point estimates
 #' 
@@ -47,8 +47,7 @@
 #' fh_bench <- benchmark_fh(fh_std, benchmark = 20140.09, 
 #' share = eusilcA_popAgg$ratio_n, type = "ratio")
 #' 
-#' # Example 2: Overwrite the point estimates of the fh object with their benchmarked 
-#' # results
+#' # Example 2: Add benchmarked results to fh object
 #' fh_bench <- benchmark_fh(fh_std, benchmark = 20140.09, 
 #' share = eusilcA_popAgg$ratio_n, type = "ratio", overwrite = TRUE)
 #' @export
