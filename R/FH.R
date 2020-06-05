@@ -238,7 +238,7 @@
 #' # Vignette.
 #' fh_spatial <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
 #' combined_data = combined_data, domains = "Domain", method = "reml", 
-#' correlation = "spatial", corMatrix = eusilcA_proxmat, MSE = TRUE, 
+#' correlation = "spatial", corMatrix = eusilcA_prox, MSE = TRUE, 
 #' mse_type = "analytical")
 #' 
 #' # Example 4: Robust Fay-Herriot model 
@@ -246,7 +246,7 @@
 #' change B to a lower value.
 #' fh_robust <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
 #' combined_data = combined_data, domains = "Domain", method = "reblupbc", 
-#' k = 1.345, c = 1, MSE = TRUE, mse_type = "boot", B = 50)
+#' k = 1.345, c = 1, MSE = TRUE, mse_type = "pseudo")
 #' 
 #' # Example 5: Ybarra-Lohr model
 #' # Create MSE array
@@ -450,10 +450,11 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                       call = call,
                       successful_bootstraps = NULL
                       )
-        } else
-          if(!(isTRUE(all.equal(sigmau2, interval[1]))) || 
-             !(isTRUE(all.equal(sigmau2, interval[2])))){
-            warning("The estimate of the variance of random effects falls at 
+        } else {
+          
+          if((isTRUE(all.equal(sigmau2, interval[1]))) || 
+             (isTRUE(all.equal(sigmau2, interval[2])))){
+            warning("The estimate of the variance of the random effects falls at 
             the interval limit. It is recommended to choose a larger 
             interval for the estimation of the variance of the random effects 
                 (specify interval input argument).")
@@ -481,7 +482,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                     call = call,
                     successful_bootstraps = NULL
         )
-        
+        } 
       } else if (method == "me") {
         out <- list(ind = eblup$EBLUP_data,
                     MSE = MSE,
@@ -510,9 +511,9 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
       
     } else if (transformation != "no") {
       
-      if(!(isTRUE(all.equal(sigmau2, interval[1]))) || 
-         !(isTRUE(all.equal(sigmau2, interval[2])))){
-        warning("The estimate of the variance of random effects falls at 
+      if((isTRUE(all.equal(sigmau2, interval[1]))) || 
+         (isTRUE(all.equal(sigmau2, interval[2])))){
+        warning("The estimate of the variance of the random effects falls at 
             the interval limit. It is recommended to choose a larger 
             interval for the estimation of the variance of the random effects 
                 (specify interval input argument).")

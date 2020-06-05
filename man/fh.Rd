@@ -240,7 +240,7 @@ eff_smpsize = "n", MSE = TRUE, mse_type = "boot", B = 50)
 # Vignette.
 fh_spatial <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
 combined_data = combined_data, domains = "Domain", method = "reml", 
-correlation = "spatial", corMatrix = eusilcA_proxmat, MSE = TRUE, 
+correlation = "spatial", corMatrix = eusilcA_prox, MSE = TRUE, 
 mse_type = "analytical")
 
 # Example 4: Robust Fay-Herriot model 
@@ -248,7 +248,7 @@ Please note that the example runs for several minutes. For a short check
 change B to a lower value.
 fh_robust <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
 combined_data = combined_data, domains = "Domain", method = "reblupbc", 
-k = 1.345, c = 1, MSE = TRUE, mse_type = "boot", B = 50)
+k = 1.345, c = 1, MSE = TRUE, mse_type = "pseudo")
 
 # Example 5: Ybarra-Lohr model
 # Create MSE array
