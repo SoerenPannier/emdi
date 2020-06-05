@@ -137,7 +137,7 @@ combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
 # Generation of the emdi object
 fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
              combined_data = combined_data, domains = "Domain", method = "ml", 
-             interval = c(0, 100000000), MSE = TRUE)
+             MSE = TRUE)
 
 # Example 5: Creation of default diagnostic plots for Fay-Herriot model
 plot(fh_std)

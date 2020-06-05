@@ -11,7 +11,7 @@ fh(
   combined_data,
   domains = NULL,
   method = "reml",
-  interval = c(0, 1000),
+  interval = NULL,
   k = 1.345,
   c = 1,
   transformation = "no",
@@ -62,13 +62,12 @@ prediction following \cite{Warnholz (2017)} ("\code{reblupbc}"),
 (ix) estimation of the measurement error model of \cite{Ybarra and Lohr 
 (2008)} ("\code{me}"). Defaults to "\code{reml}".}
 
-\item{interval}{a numeric vector containing a lower and upper limit for the
- estimation of the variance of the random effects. In some cases it 
- may be more suitable to choose a larger interval. 
-Required argument when method "\code{reml}" and  "\code{ml}" in combination 
+\item{interval}{optional argument when method "\code{reml}" and  "\code{ml}" in combination 
 with \code{correlation} equals "\code{no}" is chosen or for the adjusted 
 variance estimation methods "\code{amrl}", "\code{amrl_yl}", "\code{ampl}" 
-and "\code{ampl_yl}". Defaults to \code{c(0, 1000)}.}
+and "\code{ampl_yl}". Is internally set to \code{c(0, var(direct estimates))}.
+If desired, \code{interval} can be specified to a numeric vector containing a lower and upper limit for the
+estimation of the variance of the random effects. Defaults to \code{NULL}.}
 
 \item{k}{numeric tuning constant. Required argument when the robust version of 
 the standard or spatial Fay-Herriot model is chosen. Defaults to \code{1.345}. 
@@ -228,7 +227,7 @@ combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
 # Example 1: Standard Fay-Herriot model and analytical MSE
 fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
 combined_data = combined_data, domains = "Domain", method = "ml", 
-interval = c(0, 10000000), MSE = TRUE)
+MSE = TRUE)
 
 # Example 2: arcsin transformation of the dependent variable
 fh_arcsin <- fh(fixed = MTMED ~ cash + age_ben + rent + house_allow,

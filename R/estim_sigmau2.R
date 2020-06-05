@@ -38,7 +38,7 @@ Reml <- function(interval, direct, x, vardir, areanumber) {
                      direct = direct, x = x)
 
   estsigma2u <- ottimo$maximum
-
+  
   return(sigmau_reml = estsigma2u)
 }
 

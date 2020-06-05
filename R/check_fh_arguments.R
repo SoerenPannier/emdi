@@ -44,8 +44,8 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
     stop("The nine options for method are ''reml'', ''amrl'', ''amrl_yl'',
           ''ampl'', ''ampl_yl'', ''ml'', ''me'',''reblup'' or ''reblupbc''.")
   }
-  if (length(interval) != 2 || !is.vector(interval, mode = "numeric") ||
-      !(interval[1] < interval[2])) {
+  if (!is.null(interval) && (length(interval) != 2 || !is.vector(interval, mode = "numeric") ||
+      !(interval[1] < interval[2]))) {
     stop("interval needs to be a numeric vector of length 2 
          defining a lower and upper limit for the estimation of the variance of 
          the random effect. The value of the lower limit needs to be 
@@ -208,12 +208,12 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
          applying a transformation (transformation = ''no''), the 
          mse_type must be set to ''analytical''. See also help(fh).")
   }
-  if ((method == "reml" || method == "ml") && correlation == "no" && 
-      is.null(interval)){
-    stop("For the ''reml'' and ''ml'' variance estimation methods without 
-         incorporating a correlation structure (correlation = ''no''), the 
-         argument interval is required and cannot be ''NULL''. See also help(fh).")
-  }
+ # if ((method == "reml" || method == "ml") && correlation == "no" && 
+  #    is.null(interval)){
+  #  stop("For the ''reml'' and ''ml'' variance estimation methods without 
+     #    incorporating a correlation structure (correlation = ''no''), the 
+     #    argument interval is required and cannot be ''NULL''. See also help(fh).")
+ # }
   if ((method == "amrl" || method == "ampl" || method == "amrl_yl" || 
        method == "ampl_yl") && MSE == TRUE && mse_type != "analytical"){
     stop("For the adjusted variance estimation methods, the mse_type must be set 
@@ -232,11 +232,11 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
          If correlation is set to ''spatial'' only ''reml'' and ''ml'' variance 
          estimation methods are allowed. See also help(fh).")
   }
-  if ((method == "amrl" || method == "ampl" || method == "amrl_yl" || 
-       method == "ampl_yl") &&  is.null(interval)){
-    stop("For the adjusted variance estimation methods, the argument interval 
-         is required and cannot be ''NULL''. See also help(fh).")
-  }
+ # if ((method == "amrl" || method == "ampl" || method == "amrl_yl" || 
+   #    method == "ampl_yl") &&  is.null(interval)){
+    #stop("For the adjusted variance estimation methods, the argument interval 
+    #     is required and cannot be ''NULL''. See also help(fh).")
+ # }
   if ((method == "me") && (is.null(Ci) || is.null(tol) || is.null(maxit))){
     stop("For the measurement error model (method = ''me''), the arguments 
          Ci, tol and maxit are required and cannot be ''NULL''. See also help(fh).")

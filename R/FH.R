@@ -46,13 +46,12 @@
 #' prediction following \cite{Warnholz (2017)} ("\code{reblupbc}"),
 #' (ix) estimation of the measurement error model of \cite{Ybarra and Lohr 
 #' (2008)} ("\code{me}"). Defaults to "\code{reml}".
-#' @param interval a numeric vector containing a lower and upper limit for the
-#'  estimation of the variance of the random effects. In some cases it 
-#'  may be more suitable to choose a larger interval. 
-#' Required argument when method "\code{reml}" and  "\code{ml}" in combination 
+#' @param interval optional argument when method "\code{reml}" and  "\code{ml}" in combination 
 #' with \code{correlation} equals "\code{no}" is chosen or for the adjusted 
 #' variance estimation methods "\code{amrl}", "\code{amrl_yl}", "\code{ampl}" 
-#' and "\code{ampl_yl}". Defaults to \code{c(0, 1000)}.
+#' and "\code{ampl_yl}". Is internally set to \code{c(0, var(direct estimates))}.
+#' If desired, \code{interval} can be specified to a numeric vector containing a lower and upper limit for the
+#' estimation of the variance of the random effects. Defaults to \code{NULL}.
 #' @param k numeric tuning constant. Required argument when the robust version of 
 #' the standard or spatial Fay-Herriot model is chosen. Defaults to \code{1.345}. 
 #' For detailed information please refer to \cite{Warnholz (2016)}.
@@ -226,7 +225,7 @@
 #' # Example 1: Standard Fay-Herriot model and analytical MSE
 #' fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
 #' combined_data = combined_data, domains = "Domain", method = "ml", 
-#' interval = c(0, 10000000), MSE = TRUE)
+#' MSE = TRUE)
 #' 
 #' # Example 2: arcsin transformation of the dependent variable
 #' fh_arcsin <- fh(fixed = MTMED ~ cash + age_ben + rent + house_allow,
@@ -269,7 +268,7 @@
 
 
 fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
-               interval = c(0, 1000), k = 1.345, c = 1, transformation = "no",
+               interval = NULL, k = 1.345, c = 1, transformation = "no",
                backtransformation = NULL, eff_smpsize = NULL,
                correlation = "no", corMatrix = NULL, 
                Ci = NULL, tol = 0.0001, maxit = 100,
@@ -316,6 +315,12 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
   if (is.null(domains)) {
     combined_data$Domain <- 1:nrow(combined_data)
     framework$domains <- "Domain"
+  }
+  
+  # Limits for interval
+  if (is.null(interval)) {
+  upper <- var(framework$direct)
+  interval <- c(0, upper)
   }
 
   if (!(method == "reblup" | method == "reblupbc")) {
@@ -446,6 +451,13 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                       successful_bootstraps = NULL
                       )
         } else
+          if(!(isTRUE(all.equal(sigmau2, interval[1]))) || 
+             !(isTRUE(all.equal(sigmau2, interval[2])))){
+            warning("The estimate of the variance of random effects falls at 
+            the interval limit. It is recommended to choose a larger 
+            interval for the estimation of the variance of the random effects 
+                (specify interval input argument).")
+          }
         out <- list(ind = eblup$EBLUP_data,
                     MSE = MSE,
                     #MSE_boot = MSE_boot,
@@ -497,6 +509,14 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
       
       
     } else if (transformation != "no") {
+      
+      if(!(isTRUE(all.equal(sigmau2, interval[1]))) || 
+         !(isTRUE(all.equal(sigmau2, interval[2])))){
+        warning("The estimate of the variance of random effects falls at 
+            the interval limit. It is recommended to choose a larger 
+            interval for the estimation of the variance of the random effects 
+                (specify interval input argument).")
+      }
       
       # Shrinkage factor
       Gamma <- data.frame(Domain = framework$data[[framework$domains]],

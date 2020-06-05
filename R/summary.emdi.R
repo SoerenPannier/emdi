@@ -86,7 +86,7 @@
 #' # Generation of the emdi object
 #' fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
 #'              combined_data = combined_data, domains = "Domain", method = "ml", 
-#'              interval = c(0, 100000000), MSE = TRUE)
+#'              MSE = TRUE)
 #'              
 #' # Example 2: Receive first overview
 #' summary(fh_std)
