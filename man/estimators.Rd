@@ -12,7 +12,7 @@ calculated CV's are desired.}
 
 \item{indicator}{optional character vector that selects which indicators
 shall be returned: (i) all calculated indicators ("all");
-(ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
+(ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
 "Quantile_75", "Quantile_90", "Head_Count",
 "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
 "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
@@ -21,7 +21,8 @@ one is returned. Note, additional custom indicators can be
 defined as argument for model-based approaches (see also \code{\link{ebp}})
 and do not appear in groups of indicators even though these might belong to
 one of the groups. If the \code{model} argument is of type "model","fh", 
-indicator can be set to "all", "FH" or "Direct". Defaults to "all".}
+indicator can be set to "all", "Direct", FH", or "FH_Bench" (if benchmark
+function is used before). Defaults to "all".}
 
 \item{MSE}{optional logical. If \code{TRUE}, MSE estimates for selected indicators
 per domain are added to the data frame of point estimates. Defaults to

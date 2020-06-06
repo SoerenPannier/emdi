@@ -39,7 +39,8 @@ one is returned. Note, additional custom indicators can be
 defined as argument for the EBP approaches (see also \code{\link{ebp}})
 and do not appear in groups of indicators even though these might belong to
 one of the groups. If the \code{model} argument is of type "model","fh", 
-indicator can be set to "all", "FH" or "Direct". Defaults to "all".}
+indicator can be set to "all", "Direct", FH", or "FH_Bench" (if benchmark
+function is used before). Defaults to "all".}
 
 \item{MSE}{optional logical. If \code{TRUE}, the MSE estimates of the direct 
 and model-based estimates are compared via boxplots and ordered scatter plots.}

@@ -21,7 +21,8 @@
 #' defined as argument for the EBP approaches (see also \code{\link{ebp}})
 #' and do not appear in groups of indicators even though these might belong to
 #' one of the groups. If the \code{model} argument is of type "model","fh", 
-#' indicator can be set to "all", "FH" or "Direct". Defaults to "all".
+#' indicator can be set to "all", "Direct", FH", or "FH_Bench" (if benchmark
+#' function is used before). Defaults to "all".
 #' @param MSE optional logical. If \code{TRUE}, the MSE estimates of the direct 
 #' and model-based estimates are compared via boxplots and ordered scatter plots. 
 #' Defaults to \code{FALSE}.
@@ -88,7 +89,7 @@ compare_plot <- function(model, direct,  indicator = "all", MSE = FALSE,
 #' "Quantile_75", "Quantile_90", "Head_Count",
 #' "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
 #' "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
-#' "Inequality" or "Custom".If two of these groups are selected, only the first
+#' "Inequality" or "Custom". If two of these groups are selected, only the first
 #' one is returned. Defaults to "all". Note, additional custom indicators can be
 #' defined as argument for model-based approaches (see also \code{\link{ebp}})
 #' and do not appear in groups of indicators even though these might belong to
@@ -272,7 +273,8 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
 #' defined as argument for the EBP approaches (see also \code{\link{ebp}})
 #' and do not appear in groups of indicators even though these might belong to
 #' one of the groups. If the \code{model} argument is of type "model","fh", 
-#' indicator can be set to "all", "FH" or "Direct". Defaults to "all".
+#' indicator can be set to "all", "Direct", FH", or "FH_Bench" (if benchmark
+#' function is used before). Defaults to "all".
 #' @param MSE optional logical. If \code{TRUE}, the MSE estimates of the direct 
 #' and model-based estimates are compared via boxplots and ordered scatter plots.
 #' @param CV optional logical. If \code{TRUE}, the coefficient of variation 

@@ -20,7 +20,8 @@
 #' defined as argument for model-based approaches (see also \code{\link{ebp}}) 
 #' and do not appear in groups of indicators even though these might belong to 
 #' one of the groups. If the \code{model} argument is of type "model","fh", 
-#' indicator can be set to "all", "FH" or "Direct". Defaults to "all".
+#' indicator can be set to "all", "Direct", FH", or "FH_Bench" (if benchmark
+#' function is used before). Defaults to "all".
 #' @param MSE logical. If \code{TRUE}, the MSE of the emdiObject is exported. 
 #' Defaults to \code{FALSE}.
 #' @param CV logical. If \code{TRUE}, the CV of the emdiObject is exported. 
