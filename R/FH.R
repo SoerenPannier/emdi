@@ -49,7 +49,9 @@
 #' @param interval optional argument when method "\code{reml}" and  "\code{ml}" in combination 
 #' with \code{correlation} equals "\code{no}" is chosen or for the adjusted 
 #' variance estimation methods "\code{amrl}", "\code{amrl_yl}", "\code{ampl}" 
-#' and "\code{ampl_yl}". Is internally set to \code{c(0, var(direct estimates))}.
+#' and "\code{ampl_yl}". Is internally set to \code{c(0, var(direct estimates))}. If 
+#' a transformation is applied, the interval is internally set to 
+#' \code{c(0, var(transformed(direct estimates)))}.  
 #' If desired, \code{interval} can be specified to a numeric vector containing a lower and upper limit for the
 #' estimation of the variance of the random effects. Defaults to \code{NULL}.
 #' @param k numeric tuning constant. Required argument when the robust version of 
