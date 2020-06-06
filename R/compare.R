@@ -44,7 +44,11 @@ compare.fh <- function(model, ...){
   if(!inherits(model, "fh")){
     stop('Object needs to be of class fh.')
   }
-  
+  if(is.null(model$MSE$FH)){
+     testresults <- NULL
+      cat('The fh object does not contain MSE estimates. The Brown test 
+          statistic cannot be computed.', "\n")
+   } else {
   W_BL <- sum((model$ind$Direct[model$ind$Out == 0] - 
                  model$ind$FH[model$ind$Out == 0])^2 /
               (model$MSE$Direct[model$MSE$Out == 0] + 
@@ -59,7 +63,7 @@ compare.fh <- function(model, ...){
  testresults <- data.frame(W.value = W_BL,
                            Df = df_BL,
                            p.value = p_value_BL)
- 
+   }
  if (model$method$method == "reblupbc"){
    results <- list(Brown = testresults)
    cat("Please note that for the bias-corrected robust EBLUP ('reblupbc') only 
@@ -107,21 +111,29 @@ compare.fh <- function(model, ...){
 
 print.compare.fh <- function(x, ...)
 {
-  #cat("\n")
-  cat("Brown test","\n")
-  cat("\n")
-  cat("Null hypothesis: EBLUP estimates do not differ significantly from the 
+   if(!(is.null(x$Brown))){
+      cat("Brown test","\n")
+      cat("\n")
+      cat("Null hypothesis: EBLUP estimates do not differ significantly from the 
       direct estimates","\n")
-  cat("\n")
-  print(data.frame(W.value = x[[1]]$W,
-                   Df = x[[1]]$Df,
-                   p.value = x[[1]]$p.value,
-                   row.names = ""))
-  if (length(x) == 2){
-  cat("\n")
-  cat("Correlation between synthetic part and direct estimator: ", 
-      round(x[[2]],2),"\n")
-  }
+      cat("\n")
+      print(data.frame(W.value = x[[1]]$W,
+                       Df = x[[1]]$Df,
+                       p.value = x[[1]]$p.value,
+                       row.names = ""))
+      if (length(x) == 2){
+         cat("\n")
+         cat("Correlation between synthetic part and direct estimator: ", 
+             round(x[[2]],2),"\n")
+      }
+   } else {
+      if (length(x) == 2){
+         cat("\n")
+         cat("Correlation between synthetic part and direct estimator: ", 
+             round(x[[2]],2),"\n")
+      }
+   }
+  
 }
 
 
