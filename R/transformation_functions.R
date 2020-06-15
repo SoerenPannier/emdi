@@ -35,7 +35,7 @@
 #' In case of no and natural log transformation \code{lambda} can be set to NULL.
 #' @return a named list with two elements, a data frame containing the data set
 #' with transformed dependent variable (\code{transformed_data}) and a shift 
-#' parameter \code{shift} if present. In case of no transformation the original 
+#' parameter \code{shift} if present. In case of no transformation, the original 
 #' data frame is returned and the shift parameter is NULL.
 #' @details For the natural log and Box-Cox transformation the dependent variable 
 #' is shifted such that all values are greater than zero since the transformations 

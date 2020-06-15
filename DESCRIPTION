@@ -15,15 +15,15 @@ Description: Functions that support estimating, assessing and mapping regional
     disaggregated indicators. So far, estimation methods comprise direct estimation,
     the model-based unit-level approach Empirical Best Prediction (see "Small area
     estimation of poverty indicators" by Molina and Rao (2010) <doi:10.1002/cjs.10051>), 
-    and the area-level model (see "Estimates of income for small places: An 
+    the area-level model (see "Estimates of income for small places: An 
     application of James-Stein procedures to Census Data" by (Fay and Herriot 1979) 
-    <doi:10.2307/2286322>) and various extensions (adjusted variance estimation methods, 
-    log and arcsin transformation, spatial, robust and measurement error models) of it, 
+    <doi:10.2307/2286322>) and various extensions of it (adjusted variance estimation methods, 
+    log and arcsin transformation, spatial, robust and measurement error models), 
     as well as their precision estimates. The assessment of the used model
     is supported by a summary and diagnostic plots. For a suitable presentation of
     estimates, map plots can be easily created. Furthermore, results can easily be
-    exported to Excel. Additionally, for the area-level models a stepwise variable 
-    selection function and benchmarking options are provided.
+    exported to Excel. Additionally, a stepwise variable selection function and 
+    benchmarking options are provided for the area-level models.
 Depends:
     R (>= 3.3.0)
 License: GPL-2
