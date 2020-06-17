@@ -4,16 +4,25 @@
 \alias{compare_plot}
 \title{Shows plots for the comparison of estimates}
 \usage{
-compare_plot(model, direct, indicator = "all", MSE = FALSE,
-  CV = FALSE, label = "orig", color = c("blue", "lightblue3"),
-  shape = c(16, 16), line_type = c("solid", "solid"),
-  gg_theme = NULL, ...)
+compare_plot(
+  model,
+  direct,
+  indicator = "all",
+  MSE = FALSE,
+  CV = FALSE,
+  label = "orig",
+  color = c("blue", "lightblue3"),
+  shape = c(16, 16),
+  line_type = c("solid", "solid"),
+  gg_theme = NULL,
+  ...
+)
 }
 \arguments{
 \item{model}{an object of type "emdi","model", representing point and MSE
 estimates.}
 
-\item{direct}{optional, an object of type "emdi","direct", representing point
+\item{direct}{an object of type "emdi","direct", representing point
 and MSE estimates. If the input argument \code{model} is of type "model","ebp",
 \code{direct} is required. If the input argument \code{model} is of type 
 "model","fh", the \code{direct} component is already included in the input 
@@ -30,16 +39,16 @@ one is returned. Note, additional custom indicators can be
 defined as argument for the EBP approaches (see also \code{\link{ebp}})
 and do not appear in groups of indicators even though these might belong to
 one of the groups. If the \code{model} argument is of type "model","fh", 
-indicator can be set to "all", "Direct", FH", or "FH_Bench" (if benchmark
-function is used before). Defaults to "all".}
+indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi 
+object is overwritten by function benchmark). Defaults to "all".}
 
 \item{MSE}{optional logical. If \code{TRUE}, the MSE estimates of the direct 
-and model-based estimates are compared via boxplots and ordered scatter plots. 
+and model-based estimates are compared via boxplots and scatter plots. 
 Defaults to \code{FALSE}.}
 
 \item{CV}{optional logical. If \code{TRUE}, the coefficient of variation 
 estimates of the direct and model-based estimates are compared via boxplots 
-and ordered scatter plots. Defaults to \code{FALSE}.}
+and scatter plots. Defaults to \code{FALSE}.}
 
 \item{label}{argument that enables to customize title and axis labels. There 
 are three options to label the evaluation plots: (i) original labels ("orig"), 
@@ -81,7 +90,7 @@ plot of estimates to compare and the second is a line plot with these estimates.
 }
 \details{
 Since all of the comparisons need a direct estimator, the plots are 
-only created for in-sample domains. For the new package version (2.0.0) the 
+only created for in-sample domains. For the new package version (2.0.0), the 
 order of the input arguments direct and model has been changed. In this 
 version (1.1.6), it is still possible to use the old order because the 
 arguments are swapped internally. From the next package version on it will no 

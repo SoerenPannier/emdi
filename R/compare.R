@@ -4,7 +4,7 @@
 #' the model-based estimates by comparing them with the direct estimates based 
 #' on a goodness-of-fit test proposed by Brown et al. (2001) and by computing 
 #' the correlation between the regression-synthetic part of the model and the 
-#' direct estimates.
+#' direct estimates (Chandra et al. 2015).
 #'
 #' @param model an object of type "emdi","model".
 #' @param ... further arguments passed to or from other methods.
@@ -12,10 +12,13 @@
 #' of freedom and the p value of the Brown test and the correlation coefficient 
 #' of the synthetic part and the direct estimator.
 #' @references 
-#' Brown, G., R. Chambers, P. Heady, and D. Heasman (2001). Evaluation of small 
+#' Brown, G., Chambers, R., Heady, P., and Heasman, D. (2001), Evaluation of small 
 #' area estimation methods: An application to unemployment estimates from the UK
-#' LFS. Symposium 2001 - Achieving Data Quality in a Statistical Agency: A 
-#' Methodological Perspective, Statistics Canada.
+#' LFS, Symposium 2001 - Achieving Data Quality in a Statistical Agency: A 
+#' Methodological Perspective, Statistics Canada. \cr \cr
+#' Chandra, H., Salvati, N. and Chambers, R. (2015), A Spatially 
+#' Nonstationary Fay-Herriot Model for Small Area Estimation, Journal 
+#' of the Survey Statistics and Methodology, 3, 109-135.
 #' @export
 
 compare <- function(model, ...) UseMethod("compare")
@@ -30,12 +33,15 @@ compare <- function(model, ...) UseMethod("compare")
 #' @param ... further arguments passed to or from other methods.
 #' @return The null hypothesis, the value W of the test statistic, the degrees 
 #' of freedom and the p value of the Brown test; And the correlation coefficient 
-#' of the synthetic part and the direct estimator.
+#' of the synthetic part and the direct estimator (Chandra et al. 2015).
 #' @references 
 #' Brown, G., R. Chambers, P. Heady, and D. Heasman (2001). Evaluation of small 
 #' area estimation methods: An application to unemployment estimates from the UK
 #' LFS. Symposium 2001 - Achieving Data Quality in a Statistical Agency: A 
 #' Methodological Perspective, Statistics Canada.
+#' Chandra, H., Salvati, N. and Chambers, R. (2015), A Spatially 
+#' Nonstationary Fay-Herriot Model for Small Area Estimation, Journal 
+#' of the Survey Statistics and Methodology, 3, 109-135.
 #' @export
 #' @importFrom stats cor pchisq
 

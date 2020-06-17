@@ -7,41 +7,9 @@
 #' estimates. Objects differ depending on the estimation method: direct
 #' vs. model-based.
 #' @param ... additional arguments that are not used in this method.
-#' @return an object of type "summary.emdi" with following
-#' components:
-#' \item{out_of_smp}{if model-based estimation, number of out-of-sample domains
-#' equivalent to \code{N_dom_unobs} (see \code{\link{emdiObject}}).}
-#' \item{in_smp}{number of in-sample domains equivalent to \code{N_dom_smp}
-#'              (see \code{\link{emdiObject}}).}
-#' \item{size_smp}{number of units in sample equivalent to \code{N_smp}
-#' (see \code{\link{emdiObject}}). Not filled for class fh.}
-#' \item{size_pop}{if empirical best prediction, number of units in population
-#' equivalent to \code{N_pop} (see \code{\link{emdiObject}}).  Not filled for 
-#' class fh.}
-#' \item{size_dom}{a data frame with rows Sample_domains and Population_domains
-#' (if ebp) representing summary statistics of the sample
-#' sizes across domains of sample and population data, respectively.}
-#' \item{transform}{if model-based estimation, a data frame with columns
-#'                  Transformation, Method, Optimal_lambda and Shift_parameter representing the
-#'                  chosen transformation type and estimation method for lambda
-#'                  as well as their results.  Not filled for class fh.}
-#' \item{normality}{if model-based estimation, a data frame with columns Skewness,
-#'                  Kurtosis, Shapiro_W and Shapiro_p where the latter two represent
-#'                  the results of a Shapiro-Wilks-Test for normality.
-#'                  Rows correspond to Pearson residuals and random effects
-#'                  of the nested error regression model. The functions
-#'                  \code{\link{skewness}} and \code{\link{kurtosis}} are from
-#'                  the package \pkg{moments}. Details for the Shapiro-Wilks-Test
-#'                  are provided by \code{\link{shapiro.test}}.}
-#' \item{icc}{if empirical best prediction, the value of the intraclass coefficient.}
-#' \item{coeff_determ}{if empirical best prediction, a data frame with columns
-#'                     Marginal_R2 and Conditional_R2 representing two R2 measures
-#'                     for linear mixed models from the \pkg{MuMIn} package
-#'                     obtained by function \code{\link[MuMIn]{r.squaredGLMM}}.}
-#' \item{model}{if Fay-Herriot, a list with model components such as information
-#' criteria, coefficients of determination or variance and MSE estimation methods.}
-#' \item{call}{a list containing an image of the function call that produced the
-#'             object.}
+#' @return an object of type "summary.emdi" with information about the 
+#' sample and population data, the usage of transformation, normality 
+#' tests and information of the model fit.
 #' @references 
 #' Lahiri, P. and Suntornchost, J. (2015), Variable selection for linear mixed
 #' models with applications in small area estimation, The Indian Journal of 

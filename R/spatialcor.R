@@ -9,8 +9,8 @@
 #' @details When creating the proximity matrix \code{corMatrix}, please make 
 #' sure that the elements of \code{direct} and \code{corMatrix} are sorted 
 #' equally and that \code{direct} and \code{corMatrix} do not contain any 
-#' \code{NA}s. For a description of how to create the proximity matrix see the 
-#' package vignette. 
+#' \code{NA}s. For a description of how to create the proximity matrix, 
+#' see the package vignette. 
 #' @references Bivand, R. (2019), spdep: Spatial Dependence: Weighting Schemes, 
 #' Statistics. R package.
 #' @importFrom spdep geary.test mat2listw moran.test

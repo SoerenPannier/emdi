@@ -5,11 +5,23 @@
 \alias{write.ods}
 \title{Exports an emdiObject to an Excel file or OpenDocument Spreadsheet}
 \usage{
-write.excel(object, file = "excel_output.xlsx", indicator = "all",
-  MSE = FALSE, CV = FALSE, split = FALSE)
+write.excel(
+  object,
+  file = "excel_output.xlsx",
+  indicator = "all",
+  MSE = FALSE,
+  CV = FALSE,
+  split = FALSE
+)
 
-write.ods(object, file = "ods_output.ods", indicator = "all",
-  MSE = FALSE, CV = FALSE, split = FALSE)
+write.ods(
+  object,
+  file = "ods_output.ods",
+  indicator = "all",
+  MSE = FALSE,
+  CV = FALSE,
+  split = FALSE
+)
 }
 \arguments{
 \item{object}{an object of type "emdi", representing point and
@@ -27,8 +39,8 @@ shall be returned: (i) all calculated indicators ("all");
 defined as argument for model-based approaches (see also \code{\link{ebp}}) 
 and do not appear in groups of indicators even though these might belong to 
 one of the groups. If the \code{model} argument is of type "model","fh", 
-indicator can be set to "all", "Direct", FH", or "FH_Bench" (if benchmark
-function is used before). Defaults to "all".}
+indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi 
+object is overwritten by function benchmark). Defaults to "all".}
 
 \item{MSE}{logical. If \code{TRUE}, the MSE of the emdiObject is exported. 
 Defaults to \code{FALSE}.}

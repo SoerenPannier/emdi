@@ -21,8 +21,8 @@ one is returned. Note, additional custom indicators can be
 defined as argument for model-based approaches (see also \code{\link{ebp}})
 and do not appear in groups of indicators even though these might belong to
 one of the groups. If the \code{model} argument is of type "model","fh", 
-indicator can be set to "all", "Direct", FH", or "FH_Bench" (if benchmark
-function is used before). Defaults to "all".}
+indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi 
+object is overwritten by function benchmark). Defaults to "all".}
 
 \item{MSE}{optional logical. If \code{TRUE}, MSE estimates for selected indicators
 per domain are added to the data frame of point estimates. Defaults to
@@ -32,7 +32,7 @@ per domain are added to the data frame of point estimates. Defaults to
 indicators per domain are added to the data frame of point estimates.
 Defaults to \code{FALSE}.}
 
-\item{...}{arguments to be passed to or from other methods, e.g. indicator.}
+\item{...}{arguments to be passed to or from other methods.}
 }
 \value{
 The return of \code{estimators} depends on the class of its argument. The

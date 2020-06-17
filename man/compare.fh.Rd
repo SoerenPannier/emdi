@@ -14,7 +14,7 @@
 \value{
 The null hypothesis, the value W of the test statistic, the degrees 
 of freedom and the p value of the Brown test; And the correlation coefficient 
-of the synthetic part and the direct estimator.
+of the synthetic part and the direct estimator (Chandra et al. 2015).
 }
 \description{
 Method \code{compare.fh} assesses the quality of the model-based estimates by 
@@ -27,4 +27,7 @@ Brown, G., R. Chambers, P. Heady, and D. Heasman (2001). Evaluation of small
 area estimation methods: An application to unemployment estimates from the UK
 LFS. Symposium 2001 - Achieving Data Quality in a Statistical Agency: A 
 Methodological Perspective, Statistics Canada.
+Chandra, H., Salvati, N. and Chambers, R. (2015), A Spatially 
+Nonstationary Fay-Herriot Model for Small Area Estimation, Journal 
+of the Survey Statistics and Methodology, 3, 109-135.
 }

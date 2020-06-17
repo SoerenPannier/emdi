@@ -7,8 +7,7 @@
 The following components are always included in an emdi object but not
 always filled and with different components depending on the estimation
 approach:
-\item{\code{call}}{a list containing an image of the function call that
-                   produced the object.}
+\item{\code{call}}{the function call that produced the object.}
 \item{\code{fixed}}{for details, see \code{fixed} in \code{\link{fh}} and
              \code{\link{ebp}}. Not filled for class direct.}
  \item{\code{framework}}{a list with components that describe the data
@@ -37,13 +36,14 @@ transformation and, if appropriate, backtransformation. Not filled for class dir
 }
 \description{
 An object of class emdi that represents point predictions of regional
-disaggregated indicators. Optionally it also contains corresponding MSE
+disaggregated indicators. Optionally, it also contains corresponding MSE
 estimates. Depending on the estimation, the object is also of class direct
-or model. For each provided model-based approach an additional class is assigned:
-the standard Fay-Herriot approach ("fh"), and the empirical best prediction
+or model. For each provided model-based approach, an additional class is assigned:
+the Fay-Herriot approach ("fh"), and the empirical best prediction
 ("ebp"). Objects of these classes have methods for the generic functions
 \code{\link{compare}}, \code{\link{compare_plot}}, \code{\link{estimators}}, 
-\code{\link{print}}, \code{\link{plot}} (only for class model), and \code{\link{summary}}.
+\code{\link{print}}, \code{\link{plot}} (only for class model), and 
+\code{\link{summary}}.
 }
 \references{
 Alfons, A. and Templ, M. (2013). Estimation of Social Exclusion Indicators

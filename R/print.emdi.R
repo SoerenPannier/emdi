@@ -6,7 +6,8 @@
 #' the Fay-Herriot model and a range of extensions (see also \code{\link{fh}}),
 #' or Empirical Best Prediction (see also \code{\link{ebp}}).
 #' @param ... optional arguments passed to \code{\link{print.default}}.
-#' @seealso \code{\link{emdiObject}}, \code{\link{ebp}}, \code{\link{fh}}
+#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}},
+#'  \code{\link{emdiObject}}
 #' @export
 
 print.emdi <- function(x, ...) {
