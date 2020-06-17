@@ -19,6 +19,7 @@
 #' @param trace if \code{TRUE}, information about the single steps is 
 #' provided during the stepwise procedure. Defaults to \code{TRUE}.
 #' @param steps a number determining the maximum number of steps. Defaults to 1000.
+#' @param ... arguments to be passed to or from other methods.
 #' @return Information about the resulting "best" model due to the chosen 
 #' information criterion: 
 #' \item{\code{call}}{the function call that produced the object.}
@@ -86,6 +87,7 @@ step <- function (object, scope, criteria, direction, trace, steps,
 #' @param trace if \code{TRUE}, information about the single steps is 
 #' provided during the stepwise procedure. Defaults to \code{TRUE}.
 #' @param steps a number determining the maximum number of steps. Defaults to 1000.
+#' @param ... additional arguments that are not used in this method.
 #' @return Information about the resulting "best" model due to the chosen 
 #' information criterion: 
 #' \item{\code{call}}{the function call that produced the object.}

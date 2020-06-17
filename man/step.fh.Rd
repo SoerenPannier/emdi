@@ -37,6 +37,8 @@ provided, the default is "\code{backward}".}
 provided during the stepwise procedure. Defaults to \code{TRUE}.}
 
 \item{steps}{a number determining the maximum number of steps. Defaults to 1000.}
+
+\item{...}{additional arguments that are not used in this method.}
 }
 \value{
 Information about the resulting "best" model due to the chosen 
