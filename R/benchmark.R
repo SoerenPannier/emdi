@@ -96,7 +96,7 @@ benchmark <- function(object, benchmark, share, type = "raking", overwrite = FAL
     #            fixed = object$fixed,
     #            call = object$call,
     #            successful_bootstraps = object$successful_bootstraps)
-    warning("Please note that only point estimates are benchmarked. Thus, the 
+    cat("Please note that only point estimates are benchmarked. Thus, the 
             MSE element in the new emdi object is NULL.")
     result <- object
   }

@@ -213,7 +213,7 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
     Data$FH_Bench_Direct <- Data$FH_Direct
   }
   if ('FH_Bench' %in% indicator & !("FH_Bench" %in% selected_indicators)) {
-    warning('emdi object does not contain benchmarked fh estimates. Only 
+    cat('emdi object does not contain benchmarked fh estimates. Only 
             FH estimates are compared with direct. See also help(benchmark).')
   }
   
