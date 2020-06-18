@@ -60,13 +60,15 @@ estimates in the remaining plots. The second color specifies the
 color for the model-based estimates in the plots.}
 
 \item{shape}{a numeric vector with two elements. The first shape determines
-the shape of the points in the line plot for the direct estimates and the 
-second shape for the model-based estimates. The options are numbered from 
-0 to 25.}
+the shape of the points in the scatterplot and the shape of the points for the 
+direct estimates in the remaining plots. The second shape determines 
+the shape for the points for the model-based estimates. The options 
+are numbered from 0 to 25.}
 
 \item{line_type}{a character vector with two elements. The first line type 
-determines the type of the line for the direct estimates and the 
-second type for the model-based estimates. The options are: "twodash", 
+determines the type of the line in the scatter plot and the type of the line 
+for the direct estimates in the remaining plots. The second type specifies 
+the line type for the model-based estimates in the plots. The options are: "twodash", 
 "solid", "longdash", "dotted", "dotdash", "dashed" and "blank".}
 
 \item{gg_theme}{\code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
