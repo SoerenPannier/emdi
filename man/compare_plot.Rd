@@ -57,8 +57,8 @@ labels nor title ("blank").}
 
 \item{color}{a vector with two elements. The first color determines
 the color of the line in the scatter plot and the color for the direct 
-estimates in the line plot. The second color specifies the color of the line
-for the model-based estimates.}
+estimates in the remaining plots. The second color specifies the 
+color for the model-based estimates in the plots.}
 
 \item{shape}{a numeric vector with two elements. The first shape determines
 the shape of the points in the line plot for the direct estimates and the 

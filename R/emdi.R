@@ -22,8 +22,9 @@
 #' Furthermore, functions \code{\link{map_plot}} and \code{\link{write.excel}} 
 #' help to visualize and export results. For the estimation function \code{fh}, 
 #' the stepwise variable selection function \code{\link{step}}, benchmarking 
-#' options \code{\link{benchmark}} and a function to detect spatial structures 
-#' \code{\link{spatialcor.tests}} are provided.
+#' options \code{\link{benchmark}}, a method to assess the quality of 
+#' the model-based estimates \code{\link{compare.fh}} and a function to 
+#' detect spatial structures \code{\link{spatialcor.tests}} are provided.
 #' 
 #' An overview of all currently provided functions can be requested by
 #' \code{library(help=emdi)}.

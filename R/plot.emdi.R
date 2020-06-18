@@ -24,27 +24,8 @@
 ##' d_res, d_ran, cooks} and \code{box_cox} for the six different plots and these
 ##' list elements need to have three elements each called \code{title, y_lab and
 ##' x_lab}. Only the labels for the plots that should be different to the original
-##' need to be specified. \cr
-##' \describe{
-##' \item{list(}{}
-##' \item{qq_res =}{c(title="Error term", y_lab="Quantiles of pearson residuals",
-##'                 x_lab="Theoretical quantiles"),}
-##' \item{qq_ran =}{c(title="Random effect",
-##'                 y_lab="Quantiles of random effects",
-##'                 x_lab="Theoretical quantiles"),}
-##' \item{d_res =}{c(title="Density - Pearson residuals",
-##'                y_lab="Density",
-##'                x_lab="Pearson residuals"),}
-##' \item{d_ran =}{c(title="Density - Standardized random effects",
-##'                y_lab="Density",
-##'                x_lab="Standardized random effects"),}
-##' \item{cooks =}{c(title="Cook's Distance Plot",
-##'                y_lab="Cook's Distance",
-##'                x_lab="Index"),}
-##' \item{box_cox =}{c(title="Box-Cox - REML",
-##'                y_lab="Log-Likelihood",
-##'                x_lab="expression(lambda)"))}
-##' }
+##' need to be specified. Please see the details section for an example 
+##' with the default labels.
 #' @param color a character vector with two elements. The first element defines
 #' the color for the line in the QQ-plots, for the Cook's Distance plot and for
 #' the Box-Cox plot. The second element defines the color for the densities.
@@ -66,6 +47,27 @@
 #' and a likelihood plot for the optimal parameter of the Box-Cox transformation
 #' obtained by \code{\link[ggplot2]{ggplot}}. The latter two plots are only provided
 #' for ebp object.
+#' @details The default settings of the \code{label} argument are as follows:\cr
+##' \describe{
+##' \item{list(}{}
+##' \item{qq_res =}{c(title="Error term", y_lab="Quantiles of pearson residuals",
+##'                 x_lab="Theoretical quantiles"),}
+##' \item{qq_ran =}{c(title="Random effect",
+##'                 y_lab="Quantiles of random effects",
+##'                 x_lab="Theoretical quantiles"),}
+##' \item{d_res =}{c(title="Density - Pearson residuals",
+##'                y_lab="Density",
+##'                x_lab="Pearson residuals"),}
+##' \item{d_ran =}{c(title="Density - Standardized random effects",
+##'                y_lab="Density",
+##'                x_lab="Standardized random effects"),}
+##' \item{cooks =}{c(title="Cook's Distance Plot",
+##'                y_lab="Cook's Distance",
+##'                x_lab="Index"),}
+##' \item{box_cox =}{c(title="Box-Cox - REML",
+##'                y_lab="Log-Likelihood",
+##'                x_lab="expression(lambda)"))}
+##' }
 #' @seealso \code{\link{emdiObject}}, \code{\link{ebp}}, \code{\link{fh}}
 #' @examples
 #' \dontrun{
