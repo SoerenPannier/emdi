@@ -29,18 +29,7 @@ and MSE estimates. If the input argument \code{model} is of type "model","ebp",
 argument \code{model}.}
 
 \item{indicator}{optional character vector that selects which indicators
-shall be returned: (i) all calculated indicators ("all");
-(ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
-"Quantile_75", "Quantile_90", "Head_Count",
-"Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
-"custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
-"Inequality" or "Custom". If two of these groups are selected, only the first
-one is returned. Note, additional custom indicators can be
-defined as argument for the EBP approaches (see also \code{\link{ebp}})
-and do not appear in groups of indicators even though these might belong to
-one of the groups. If the \code{model} argument is of type "model","fh", 
-indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi 
-object is overwritten by function benchmark). Defaults to "all".}
+shall be returned. Defaults to "all".}
 
 \item{MSE}{optional logical. If \code{TRUE}, the MSE estimates of the direct 
 and model-based estimates are compared via boxplots and scatter plots. 
