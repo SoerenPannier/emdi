@@ -7,9 +7,11 @@
 spatialcor.tests(direct, corMatrix)
 }
 \arguments{
-\item{direct}{a vector containing direct estimates.}
+\item{direct}{a vector containing direct estimates. The elements of 
+\code{direct} must be sorted like the elements in \code{corMatrix}.}
 
-\item{corMatrix}{proximity matrix or data frame.}
+\item{corMatrix}{proximity matrix or data frame. The elements of 
+\code{corMatrix} must be sorted like the elements in \code{direct}.}
 }
 \value{
 The values of the test statistics and their corresponding p values.

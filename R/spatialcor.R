@@ -3,8 +3,10 @@
 #' This function computes two spatial autocorrelation tests: Moran's I and 
 #' Geary's C.
 #'
-#' @param direct a vector containing direct estimates.
-#' @param corMatrix proximity matrix or data frame.
+#' @param direct a vector containing direct estimates. The elements of 
+#' \code{direct} must be sorted like the elements in \code{corMatrix}.
+#' @param corMatrix proximity matrix or data frame. The elements of 
+#' \code{corMatrix} must be sorted like the elements in \code{direct}.
 #' @return The values of the test statistics and their corresponding p values.
 #' @details When creating the proximity matrix \code{corMatrix}, please make 
 #' sure that the elements of \code{direct} and \code{corMatrix} are sorted 
