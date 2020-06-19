@@ -359,6 +359,12 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                         combined_data = combined_data)
       Gamma <- data.frame(Domain = framework$combined_data[[framework$domains]],
                           Gamma = as.numeric(eblup$gamma))
+      # Criteria for model selection -----------------------------------------
+      criteria <- model_select(framework = framework, sigmau2 = sigmau2,
+                               method = method, interval = interval, 
+                               eblup = eblup, B = B, vardir = vardir,
+                               transformation = transformation,
+                               combined_data = framework$combined_data)
     }
     
     
@@ -492,7 +498,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                                  real_residuals = eblup$real_res,
                                  std_real_residuals = eblup$std_real_res,
                                  gamma = Gamma,
-                                # model_select = NULL,
+                                 model_select = criteria,
                                  correlation = correlation),
                     framework = framework[c("direct", "vardir", "N_dom_smp",
                                             "N_dom_unobs")],

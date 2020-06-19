@@ -8,6 +8,8 @@ model_select <- function(framework, sigmau2, method, interval,
   
   res <- eblup$real_res + eblup$random_effects
   
+  if (method != "me"){
+  
   # Criteria for model selection
   if (framework$correlation == "spatial"){
     Vi  <- solve(eblup$V)
@@ -92,6 +94,7 @@ model_select <- function(framework, sigmau2, method, interval,
   KICb2 <- AICb2 + B2
   }
   
+  }
   # Calculation R2
   P <- framework$model_X%*%solve(t(framework$model_X)%*%framework$model_X)%*%t(framework$model_X)
   SSE <- as.numeric(t(framework$direct)%*%(diag(1,length(framework$direct))-P)%*%framework$direct)
@@ -130,12 +133,16 @@ model_select <- function(framework, sigmau2, method, interval,
                            KIC = KIC,
                            R2 = R2_regular,
                            AdjR2 = AdjR2)
-  } else if (framework$correlation == "no" & transformation == "no" & !is.null(B)) {
+  } else if (framework$correlation == "no" & transformation == "no" & 
+             !is.null(B) & method != "me") {
     criteria <- data.frame(loglike = loglike,
                            AIC = AIC, AICc = AICc, AICb1 = AICb1, AICb2 = AICb2,
                            BIC = BIC,
                            KIC = KIC, KICc = KICc, KICb1 = KICb1, KICb2 = KICb2,
                            R2 = R2_regular,
+                           AdjR2 = AdjR2)
+  } else if (method == "me"){
+    criteria <- data.frame(R2 = R2_regular,
                            AdjR2 = AdjR2)
   }
   return(criteria)
