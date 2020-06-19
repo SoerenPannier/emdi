@@ -33,7 +33,7 @@ eblup_FH <- function(framework, sigmau2, combined_data) {
   real_res <- framework$direct - (framework$model_X%*%Beta.hat + D%*%u.hat)
   std_real_res <- real_res / sqrt(framework$vardir)
 
-  EBLUP_data <- data.frame(Domain = combined_data[[framework$domains]])
+  EBLUP_data <- data.frame(Domain = framework$combined_data[[framework$domains]])
   EBLUP_data$Direct <- NA
   EBLUP_data$Direct[framework$obs_dom == TRUE] <- framework$direct
 
@@ -106,7 +106,7 @@ eblup_SFH <- function(framework, sigmau2, combined_data) {
   real_res <- framework$direct - (framework$model_X%*%Beta.hat + G%*%Vi%*%res)
   std_real_res <- real_res / sqrt(framework$vardir) # Achtung nochmal prüfen
   
-  EBLUP_data <- data.frame(Domain = combined_data[[framework$domains]])
+  EBLUP_data <- data.frame(Domain = framework$combined_data[[framework$domains]])
   EBLUP_data$Direct <- NA
   EBLUP_data$Direct[framework$obs_dom == TRUE] <- framework$direct
   
@@ -189,7 +189,7 @@ eblup_YL <- function(framework, sigmau2, combined_data) {
   real_res <- framework$direct - (framework$model_X%*%sigmau2$betahatw + u.hat)
   std_real_res <- real_res / sqrt(framework$vardir)
   
-  EBLUP_data <- data.frame(Domain = combined_data[[framework$domains]])
+  EBLUP_data <- data.frame(Domain = framework$combined_data[[framework$domains]])
   EBLUP_data$Direct <- NA
   EBLUP_data$Direct[framework$obs_dom == TRUE] <- framework$direct
   

@@ -314,10 +314,6 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                             corMatrix = corMatrix, Ci = Ci, tol = tol,
                             maxit = maxit)
   
-  if (is.null(domains)) {
-    combined_data$Domain <- 1:nrow(combined_data)
-    framework$domains <- "Domain"
-  }
   
   # Limits for interval
   if (is.null(interval)) {
@@ -337,14 +333,14 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
         eblup <- eblup_FH(framework = framework, sigmau2 = sigmau2,
                           combined_data = combined_data)
         
-        Gamma <- data.frame(Domain = framework$data[[framework$domains]],
+        Gamma <- data.frame(Domain = framework$combined_data[[framework$domains]],
                             Gamma = as.numeric(eblup$gamma))
         # Criteria for model selection -----------------------------------------
          criteria <- model_select(framework = framework, sigmau2 = sigmau2, 
                                   method = method, interval = interval, 
                                   eblup = eblup, B = B, vardir = vardir,
                                   transformation = transformation,
-                                  combined_data = combined_data)
+                                  combined_data = framework$combined_data)
       }
       if ((method == "ml" | method == "reml") & correlation == "spatial"){
         # Spatial EBLUP --------------------------------------------------------
@@ -355,13 +351,13 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                                  method = method, interval = interval, 
                                  eblup = eblup, B = B, vardir = vardir,
                                  transformation = transformation,
-                                 combined_data = combined_data)
+                                 combined_data = framework$combined_data)
       }
     } else if (method == "me") {
       # Standard EBLUP ---------------------------------------------------------
       eblup <- eblup_YL(framework = framework, sigmau2 = sigmau2,
                         combined_data = combined_data)
-      Gamma <- data.frame(Domain = framework$data[[framework$domains]],
+      Gamma <- data.frame(Domain = framework$combined_data[[framework$domains]],
                           Gamma = as.numeric(eblup$gamma))
     }
     
@@ -371,7 +367,8 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
       
       # Analytical MSE
       if (MSE == TRUE) {
-        MSE_data <- wrapper_MSE(framework = framework, combined_data = combined_data,
+        MSE_data <- wrapper_MSE(framework = framework, 
+                                combined_data = framework$combined_data,
                                 sigmau2 = sigmau2, vardir = vardir, Ci = Ci,
                                 eblup = eblup, transformation = transformation,
                                 method = method, interval = interval,
@@ -522,7 +519,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
       }
       
       # Shrinkage factor
-      Gamma <- data.frame(Domain = framework$data[[framework$domains]],
+      Gamma <- data.frame(Domain = framework$combined_data[[framework$domains]],
                           Gamma = as.numeric(eblup$gamma))
       
       # Back-transformation
@@ -531,7 +528,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                                      eblup = eblup,
                                      transformation = transformation,
                                      backtransformation = backtransformation,
-                                     combined_data = combined_data,
+                                     combined_data = framework$combined_data,
                                      method = method, interval = interval,
                                      MSE = MSE,
                                      mse_type = mse_type,
@@ -569,7 +566,8 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
     
     # MSE ----------------------------------------------------------------------
     if (MSE == TRUE) {
-      MSE_data <- wrapper_MSE(framework = framework, combined_data = combined_data,
+      MSE_data <- wrapper_MSE(framework = framework, 
+                              combined_data = framework$combined_data,
                               vardir = vardir, eblup = eblup,
                               mse_type = mse_type, method = method, B = B)
       MSE <- MSE_data$MSE_data
