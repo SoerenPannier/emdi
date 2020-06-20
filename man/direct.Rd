@@ -71,9 +71,9 @@ might not be used in the additional function. Defaults to \code{NULL}.}
 from the sample data. Defaults to \code{FALSE}.}
 }
 \value{
-An object of class "emdi" that provides direct estimators for regional
-disaggregated indicators and optionally corresponding variance estimates. Generic
-functions such as \code{\link{estimators}}, \code{\link{print}} 
+An object of class "emdi", "direct" that provides direct estimators 
+for regional disaggregated indicators and optionally corresponding variance 
+estimates. Generic functions such as \code{\link{estimators}}, \code{\link{print}} 
 and \code{\link{summary}} have methods that can be used
 to obtain further information. See \code{\link{emdiObject}} for descriptions
 of components of objects of class "emdi".
