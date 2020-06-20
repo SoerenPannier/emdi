@@ -1,17 +1,13 @@
 #' Step function
 #'
-#' This generic function selects a Fay-Herriot model by different criteria in a stepwise 
+#' This generic function selects a model by different criteria in a stepwise 
 #' algorithm.
 #'
-#' @param object an object of type "emdi","model","fh" that contains the chosen 
-#' information criteria.
+#' @param object an object of type "emdi","model".
 #' @param scope formula or a list including two formulas (\code{lower} and 
 #' \code{upper}) specifying the models considered in the step function. 
 #' Defaults to \code{NULL}.
 #' @param criteria a character string describing the model selection criterion. 
-#' Criteria that can be chosen are "\code{AIC}", "\code{AICc}", "\code{AICb1}", 
-#' "\code{AICb2}", "\code{BIC}", "\code{KIC}", "\code{KICc}", "\code{KICb1}", 
-#' or "\code{KICb2}". Defaults to "\code{AIC}".
 #' @param direction a character string describing the direction of stepwise 
 #' algorithm. Directions that can be chosen are "\code{both}", "\code{backward}" 
 #' or "\code{forward}". Defaults to "\code{both}". If no \code{scope} argument is 
@@ -20,54 +16,33 @@
 #' provided during the stepwise procedure. Defaults to \code{TRUE}.
 #' @param steps a number determining the maximum number of steps. Defaults to 1000.
 #' @param ... arguments to be passed to or from other methods.
-#' @return Information about the resulting "best" model due to the chosen 
-#' information criterion: 
-#' \item{\code{call}}{the function call that produced the object.}
-#' \item{\code{coefficients}}{data frame containing the estimated regression 
-#' coefficients, the standard errors and the \code{t}- and \code{p}-values of 
-#' the explanatory variables.} 
-#' @details The information criteria "\code{AICc}", "\code{AICb1}", 
-#' "\code{AICb2}", "\code{KIC}", "\code{KICc}", "\code{KICb1}" and 
-#' "\code{KICb2}" are especially developed for FH models by 
-#' \cite{Marhuenda et al. (2014)}. They are based on a bootstrap 
-#' algorithm. If one of the criteria is chosen, make sure that the 
-#' bootstrap iterations (\code{B}) of the fh object are set to a positive number. 
-#' For some model extensions of the fh model only the "\code{AIC}" and 
-#' the "\code{BIC}" information criteria are provided and for some none 
-#' of the information criteria are defined. Check the model_select 
-#' component of the fh object (objectname$model$model_select). If no 
-#' criteria are provided, it is not possible to apply the stepwise 
-#' variable selection algorithm.
-#' @references 
-#' Marhuenda, Y., Morales, D. and Pardo, M.C. (2014). Information criteria for 
-#' Fay-Herriot model selection. Computational Statistics and Data Analysis 70, 
-#' 268-280.
-#' @seealso \code{\link{emdiObject}}, \code{\link{fh}} 
-#' @examples
-#' # Loading data - population and sample data
-#' data("eusilcA_popAgg")
-#' data("eusilcA_smpAgg")
-#' 
-#' # Combine sample and population data -------------------------------------------
-#' combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
-#'                              smp_data = eusilcA_smpAgg, smp_domains = "Domain")
-#'
-#' # Estimate FH model that contains all variables that should be considered
-#' fh_std <- fh(fixed = Mean ~ cash + self_empl + unempl_ben, vardir = "Var_Mean",
-#' combined_data = combined_data, domains = "Domain", method = "ml", 
-#' MSE = TRUE)
-#' 
-#' # Example 1: Use default settings
-#' step(fh_std)
-#' 
-#' # Example 2: Choose "KICb2" information criterion
-#' step(fh_std, criteria = "KICb2")
+#' @return The return of \code{step} depends on the class of its argument. The
+#' documentation of particular methods gives detailed information about the
+#' return of that method.
 #' @export
 #' @importFrom stats factor.scope 
 
 step <- function (object, scope, criteria, direction, trace, steps,
-                     ...) UseMethod("step") 
-                       
+                  ...) UseMethod("step") 
+
+
+#' Method \code{step.default} performs a variable selection for lm models.
+#'
+#' @param object an object of type "emdi","model" or a \code{lm} object.
+#' @param ... arguments to be passed to or from other methods.
+#' @details The default method of the generic function \code{step} 
+#' applies the \code{step} function for \code{lm} models of the stats package. 
+#' Please refer to the documentation of the \code{step} function of 
+#' the stats package for details.
+#' @seealso \code{\link[stats]{step}}
+#' @export
+#' @rdname step 
+#' @method step default
+#' @importFrom stats step 
+step.default <- function(object,...) stats::step(object, ...)
+
+
+
 #' Method \code{step.fh} selects a Fay-Herriot model by different 
 #' information criteria in a stepwise algorithm.
 #'
@@ -131,14 +106,15 @@ step <- function (object, scope, criteria, direction, trace, steps,
 #' # Example 2: Choose "KICb2" information criterion
 #' step(fh_std, criteria = "KICb2")
 #' @export
+#' @method step fh
 #' @importFrom stats factor.scope   
 
 step.fh <- function (object, scope = NULL, criteria = "AIC", 
-                                            direction = "both", trace = TRUE,
-                                            steps = 1000, ...){
+                     direction = "both", trace = TRUE,
+                     steps = 1000, ...){
   
   step_check(object = object, scope = scope, criteria = criteria,
-                direction = direction, trace = trace, steps = steps)
+             direction = direction, trace = trace, steps = steps)
   
   if ((criteria == "AICc" || criteria == "AICb1" || 
        criteria == "AICb2"|| criteria == "KICc" || 
@@ -286,6 +262,7 @@ step.fh <- function (object, scope = NULL, criteria = "AIC",
   results
 }
 
+
 #' Prints step function results
 #'
 #' The elements described in step are printed.
@@ -304,7 +281,7 @@ print.step <- function(x, ...)
 }
 
 step_check <- function(object, scope, criteria, direction, trace, 
-                          steps){
+                       steps){
   
   if(!inherits(object, "fh")){
     stop('Object needs to be fh object.')
@@ -356,6 +333,10 @@ Otherwise the comparison of models based on information criteria would not be va
   }
   
 }
+
+
+
+
 
 
 
