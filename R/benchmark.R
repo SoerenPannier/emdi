@@ -11,19 +11,22 @@
 #' (i) Raking ("\code{raking}"),
 #' (ii) Ratio adjustment ("\code{ratio}"),
 #' (iii) MSE adjustment ("\code{MSE_adj}"). Defaults to "\code{raking}".
-#' @param overwrite if \code{TRUE}, the benchmarked results are added to 
-#' the fh object and the MSE estimates of the FH estimates of fh object 
-#' are set to NULL. Defaults to \code{FALSE}. 
+#' @param overwrite if \code{TRUE}, the benchmarked FH estimates are added to 
+#' the ind object of the emdi object and the MSE estimates are set to 
+#' NULL since these are not benchmarked. Defaults to \code{FALSE}. 
 #' @return A data frame containing a domain indicator (Domain), direct estimates 
-#' (Direct), point predictions (FH), benchmarked point predictions (FHBENCH) and 
+#' (Direct), point predictions (FH), benchmarked point predictions (FH_Bench) and 
 #' a variable indicating out-of-sample domains Out (1 for out-of-sample, 0 for 
 #' in-sample) . If overwrite is set to TRUE, the fh object is returned, but the 
 #' point predictions of the ind data frame are substituted by the benchmarked 
 #' results.
 #' @details
-#' The benchmarking algorithm does not work, if no out-of-sample point estimates 
-#' are available. The type "\code{MSE_adj}" does not work, if no out-of-sample 
-#' MSE estimates are available.
+#' The benchmarking algorithm only works, if FH estimates are available. 
+#' The type "\code{MSE_adj}" only works, if MSE estimates are available. 
+#' If overwrite is set to TRUE, the emdi object is returned, but the 
+#' benchmarked FH estimates are added to the ind object of the emdi 
+#' object and the MSE estimates are set to NULL since these are not 
+#' benchmarked. 
 #' @references 
 #' Datta,G. S., Ghosh, M., Steorts, R. and Maples, J. (2010) Bayesian 
 #' benchmarking with applications to small area estimation. Test, 20, 574–588.
@@ -44,16 +47,16 @@
 #' # Benchmark the point estimates
 #' 
 #' # Example 1: Receive data frame with point estimates and their benchmarked results
-#' fh_bench <- benchmark_fh(fh_std, benchmark = 20140.09, 
+#' fh_bench <- benchmark(fh_std, benchmark = 20140.09, 
 #' share = eusilcA_popAgg$ratio_n, type = "ratio")
 #' 
 #' # Example 2: Add benchmarked results to fh object
-#' fh_bench <- benchmark_fh(fh_std, benchmark = 20140.09, 
+#' fh_bench <- benchmark(fh_std, benchmark = 20140.09, 
 #' share = eusilcA_popAgg$ratio_n, type = "ratio", overwrite = TRUE)
 #' @export
 
 
-benchmark_fh <- function(object, benchmark, share, type = "raking", overwrite = FALSE) {
+benchmark <- function(object, benchmark, share, type = "raking", overwrite = FALSE) {
   
   check_benchmark_arguments(object = object, benchmark = benchmark, share = share, 
                             type = type, overwrite = overwrite)
@@ -93,7 +96,7 @@ benchmark_fh <- function(object, benchmark, share, type = "raking", overwrite = 
     #            fixed = object$fixed,
     #            call = object$call,
     #            successful_bootstraps = object$successful_bootstraps)
-    warning("Please note that only point estimates are benchmarked. Thus, the 
+    cat("Please note that only point estimates are benchmarked. Thus, the 
             MSE element in the new emdi object is NULL.")
     result <- object
   }

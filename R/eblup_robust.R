@@ -17,7 +17,7 @@ eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, c,
   # Inference for coefficients
   eblup_coef <- data.frame(coefficients = eblupobject$coefficients)
   
-  EBLUP_data <- data.frame(Domain = combined_data[[framework$domains]])
+  EBLUP_data <- data.frame(Domain = framework$combined_data[[framework$domains]])
   #direct
   EBLUP_data$Direct <- NA
   EBLUP_data$Direct[framework$obs_dom == TRUE] <- framework$direct

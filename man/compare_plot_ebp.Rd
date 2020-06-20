@@ -13,7 +13,7 @@ compare_plot_ebp(model, direct, indicator = "all", MSE = FALSE,
 \item{model}{an object of type "emdi","model", representing point and MSE
 estimates}
 
-\item{direct}{optional, an object of type "emdi","direct", representing point
+\item{direct}{an object of type "emdi","direct", representing point
 and MSE estimates. If the input argument \code{model} is of type "model","ebp",
 \code{direct} is required. If the input argument \code{model} is of type 
 "model","fh", the \code{direct} component is already included in the input 
@@ -34,6 +34,9 @@ one of the groups.}
 \value{
 A scatter plot and a line plot comparing direct and model-based
 estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
+If the input arguments MSE and CV are set to TRUE two extra plots are created, 
+respectively: the MSE/CV estimates of the direct and model-based estimates are 
+compared by boxplots and scatter plots.
 }
 \description{
 For all indicators or a selection of indicators two plots are returned. The

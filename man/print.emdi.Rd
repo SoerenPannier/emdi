@@ -18,5 +18,6 @@ or Empirical Best Prediction (see also \code{\link{ebp}}).}
 Basic information of an emdi object is printed.
 }
 \seealso{
-\code{\link{emdiObject}}, \code{\link{ebp}}, \code{\link{fh}}
+\code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}},
+ \code{\link{emdiObject}}
 }

@@ -7,7 +7,7 @@
 \title{A package for estimating and mapping disaggregated indicators}
 \description{
 The package \pkg{emdi} supports estimating and mapping regional
-disaggregated indicators. For estimating these indicators direct estimation, 
+disaggregated indicators. For estimating these indicators, direct estimation, 
 the unit-level Empirical Best Prediction approach by \cite{Molina and Rao (2010)}, 
 the area-level model by \cite{Fay and Herriot (1979)} and various 
 extensions of it (adjusted variance estimation methods, log and arcsin transformation, 
@@ -26,10 +26,11 @@ available as \code{\link{estimators.emdi}}, \code{\link{compare_plot.emdi}},
 \code{\link{plot.emdi}} (only for emdi objects obtained by functions 
 \code{ebp} or \code{fh}), \code{\link{print.emdi}} and \code{\link{summary.emdi}}. 
 Furthermore, functions \code{\link{map_plot}} and \code{\link{write.excel}} 
-help to visualize and export results. For the estimation function \code{fh} 
-the stepwise variable selection function \code{\link{step_fh}}, benchmarking 
-options \code{\link{benchmark_fh}} and a function to detect spatial structures 
-\code{\link{spatialcor.tests}} are provided.
+help to visualize and export results. For the estimation function \code{fh}, 
+the stepwise variable selection function \code{\link{step}}, benchmarking 
+options \code{\link{benchmark}}, a method to assess the quality of 
+the model-based estimates \code{\link{compare.fh}} and a function to 
+detect spatial structures \code{\link{spatialcor.tests}} are provided.
 
 An overview of all currently provided functions can be requested by
 \code{library(help=emdi)}.

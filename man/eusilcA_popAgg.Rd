@@ -32,7 +32,7 @@ The data set is synthetic EU-SILC data based on the data set
 \code{\link[simFrame]{eusilcP}} from package \pkg{simFrame}. The data set is 
 reduced to 15 variables including a regional variable for the districts and 
 contains the household level data that is aggregated on the district level. 
-Therefore, except for the domain variable, the observations of all variables 
-consist of the mean values per district.
+Therefore, except for the variables \code{ratio_n} and \code{Domain}, 
+the variables are the mean values per district.
 }
 \keyword{datasets}

@@ -13,7 +13,7 @@
 \item{model}{an object of type "emdi","model", representing point and MSE
 estimates.}
 
-\item{direct}{optional, an object of type "emdi","direct", representing point
+\item{direct}{an object of type "emdi","direct", representing point
 and MSE estimates. If the input argument \code{model} is of type "model","ebp",
 \code{direct} is required. If the input argument \code{model} is of type 
 "model","fh", the \code{direct} component is already included in the input 
@@ -30,15 +30,15 @@ one is returned. Note, additional custom indicators can be
 defined as argument for the EBP approaches (see also \code{\link{ebp}})
 and do not appear in groups of indicators even though these might belong to
 one of the groups. If the \code{model} argument is of type "model","fh", 
-indicator can be set to "all", "Direct", FH", or "FH_Bench" (if benchmark
-function is used before). Defaults to "all".}
+indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi 
+object is overwritten by function benchmark). Defaults to "all".}
 
 \item{MSE}{optional logical. If \code{TRUE}, the MSE estimates of the direct 
-and model-based estimates are compared via boxplots and ordered scatter plots.}
+and model-based estimates are compared via boxplots and scatter plots.}
 
 \item{CV}{optional logical. If \code{TRUE}, the coefficient of variation 
 estimates of the direct and model-based estimates are compared via boxplots 
-and ordered scatter plots.}
+and scatter plots.}
 
 \item{label}{argument that enables to customize title and axis labels. There 
 are three options to label the evaluation plots: (i) original labels ("orig"), 
@@ -47,17 +47,19 @@ labels nor title ("blank").}
 
 \item{color}{a vector with two elements. The first color determines
 the color of the line in the scatter plot and the color for the direct 
-estimates in the line plot. The second color specifies the color of the line
-for the model-based estimates.}
+estimates in the remaining plots. The second color specifies the 
+color for the model-based estimates in the plots.}
 
 \item{shape}{a numeric vector with two elements. The first shape determines
-the shape of the points in the line plot for the direct estimates and the 
-second shape for the model-based estimates. The options are numbered from 
-0 to 25.}
+the shape of the points in the scatterplot and the shape of the points for the 
+direct estimates in the remaining plots. The second shape determines 
+the shape for the points for the model-based estimates. The options 
+are numbered from 0 to 25.}
 
 \item{line_type}{a character vector with two elements. The first line type 
-determines the type of the line for the direct estimates and the 
-second type for the model-based estimates. The options are: "twodash", 
+determines the type of the line in the scatter plot and the type of the line 
+for the direct estimates in the remaining plots. The second type specifies 
+the line type for the model-based estimates in the plots. The options are: "twodash", 
 "solid", "longdash", "dotted", "dotdash", "dashed" and "blank".}
 
 \item{gg_theme}{\code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
@@ -69,6 +71,9 @@ For using this argument, package \pkg{ggplot2} must be loaded via
 \value{
 A scatter plot and a line plot comparing direct and model-based
 estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
+If the input arguments MSE and CV are set to TRUE two extra plots are created, 
+respectively: the MSE/CV estimates of the direct and model-based estimates are 
+compared by boxplots and scatter plots.
 }
 \description{
 Method \code{compare_plot.emdi} produces two plots for all indicators or a 
@@ -78,7 +83,7 @@ plot with these estimates.
 }
 \details{
 Since all of the comparisons need a direct estimator, the plots are 
-only created for in-sample domains. For the new package version (2.0.0) the 
+only created for in-sample domains. For the new package version (2.0.0), the 
 order of the input arguments direct and model has been changed. In this 
 version (1.1.6), it is still possible to use the old order because the 
 arguments are swapped internally. From the next package version on it will no 

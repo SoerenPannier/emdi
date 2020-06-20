@@ -53,9 +53,10 @@
 #' from the sample data. Defaults to \code{FALSE}. 
 #' @return An object of class "emdi", "direct" that provides direct estimators 
 #' for regional disaggregated indicators and optionally corresponding variance 
-#' estimates. Generic functions such as \code{\link{estimators}}, \code{\link{print}} 
-#' and \code{\link{summary}} have methods that can be used
-#' to obtain further information. See \code{\link{emdiObject}} for descriptions
+#' estimates. Generic functions such as \code{\link{estimators}}, 
+#' \code{\link{compare_plot}}, \code{\link{print}} and 
+#' \code{\link{summary}} have methods that can be used to obtain 
+#' further information. See \code{\link{emdiObject}} for descriptions
 #' of components of objects of class "emdi".
 #' @details The set of predefined indicators includes the mean, median, four 
 #' further quantiles (10\%, 25\%, 75\% and 90\%), head count ratio, poverty gap, 

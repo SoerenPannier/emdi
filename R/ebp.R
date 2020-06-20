@@ -79,12 +79,13 @@
 #' @param na.rm if \code{TRUE}, observations with \code{NA} values are deleted 
 #' from the population and sample data. For the EBP procedure complete observations  
 #' are required. Defaults to \code{FALSE}. 
-#' @return An object of class "emdi" that provides estimators for regional
+#' @return An object of class "emdi", "model", "ebp" that provides estimators for regional
 #' disaggregated indicators and optionally corresponding MSE estimates. Generic
-#' functions such as \code{\link{estimators}}, \code{\link{print}}, 
-#' \code{\link{plot}} and \code{\link{summary}} have methods that can be used
-#' to obtain further information. See \code{\link{emdiObject}} for descriptions
-#' of components of objects of class "emdi".
+#' functions such as \code{\link{estimators}}, \code{\link{compare_plot}}, 
+#' \code{\link{print}}, \code{\link{plot}} and \code{\link{summary}} have 
+#' methods that can be used to obtain further information. See 
+#' \code{\link{emdiObject}} for descriptions of components of objects 
+#' of class "emdi".
 #' @details For Monte-Carlo approximations and in the parametric bootstrap
 #' approach random number generation is used. Thus, a seed is set by the 
 #' argument \code{seed}. \cr \cr
