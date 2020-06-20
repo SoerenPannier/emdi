@@ -108,7 +108,7 @@
 #' data("eusilcA_popAgg")
 #' data("eusilcA_smpAgg")
 #'
-#' # Combine sample and population data -------------------------------------------
+#' # Combine sample and population data
 #' combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
 #'                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
 #'
