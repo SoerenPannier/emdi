@@ -69,7 +69,10 @@ models with applications in small area estimation, The Indian Journal of
 Statistics 77-B(2), 312-320. \cr \cr
 Marhuenda, Y., Morales, D. and Pardo, M.C. (2014). Information criteria for 
 Fay-Herriot model selection. Computational Statistics and Data Analysis 70, 
-268-280.
+268-280. \cr \cr
+Nakagawa S, Schielzeth H (2013). A general and simple method for obtaining R2 
+from generalized linear mixed-effects models. Methods in Ecology and Evolution, 
+4(2), 133-142.
 }
 \seealso{
 \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}},

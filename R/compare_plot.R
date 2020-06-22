@@ -1,8 +1,8 @@
 #' Shows plots for the comparison of estimates
 #'
-#' Function \code{compare_plot} is a generic function used to produce two plots 
-#' for all indicators or a selection of indicators. The first plot is a scatter 
-#' plot of estimates to compare and the second is a line plot with these estimates.
+#' Function \code{compare_plot} is a generic function used to produce plots 
+#' comparing point and existing MSE/CV estimates of direct and model-based
+#' estimation for all indicators or a selection of indicators. 
 #' @param model an object of type "emdi","model", representing point and MSE
 #' estimates.
 #' @param direct an object of type "emdi","direct", representing point
@@ -13,43 +13,31 @@
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned. Defaults to "all".
 #' @param MSE optional logical. If \code{TRUE}, the MSE estimates of the direct 
-#' and model-based estimates are compared via boxplots and scatter plots. 
-#' Defaults to \code{FALSE}.
+#' and model-based estimates are compared via suitable plots. Defaults to \code{FALSE}.
 #' @param CV optional logical. If \code{TRUE}, the coefficient of variation 
-#' estimates of the direct and model-based estimates are compared via boxplots 
-#' and scatter plots. Defaults to \code{FALSE}.
+#' estimates of the direct and model-based estimates are compared via suitable plots. 
+#' Defaults to \code{FALSE}.
 #' @param label argument that enables to customize title and axis labels. There 
 #' are three options to label the evaluation plots: (i) original labels ("orig"), 
 #' (ii) axis labels but no title ("no_title"), (iii) neither axis 
 #' labels nor title ("blank").
-#' @param color a vector with two elements. The first color determines
-#' the color of the line in the scatter plot and the color for the direct 
-#' estimates in the remaining plots. The second color specifies the 
-#' color for the model-based estimates in the plots.
-#' @param shape a numeric vector with two elements. The first shape determines
-#' the shape of the points in the scatterplot and the shape of the points for the 
-#' direct estimates in the remaining plots. The second shape determines 
-#' the shape for the points for the model-based estimates. The options 
-#' are numbered from 0 to 25. 
-#' @param line_type a character vector with two elements. The first line type 
-#' determines the type of the line in the scatter plot and the type of the line 
-#' for the direct estimates in the remaining plots. The second type specifies 
-#' the line type for the model-based estimates in the plots. The options are: "twodash", 
-#' "solid", "longdash", "dotted", "dotdash", "dashed" and "blank".
+#' @param color a vector with two elements determining color schemes in returned 
+#' plots.
+#' @param shape a numeric vector with two elements determining the shape of points
+#' in returned plots.
+#' @param line_type a character vector with two elements determining the line 
+#' types in returned plots.
 #' @param gg_theme \code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
 #' For using this argument, package \pkg{ggplot2} must be loaded via 
-#' \code{library(ggplot2)}. See also Example 2.
+#' \code{library(ggplot2)}. 
 #' @param ... further arguments passed to or from other methods.
-#' @return A scatter plot and a line plot comparing direct and model-based
-#' estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
-#' If the input arguments MSE and CV are set to TRUE two extra plots are created, 
-#' respectively: the MSE/CV estimates of the direct and model-based estimates are 
-#' compared by boxplots and scatter plots.
+#' @return Plots comparing direct and model-based estimators for each selected 
+#' indicator obtained by \code{\link[ggplot2]{ggplot}}.
 #' @details Since all of the comparisons need a direct estimator, the plots are 
 #' only created for in-sample domains. For the new package version (2.0.0), the 
 #' order of the input arguments direct and model has been changed. In this 
 #' version (1.1.6), it is still possible to use the old order because the 
-#' arguments are swapped internally. From the next package version on it will no 
+#' arguments are swapped internally. From the next package version on, it will no 
 #' longer be possible.
 #' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
 #' \code{\link{fh}}
@@ -248,10 +236,13 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
 
 #' Shows plots for the comparison of estimates
 #'
-#' Method \code{compare_plot.emdi} produces two plots for all indicators or a 
-#' selection of indicators for objects of type "emdi". The
-#' first plot is a scatter plot of estimates to compare and the second is a line
-#' plot with these estimates.
+#' Method \code{compare_plot.emdi} produce plots comparing point and existing 
+#' MSE/CV estimates of direct and model-based estimation for all indicators or a 
+#' selection of indicators for objects of type "emdi". The direct and model-based 
+#' point estimates are compared by a scatter plot and a line plot for each selected 
+#' indicator. If the input arguments MSE and CV are set to TRUE, two extra plots 
+#' are created, respectively: the MSE/CV estimates of the direct and model-based 
+#' estimates are compared by boxplots and scatter plots.
 #' @param model an object of type "emdi","model", representing point and MSE
 #' estimates.
 #' @param direct an object of type "emdi","direct", representing point
@@ -271,7 +262,7 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
 #' and do not appear in groups of indicators even though these might belong to
 #' one of the groups. If the \code{model} argument is of type "model","fh", 
 #' indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi 
-#' object is overwritten by function benchmark). Defaults to "all".
+#' object is overwritten by function \code{\link{benchmark}}). Defaults to "all".
 #' @param MSE optional logical. If \code{TRUE}, the MSE estimates of the direct 
 #' and model-based estimates are compared via boxplots and scatter plots.
 #' @param CV optional logical. If \code{TRUE}, the coefficient of variation 
@@ -282,19 +273,22 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
 #' (ii) axis labels but no title ("no_title"), (iii) neither axis 
 #' labels nor title ("blank").
 #' @param color a vector with two elements. The first color determines
-#' the color of the line in the scatter plot and the color for the direct 
-#' estimates in the remaining plots. The second color specifies the 
-#' color for the model-based estimates in the plots.
+#' the color for the regression line in the scatter plot and the color for 
+#' the direct estimates in the remaining plots. The second color specifies the 
+#' color of the intersection line in the scatter plot and the color for the 
+#' model-based estimates in the remaining plots. Defaults to c("blue", "lightblue3").
 #' @param shape a numeric vector with two elements. The first shape determines
 #' the shape of the points in the scatterplot and the shape of the points for the 
 #' direct estimates in the remaining plots. The second shape determines 
 #' the shape for the points for the model-based estimates. The options 
-#' are numbered from 0 to 25. 
+#' are numbered from 0 to 25. Defaults to c(16, 16).
 #' @param line_type a character vector with two elements. The first line type 
-#' determines the type of the line in the scatter plot and the type of the line 
-#' for the direct estimates in the remaining plots. The second type specifies 
-#' the line type for the model-based estimates in the plots. The options are: "twodash", 
-#' "solid", "longdash", "dotted", "dotdash", "dashed" and "blank".
+#' determines the line type for the regression line in the scatter plot and the 
+#' line type for the direct estimates in the remaining plots. The second line type 
+#' specifies the line type of the intersection line in the scatter plot and the 
+#' line type for the model-based estimates in the remaining plots. The options 
+#' are: "twodash", "solid", "longdash", "dotted", "dotdash", "dashed" and "blank".
+#' Defaults to  c("solid", "solid").
 #' @param gg_theme \code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
 #' For using this argument, package \pkg{ggplot2} must be loaded via 
 #' \code{library(ggplot2)}. See also Example 2.
@@ -537,80 +531,6 @@ define_evallabel <- function(type, label, indi){
     }
 
   }
-
-  #else if (inherits(label, "list")) {
-
-  #  if (!any(names(label) %in% c("scatter", "line"))) {
-  #    stop("List elements must have following names even though not
-  #         all must be included: scatter and line Every list element must
-  #         have the elements title, y_lab and x_lab.")
-  #  }
-  #  for (i in names(label)) {
-  #    if (!all(names(label[[i]]) == c("title", "y_lab", "x_lab"))) {
-  #      stop("Every list element must have the elements title,
-  #           y_lab and x_lab in this order.")
-  #    }
-  #    }
-
-  #  if (type == "unit") {
-  #    orig_label <- list(scatter = c(title = indi,
-  #                              y_lab = "Model-based",
-  #                              x_lab = "Direct"),
-  #                  line = c(title = indi,
-  #                           y_lab = "Value",
-  #                           x_lab = "Domain (ordered by sample size)"),
-  #                  boxplot_MSE = c(title = indi,
-  #                                  y_lab = "Value",
-  #                                  x_lab = "Domain (ordered by sample size)"),
-  #                  ordered_MSE = c(title = indi,
-  #                                  y_lab = "Value",
-  #                                  x_lab = "Domain (ordered by sample size)"),
-  #                  boxplot_CV = c(title = indi,
-  #                                 y_lab = "Value",
-  #                                 x_lab = "Domain (ordered by sample size)"),
-  #                  ordered_CV = c(title = indi,
-  #                                 y_lab = "Value",
-  #                                 x_lab = "Domain (ordered by sample size)"))
-  #  } else if (type == "area") {
-  #    orig_label <- list(scatter = c(title = indi,
-  #                              y_lab = "Model-based",
-  #                              x_lab = "Direct"),
-  #                  line = c(title = indi,
-  #                           y_lab = "Value",
-  #                           x_lab = "Domain (ordered by sample size)"),
-  #                  boxplot_MSE = c(title = indi,
-  #                                  y_lab = "",
-  #                                  x_lab = "MSE"),
-  #                  ordered_MSE = c(title = indi,
-  #                                  y_lab = "MSE",
-  #                                  x_lab = "Domain (ordered by increasing MSE of Direct)"),
-  #                  boxplot_CV = c(title = indi,
-  #                                 y_lab = "CV",
-  #                                 x_lab = ""),
-  #                  ordered_CV = c(title = indi,
-  #                                 y_lab = "Value",
-  #                                 x_lab = "Domain (ordered by increasing CV of Direct)"))
-  #  }
-
-
-  #  if (any(names(label) == "scatter")) {
-  #    label$scatter <- label$scatter
-  #  } else {
-   #   label$scatter <- orig_label$scatter
-  #  }
-  #  if (any(names(label) == "line")) {
-  #    label$line <- label$line
-  #  } else {
-  #    label$line <- orig_label$line
-  #  }
-  #    }
-
-  #if (any(!(names(label) %in%  c("scatter", "line")))) {
-  #  warning("One or more list elements are not called scatter or line. The
-  #           changes are for this/these element(s) is/are not done. Instead the
-  #          original labels are used.")
-  #}
-
   return(label)
     }
 
@@ -735,7 +655,8 @@ compare_plots <- function(object, type, selected_indicators, MSE, CV, label, col
                     x = label_ind$boxplot_MSE["x_lab"],
                     y = label_ind$boxplot_MSE["y_lab"]) +
                scale_fill_manual(name = "Method",
-                                 values = color)))
+                                 values = color)+  
+               gg_theme))
 
       cat("Press [enter] to continue")
       line <- readline()
@@ -749,7 +670,7 @@ compare_plots <- function(object, type, selected_indicators, MSE, CV, label, col
                                    x = label_ind$ordered_MSE["x_lab"],
                                    y = label_ind$ordered_MSE["y_lab"]) +
                scale_color_manual(values = color)) +
-        scale_shape_manual(values = c(shape[1], shape[2])))
+        scale_shape_manual(values = c(shape[1], shape[2])) + gg_theme)
     }
 
     if (CV == TRUE) {
@@ -777,7 +698,7 @@ compare_plots <- function(object, type, selected_indicators, MSE, CV, label, col
                     x = label_ind$boxplot_CV["x_lab"],
                     y = label_ind$boxplot_CV["y_lab"]) +
                scale_fill_manual(name = "Method",
-                                 values = color)))
+                                 values = color)) + gg_theme)
 
       cat("Press [enter] to continue")
       line <- readline()
@@ -793,7 +714,7 @@ compare_plots <- function(object, type, selected_indicators, MSE, CV, label, col
                                    x = label_ind$ordered_CV["x_lab"],
                                    y = label_ind$ordered_CV["y_lab"]) +
                scale_color_manual(values = color))+
-        scale_shape_manual(values = c(shape[1], shape[2])))
+        scale_shape_manual(values = c(shape[1], shape[2])) + gg_theme)
     }
 
 

@@ -11,6 +11,8 @@
 #' @export
 
 compare <- function(model, ...) UseMethod("compare")
+
+
 #' Compare function
 #'
 #' Method \code{compare.fh} assesses the quality of the model-based estimates by 
@@ -21,7 +23,7 @@ compare <- function(model, ...) UseMethod("compare")
 #' @param model an object of type "model","fh".
 #' @param ... further arguments passed to or from other methods.
 #' @return The null hypothesis, the value W of the test statistic, the degrees 
-#' of freedom and the p value of the Brown test; And the correlation coefficient 
+#' of freedom and the p value of the Brown test; and the correlation coefficient 
 #' of the synthetic part and the direct estimator \cite{(Chandra et al. 2015)}.
 #' @references 
 #' Brown, G., R. Chambers, P. Heady, and D. Heasman (2001). Evaluation of small 

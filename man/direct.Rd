@@ -4,22 +4,10 @@
 \alias{direct}
 \title{Direct estimation of disaggregated indicators}
 \usage{
-direct(
-  y,
-  smp_data,
-  smp_domains,
-  weights = NULL,
-  design = NULL,
-  threshold = NULL,
-  var = FALSE,
-  boot_type = "naive",
-  B = 50,
-  seed = 123,
-  X_calib = NULL,
-  totals = NULL,
-  custom_indicator = NULL,
-  na.rm = FALSE
-)
+direct(y, smp_data, smp_domains, weights = NULL, design = NULL,
+  threshold = NULL, var = FALSE, boot_type = "naive", B = 50,
+  seed = 123, X_calib = NULL, totals = NULL,
+  custom_indicator = NULL, na.rm = FALSE)
 }
 \arguments{
 \item{y}{a character string indicating the variable that is used for 
@@ -85,11 +73,10 @@ from the sample data. Defaults to \code{FALSE}.}
 \value{
 An object of class "emdi", "direct" that provides direct estimators 
 for regional disaggregated indicators and optionally corresponding variance 
-estimates. Generic functions such as \code{\link{estimators}}, 
-\code{\link{compare_plot}}, \code{\link{print}} and 
-\code{\link{summary}} have methods that can be used to obtain 
-further information. See \code{\link{emdiObject}} for descriptions
-of components of objects of class "emdi".
+estimates. Generic functions such as \code{\link{compare_plot}}, 
+\code{\link{estimators}}, \code{\link{print}} and \code{\link{summary}} have 
+methods that can be used to obtain further information. See 
+\code{\link{emdiObject}} for descriptions of components of objects of class "emdi".
 }
 \description{
 Function \code{direct} estimates indicators only based on sample information. 

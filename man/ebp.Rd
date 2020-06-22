@@ -4,25 +4,11 @@
 \alias{ebp}
 \title{Empirical Best Prediction for disaggregated indicators}
 \usage{
-ebp(
-  fixed,
-  pop_data,
-  pop_domains,
-  smp_data,
-  smp_domains,
-  L = 50,
-  threshold = NULL,
-  transformation = "box.cox",
-  interval = c(-1, 2),
-  MSE = FALSE,
-  B = 50,
-  seed = 123,
-  boot_type = "parametric",
-  parallel_mode = ifelse(grepl("windows", .Platform$OS.type), "socket", "multicore"),
-  cpus = 1,
-  custom_indicator = NULL,
-  na.rm = FALSE
-)
+ebp(fixed, pop_data, pop_domains, smp_data, smp_domains, L = 50,
+  threshold = NULL, transformation = "box.cox", interval = c(-1, 2),
+  MSE = FALSE, B = 50, seed = 123, boot_type = "parametric",
+  parallel_mode = ifelse(grepl("windows", .Platform$OS.type), "socket",
+  "multicore"), cpus = 1, custom_indicator = NULL, na.rm = FALSE)
 }
 \arguments{
 \item{fixed}{a two-sided linear formula object describing the
@@ -115,7 +101,7 @@ are required. Defaults to \code{FALSE}.}
 \value{
 An object of class "emdi", "model", "ebp" that provides estimators for regional
 disaggregated indicators and optionally corresponding MSE estimates. Generic
-functions such as \code{\link{estimators}}, \code{\link{compare_plot}}, 
+functions such as \code{\link{compare_plot}}, \code{\link{estimators}},  
 \code{\link{print}}, \code{\link{plot}} and \code{\link{summary}} have 
 methods that can be used to obtain further information. See 
 \code{\link{emdiObject}} for descriptions of components of objects 
