@@ -4,11 +4,25 @@
 \alias{ebp}
 \title{Empirical Best Prediction for disaggregated indicators}
 \usage{
-ebp(fixed, pop_data, pop_domains, smp_data, smp_domains, L = 50,
-  threshold = NULL, transformation = "box.cox", interval = c(-1, 2),
-  MSE = FALSE, B = 50, seed = 123, boot_type = "parametric",
-  parallel_mode = ifelse(grepl("windows", .Platform$OS.type), "socket",
-  "multicore"), cpus = 1, custom_indicator = NULL, na.rm = FALSE)
+ebp(
+  fixed,
+  pop_data,
+  pop_domains,
+  smp_data,
+  smp_domains,
+  L = 50,
+  threshold = NULL,
+  transformation = "box.cox",
+  interval = c(-1, 2),
+  MSE = FALSE,
+  B = 50,
+  seed = 123,
+  boot_type = "parametric",
+  parallel_mode = ifelse(grepl("windows", .Platform$OS.type), "socket", "multicore"),
+  cpus = 1,
+  custom_indicator = NULL,
+  na.rm = FALSE
+)
 }
 \arguments{
 \item{fixed}{a two-sided linear formula object describing the

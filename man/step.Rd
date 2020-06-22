@@ -10,7 +10,7 @@ step(object, scope, criteria, direction, trace, steps, ...)
 \method{step}{default}(object, ...)
 }
 \arguments{
-\item{object}{an object of type "emdi","model".}
+\item{object}{an object of type "emdi","model" or a \code{lm} object.}
 
 \item{scope}{formula or a list including two formulas (\code{lower} and 
 \code{upper}) specifying the models considered in the step function. 
@@ -27,10 +27,6 @@ provided, the default is "\code{backward}".}
 provided during the stepwise procedure. Defaults to \code{TRUE}.}
 
 \item{steps}{a number determining the maximum number of steps. Defaults to 1000.}
-
-\item{...}{arguments to be passed to or from other methods.}
-
-\item{object}{an object of type "emdi","model" or a \code{lm} object.}
 
 \item{...}{arguments to be passed to or from other methods.}
 }

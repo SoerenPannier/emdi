@@ -5,8 +5,15 @@
 \title{Method \code{step.fh} selects a Fay-Herriot model by different 
 information criteria in a stepwise algorithm.}
 \usage{
-\method{step}{fh}(object, scope = NULL, criteria = "AIC",
-  direction = "both", trace = TRUE, steps = 1000, ...)
+\method{step}{fh}(
+  object,
+  scope = NULL,
+  criteria = "AIC",
+  direction = "both",
+  trace = TRUE,
+  steps = 1000,
+  ...
+)
 }
 \arguments{
 \item{object}{an object of type "emdi","model","fh" that contains the chosen 
