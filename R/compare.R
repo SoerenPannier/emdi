@@ -93,7 +93,7 @@ compare.fh <- function(model, ...){
  
  if (model$framework$N_dom_unobs > 0) {
    cat("Please note that the computation of both test statistics is only based 
-       on in-sample domains.")
+       on in-sample domains.","\n")
  }
  return(results)
 }
