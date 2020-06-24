@@ -10,8 +10,10 @@ spatialcor.tests(direct, corMatrix)
 \item{direct}{a vector containing direct estimates. The elements of 
 \code{direct} must be sorted like the elements in \code{corMatrix}.}
 
-\item{corMatrix}{proximity matrix or data frame. The elements of 
-\code{corMatrix} must be sorted like the elements in \code{direct}.}
+\item{corMatrix}{matrix or data frame with dimensions number of areas times 
+number of areas containing the row-standardized proximities between the 
+domains. Values must lie between \code{0} and \code{1}. The columns and rows 
+must be sorted like the domains in \code{direct}.}
 }
 \value{
 The values of the test statistics and their corresponding p values.
@@ -25,7 +27,18 @@ When creating the proximity matrix \code{corMatrix}, please make
 sure that the elements of \code{direct} and \code{corMatrix} are sorted 
 equally and that \code{direct} and \code{corMatrix} do not contain any 
 \code{NA}s. For a description of how to create the proximity matrix, 
-see the package vignette.
+see the package vignette. If direct estimates do not exist for every area 
+contained in the proximity matrix, the proximity matrix needs to be 
+subsetted to the areas contained in the direct vector.
+}
+\examples{
+# Loading data - sample data and proximity matrix
+data("eusilcA_smpAgg")
+data("eusilcA_prox")
+
+# Compute spatial correlation tests 
+spatialcor.tests(direct = eusilcA_smpAgg$Mean, 
+corMatrix = eusilcA_prox)
 }
 \references{
 Bivand, R. (2019), spdep: Spatial Dependence: Weighting Schemes, 
