@@ -49,6 +49,7 @@ framework_FH <- function(combined_data, fixed, vardir, domains,
   
   if (!is.null(corMatrix)){
     corMatrix <- corMatrix
+    if (is.matrix(corMatrix) == FALSE){corMatrix <- as.matrix(corMatrix)}
   }
   
   if (!is.null(Ci)){

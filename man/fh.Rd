@@ -215,9 +215,12 @@ Out-of-sample EBLUPs are available for all area-level models except for the
 \code{bc_sm} backtransformation and for the robust models. \cr 
 Out-of-sample MSEs are available for the analytical MSE estimator of the 
 standard Fay-Herriot model with reml and ml variance estimation, the crude 
-backtransformation in case of log transformation, the bootstrap MSE estimator 
-for the arcsin transformation and for the nonparametric 
-bootstrap estimator within the spatial Fay-Herriot model framework.
+backtransformation in case of log transformation and the bootstrap MSE estimator 
+for the arcsin transformation. \cr \cr
+For a description of how to create the proximity matrix for the 
+spatial Fay-Herriot model, see the package vignette. If the presence 
+of out-of-sample domains, the proximity matrix needs to be 
+subsetted to the in-sample domains.
 }
 \examples{
 \dontrun{
@@ -241,8 +244,8 @@ method = "ml", transformation = "arcsin", backtransformation = "bc",
 eff_smpsize = "n", MSE = TRUE, mse_type = "boot", B = 50)
 
 # Example 3: Spatial Fay-Herriot model
-# For the creation of eusilcA_proxmat, please refer to the package 
-# vignette.
+# Load proximity matrix
+data("eusilcA_prox")
 fh_spatial <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
 combined_data = combined_data, domains = "Domain", method = "reml", 
 correlation = "spatial", corMatrix = eusilcA_prox, MSE = TRUE, 
