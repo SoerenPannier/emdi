@@ -196,7 +196,7 @@ ebp <- function(fixed,
                               smp_domains      = smp_domains,
                               custom_indicator = custom_indicator,
                               fixed            = fixed,
-                              threshold         = threshold,
+                              threshold        = threshold,
                               na.rm            = na.rm
                               )
 
