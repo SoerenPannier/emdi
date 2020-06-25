@@ -1,15 +1,9 @@
 Package: emdi
 Title: Estimating and Mapping Disaggregated Indicators
-<<<<<<< HEAD
-Version: 1.1.7
-Date: 2020-03-18
-Authors@R: c(person("Ann-Kristin", "Kreutzmann", role="aut", email="ann-kristin.kreutzmann@fu-berlin.de"),
-=======
-Version: 1.2.9000
-Date: 2019-04-08
+Version: 2.0.9000
+Date: 2020-06-25
 Authors@R: c(person("Sylvia", "Harmening", role="aut", email = "sylvia.harmening@fu-berlin.de"), 
     person("Ann-Kristin", "Kreutzmann", role="aut", email="ann-kristin.kreutzmann@fu-berlin.de"),
->>>>>>> fh_integration
     person("Soeren", "Pannier", role=c("aut", "cre"), email="soeren.pannier@fu-berlin.de"),
     person("Natalia", "Rojas-Perilla", role="aut", email = "natalia.rojas@fu-berlin.de"),
     person("Nicola", "Salvati", role="aut", email = "nicola.salvati@unipi.it"),
@@ -28,16 +22,11 @@ Description: Functions that support estimating, assessing and mapping regional
     as well as their precision estimates. The assessment of the used model
     is supported by a summary and diagnostic plots. For a suitable presentation of
     estimates, map plots can be easily created. Furthermore, results can easily be
-<<<<<<< HEAD
     exported to excel. For a detailed description of the package and the methods used
     see "The {R} Package {emdi} for Estimating and Mapping Regionally Disaggregated Indicators"
     by Kreutzmann et al. (2019) <doi:10.18637/jss.v091.i07>.
-=======
-    exported to Excel. Additionally, a stepwise variable selection function and 
-    benchmarking options are provided for the area-level models.
->>>>>>> fh_integration
 Depends:
-    R (>= 3.3.0)
+    R (>= 3.5.0)
 License: GPL-2
 URL: https://github.com/SoerenPannier/emdi
 LazyData: true
