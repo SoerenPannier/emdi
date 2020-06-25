@@ -6,23 +6,14 @@
 #' @param object an object for which point and/or MSE estimates and/or
 #' calculated CV's are desired.
 #' @param indicator optional character vector that selects which indicators
-#' shall be returned: (i) all calculated indicators ("all");
-#' (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
-#' "Quantile_75", "Quantile_90", "Head_Count", 
-#' "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of 
-#' "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty", 
-#' "Inequality" or "Custom".If two of these groups are selected, only the first
-#' one is returned. Defaults to "all". Note, additional custom indicators can be 
-#' defined as argument for model-based approaches (see also \code{\link{ebp}}) 
-#' and do not appear in groups of indicators even though these might belong to 
-#' one of the groups.  
+#' shall be returned.
 #' @param MSE optional logical. If \code{TRUE}, MSE estimates for selected indicators
-#' per domain are added to the data frame of point estimates. Defaults to 
+#' per domain are added to the data frame of point estimates. Defaults to
 #' \code{FALSE}.
 #' @param CV optional logical. If \code{TRUE}, coefficients of variation for selected
 #' indicators per domain are added to the data frame of point estimates.
 #' Defaults to \code{FALSE}.
-#' @param ... arguments to be passed to or from other methods, e.g. indicator.
+#' @param ... arguments to be passed to or from other methods.
 #' @return
 #' The return of \code{estimators} depends on the class of its argument. The
 #' documentation of particular methods gives detailed information about the
@@ -44,16 +35,18 @@ estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
 #' (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
-#' "Quantile_75", "Quantile_90", "Head_Count", 
-#' "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of 
-#' "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty", 
+#' "Quantile_75", "Quantile_90", "Head_Count",
+#' "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
+#' "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
 #' "Inequality" or "Custom". If two of these groups are selected, only the first
-#' one is returned. Defaults to "all". Note, additional custom indicators can be 
-#' defined as argument for model-based approaches (see also \code{\link{ebp}}) 
-#' and do not appear in groups of indicators even though these might belong to 
-#' one of the groups.  
+#' one is returned. Note, additional custom indicators can be
+#' defined as argument for model-based approaches (see also \code{\link{ebp}})
+#' and do not appear in groups of indicators even though these might belong to
+#' one of the groups. If the \code{model} argument is of type "model","fh", 
+#' indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi 
+#' object is overwritten by function benchmark). Defaults to "all".
 #' @param MSE optional logical. If \code{TRUE}, MSE estimates for selected indicators
-#' per domain are added to the data frame of point estimates. Defaults to 
+#' per domain are added to the data frame of point estimates. Defaults to
 #' \code{FALSE}.
 #' @param CV optional logical. If \code{TRUE}, coefficients of variation for selected
 #' indicators per domain are added to the data frame of point estimates.
@@ -62,10 +55,11 @@ estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
 #' @return
 #' an object of type "estimators.emdi" with point and/or MSE
 #' estimates and/or calculated CV's per domain obtained from
-#' \code{emdiObject$ind} and, if chosen, \code{emdiObject$MSE}. These objects 
-#' contain two elements, one data frame \code{ind} and a character naming the 
+#' \code{emdiObject$ind} and, if chosen, \code{emdiObject$MSE}. These objects
+#' contain two elements, one data frame \code{ind} and a character naming the
 #' indicator or indicator group \code{ind_name}.
-#' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}
+#' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
+#' \code{\link{fh}}
 #' @examples
 #' \dontrun{
 #' # Loading data - population and sample data
@@ -73,18 +67,18 @@ estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
 #' data("eusilcA_smp")
 #'
 #' # Generate emdi object with additional indicators; here via function ebp()
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
-#' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
+#' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 #' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' threshold = 11064.82, transformation = "box.cox", 
-#' L = 50, MSE = TRUE, B = 50, custom_indicator = 
+#' threshold = 11064.82, transformation = "box.cox",
+#' L = 50, MSE = TRUE, B = 50, custom_indicator =
 #' list(my_max = function(y, threshold){max(y)},
 #' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
-#' 
+#'
 #' # Example 1: Choose Gini coefficient, MSE and CV
 #' estimators(emdi_model, indicator = "Gini", MSE = TRUE, CV = TRUE)
-#' 
+#'
 #' # Example 2: Choose custom indicators without MSE and CV
 #' estimators(emdi_model, indicator = "Custom")
 #' }
@@ -92,9 +86,9 @@ estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
 
 estimators.emdi <- function(object, indicator = "all", MSE = FALSE, CV = FALSE, ...) {
 
-  estimators_check(object = object, indicator = indicator, 
+  estimators_check(object = object, indicator = indicator,
                    MSE = MSE, CV = CV)
-  
+
   # Only point estimates
   all_ind <- point_emdi(object = object, indicator = indicator)
   selected <- colnames(all_ind$ind)[-1]
@@ -133,17 +127,17 @@ print.estimators.emdi <- function(x,...) {
 
 # Tail/head functions ----------------------------------------------------------
 
-#' Returns the first part of predicted indicators and, if chosen, of MSE and 
+#' Returns the first part of predicted indicators and, if chosen, of MSE and
 #' CV estimators.
 #'
-#' @param x an object of type "estimators.emdi", representing 
-#' point estimators and, if chosen, MSE and/or CV estimates for selected 
+#' @param x an object of type "estimators.emdi", representing
+#' point estimators and, if chosen, MSE and/or CV estimates for selected
 #' indicators.
-#' @param n a single integer. If positive, it determines the number of rows for 
+#' @param n a single integer. If positive, it determines the number of rows for
 #' the data frame. If negative, all but the n last rows of
 #' elements of the object.
 #' @param addrownums if there are no row names, create them from the row numbers.
-#' @param ... arguments to be passed to or from other methods. 
+#' @param ... arguments to be passed to or from other methods.
 #' @return Selected rows of the object of type "estimators.emdi".
 #' @seealso \code{\link{estimators.emdi}}
 #' @examples
@@ -151,10 +145,10 @@ print.estimators.emdi <- function(x,...) {
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
-#' 
+#'
 #' # Generate emdi object with deleting missing values; here via function ebp()
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
-#' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
+#' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
 #' fam_allow + house_allow + cap_inv + tax_adj,
 #' pop_data = eusilcA_pop, pop_domains = "district",
 #' smp_data = eusilcA_smp, smp_domains = "district",
@@ -169,17 +163,17 @@ head.estimators.emdi <- function(x, n = 6L, addrownums=NULL, ...) {
   head(x$ind, n = n, addrownums = addrownums, ...)
 }
 
-#' Returns the last part of predicted indicators and, if chosen, of MSE and 
+#' Returns the last part of predicted indicators and, if chosen, of MSE and
 #' CV estimators.
 #'
-#' @param x an object of type "estimators.emdi", representing 
-#' point estimators and, if chosen, MSE and/or CV estimates for selected 
+#' @param x an object of type "estimators.emdi", representing
+#' point estimators and, if chosen, MSE and/or CV estimates for selected
 #' indicators.
-#' @param n a single integer. If positive, it determines the number of rows for 
+#' @param n a single integer. If positive, it determines the number of rows for
 #' the data frame. If negative, all but the n first rows of
 #' elements of the object.
 #' @param addrownums if there are no row names, create them from the row numbers.
-#' @param ... arguments to be passed to or from other methods. 
+#' @param ... arguments to be passed to or from other methods.
 #' @return Selected rows of the object of type "estimators.emdi".
 #' @seealso \code{\link{estimators.emdi}}
 #' @examples
@@ -187,10 +181,10 @@ head.estimators.emdi <- function(x, n = 6L, addrownums=NULL, ...) {
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
-#' 
+#'
 #' # Generate emdi object with deleting missing values; here via function ebp()
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
-#' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
+#' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
 #' fam_allow + house_allow + cap_inv + tax_adj,
 #' pop_data = eusilcA_pop, pop_domains = "district",
 #' smp_data = eusilcA_smp, smp_domains = "district",
@@ -228,7 +222,7 @@ as.data.frame.estimators.emdi <- function(x,...) {
 }
 
 #' Subsets an estimators.emdi object
-#' 
+#'
 #' @param x an object of type "estimators.emdi".
 #' @param ... further arguments passed to or from other methods.
 #' @return Selected subsets of the object of type "estimators.emdi".
@@ -238,17 +232,17 @@ as.data.frame.estimators.emdi <- function(x,...) {
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
-#' 
+#'
 #' # Generate emdi object with deleting missing values; here via function ebp()
-#' emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash + 
-#' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
+#' emdi_model <- ebp( fixed = eqIncome ~ gender + eqsize + cash +
+#' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
 #' fam_allow + house_allow + cap_inv + tax_adj,
 #' pop_data = eusilcA_pop, pop_domains = "district",
 #' smp_data = eusilcA_smp, smp_domains = "district",
 #' na.rm = TRUE)
 #'
 #' # Example: Choose last lines of the Gini coefficient, MSE and CV
-#' subset(estimators(emdi_model, indicator = "Gini"), 
+#' subset(estimators(emdi_model, indicator = "Gini"),
 #'        Domain %in% c("Wien", "Wien Umgebung"))
 #' }
 #' @export

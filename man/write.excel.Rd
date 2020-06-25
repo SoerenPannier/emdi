@@ -3,7 +3,7 @@
 \name{write.excel}
 \alias{write.excel}
 \alias{write.ods}
-\title{Exports an emdiObject to an excel file or OpenDocument Spreadsheet}
+\title{Exports an emdiObject to an Excel file or OpenDocument Spreadsheet}
 \usage{
 write.excel(
   object,
@@ -35,10 +35,12 @@ shall be returned: (i) all calculated indicators ("all");
 "Quantile_75", "Quantile_90", "Head_Count", 
 "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of 
 "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty" or 
-"Inequality". Defaults to "all". Note, additional custom indicators can be 
+"Inequality". Note, additional custom indicators can be 
 defined as argument for model-based approaches (see also \code{\link{ebp}}) 
 and do not appear in groups of indicators even though these might belong to 
-one of the groups.}
+one of the groups. If the \code{model} argument is of type "model","fh", 
+indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi 
+object is overwritten by function benchmark). Defaults to "all".}
 
 \item{MSE}{logical. If \code{TRUE}, the MSE of the emdiObject is exported. 
 Defaults to \code{FALSE}.}
@@ -66,10 +68,10 @@ Spreadsheets. Note that while \code{write.exel} will create a single document
 }
 \details{
 These functions create an Excel file via the package
-\pkg{\link{openxlsx}} respectively ODS files via the package 
+\pkg{\link{openxlsx}} and ODS files via the package 
 \pkg{readODS}.
-Both packages requires a zip application to be available to \R. If this is not 
-the case the authors of \pkg{\link{openxlsx}} suggest the first of the two following ways. 
+Both packages require a zip application to be available to \R. If this is not 
+the case the authors of \pkg{\link{openxlsx}} suggest the first of the following two ways. 
 \itemize{
 \item Install Rtools from: http://cran.r-project.org/bin/windows/Rtools/ and
 modify the system PATH during installation.
@@ -86,7 +88,7 @@ To check if a zip application is available they recommend the command
 data("eusilcA_pop")
 data("eusilcA_smp")
 
-# Generate emdi object with two additional indicators
+# Generate emdi object with two additional indicators; here via function ebp() 
 emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
 self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
@@ -111,5 +113,6 @@ MSE = TRUE, CV = TRUE)
 
 }
 \seealso{
-\code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}}
+\code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}}, 
+\code{\link{fh}}
 }

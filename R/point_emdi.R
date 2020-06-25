@@ -2,19 +2,19 @@
 # #
 # # Function \code{point_emdi} presents point estimates for regional
 # # disaggregated indicators. This method enables to select for which indicators
-# # the point estimates shall be returned. 
+# # the point estimates shall be returned.
 # # @param object an object of type "emdi", representing point and
 # # MSE estimates.
 # # @param indicator optional character vector that selects which indicators
 # # shall be returned: (i) all calculated indicators ("all");
 # # (ii) each indicator name: "Mean" "Quantile_10", "Quantile_25", "Median",
-# # "Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini", 
-# # "Quintile_Share" or the function name/s of "custom_indicator/s"; 
-# # (ii) groups of indicators: "Quantiles", "Poverty" or 
-# # "Inequality". Defaults to "all". Note, additional custom indicators can be 
-# # defined as argument for model-based approaches (\code{link{ebp}}) and do not 
-# # appear in groups of indicators even though these might belong to one of the 
-# # groups.  
+# # "Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini",
+# # "Quintile_Share" or the function name/s of "custom_indicator/s";
+# # (ii) groups of indicators: "Quantiles", "Poverty" or
+# # "Inequality". Defaults to "all". Note, additional custom indicators can be
+# # defined as argument for model-based approaches (\code{link{ebp}}) and do not
+# # appear in groups of indicators even though these might belong to one of the
+# # groups.
 # # @return
 # # an object of type "point.emdi" with point estimates per domain
 # # obtained from \code{emdiObject$ind}. These objects contain two elements,
@@ -38,10 +38,10 @@
 point_emdi <- function(object, indicator = "all") {
   if (is.null(object$ind)) {
     stop('No estimates in object: method point not applicable')
-  } 
+  }
   if ((ncol(object$ind) == 11) && any(indicator == "Custom" || indicator == "custom")) {
     stop('No individual indicators are defined. Either select other indicators or
-         define custom indicators and generate a new emdi object. See also 
+         define custom indicators and generate a new emdi object. See also
          help(direct) or help(ebp).')
   }
 
@@ -63,11 +63,25 @@ point_emdi <- function(object, indicator = "all") {
                   colnames(object$ind[-c(1,2,3,4,5,6,7,8,9,10,11)]))
   }
 
-  
+  if(inherits(object, "fh")) {
+    #object$ind <- object$ind[, c("Domain", "Direct", "FH")]
+    object$ind["Out"] <- NULL
+  }
+
+
 
   if (any(indicator == "all") || any(indicator == "All" )) {
     ind <- object$ind
     ind_name <- "All indicators"
+  } else if (any(indicator == "fh") || any(indicator == "FH" )) {
+    ind <- object$ind[, c("Domain", "FH")]
+    ind_name <- "Fay-Herriot estimates"
+  } else if (any(indicator == "fh_bench") || any(indicator == "FH_Bench" )) {
+    ind <- object$ind[, c("Domain", "FH_Bench")]
+    ind_name <- "Benchmarked Fay-Herriot estimates"
+  } else if (any(indicator == "Direct") || any(indicator == "direct" )) {
+    ind <- object$ind[, c("Domain", "Direct")]
+    ind_name <- "Direct estimates used in Fay-Herriot approach"
   } else {
     selection <- colnames(object$ind[-1]) %in% indicator
     ind <- object$ind[,c(TRUE, selection)]

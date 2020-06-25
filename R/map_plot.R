@@ -13,12 +13,16 @@
 #' "Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini", 
 #' "Quintile_Share" or the function name/s of "custom_indicator/s"; 
 #' (iii) groups of indicators: "Quantiles", "Poverty" or 
-#' "Inequality". Defaults to "all". Note, additional custom indicators can be 
+#' "Inequality". Note, additional custom indicators can be 
 #' defined as argument for model-based approaches (see also \code{\link{ebp}}) 
 #' and do not appear in groups of indicators even though these might belong to 
-#' one of the groups.  
-#' @param MSE optional logical. If \code{TRUE}, the MSE is also visualized.
-#' @param CV optional logical. If \code{TRUE}, the CV is also visualized.
+#' one of the groups. If the \code{model} argument is of type "model","fh", 
+#' indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi 
+#' object is overwritten by function benchmark). Defaults to "all". 
+#' @param MSE optional logical. If \code{TRUE}, the MSE is also visualized. 
+#' Defaults to \code{FALSE}.
+#' @param CV optional logical. If \code{TRUE}, the CV is also visualized. 
+#' Defaults to \code{FALSE}.
 #' @param map_obj an \code{SpatialPolygonsDataFrame} object as defined by the
 #' \pkg{sp} package on which the data should be visualized.
 #' @param map_dom_id a character string containing the name of a variable in
@@ -31,19 +35,19 @@
 #' color in the plots.
 #' @param scale_points a structure defining the lowest, the mid and the highest 
 #' value of the colorscale. If a numeric vector of length two is given, this scale
-#' will be used for every plot. Alternatively a list defining colors for each 
+#' will be used for every plot. Alternatively, a list defining colors for each 
 #' plot separately may be given. Please see the details section and examples for 
 #' this. 
 #' @param guide character passed to 
 #' \code{scale_colour_gradient} from \pkg{ggplot2}.
 #' Possible values are "none", "colourbar", and "legend".
-#' @param return_data if set to \code{TRUE} a fortified data frame including the 
+#' @param return_data if set to \code{TRUE}, a fortified data frame including the 
 #' map data as well as the chosen indicators is returned. Customized maps can 
 #' easily be obtained from this data frame via the package \pkg{ggplot2}. Defaults 
 #' to \code{FALSE}.
 #' @return Creates the plots demanded, and, if selected, a fortified data.frame
 #' containing the mapdata and chosen indicators. 
-#' @seealso \code{\link{ebp}}, \code{\link{emdiObject}},
+#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}, \code{\link{emdiObject}},
 #' \code{\link[maptools]{readShapePoly}}
 #' @examples 
 #' \dontrun{
@@ -262,12 +266,12 @@ get_polygone <- function(values) {
 get_scale_points <- function(y, ind, scale_points){
   result <- NULL
   if (!is.null(scale_points)) {
-    if (class(scale_points) == "numeric" && length(scale_points == 2)) {
+    if (class(scale_points) == "numeric" && length(scale_points) == 2) {
       result <- scale_points
     } else {
       splt <- strsplit(ind, "_\\s*(?=[^_]+$)", perl = TRUE)[[1]]
       indicator_name <- splt[1]
-      if (length(splt == 2)) {
+      if (length(splt) == 2) {
         measure <- splt[2]
       } else {
         measure <- "ind"
@@ -276,9 +280,9 @@ get_scale_points <- function(y, ind, scale_points){
         pointset <- scale_points[[indicator_name]]
         try(result <- pointset[[measure]])
       }
-      if (is.null(result) || length(result) != 3)
+      if (is.null(result) || length(result) != 2)
       {
-        warnings("scale_points is of no apropriate form, default values will 
+        warning("scale_points is of no apropriate form, default values will 
                  be used. See the descriptions and examples for details")
         result <- NULL
       }

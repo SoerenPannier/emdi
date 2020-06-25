@@ -1,21 +1,30 @@
 #' A package for estimating and mapping disaggregated indicators
 #'
 #' The package \pkg{emdi} supports estimating and mapping regional
-#' disaggregated indicators. For estimating these indicators direct estimation 
-#' and the Empirical Best Prediction approach by \cite{Molina and Rao (2010)} 
-#' are provided. Estimates of the mean squared error for these methods can be 
-#' conducted by using a parametric bootstrap approach (\cite{Gonzalez-Manteiga et al. 2008}). 
-#' Furthermore, a mapping tool for plotting the estimates on their geographic 
-#' regions is provided. Point and uncertainty measures as well as diagnostic 
-#' tests can be easily extracted to Excel.
+#' disaggregated indicators. For estimating these indicators, direct estimation, 
+#' the unit-level Empirical Best Prediction approach by \cite{Molina and Rao (2010)}, 
+#' the area-level model by \cite{Fay and Herriot (1979)} and various 
+#' extensions of it (adjusted variance estimation methods, log and arcsin transformation, 
+#' spatial, robust and measurement error models) are provided. Depending on 
+#' the particular method, analytical, bootstrap and jackknife MSE estimation 
+#' approaches are implemented. The assessment of the used model is supported by 
+#' a summary and diagnostic plots. For a suitable presentation of estimates, map 
+#' plots can be easily created. Furthermore, results can easily be exported to 
+#' Excel. Additionally, for the area-level models a stepwise variable selection 
+#' function, benchmarking options and spatial correlation tests are provided.
 #'
 #' @details
-#' The two estimation functions are called \code{\link{direct}} and 
-#' \code{\link{ebp}}. For both functions several methods are available as 
-#' \code{\link{estimators.emdi}}, \code{\link{plot.emdi}} (only for emdi objects 
-#' obtained by function \code{ebp}), \code{\link{print.emdi}} and 
-#' \code{\link{summary.emdi}}. Furthermore, functions \code{\link{map_plot}} and
-#' \code{\link{write.excel}} help to visualize and export results.
+#' The three estimation functions are called \code{\link{direct}}, 
+#' \code{\link{ebp}} and \code{\link{fh}}. For all functions several methods are 
+#' available as \code{\link{estimators.emdi}}, \code{\link{compare_plot.emdi}}, 
+#' \code{\link{plot.emdi}} (only for emdi objects obtained by functions 
+#' \code{ebp} or \code{fh}), \code{\link{print.emdi}} and \code{\link{summary.emdi}}. 
+#' Furthermore, functions \code{\link{map_plot}} and \code{\link{write.excel}} 
+#' help to visualize and export results. For the estimation function \code{fh}, 
+#' the stepwise variable selection function \code{\link{step}}, benchmarking 
+#' options \code{\link{benchmark}}, a method to assess the quality of 
+#' the model-based estimates \code{\link{compare.fh}} and a function to 
+#' detect spatial structures \code{\link{spatialcor.tests}} are provided.
 #' 
 #' An overview of all currently provided functions can be requested by
 #' \code{library(help=emdi)}.
@@ -28,9 +37,9 @@
 #' Battese, G.E., Harter, R.M. and Fuller, W.A. (1988). An Error-Components
 #' Model for Predictions of County Crop Areas Using Survey and Satellite Data.
 #' Journal of the American Statistical Association, Vol.83, No. 401, 28-36. \cr \cr
-#' Gonzalez-Manteiga, W. et al. (2008). Bootstrap mean squared error of
-#' a small-area EBLUP. Journal of Statistical Computation and Simulation,
-#' 78:5, 443-462. \cr \cr
+#' Fay, R. E. and Herriot, R. A. (1979), Estimates of income for small places:
+#' An application of James-Stein procedures to census data, Journal of the 
+#' American Statistical Association 74(366), 269-277. \cr \cr
 #' Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
 #' indicators. The Canadian Journal of Statistics, Vol. 38, No.3, 369-385.
 #' @docType package

@@ -25,7 +25,7 @@
 #' for using a function as threshold.  A threshold is needed for calculation e.g. 
 #' of head count ratios and poverty gaps. The argument defaults to \code{NULL}. 
 #' In this case the threshold is set to 60\% of the median of the variable that 
-#' is selected as \code{y} similary to the at-risk-of-poverty rate used in the 
+#' is selected as \code{y} similarly to the at-risk-of-poverty rate used in the 
 #' EU (see also \cite{Social Protection Committee 2001}). However, any desired 
 #' threshold can be chosen.
 #' @param var if \code{TRUE}, estimates for the variance are calculated using a 
@@ -51,12 +51,12 @@
 #' might not be used in the additional function. Defaults to \code{NULL}.
 #' @param na.rm if \code{TRUE}, observations with \code{NA} values are deleted 
 #' from the sample data. Defaults to \code{FALSE}. 
-#' @return An object of class "emdi" that provides direct estimators for regional
-#' disaggregated indicators and optionally corresponding variance estimates. Generic
-#' functions such as \code{\link{estimators}}, \code{\link{print}} 
-#' and \code{\link{summary}} have methods that can be used
-#' to obtain further information. See \code{\link{emdiObject}} for descriptions
-#' of components of objects of class "emdi".
+#' @return An object of class "emdi", "direct" that provides direct estimators 
+#' for regional disaggregated indicators and optionally corresponding variance 
+#' estimates. Generic functions such as \code{\link{compare_plot}}, 
+#' \code{\link{estimators}}, \code{\link{print}} and \code{\link{summary}} have 
+#' methods that can be used to obtain further information. See 
+#' \code{\link{emdiObject}} for descriptions of components of objects of class "emdi".
 #' @details The set of predefined indicators includes the mean, median, four 
 #' further quantiles (10\%, 25\%, 75\% and 90\%), head count ratio, poverty gap, 
 #' Gini coefficient and the quintile share ratio. 

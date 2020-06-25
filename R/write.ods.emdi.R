@@ -18,8 +18,11 @@ write.ods <- function(object,
     add_summary_direct_ods(object = object, 
                              wb = wb)
   }
-  else if (inherits(object, "model"))  {
-    add_summary_ods(object = object, wb = wb)
+  else if (inherits(object, "ebp"))  {
+    add_summary_ods_ebp(object = object, wb = wb)
+  }
+  else if (inherits(object, "fh"))  {
+    add_summary_ods_fh(object = object, wb = wb)
   }
   
   if (!split & (MSE | CV)) {
@@ -46,7 +49,7 @@ write.ods <- function(object,
   
 }
 
-add_summary_ods <- function(object, wb, headlines_cs) {
+add_summary_ods_ebp <- function(object, wb, headlines_cs) {
   su <- summary(object)
   
   df_nobs <- data.frame(Count = c(su$out_of_smp,
@@ -72,6 +75,65 @@ add_summary_ods <- function(object, wb, headlines_cs) {
 
   su$coeff_determ <-  cbind.data.frame("Coefficients of determination", su$coeff_determ)
   readODS::write_ods(x = su$coeff_determ, path = paste0(wb, "_sumCoefDet", ".ods"))
+  
+  return(NULL)
+}
+
+add_summary_ods_fh <- function(object, wb, headlines_cs) {
+  su <- summary(object)
+  
+  df_nobs <- data.frame(Count = c(su$out_of_smp,
+                                  su$in_smp)
+  )
+  rownames(df_nobs) <- c("out of sample domains",
+                         "in sample domains")
+  
+  df_nobs <- cbind.data.frame(rownames(df_nobs), df_nobs)
+  readODS::write_ods(x = df_nobs, path = paste0(wb, "_sumObs", ".ods"))
+  
+  if (su$model$correlation == 'no') {
+    estimMethods <- data.frame(su$method$method, su$model$variance, su$method$MSE_method, 
+                               row.names = "")
+    names(estimMethods) <- c("Variance estimation", "Estimated variance", "MSE estimation")
+    if (su$method$method == "reblup") {
+      estimMethods$k <- su$model$k 
+      estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
+                                       "k", "MSE estimation")]
+    } else if (su$method$method == "reblupbc") {
+      estimMethods$k <- su$model$k
+      estimMethods$c <- su$model$c
+      estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
+                                       "k", "c", "MSE estimation")]
+    }
+  } else if (su$model$correlation == 'spatial') {
+    estimMethods <- data.frame(su$method$method, su$model$variance['variance'], 
+                               su$model$variance['correlation'], su$method$MSE_method, 
+                               row.names = "")
+    names(estimMethods) <- c("Variance estimation", "Estimated variance", 
+                             "Spatial correlation", "MSE estimation")
+    if (su$method$method == "reblup") {
+      estimMethods$k <- su$model$k 
+      estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
+                                       "k", "Spatial correlation", "MSE estimation")]
+    } else if (su$method$method == "reblupbc") {
+      estimMethods$k <- su$model$k
+      estimMethods$c <- su$model$c
+      estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
+                                       "k", "c", "Spatial correlation", "MSE estimation")]
+    }
+  }
+  readODS::write_ods(x = estimMethods, path = paste0(wb, "_sumEstimMethods", ".ods"))
+  
+  if (!is.null(su$transform)) {
+    readODS::write_ods(x = su$transform, path = paste0(wb, "_sumTrafo", ".ods"))
+  }
+  su$normality <-  cbind.data.frame(rownames(su$normality), su$normality)
+  readODS::write_ods(x = su$normality, path = paste0(wb, "_sumNorm", ".ods"))
+
+  if (su$model$correlation == "no" & !(su$method$method %in% c("reblup", "reblupbc") | 
+                                       su$method$method == "me")) {
+    readODS::write_ods(x = su$model$model_select, path = paste0(wb, "_sumModelSelect", ".ods"))
+  }
   
   return(NULL)
 }

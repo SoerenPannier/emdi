@@ -13,14 +13,27 @@ estimators_check <- function(object,
   if (!(inherits(CV, "logical") && length(CV) == 1)) {
     stop("CV must be a logical value. Set CV to TRUE or FALSE.")
   }
-  if (is.null(indicator) || !(indicator == "all" || indicator == "Quantiles" 
-       || indicator == "quantiles"
-       || indicator == "Poverty" || indicator == "poverty" 
-       || indicator == "Inequality" || indicator == "inequality" 
-       || indicator == "Custom" || indicator == "custom" 
-       || indicator %in% names(object$ind[-1]))) {
-    stop(paste0("The argument indicator is set to ", indicator, ". The argument 
-         only allows to be set to all, a name of estimated indicators or 
-         indicator groups as described in help(estimators.emdi)."))
+  if (inherits(object, "fh")) {
+    if (is.null(indicator) || !(indicator == "all" || indicator == "All" || 
+                                indicator == "FH" || 
+                                indicator == "FH_Bench" 
+                                || indicator == "Direct")) {
+      stop(paste0("The argument indicator is set to ", indicator, ". The argument 
+                  only allows to be set to all, FH, Direct or FH_Bench (if benchmark
+                  function is used before)."))
+    }
+  } else {
+    if (is.null(indicator) || !(indicator == "all" || indicator == "All" || 
+                                indicator == "Quantiles" 
+                                || indicator == "quantiles"
+                                || indicator == "Poverty" || indicator == "poverty" 
+                                || indicator == "Inequality" || indicator == "inequality" 
+                                || indicator == "Custom" || indicator == "custom" 
+                                || indicator %in% names(object$ind[-1]))) {
+      stop(paste0("The argument indicator is set to ", indicator, ". The argument 
+                  only allows to be set to all, a name of estimated indicators or 
+                  indicator groups as described in help(estimators.emdi)."))
+    }
   }
+  
 }

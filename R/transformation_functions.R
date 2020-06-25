@@ -25,7 +25,7 @@
 #' to the argument \code{fixed} in function \code{\link[nlme]{lme}}.
 #' @param smp_data a data frame that needs to comprise all variables named in
 #' \code{fixed}. If transformed data is further used to fit a nested error
-#' linear regression model \code{smp_data} also needs to comprise the variable
+#' linear regression model, \code{smp_data} also needs to comprise the variable
 #' named in \code{smp_domains} (see \code{\link{ebp}}).
 #' @param transformation a character string. Three different transformation
 #' methods for the dependent variable can be chosen (i) no transformation ("no");
@@ -35,7 +35,7 @@
 #' In case of no and natural log transformation \code{lambda} can be set to NULL.
 #' @return a named list with two elements, a data frame containing the data set
 #' with transformed dependent variable (\code{transformed_data}) and a shift 
-#' parameter \code{shift} if present. In case of no transformation the original 
+#' parameter \code{shift} if present. In case of no transformation, the original 
 #' data frame is returned and the shift parameter is NULL.
 #' @details For the natural log and Box-Cox transformation the dependent variable 
 #' is shifted such that all values are greater than zero since the transformations 

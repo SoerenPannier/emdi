@@ -8,7 +8,8 @@
 }
 \arguments{
 \item{x}{an x of type "emdi", representing point and MSE
-estimates obtained by direct estimation (see also \code{\link{direct}})
+estimates obtained by direct estimation (see also \code{\link{direct}}),
+the Fay-Herriot model and a range of extensions (see also \code{\link{fh}}),
 or Empirical Best Prediction (see also \code{\link{ebp}}).}
 
 \item{...}{optional arguments passed to \code{\link{print.default}}.}
@@ -17,5 +18,6 @@ or Empirical Best Prediction (see also \code{\link{ebp}}).}
 Basic information of an emdi object is printed.
 }
 \seealso{
-\code{\link{emdiObject}}, \code{\link{ebp}}
+\code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}},
+ \code{\link{emdiObject}}
 }

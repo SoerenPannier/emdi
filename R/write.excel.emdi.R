@@ -1,4 +1,4 @@
-#' Exports an emdiObject to an excel file or OpenDocument Spreadsheet 
+#' Exports an emdiObject to an Excel file or OpenDocument Spreadsheet 
 #'
 #' Function \code{write.excel} enables the user to export point and MSE 
 #' estimates as well as diagnostics from \code{summary.emdi} to an Excel file. 
@@ -16,10 +16,12 @@
 #' "Quantile_75", "Quantile_90", "Head_Count", 
 #' "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of 
 #' "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty" or 
-#' "Inequality". Defaults to "all". Note, additional custom indicators can be 
+#' "Inequality". Note, additional custom indicators can be 
 #' defined as argument for model-based approaches (see also \code{\link{ebp}}) 
 #' and do not appear in groups of indicators even though these might belong to 
-#' one of the groups.  
+#' one of the groups. If the \code{model} argument is of type "model","fh", 
+#' indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi 
+#' object is overwritten by function benchmark). Defaults to "all".
 #' @param MSE logical. If \code{TRUE}, the MSE of the emdiObject is exported. 
 #' Defaults to \code{FALSE}.
 #' @param CV logical. If \code{TRUE}, the CV of the emdiObject is exported. 
@@ -31,10 +33,10 @@
 #' @return An Excel file is created in your working directory, or at the given
 #' path. Alternatively multiple ODS files are created at the given path.
 #' @details These functions create an Excel file via the package
-#' \pkg{\link{openxlsx}} respectively ODS files via the package 
+#' \pkg{\link{openxlsx}} and ODS files via the package 
 #' \pkg{readODS}.
-#' Both packages requires a zip application to be available to \R. If this is not 
-#' the case the authors of \pkg{\link{openxlsx}} suggest the first of the two following ways. 
+#' Both packages require a zip application to be available to \R. If this is not 
+#' the case the authors of \pkg{\link{openxlsx}} suggest the first of the following two ways. 
 #' \itemize{
 #' \item Install Rtools from: http://cran.r-project.org/bin/windows/Rtools/ and
 #' modify the system PATH during installation.
@@ -44,14 +46,15 @@
 #' }
 #' To check if a zip application is available they recommend the command 
 #' \code{shell("zip")}.
-#' @seealso \code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}}
+#' @seealso \code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}}, 
+#' \code{\link{fh}}
 #' @examples 
 #' \dontrun{
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
 #' 
-#' # Generate emdi object with two additional indicators
+#' # Generate emdi object with two additional indicators; here via function ebp() 
 #' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
 #' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
 #' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
@@ -107,8 +110,10 @@ write.excel <- function(object,
                              wb = wb, 
                              headlines_cs = headlines_cs)
   }
-  else if (inherits(object, "model"))  {
-    wb <- add_summary(object = object, wb = wb, headlines_cs = headlines_cs)
+  else if (inherits(object, "ebp"))  {
+    wb <- add_summary_ebp(object = object, wb = wb, headlines_cs = headlines_cs)
+  } else if (inherits(object, "fh")) {
+    wb <- add_summary_fh(object = object, wb = wb, headlines_cs = headlines_cs)
   }
 
   if (!split & (MSE | CV)) {
@@ -138,7 +143,7 @@ write.excel <- function(object,
   saveWorkbook(wb, file, overwrite = TRUE)
 }
 
-add_summary <- function(object, wb, headlines_cs) {
+add_summary_ebp <- function(object, wb, headlines_cs) {
   su <- summary(object)
 
   title_cs <- createStyle(fontSize = 14,
@@ -241,6 +246,144 @@ add_summary <- function(object, wb, headlines_cs) {
   )
   return(wb)
 
+}
+
+add_summary_fh <- function(object, wb, headlines_cs) {
+  su <- summary(object)
+  
+  title_cs <- createStyle(fontSize = 14,
+                          border = "Bottom",
+                          halign = "left",
+                          borderStyle = "thick",
+                          textDecoration = "bold")
+  
+  df_nobs <- data.frame(Count = c(su$out_of_smp,
+                                  su$in_smp)
+  )
+  rownames(df_nobs) <- c("out of sample domains",
+                         "in sample domains")
+  
+  addWorksheet(wb, sheetName = "summary", gridLines = FALSE)
+  
+  writeData(wb = wb, sheet = "summary", x = "Fay-Herriot Approach", colNames = FALSE)
+  addStyle(wb = wb, sheet = "summary", cols = 1, rows = 1, style = title_cs, stack = TRUE)
+  
+  starting_row <- 5
+  writeDataTable(x = df_nobs,
+                 withFilter = FALSE,
+                 wb = wb,
+                 sheet = "summary",
+                 startRow = starting_row,
+                 startCol = 3,
+                 rowNames = TRUE,
+                 headerStyle = headlines_cs,
+                 colNames = TRUE,
+                 tableStyle = "TableStyleMedium2"
+  )
+  
+  starting_row <- starting_row + 2 + nrow(df_nobs)
+  
+  if (su$model$correlation == 'no') {
+    estimMethods <- data.frame(su$method$method, su$model$variance, su$method$MSE_method, 
+                               row.names = "")
+    names(estimMethods) <- c("Variance estimation", "Estimated variance", "MSE estimation")
+    if (su$method$method == "reblup") {
+      estimMethods$k <- su$model$k 
+      estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
+                                       "k", "MSE estimation")]
+    } else if (su$method$method == "reblupbc") {
+      estimMethods$k <- su$model$k
+      estimMethods$c <- su$model$c
+      estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
+                                       "k", "c", "MSE estimation")]
+    }
+  } else if (su$model$correlation == 'spatial') {
+    estimMethods <- data.frame(su$method$method, su$model$variance['variance'], 
+                               su$model$variance['correlation'], su$method$MSE_method, 
+                               row.names = "")
+    names(estimMethods) <- c("Variance estimation", "Estimated variance", 
+                             "Spatial correlation", "MSE estimation")
+    if (su$method$method == "reblup") {
+      estimMethods$k <- su$model$k 
+      estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
+                                       "k", "Spatial correlation", "MSE estimation")]
+    } else if (su$method$method == "reblupbc") {
+      estimMethods$k <- su$model$k
+      estimMethods$c <- su$model$c
+      estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
+                                       "k", "c", "Spatial correlation", "MSE estimation")]
+    }
+  }
+    
+  
+  writeDataTable(x = estimMethods,
+                 wb = wb,
+                 withFilter = FALSE,
+                 sheet = "summary",
+                 startRow = starting_row,
+                 startCol = 3,
+                 rowNames = FALSE,
+                 headerStyle = headlines_cs,
+                 colNames = TRUE,
+                 tableStyle = "TableStyleMedium2"
+  )
+  
+  starting_row <- starting_row + 2 + nrow(estimMethods)
+  
+  
+  if (!is.null(su$transform)) {
+    
+    writeDataTable(x = su$transform,
+                   wb = wb,
+                   withFilter = FALSE,
+                   sheet = "summary",
+                   startRow = starting_row,
+                   startCol = 3,
+                   rowNames = FALSE,
+                   headerStyle = headlines_cs,
+                   colNames = TRUE,
+                   tableStyle = "TableStyleMedium2"
+    )
+    
+    starting_row <- starting_row + 2 + nrow(su$transform)
+  }
+  
+  
+  writeDataTable(x = su$normality,
+                 wb = wb,
+                 withFilter = FALSE,
+                 sheet = "summary",
+                 startRow = starting_row,
+                 startCol = 3,
+                 rowNames = TRUE,
+                 headerStyle = headlines_cs,
+                 colNames = TRUE,
+                 tableStyle = "TableStyleMedium2"
+  )
+  starting_row <- starting_row + 2 + nrow(su$normality)
+
+  if (su$model$correlation == "no" & !(su$method$method %in% c("reblup", "reblupbc") | su$method$method == "me")) {
+    writeDataTable(x = su$model$model_select,
+                   wb = wb,
+                   withFilter = FALSE,
+                   sheet = "summary",
+                   startRow = starting_row,
+                   startCol = 3,
+                   rowNames = FALSE,
+                   headerStyle = headlines_cs,
+                   colNames = TRUE,
+                   tableStyle = "TableStyleMedium2"
+    )
+  }
+
+  
+  setColWidths(wb = wb,
+               sheet = "summary",
+               cols = 3:9,
+               widths = "auto"
+  )
+  return(wb)
+  
 }
 
 add_summary_direct <- function(object, wb, headlines_cs) {

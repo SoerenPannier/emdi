@@ -47,7 +47,7 @@ estimation and in each iteration of the parametric bootstrap. See Example 2
 for using a function as threshold.  A threshold is needed for calculation e.g. 
 of head count ratios and poverty gaps. The argument defaults to \code{NULL}. 
 In this case the threshold is set to 60\% of the median of the variable that 
-is selected as \code{y} similary to the at-risk-of-poverty rate used in the 
+is selected as \code{y} similarly to the at-risk-of-poverty rate used in the 
 EU (see also \cite{Social Protection Committee 2001}). However, any desired 
 threshold can be chosen.}
 
@@ -83,12 +83,12 @@ might not be used in the additional function. Defaults to \code{NULL}.}
 from the sample data. Defaults to \code{FALSE}.}
 }
 \value{
-An object of class "emdi" that provides direct estimators for regional
-disaggregated indicators and optionally corresponding variance estimates. Generic
-functions such as \code{\link{estimators}}, \code{\link{print}} 
-and \code{\link{summary}} have methods that can be used
-to obtain further information. See \code{\link{emdiObject}} for descriptions
-of components of objects of class "emdi".
+An object of class "emdi", "direct" that provides direct estimators 
+for regional disaggregated indicators and optionally corresponding variance 
+estimates. Generic functions such as \code{\link{compare_plot}}, 
+\code{\link{estimators}}, \code{\link{print}} and \code{\link{summary}} have 
+methods that can be used to obtain further information. See 
+\code{\link{emdiObject}} for descriptions of components of objects of class "emdi".
 }
 \description{
 Function \code{direct} estimates indicators only based on sample information. 

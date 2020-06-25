@@ -8,7 +8,7 @@
 }
 \arguments{
 \item{x}{an object of type "summary.emdi", generally resulting
-from applying summary to an object of type "emdi"}
+from applying summary to an object of type "emdi".}
 
 \item{...}{optional arguments passed to print.default; see the documentation on
 that method functions.}
