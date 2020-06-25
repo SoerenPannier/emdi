@@ -29,71 +29,50 @@ and MSE estimates. If the input argument \code{model} is of type "model","ebp",
 argument \code{model}.}
 
 \item{indicator}{optional character vector that selects which indicators
-shall be returned: (i) all calculated indicators ("all");
-(ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
-"Quantile_75", "Quantile_90", "Head_Count",
-"Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
-"custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
-"Inequality" or "Custom". If two of these groups are selected, only the first
-one is returned. Note, additional custom indicators can be
-defined as argument for the EBP approaches (see also \code{\link{ebp}})
-and do not appear in groups of indicators even though these might belong to
-one of the groups. If the \code{model} argument is of type "model","fh", 
-indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi 
-object is overwritten by function benchmark). Defaults to "all".}
+shall be returned. Defaults to "all".}
 
 \item{MSE}{optional logical. If \code{TRUE}, the MSE estimates of the direct 
-and model-based estimates are compared via boxplots and scatter plots. 
-Defaults to \code{FALSE}.}
+and model-based estimates are compared via suitable plots. Defaults to \code{FALSE}.}
 
 \item{CV}{optional logical. If \code{TRUE}, the coefficient of variation 
-estimates of the direct and model-based estimates are compared via boxplots 
-and scatter plots. Defaults to \code{FALSE}.}
+estimates of the direct and model-based estimates are compared via suitable plots. 
+Defaults to \code{FALSE}.}
 
 \item{label}{argument that enables to customize title and axis labels. There 
 are three options to label the evaluation plots: (i) original labels ("orig"), 
 (ii) axis labels but no title ("no_title"), (iii) neither axis 
 labels nor title ("blank").}
 
-\item{color}{a vector with two elements. The first color determines
-the color of the line in the scatter plot and the color for the direct 
-estimates in the line plot. The second color specifies the color of the line
-for the model-based estimates.}
+\item{color}{a vector with two elements determining color schemes in returned 
+plots.}
 
-\item{shape}{a numeric vector with two elements. The first shape determines
-the shape of the points in the line plot for the direct estimates and the 
-second shape for the model-based estimates. The options are numbered from 
-0 to 25.}
+\item{shape}{a numeric vector with two elements determining the shape of points
+in returned plots.}
 
-\item{line_type}{a character vector with two elements. The first line type 
-determines the type of the line for the direct estimates and the 
-second type for the model-based estimates. The options are: "twodash", 
-"solid", "longdash", "dotted", "dotdash", "dashed" and "blank".}
+\item{line_type}{a character vector with two elements determining the line 
+types in returned plots.}
 
 \item{gg_theme}{\code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
 For using this argument, package \pkg{ggplot2} must be loaded via 
-\code{library(ggplot2)}. See also Example 2.}
+\code{library(ggplot2)}.}
 
 \item{...}{further arguments passed to or from other methods.}
 }
 \value{
-A scatter plot and a line plot comparing direct and model-based
-estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
-If the input arguments MSE and CV are set to TRUE two extra plots are created, 
-respectively: the MSE/CV estimates of the direct and model-based estimates are 
-compared by boxplots and scatter plots.
+Plots comparing direct and model-based estimators for each selected 
+indicator obtained by \code{\link[ggplot2]{ggplot}}.
 }
 \description{
-Function \code{compare_plot} is a generic function used to produce two plots 
-for all indicators or a selection of indicators. The first plot is a scatter 
-plot of estimates to compare and the second is a line plot with these estimates.
+Function \code{compare_plot} is a generic function used to produce plots 
+comparing point and existing MSE/CV estimates of direct and model-based
+estimation for all indicators or a selection of indicators.
 }
 \details{
 Since all of the comparisons need a direct estimator, the plots are 
 only created for in-sample domains. For the new package version (2.0.0), the 
 order of the input arguments direct and model has been changed. In this 
 version (1.1.6), it is still possible to use the old order because the 
-arguments are swapped internally. From the next package version on it will no 
+arguments are swapped internally. From the next package version on, it will no 
 longer be possible.
 }
 \seealso{

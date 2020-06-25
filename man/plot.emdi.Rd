@@ -28,27 +28,8 @@ have below structure. Six elements can be defined called \code{qq_res, qq_ran,
 d_res, d_ran, cooks} and \code{box_cox} for the six different plots and these
 list elements need to have three elements each called \code{title, y_lab and
 x_lab}. Only the labels for the plots that should be different to the original
-need to be specified. \cr
-\describe{
-\item{list(}{}
-\item{qq_res =}{c(title="Error term", y_lab="Quantiles of pearson residuals",
-                x_lab="Theoretical quantiles"),}
-\item{qq_ran =}{c(title="Random effect",
-                y_lab="Quantiles of random effects",
-                x_lab="Theoretical quantiles"),}
-\item{d_res =}{c(title="Density - Pearson residuals",
-               y_lab="Density",
-               x_lab="Pearson residuals"),}
-\item{d_ran =}{c(title="Density - Standardized random effects",
-               y_lab="Density",
-               x_lab="Standardized random effects"),}
-\item{cooks =}{c(title="Cook's Distance Plot",
-               y_lab="Cook's Distance",
-               x_lab="Index"),}
-\item{box_cox =}{c(title="Box-Cox - REML",
-               y_lab="Log-Likelihood",
-               x_lab="expression(lambda)"))}
-}}
+need to be specified. Please see the details section for an example 
+with the default labels.}
 
 \item{color}{a character vector with two elements. The first element defines
 the color for the line in the QQ-plots, for the Cook's Distance plot and for
@@ -91,6 +72,29 @@ only returned in case a Box-Cox transformation is chosen. The range of the
 x-axis is optional but necessary to change if there are convergence problems.
 All plots are obtained by \code{\link[ggplot2]{ggplot}}.
 }
+\details{
+The default settings of the \code{label} argument are as follows:\cr
+\describe{
+\item{list(}{}
+\item{qq_res =}{c(title="Error term", y_lab="Quantiles of pearson residuals",
+                x_lab="Theoretical quantiles"),}
+\item{qq_ran =}{c(title="Random effect",
+                y_lab="Quantiles of random effects",
+                x_lab="Theoretical quantiles"),}
+\item{d_res =}{c(title="Density - Pearson residuals",
+               y_lab="Density",
+               x_lab="Pearson residuals"),}
+\item{d_ran =}{c(title="Density - Standardized random effects",
+               y_lab="Density",
+               x_lab="Standardized random effects"),}
+\item{cooks =}{c(title="Cook's Distance Plot",
+               y_lab="Cook's Distance",
+               x_lab="Index"),}
+\item{box_cox =}{c(title="Box-Cox - REML",
+               y_lab="Log-Likelihood",
+               x_lab="expression(lambda)"))}
+}
+}
 \examples{
 \dontrun{
 # Examples for models of type ebp
@@ -130,7 +134,7 @@ title = element_text(color = "navy")))
 data("eusilcA_popAgg")
 data("eusilcA_smpAgg")
 
-# Combine sample and population data -------------------------------------------
+# Combine sample and population data
 combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
 

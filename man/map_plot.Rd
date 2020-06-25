@@ -57,7 +57,7 @@ color in the plots.}
 
 \item{scale_points}{a structure defining the lowest, the mid and the highest 
 value of the colorscale. If a numeric vector of length two is given, this scale
-will be used for every plot. Alternatively a list defining colors for each 
+will be used for every plot. Alternatively, a list defining colors for each 
 plot separately may be given. Please see the details section and examples for 
 this.}
 
@@ -65,7 +65,7 @@ this.}
 \code{scale_colour_gradient} from \pkg{ggplot2}.
 Possible values are "none", "colourbar", and "legend".}
 
-\item{return_data}{if set to \code{TRUE} a fortified data frame including the 
+\item{return_data}{if set to \code{TRUE}, a fortified data frame including the 
 map data as well as the chosen indicators is returned. Customized maps can 
 easily be obtained from this data frame via the package \pkg{ggplot2}. Defaults 
 to \code{FALSE}.}

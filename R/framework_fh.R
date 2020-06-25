@@ -49,6 +49,7 @@ framework_FH <- function(combined_data, fixed, vardir, domains,
   
   if (!is.null(corMatrix)){
     corMatrix <- corMatrix
+    if (is.matrix(corMatrix) == FALSE){corMatrix <- as.matrix(corMatrix)}
   }
   
   if (!is.null(Ci)){
@@ -59,6 +60,7 @@ framework_FH <- function(combined_data, fixed, vardir, domains,
                         N_dom_smp = m,
                         N_dom_unobs = N_dom_unobs,
                         data = data,
+                        combined_data = combined_data,
                         formula = fixed,
                         direct = direct,
                         direct_orig = direct_orig,

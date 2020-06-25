@@ -150,8 +150,9 @@
 #' \code{NULL}, seed is chosen randomly. Defaults to \code{123}.
 #' @return An object of class "fh", "model" and "emdi" that provides estimators 
 #' for regional disaggregated indicators like means and ratios and optionally 
-#' corresponding MSE estimates. Generic functions such as \code{\link{estimators}}, 
-#' \code{\link{print}}, \code{\link{plot}} and \code{\link{summary}} have methods 
+#' corresponding MSE estimates. Generic functions such as \code{\link{compare}},
+#' \code{\link{compare_plot}}, \code{\link{estimators}}, \code{\link{print}}, 
+#' \code{\link{plot}}, \code{\link{step}} and \code{\link{summary}} have methods 
 #' that can be used to obtain further information. Additionally, for the standard 
 #' Fay-Herriot model that is estimated via ML variance estimation a model selection 
 #' function is provided (\code{\link{step}}). See \code{\link{emdiObject}} for 
@@ -162,9 +163,12 @@
 #' \code{bc_sm} backtransformation and for the robust models. \cr 
 #' Out-of-sample MSEs are available for the analytical MSE estimator of the 
 #' standard Fay-Herriot model with reml and ml variance estimation, the crude 
-#' backtransformation in case of log transformation, the bootstrap MSE estimator 
-#' for the arcsin transformation and for the nonparametric 
-#' bootstrap estimator within the spatial Fay-Herriot model framework.
+#' backtransformation in case of log transformation and the bootstrap MSE estimator 
+#' for the arcsin transformation. \cr \cr
+#' For a description of how to create the proximity matrix for the 
+#' spatial Fay-Herriot model, see the package vignette. If the presence 
+#' of out-of-sample domains, the proximity matrix needs to be 
+#' subsetted to the in-sample domains.
 #' @references 
 #' Chen S., Lahiri P. (2002), A weighted jackknife MSPE estimator in small-area 
 #' estimation, "Proceeding of the Section on Survey Research Methods", American 
@@ -220,7 +224,7 @@
 #' data("eusilcA_popAgg")
 #' data("eusilcA_smpAgg")
 #' 
-#' # Combine sample and population data -------------------------------------------
+#' # Combine sample and population data
 #' combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
 #'                              smp_data = eusilcA_smpAgg, smp_domains = "Domain")
 #'
@@ -236,8 +240,8 @@
 #' eff_smpsize = "n", MSE = TRUE, mse_type = "boot", B = 50)
 #' 
 #' # Example 3: Spatial Fay-Herriot model
-#' # For the creation of eusilcA_proxmat, please refer to the package 
-#' # vignette.
+#' # Load proximity matrix
+#' data("eusilcA_prox")
 #' fh_spatial <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
 #' combined_data = combined_data, domains = "Domain", method = "reml", 
 #' correlation = "spatial", corMatrix = eusilcA_prox, MSE = TRUE, 
@@ -314,10 +318,6 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                             corMatrix = corMatrix, Ci = Ci, tol = tol,
                             maxit = maxit)
   
-  if (is.null(domains)) {
-    combined_data$Domain <- 1:nrow(combined_data)
-    framework$domains <- "Domain"
-  }
   
   # Limits for interval
   if (is.null(interval)) {
@@ -337,14 +337,14 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
         eblup <- eblup_FH(framework = framework, sigmau2 = sigmau2,
                           combined_data = combined_data)
         
-        Gamma <- data.frame(Domain = framework$data[[framework$domains]],
+        Gamma <- data.frame(Domain = framework$combined_data[[framework$domains]],
                             Gamma = as.numeric(eblup$gamma))
         # Criteria for model selection -----------------------------------------
          criteria <- model_select(framework = framework, sigmau2 = sigmau2, 
                                   method = method, interval = interval, 
                                   eblup = eblup, B = B, vardir = vardir,
                                   transformation = transformation,
-                                  combined_data = combined_data)
+                                  combined_data = framework$combined_data)
       }
       if ((method == "ml" | method == "reml") & correlation == "spatial"){
         # Spatial EBLUP --------------------------------------------------------
@@ -355,14 +355,20 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                                  method = method, interval = interval, 
                                  eblup = eblup, B = B, vardir = vardir,
                                  transformation = transformation,
-                                 combined_data = combined_data)
+                                 combined_data = framework$combined_data)
       }
     } else if (method == "me") {
       # Standard EBLUP ---------------------------------------------------------
       eblup <- eblup_YL(framework = framework, sigmau2 = sigmau2,
                         combined_data = combined_data)
-      Gamma <- data.frame(Domain = framework$data[[framework$domains]],
+      Gamma <- data.frame(Domain = framework$combined_data[[framework$domains]],
                           Gamma = as.numeric(eblup$gamma))
+      # Criteria for model selection -----------------------------------------
+      criteria <- model_select(framework = framework, sigmau2 = sigmau2,
+                               method = method, interval = interval, 
+                               eblup = eblup, B = B, vardir = vardir,
+                               transformation = transformation,
+                               combined_data = framework$combined_data)
     }
     
     
@@ -371,7 +377,8 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
       
       # Analytical MSE
       if (MSE == TRUE) {
-        MSE_data <- wrapper_MSE(framework = framework, combined_data = combined_data,
+        MSE_data <- wrapper_MSE(framework = framework, 
+                                combined_data = framework$combined_data,
                                 sigmau2 = sigmau2, vardir = vardir, Ci = Ci,
                                 eblup = eblup, transformation = transformation,
                                 method = method, interval = interval,
@@ -495,7 +502,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                                  real_residuals = eblup$real_res,
                                  std_real_residuals = eblup$std_real_res,
                                  gamma = Gamma,
-                                # model_select = NULL,
+                                 model_select = criteria,
                                  correlation = correlation),
                     framework = framework[c("direct", "vardir", "N_dom_smp",
                                             "N_dom_unobs")],
@@ -522,7 +529,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
       }
       
       # Shrinkage factor
-      Gamma <- data.frame(Domain = framework$data[[framework$domains]],
+      Gamma <- data.frame(Domain = framework$combined_data[[framework$domains]],
                           Gamma = as.numeric(eblup$gamma))
       
       # Back-transformation
@@ -531,7 +538,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                                      eblup = eblup,
                                      transformation = transformation,
                                      backtransformation = backtransformation,
-                                     combined_data = combined_data,
+                                     combined_data = framework$combined_data,
                                      method = method, interval = interval,
                                      MSE = MSE,
                                      mse_type = mse_type,
@@ -569,7 +576,8 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
     
     # MSE ----------------------------------------------------------------------
     if (MSE == TRUE) {
-      MSE_data <- wrapper_MSE(framework = framework, combined_data = combined_data,
+      MSE_data <- wrapper_MSE(framework = framework, 
+                              combined_data = framework$combined_data,
                               vardir = vardir, eblup = eblup,
                               mse_type = mse_type, method = method, B = B)
       MSE <- MSE_data$MSE_data

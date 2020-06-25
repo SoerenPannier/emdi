@@ -35,7 +35,7 @@
 #' data("eusilcA_popAgg")
 #' data("eusilcA_smpAgg")
 #' 
-#' # Combine sample and population data -------------------------------------------
+#' # Combine sample and population data
 #' combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
 #'                              smp_data = eusilcA_smpAgg, smp_domains = "Domain")
 #'
@@ -96,7 +96,7 @@ benchmark <- function(object, benchmark, share, type = "raking", overwrite = FAL
     #            fixed = object$fixed,
     #            call = object$call,
     #            successful_bootstraps = object$successful_bootstraps)
-    warning("Please note that only point estimates are benchmarked. Thus, the 
+    cat("Please note that only point estimates are benchmarked. Thus, the 
             MSE element in the new emdi object is NULL.")
     result <- object
   }

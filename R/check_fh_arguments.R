@@ -85,6 +85,26 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
           proximity matrix. See also help(fh). A description how a proximity matrix
           can be computed can be found in the vignette.') 
   }
+  if (correlation == "spatial" && 
+      (dim(corMatrix)[1] != dim(corMatrix)[2])) {
+    stop('The columns and rows of corMatrix must have the same lengths. 
+    See also help(fh). A description how a proximity matrix
+          can be computed can be found in the vignette.') 
+  }
+  direct <- makeXY(fixed, combined_data)$y
+  if (correlation == "spatial" && 
+      (dim(corMatrix)[1] != length(direct))) {
+    stop('The columns and rows of corMatrix must have the same lengths 
+    like the number of areas. If out-of-sample areas exist, the columns 
+    and rows of corMatrix must have the same lengths like the number 
+    of in-sample areas. See also help(fh). A description how a proximity matrix
+          can be computed can be found in the vignette.') 
+  }
+  if (correlation == "spatial" && (all(corMatrix == 0))) {
+    stop('The elements of corMatrix are all equal to 0. No 
+         neighbourhood structure can be identified. It is suggested to 
+         apply a standard Fay-Herriot model.') 
+  }
   estcoef <- makeXY(formula = fixed, data = combined_data)
   if (method == "me" && !is.null(Ci) &&
       (!(dim(Ci)[1] == dim(estcoef$x)[2]) || 
