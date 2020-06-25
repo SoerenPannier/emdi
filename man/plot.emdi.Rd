@@ -15,111 +15,139 @@
 )
 }
 \arguments{
-\item{x}{an object of type "emdi", "model", representing point and, if chosen, 
-MSE estimates obtained by the EBP approach (see also \code{\link{ebp}}).}
+\item{x}{an object of type "emdi", "model", representing point and, if chosen,
+MSE estimates obtained by the EBP or Fay-Herriot approach (see also
+\code{\link{ebp}} and \code{\link{fh}}).}
 
-\item{label}{argument that enables to customize title and axis labels. There 
-are four options to label the diagnostic plot: (i) original labels ("orig"), 
-(ii) axis labels but no title ("no_title"), (iii) neither axis 
-labels nor title ("blank"), (iv) individual labels by a list that needs to 
-have below structure. Six elements can be defined called \code{qq_res, qq_ran, 
-d_res, d_ran, cooks} and \code{box_cox} for the six different plots and these 
-list elements need to have three elements each called \code{title, y_lab and 
+\item{label}{argument that enables to customize title and axis labels. There
+are three instant options to label the diagnostic plot: (i) original labels ("orig"),
+(ii) axis lables but no title ("no_title"), (iii) neither axis
+labels nor title ("blank").
+(iv) individual labels by a list that needs to
+have below structure. Six elements can be defined called \code{qq_res, qq_ran,
+d_res, d_ran, cooks} and \code{box_cox} for the six different plots and these
+list elements need to have three elements each called \code{title, y_lab and
 x_lab}. Only the labels for the plots that should be different to the original
-need to be specified. \cr
-\describe{
-\item{list(}{} 
-\item{qq_res =}{c(title="Error term", y_lab="Quantiles of pearson residuals", 
-                x_lab="Theoretical quantiles"),}
-\item{qq_ran =}{c(title="Random effect",
-                y_lab="Quantiles of random effects", 
-                x_lab="Theoretical quantiles"),}
-\item{d_res =}{c(title="Density - Pearson residuals", 
-               y_lab="Density", 
-               x_lab="Pearson residuals"),}
-\item{d_ran =}{c(title="Density - Standardized random effects",
-               y_lab="Density", 
-               x_lab="Standardized random effects"),}
-\item{cooks =}{c(title="Cook's Distance Plot", 
-               y_lab="Cook's Distance", 
-               x_lab="Index"),}
-\item{box_cox =}{c(title="Box-Cox - REML", 
-               y_lab="Log-Likelihood", 
-               x_lab="expression(lambda)"))}
-}}
+need to be specified. Please see the details section for an example 
+with the default labels.}
 
 \item{color}{a character vector with two elements. The first element defines
 the color for the line in the QQ-plots, for the Cook's Distance plot and for
 the Box-Cox plot. The second element defines the color for the densities.}
 
 \item{gg_theme}{\code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
-For using this argument, package \pkg{ggplot2} must be loaded via 
+For using this argument, package \pkg{ggplot2} must be loaded via
 \code{library(ggplot2)}. See also Example 4.}
 
-\item{cooks}{if \code{TRUE}, a Cook's distance plot is returned. The used 
-method \code{mdffits.default} from the package \pkg{HLMdiag}
-struggles when data sets get large. In these cases, \code{cooks} should be 
+\item{cooks}{if \code{TRUE}, a Cook's distance plot is returned when the ebp
+function is used. The used method \code{mdffits.default} from the package \pkg{HLMdiag}
+struggles when data sets get large. In these cases, \code{cooks} should be
 set to \code{FALSE}. It defaults to \code{TRUE}.}
 
 \item{range}{optional sequence determining the range of the x-axis for plots
-of the optimal transformation parameter that defaults to \code{NULL}. In that 
-case a range of the optimal parameter +2/-1 is used for the plots of the 
-optimal parameter. This leads in some cases to convergence problems such that 
-it should be changed to e.g. the selected \code{interval}. This means for the 
+of the optimal transformation parameter that defaults to \code{NULL}. In that
+case a range of the optimal parameter +2/-1 is used for the plots of the
+optimal parameter. This leads in some cases to convergence problems such that
+it should be changed to e.g. the selected \code{interval}. This means for the
 default interval \code{seq(-1, 2, by = 0.05)}.}
 
 \item{...}{optional arguments passed to generic function.}
 }
 \value{
-Two Q-Q plots in one grid, two density plots, a Cook' distance plot 
-and a likelihood plot for the optimal parameter of the Box-Cox transformation 
-obtained by \code{\link[ggplot2]{ggplot}}.
+Two Q-Q plots in one grid, two density plots, a Cook's distance plot
+and a likelihood plot for the optimal parameter of the Box-Cox transformation
+obtained by \code{\link[ggplot2]{ggplot}}. The latter two plots are only provided
+for ebp object.
 }
 \description{
-Diagnostic plots of the underlying model in the EBP approach (see also 
-\code{\link{ebp}}) are obtained. These include Q-Q plots and density plots 
-of residuals and random effects from the nested error regression model, a 
-Cook's distance plot for detecting outliers and the log-likelihood of the 
-estimation of the optimal parameter in Box-Cox transformations. The return 
-depends on the transformation such that a plot for the optimal parameter is 
-only returned in case a Box-Cox transformation is chosen. The range of the 
-x-axis is optional but necessary to change if there are convergence problems. 
+Diagnostic plots of the underlying model in the EBP (see also
+\code{\link{ebp}}) or Fay-Herriot (see also \code{\link{fh}}) approaches are 
+obtained. These include Q-Q plots and density plots of residuals and random 
+effects from the nested error linear regression model/
+the Fay-Herriot model, a Cook's distance plot for detecting outliers and the
+log-likelihood of the estimation of the optimal parameter in Box-Cox
+transformations (the latter two only for ebp). The return depends on the
+transformation such that a plot for the optimal parameter is
+only returned in case a Box-Cox transformation is chosen. The range of the
+x-axis is optional but necessary to change if there are convergence problems.
 All plots are obtained by \code{\link[ggplot2]{ggplot}}.
+}
+\details{
+The default settings of the \code{label} argument are as follows:\cr
+\describe{
+\item{list(}{}
+\item{qq_res =}{c(title="Error term", y_lab="Quantiles of pearson residuals",
+                x_lab="Theoretical quantiles"),}
+\item{qq_ran =}{c(title="Random effect",
+                y_lab="Quantiles of random effects",
+                x_lab="Theoretical quantiles"),}
+\item{d_res =}{c(title="Density - Pearson residuals",
+               y_lab="Density",
+               x_lab="Pearson residuals"),}
+\item{d_ran =}{c(title="Density - Standardized random effects",
+               y_lab="Density",
+               x_lab="Standardized random effects"),}
+\item{cooks =}{c(title="Cook's Distance Plot",
+               y_lab="Cook's Distance",
+               x_lab="Index"),}
+\item{box_cox =}{c(title="Box-Cox - REML",
+               y_lab="Log-Likelihood",
+               x_lab="expression(lambda)"))}
+}
 }
 \examples{
 \dontrun{
+# Examples for models of type ebp
 # Loading data - population and sample data
 data("eusilcA_pop")
 data("eusilcA_smp")
 
 # With default setting but na.rm = TRUE; with Box-Cox transformation
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
+emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
 house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
+pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
 na.rm = TRUE)
 
 # Example 1: Creation of default diagnostic plots
 plot(emdi_model)
 
-# Example 2: Creation of diagnostic plots without labels and titles, different colors 
+# Example 2: Creation of diagnostic plots without labels and titles, different colors
 # and without Cook's distance plot.
 plot(emdi_model, label = "no_title", color = c("red", "yellow"), cooks = FALSE)
 
-# Example 3: Creation of diagnostic plots where labels and title differs for 
+# Example 3: Creation of diagnostic plots where labels and title differs for
 # residual plot
-plot(emdi_model, label = list(qq_res = c(title = "Pearson resid.", 
-y_lab = "Quant.", x_lab = "Theo. Quant.")), color = c("red", "yellow"), 
+plot(emdi_model, label = list(qq_res = c(title = "Pearson resid.",
+y_lab = "Quant.", x_lab = "Theo. Quant.")), color = c("red", "yellow"),
 cooks = FALSE)
 
 # Example 4: Usage of theme from ggplot2 within plot.emdi
 library(ggplot2)
-plot(emdi_model, gg_theme = theme(panel.background = element_rect(fill = "white", 
+plot(emdi_model, gg_theme = theme(panel.background = element_rect(fill = "white",
 colour = "white"), plot.title = element_text(face = "bold"),
 title = element_text(color = "navy")))
+
+# Example for models of type fh
+
+# Loading data - population and sample data
+data("eusilcA_popAgg")
+data("eusilcA_smpAgg")
+
+# Combine sample and population data
+combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
+                              smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+
+# Generation of the emdi object
+fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+             combined_data = combined_data, domains = "Domain", method = "ml", 
+             MSE = TRUE)
+
+# Example 5: Creation of default diagnostic plots for Fay-Herriot model
+plot(fh_std)
 
 }
 }
 \seealso{
-\code{\link{emdiObject}}, \code{\link{ebp}}
+\code{\link{emdiObject}}, \code{\link{ebp}}, \code{\link{fh}}
 }
