@@ -11,9 +11,9 @@ wrapper_estsigmau2(framework, method, interval)
 
 \item{vardir}{direct variance.}
 
-\item{precision}{precision criteria for the estimation of sigmau2.}
+\item{tol}{precision criteria for the estimation of sigmau2.}
 
-\item{maxiter}{maximum of iterations for the estimation of sigmau2.}
+\item{maxit}{maximum of iterations for the estimation of sigmau2.}
 
 \item{direct}{direct estimator.}
 

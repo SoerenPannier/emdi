@@ -529,6 +529,19 @@ ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
   x <- t(x)
   rownames(x) <- NULL
   
+  # Function for inverse square root matrix of G
+  inverse.square.root.mat <- function(mat, maxit) { 
+    stopifnot(nrow(mat) == ncol(mat))
+    niter <- 0
+    G.inv <- diag(1, nrow(mat))
+    for (niter in seq_len(maxit)) {
+      mat.tmp <- 0.5*(mat + ginv(G.inv))
+      G.inv <- 0.5*(G.inv + ginv(mat))
+      mat <- mat.tmp
+    }
+    return(list(G = mat, G.inv = G.inv))
+  }
+  
   while (conv > tol & iter < maxit){ 
     
     wi.tmp <- wi 
@@ -543,18 +556,7 @@ ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
     G <- t(wi*t(x)) %*% t(x) 
     
     # Inverse square root matrix of G
-    inverse.square.root.mat <- function(mat, maxiter = 50) { 
-      stopifnot(nrow(mat) == ncol(mat))
-      niter <- 0
-      z <- diag(rep(1, nrow(mat)))
-      for (niter in seq_len(maxiter)) {
-        mat.tmp <- 0.5*(mat + ginv(z))
-        z <- 0.5*(z + ginv(mat))
-        mat <- mat.tmp
-      }
-      return(list(sqrt = mat, sqrt.inv = z))
-    }
-    Gi <- inverse.square.root.mat(G)$sqrt.inv 
+    Gi <- inverse.square.root.mat(G, maxit = maxit)$G.inv 
     
     # GiwCGi
     GiwCGi <- Gi %*% wC %*% Gi 
@@ -615,8 +617,8 @@ ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
 #' This function wraps the different estimation methods for sigmau2.
 #'
 #' @param vardir direct variance.
-#' @param precision precision criteria for the estimation of sigmau2.
-#' @param maxiter maximum of iterations for the estimation of sigmau2.
+#' @param tol precision criteria for the estimation of sigmau2.
+#' @param maxit maximum of iterations for the estimation of sigmau2.
 #' @param interval interval for the algorithm.
 #' @param direct direct estimator.
 #' @param x matrix with explanatory variables.
