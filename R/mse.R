@@ -697,12 +697,12 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   estTheta <- matrix(0, framework$m, B)
   trueTheta <- matrix(0, framework$m, B)
   difmse.npb <- matrix(0,framework$m,1)
-  g1.help <- matrix(0,framework$m,1)
-  g2.help <- matrix(0,framework$m,1)
-  difg1.npb <- matrix(0,framework$m,1)
-  difg2.npb <- matrix(0,framework$m,1)
-  difg3.npb <- matrix(0,framework$m,1)
-  difmse.npbBC <- matrix(0,framework$m,1)
+  g1.help <- matrix(0, framework$m, 1)
+  g2.help <- matrix(0, framework$m, 1)
+  difg1.npb <- matrix(0, framework$m, 1)
+  difg2.npb <- matrix(0, framework$m, 1)
+  difg3.npb <- matrix(0, framework$m, 1)
+  difmse.npbBC <- matrix(0, framework$m, 1)
   # Successfull bootstraps
   notSuc <- matrix(0,B,1)
   
@@ -710,15 +710,14 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   for (b in 1:B){
     
     # Bootstrap data
-    u.boot <- sample(std.u,framework$m,replace=TRUE)
-    e.samp <- sample(std.e,framework$m,replace=TRUE)
+    u.boot <- sample(std.u, framework$m, replace=TRUE)
+    e.samp <- sample(std.e, framework$m, replace=TRUE)
     e.boot <- sqrt(framework$vardir)*e.samp
     v.boot <- solve(D-rho.boot*W)%*%u.boot
     
     
     data_tmp <- data.frame(Domain = framework$combined_data[[framework$domains]])
-    data_tmp$theta.boot[framework$obs_dom == TRUE] <- 
-      as.numeric(framework$model_X%*%BCoef.boot + v.boot) 
+    data_tmp$theta.boot[framework$obs_dom == TRUE] <- as.numeric(framework$model_X%*%BCoef.boot + v.boot) 
     
     direct.boot <- as.numeric(data_tmp$theta.boot[framework$obs_dom == TRUE] + 
                                 e.boot)
@@ -748,7 +747,7 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
                                sigmau2 = sigmau2.boot,
                                combined_data = combined_data) 
     
-    
+    eblupSFH.boot$EBLUP_data$FH[eblupSFH.boot$EBLUP_data$Out == 1] <- NA
     # New sample if estimated parameters are not acceptable 
     if (sigmau2.boot$convergence==FALSE | sigmau2.boot$sigmau2 <0 | 
         sigmau2.boot$rho <(-1) | sigmau2.boot$rho>1){
@@ -761,7 +760,7 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     # Bootstrap values                                   
     rho.tmp.boot <- sigmau2.boot$rho
     sigma2.tmp.boot <- sigmau2.boot$sigmau2                                        
-    thetaSFH.boot <-  eblupSFH.boot$EBLUP_data$FH   
+    thetaSFH.boot <-  eblupSFH.boot$EBLUP_data$FH[framework$obs_dom == TRUE]   
     
     # Computation of nonparametric bootstrap estimator of g3
     est.coef.sblup <- Q.rho%*%XtV.rhoi%*%direct.boot
@@ -775,6 +774,7 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     difg3.npb[,1] <- difg3.npb[,1] + 
       (thetaSFH.boot.in - data_tmp$thetaSFH.sblup.boot[framework$obs_dom == TRUE])^2
     
+    data_tmp <- data_tmp[complete.cases(data_tmp$theta.boot),]
     # Naive nonparametric bootstrap MSE
     estTheta[,b] <- thetaSFH.boot # estimated values
     trueTheta[,b] <- data_tmp$theta.boot # true values
@@ -919,10 +919,10 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   for (b in 1:B){
     
     # Bootstrap data
-    u.boot     <- rnorm(framework$m,0,sqrt(sigma2.boot))
+    u.boot     <- rnorm(framework$m, 0, sqrt(sigma2.boot))
     v.boot     <- solve(D - rho.boot*W)%*%u.boot
     theta.boot <- framework$model_X%*%BCoef.boot + v.boot
-    e.boot     <- rnorm(framework$m,0,sqrt(framework$vardir))
+    e.boot     <- rnorm(framework$m, 0, sqrt(framework$vardir))
     direct.boot <- theta.boot + e.boot
     combined_data$direct.boot[framework$obs_dom == TRUE] <- direct.boot
     
@@ -962,7 +962,7 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     rho.tmp.boot <- sigmau2.boot$rho
     sigma2.tmp.boot <- sigmau2.boot$sigmau2  
     BCoef.tmp.boot <- eblupSFH.boot$coefficients$coefficients  
-    thetaSFH.boot <-  eblupSFH.boot$EBLUP_data$FH   
+    thetaSFH.boot <-  eblupSFH.boot$EBLUP_data$FH[framework$obs_dom == TRUE]   
     
     # Parametric bootstrap estimator of g3
     est.coef.sblup <- Q.rho%*%XtV.rhoi%*%direct.boot
