@@ -113,7 +113,8 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
 
       # Use integral to solve the formula in Slud and Maiti
       int_value <- NULL
-      for (i in 1:framework$m) {
+      
+      for (i in seq_len(framework$m)) {
 
         mu_dri <- eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]
         mu_dri <- mu_dri[i]

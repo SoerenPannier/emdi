@@ -548,7 +548,7 @@ ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
     
     # wC
     wC <- matrix(0, p, p)
-    for(i in 1:areanumber){ 
+    for(i in seq_len(areanumber)){ 
       wC <- wC + wi[i]*Ci[,,i]
     }
     
@@ -580,7 +580,7 @@ ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
     
     # b^tCib
     Beta.hat.tCiBeta.hat <- NULL
-    for (i in 1:areanumber) {
+    for (i in seq_len(areanumber)) {
       Beta.hat.tCiBeta.hat[i] <- t(Beta.hat) %*% Ci[,,i] %*% Beta.hat 
     }
     

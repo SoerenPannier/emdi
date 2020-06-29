@@ -152,7 +152,7 @@ eblup_YL <- function(framework, sigmau2, combined_data) {
   # Total variance-covariance matrix - only values on the diagonal due to
   # independence of error terms
   Beta.hat.tCiBeta.hat <- NULL
-  for(i in 1:framework$m){
+  for(i in seq_len(framework$m)){
     Beta.hat.tCiBeta.hat[i] <- 
       t(sigmau2$betahatw)%*%framework$Ci[,,i]%*%sigmau2$betahatw
   }

@@ -641,7 +641,7 @@ compare_plots <- function(object, type, selected_indicators, MSE, CV, label, col
       data_tmp2$ID <- seq_along(object$Domain)
       data_shaped <- melt(data_tmp2, id.vars = "ID")
       names(data_shaped) <- c("ID", "Method", "value")
-      data_shaped$area <- rep(1:NROW(data_tmp2$Direct), 2)
+      data_shaped$area <- rep(seq_len(NROW(data_tmp2$Direct)), 2)
 
       cat("Press [enter] to continue")
       line <- readline()
@@ -684,7 +684,7 @@ compare_plots <- function(object, type, selected_indicators, MSE, CV, label, col
       data_tmp3$ID <- seq_along(object$Domain)
       data_shaped <- melt(data_tmp3, id.vars = "ID")
       names(data_shaped) <- c("ID", "Method", "value")
-      data_shaped$area <- rep(1:NROW(data_tmp3$Direct), 2)
+      data_shaped$area <- rep(seq_len(NROW(data_tmp3$Direct)), 2)
 
       cat("Press [enter] to continue")
       line <- readline()

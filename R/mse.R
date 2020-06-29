@@ -18,7 +18,7 @@ prasad_rao <- function(framework, sigmau2, combined_data) {
   # 2 divided by squared inverse of total variance
   VarA <- 2/SumAD2
 
-  for (d in 1:framework$m) {
+  for (d in seq_len(framework$m)) {
     # Variance due to random effects: vardir * gamma
     g1[d] <- framework$vardir[d] * (1 - Bd[d])
     # Covariate for single domain
@@ -50,7 +50,7 @@ prasad_rao <- function(framework, sigmau2, combined_data) {
     pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
     pred_X <- pred_data$x
 
-    for (d_out in 1:(framework$M - framework$m)) {
+    for (d_out in seq_len((framework$M - framework$m))) {
       xd_out <- matrix(pred_X[d_out, ], nrow = 1, ncol = framework$p)
       h[d_out] <- xd_out %*% Q %*% t(xd_out)
       mse_out[d_out] <- sigmau2 + h[d_out]
@@ -80,7 +80,7 @@ datta_lahiri <- function(framework, sigmau2, combined_data) {
 
   VarA <- 2/SumAD2
   b <- (-1) * sum(diag(Q %*% (t((Vi^2) * framework$model_X) %*% framework$model_X)))/SumAD2
-  for (d in 1:framework$m) {
+  for (d in seq_len(framework$m)) {
     g1[d] <- framework$vardir[d] * (1 - Bd[d])
     xd <- matrix(framework$model_X[d, ], nrow = 1, ncol = framework$p)
     g2[d] <- (Bd[d]^2) * xd %*% Q %*% t(xd)
@@ -106,7 +106,7 @@ datta_lahiri <- function(framework, sigmau2, combined_data) {
     pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
     pred_X <- pred_data$x
 
-    for (d_out in 1:(framework$M - framework$m)) {
+    for (d_out in seq_len((framework$M - framework$m))) {
       xd_out <- matrix(pred_X[d_out, ], nrow = 1, ncol = framework$p)
       h[d_out] <- xd_out %*% Q %*% t(xd_out)
       mse_out[d_out] <- sigmau2 + b + h[d_out]
@@ -144,13 +144,13 @@ li_lahiri <- function(framework, sigmau2, combined_data, method) {
 
     if (method == "ampl") {
       Bias <- (sum(diag(P - Vi)) + (2/sigmau2)) / sum(diag(Vi^2))
-      for (d in 1:framework$m) {
+      for (d in seq_len(framework$m)) {
         # Adjusted mse
         mse[d] <- mse[d] - (Bd[d]^2) * Bias
       }
     } else if (method == "amrl") {
       Bias <- (2/sigmau2) / sum(diag(Vi^2))
-      for (d in 1:framework$m) {
+      for (d in seq_len(framework$m)) {
         # Adjusted mse
         mse[d] <- mse[d] - (Bd[d]^2) * Bias
       }
@@ -197,7 +197,7 @@ yoshimori_lahiri <- function(framework, sigmau2, combined_data, method) {
 
   if (method == "ampl_yl") {
     Bias <- (sum(diag(P - Vi))) / sum(diag(Vi^2))
-    for (d in 1:framework$m) {
+    for (d in seq_len(framework$m)) {
       # Adjusted mse
       mse[d] <- mse[d] - (Bd[d]^2) * Bias
     }
@@ -250,7 +250,7 @@ prasad_rao_spatial <- function(framework, sigmau2, combined_data, method) {
   Xcoef <- matrix(0,1,framework$p)
   
   # Computation of g1 and g2
-  for (d in 1:framework$m){
+  for (d in seq_len(framework$m)){
     g1[d]<- G1[d,d]
     Xcoef[1,] <- framework$model_X[d,]-G2[d,]
     g2[d] <- Xcoef%*%Q.rho%*%t(Xcoef)
@@ -282,7 +282,7 @@ prasad_rao_spatial <- function(framework, sigmau2, combined_data, method) {
   line2t <- t(line2)
   
   lines <- matrix(0, 2, framework$m)
-  for (d in 1:framework$m)
+  for (d in seq_len(framework$m))
   {
     lines[1,] <- line1t[d,]
     lines[2,] <- line2t[d,]
@@ -299,7 +299,7 @@ prasad_rao_spatial <- function(framework, sigmau2, combined_data, method) {
   D <- (psi%*%V.rhoi%*%D1help%*%V.rhoi%*%psi) * (fisheri[1,2]+fisheri[2,1]) + 
     psi%*%V.rhoi%*%D2help%*%V.rhoi%*%psi*fisheri[2,2]
   
-  for (d in 1:framework$m){
+  for (d in seq_len(framework$m)){
     g4[d] <- (0.5) * D[d, d]
   }
   
@@ -328,7 +328,7 @@ prasad_rao_spatial <- function(framework, sigmau2, combined_data, method) {
     grad.g1d <- matrix(0, nrow=2, ncol=1) 
     
     bMLgrad.g1 <- rep(0, framework$m)   
-    for (d in 1:framework$m)
+    for (d in seq_len(framework$m))
     {
       grad.g1d[1,1] <- dg1_dDrhoWDrhoWt[d,d]
       grad.g1d[2,1] <- dg1_dp[d,d]
@@ -391,12 +391,12 @@ slud_maiti <- function(framework, sigmau2, eblup, combined_data) {
   Var.sigma <- ((1/2) * sum(diag(Deriv1%*%Deriv1)))^(-1)
 
   tmp <- NULL
-  for (i in 1:framework$m) {
+  for (i in seq_len(framework$m)) {
     tmp[i] <- (t(framework$model_X)[,i]%*%Q%*%framework$model_X[i,])/(tau[i]^2)
   }
 
   mse <- NULL
-  for (j in 1:framework$m) {
+  for (j in seq_len(framework$m)) {
     mse[j] <- exp(2 * (nu[j,1] + sigmau2)) * (1 - exp(-gamma[j] * framework$vardir[j])) +
       ((framework$vardir[j]^2)/tau[j]^2) * exp(2 * nu[j,1] + sigmau2 * (1 + gamma[j])) * (t(framework$model_X)[,j]%*%Q%*%framework$model_X[j,]) +
       Var.sigma * ((framework$vardir[j]^2)/tau[j]^2) * exp(2 * nu[j,1] + sigmau2 * (1 + gamma[j])) *
@@ -482,9 +482,7 @@ boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
   true_value_boot <- matrix(NA, ncol = B, nrow = M)
   est_value_boot  <- matrix(NA, ncol = B, nrow = M)
   
-  for (b in 1:B){
-    
-    #set.seed(b)
+  for (b in seq_len(B)){
     
     v_boot <- rnorm(M, 0, sqrt(sigmau2))
     e_boot <- rnorm(m, 0, sqrt(vardir))
@@ -545,7 +543,7 @@ boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
     # backtransformation
     if (backtransformation == "bc") {
       int_value <- NULL
-      for (i in 1:M) {
+      for (i in seq_len(M)) {
         
         if(in_sample[i] == T){
           mu_dri <- est_value_boot_trans
@@ -570,7 +568,7 @@ boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
       }
     } else if (backtransformation == "naive") {
       int_value <- NULL
-      for (i in 1:M) {
+      for (i in seq_len(M)) {
         int_value <- c(int_value, (sin(est_value_boot_trans[i]))^2)
       }
     }
@@ -584,7 +582,7 @@ boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
   Li <- rep(NA, M)
   Ui <- rep(NA, M)
   
-  for(ii in 1:M){
+  for(ii in seq_len(M)){
     Li[ii] <- eblup_corr[ii] + quantile(est_value_boot[ii,] - true_value_boot[ii,], 0.025)
     Ui[ii] <- eblup_corr[ii] + quantile(est_value_boot[ii,] - true_value_boot[ii,], 0.975)
   }
@@ -593,7 +591,7 @@ boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
   
   Quality_MSE<-function(estimator, TrueVal, B){
     RMSE<-rep(NA,dim(estimator)[1])
-    for(ii in 1:dim(estimator)[1]){
+    for(ii in seq_len(dim(estimator)[1])){
       RMSE[ii]<-(1/B*sum(((estimator[ii,]-TrueVal[ii,]))^2))
     }
     RMSE
@@ -658,7 +656,7 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   G2 <- var.DrhoW%*%t(XtV.rhoi)
   Xcoef <- matrix(0,1,framework$p)
   
-  for (d in 1:framework$m) {
+  for (d in seq_len(framework$m)) {
     g1[d] <- G1[d,d]
     Xcoef[1,] <- framework$model_X[d,] - G2[d,]
     g2[d] <- Xcoef%*%Q.rho%*%t(Xcoef)
@@ -666,15 +664,15 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   
   # Square roots of covariance matrices
   eigenVecVe0 <- eigen(Ve)$vectors
-  eigenVecVe <- eigenVecVe0[, 1:(framework$m - framework$p)]
+  eigenVecVe <- eigenVecVe0[, seq_len((framework$m - framework$p))]
   eigenValVe0 <- eigen(Ve)$values
-  eigenValVe <- diag(sqrt(1/eigenValVe0[1:(framework$m - framework$p)]))
+  eigenValVe <- diag(sqrt(1/eigenValVe0[seq_len((framework$m - framework$p))]))
   Vei <- eigenVecVe%*%eigenValVe%*%t(eigenVecVe)
   
   eigenVecVu0 <- eigen(Vu)$vectors
-  eigenVecVu <- eigenVecVu0[, 1:(framework$m - framework$p)]
+  eigenVecVu <- eigenVecVu0[, seq_len((framework$m - framework$p))]
   eigenValVu0 <- 1/(eigen(Vu)$values)
-  eigenValVu <- diag(sqrt(eigenValVu0[1:(framework$m - framework$p)]))
+  eigenValVu <- diag(sqrt(eigenValVu0[seq_len((framework$m - framework$p))]))
   Vui <- eigenVecVu%*%eigenValVu%*%t(eigenVecVu)
   
   # Standardize residual vectors
@@ -683,12 +681,12 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   sdu <- sqrt(sigma2.boot)
   
   std.u <- rep(0,framework$m)
-  for (d in 1:framework$m){
+  for (d in seq_len(framework$m)){
     std.u[d] <- (sdu*(est.u[d]-mean(est.u)))/sqrt(mean((est.u-mean(est.u))^2))
   }
   
   std.e <- rep(0,framework$m)
-  for (d in 1:framework$m){
+  for (d in seq_len(framework$m)){
     std.e[d] <- (est.e[d]-mean(est.e))/sqrt(mean((est.e-mean(est.e))^2))
   }
   
@@ -707,7 +705,7 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   notSuc <- matrix(0,B,1)
   
   # Bootstrap algorithm
-  for (b in 1:B){
+  for (b in seq_len(B)){
     
     # Bootstrap data
     u.boot <- sample(std.u, framework$m, replace=TRUE)
@@ -794,7 +792,7 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     G2 <- var.DrhoW.boot%*%Vi.rho.boot%*%framework$model_X
     Xcoef <- matrix(0,1,framework$p)
     
-    for (d in 1:framework$m){
+    for (d in seq_len(framework$m)){
       g1.help[d] <- G1[d,d] 
       Xcoef[1,] <- framework$model_X[d,] - G2[d,]
       g2.help[d] <- Xcoef%*%Q.rho.boot%*%t(Xcoef)
@@ -896,7 +894,7 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   G2 <- var.DrhoW%*%t(XtV.rhoi)
   Xcoef <- matrix(0, 1, framework$p)
   
-  for (d in 1:framework$m) {
+  for (d in seq_len(framework$m)) {
     g1[d]<-G1[d,d]
     Xcoef[1,]<-framework$model_X[d,] - G2[d,]
     g2[d] <- Xcoef%*%Q.rho%*%t(Xcoef)
@@ -916,7 +914,7 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   
   
   # Bootstrap algorithm
-  for (b in 1:B){
+  for (b in seq_len(B)){
     
     # Bootstrap data
     u.boot     <- rnorm(framework$m, 0, sqrt(sigma2.boot))
@@ -986,7 +984,7 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     G2 <- var.DrhoW.boot %*%Vi.rho.boot%*%framework$model_X
     Xcoef <- matrix(0,1,framework$p)
     
-    for (d in 1:framework$m){
+    for (d in seq_len(framework$m)){
       g1.help[d] <- G1[d,d] 
       Xcoef[1,] <- framework$model_X[d,] - G2[d,]
       g2.help[d] <- Xcoef%*%Q.rho.boot %*%t(Xcoef)
@@ -1060,8 +1058,8 @@ jiang_jackknife <- function(framework, combined_data, sigmau2, eblup, transforma
   # this MSE estimator can leed to negative values
   m <- framework$m
   jack_sigmau2 <- vector(length = m)
-  diff_jack_eblups <- data.frame(row.names = 1:m)
-  diff_jack_g1 <- data.frame(row.names = 1:m)
+  diff_jack_eblups <- data.frame(row.names = seq_len(m))
+  diff_jack_g1 <- data.frame(row.names = seq_len(m))
 
   g1 <- rep(0, framework$m)
   jack_mse <- rep(0, framework$m)
@@ -1071,12 +1069,12 @@ jiang_jackknife <- function(framework, combined_data, sigmau2, eblup, transforma
   Bd <- framework$vardir/(sigmau2 + framework$vardir)
 
 
-  for (d in 1:framework$m) {
+  for (d in seq_len(framework$m)) {
     # Variance due to random effects: vardir * gamma
     g1[d] <- framework$vardir[d] * (1 - Bd[d])
   }
 
-  for (domain in 1:m) {
+  for (domain in seq_len(m)) {
     cat("domain =",domain,"\n") 
 
 
@@ -1101,7 +1099,7 @@ jiang_jackknife <- function(framework, combined_data, sigmau2, eblup, transforma
     Bd_tmp <- framework$vardir/(sigmau2_tmp + framework$vardir)
 
     g1_tmp <- rep(0, framework$m)
-    for (d_tmp in 1:framework$m) {
+    for (d_tmp in seq_len(framework$m)) {
       g1_tmp[d_tmp] <- framework$vardir[d_tmp] * (1 - Bd_tmp[d_tmp])
     }
 
@@ -1159,9 +1157,9 @@ chen_weighted_jackknife <- function(framework, combined_data, sigmau2, eblup, tr
 
   m <- framework$m
   jack_sigmau2 <- vector(length = m)
-  diff_jack_eblups <- data.frame(row.names = 1:m)
-  diff_jack_g1 <- data.frame(row.names = 1:m)
-  diff_jack_g2 <- data.frame(row.names = 1:m)
+  diff_jack_eblups <- data.frame(row.names = seq_len(m))
+  diff_jack_g1 <- data.frame(row.names = seq_len(m))
+  diff_jack_g2 <- data.frame(row.names = seq_len(m))
 
   g1 <- rep(0, framework$m)
   jack_mse <- rep(0, framework$m)
@@ -1172,26 +1170,26 @@ chen_weighted_jackknife <- function(framework, combined_data, sigmau2, eblup, tr
   Bd <- framework$vardir/(sigmau2 + framework$vardir)
 
 
-  for (d in 1:framework$m) {
+  for (d in seq_len(framework$m)) {
     # Variance due to random effects: vardir * gamma
     g1[d] <- framework$vardir[d] * (1 - Bd[d])
   }
 
 
   Nenner <- rep(0, framework$m)
-  for (d in 1:framework$m) {
+  for (d in seq_len(framework$m)) {
     Nenner[d] <- (framework$model_X[d,] %*% framework$model_X[d,]) /
       (framework$vardir[d] + sigmau2)
   }
 
 
   g2 <- rep(0, framework$m)
-  for (d in 1:framework$m) {
+  for (d in seq_len(framework$m)) {
     # Variance due to beta estimation
     g2[d] <- (Bd[d])^2 * framework$model_X[d,] %*% framework$model_X[d,] * (sum(Nenner))^(-1)
   }
 
-  for (domain in 1:m) {
+  for (domain in seq_len(m)) {
     cat("domain =",domain,"\n")
 
 
@@ -1216,18 +1214,18 @@ chen_weighted_jackknife <- function(framework, combined_data, sigmau2, eblup, tr
     Bd_tmp <- framework$vardir/(sigmau2_tmp + framework$vardir)
 
     g1_tmp <- rep(0, framework$m)
-    for (d_tmp in 1:framework$m) {
+    for (d_tmp in seq_len(framework$m)) {
       g1_tmp[d_tmp] <- framework$vardir[d_tmp] * (1 - Bd_tmp[d_tmp])
     }
 
     Nenner_tmp <- rep(0, framework$m)
-    for (d_tmp in 1:framework$m) {
+    for (d_tmp in seq_len(framework$m)) {
       Nenner_tmp[d_tmp] <- (framework$model_X[d_tmp,] %*% framework$model_X[d_tmp,]) /
         (framework$vardir[d_tmp] + sigmau2_tmp)
     }
 
     g2_tmp <- rep(0, framework$m)
-    for (d_tmp in 1:framework$m) {
+    for (d_tmp in seq_len(framework$m)) {
       g2_tmp[d_tmp] <- (Bd_tmp[d_tmp])^2 * framework$model_X[d_tmp,] %*% framework$model_X[d_tmp,] * (sum(Nenner_tmp))^(-1)
     }
 
@@ -1254,7 +1252,7 @@ chen_weighted_jackknife <- function(framework, combined_data, sigmau2, eblup, tr
   w_u  <- c()
   v_wj <- c()
 
-  for(i in 1:nrow(framework$model_X)){
+  for(i in seq_len(nrow(framework$model_X))){
     w_u[i] <- 1 - t(framework$model_X[i,]) %*% solve(t(framework$model_X) %*% framework$model_X) %*% framework$model_X[i,]
     v_wj[i] <- w_u[i] * (jack_sigmau2[i] - sigmau2) * (jack_sigmau2[i] - sigmau2)
   }
@@ -1287,7 +1285,7 @@ chen_weighted_jackknife <- function(framework, combined_data, sigmau2, eblup, tr
     jack_mse_weighted_neg <- g1 + g2 + w_u * rowSums(diff_jack_eblups^2) - app_bias_correction
   }
 
-  for(i in 1:m){
+  for(i in seq_len(m)){
     if(i %in% neg_values){
       jack_mse_weighted[i] <- jack_mse_weighted_neg[i]
     }
@@ -1327,8 +1325,8 @@ jiang_jackknife_yl  <- function(framework, combined_data, sigmau2, eblup, method
   # this MSE estimator can leed to negative values
   m <- framework$m
   jack_sigmau2 <- vector(length = m)
-  diff_jack_eblups <- data.frame(row.names = 1:m)
-  diff_jack_g1 <- data.frame(row.names = 1:m)
+  diff_jack_eblups <- data.frame(row.names = seq_len(m))
+  diff_jack_g1 <- data.frame(row.names = seq_len(m))
   g1 <- rep(0, framework$m)
   jack_mse <- rep(0, framework$m)
   gamma_tmp <- matrix(0, framework$m, framework$m)
@@ -1340,12 +1338,12 @@ jiang_jackknife_yl  <- function(framework, combined_data, sigmau2, eblup, method
   Bd <- 1- eblup$gamma
   
   g1_tmp <- matrix(0,framework$m, framework$m)
-  for (d in 1:framework$m) {
+  for (d in seq_len(framework$m)) {
     # Variance due to random effects: vardir * gamma
     g1[d] <- framework$vardir[d] * (1 - Bd[d])
   }
   
-  for (domain in 1:m) {
+  for (domain in seq_len(m)) {
     cat("domain =",domain,"\n")
     
     
@@ -1390,7 +1388,7 @@ jiang_jackknife_yl  <- function(framework, combined_data, sigmau2, eblup, method
     
     
     Beta.hat.tCiBeta.hat<-NULL
-    for(i in 1:framework_insample$m){
+    for(i in seq_len(framework_insample$m)){
       Beta.hat.tCiBeta.hat[i]<-
         t(sigmau2_tmp$betahatw)%*%framework_insample$Ci[,,i]%*%sigmau2_tmp$betahatw
     }
@@ -1400,7 +1398,7 @@ jiang_jackknife_yl  <- function(framework, combined_data, sigmau2, eblup, method
     
     
     
-    for (d_tmp in 1:framework$m) {
+    for (d_tmp in seq_len(framework$m)) {
       g1_tmp[d_tmp,] <- framework$vardir[d_tmp] * gamma_tmp[d_tmp,] #(1 - Bd_tmp[d_tmp])
     }
     

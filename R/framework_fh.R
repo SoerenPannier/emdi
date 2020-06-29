@@ -35,7 +35,7 @@ framework_FH <- function(combined_data, fixed, vardir, domains,
   }
 
   if (is.null(domains)) {
-    combined_data$Domain <- 1:nrow(combined_data)
+    combined_data$Domain <- seq_len(nrow(combined_data))
     domains <- "Domain"
   }
   

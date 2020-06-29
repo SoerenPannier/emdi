@@ -34,7 +34,7 @@ model_select <- function(framework, sigmau2, method, interval,
   loglike.boot <- vector(length = B)
   loglikestar.boot <- vector(length = B)
   
-  for (b in 1:B){
+  for (b in seq_len(B)){
    W1 <- rnorm(n = m, mean = 0, sd = 1) 
    u.boot <- sqrt(sigmau2)*W1
    W2 <- rnorm(n = m, mean = 0, sd = 1)
@@ -106,7 +106,7 @@ model_select <- function(framework, sigmau2, method, interval,
   
   barD <- sum(framework$vardir)/m
   hii <- NULL
-  for (i in 1:m)
+  for (i in seq_len(m))
   {
     hii[i] <- as.numeric(t(framework$model_X[i,])%*%solve(t(framework$model_X)%*%framework$model_X)%*%framework$model_X[i,])
   }
