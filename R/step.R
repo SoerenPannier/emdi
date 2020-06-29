@@ -131,10 +131,11 @@ step.fh <- function (object, scope = NULL, criteria = "AIC",
     string
   }
   step.results <- function(models, fit, object) { 
-    change <- sapply(models, "[[", "change")
-    rdf <- sapply(models, "[[", "df.resid")
+    change <- vapply(models, "[[" , "change", FUN.VALUE = character(1))
+    rdf <- vapply(models, "[[", "df.resid", FUN.VALUE = numeric(1))
     ddf <- c(NA, diff(rdf))
-    infcriteria <- sapply(models, "[[", "criteria")
+    infcriteria <- NULL
+    infcriteria <- vapply(models, "[[", "criteria", FUN.VALUE = numeric(1))
     heading <- c("Stepwise Model Path \nAnalysis of Deviance Table", 
                  "\nInitial Model:", deparse(object$fixed), "\nFinal Model:", 
                  deparse(fit$fixed), "\n")
