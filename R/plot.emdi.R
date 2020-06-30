@@ -139,7 +139,6 @@ plot.emdi <- function(x,
                       cooks = TRUE,
                       range = NULL, ...){
 
-
   plot_check(x = x, label = label, color = color, cooks = cooks, range = range)
   plotList <- vector(mode = "list", length = 5)
   plotList <- lapply(plotList, function(x) NA)
@@ -159,7 +158,7 @@ plot.emdi <- function(x,
     model$call$fixed <- x$fixed
   } else if (inherits(x, "fh")) {
     
-    if(any(is.na(x$model$std_real_residuals))) {
+    if (any(is.na(x$model$std_real_residuals))) {
       residuals <- x$model$std_real_residuals[!is.na(x$model$std_real_residuals)]
       warning("At least one value in the standardized realized residuals is NA. Only
               numerical values are plotted.")
@@ -215,16 +214,15 @@ plot.emdi <- function(x,
                         ggtitle(label$d_ran["title"]) +
                         gg_theme))
 
-  if (cooks == TRUE) {
-
+  if (cooks == TRUE && inherits(x, "ebp")) {
+    
     cooksdist <- NULL
-
-    if (inherits(x, "ebp")) {
-
-    try(cooksdist <- as.vector(
-      cooks.distance(model)), silent = TRUE)
-    if (is.null(cooksdist))
-    {
+    # Supress warning is used here due to a small bug in the 
+    # HLMdiag:::.extract.lmeDesign which is underlying the here used
+    # cooks distance. The given warning has no relevance in this case.
+    try(cooksdist <- as.vector(suppressWarnings(cooks.distance(model))), 
+        silent = TRUE)
+    if (is.null(cooksdist)) {
       cooks <- FALSE
       warning(paste0("Cook's distance could not be calculated, this is usually due",
                      " to exceedence of available memory. Try using cooks = FALSE to ",
@@ -233,17 +231,19 @@ plot.emdi <- function(x,
       cook_df <- data.frame(index = seq_along(cooksdist), cooksdist)
       indexer <- cook_df[order(cooksdist, decreasing = TRUE),][seq_len(3),]
     }
-
-    cat("Press [enter] to continue")
-    line <- readline()
-    print((plotList[[4]] <- ggplot(data = cook_df, aes(x = index, y = cooksdist)) +
-            geom_segment(aes(x = index, y = 0, xend = index, yend = cooksdist),
-                         colour = color[1]) +
-            xlab("Index") + ylab(label$cooks["y_lab"])
-          + geom_text(label = indexer[,1], data = indexer) +
-            ggtitle(label$cooks["title"]) + gg_theme))
+    
+    if (cooks == TRUE) {
+      cat("Press [enter] to continue")
+      line <- readline()
+      print((plotList[[4]] <- ggplot(data = cook_df, aes(x = index, y = cooksdist)) +
+              geom_segment(aes(x = index, y = 0, xend = index, yend = cooksdist),
+                           colour = color[1]) +
+              xlab("Index") + ylab(label$cooks["y_lab"])
+            + geom_text(label = indexer[,1], data = indexer) +
+              ggtitle(label$cooks["title"]) + gg_theme))
     }
   }
+
 
   if (inherits(x, "ebp")) {
     if (x$transformation == "box.cox") {
