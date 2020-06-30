@@ -46,7 +46,7 @@ prasad_rao <- function(framework, sigmau2, combined_data) {
     # Covariates for out-of-sample domains
     pred_data_tmp <- combined_data[framework$obs_dom == FALSE,]
     pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1,0,1))
-    lhs(framework$formula) <- quote(helper)
+    formula.tools::lhs(framework$formula) <- quote(helper)
     pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
     pred_X <- pred_data$x
 
@@ -102,7 +102,7 @@ datta_lahiri <- function(framework, sigmau2, combined_data) {
     # Covariates for out-of-sample domains
     pred_data_tmp <- combined_data[framework$obs_dom == FALSE,]
     pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1,0,1))
-    lhs(framework$formula) <- quote(helper)
+    formula.tools::lhs(framework$formula) <- quote(helper)
     pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
     pred_X <- pred_data$x
 
@@ -490,7 +490,7 @@ boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
     # Get covariates for all domains
     pred_data_tmp <- framework$combined_data
     pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1,0,1))
-    lhs(framework$formula) <- quote(helper)
+    formula.tools::lhs(framework$formula) <- quote(helper)
     pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
     
     pred_X <- pred_data$x

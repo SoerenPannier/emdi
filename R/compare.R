@@ -65,9 +65,9 @@ compare.fh <- function(model, ...){
  # Extraction of the regression part
  if (!is.null(model$model$gamma)) {
     xb <- (model$ind$FH[model$ind$Out == 0] - 
-             model$model$gamma$Gamma *
+             model$model$gamma$Gamma[model$ind$Out == 0] *
              model$ind$Direct[model$ind$Out == 0]) /
-       (1 - model$model$gamma$Gamma) 
+       (1 - model$model$gamma$Gamma[model$ind$Out == 0]) 
  } 
  if (is.null(model$model$gamma)) {
    xb <- model$ind$FH[model$ind$Out == 0] - 
