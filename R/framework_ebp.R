@@ -9,7 +9,6 @@
 framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, 
                      threshold, custom_indicator = NULL, na.rm) {
 
-  #smp_domains_orig <- smp_domains
   
   # Reduction of number of variables
   mod_vars <- all.vars(fixed)

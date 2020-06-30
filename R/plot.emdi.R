@@ -130,7 +130,7 @@
 #' @importFrom nlme ranef random.effects
 #' @importFrom gridExtra arrangeGrob grid.arrange
 #' @importFrom stats shapiro.test logLik cooks.distance
-#' @import HLMdiag
+#' @importFrom HLMdiag mdffits
 
 plot.emdi <- function(x,
                       label = "orig",
@@ -166,7 +166,6 @@ plot.emdi <- function(x,
     } else {
       residuals <- x$model$std_real_residuals
     }
-    # ?? Sollten wir das machen?
     residuals <- (residuals - mean(residuals)) / sd(residuals)
     rand.eff <- x$model$random_effects
     srand.eff <- (rand.eff - mean(rand.eff)) / sd(rand.eff)
@@ -431,13 +430,7 @@ define_label <- function(x, label){
              help(plot.emdi).")
       }
     }
-#
-#    if(all(length(label) == 6 && any(names(label) == c("qq_res", "qq_ran",
-#                                                       "d_res", "d_ran",
-#                                                       "cooks", "box_cox")))){
-#      label <- label
-#    } else if(length(label) < 6){
-#
+    
       orig_label <- list(qq_res = c(title = "Error term",
                                     y_lab = "Quantiles of pearson residuals",
                                     x_lab = "Theoretical quantiles"),

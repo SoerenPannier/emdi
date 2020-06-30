@@ -61,33 +61,26 @@ compare.fh <- function(model, ...){
                            Df = df_BL,
                            p.value = p_value_BL)
    }
- if (model$method$method == "reblupbc") {
-   results <- list(Brown = testresults)
-   cat("Please note that for the bias-corrected robust EBLUP ('reblupbc') only 
-       the goodness-of-fit test proposed by Brown et al. (2001) is provided and 
-       not the correlation coefficient of the synthetic part and the direct 
-       estimator. \n")
- } else {
-   # Extraction of the regression part
-   if (!is.null(model$model$gamma)) {
-     xb <- (model$ind$FH[model$ind$Out == 0] - 
-              model$model$gamma$Gamma *
-              model$ind$Direct[model$ind$Out == 0]) /
+ 
+ # Extraction of the regression part
+ if (!is.null(model$model$gamma)) {
+    xb <- (model$ind$FH[model$ind$Out == 0] - 
+             model$model$gamma$Gamma *
+             model$ind$Direct[model$ind$Out == 0]) /
        (1 - model$model$gamma$Gamma) 
-   } 
-   if (is.null(model$model$gamma)) {
-     xb <- model$ind$FH[model$ind$Out == 0] - 
-       model$model$random_effects
-   }
-   
-   
-   # Direkt estimator
-   direct_insample <- model$ind$Direct[model$ind$Out == 0]
-   # Correlation
-   syndircor <- cor(xb, direct_insample)
-   
-   results <- list(Brown = testresults, syndir = syndircor)
+ } 
+ if (is.null(model$model$gamma)) {
+   xb <- model$ind$FH[model$ind$Out == 0] - 
+    model$model$random_effects
  }
+   
+   
+ # Direct estimator
+ direct_insample <- model$ind$Direct[model$ind$Out == 0]
+ # Correlation
+ syndircor <- cor(xb, direct_insample)
+   
+ results <- list(Brown = testresults, syndir = syndircor)
  
  class(results) <- "compare.fh"
  

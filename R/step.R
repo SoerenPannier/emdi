@@ -150,7 +150,6 @@ step.fh <- function (object, scope = NULL, criteria = "AIC",
   Terms <- terms(object$fixed)
   object$call$formula <- object$formula <- Terms
   md <- missing(direction)
-  # direction <- match.arg(direction)
   backward <- direction == "both" | direction == "backward"
   forward <- direction == "both" | direction == "forward"
   if (missing(scope)) {
@@ -178,8 +177,6 @@ step.fh <- function (object, scope = NULL, criteria = "AIC",
   fit <- object 
   bcriteria <- fit$model$model_select[[criteria]]
   edf <- length(attr(terms(object$fixed), "term.labels")) + 1 
-  # if (is.na(bcriteria)) 
-  # stop(criteria, "is not defined for this model, so 'step' cannot proceed", sep = " ")
   if (bcriteria == -Inf) 
     stop(criteria, "is -infinity for this model, so 'step' cannot proceed", sep = " ")
   nm <- 1
@@ -223,7 +220,7 @@ step.fh <- function (object, scope = NULL, criteria = "AIC",
       aod <- aod[nzdf, ]
       if (is.null(aod) || ncol(aod) == 0) 
         break
-      nc <- match("criteria", names(aod)) #"Cp", match(c("AIC"), names(aod)) #"Cp",
+      nc <- match("criteria", names(aod)) 
       nc <- nc[!is.na(nc)][1L]
       o <- order(aod[, nc])
       names(aod) <- c("df", criteria)

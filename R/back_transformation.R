@@ -43,9 +43,6 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
       # is adding 0.5 * sigmau2 * (1-gamma) to the point estimator on the transformed
       # scale and backtransform the term by the exponential
       EBLUP_data$FH[framework$obs_dom == TRUE] <- exp(eblup$EBLUP_data$FH[framework$obs_dom == TRUE] + (0.5 * sigmau2 * (1 - eblup$gamma)))
-      # If we want estimates for the out-of-sample domain, we need to use the crude
-      # estimation
-      #EBLUP_data$EBLUP[framework$obs_dom == FALSE] <- exp(eblup$EBLUP_data$EBLUP[framework$obs_dom == FALSE] + 0.5 * estim_MSE$MSE_data$MSE[framework$obs_dom == FALSE])
       EBLUP_data$FH[framework$obs_dom == FALSE] <- NA
 
 
@@ -53,8 +50,6 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
         SM_MSE <- slud_maiti(framework = framework, sigmau2 = sigmau2,
                              eblup = eblup, combined_data = combined_data)
         MSE_data$FH[framework$obs_dom == TRUE] <- SM_MSE$FH[framework$obs_dom == TRUE]
-        # MSE_data$MSE[framework$obs_dom == FALSE] <-  exp(eblup$EBLUP_data$EBLUP[framework$obs_dom == FALSE])^2 * estim_MSE$MSE_data$MSE[framework$obs_dom == FALSE]
-       # MSE_data$FHE[framework$obs_dom == FALSE] <- NA
         MSE_method <- "slud-maiti"
       } else {
         MSE_data <- NULL
@@ -97,7 +92,6 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
           }
 
 
-          # Following which paper??
           back_jack_mse <- 2 * sin(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]) * cos(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]) * jack_mse$MSE_data$FH[jack_mse$MSE_data$Out == 0]
 
           MSE_data$FH[framework$obs_dom == TRUE] <- back_jack_mse
@@ -165,8 +159,6 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
                                     interval = interval, mse_type = mse_type)
           }
 
-
-          # Following which paper??
           back_jack_mse <- 2 * sin(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]) * cos(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]) * jack_mse$MSE_data$FH[jack_mse$MSE_data$Out == 0]
 
           MSE_data$FH[framework$obs_dom == TRUE] <- back_jack_mse

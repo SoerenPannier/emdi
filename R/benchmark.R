@@ -63,7 +63,7 @@ benchmark <- function(object, benchmark, share, type = "raking", overwrite = FAL
   
   estim <- object$ind$FH
   FH_bench <- rep(NA, length(object$ind$FH))
-  #benchmark <- sum(share * object$ind$Direct)
+  
   if (type == "raking"){
     FH_bench <- estim + benchmark - sum(share * estim)
   } else if (type == "ratio"){
@@ -86,16 +86,7 @@ benchmark <- function(object, benchmark, share, type = "raking", overwrite = FAL
     object$ind$FH_Bench <- FH_bench
     object$ind <- object$ind[, c('Domain', 'Direct', 'FH', 'FH_Bench', 'Out')]
     object['MSE'] <- list(NULL)
-    #out <- list(ind = object$ind,
-    #            MSE = NULL,
-    #            transform_param = object$transform_param,
-    #            model = object$model,
-    #            framework = object$framework,
-    #            transformation = object$transformation,
-    #            method = object$method,
-    #            fixed = object$fixed,
-    #            call = object$call,
-    #            successful_bootstraps = object$successful_bootstraps)
+
     cat("Please note that only point estimates are benchmarked. Thus, the 
             MSE element in the new emdi object is NULL.")
     result <- object
@@ -105,9 +96,10 @@ benchmark <- function(object, benchmark, share, type = "raking", overwrite = FAL
 
 
 
-################################################################################
+######################################################################
 # Argument checking
-check_benchmark_arguments <- function(object, benchmark, share, type, overwrite){
+check_benchmark_arguments <- function(object, benchmark, share, type, 
+                                      overwrite){
   if(!inherits(object, "fh")){
     stop('Object needs to be fh object.')
   }

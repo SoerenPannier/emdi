@@ -1,12 +1,7 @@
 compare_plot_check <- function(model, indicator, label, color, shape, 
                                 line_type, gg_theme) {
   
-  #if (!all(inherits(direct, which = TRUE, c("emdi", "direct")))) {
-   # stop('First object needs to be of class emdi, direct.')
- # }
-  #if (!all(inherits(model, which = TRUE, c("emdi", "model")))) {
-    #stop('Second object needs to be of class emdi, model.')
-  #}
+
   if (is.null(indicator) || !(indicator == "all" || indicator == "Quantiles" 
                               || indicator == "quantiles"
                               || indicator == "Poverty" || indicator == "poverty" 

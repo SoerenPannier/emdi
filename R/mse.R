@@ -387,7 +387,7 @@ slud_maiti <- function(framework, sigmau2, eblup, combined_data) {
   # Identity matrix mxm
   D <- diag(1, framework$m)
   Deriv1 <- solve((sigmau2 * D) + diag(c(framework$vardir), framework$m))
-  ### Inverse of fisher information matrix. That is var. sigma2u
+  # Inverse of fisher information matrix. That is var. sigma2u
   Var.sigma <- ((1/2) * sum(diag(Deriv1%*%Deriv1)))^(-1)
 
   tmp <- NULL
@@ -509,7 +509,7 @@ boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
     
     ystar_trans <- Xbeta_boot[in_sample] + v_boot[in_sample] + e_boot
     
-    ## Estimation of sigmau2_boot auf transformierter Ebene
+    ## Estimation of sigmau2_boot on transformed scale
     framework2 <- framework
     framework2$direct <- ystar_trans
     sigmau2_boot <- wrapper_estsigmau2(framework = framework2, method = method,
@@ -600,8 +600,8 @@ boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
   mse <- Quality_MSE(est_value_boot, true_value_boot, B)
   
   MSE_data <- data.frame(Domain = framework$combined_data[[framework$domains]])
-  MSE_data$Var <- NA
-  MSE_data$Var[framework$obs_dom == TRUE] <- framework$vardir
+  MSE_data$Direct <- NA
+  MSE_data$Direct[framework$obs_dom == TRUE] <- framework$vardir
   
   # Small area MSE
   MSE_data$MSE <- mse
@@ -778,7 +778,6 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     trueTheta[,b] <- data_tmp$theta.boot # true values
     bootstrapMSE[, b] <- (thetaSFH.boot - data_tmp$theta.boot)^2
     difmse.npb[,1] <- difmse.npb[,1] + (thetaSFH.boot - data_tmp$theta.boot)^2
-    #difmse.npb1[,1]<-difmse.npb1[,1]+(thetaEBLUPSpat.boot1[,1]-theta.boot1)^2
     
     # Computation of g1 and g2
     A <- solve((D - rho.tmp.boot*Wt)%*%(D - rho.tmp.boot*W))
@@ -816,8 +815,8 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     difg3.npb[,1]/NoSuc
   
   MSE_data <- data.frame(Domain = framework$combined_data[[framework$domains]])
-  MSE_data$Var <- NA
-  MSE_data$Var[framework$obs_dom == TRUE] <- framework$vardir
+  MSE_data$Direct <- NA
+  MSE_data$Direct[framework$obs_dom == TRUE] <- framework$vardir
   
   notSuc <- paste(NoSuc,"out of", B)
   
@@ -838,8 +837,8 @@ For the out-of-sample domains, no estimate for the MSE is returned. For the
     }
   }
   if (mse_type == "spatialnonparbootbc"){
-    MSE_data$FH.BC <- NA
-    MSE_data$FH.BC[framework$obs_dom == TRUE] <- mse.npbBC
+    MSE_data$FH <- NA
+    MSE_data$FH[framework$obs_dom == TRUE] <- mse.npbBC
     MSE_data$Out[framework$obs_dom == TRUE] <- 0
     MSE_data$Out[framework$obs_dom == FALSE] <- 1
     MSE_data <- list(MSE_data = MSE_data,
@@ -1010,8 +1009,8 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
   
   
   MSE_data <- data.frame(Domain = framework$combined_data[[framework$domains]])
-  MSE_data$Var <- NA
-  MSE_data$Var[framework$obs_dom == TRUE] <- framework$vardir
+  MSE_data$Direct <- NA
+  MSE_data$Direct[framework$obs_dom == TRUE] <- framework$vardir
   
   notSuc <- paste(NoSuc,"out of", B)
   
@@ -1277,9 +1276,9 @@ chen_weighted_jackknife <- function(framework, combined_data, sigmau2, eblup, tr
     L_d  <- framework$vardir/((sigmau2 + framework$vardir)^2) * diag(m)
     b_wj <- w_u * (jack_sigmau2 - sigmau2)
 
-    # bias fuer REML ist NULL (nur fuer REML durchfuehrbar)
+    # bias for REML is NULL (only for REML feasible)
     app_bias_correction <-
-      sum(b_wj) * (framework$vardir^2 / (framework$vardir + sigmau2)^2) - #ueberprueft
+      sum(b_wj) * (framework$vardir^2 / (framework$vardir + sigmau2)^2) - 
       diag(L_d %*% Sig_d %*% t(L_d) * sum(v_wj))
 
     jack_mse_weighted_neg <- g1 + g2 + w_u * rowSums(diff_jack_eblups^2) - app_bias_correction
@@ -1332,8 +1331,6 @@ jiang_jackknife_yl  <- function(framework, combined_data, sigmau2, eblup, method
   gamma_tmp <- matrix(0, framework$m, framework$m)
   sigmau2_tmp<- matrix(0, framework$m)
   jack_sigmau2<- matrix(0, framework$m)
-  # Inverse of total variance
-  #Vi <- 1/(sigmau2 + framework$vardir)
   # Shrinkage factor
   Bd <- 1- eblup$gamma
   
@@ -1369,11 +1366,6 @@ jiang_jackknife_yl  <- function(framework, combined_data, sigmau2, eblup, method
     sigmau2_tmp <- wrapper_estsigmau2(framework = framework_tmp, method = method)
     jack_sigmau2[domain] <- sigmau2_tmp$sigmau_YL
     
-    #Vi_tmp <- 1/(sigmau2_tmp + framework$vardir)
-    
-    # Shrinkage factor
-    #Bd_tmp <- 1- eblup_tmp$gamma
-    
     framework_insample <- framework_FH(combined_data = data_insample, 
                                        fixed = framework$formula,
                                        vardir = vardir, 
@@ -1399,7 +1391,7 @@ jiang_jackknife_yl  <- function(framework, combined_data, sigmau2, eblup, method
     
     
     for (d_tmp in seq_len(framework$m)) {
-      g1_tmp[d_tmp,] <- framework$vardir[d_tmp] * gamma_tmp[d_tmp,] #(1 - Bd_tmp[d_tmp])
+      g1_tmp[d_tmp,] <- framework$vardir[d_tmp] * gamma_tmp[d_tmp,] 
     }
     
     

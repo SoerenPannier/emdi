@@ -18,10 +18,10 @@ eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, c,
   eblup_coef <- data.frame(coefficients = eblupobject$coefficients)
   
   EBLUP_data <- data.frame(Domain = framework$combined_data[[framework$domains]])
-  #direct
+  # direct
   EBLUP_data$Direct <- NA
   EBLUP_data$Direct[framework$obs_dom == TRUE] <- framework$direct
-  #eblup
+  # eblup
   # bias corrected prediction
   if (is.element("linear", method)) EBLUP_data$FH[framework$obs_dom == TRUE] <- eblupobject$linear
   if (is.element("reblup", method)) EBLUP_data$FH[framework$obs_dom == TRUE] <- eblupobject$reblup
@@ -33,19 +33,7 @@ eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, c,
     cat("Please note that the results are only returned for in-sample domains.
         For more information see help(fh).")
   }
-  # Scores
- # eblupobject$score <- saeRobust::score(eblupobject)
- # names(eblupobject$score) <- c("coefficients", "variance", "re")
- # names(eblupobject$score$coefficients) <- names(coefficients(eblupobject))
- # names(eblupobject$score$variance) <- names(eblupobject$variance)
-  
-  # Iterations:
- # eblupobject$iter <- c(
-  #  "model parameter" = NROW(eblupobject$iterations$coefficients),
-  #  "random effects" = NROW(eblupobject$iterations$re)
- # )
-  
-  
+
   eblup_out <- list(EBLUP_data = EBLUP_data,
                     fitted <- eblupobject$fitted,
                     coefficients = eblup_coef,
@@ -53,13 +41,7 @@ eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, c,
                     std_real_res = eblupobject$residuals/sqrt(eblupobject$samplingVar),
                     random_effects = eblupobject$re,
                     eblupobject = eblupobject,
-                    variance = eblupobject$variance) #,
-                   # W = eblupobject$W,
-                   # scores = eblupobject$score,
-                   # iterations = eblupobject$iter,
-                   # maxIter = eblupobject$maxIter,
-                   # maxIterParam = eblupobject$maxIterParam,
-                   # maxIterRe = eblupobject$maxIterRe)
+                    variance = eblupobject$variance) 
   
   return(eblup_out)
 }

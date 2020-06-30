@@ -267,7 +267,7 @@
 #' Ci = Ci_array, MSE = TRUE, mse_type = "jackknife")
 #' }
 #' @export
-#' @import formula.tools 
+#' @importFrom formula.tools lhs 
 #' @importFrom stats coefficients integrate median model.frame model.matrix  
 #' @importFrom stats model.response optimize pnorm rnorm terms update
 
@@ -396,10 +396,6 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
       }
       
       
-      # Shrinkage factor
-      #Gamma <- data.frame(Domain = framework$data[[framework$domains]],
-         #                 Gamma = eblup$gamma)
-      
       if (method != "me") {
         if (!is.null(MSE) && (mse_type == "spatialnonparboot" ||
                             mse_type == "spatialnonparbootbc" ||
@@ -418,7 +414,6 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                                    random_effects = eblup$random_effects,
                                    real_residuals = eblup$real_res,
                                    std_real_residuals = eblup$std_real_res,
-                                   #gamma = Gamma,
                                    model_select = criteria,
                                    correlation = correlation,
                                    seed = seed),
@@ -438,14 +433,12 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
           row.names(sigmau2) <- ""
           out <- list(ind = eblup$EBLUP_data,
                       MSE = MSE,
-                      #MSE_boot = MSE_boot,
                       transform_param = NULL,
                       model = list(coefficients = eblup$coefficients,
                                    variance = sigmau2,
                                    random_effects = eblup$random_effects,
                                    real_residuals = eblup$real_res,
                                    std_real_residuals = eblup$std_real_res,
-                                  # gamma = Gamma,
                                    model_select = criteria,
                                    correlation = correlation,
                                    seed = seed),
@@ -461,8 +454,8 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                       )
         } else {
           
-          if((isTRUE(all.equal(sigmau2, interval[1]))) || 
-             (isTRUE(all.equal(sigmau2, interval[2])))){
+          if((isTRUE(all.equal(round(sigmau2, 3), interval[1]))) || 
+             (isTRUE(all.equal(round(sigmau2, 3), interval[2])))){
             warning("The estimate of the variance of the random effects falls at 
             the interval limit. It is recommended to choose a larger 
             interval for the estimation of the variance of the random effects 
@@ -470,7 +463,6 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
           }
         out <- list(ind = eblup$EBLUP_data,
                     MSE = MSE,
-                    #MSE_boot = MSE_boot,
                     transform_param = NULL,
                     model = list(coefficients = eblup$coefficients,
                                  variance = sigmau2,
@@ -596,17 +588,10 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                              random_effects = as.matrix(eblup$random_effects),
                              real_residuals = as.matrix(eblup$real_res),
                              std_real_residuals = as.matrix(eblup$std_real_res),
-                             #model_select = NULL,
                              correlation = correlation,
-                             #W = eblup$W,
                              k = k,
                              c = c,
                              seed = seed),
-                            # scores = eblup$scores,
-                             #iterations = eblup$iterations,
-                            # max_iter = eblup$maxIter,
-                           #  max_iter_param = eblup$maxIterParam,
-                            # max_iter_re = eblup$maxIterRe),
                 framework = framework[c("direct", "vardir", "N_dom_smp",
                                         "N_dom_unobs")],
                 transformation = list(transformation = transformation,

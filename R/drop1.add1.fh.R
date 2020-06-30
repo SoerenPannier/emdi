@@ -84,10 +84,6 @@ add1.fh <- function(object, criteria, scope, trace = TRUE, ...)
  
   if(!length(scope))
     stop("no terms in scope for adding to object")
-  #     newform <- update.formula(object,
-  #                               paste(". ~ . +", paste(scope, collapse="+")))
-  #     data <- model.frame(update(object, newform)) # remove NAs
-  #     object <- update(object, data = data)
   
   ns <- length(scope)
   ans <- matrix(nrow = ns + 1L, ncol = 2L,

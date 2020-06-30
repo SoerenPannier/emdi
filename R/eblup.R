@@ -183,7 +183,6 @@ eblup_YL <- function(framework, sigmau2, combined_data) {
     (sigmau2$sigmau_YL + Beta.hat.tCiBeta.hat + framework$vardir)	
   
   res <- framework$direct - c(framework$model_X%*%sigmau2$betahatw)
-  # sigmau2Diag <- sigmau2*D
   u.hat <- gamma*res
   
   real_res <- framework$direct - (framework$model_X%*%sigmau2$betahatw + u.hat)

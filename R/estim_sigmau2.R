@@ -31,7 +31,6 @@ Reml <- function(interval, direct, x, vardir, areanumber) {
 
     ee = eigen(V)
     -(areanumber/2) * log(2*pi) - 0.5 * sum(log(ee$value)) - (0.5) * log(det(t(X) %*% Vi%*%X)) - (0.5) * t(Y)%*%P%*%Y
-    #(2*pi)^(-(areanumber/2)) * exp(-0.5 * sum(log(ee$value))) * exp(-(0.5) * log(det(t(X)%*%Vi%*%X))) * exp(-(0.5) * t(Y)%*%P%*%Y)
   }
   ottimo <- optimize(A.reml, interval, maximum = TRUE,
                      vardir = vardir, areanumber = areanumber,
@@ -126,7 +125,6 @@ AMRL_YL <- function(interval, direct, x, vardir, areanumber) {
     atan(sum(diag((I - Bd))))^(1 / areanumber) * (2 * pi)^(-(areanumber / 2)) * 
       exp(-0.5 * sum(log(ee$value))) * 
       exp(-(0.5) * log(det(t(X) %*% Vi %*% X))) * exp(-(0.5) * t(Y) %*% P %*% Y)
-    #(1/areanumber) * log((atan(sum(diag(I - Bd)))^-1)) - (areanumber/2) * log(2*pi) - 0.5 * sum(log(ee$value)) - (0.5) * log(det(t(X)%*%Vi%*%X)) - (0.5) * t(Y)%*%P%*%Y
   }
 
   ottimo <- optimize(AR_YL, interval, maximum = TRUE,
@@ -218,10 +216,8 @@ AMPL_YL <- function(interval, direct, x, vardir, areanumber) {
     Bd <- diag(vardir / (sigma.u_log + vardir))
 
     ee = eigen(V)
-    #(1/areanumber) * log((tan(sum(diag(I - Bd)))^-1)) - (areanumber/2) * log(2*pi) - 0.5 * sum(log(ee$value)) - (0.5) * t(Y)%*%P%*%Y
     (atan(sum(diag((I - Bd)))))^(1/areanumber) * (2*pi)^(-(areanumber/2)) * 
       exp(-0.5 * sum(log(ee$value))) * exp(-(0.5) * t(Y) %*% P %*% Y)
-    #sigma.u_log * (2*pi)^(-(areanumber/2)) * exp(-0.5 * sum(log(ee$value))) * exp(-(0.5) * t(Y)%*%P%*%Y)
   }
 
   ottimo <- optimize(AP_YL, interval, maximum = TRUE,
@@ -267,7 +263,6 @@ MPL <- function(interval, direct, x, vardir, areanumber) {
     ee = eigen(V)
     -(areanumber/2) * log(2*pi) - 0.5 * sum(log(ee$value)) - 
       (0.5) * t(Y) %*% P %*% Y
-    # (2*pi)^(-(areanumber/2)) * exp(- 0.5 * sum(log(ee$value))) * exp(-(0.5) * t(Y)%*%P%*%Y)
   }
 
   ottimo <- optimize(ML, interval, maximum = TRUE,
@@ -386,7 +381,6 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol){
   
   if (iter >= maxit && conv >= tol) {
     convergence <- FALSE
-    #print("The variance estimation algorithm did not converge.")
   } else
     convergence <- TRUE
   
@@ -498,7 +492,6 @@ SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
       
     if (iter >= maxit && conv >= tol) {
       convergence <- FALSE
-      #print("The variance estimation algorithm did not converge.")
     } else
       convergence <- TRUE
 

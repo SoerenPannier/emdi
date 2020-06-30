@@ -202,11 +202,6 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
     Data$smp_size <- NULL
   } 
   
-  # Streichen, wenn es nichts kaputt macht
-  #else {
-  #  Data$smp_size <- -model$MSE$Direct[model$MSE$Out == 0]
-  #}
-  
 
   if (MSE == TRUE || CV == TRUE) {
     all_precisions <- mse_emdi(object = model, indicator = "all", CV = TRUE)
@@ -219,8 +214,6 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
     Data$smp_size <- -Data$FH_Direct_MSE
     Data$smp_size2 <- -Data$FH_Direct_CV
   }
-
-  #compare_plot_check2(ind_model, ind_direct)
   
   if (model$framework$N_dom_unobs > 0) {
     cat("Please not that since all of the comparisons need a direct estimator, 
@@ -301,7 +294,7 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
 #' @details Since all of the comparisons need a direct estimator, the plots are 
 #' only created for in-sample domains. For the new package version (2.0.0), the 
 #' order of the input arguments direct and model has been changed. In this 
-#' version (1.1.6), it is still possible to use the old order because the 
+#' version, it is still possible to use the old order because the 
 #' arguments are swapped internally. From the next package version on it will no 
 #' longer be possible.
 #' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
@@ -458,13 +451,13 @@ define_evallabel <- function(type, label, indi){
                                       x_lab = "MSE"),
                       ordered_MSE = c(title = indi,
                                       y_lab = "MSE",
-                                      x_lab = "Domain (ordered by decreasing MSE of Direct)"),
+                                      x_lab = "Domain (ordered by increasing MSE of Direct)"),
                       boxplot_CV = c(title = indi,
                                      y_lab = "CV",
                                      x_lab = ""),
                       ordered_CV = c(title = indi,
                                      y_lab = "CV",
-                                     x_lab = "Domain (ordered by decreasing CV of Direct)"))
+                                     x_lab = "Domain (ordered by increasing CV of Direct)"))
       }
 
     } else if (label == "blank") {
@@ -519,13 +512,13 @@ define_evallabel <- function(type, label, indi){
                                       x_lab = "MSE"),
                       ordered_MSE = c(title = "",
                                       y_lab = "MSE",
-                                      x_lab = "Domain (ordered by decreasing MSE of Direct)"),
+                                      x_lab = "Domain (ordered by increasing MSE of Direct)"),
                       boxplot_CV = c(title = "",
                                      y_lab = "CV",
                                      x_lab = ""),
                       ordered_CV = c(title = "",
                                      y_lab = "CV",
-                                     x_lab = "Domain (ordered by decreasing CV of Direct)"))
+                                     x_lab = "Domain (ordered by increasing CV of Direct)"))
       }
 
     }
