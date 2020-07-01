@@ -45,7 +45,7 @@ eblup_FH <- function(framework, sigmau2, combined_data) {
     pred_data_tmp <- combined_data[framework$obs_dom == FALSE,]
 
     pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1,0,1))
-    lhs(framework$formula) <- quote(helper)
+    formula.tools::lhs(framework$formula) <- quote(helper)
     pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
 
     pred_X <- pred_data$x
@@ -119,7 +119,7 @@ eblup_SFH <- function(framework, sigmau2, combined_data) {
     pred_data_tmp <- combined_data[framework$obs_dom == FALSE,]
     
     pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1,0,1))
-    lhs(framework$formula) <- quote(helper)
+    formula.tools::lhs(framework$formula) <- quote(helper)
     pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
     
     pred_X <- pred_data$x
@@ -201,7 +201,7 @@ eblup_YL <- function(framework, sigmau2, combined_data) {
      pred_data_tmp <- combined_data[framework$obs_dom == FALSE,]
   
      pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1,0,1))
-     lhs(framework$formula) <- quote(helper)
+     formula.tools::lhs(framework$formula) <- quote(helper)
      pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
      pred_X <- pred_data$x
      pred_y <- pred_X%*%sigmau2$betahatw
