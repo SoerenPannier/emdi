@@ -67,6 +67,7 @@ criteria are provided, it is not possible to apply the stepwise
 variable selection algorithm.
 }
 \examples{
+\donttest{
 # Loading data - population and sample data
 data("eusilcA_popAgg")
 data("eusilcA_smpAgg")
@@ -85,6 +86,7 @@ step(fh_std)
 
 # Example 2: Choose "KICb2" information criterion
 step(fh_std, criteria = "KICb2")
+}
 }
 \references{
 Marhuenda, Y., Morales, D. and Pardo, M.C. (2014). Information criteria for 

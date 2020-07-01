@@ -87,6 +87,7 @@ step.default <- function(object,...) stats::step(object, ...)
 #' 268-280.
 #' @seealso \code{\link{emdiObject}}, \code{\link{fh}} 
 #' @examples
+#' \donttest{
 #' # Loading data - population and sample data
 #' data("eusilcA_popAgg")
 #' data("eusilcA_smpAgg")
@@ -105,6 +106,7 @@ step.default <- function(object,...) stats::step(object, ...)
 #' 
 #' # Example 2: Choose "KICb2" information criterion
 #' step(fh_std, criteria = "KICb2")
+#' }
 #' @export
 #' @method step fh
 #' @importFrom stats factor.scope   
