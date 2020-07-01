@@ -24,7 +24,7 @@ methods and components of an emdi object are extracted. The returned object
 is suitable for printing  with the \code{print.summary.emdi} method.
 }
 \examples{
-\dontrun{
+\donttest{
 # Example for models of type ebp
 
 # Loading data - population and sample data

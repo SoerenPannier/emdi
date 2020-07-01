@@ -49,7 +49,7 @@ the estimates shall be returned. The returned object is suitable for
 printing with the \code{print.estimators.emdi} method.
 }
 \examples{
-\dontrun{
+\donttest{
 # Loading data - population and sample data
 data("eusilcA_pop")
 data("eusilcA_smp")

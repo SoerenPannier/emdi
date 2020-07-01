@@ -70,7 +70,7 @@
 #' \code{\link{estimators.emdi}}, \code{\link{print.emdi}}, 
 #' \code{\link{summary.emdi}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Loading sample data
 #' data("eusilcA_smp")
 #'

@@ -24,7 +24,7 @@
 #' \code{\link{fh}}, \code{\link[MuMIn]{r.squaredGLMM}}, \code{\link[moments]{skewness}},
 #' \code{\link[moments]{kurtosis}}, \code{\link[stats]{shapiro.test}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Example for models of type ebp
 #' 
 #' # Loading data - population and sample data

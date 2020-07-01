@@ -50,7 +50,7 @@
 #' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}, \code{\link{emdiObject}},
 #' \code{\link[maptools]{readShapePoly}}
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
 #' 

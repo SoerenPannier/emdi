@@ -79,7 +79,7 @@ Function \code{map_plot} creates spatial visualizations of the estimates
 obtained by small area estimation methods or direct estimation.
 }
 \examples{
-\dontrun{
+\donttest{
 data("eusilcA_pop")
 data("eusilcA_smp")
 

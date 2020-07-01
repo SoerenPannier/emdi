@@ -140,7 +140,7 @@ The set of predefined indicators includes the mean, median, four further quantil
 and the quintile share ratio.
 }
 \examples{
-\dontrun{
+\donttest{
 # Loading data - population and sample data
 data("eusilcA_pop")
 data("eusilcA_smp")

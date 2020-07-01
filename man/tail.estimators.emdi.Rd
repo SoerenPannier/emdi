@@ -5,7 +5,7 @@
 \title{Returns the last part of predicted indicators and, if chosen, of MSE and
 CV estimators.}
 \usage{
-\method{tail}{estimators.emdi}(x, n = 6L, addrownums = NULL, ...)
+\method{tail}{estimators.emdi}(x, n = 6L, keepnums = TRUE, addrownums = NULL, ...)
 }
 \arguments{
 \item{x}{an object of type "estimators.emdi", representing
@@ -15,6 +15,10 @@ indicators.}
 \item{n}{a single integer. If positive, it determines the number of rows for
 the data frame. If negative, all but the n first rows of
 elements of the object.}
+
+\item{keepnums}{in each dimension, if no names in that dimension are 
+present, create them using the indices included in that dimension. 
+Ignored if dim(x) is NULL or its length 1.}
 
 \item{addrownums}{if there are no row names, create them from the row numbers.}
 
@@ -28,7 +32,7 @@ Returns the last part of predicted indicators and, if chosen, of MSE and
 CV estimators.
 }
 \examples{
-\dontrun{
+\donttest{
 # Loading data - population and sample data
 data("eusilcA_pop")
 data("eusilcA_smp")

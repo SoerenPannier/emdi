@@ -102,7 +102,7 @@ further quantiles (10\%, 25\%, 75\% and 90\%), head count ratio, poverty gap,
 Gini coefficient and the quintile share ratio.
 }
 \examples{
-\dontrun{
+\donttest{
 # Loading sample data
 data("eusilcA_smp")
 

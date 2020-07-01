@@ -28,7 +28,7 @@ Returns the first part of predicted indicators and, if chosen, of MSE and
 CV estimators.
 }
 \examples{
-\dontrun{
+\donttest{
 # Loading data - population and sample data
 data("eusilcA_pop")
 data("eusilcA_smp")

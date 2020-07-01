@@ -61,7 +61,7 @@ estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
 #' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
 #' \code{\link{fh}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
@@ -141,7 +141,7 @@ print.estimators.emdi <- function(x,...) {
 #' @return Selected rows of the object of type "estimators.emdi".
 #' @seealso \code{\link{estimators.emdi}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
@@ -159,7 +159,7 @@ print.estimators.emdi <- function(x,...) {
 #' }
 #' @importFrom utils head
 #' @export
-head.estimators.emdi <- function(x, n = 6L, addrownums=NULL, ...) {
+head.estimators.emdi <- function(x, n = 6L, addrownums = NULL, ...) {
   head(x$ind, n = n, addrownums = addrownums, ...)
 }
 
@@ -172,12 +172,15 @@ head.estimators.emdi <- function(x, n = 6L, addrownums=NULL, ...) {
 #' @param n a single integer. If positive, it determines the number of rows for
 #' the data frame. If negative, all but the n first rows of
 #' elements of the object.
+#' @param keepnums in each dimension, if no names in that dimension are 
+#' present, create them using the indices included in that dimension. 
+#' Ignored if dim(x) is NULL or its length 1.
 #' @param addrownums if there are no row names, create them from the row numbers.
 #' @param ... arguments to be passed to or from other methods.
 #' @return Selected rows of the object of type "estimators.emdi".
 #' @seealso \code{\link{estimators.emdi}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")
@@ -196,8 +199,8 @@ head.estimators.emdi <- function(x, n = 6L, addrownums=NULL, ...) {
 #' @importFrom utils tail
 #' @export
 
-tail.estimators.emdi <- function(x, n = 6L, addrownums=NULL, ...) {
-  tail(x$ind, n = n, addrownums = addrownums, ...)
+tail.estimators.emdi <- function(x, n = 6L, keepnums = TRUE, addrownums = NULL, ...) {
+  tail(x$ind, n = n, keepnums = keepnums, addrownums = addrownums, ...)
 }
 
 
@@ -228,7 +231,7 @@ as.data.frame.estimators.emdi <- function(x,...) {
 #' @return Selected subsets of the object of type "estimators.emdi".
 #' @seealso \code{\link{estimators.emdi}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")

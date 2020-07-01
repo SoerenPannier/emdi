@@ -111,7 +111,7 @@
 #' \code{\link{estimators.emdi}}, \code{\link{print.emdi}}, \code{\link{plot.emdi}},
 #' \code{\link{summary.emdi}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")

@@ -308,7 +308,7 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
 #' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
 #' \code{\link{fh}} 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Examples for comparisons of direct estimates and models of type ebp
 #' 
 #' # Loading data - population and sample data

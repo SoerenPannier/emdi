@@ -105,7 +105,7 @@ arguments are swapped internally. From the next package version on it will no
 longer be possible.
 }
 \examples{
-\dontrun{
+\donttest{
 # Examples for comparisons of direct estimates and models of type ebp
 
 # Loading data - population and sample data

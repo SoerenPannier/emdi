@@ -96,7 +96,7 @@ The default settings of the \code{label} argument are as follows:\cr
 }
 }
 \examples{
-\dontrun{
+\donttest{
 # Examples for models of type ebp
 # Loading data - population and sample data
 data("eusilcA_pop")

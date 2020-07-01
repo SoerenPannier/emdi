@@ -69,7 +69,7 @@
 ##' }
 #' @seealso \code{\link{emdiObject}}, \code{\link{ebp}}, \code{\link{fh}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Examples for models of type ebp
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")

@@ -18,7 +18,7 @@ Selected subsets of the object of type "estimators.emdi".
 Subsets an estimators.emdi object
 }
 \examples{
-\dontrun{
+\donttest{
 # Loading data - population and sample data
 data("eusilcA_pop")
 data("eusilcA_smp")
