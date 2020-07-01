@@ -337,8 +337,9 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
         eblup <- eblup_FH(framework = framework, sigmau2 = sigmau2,
                           combined_data = combined_data)
         
-        Gamma <- data.frame(Domain = framework$combined_data[[framework$domains]],
-                            Gamma = as.numeric(eblup$gamma))
+        Gamma <- data.frame(Domain = framework$combined_data[[framework$domains]])
+        Gamma$Gamma <- NA
+        Gamma$Gamma[framework$obs_dom == TRUE] <- as.numeric(eblup$gamma)
         # Criteria for model selection -----------------------------------------
          criteria <- model_select(framework = framework, sigmau2 = sigmau2, 
                                   method = method, interval = interval, 
@@ -361,8 +362,10 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
       # Standard EBLUP ---------------------------------------------------------
       eblup <- eblup_YL(framework = framework, sigmau2 = sigmau2,
                         combined_data = combined_data)
-      Gamma <- data.frame(Domain = framework$combined_data[[framework$domains]],
-                          Gamma = as.numeric(eblup$gamma))
+      
+      Gamma <- data.frame(Domain = framework$combined_data[[framework$domains]])
+      Gamma$Gamma <- NA
+      Gamma$Gamma[framework$obs_dom == TRUE] <- as.numeric(eblup$gamma)
       # Criteria for model selection -----------------------------------------
       criteria <- model_select(framework = framework, sigmau2 = sigmau2,
                                method = method, interval = interval, 
@@ -521,8 +524,9 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
       }
       
       # Shrinkage factor
-      Gamma <- data.frame(Domain = framework$combined_data[[framework$domains]],
-                          Gamma = as.numeric(eblup$gamma))
+      Gamma <- data.frame(Domain = framework$combined_data[[framework$domains]])
+      Gamma$Gamma <- NA
+      Gamma$Gamma[framework$obs_dom == TRUE] <- as.numeric(eblup$gamma)
       
       # Back-transformation
       result_data <- backtransformed(framework = framework,

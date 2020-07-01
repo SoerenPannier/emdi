@@ -207,9 +207,9 @@ eblup_YL <- function(framework, sigmau2, combined_data) {
      pred_y <- pred_X%*%sigmau2$betahatw
   
   # Small area mean
-  EBLUP_data$EBLUP[framework$obs_dom == TRUE] <- gamma*framework$direct + 
+  EBLUP_data$FH[framework$obs_dom == TRUE] <- gamma*framework$direct + 
     (1-gamma)* framework$model_X%*%sigmau2$betahatw[,1]
-  EBLUP_data$EBLUP[framework$obs_dom == FALSE] <- pred_y
+  EBLUP_data$FH[framework$obs_dom == FALSE] <- pred_y
   EBLUP_data$Out[framework$obs_dom == TRUE] <- 0
   EBLUP_data$Out[framework$obs_dom == FALSE] <- 1
   }

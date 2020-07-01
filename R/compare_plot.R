@@ -201,7 +201,6 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
   if (is.null(model$MSE)) {
     Data$smp_size <- NULL
   } 
-  
 
   if (MSE == TRUE || CV == TRUE) {
     all_precisions <- mse_emdi(object = model, indicator = "all", CV = TRUE)
@@ -216,7 +215,7 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
   }
   
   if (model$framework$N_dom_unobs > 0) {
-    cat("Please not that since all of the comparisons need a direct estimator, 
+    cat("Please note that since all of the comparisons need a direct estimator, 
   the plots are only created for in-sample domains. \n \n")
   }
   
@@ -372,7 +371,7 @@ compare_plot.emdi <- function(model = NULL, direct = NULL, indicator = "all",
      model <- direct_orig
      direct <- model_orig
      warning("Please note that for the new package version (2.0.0), the order of the input 
-         arguments direct and model has been changed. In this version (1.1.6), it is 
+         arguments direct and model has been changed. In this version, it is 
          still possible to use the old order because the arguments are swapped 
          internally. From the next version on it will no longer be possible.")
    }
