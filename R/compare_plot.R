@@ -111,13 +111,19 @@ compare_plot_ebp <- function(model, direct, indicator = "all", MSE = FALSE,
 
   if (MSE == TRUE || CV == TRUE ) {
     
-    precisions_direct <- mse_emdi(object = direct, indicator = indicator, CV = TRUE)
-    colnames(precisions_direct$ind) <- c("Domain", paste0(colnames(precisions_direct$ind)[-1], "_Direct_MSE"))
-    colnames(precisions_direct$ind_cv) <- c("Domain", paste0(colnames(precisions_direct$ind_cv)[-1], "_Direct_CV"))
+    precisions_direct <- 
+      mse_emdi(object = direct, indicator = indicator, CV = TRUE)
+    colnames(precisions_direct$ind) <- 
+      c("Domain", paste0(colnames(precisions_direct$ind)[-1], "_Direct_MSE"))
+    colnames(precisions_direct$ind_cv) <- 
+      c("Domain", paste0(colnames(precisions_direct$ind_cv)[-1], "_Direct_CV"))
 
-    precisions_model <- mse_emdi(object = model, indicator = indicator, CV = TRUE)
-    colnames(precisions_model$ind) <- c("Domain", paste0(colnames(precisions_model$ind)[-1], "_Model_MSE"))
-    colnames(precisions_model$ind_cv) <- c("Domain", paste0(colnames(precisions_model$ind_cv)[-1], "_Model_CV"))
+    precisions_model <- 
+      mse_emdi(object = model, indicator = indicator, CV = TRUE)
+    colnames(precisions_model$ind) <- 
+      c("Domain", paste0(colnames(precisions_model$ind)[-1], "_Model_MSE"))
+    colnames(precisions_model$ind_cv) <- 
+      c("Domain", paste0(colnames(precisions_model$ind_cv)[-1], "_Model_CV"))
 
     if (MSE == TRUE) {
       Data <- merge(Data, precisions_direct$ind, id = "Domain")
@@ -133,7 +139,8 @@ compare_plot_ebp <- function(model, direct, indicator = "all", MSE = FALSE,
 
   selected_indicators <- selected_model[selected_model %in% selected_direct]
 
-  compare_plots(object = Data, type = "unit", selected_indicators = selected_indicators,
+  compare_plots(object = Data, type = "unit", 
+                selected_indicators = selected_indicators,
                 MSE = MSE, CV = CV, label = label, color = color,
                 shape = shape, line_type = line_type, gg_theme = gg_theme)
 
@@ -185,7 +192,8 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
   Data <- Data[!is.na(Data$Direct), ]
   selected_indicators <- colnames(Data)[!(colnames(Data) %in% c('Domain', 'Direct'))]
   colnames(Data) <- c("Domain", "FH_Direct",
-                            paste0(colnames(Data)[!(colnames(Data) %in% c('Domain', 'Direct'))], "_Model"))
+                            paste0(colnames(Data)[!(colnames(Data) %in% 
+                                                      c('Domain', 'Direct'))], "_Model"))
   if ("FH_Bench" %in% selected_indicators) {
     Data$FH_Bench_Direct <- Data$FH_Direct
   }
@@ -219,7 +227,8 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
   the plots are only created for in-sample domains. \n \n")
   }
   
-  compare_plots(object = Data, type = "area", selected_indicators = selected_indicators,
+  compare_plots(object = Data, type = "area", 
+                selected_indicators = selected_indicators,
                 MSE = MSE, CV = CV, label = label, color = color,
                 shape = shape, line_type = line_type, gg_theme = gg_theme)
 
@@ -376,35 +385,37 @@ compare_plot.emdi <- function(model = NULL, direct = NULL, indicator = "all",
          internally. From the next version on it will no longer be possible.")
    }
   
-  if(is.null(model) & inherits(direct, "fh") ){
+  if (is.null(model) & inherits(direct, "fh") ) {
       model <- direct
   } 
   
-  if((inherits(direct, "fh") & inherits(model, "ebp")) |
+  if ((inherits(direct, "fh") & inherits(model, "ebp")) |
     (inherits(direct, "ebp") & inherits(model, "fh"))) {
     stop(paste0("It is not possible to compare the point and MSE estimates of a
-model of type 'model','fh', to the point and MSE estimates of a 'model','ebp' object.")) 
+            model of type 'model','fh', to the point and MSE estimates of a 
+            'model','ebp' object.")) 
   }
-   if((is.null(model) & inherits(direct, "direct")) |
+   if ((is.null(model) & inherits(direct, "direct")) |
       (is.null(direct) & inherits(model, "direct"))) {
      stop(paste0("If the direct argument is of type 'emdi','direct', the input 
                  argument model is required.")) 
    } 
-   if(inherits(model, "fh")  & inherits(direct, "direct")) {
+   if (inherits(model, "fh")  & inherits(direct, "direct")) {
       stop(paste0("It is not possible to compare the point and MSE estimates of a
-model of type 'model','fh', to the point and MSE estimates of a 'direct' object."))
-   } else if(inherits(model, "fh")){
+              model of type 'model','fh', to the point and MSE estimates of a 
+                  'direct' object."))
+   } else if (inherits(model, "fh")) {
      compare_plot_fh(model = model, direct = model, indicator = indicator,
                      MSE = MSE, CV = CV,
                      label = label, color = color, shape = shape,
                      line_type = line_type, gg_theme = gg_theme)
    }
     
-  if((inherits(model, "ebp") & is.null(direct)) | 
+  if ((inherits(model, "ebp") & is.null(direct)) | 
      (inherits(direct, "ebp") & is.null(model))) {
       stop(paste0("If the model is of type 'model','ebp', the input argument 
                   direct is required."))
-    } else if(inherits(model, "ebp") & inherits(direct, "direct")) {
+    } else if (inherits(model, "ebp") & inherits(direct, "direct")) {
       compare_plot_ebp(model = model, direct = direct, indicator = indicator,
                        MSE = MSE, CV = CV,
                        label = label, color = color, shape = shape,
@@ -524,7 +535,7 @@ define_evallabel <- function(type, label, indi){
 
   }
   return(label)
-    }
+}
 
 
 compare_plots <- function(object, type, selected_indicators, MSE, CV, label, color,
@@ -579,7 +590,8 @@ compare_plots <- function(object, type, selected_indicators, MSE, CV, label, col
     print((plotList[[paste("scatter", ind, sep = "_")]] <- 
              ggplot(data_tmp, aes(x = Direct, y = Model_based)) + 
              geom_point(shape = shape[1]) +
-             geom_smooth(method = lm, se = FALSE, inherit.aes = FALSE, 
+             geom_smooth(method = lm, formula = y ~ x, se = FALSE, 
+                         inherit.aes = FALSE, 
                          lty = line_type[1],
                          aes(colour = "Reg. line", x = Direct, y = Model_based)) + 
              geom_abline(mapping = aes(colour = "Intersection", 
@@ -638,25 +650,22 @@ compare_plots <- function(object, type, selected_indicators, MSE, CV, label, col
       cat("Press [enter] to continue")
       line <- readline()
 
-      print((plotList[[paste("boxplot", "MSE", ind, sep = "_")]] <- ggplot(data_shaped,
-                                                                        aes(x = Method, y = value,
-                                                                            fill = Method)) +
+      print((plotList[[paste("boxplot", "MSE", ind, sep = "_")]] <- 
+               ggplot(data_shaped, aes(x = Method, y = value, fill = Method)) +
                geom_boxplot() +
                coord_flip() +
                labs(title = label_ind$boxplot_MSE["title"],
                     x = label_ind$boxplot_MSE["x_lab"],
                     y = label_ind$boxplot_MSE["y_lab"]) +
                scale_fill_manual(name = "Method",
-                                 values = color)+  
+                                 values = color) +  
                gg_theme))
 
       cat("Press [enter] to continue")
       line <- readline()
 
-      print((plotList[[paste("ordered", "MSE", ind, sep = "_")]] <- ggplot(data_shaped,
-                                                                        aes(x = area,
-                                                                            y = value,
-                                                                            colour = Method)) +
+      print((plotList[[paste("ordered", "MSE", ind, sep = "_")]] <- 
+               ggplot(data_shaped, aes(x = area, y = value, colour = Method)) +
                geom_point(aes(color = Method, shape = Method)) +
                labs(title = label_ind$ordered_MSE["title"],
                                    x = label_ind$ordered_MSE["x_lab"],
@@ -681,9 +690,8 @@ compare_plots <- function(object, type, selected_indicators, MSE, CV, label, col
       cat("Press [enter] to continue")
       line <- readline()
 
-      print((plotList[[paste("boxplot", "CV", ind, sep = "_")]] <- ggplot(data_shaped,
-                                                                        aes(x = Method, y = value,
-                                                                            fill = Method)) +
+      print((plotList[[paste("boxplot", "CV", ind, sep = "_")]] <- 
+               ggplot(data_shaped, aes(x = Method, y = value, fill = Method)) +
                geom_boxplot() +
                coord_flip() +
                labs(title = label_ind$boxplot_CV["title"],
@@ -697,15 +705,13 @@ compare_plots <- function(object, type, selected_indicators, MSE, CV, label, col
 
       data_shaped
 
-      print((plotList[[paste("ordered", "CV", ind, sep = "_")]] <- ggplot(data_shaped,
-                                                                        aes(x = area,
-                                                                            y = value,
-                                                                            colour = Method)) +
+      print((plotList[[paste("ordered", "CV", ind, sep = "_")]] <- 
+               ggplot(data_shaped, aes(x = area, y = value, colour = Method)) +
                geom_point(aes(color = Method, shape = Method)) +
                labs(title = label_ind$ordered_CV["title"],
                                    x = label_ind$ordered_CV["x_lab"],
                                    y = label_ind$ordered_CV["y_lab"]) +
-               scale_color_manual(values = color))+
+               scale_color_manual(values = color)) +
         scale_shape_manual(values = c(shape[1], shape[2])) + gg_theme)
     }
 
