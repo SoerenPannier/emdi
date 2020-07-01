@@ -88,7 +88,6 @@
 #' 
 #'         }
 #' @export
-# @import rgeos maptools  
 #' @importFrom reshape2 melt
 #' @importFrom ggplot2 aes geom_polygon facet_wrap fortify coord_equal labs
 #' @importFrom ggplot2 theme element_blank guides scale_fill_gradient
