@@ -267,9 +267,11 @@
 #' Ci = Ci_array, MSE = TRUE, mse_type = "jackknife")
 #' }
 #' @export
-#' @importFrom formula.tools lhs 
+#' @importFrom formula.tools lhs lhs<-
 #' @importFrom stats coefficients integrate median model.frame model.matrix  
 #' @importFrom stats model.response optimize pnorm rnorm terms update
+#' @importFrom stats complete.cases var
+
 
 
 
