@@ -1,3 +1,13 @@
+# emdi 2.0.0
+* Area-level models newly added via function `fh`
+* All methods for `emdi model` are extended for `emdi model fh`
+* Step function for area-level models newly added
+* Three new data sets `eusilcA_smpAgg`, `eusilcA_popAgg` and 
+`eusilcA_prox` have been integrated
+* New additional vignette
+* Change of argument order (model and direct) in function `compare_plot`
+* Minor bug fixes in argument checkings and message handling
+
 # emdi 1.1.7
  
 * Minor typos corrected
