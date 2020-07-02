@@ -1,8 +1,10 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 language: R
-install: travis_wait 30 mvn install
 sudo: false
 cache: packages
+env:
+  global:
+    - _R_CHECK_DONTTEST_EXAMPLES_=FALSE
 r_github_packages: 
  - cran/survival
 addons:
