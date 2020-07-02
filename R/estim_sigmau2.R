@@ -8,7 +8,7 @@
 #' @param vardir direct variance.
 #' @param areanumber number of domains.
 #' @return estimated sigmau2.
-#' @keywords internal
+#' @noRd
 
 
 Reml <- function(interval, direct, x, vardir, areanumber) {
@@ -53,7 +53,7 @@ Reml <- function(interval, direct, x, vardir, areanumber) {
 #' @param vardir direct variance.
 #' @param areanumber number of domains.
 #' @return estimated sigmau2.
-#' @keywords internal
+#' @noRd
 
 AMRL <- function(interval, direct, x, vardir, areanumber) {
 
@@ -100,7 +100,7 @@ AMRL <- function(interval, direct, x, vardir, areanumber) {
 #' @param vardir direct variance.
 #' @param areanumber number of domains.
 #' @return estimated sigmau2.
-#' @keywords internal
+#' @noRd
 
 AMRL_YL <- function(interval, direct, x, vardir, areanumber) {
 
@@ -148,7 +148,7 @@ AMRL_YL <- function(interval, direct, x, vardir, areanumber) {
 #' @param vardir direct variance.
 #' @param areanumber number of domains.
 #' @return estimated sigmau2.
-#' @keywords internal
+#' @noRd
 
 AMPL <- function(interval, direct, x, vardir, areanumber) {
 
@@ -194,7 +194,7 @@ AMPL <- function(interval, direct, x, vardir, areanumber) {
 #' @param vardir direct variance.
 #' @param areanumber number of domains.
 #' @return estimated sigmau2.
-#' @keywords internal
+#' @noRd
 
 AMPL_YL <- function(interval, direct, x, vardir, areanumber) {
 
@@ -240,7 +240,7 @@ AMPL_YL <- function(interval, direct, x, vardir, areanumber) {
 #' @param vardir direct variance.
 #' @param areanumber number of domains.
 #' @return estimated sigmau2.
-#' @keywords internal
+#' @noRd
 
 MPL <- function(interval, direct, x, vardir, areanumber) {
 
@@ -284,7 +284,7 @@ MPL <- function(interval, direct, x, vardir, areanumber) {
 #' @param maxit maximum number of iterations for the estimation of the variance.
 #' @param tol tolerance value for the estimation of the variance.
 #' @return estimated sigmau2 and beta coefficients and convergence (TRUE/FALSE).
-#' @keywords internal
+#' @noRd
 
 SML <- function(direct, X, vardir, areanumber, W, maxit, tol){
   
@@ -398,7 +398,7 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol){
 #' @param maxit maximum number of iterations for the estimation of the variance.
 #' @param tol tolerance value for the estimation of the variance.
 #' @return estimated sigmau2 and beta coefficients and convergence (TRUE/FALSE).
-#' @keywords internal
+#' @noRd
  
 SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
   
@@ -510,7 +510,7 @@ SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
 #' @param tol tolerance value.
 #' @param maxit maximum number of iterations.
 #' @return estimated sigmau2 and estimated beta coefficients.
-#' @keywords internal
+#' @noRd
 
 ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
   
@@ -617,7 +617,7 @@ ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
 #' @param x matrix with explanatory variables.
 #' @param areanumber number of domains.
 #' @return estimated sigmau2.
-#' @keywords internal
+#' @noRd
 
 wrapper_estsigmau2 <- function(framework, method, interval) {
 

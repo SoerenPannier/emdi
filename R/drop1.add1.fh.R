@@ -11,7 +11,7 @@
 #' @param areanumber number of domains.
 #' @return value of chosen criteria for the different variable combinations when 
 #' one variable is dropped.
-#' @keywords internal
+#' @noRd
 #' @importFrom stats terms drop.scope update.formula update formula
 
 drop1.fh <- function(object,criteria, scope,...)
@@ -40,7 +40,7 @@ drop1.fh <- function(object,criteria, scope,...)
     nfit$call$fixed <- update(object$fixed, as.formula(paste("~ . -", tt)),
                              evaluate = FALSE) 
     nfit$call$formula <- NULL
-    nfit <- eval(nfit$call)
+    catmessage <- capture.output(nfit <- eval(nfit$call))
     
     ans[i+1, ] <- c(length(attr(terms(nfit$fixed), "term.labels")) + 1,
                     nfit$model$model_select[[criteria]])
@@ -73,7 +73,7 @@ drop1.fh <- function(object,criteria, scope,...)
 #' @param areanumber number of domains.
 #' @return value of chosen criteria for the different variable combinations when 
 #' one variable is added.
-#' @keywords internal
+#' @noRd
 #' @importFrom stats add.scope drop.scope formula update.formula update terms
 
 add1.fh <- function(object, criteria, scope, trace = TRUE, ...)
@@ -97,7 +97,8 @@ add1.fh <- function(object, criteria, scope, trace = TRUE, ...)
     nfit$call$fixed <- update(object$fixed, as.formula(paste("~ . +", tt)),
                               evaluate = FALSE)
     nfit$call$formula <- NULL
-    nfit <- eval(nfit$call)
+    catmessage <- capture.output(nfit <- eval(nfit$call))
+    
     ans[i+1L, ] <- c(length(attr(terms(nfit$fixed), "term.labels")) + 1,
                      nfit$model$model_select[[criteria]]) 
     nnew <- nfit$framework$N_dom_smp

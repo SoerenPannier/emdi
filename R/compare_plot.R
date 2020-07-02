@@ -78,7 +78,7 @@ compare_plot <- function(model, direct,  indicator = "all", MSE = FALSE,
 #' If the input arguments MSE and CV are set to TRUE two extra plots are created, 
 #' respectively: the MSE/CV estimates of the direct and model-based estimates are 
 #' compared by boxplots and scatter plots.
-#' @keywords internal
+#' @noRd
 
 compare_plot_ebp <- function(model, direct, indicator = "all", MSE = FALSE,
                              CV = FALSE, label = "orig",
@@ -172,7 +172,7 @@ compare_plot_ebp <- function(model, direct, indicator = "all", MSE = FALSE,
 #' If the input arguments MSE and CV are set to TRUE two extra plots are created, 
 #' respectively: the MSE/CV estimates of the direct and model-based estimates are 
 #' compared by boxplots and scatter plots.
-#' @keywords internal
+#' @noRd
 
 compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = FALSE,
                             label = "orig", color = c("blue", "lightblue3"),
