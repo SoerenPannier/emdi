@@ -1,5 +1,6 @@
-The package tests make use of the "incomedata" and "Xoutsamp" data sets provided 
-by the sae package under a GPL-2 license.
+The package tests make use of the "incomedata", "Xoutsamp", "milk", 
+"grapes" and "grapesprox" data sets provided by the sae package under 
+a GPL-2 license.
 
 Molina I and Marhuenda Y (2015). “sae: An R Package for Small Area Estimation.” 
 The R Journal, 7(1), pp. 81-98. <URL:
