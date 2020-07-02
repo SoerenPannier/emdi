@@ -73,6 +73,25 @@ compare_plot <- function(model, direct,  indicator = "all", MSE = FALSE,
 #' defined as argument for model-based approaches (see also \code{\link{ebp}})
 #' and do not appear in groups of indicators even though these might belong to
 #' one of the groups.
+#' @param MSE optional logical. If \code{TRUE}, the MSE estimates of the direct 
+#' and model-based estimates are compared via suitable plots. Defaults to \code{FALSE}.
+#' @param CV optional logical. If \code{TRUE}, the coefficient of variation 
+#' estimates of the direct and model-based estimates are compared via suitable plots. 
+#' Defaults to \code{FALSE}.
+#' @param label argument that enables to customize title and axis labels. There 
+#' are three options to label the evaluation plots: (i) original labels ("orig"), 
+#' (ii) axis labels but no title ("no_title"), (iii) neither axis 
+#' labels nor title ("blank").
+#' @param color a vector with two elements determining color schemes in returned 
+#' plots.
+#' @param shape a numeric vector with two elements determining the shape of points
+#' in returned plots.
+#' @param line_type a character vector with two elements determining the line 
+#' types in returned plots.
+#' @param gg_theme \code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
+#' For using this argument, package \pkg{ggplot2} must be loaded via 
+#' \code{library(ggplot2)}. 
+#' @param ... further arguments passed to or from other methods.
 #' @return A scatter plot and a line plot comparing direct and model-based
 #' estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
 #' If the input arguments MSE and CV are set to TRUE two extra plots are created, 
@@ -167,6 +186,25 @@ compare_plot_ebp <- function(model, direct, indicator = "all", MSE = FALSE,
 #' defined as argument for model-based approaches (see also \code{\link{ebp}})
 #' and do not appear in groups of indicators even though these might belong to
 #' one of the groups.
+#' @param MSE optional logical. If \code{TRUE}, the MSE estimates of the direct 
+#' and model-based estimates are compared via suitable plots. Defaults to \code{FALSE}.
+#' @param CV optional logical. If \code{TRUE}, the coefficient of variation 
+#' estimates of the direct and model-based estimates are compared via suitable plots. 
+#' Defaults to \code{FALSE}.
+#' @param label argument that enables to customize title and axis labels. There 
+#' are three options to label the evaluation plots: (i) original labels ("orig"), 
+#' (ii) axis labels but no title ("no_title"), (iii) neither axis 
+#' labels nor title ("blank").
+#' @param color a vector with two elements determining color schemes in returned 
+#' plots.
+#' @param shape a numeric vector with two elements determining the shape of points
+#' in returned plots.
+#' @param line_type a character vector with two elements determining the line 
+#' types in returned plots.
+#' @param gg_theme \code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
+#' For using this argument, package \pkg{ggplot2} must be loaded via 
+#' \code{library(ggplot2)}. 
+#' @param ... further arguments passed to or from other methods.
 #' @return A scatter plot and a line plot comparing direct and model-based
 #' estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
 #' If the input arguments MSE and CV are set to TRUE two extra plots are created, 
