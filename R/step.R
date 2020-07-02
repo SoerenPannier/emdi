@@ -123,7 +123,7 @@ step.fh <- function (object, scope = NULL, criteria = "AIC",
        criteria == "KICb1"|| criteria == "KICb2") && 
       (is.null(object$model$seed)))  {
     object$call$seed <- 123
-    object <- eval(object$call)
+    catmessage <- capture.output(object <- eval(object$call))
     cat("Seed in fh object not defined, 123 used as default seed. \n")
   }
   
@@ -132,7 +132,7 @@ step.fh <- function (object, scope = NULL, criteria = "AIC",
       string[-1L] <- paste0("\n", string[-1L])
     string
   }
-  step.results <- function(models, fit, object) { 
+  step.results <- function(models, fit, object, catmessage) { 
     change <- vapply(models, "[[" , "change", FUN.VALUE = character(1))
     rdf <- vapply(models, "[[", "df.resid", FUN.VALUE = numeric(1))
     ddf <- c(NA, diff(rdf))
@@ -146,7 +146,8 @@ step.fh <- function (object, scope = NULL, criteria = "AIC",
     attr(aod, "heading") <- heading
     fit$anova <- aod
     list(Call = fit$call,
-         Coefficients = fit$model$coefficients)
+         Coefficients = fit$model$coefficients,
+         catmessage = catmessage)
     
   }
   Terms <- terms(object$fixed)
@@ -237,9 +238,8 @@ step.fh <- function (object, scope = NULL, criteria = "AIC",
                              evaluate = FALSE) 
     fit$call$MSE <- FALSE
     fit$call$formula <- NULL  
-    fit <- eval(fit$call)
-    
-    
+    catmessage <- capture.output(fit <- eval(fit$call))
+   
     nnew <- fit$framework$N_dom_smp 
     if (all(is.finite(c(n, nnew))) && nnew != n) 
       stop("number of rows in use has changed: remove missing values?")
@@ -257,7 +257,11 @@ step.fh <- function (object, scope = NULL, criteria = "AIC",
     nm <- nm + 1
     models[[nm]] <- list(df.resid = n - edf,change = "", criteria = bcriteria)
   }
-  results <- step.results(models = models[seq(nm)], fit, object) 
+  if (any(grepl(pattern = c("note that the model selection criteria are only computed based"),
+                x = catmessage))){
+    catmessage <- TRUE
+  } else { catmessage <- FALSE}
+  results <- step.results(models = models[seq(nm)], fit, object, catmessage) 
   class(results) <- "step"
   results
 }
@@ -278,6 +282,12 @@ print.step <- function(x, ...)
   cat("\n")
   cat("Coefficients:\n ")
   print(x$Coefficients)
+  cat("\n")
+  if (x$catmessage == TRUE){
+    cat("Please note that the model selection criteria are only computed based on 
+       the in-sample domains. \n ")
+  }
+  
 }
 
 step_check <- function(object, scope, criteria, direction, trace, 
