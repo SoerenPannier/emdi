@@ -110,8 +110,9 @@ step.default <- function(object,...) stats::step(object, ...)
 #' @export
 #' @method step fh
 #' @importFrom stats factor.scope   
+#' @importFrom utils capture.output
 
-step.fh <- function (object, scope = NULL, criteria = "AIC", 
+step.fh <- function(object, scope = NULL, criteria = "AIC", 
                      direction = "both", trace = TRUE,
                      steps = 1000, ...){
   
