@@ -2,12 +2,12 @@ compare_plot_check <- function(model, indicator, label, color, shape,
                                 line_type, gg_theme) {
   
 
-  if (is.null(indicator) || !(indicator == "all" || indicator == "Quantiles" 
-                              || indicator == "quantiles"
-                              || indicator == "Poverty" || indicator == "poverty" 
-                              || indicator == "Inequality" || indicator == "inequality" 
-                              || indicator == "Custom" || indicator == "custom" 
-                              || indicator %in% names(model$ind[-1]))) {
+  if (is.null(indicator) || !all(indicator == "all" | indicator == "Quantiles" 
+                              | indicator == "quantiles"
+                              | indicator == "Poverty" | indicator == "poverty" 
+                              | indicator == "Inequality" | indicator == "inequality" 
+                              | indicator == "Custom" | indicator == "custom" 
+                              | indicator %in% names(model$ind[-1]))) {
     stop(paste0("The argument indicator is set to ", indicator, ". The argument 
                 only allows to be set to all, a name of estimated indicators or 
                 indicator groups as described in help(estimators.emdi)."))

@@ -200,7 +200,7 @@ head.estimators.emdi <- function(x, n = 6L, addrownums = NULL, ...) {
 #' @export
 
 tail.estimators.emdi <- function(x, n = 6L, keepnums = TRUE, addrownums = NULL, ...) {
-  tail(x$ind, n = n, keepnums = keepnums, addrownums = addrownums, ...)
+  tail(x$ind, n = n, keepnums = keepnums, ...)
 }
 
 

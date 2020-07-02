@@ -461,12 +461,12 @@ add_summary_direct <- function(object, wb, headlines_cs) {
 add_pointests <- function(object, indicator, wb, headlines_cs) {
   addWorksheet(wb, sheetName = "Point Estimators", gridLines = FALSE)
   
-  if (is.null(indicator) || !(indicator == "all" || indicator == "Quantiles" 
-                              || indicator == "quantiles"
-                              || indicator == "Poverty" || indicator == "poverty" 
-                              || indicator == "Inequality" || indicator == "inequality" 
-                              || indicator == "Custom" || indicator == "custom" 
-                              || indicator %in% names(object$ind[-1]))) {
+  if (is.null(indicator) || !all(indicator == "all" | indicator == "Quantiles" 
+                              | indicator == "quantiles"
+                              | indicator == "Poverty" | indicator == "poverty" 
+                              | indicator == "Inequality" | indicator == "inequality" 
+                              | indicator == "Custom" | indicator == "custom" 
+                              | indicator %in% names(object$ind[-1]))) {
     stop(paste0("The argument indicator is set to ", indicator, ". The argument 
          only allows to be set to all, a name of estimated indicators or 
                 indicator groups as described in help(estimators.emdi)."))
