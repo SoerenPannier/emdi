@@ -1,6 +1,6 @@
 # External documentation -------------------------------------------------------
 
-#' Visualizes regional disaggregrated estimates on a map
+#' Visualizes regional disaggregated estimates on a map
 #'
 #' Function \code{map_plot} creates spatial visualizations of the estimates
 #' obtained by small area estimation methods or direct estimation.
@@ -36,8 +36,7 @@
 #' @param scale_points a structure defining the lowest, the mid and the highest 
 #' value of the colorscale. If a numeric vector of length two is given, this scale
 #' will be used for every plot. Alternatively, a list defining colors for each 
-#' plot separately may be given. Please see the details section and examples for 
-#' this. 
+#' plot separately may be given. 
 #' @param guide character passed to 
 #' \code{scale_colour_gradient} from \pkg{ggplot2}.
 #' Possible values are "none", "colourbar", and "legend".

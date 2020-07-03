@@ -11,7 +11,7 @@
 # emdi 1.1.7
  
 * Minor typos corrected
-* Unit-Tests adjusted to the forthcomming R-Version 4.0
+* Unit-Tests adjusted to the forthcoming R-Version 4.0
 
 # emdi 1.1.6
  

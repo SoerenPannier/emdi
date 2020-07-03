@@ -91,7 +91,7 @@ the sampling variances following \cite{Neves et al. (2013)},
 (iii) arcsin transformation ("\code{arcsin}") of the dependent variable and of 
 the sampling variances following \cite{Jiang et al. (2001)}. Defaults to "\code{no}".}
 
-\item{backtransformation}{a character that determines the type of bracktransformation 
+\item{backtransformation}{a character that determines the type of backtransformation 
 of the EBLUPs and MSE estimates. Required argument when a transformation is chosen. 
 Available methods are 
 (i) crude bias-correction following \cite{Neves et al. (2013)} and 
