@@ -419,7 +419,7 @@ compare_plot.emdi <- function(model = NULL, direct = NULL, indicator = "all",
      direct <- model_orig
      warning("Please note that for the new package version (2.0.0), the order of the input 
          arguments direct and model has been changed. In this version, it is 
-         still possible to use the old order because the arguments are swapped 
+         still possible to use the old order becauwese the arguments are swapped 
          internally. From the next version on it will no longer be possible.")
    }
   
