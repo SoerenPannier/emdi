@@ -15,7 +15,8 @@ test_that("Does the fh function in emdi return the same variance, EBLUP and MSE
             milk$var <- milk$SD^2
             fh_reml <- fh(fixed = yi ~ as.factor(MajorArea), vardir = "var",
                           combined_data = milk, domains = "SmallArea",
-                          method = "reml", interval = c(0, 1000), MSE = TRUE)
+                          method = "reml", interval = c(0, 1000), MSE = TRUE, 
+                          B = NULL)
             
             # Estimation with mseFH of sae (benchmark)
             fh_reml_sae <- read.csv("FH/fh_reml_sae.csv", sep = ",", 
@@ -33,7 +34,7 @@ test_that("Does the fh function in emdi return the same variance, EBLUP and MSE
             # Estimation with fh of emdi
             fh_ml <- fh(fixed = yi ~ as.factor(MajorArea), vardir = "var",
                         combined_data = milk, domains = "SmallArea",
-                        method = "ml", interval = c(0, 1000), MSE = TRUE)
+                        method = "ml", interval = c(0, 1000), MSE = TRUE, B = NULL)
             
             # Estimation with mseFH of sae (benchmark)
             fh_ml_sae <- read.csv("FH/fh_ml_sae.csv", sep = ",", 
