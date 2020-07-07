@@ -1,7 +1,7 @@
 Package: emdi
 Title: Estimating and Mapping Disaggregated Indicators
 Version: 2.0.0
-Date: 2020-07-06
+Date: 2020-07-07
 Authors@R: c(person("Sylvia", "Harmening", role="aut", email = "sylvia.harmening@fu-berlin.de"), 
     person("Ann-Kristin", "Kreutzmann", role="aut", email="ann-kristin.kreutzmann@fu-berlin.de"),
     person("Soeren", "Pannier", role=c("aut", "cre"), email="soeren.pannier@fu-berlin.de"),
@@ -26,7 +26,7 @@ Description: Functions that support estimating, assessing and mapping regional
     see "The {R} Package {emdi} for Estimating and Mapping Regionally Disaggregated Indicators"
     by Kreutzmann et al. (2019) <doi:10.18637/jss.v091.i07>.
 Depends:
-    R (>= 3.5.0)
+    R (>= 4.0.0)
 License: GPL-2
 URL: https://github.com/SoerenPannier/emdi
 LazyData: true

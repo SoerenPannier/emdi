@@ -7,6 +7,7 @@
 * New additional vignette
 * Change of argument order (model and direct) in function `compare_plot`
 * Minor bug fixes in argument checkings and message handling
+* Updated R version dependency
 
 # emdi 1.1.7
  
