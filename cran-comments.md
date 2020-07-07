@@ -1,6 +1,7 @@
 ## This is a resubmission
 * all previous issues have been fixed and, additional to the tests below, 
 have been tested on win-builder.r-project.org
+* Check time in seconds: 548 (on win-builder R 4.0.2)
 
 ## Test environments
 * Ubuntu 16.04.6 LTS (on travis-ci), R 4.0.0
