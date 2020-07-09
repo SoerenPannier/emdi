@@ -34,7 +34,7 @@
 #' @return Plots comparing direct and model-based estimators for each selected 
 #' indicator obtained by \code{\link[ggplot2]{ggplot}}.
 #' @details Since all of the comparisons need a direct estimator, the plots are 
-#' only created for in-sample domains. For the new package version (2.0.0), the 
+#' only created for in-sample domains. For the new package version (2.0.1), the 
 #' order of the input arguments direct and model has been changed. In this version, it 
 #' is still possible to use the old order because the 
 #' arguments are swapped internally. From the next package version on, it will no 
@@ -338,7 +338,7 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
 #' respectively: the MSE/CV estimates of the direct and model-based estimates are 
 #' compared by boxplots and scatter plots.
 #' @details Since all of the comparisons need a direct estimator, the plots are 
-#' only created for in-sample domains. For the new package version (2.0.0), the 
+#' only created for in-sample domains. For the new package version (2.0.1), the 
 #' order of the input arguments direct and model has been changed. In this 
 #' version, it is still possible to use the old order because the 
 #' arguments are swapped internally. From the next package version on it will no 
@@ -417,7 +417,7 @@ compare_plot.emdi <- function(model = NULL, direct = NULL, indicator = "all",
      direct_orig <- direct
      model <- direct_orig
      direct <- model_orig
-     warning("Please note that for the new package version (2.0.0), the order of the input 
+     warning("Please note that for the new package version (2.0.1), the order of the input 
          arguments direct and model has been changed. In this version, it is 
          still possible to use the old order becauwese the arguments are swapped 
          internally. From the next version on it will no longer be possible.")

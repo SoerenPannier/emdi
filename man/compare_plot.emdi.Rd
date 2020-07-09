@@ -98,7 +98,7 @@ estimates are compared by boxplots and scatter plots.
 }
 \details{
 Since all of the comparisons need a direct estimator, the plots are 
-only created for in-sample domains. For the new package version (2.0.0), the 
+only created for in-sample domains. For the new package version (2.0.1), the 
 order of the input arguments direct and model has been changed. In this 
 version, it is still possible to use the old order because the 
 arguments are swapped internally. From the next package version on it will no 
