@@ -1,3 +1,8 @@
+# emdi 2.0.1
+* Robustifying tests to comply with alternative BLAS/LAPACK implementations
+* Robustifying tests to work with r-oldrel
+* Updated R version dependency
+
 # emdi 2.0.0
 * Area-level models newly added via function `fh`
 * All methods for `emdi model` are extended for `emdi model fh`
