@@ -20,16 +20,19 @@ test_that("Does the variance estimation (and resulting EBLUPs and MSEs)
             # ML model fitting status quo (benchmark)
             ML_modelfit <- read.csv("FH/ML_modelfit.csv", sep = ",", 
                                     stringsAsFactors = TRUE)  
-            
             # Compare results from current version and benchmark
             # EBLUP
             expect_equal(fh_ML$ind[, c("Domain","FH")], 
-                         ML_modelfit[, c("Domain","FH")])
-            expect_equal(fh_ML$ind$FH, ML_modelfit$FH)
+                         ML_modelfit[, c("Domain","FH")],
+                         tolerance = 1e-5)
+            expect_equal(fh_ML$ind$FH, ML_modelfit$FH,
+                         tolerance = 1e-5)
             # MSE
-            expect_equal(fh_ML$MSE$FH, ML_modelfit$MSE)
+            expect_equal(fh_ML$MSE$FH, ML_modelfit$MSE,
+                         tolerance = 1e-5)
             # Variance
-            expect_equal(fh_ML$model$variance, ML_modelfit$variance[1])
+            expect_equal(fh_ML$model$variance, ML_modelfit$variance[1],
+                         tolerance = 1e-5)
             
  ################################ REML #########################################          
             # REML model fitting (current version) 
@@ -45,11 +48,14 @@ test_that("Does the variance estimation (and resulting EBLUPs and MSEs)
             # Compare results from current version and benchmark
             # EBLUP
             expect_equal(fh_REML$ind[, c("Domain","FH")], 
-                         REML_modelfit[, c("Domain","FH")])
+                         REML_modelfit[, c("Domain","FH")],
+                         tolerance = 1e-5)
             # MSE
-            expect_equal(fh_REML$MSE$FH, REML_modelfit$MSE)
+            expect_equal(fh_REML$MSE$FH, REML_modelfit$MSE,
+                         tolerance = 1e-5)
             # Variance
-            expect_equal(fh_REML$model$variance, REML_modelfit$variance[1])
+            expect_equal(fh_REML$model$variance, REML_modelfit$variance[1],
+                         tolerance = 1e-5)
             
 ################################# AMPL #########################################
             # AMPL model fitting (current version) 
@@ -65,11 +71,14 @@ test_that("Does the variance estimation (and resulting EBLUPs and MSEs)
             # Compare results from current version and benchmark
             # EBLUP
             expect_equal(fh_AMPL$ind[, c("Domain","FH")], 
-                         AMPL_modelfit[, c("Domain","FH")])
+                         AMPL_modelfit[, c("Domain","FH")],
+                         tolerance = 1e-5)
             # MSE
-            expect_equal(fh_AMPL$MSE$FH, AMPL_modelfit$MSE)
+            expect_equal(fh_AMPL$MSE$FH, AMPL_modelfit$MSE,
+                         tolerance = 1e-5)
             # Variance
-            expect_equal(fh_AMPL$model$variance, AMPL_modelfit$variance[1])
+            expect_equal(fh_AMPL$model$variance, AMPL_modelfit$variance[1],
+                         tolerance = 1e-5)
             
 ################################# AMRL #########################################
             # AMRL model fitting (current version) 
@@ -85,11 +94,14 @@ test_that("Does the variance estimation (and resulting EBLUPs and MSEs)
             # Compare results from current version and benchmark
             # EBLUP
             expect_equal(fh_AMRL$ind[, c("Domain","FH")], 
-                         AMRL_modelfit[, c("Domain","FH")])
+                         AMRL_modelfit[, c("Domain","FH")],
+                         tolerance = 1e-5)
             # MSE
-            expect_equal(fh_AMRL$MSE$FH, AMRL_modelfit$MSE)
+            expect_equal(fh_AMRL$MSE$FH, AMRL_modelfit$MSE,
+                         tolerance = 1e-5)
             # Variance
-            expect_equal(fh_AMRL$model$variance, AMRL_modelfit$variance[1])
+            expect_equal(fh_AMRL$model$variance, AMRL_modelfit$variance[1],
+                         tolerance = 1e-5)
             
 ################################# AMPL_YL ######################################
             # AMPL_YL model fitting (current version) 
@@ -105,11 +117,14 @@ test_that("Does the variance estimation (and resulting EBLUPs and MSEs)
             # Compare results from current version and benchmark
             # EBLUP
             expect_equal(fh_AMPL_YL$ind[, c("Domain","FH")], 
-                         AMPL_YL_modelfit[, c("Domain","FH")])
+                         AMPL_YL_modelfit[, c("Domain","FH")],
+                         tolerance = 1e-5)
             # MSE
-            expect_equal(fh_AMPL_YL$MSE$FH, AMPL_YL_modelfit$MSE)
+            expect_equal(fh_AMPL_YL$MSE$FH, AMPL_YL_modelfit$MSE,
+                         tolerance = 1e-5)
             # Variance
-            expect_equal(fh_AMPL_YL$model$variance, AMPL_YL_modelfit$variance[1])
+            expect_equal(fh_AMPL_YL$model$variance, AMPL_YL_modelfit$variance[1],
+                         tolerance = 1e-5)
             
 ################################# AMRL_YL ######################################
             # AMRL_YL model fitting (current version) 
@@ -125,9 +140,12 @@ test_that("Does the variance estimation (and resulting EBLUPs and MSEs)
             # Compare results from current version and benchmark
             # EBLUP
             expect_equal(fh_AMRL_YL$ind[, c("Domain","FH")], 
-                         AMRL_YL_modelfit[, c("Domain","FH")])
+                         AMRL_YL_modelfit[, c("Domain","FH")],
+                         tolerance = 1e-5)
             # MSE
-            expect_equal(fh_AMRL_YL$MSE$FH, AMRL_YL_modelfit$MSE)
+            expect_equal(fh_AMRL_YL$MSE$FH, AMRL_YL_modelfit$MSE,
+                         tolerance = 1e-5)
             # Variance
-            expect_equal(fh_AMRL_YL$model$variance, AMRL_YL_modelfit$variance[1]) 
+            expect_equal(fh_AMRL_YL$model$variance, AMRL_YL_modelfit$variance[1],
+                         tolerance = 1e-5) 
             })
