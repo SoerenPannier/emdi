@@ -5,7 +5,7 @@
 ## Test environments
 * Ubuntu 16.04.6 LTS (on travis-ci), R 4.0.0
 * Windows10 R 4.0.2 local development environment
-* win-builder: R 4.0.2, R 3.6.3, R 
+* win-builder: R 4.0.2, R 3.6.3, R Under development
 
 
 ## R CMD check results
