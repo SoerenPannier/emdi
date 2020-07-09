@@ -2,7 +2,7 @@ The package tests make use of the "incomedata", "Xoutsamp", "milk",
 "grapes" and "grapesprox" data sets provided by the sae package under 
 a GPL-2 license.
 
-Molina I and Marhuenda Y (2015). “sae: An R Package for Small Area Estimation.” 
+Molina I and Marhuenda Y (2015). "sae: An R Package for Small Area Estimation." 
 The R Journal, 7(1), pp. 81-98. <URL:
 http://journal.r-project.org/archive/2015-1/molina-marhuenda.pdf>
 
@@ -18,7 +18,7 @@ Xoutsamp_AuxVar.RData.
 The Austrian shape file provided by this package was obtained under a CC
 BY-SA 2.0 license from:
 
-Bundesamt für Eich- und Vermessungswesen, Verwaltungsgrenzen (VGD) - 1:250.000, 
+Bundesamt fuer Eich- und Vermessungswesen, Verwaltungsgrenzen (VGD) - 1:250.000, 
 Bezirksgrenzen, Data from 1.04.2017, 
 http://data-synergis.opendata.arcgis.com/datasets/bb4acc011100469185d2e59fa4cae5fc_0, 
 by SynerGIS, CC BY-SA 2.0 (https://creativecommons.org/licenses/by-sa/2.0/), 
