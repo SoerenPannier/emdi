@@ -12,8 +12,7 @@
 \item{...}{additional arguments that are not used in this method.}
 }
 \value{
-Data frame used to fit the model. For classes direct and ebp the 
-sample data is returned. For class fh the combined data set is returned.
+Single number.
 }
 \description{
 Method \code{nobs.emdi} extracts the number of `observations´ from a model 

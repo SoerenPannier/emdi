@@ -5,8 +5,7 @@
 #' 
 #' @param object an object of type "emdi".
 #' @param ... additional arguments that are not used in this method.
-#' @return Data frame used to fit the model. For classes direct and ebp the 
-#' sample data is returned. For class fh the combined data set is returned.
+#' @return Single number.
 #' @seealso \code{\link{direct}}, \code{\link{ebp}},
 #' \code{\link{fh}}, \code{\link[stats]{nobs}}
 #' @examples
@@ -37,4 +36,45 @@ if(inherits(object, "ebp")){
   N_obs <- object$framework$N_dom_smp
 }
   N_obs
+}
+
+#' Extract the model formula of an emdi object
+#'
+#' Method \code{formula.emdi} extracts the model formula of an emdi object.
+#' 
+#' @param object an object of type "emdi".
+#' @param ... additional arguments that are not used in this method.
+#' @return Two-sided linear formula object describing the fixed-effects part of 
+#' the regression model with the dependent variable on the left of a ~ operator 
+#' and the explanatory variables on the right, separated by + operators. Method 
+#' is not defined for emdi objects of class direct.
+#' @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link[stats]{formula}}
+#' @examples
+#' \donttest{
+#' # Example for class fh
+#' combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain", 
+#'                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+#'                               
+#' fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
+#'           combined_data = combined_data, domains = "Domain", method = "ml", 
+#'           MSE = TRUE)
+#' 
+#' formula(fh_std)
+#' }
+#' @export
+#' @importFrom stats formula
+
+formula.emdi <- function(object, ...) {
+  
+  if(!inherits(object, "emdi")){
+    stop('First object needs to be of class emdi.')
+  }
+  
+  if(inherits(object, "ebp")){
+    object$fixed
+  } else if(inherits(object, "direct")){
+    cat("Object of class direct does not contain a model formula.")
+  } else if (inherits(object, "fh")) {
+    object$fixed
+  }
 }
