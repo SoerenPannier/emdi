@@ -1,6 +1,6 @@
-#' Extract emdi Object Data
+#' Extract emdi object data
 #'
-#' Extracts the data frame used to fit the model.
+#' Method \code{getData.emdi} extracts the data frame used to fit the model.
 #' 
 #' @param object an object of type "emdi".
 #' @param ... additional arguments that are not used in this method.
@@ -37,6 +37,43 @@ getData.emdi <- function(object, ...) {
   data
 }
 
+#' Extract response variable from an emdi object
+#'
+#' Method \code{getResponse.emdi} extracts the response variable from an emdi 
+#' object.
+#' 
+#' @param object an object of type "emdi".
+#' @param ... additional arguments that are not used in this method.
+#' @return Vector containing the response variable. 
+#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}, \code{\link[nlme]{getResponse}}
+#' @examples
+#' \donttest{
+#' # Example for class ebp
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
+#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
+#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
+#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
+#' na.rm = TRUE)
+#' 
+#' getResponse(emdi_model)
+#' }
+#' @export
+#' @importFrom nlme getResponse
 
+getResponse.emdi <- function(object, ...) {
+  
+  if(!inherits(object, "emdi")){
+    stop('First object needs to be of class emdi.')
+  }
+  
+  if(inherits(object, "ebp")){
+    response <- object$framework$response
+  } else if(inherits(object, "direct")){
+    response <- object$framework$y_vec
+  } else if (inherits(object, "fh")) {
+    response <- object$framework$direct
+  }
+  response
+}
 
 

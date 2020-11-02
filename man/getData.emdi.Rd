@@ -2,7 +2,7 @@
 % Please edit documentation in R/getData_emdi.R
 \name{getData.emdi}
 \alias{getData.emdi}
-\title{Extract emdi Object Data}
+\title{Extract emdi object data}
 \usage{
 \method{getData}{emdi}(object, ...)
 }
@@ -16,7 +16,7 @@ Data frame used to fit the model. For classes direct and ebp the
 sample data is returned. For class fh the combined data set is returned.
 }
 \description{
-Extracts the data frame used to fit the model.
+Method \code{getData.emdi} extracts the data frame used to fit the model.
 }
 \examples{
 \donttest{
