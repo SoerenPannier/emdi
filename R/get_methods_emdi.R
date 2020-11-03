@@ -106,7 +106,7 @@ getGroupsFormula.emdi <- function(object, ...) {
   }
   
   if(inherits(object, "ebp")){
-    groups_formula <- eval(parse(text = paste("~", object$framework$smp_domains)))
+    groups_formula <- eval(parse(text = paste("~", obje-ct$framework$smp_domains)))
   } else if(inherits(object, "direct")){
     groups_formula <- eval(parse(text = paste("~", object$framework$smp_domains)))
   } else if (inherits(object, "fh")) {
@@ -152,6 +152,47 @@ getResponse.emdi <- function(object, ...) {
     response <- object$framework$direct
   }
   response
+}
+
+#' Extract fixed effects from an emdi object
+#'
+#' Method \code{fixef.emdi} extracts the fixed effects from an emdi 
+#' object.
+#' 
+#' @param object an object of type "emdi".
+#' @param ... additional arguments that are not used in this method.
+#' @return For class ebp a vector containing the fixed effects is returned. 
+#' For class fh a data frame containing the fixed effects and the corresponding 
+#' standard errors, t- and p-value is returned. For class direct no fixed effects 
+#' are available.
+#' @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link[nlme]{fixef}}
+#' @examples
+#' \donttest{
+#' # Example for class ebp
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
+#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
+#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
+#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
+#' na.rm = TRUE)
+#' 
+#' fixef(emdi_model)
+#' }
+#' @export
+#' @importFrom nlme fixef
+
+fixef.emdi <- function(object, ...) {
+  
+  if(!inherits(object, "emdi")){
+    stop('First object needs to be of class emdi.')
+  }
+  
+  if(inherits(object, "ebp")){
+    object$model$coefficients$fixed
+  } else if(inherits(object, "direct")){
+    cat("For an object of class direct no fixed effects are available.")
+  } else if (inherits(object, "fh")) {
+    object$model$coefficients
+  }
 }
 
 
