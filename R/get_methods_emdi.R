@@ -37,6 +37,44 @@ getData.emdi <- function(object, ...) {
   data
 }
 
+#' Extract grouping factors from an emdi object
+#'
+#' Method \code{getGroups.emdi} extracts grouping factors from an emdi object.
+#' 
+#' @param object an object of type "emdi".
+#' @param ... additional arguments that are not used in this method.
+#' @return A vector containing the grouping factors.
+#' @seealso \code{\link{direct}}, \code{\link{ebp}},
+#' \code{\link{fh}}, \code{\link[nlme]{getGroups}}
+#' @examples
+#' \donttest{
+#' # Example for class direct
+#' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
+#' smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
+#' boot_type = "naive", B = 50, seed = 123, X_calib = NULL, totals = NULL, 
+#' na.rm = TRUE)
+#' 
+#' getGroups(emdi_direct)
+#' }
+#' @export
+#' @importFrom nlme getGroups
+
+getGroups.emdi <- function(object, ...) {
+  
+  if(!inherits(object, "emdi")){
+    stop('First object needs to be of class emdi.')
+  }
+  
+  if(inherits(object, "ebp")){
+    groups <- object$framework$smp_domains_vec
+  } else if(inherits(object, "direct")){
+    groups <- object$framework$smp_domains_vec
+  } else if (inherits(object, "fh")) {
+    groups <- object$ind$Domain
+  }
+  groups
+}
+
 #' Extract response variable from an emdi object
 #'
 #' Method \code{getResponse.emdi} extracts the response variable from an emdi 
