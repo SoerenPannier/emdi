@@ -2,7 +2,7 @@
 % Please edit documentation in R/stats_methods.R
 \name{nobs.emdi}
 \alias{nobs.emdi}
-\title{Extract the number of `observations´ from a model fit of an emdi object}
+\title{Extract the number of `observations´ from a fit of an emdi object}
 \usage{
 \method{nobs}{emdi}(object, ...)
 }
@@ -15,7 +15,7 @@
 Single number.
 }
 \description{
-Method \code{nobs.emdi} extracts the number of `observations´ from a model 
+Method \code{nobs.emdi} extracts the number of `observations´ from a 
 fit of an emdi object.
 }
 \examples{

@@ -1,6 +1,46 @@
-#' Extract the number of `observations´ from a model fit of an emdi object
+#' Extract the AIC from a model fit of an emdi object
 #'
-#' Method \code{nobs.emdi} extracts the number of `observations´ from a model 
+#' Method \code{extractAIC.emdi} extracts the Akaike Information Criterion from 
+#' a model fit of an emdi object.
+#' 
+#' @param object an object of type "emdi".
+#' @param ... additional arguments that are not used in this method.
+#' @return For objects of class fh a single number is returned. For class direct 
+#' and ebp no AIC value is available.
+#' @seealso \code{\link{fh}}, \code{\link[stats]{extractAIC}}
+#' @examples
+#' \donttest{
+#' # Example for class fh
+#' combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain", 
+#'                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+#' 
+#' fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
+#' combined_data = combined_data, domains = "Domain", method = "ml", 
+#' MSE = TRUE)
+#' 
+#' extractAIC(fh_std)
+#' }
+#' @export
+#' @importFrom stats extractAIC
+
+extractAIC.emdi <- function(object, ...) {
+  
+  if(!inherits(object, "emdi")){
+    stop('First object needs to be of class emdi.')
+  }
+  
+  if(inherits(object, "ebp")){
+    cat("For an object of class ebp no AIC value is available.")
+  } else if(inherits(object, "direct")){
+    cat("For an object of class direct no AIC value is available.")
+  } else if (inherits(object, "fh")) {
+    object$model$model_select$AIC
+  }
+}
+
+#' Extract the number of `observations´ from a fit of an emdi object
+#'
+#' Method \code{nobs.emdi} extracts the number of `observations´ from a 
 #' fit of an emdi object.
 #' 
 #' @param object an object of type "emdi".
