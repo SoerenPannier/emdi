@@ -75,6 +75,46 @@ getGroups.emdi <- function(object, ...) {
   groups
 }
 
+#' Extract grouping formula from an emdi object
+#'
+#' Method \code{getGroupsFormula.emdi} extracts the grouping formula from an 
+#' emdi object.
+#' 
+#' @param object an object of type "emdi".
+#' @param ... additional arguments that are not used in this method.
+#' @return A one-sided formula.
+#' @seealso \code{\link{direct}}, \code{\link{ebp}},
+#' \code{\link{fh}}, \code{\link[nlme]{getGroupsFormula}}
+#' @examples
+#' \donttest{
+#' # Example for class ebp
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
+#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
+#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
+#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
+#' na.rm = TRUE)
+#' 
+#' getGroupsFormula(emdi_model)
+#' }
+#' @export
+#' @importFrom nlme getGroupsFormula
+
+getGroupsFormula.emdi <- function(object, ...) {
+  
+  if(!inherits(object, "emdi")){
+    stop('First object needs to be of class emdi.')
+  }
+  
+  if(inherits(object, "ebp")){
+    groups_formula <- eval(parse(text = paste("~", object$framework$smp_domains)))
+  } else if(inherits(object, "direct")){
+    groups_formula <- eval(parse(text = paste("~", object$framework$smp_domains)))
+  } else if (inherits(object, "fh")) {
+    groups_formula <- eval(parse(text = paste("~", object$framework$domains)))
+  }
+  groups_formula
+}
+
 #' Extract response variable from an emdi object
 #'
 #' Method \code{getResponse.emdi} extracts the response variable from an emdi 
