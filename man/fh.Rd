@@ -23,7 +23,7 @@ fh(
   maxit = 100,
   MSE = FALSE,
   mse_type = "analytical",
-  B = 50,
+  B = c(50, 0),
   seed = 123
 )
 }
@@ -168,12 +168,13 @@ robust extensions of the Fay-Herriot model. For an extensive overview of the pos
 MSE options, please refer to the vignette. Required argument when 
 \code{MSE = TRUE}. Defaults to "\code{analytical}".}
 
-\item{B}{a number determining the number of bootstrap iterations. When a 
-bootstrap MSE estimator is chosen, \code{B} regulates the MSE estimation. 
-When the standard FH model is applied and \code{B} is not \code{NULL}, the 
-information criteria by Marhuenda et al. (2014) are computed. The number must 
-be greater than 1. Defaults to 50. For practical applications, 
-values larger than 200 are recommended.}
+\item{B}{either a single number or a numeric vector with two elements. The 
+single number or the first element defines the number of bootstrap iterations 
+when a bootstrap MSE estimator is chosen. When the standard FH 
+model is applied and the information criteria by Marhuenda et al. (2014) 
+should be computed, the second element of \code{B} is needed and must be 
+greater than 1. Defaults to c(50,0). For practical applications, values larger 
+than 200 are recommended.}
 
 \item{seed}{an integer to set the seed for the random number generator. For 
 the usage of random number generation see details. If seed is set to 
@@ -241,7 +242,7 @@ MSE = TRUE)
 fh_arcsin <- fh(fixed = MTMED ~ cash + age_ben + rent + house_allow,
 vardir = "Var_MTMED", combined_data = combined_data, domains = "Domain", 
 method = "ml", transformation = "arcsin", backtransformation = "bc", 
-eff_smpsize = "n", MSE = TRUE, mse_type = "boot", B = 50)
+eff_smpsize = "n", MSE = TRUE, mse_type = "boot", B = c(50,0))
 
 # Example 3: Spatial Fay-Herriot model
 # Load proximity matrix
