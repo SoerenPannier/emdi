@@ -16,7 +16,7 @@ test_that("Does the variance estimation (and resulting EBLUPs and MSEs)
             fh_ML <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
                         combined_data = combined_data, domains = "Domain",
                         method = "ml", interval = c(0, 10000000), MSE = TRUE,
-                        B = NULL)
+                        B = c(0,0))
             # ML model fitting status quo (benchmark)
             ML_modelfit <- read.csv("FH/ML_modelfit.csv", sep = ",", 
                                     stringsAsFactors = TRUE)  
@@ -39,7 +39,7 @@ test_that("Does the variance estimation (and resulting EBLUPs and MSEs)
             fh_REML <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
                           combined_data = combined_data, domains = "Domain",
                           method = "reml", interval = c(0, 10000000), MSE = TRUE,
-                          B = NULL)
+                          B = c(0,0))
             
             # REML model fitting status quo (benchmark)
             REML_modelfit <- read.csv("FH/REML_modelfit.csv", sep = ",", 
@@ -62,7 +62,7 @@ test_that("Does the variance estimation (and resulting EBLUPs and MSEs)
             fh_AMPL <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
                           combined_data = combined_data, domains = "Domain",
                           method = "ampl", interval = c(0, 10000000), MSE = TRUE,
-                          B = NULL)
+                          B = c(0,0))
             
             # AMPL model fitting status quo (benchmark)
             AMPL_modelfit <- read.csv("FH/AMPL_modelfit.csv", sep = ",", 
@@ -85,7 +85,7 @@ test_that("Does the variance estimation (and resulting EBLUPs and MSEs)
             fh_AMRL <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
                           combined_data = combined_data, domains = "Domain",
                           method = "amrl", interval = c(0, 10000000), MSE = TRUE,
-                          B = NULL)
+                          B = c(0,0))
             
             # AMRL model fitting status quo (benchmark)
             AMRL_modelfit <- read.csv("FH/AMRL_modelfit.csv", sep = ",", 
@@ -108,7 +108,7 @@ test_that("Does the variance estimation (and resulting EBLUPs and MSEs)
             fh_AMPL_YL <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
                              combined_data = combined_data, domains = "Domain",
                              method = "ampl_yl", interval = c(0, 10000000), MSE = TRUE,
-                             B = NULL)
+                             B = c(0,0))
             
             # AMPL model fitting status quo (benchmark)
             AMPL_YL_modelfit <- read.csv("FH/AMPL_YL_modelfit.csv", sep = ",", 
@@ -131,7 +131,7 @@ test_that("Does the variance estimation (and resulting EBLUPs and MSEs)
             fh_AMRL_YL <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
                              combined_data = combined_data, domains = "Domain",
                              method = "amrl_yl", interval = c(0, 10000000), MSE = TRUE,
-                             B = NULL)
+                             B = c(0,0))
             
             # AMRL_YL model fitting status quo (benchmark)
             AMRL_YL_modelfit <- read.csv("FH/AMRL_YL_modelfit.csv", sep = ",", 
