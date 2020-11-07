@@ -110,24 +110,6 @@ test_that("Does the fh function with a arcsin transformation return the same
             
   ############################ sm backtransformation ###########################
             # Current version 
-           # fh_arcsin_sm_jack <- fh(fixed = MTMED ~ cash + age_ben + rent + house_allow, 
-            #                        vardir = "Var_MTMED", 
-            #                        combined_data = combined_data, 
-            #                        domains = "Domain",
-             #                       method = "ml", interval = c(0, 10000000), 
-              #                      transformation = "arcsin", 
-              #                      backtransformation = "bc", 
-              #                      eff_smpsize = "n", MSE = TRUE,
-               #                     mse_type = "jackknife")
-           # fh_arcsin_sm_wjack <- fh(fixed = MTMED ~ cash + age_ben + rent + house_allow, 
-            #                         vardir = "Var_MTMED", 
-             #                        combined_data = combined_data, 
-             #                        domains = "Domain",
-             #                        method = "ml", interval = c(0, 10000000), 
-             #                        transformation = "arcsin", 
-             #                        backtransformation = "bc", 
-             #                        eff_smpsize = "n", MSE = TRUE,
-             #                        mse_type = "weighted_jackknife")
             fh_arcsin_sm_boot <- fh(fixed = MTMED ~ cash + age_ben + rent + house_allow, 
                                     vardir = "Var_MTMED", 
                                     combined_data = combined_data, 
@@ -146,12 +128,6 @@ test_that("Does the fh function with a arcsin transformation return the same
             # EBLUP
             expect_equal(fh_arcsin_sm_boot$ind[, c("Domain","FH")], 
                          transf_arcsin_sm[, c("Domain","FH")])
-            # MSE jackknife
-           # expect_equal(fh_arcsin_sm_boot$MSE$FH, 
-             #            transf_arcsin_sm$MSE_jack)
-            # MSE weighted jackknife
-          #  expect_equal(fh_arcsin_sm_boot$MSE$FH, 
-            #             transf_arcsin_sm$MSE_wjack)
             # MSE bootstrap
             expect_equal(fh_arcsin_sm_boot$MSE$FH, 
                          transf_arcsin_sm$MSE_boot)
