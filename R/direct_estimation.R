@@ -228,7 +228,8 @@ direct <- function(y,
                          "N_smp",
                          "smp_domains",
                          "smp_data",
-                         "smp_domains_vec")],
+                         "smp_domains_vec",
+                         "y_vec")],
     call = call,
     successful_bootstraps = sucInd
     )
