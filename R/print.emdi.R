@@ -61,6 +61,13 @@ print.emdi <- function(x, ...) {
     cat("\n")
     cat("Units in each Domain:")
     print(table(x$framework$smp_domains_vec))
+  } else if (inherits(x, "step_fh")) {
+    cat("\n")
+    cat("Call:\n ")
+    print(x$call)
+    cat("\n")
+    cat("Coefficients:\n ")
+    print(x$model$coefficients)
   } else if (inherits(x, "fh")) {
     
       cat("Empirical Best Linear Unbiased Prediction (Fay-Herriot)\n")
@@ -122,7 +129,7 @@ print.emdi <- function(x, ...) {
         cat("Transformation:\n")
         print(transform_data)
       }
-    }
+    } 
 }
 
 

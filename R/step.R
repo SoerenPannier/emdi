@@ -128,11 +128,14 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
     cat("Seed in fh object not defined, 123 used as default seed. \n")
   }
   
+  startobject <- object
+  
   cut.string <- function(string) {
     if (length(string) > 1L) 
       string[-1L] <- paste0("\n", string[-1L])
     string
   }
+  
   step.results <- function(models, fit, object, catmessage) { 
     change <- vapply(models, "[[" , "change", FUN.VALUE = character(1))
     rdf <- vapply(models, "[[", "df.resid", FUN.VALUE = numeric(1))
@@ -145,12 +148,18 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
     aod <- data.frame(Step = I(change), Df = ddf, criteria = infcriteria, 
                       check.names = FALSE)  
     attr(aod, "heading") <- heading
-    fit$anova <- aod
-    list(Call = fit$call,
-         Coefficients = fit$model$coefficients,
-         catmessage = catmessage)
-    
+    #fit$anova <- aod
+    fit$call$MSE <- startobject$call$MSE
+    invisible(fit <- eval(fit$call))
+    if (catmessage == TRUE){
+      cat("\n")
+      cat("Please note that the model selection criteria are only computed based on 
+       the in-sample domains. \n \n ")
+    }
+    class(fit) <- c("emdi", "model", "fh", "step_fh")
+    fit
   }
+  
   Terms <- terms(object$fixed)
   object$call$formula <- object$formula <- Terms
   md <- missing(direction)
@@ -256,40 +265,17 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
     if (bcriteria >= infcriteria + 1e-07) 
       break
     nm <- nm + 1
-    models[[nm]] <- list(df.resid = n - edf,change = "", criteria = bcriteria)
+    models[[nm]] <- list(df.resid = n - edf, change = "", criteria = bcriteria)
   }
   if (any(grepl(pattern = c("note that the model selection criteria are only computed based"),
                 x = catmessage))){
     catmessage <- TRUE
   } else { catmessage <- FALSE}
-  results <- step.results(models = models[seq(nm)], fit, object, catmessage) 
-  class(results) <- "step"
-  results
+  step.results(models = models[seq(nm)], fit, object, catmessage) 
+  #list(summary(results), invisible(results))
 }
 
 
-#' Prints step function results
-#'
-#' The elements described in step are printed.
-#' @param x an object of type "step".
-#' @param ... further arguments passed to or from other methods.
-#' @export
-
-print.step <- function(x, ...)
-{
-  cat("\n")
-  cat("Call:\n ")
-  print(x$Call)
-  cat("\n")
-  cat("Coefficients:\n ")
-  print(x$Coefficients)
-  cat("\n")
-  if (x$catmessage == TRUE){
-    cat("Please note that the model selection criteria are only computed based on 
-       the in-sample domains. \n ")
-  }
-  
-}
 
 step_check <- function(object, scope, criteria, direction, trace, 
                        steps){
@@ -315,12 +301,12 @@ Otherwise the comparison of models based on information criteria would not be va
   }
   if (is.null(object$model$model_select[[criteria]])){
     stop("The fh object does not contain the chosen criterion. Please set the 
-         input argument B of the fh function to a positive number to receive 
-         results for all of the information criteria. For some model extensions of 
-         the fh model the information criteria are not defined. Check the 
-         model_select component of the fh object (objectname$model$model_select). 
-         If no criteria are provided, it is not possible to apply the 
-         stepwise variable selection algorithm.")
+         second element of the input argument B of the fh function to a number 
+         greater than 1 to receive results for all of the information criteria. 
+         For some model extensions of the fh model the information criteria are 
+         not defined. Check the model_select component of the fh object 
+         (objectname$model$model_select). If no criteria are provided, it is not 
+         possible to apply the stepwise variable selection algorithm.")
   }
   if (is.null(direction) || !(direction == "forward" 
                               || direction == "backward" 
