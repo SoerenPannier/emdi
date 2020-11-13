@@ -75,7 +75,7 @@
 #' of the EBLUPs and MSE estimates. Required argument when a transformation is chosen. 
 #' Available methods are 
 #' (i) crude bias-correction following \cite{Neves et al. (2013)} and 
-#' \cite{Rao and Molina (2015)} when the log transformation is chosen 
+#' \cite{Rao (2003)} when the log transformation is chosen 
 #' ("\code{bc_crude}"),
 #' (ii) bias-correction following \cite{Slud and Maiti (2006)} when the 
 #' log transformations is chosen ("\code{bc_sm}"),
