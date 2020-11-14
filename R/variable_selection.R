@@ -126,7 +126,8 @@ model_select <- function(framework, sigmau2, method, interval,
                            BIC = BIC,
                            R2 = R2_regular,
                            AdjR2 = AdjR2)
-  } else if (framework$correlation == "no" & !(B > 1)) {
+  } else if (framework$correlation == "no" & transformation == "no" & 
+             !(B > 1) & method != "me") {
     criteria <- data.frame(loglike = loglike,
                            AIC = AIC,
                            BIC = BIC,

@@ -38,44 +38,47 @@ extractAIC.emdi <- function(object, ...) {
   }
 }
 
-#' Extract the number of `observations´ from a fit of an emdi object
+#' Extract fitted values of emdi objects
 #'
-#' Method \code{nobs.emdi} extracts the number of `observations´ from a 
-#' fit of an emdi object.
+#' Method \code{fitted.emdi} extracts the model fitted values from an emdi 
+#' object.
 #' 
 #' @param object an object of type "emdi".
 #' @param ... additional arguments that are not used in this method.
-#' @return Single number.
-#' @seealso \code{\link{direct}}, \code{\link{ebp}},
-#' \code{\link{fh}}, \code{\link[stats]{nobs}}
+#' @return For class ebp XXXXXXXXXXXXX is returned. 
+#' For class fh a vector containing the fitted values is returned. For class 
+#' direct no model fitted values are available.
+#' @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link[stats]{fitted}}
+#' @aliases fitted.values
 #' @examples
 #' \donttest{
-#' # Example for class ebp
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-#' na.rm = TRUE)
+#' Example for class fh
+#' combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain", 
+#'                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+#'                               
+#' fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
+#'           combined_data = combined_data, domains = "Domain", method = "ml", 
+#'           MSE = TRUE)
 #' 
-#' nobs(emdi_model)
+#' fitted(fh_std)
 #' }
 #' @export
-#' @importFrom stats nobs
- 
-nobs.emdi <- function(object, ...) {
+#' @method fitted emdi
+#' @importFrom stats fitted fitted.values
 
-if(!inherits(object, "emdi")){
-  stop('First object needs to be of class emdi.')
-}
-
-if(inherits(object, "ebp")){
-  N_obs <- object$framework$N_smp
-} else if(inherits(object, "direct")){
-  N_obs <- object$framework$N_smp
-} else if (inherits(object, "fh")) {
-  N_obs <- object$framework$N_dom_smp
-}
-  N_obs
+fitted.emdi <- function(object, ...) {
+  
+  if(!inherits(object, "emdi")){
+    stop('First object needs to be of class emdi.')
+  }
+  
+  if(inherits(object, "ebp")){
+    object$model$fitted
+  } else if(inherits(object, "direct")){
+    cat("For an object of class direct no model fitted values are available.")
+  } else if (inherits(object, "fh")) {
+    object$model$fitted
+  }
 }
 
 #' Extract the model formula of an emdi object
@@ -118,3 +121,46 @@ formula.emdi <- function(object, ...) {
     object$fixed
   }
 }
+
+
+#' Extract the number of `observations´ from a fit of an emdi object
+#'
+#' Method \code{nobs.emdi} extracts the number of `observations´ from a 
+#' fit of an emdi object.
+#' 
+#' @param object an object of type "emdi".
+#' @param ... additional arguments that are not used in this method.
+#' @return Single number.
+#' @seealso \code{\link{direct}}, \code{\link{ebp}},
+#' \code{\link{fh}}, \code{\link[stats]{nobs}}
+#' @examples
+#' \donttest{
+#' # Example for class ebp
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
+#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
+#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
+#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
+#' na.rm = TRUE)
+#' 
+#' nobs(emdi_model)
+#' }
+#' @export
+#' @importFrom stats nobs
+ 
+nobs.emdi <- function(object, ...) {
+
+if(!inherits(object, "emdi")){
+  stop('First object needs to be of class emdi.')
+}
+
+if(inherits(object, "ebp")){
+  N_obs <- object$framework$N_smp
+} else if(inherits(object, "direct")){
+  N_obs <- object$framework$N_smp
+} else if (inherits(object, "fh")) {
+  N_obs <- object$framework$N_dom_smp
+}
+  N_obs
+}
+
+

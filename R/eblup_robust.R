@@ -35,7 +35,7 @@ eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, c,
   }
 
   eblup_out <- list(EBLUP_data = EBLUP_data,
-                    fitted <- eblupobject$fitted,
+                    fitted = eblupobject$fitted,
                     coefficients = eblup_coef,
                     real_res = eblupobject$residuals,
                     std_real_res = eblupobject$residuals/sqrt(eblupobject$samplingVar),
