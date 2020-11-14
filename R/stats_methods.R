@@ -163,4 +163,41 @@ if(inherits(object, "ebp")){
   N_obs
 }
 
+#' Constructs a terms object from an emdi object
+#'
+#' Method \code{terms.emdi} constructs a terms object from an emdi object.
+#' 
+#' @param object an object of type "emdi".
+#' @param ... additional arguments that are not used in this method.
+#' @return For classes ebp and fh a \code{\link[stats]{terms.object}} is returned. 
+#' For class direct no terms object is available.
+#' @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link[stats]{terms}}, 
+#' \code{\link[stats]{terms.object}}
+#' @examples
+#' \donttest{
+#' # Example for class ebp
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
+#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
+#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
+#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
+#' na.rm = TRUE)
+#' 
+#' terms(emdi_model)
+#' }
+#' @export
+#' @importFrom stats terms
 
+terms.emdi <- function(object, ...) {
+  
+  if(!inherits(object, "emdi")){
+    stop('First object needs to be of class emdi.')
+  }
+  
+  if(inherits(object, "ebp")){
+    stats::terms(aov(object$fixed, object$framework$smp_data))
+  } else if(inherits(object, "direct")){
+    cat("For class direct no terms object is available.")
+  } else if (inherits(object, "fh")) {
+    stats::terms(aov(object$fixed, object$framework$combined_data))
+  }
+}
