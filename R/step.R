@@ -113,8 +113,8 @@ step.default <- function(object,...) stats::step(object, ...)
 #' @importFrom utils capture.output
 
 step.fh <- function(object, scope = NULL, criteria = "AIC", 
-                     direction = "both", trace = TRUE,
-                     steps = 1000, ...){
+                    direction = "both", trace = TRUE,
+                    steps = 1000, ...){
   
   step_check(object = object, scope = scope, criteria = criteria,
              direction = direction, trace = trace, steps = steps)
@@ -150,6 +150,7 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
     attr(aod, "heading") <- heading
     #fit$anova <- aod
     fit$call$MSE <- startobject$call$MSE
+    fit$call$formula <- NULL
     invisible(fit <- eval(fit$call))
     if (catmessage == TRUE){
       cat("\n")
@@ -249,7 +250,7 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
     fit$call$MSE <- FALSE
     fit$call$formula <- NULL  
     catmessage <- capture.output(fit <- eval(fit$call))
-   
+    
     nnew <- fit$framework$N_dom_smp 
     if (all(is.finite(c(n, nnew))) && nnew != n) 
       stop("number of rows in use has changed: remove missing values?")
@@ -267,10 +268,10 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
     nm <- nm + 1
     models[[nm]] <- list(df.resid = n - edf, change = "", criteria = bcriteria)
   }
-  if (any(grepl(pattern = c("note that the model selection criteria are only computed based"),
-                x = catmessage))){
+  if (any(grepl(pattern = c("Please note that the model selection criteria are only computed based on 
+       the in-sample domains."), x = ""))){
     catmessage <- TRUE
-  } else { catmessage <- FALSE}
+} else {catmessage <- FALSE}
   step.results(models = models[seq(nm)], fit, object, catmessage) 
   #list(summary(results), invisible(results))
 }
@@ -330,9 +331,6 @@ Otherwise the comparison of models based on information criteria would not be va
   }
   
 }
-
-
-
 
 
 
