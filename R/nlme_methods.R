@@ -188,9 +188,9 @@ getResponse.emdi <- function(object, ...) {
   }
   
   if(inherits(object, "ebp")){
-    response <- object$framework$response
+    response <- makeXY(object$fixed, object$framework$smp_data)$y
   } else if(inherits(object, "direct")){
-    response <- object$framework$y_vec
+    response <- object$framework$smp_data[, object$call$y]
   } else if (inherits(object, "fh")) {
     response <- object$framework$direct
   }
