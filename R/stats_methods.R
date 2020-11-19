@@ -1,3 +1,47 @@
+#' Extract model coefficients of emdi objects
+#'
+#' Method \code{coef.emdi} extracts the model coefficients from an emdi 
+#' object.
+#' 
+#' @param object an object of type "emdi".
+#' @param ... additional arguments that are not used in this method.
+#' @return For class ebp a vector containing the residuals is returned. 
+#' For class fh a data frame containing the realized and standardized realized 
+#' residuals. For class direct no residuals are available.
+#' @seealso \code{\link{ebp}}, \code{\link{fh}}
+#' @aliases coefficients
+#' @examples
+#' \donttest{
+#' # Example for class ebp
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
+#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
+#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
+#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
+#' na.rm = TRUE)
+#' 
+#' coef(emdi_model)
+#' }
+#' @export
+#' @method coef emdi
+#' @importFrom stats coef coefficients
+
+coef.emdi <- function(object, ...) {
+  
+  if(!inherits(object, "emdi")){
+    stop('First object needs to be of class emdi.')
+  }
+  
+  if(inherits(object, "ebp")){
+    coef(object$model)
+  } else if(inherits(object, "direct")){
+    cat("For an object of class direct no fixed effects are available.")
+  } else if (inherits(object, "fh")) {
+    fixed_effects <- object$model$coefficients$coefficients
+    names(fixed_effects) <- row.names(object$model$coefficients)
+    fixed_effects
+  }
+}
+
 #' Extract the AIC from a model fit of an emdi object
 #'
 #' Method \code{extractAIC.emdi} extracts the Akaike Information Criterion from 
@@ -122,6 +166,45 @@ formula.emdi <- function(x, ...) {
   }
 }
 
+#' Extract log-Likelihood of emdi objects
+#'
+#' Method \code{logLik.emdi} extracts the log-Likelihood from an emdi 
+#' object.
+#' 
+#' @param object an object of type "emdi".
+#' @param ... additional arguments that are not used in this method.
+#' @return For class ebp and fh, a vector containing the log-Likelihood. For 
+#' class direct, no residuals are available.
+#' @seealso \code{\link{ebp}}, \code{\link{fh}}
+#' @examples
+#' \donttest{
+#' # Example for class ebp
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
+#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
+#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
+#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
+#' na.rm = TRUE)
+#' 
+#' logLik(emdi_model)
+#' }
+#' @export
+#' @method logLik emdi
+#' @importFrom stats logLik
+
+logLik.emdi <- function(object, ...) {
+  
+  if(!inherits(object, "emdi")){
+    stop('First object needs to be of class emdi.')
+  }
+  
+  if(inherits(object, "ebp")){
+    object$model$logLik
+  } else if(inherits(object, "direct")){
+    cat("For an object of class direct no fixed effects are available.")
+  } else if (inherits(object, "fh")) {
+    object$model$model_select$loglike
+  }
+}
 
 #' Extract the number of `observations´ from a fit of an emdi object
 #'
@@ -161,6 +244,81 @@ if(inherits(object, "ebp")){
   N_obs <- object$framework$N_dom_smp
 }
   N_obs
+}
+
+#' Predictions from emdi objects
+#'
+#' Method \code{predict.emdi} extracts the small area predictions from an emdi 
+#' object.
+#' 
+#' @param object an object of type "emdi".
+#' @param ... additional arguments that are not used in this method.
+#' @return Data frame with domain predictors.
+#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}
+#' @examples
+#' \donttest{
+#' # Example for class ebp
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
+#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
+#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
+#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
+#' na.rm = TRUE)
+#' 
+#' predict(emdi_model)
+#' }
+#' @export
+#' @method predict emdi
+
+predict.emdi <- function(object, ...) {
+  
+  if(!inherits(object, "emdi")){
+    stop('First object needs to be of class emdi.')
+  }
+  
+  object$ind
+}
+
+#' Extract residuals of emdi objects
+#'
+#' Method \code{residuals.emdi} extracts the residuals from an emdi 
+#' object.
+#' 
+#' @param object an object of type "emdi".
+#' @param ... additional arguments that are not used in this method.
+#' @return For class ebp a vector containing the residuals is returned. 
+#' For class fh a data frame containing the realized and standardized realized 
+#' residuals. For class direct no residuals are available.
+#' @seealso \code{\link{ebp}}, \code{\link{fh}}
+#' @aliases resid
+#' @examples
+#' \donttest{
+#' # Example for class ebp
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
+#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
+#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
+#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
+#' na.rm = TRUE)
+#' 
+#' residuals(emdi_model)
+#' }
+#' @export
+#' @method residuals emdi
+#' @importFrom stats residuals resid
+
+residuals.emdi <- function(object, ...) {
+  
+  if(!inherits(object, "emdi")){
+    stop('First object needs to be of class emdi.')
+  }
+  
+  if(inherits(object, "ebp")){
+    as.numeric(object$model$residuals[, 2])
+  } else if(inherits(object, "direct")){
+    cat("For an object of class direct no fixed effects are available.")
+  } else if (inherits(object, "fh")) {
+    data.frame(real_residuals = object$model$real_residuals, 
+               std_real_residuals = object$model$std_real_residuals)
+  }
 }
 
 #' Constructs a terms object from an emdi object
