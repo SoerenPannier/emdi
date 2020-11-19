@@ -4,10 +4,10 @@
 \alias{formula.emdi}
 \title{Extract the model formula of an emdi object}
 \usage{
-\method{formula}{emdi}(object, ...)
+\method{formula}{emdi}(x, ...)
 }
 \arguments{
-\item{object}{an object of type "emdi".}
+\item{x}{an object of type "emdi".}
 
 \item{...}{additional arguments that are not used in this method.}
 }

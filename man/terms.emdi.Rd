@@ -4,10 +4,10 @@
 \alias{terms.emdi}
 \title{Constructs a terms object from an emdi object}
 \usage{
-\method{terms}{emdi}(object, ...)
+\method{terms}{emdi}(x, ...)
 }
 \arguments{
-\item{object}{an object of type "emdi".}
+\item{x}{an object of type "emdi".}
 
 \item{...}{additional arguments that are not used in this method.}
 }

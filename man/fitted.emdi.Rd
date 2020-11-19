@@ -23,7 +23,7 @@ object.
 }
 \examples{
 \donttest{
-Example for class fh
+# Example for class fh
 combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain", 
                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
                               

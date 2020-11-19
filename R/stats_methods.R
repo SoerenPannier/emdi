@@ -3,7 +3,7 @@
 #' Method \code{extractAIC.emdi} extracts the Akaike Information Criterion from 
 #' a model fit of an emdi object.
 #' 
-#' @param object an object of type "emdi".
+#' @param fit an object of type "emdi".
 #' @param ... additional arguments that are not used in this method.
 #' @return For objects of class fh a single number is returned. For class direct 
 #' and ebp no AIC value is available.
@@ -23,18 +23,18 @@
 #' @export
 #' @importFrom stats extractAIC
 
-extractAIC.emdi <- function(object, ...) {
+extractAIC.emdi <- function(fit, ...) {
   
-  if(!inherits(object, "emdi")){
+  if(!inherits(fit, "emdi")){
     stop('First object needs to be of class emdi.')
   }
   
-  if(inherits(object, "ebp")){
+  if(inherits(fit, "ebp")){
     cat("For an object of class ebp no AIC value is available.")
-  } else if(inherits(object, "direct")){
+  } else if(inherits(fit, "direct")){
     cat("For an object of class direct no AIC value is available.")
-  } else if (inherits(object, "fh")) {
-    object$model$model_select$AIC
+  } else if (inherits(fit, "fh")) {
+    fit$model$model_select$AIC
   }
 }
 
@@ -52,7 +52,7 @@ extractAIC.emdi <- function(object, ...) {
 #' @aliases fitted.values
 #' @examples
 #' \donttest{
-#' Example for class fh
+#' # Example for class fh
 #' combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain", 
 #'                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
 #'                               
@@ -85,7 +85,7 @@ fitted.emdi <- function(object, ...) {
 #'
 #' Method \code{formula.emdi} extracts the model formula of an emdi object.
 #' 
-#' @param object an object of type "emdi".
+#' @param x an object of type "emdi".
 #' @param ... additional arguments that are not used in this method.
 #' @return Two-sided linear formula object describing the fixed-effects part of 
 #' the regression model with the dependent variable on the left of a ~ operator 
@@ -107,18 +107,18 @@ fitted.emdi <- function(object, ...) {
 #' @export
 #' @importFrom stats formula
 
-formula.emdi <- function(object, ...) {
+formula.emdi <- function(x, ...) {
   
-  if(!inherits(object, "emdi")){
+  if(!inherits(x, "emdi")){
     stop('First object needs to be of class emdi.')
   }
   
-  if(inherits(object, "ebp")){
-    object$fixed
-  } else if(inherits(object, "direct")){
+  if(inherits(x, "ebp")){
+    x$fixed
+  } else if(inherits(x, "direct")){
     cat("Object of class direct does not contain a model formula.")
-  } else if (inherits(object, "fh")) {
-    object$fixed
+  } else if (inherits(x, "fh")) {
+    x$fixed
   }
 }
 
@@ -167,7 +167,7 @@ if(inherits(object, "ebp")){
 #'
 #' Method \code{terms.emdi} constructs a terms object from an emdi object.
 #' 
-#' @param object an object of type "emdi".
+#' @param x an object of type "emdi".
 #' @param ... additional arguments that are not used in this method.
 #' @return For classes ebp and fh a \code{\link[stats]{terms.object}} is returned. 
 #' For class direct no terms object is available.
@@ -185,19 +185,19 @@ if(inherits(object, "ebp")){
 #' terms(emdi_model)
 #' }
 #' @export
-#' @importFrom stats terms
+#' @importFrom stats aov terms
 
-terms.emdi <- function(object, ...) {
+terms.emdi <- function(x, ...) {
   
-  if(!inherits(object, "emdi")){
+  if(!inherits(x, "emdi")){
     stop('First object needs to be of class emdi.')
   }
   
-  if(inherits(object, "ebp")){
-    stats::terms(aov(object$fixed, object$framework$smp_data))
-  } else if(inherits(object, "direct")){
+  if(inherits(x, "ebp")){
+    terms(aov(x$fixed, x$framework$smp_data))
+  } else if(inherits(x, "direct")){
     cat("For class direct no terms object is available.")
-  } else if (inherits(object, "fh")) {
-    stats::terms(aov(object$fixed, object$framework$combined_data))
+  } else if (inherits(x, "fh")) {
+    terms(aov(x$fixed, x$framework$combined_data))
   }
 }

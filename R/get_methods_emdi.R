@@ -106,7 +106,7 @@ getGroupsFormula.emdi <- function(object, ...) {
   }
   
   if(inherits(object, "ebp")){
-    groups_formula <- eval(parse(text = paste("~", obje-ct$framework$smp_domains)))
+    groups_formula <- eval(parse(text = paste("~", object$framework$smp_domains)))
   } else if(inherits(object, "direct")){
     groups_formula <- eval(parse(text = paste("~", object$framework$smp_domains)))
   } else if (inherits(object, "fh")) {

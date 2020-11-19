@@ -4,10 +4,10 @@
 \alias{extractAIC.emdi}
 \title{Extract the AIC from a model fit of an emdi object}
 \usage{
-\method{extractAIC}{emdi}(object, ...)
+\method{extractAIC}{emdi}(fit, ...)
 }
 \arguments{
-\item{object}{an object of type "emdi".}
+\item{fit}{an object of type "emdi".}
 
 \item{...}{additional arguments that are not used in this method.}
 }
