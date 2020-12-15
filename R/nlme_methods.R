@@ -204,9 +204,9 @@ getResponse.emdi <- function(object, ...) {
 #' 
 #' @param object an object of type "emdi".
 #' @param ... additional arguments that are not used in this method.
-#' @return For class ebp a vector containing the residuals is returned. 
-#' For class fh a data frame containing the realized and standardized realized 
-#' residuals. For class direct no residuals are available.
+#' @return For class ebp and fh, a vector containing the estimated random effects 
+#' at domain level is returned. 
+#' For class direct, the method is not applicable.
 #' @seealso \code{\link{ebp}}, \code{\link{fh}}
 #' @aliases random.effects
 #' @examples
@@ -235,7 +235,9 @@ ranef.emdi <- function(object, ...) {
   } else if(inherits(object, "direct")){
     cat("For an object of class direct no fixed effects are available.")
   } else if (inherits(object, "fh")) {
-    object$model$random_effects
+    random_effects <- object$model$random_effects
+    row.names(random_effects) <- object$ind$Domain
+    random_effects
   }
 }
 

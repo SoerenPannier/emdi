@@ -13,7 +13,7 @@
 }
 \value{
 For class ebp and fh, a vector containing the log-Likelihood. For 
-class direct, no residuals are available.
+class direct, the method is not applicable.
 }
 \description{
 Method \code{logLik.emdi} extracts the log-Likelihood from an emdi 

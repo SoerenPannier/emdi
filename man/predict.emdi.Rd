@@ -15,7 +15,8 @@
 Data frame with domain predictors.
 }
 \description{
-Method \code{predict.emdi} extracts the small area predictions from an emdi 
+Method \code{predict.emdi} extracts the direct estimates, the empirical
+best linear unbiased or empirical best predictors for all domains from an emdi 
 object.
 }
 \examples{

@@ -13,9 +13,9 @@
 \item{...}{additional arguments that are not used in this method.}
 }
 \value{
-For class ebp a vector containing the residuals is returned. 
-For class fh a data frame containing the realized and standardized realized 
-residuals. For class direct no residuals are available.
+For class ebp, a vector containing the residuals is returned. 
+For class fh, a data frame containing the realized and standardized realized 
+residuals. For class direct, the method is not applicable.
 }
 \description{
 Method \code{residuals.emdi} extracts the residuals from an emdi 
