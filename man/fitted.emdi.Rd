@@ -13,9 +13,9 @@
 \item{...}{additional arguments that are not used in this method.}
 }
 \value{
-For class ebp XXXXXXXXXXXXX is returned. 
-For class fh a vector containing the fitted values is returned. For class 
-direct no model fitted values are available.
+For classes ebp and fh a vector containing the fitted values that are 
+only based on the fixed effects is returned. For class direct no model fitted 
+values are available.
 }
 \description{
 Method \code{fitted.emdi} extracts the model fitted values from an emdi 

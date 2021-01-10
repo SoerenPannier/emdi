@@ -168,9 +168,9 @@ extractAIC.emdi <- function(fit, ...) {
 #' 
 #' @param object an object of type "emdi".
 #' @param ... additional arguments that are not used in this method.
-#' @return For class ebp XXXXXXXXXXXXX is returned. 
-#' For class fh a vector containing the fitted values is returned. For class 
-#' direct no model fitted values are available.
+#' @return For classes ebp and fh a vector containing the fitted values that are 
+#' only based on the fixed effects is returned. For class direct no model fitted 
+#' values are available.
 #' @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link[stats]{fitted}}
 #' @aliases fitted.values
 #' @examples
@@ -196,7 +196,7 @@ fitted.emdi <- function(object, ...) {
   }
   
   if(inherits(object, "ebp")){
-    object$model$fitted
+    as.numeric(object$model$fitted[,1])
   } else if(inherits(object, "direct")){
     cat("For an object of class direct no model fitted values are available.")
   } else if (inherits(object, "fh")) {
@@ -402,8 +402,45 @@ residuals.emdi <- function(object, ...) {
   }
 }
 
+#' Extract residual standard deviation of emdi objects
+#'
+#' Method \code{sigma.emdi} extracts the residual standard deviation from an emdi 
+#' object.
+#' 
+#' @param object an object of type "emdi".
+#' @param ... additional arguments that are not used in this method.
+#' @return For class ebp, the estimated within-group error standard deviation is 
+#' returned. For class fh, XXXX. For class direct, the method is not applicable.
+#' @seealso \code{\link{ebp}}, \code{\link{fh}}
+#' @examples
+#' \donttest{
+#' # Example for class ebp
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
+#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
+#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
+#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
+#' na.rm = TRUE)
+#' 
+#' sigma(emdi_model)
+#' }
+#' @export
+#' @method sigma emdi
+#' @importFrom stats sigma
 
-
+sigma.emdi <- function(object, ...) {
+  
+  if(!inherits(object, "emdi")){
+    stop('First object needs to be of class emdi.')
+  }
+  
+  if(inherits(object, "ebp")){
+    object$model$sigma
+  } else if(inherits(object, "direct")){
+    cat("For an object of class direct no residual standard deviation is available.")
+  } else if (inherits(object, "fh")) {
+    # XXXX
+  }
+}
 
 #' Constructs a terms object from an emdi object
 #'
