@@ -450,8 +450,9 @@ residuals.emdi <- function(object, ...) {
 #' @param object an object of type "emdi".
 #' @param ... additional arguments that are not used in this method.
 #' @return For class ebp, the estimated within-group error standard deviation is 
-#' returned. For class fh, XXXX. For class direct, the method is not applicable.
-#' @seealso \code{\link{ebp}}, \code{\link{fh}}
+#' returned. For class fh, sigma is not available, since it is not defined for 
+#' area-level models. For class direct, the method is not applicable.
+#' @seealso \code{\link{ebp}}
 #' @examples
 #' \donttest{
 #' # Example for class ebp
@@ -478,7 +479,8 @@ sigma.emdi <- function(object, ...) {
   } else if(inherits(object, "direct")){
     cat("For an object of class direct no residual standard deviation is available.")
   } else if (inherits(object, "fh")) {
-    # XXXX
+    cat("For an object of class fh no residual standard deviation is available, 
+        since it is not defined for area-level models.")
   }
 }
 

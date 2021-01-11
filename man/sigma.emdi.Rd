@@ -13,7 +13,8 @@
 }
 \value{
 For class ebp, the estimated within-group error standard deviation is 
-returned. For class fh, XXXX. For class direct, the method is not applicable.
+returned. For class fh, sigma is not available, since it is not defined for 
+area-level models. For class direct, the method is not applicable.
 }
 \description{
 Method \code{sigma.emdi} extracts the residual standard deviation from an emdi 
@@ -32,5 +33,5 @@ sigma(emdi_model)
 }
 }
 \seealso{
-\code{\link{ebp}}, \code{\link{fh}}
+\code{\link{ebp}}
 }
