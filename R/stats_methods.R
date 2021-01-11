@@ -161,6 +161,46 @@ extractAIC.emdi <- function(fit, ...) {
   }
 }
 
+#' Extracts family object of emdi object
+#'
+#' Method \code{family.emdi} extracts family objects from emdi objects.
+#' 
+#' @param fit an object of type "emdi".
+#' @param ... additional arguments that are not used in this method.
+#' @return For objects of class ebp and fh among others characters of the family 
+#' and link names are returned. For class direct no model family is available.
+#' @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link[stats]{extractAIC}}
+#' @examples
+#' \donttest{
+#' # Example for class fh
+#' combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain", 
+#'                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+#' 
+#' fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
+#' combined_data = combined_data, domains = "Domain", method = "ml", 
+#' MSE = TRUE)
+#' 
+#' family(fh_std)
+#' }
+#' @export
+#' @method family emdi
+#' @importFrom stats family gaussian
+
+family.emdi <- function(object, ...) {
+  
+  if(!inherits(object, "emdi")){
+    stop('First object needs to be of class emdi.')
+  }
+  
+  if(inherits(object, "ebp")){
+    gaussian(link = "identity")
+  } else if(inherits(object, "direct")){
+    cat("For an object of class direct no model family is available.")
+  } else if (inherits(object, "fh")) {
+    gaussian(link = "identity")
+  }
+}
+
 #' Extract fitted values of emdi objects
 #'
 #' Method \code{fitted.emdi} extracts the model fitted values from an emdi 
