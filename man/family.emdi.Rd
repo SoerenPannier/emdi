@@ -7,9 +7,9 @@
 \method{family}{emdi}(object, ...)
 }
 \arguments{
-\item{...}{additional arguments that are not used in this method.}
+\item{object}{an object of type "emdi".}
 
-\item{fit}{an object of type "emdi".}
+\item{...}{additional arguments that are not used in this method.}
 }
 \value{
 For objects of class ebp and fh among others characters of the family 

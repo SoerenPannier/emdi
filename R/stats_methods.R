@@ -167,7 +167,7 @@ extractAIC.emdi <- function(fit, ...) {
 #'
 #' Method \code{family.emdi} extracts family objects from emdi objects.
 #' 
-#' @param fit an object of type "emdi".
+#' @param object an object of type "emdi".
 #' @param ... additional arguments that are not used in this method.
 #' @return For objects of class ebp and fh among others characters of the family 
 #' and link names are returned. For class direct no model family is available.
