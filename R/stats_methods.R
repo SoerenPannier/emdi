@@ -77,7 +77,7 @@ coef.emdi <- function(object, ...) {
 #' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
 #' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
 #' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-#' na.rm = TRUE)
+#' L = 5, MSE = TRUE, B = 5, na.rm = TRUE)
 #' 
 #' confint(emdi_model)
 #' }
@@ -89,6 +89,8 @@ confint.emdi <- function(object, parm = 'all', level = 0.95,  ...) {
   if(!inherits(object, "emdi")){
     stop('First object needs to be of class emdi.')
   }
+  
+  indicator <- parm
   
   estimators_check(object = object, indicator = indicator,
                    MSE = FALSE, CV = FALSE)
