@@ -27,6 +27,7 @@
 #' @importFrom stats coef coefficients
 
 coef.ebp <- function(object, ...) {
+  throw_class_error(object, "ebp")
   coef(object$model)
 }
 
@@ -60,6 +61,7 @@ coef.ebp <- function(object, ...) {
 #' @importFrom stats coef coefficients
 
 coef.fh <- function(object, ...) {
+  throw_class_error(object, "fh")
   fixed_effects <- object$model$coefficients$coefficients
   names(fixed_effects) <- row.names(object$model$coefficients)
   fixed_effects
@@ -105,6 +107,7 @@ coef.fh <- function(object, ...) {
 #' confint(emdi_model)
 #' }
 #' @export
+#' @method confint emdi
 #' @importFrom stats confint
 
 confint.emdi <- function(object, parm = 'all', level = 0.95,  ...) {
@@ -165,10 +168,13 @@ confint.emdi <- function(object, parm = 'all', level = 0.95,  ...) {
 # extractAIC(fh_std)
 # }
 #' @export
+#' @method extractAIC ebp
 #' @importFrom stats extractAIC
 
 extractAIC.ebp <- function(fit, ...) {
-  cat("For an object of class ebp no AIC value is available since the used estimation approach is REML.")
+  throw_class_error(object, "ebp")
+  cat("For an object of class ebp no AIC value is available since the used 
+      estimation approach is REML.")
 }
 
 # Extract the AIC from a model fit of an emdi object
@@ -194,10 +200,12 @@ extractAIC.ebp <- function(fit, ...) {
 # extractAIC(fh_std)
 # }
 #' @export
+#' @method extractAIC fh
 #' @importFrom stats extractAIC
 
 extractAIC.fh <- function(fit, ...) {
-    fit$model$model_select$AIC
+  throw_class_error(object, "fh")
+  fit$model$model_select$AIC
 }
 
 # Extracts family object of emdi object
@@ -226,7 +234,8 @@ extractAIC.fh <- function(fit, ...) {
 #' @importFrom stats family gaussian
 
 family.ebp <- function(object, ...) {
-    gaussian(link = "identity")
+  throw_class_error(object, "ebp")
+  gaussian(link = "identity")
 }
 
 # Extracts family object of emdi object
@@ -255,6 +264,7 @@ family.ebp <- function(object, ...) {
 #' @importFrom stats family gaussian
 
 family.fh <- function(object, ...) {
+  throw_class_error(object, "fh")
   gaussian(link = "identity")
 }
 
@@ -288,7 +298,7 @@ family.fh <- function(object, ...) {
 #' @importFrom stats fitted fitted.values
 
 fitted.ebp <- function(object, ...) {
-  
+  throw_class_error(object, "ebp")
   as.numeric(object$model$fitted[,1])
   
 }
@@ -323,6 +333,7 @@ fitted.ebp <- function(object, ...) {
 #' @importFrom stats fitted fitted.values
 
 fitted.fh <- function(object, ...) {
+  throw_class_error(object, "fh")
   object$model$fitted
 }
 
@@ -350,9 +361,11 @@ fitted.fh <- function(object, ...) {
 # formula(fh_std)
 # }
 #' @export
+#' @method formula ebp
 #' @importFrom stats formula
 
 formula.ebp <- function(x, ...) {
+  throw_class_error(object, "ebp")
   x$fixed
 }
 
@@ -380,9 +393,11 @@ formula.ebp <- function(x, ...) {
 # formula(fh_std)
 # }
 #' @export
+#' @method formula fh
 #' @importFrom stats formula
 
 formula.fh <- function(x, ...) {
+  throw_class_error(object, "fh")
   x$fixed
 }
 
@@ -412,7 +427,7 @@ formula.fh <- function(x, ...) {
 #' @importFrom stats logLik
 
 logLik.ebp <- function(object, ...) {
-  
+  throw_class_error(object, "ebp")
   object$model$logLik
 }
 
@@ -443,6 +458,7 @@ logLik.ebp <- function(object, ...) {
 #' @importFrom stats logLik
 
 logLik.fh <- function(object, ...) {
+  throw_class_error(object, "fh")
   object$model$model_select$loglike
 }
 
@@ -468,9 +484,11 @@ logLik.fh <- function(object, ...) {
 # nobs(emdi_model)
 # }
 #' @export
+#' @method nobs ebp
 #' @importFrom stats nobs
  
 nobs.ebp <- function(object, ...) {
+  throw_class_error(object, "ebp")
   N_obs <- object$framework$N_smp
   N_obs
 }
@@ -497,9 +515,11 @@ nobs.ebp <- function(object, ...) {
 # nobs(emdi_model)
 # }
 #' @export
+#' @method nobs fh
 #' @importFrom stats nobs
 
 nobs.fh <- function(object, ...) {
+  throw_class_error(object, "fh")
   N_obs <- object$framework$N_dom_smp
   N_obs
 }
@@ -562,7 +582,7 @@ predict.emdi <- function(object, ...) {
 #' @importFrom stats residuals resid
 
 residuals.ebp <- function(object, ...) {
-  
+  throw_class_error(object, "ebp")
   as.numeric(residuals(object$model, level = 0, type = "pearson"))
   #as.numeric(object$model$residuals[, 2])
 }
@@ -596,6 +616,7 @@ residuals.ebp <- function(object, ...) {
 #' @importFrom stats residuals resid
 
 residuals.fh <- function(object, ...) {
+  throw_class_error(object, "fh")
   data.frame(real_residuals = object$model$real_residuals, 
              std_real_residuals = object$model$std_real_residuals)
 }
@@ -627,6 +648,7 @@ residuals.fh <- function(object, ...) {
 #' @importFrom stats sigma
 
 sigma.ebp <- function(object, ...) {
+  throw_class_error(object, "ebp")
   object$model$sigma
 }
 
@@ -657,7 +679,9 @@ sigma.ebp <- function(object, ...) {
 #' @importFrom stats sigma
 
 sigma.fh <- function(object, ...) {
-  cat("For an object of class fh no residual standard deviation is available, since it is not defined for area-level models.")
+  throw_class_error(object, "fh")
+  cat("For an object of class fh no residual standard deviation is available, 
+      since it is not defined for area-level models.")
   }
 
 
@@ -683,10 +707,11 @@ sigma.fh <- function(object, ...) {
 # terms(emdi_model)
 # }
 #' @export
+#' @method terms ebp
 #' @importFrom stats aov terms
 
 terms.ebp <- function(x, ...) {
-  
+  throw_class_error(object, "ebp")
   terms(aov(x$fixed, x$framework$smp_data))
 }
 
@@ -712,10 +737,11 @@ terms.ebp <- function(x, ...) {
 # terms(emdi_model)
 # }
 #' @export
+#' @method terms fh
 #' @importFrom stats aov terms
 
 terms.fh <- function(x, ...) {
-  
+  throw_class_error(object, "fh")
   terms(aov(x$fixed, x$framework$combined_data))
 }
 

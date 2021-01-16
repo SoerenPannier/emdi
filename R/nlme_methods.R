@@ -155,6 +155,7 @@ comparePred.emdi <- function(object1, object2, MSE = FALSE, ...) {
 #' @importFrom nlme fixef fixed.effects
 
 fixef.ebp <- function(object, ...) {
+  throw_class_error(object, "ebp")
   object$model$coefficients$fixed
 }
 
@@ -185,6 +186,7 @@ fixef.ebp <- function(object, ...) {
 #' @importFrom nlme fixef fixed.effects
 
 fixef.fh <- function(object, ...) {
+  throw_class_error(object, "fh")
   fixed_effects <- object$model$coefficients$coefficients
   names(fixed_effects) <- row.names(object$model$coefficients)
   fixed_effects
@@ -216,6 +218,7 @@ fixef.fh <- function(object, ...) {
 #' @importFrom nlme getData
 
 getData.direct <- function(object, ...) {
+  throw_class_error(object, "direct")
   object$framework$smp_data
 }
 
@@ -244,6 +247,7 @@ getData.direct <- function(object, ...) {
 #' @importFrom nlme getData
 
 getData.ebp <- function(object, ...) {
+  throw_class_error(object, "ebp")
   object$framework$smp_data
 }
 
@@ -272,6 +276,7 @@ getData.ebp <- function(object, ...) {
 #' @importFrom nlme getData
 
 getData.fh <- function(object, ...) {
+  throw_class_error(object, "fh")
   object$framework$combined_data
 }
 
@@ -299,6 +304,7 @@ getData.fh <- function(object, ...) {
 #' @importFrom nlme getGroups
 
 getGroups.direct <- function(object, ...) {
+  throw_class_error(object, "direct")
   object$framework$smp_domains_vec
 }
 
@@ -326,6 +332,7 @@ getGroups.direct <- function(object, ...) {
 #' @importFrom nlme getGroups
 
 getGroups.ebp <- function(object, ...) {
+  throw_class_error(object, "ebp")
   object$framework$smp_domains_vec
 }
 
@@ -353,6 +360,7 @@ getGroups.ebp <- function(object, ...) {
 #' @importFrom nlme getGroups
 
 getGroups.fh <- function(object, ...) {
+  throw_class_error(object, "fh")
   object$ind$Domain
 }
 
@@ -383,6 +391,7 @@ getGroups.fh <- function(object, ...) {
 #' @importFrom nlme getGroupsFormula
 
 getGroupsFormula.direct <- function(object, ...) {
+  throw_class_error(object, "direct")
   eval(parse(text = paste("~", object$framework$smp_domains)))
 }
 
@@ -412,6 +421,7 @@ getGroupsFormula.direct <- function(object, ...) {
 #' @importFrom nlme getGroupsFormula
 
 getGroupsFormula.ebp <- function(object, ...) {
+  throw_class_error(object, "ebp")
   eval(parse(text = paste("~", object$framework$smp_domains)))
 }
 
@@ -441,11 +451,9 @@ getGroupsFormula.ebp <- function(object, ...) {
 #' @importFrom nlme getGroupsFormula
 
 getGroupsFormula.fh <- function(object, ...) {
+  throw_class_error(object, "fh")
   eval(parse(text = paste("~", object$framework$domains)))
 }
-
-
-
 
 # Extract response variable from an emdi object
 #
@@ -472,8 +480,8 @@ getGroupsFormula.fh <- function(object, ...) {
 #' @importFrom nlme getResponse
 
 getResponse.direct <- function(object, ...) {
-  
- object$framework$smp_data[, object$call$y]
+  throw_class_error(object, "direct")  
+  object$framework$smp_data[, object$call$y]
   
 }
 
@@ -502,7 +510,7 @@ getResponse.direct <- function(object, ...) {
 #' @importFrom nlme getResponse
 
 getResponse.ebp <- function(object, ...) {
-  
+  throw_class_error(object, "ebp")
   makeXY(object$fixed, object$framework$smp_data)$y
 }
 
@@ -531,10 +539,11 @@ getResponse.ebp <- function(object, ...) {
 #' @importFrom nlme getResponse
 
 getResponse.fh <- function(object, ...) {
+  throw_class_error(object, "fh")
   object$framework$direct
 }
 
-#' Extract random effects of emdi objects
+# Extract random effects of emdi objects
 #
 # Method \code{ranef.emdi} extracts the random effects from an emdi 
 # object.
@@ -563,7 +572,8 @@ getResponse.fh <- function(object, ...) {
 #' @importFrom nlme ranef random.effects
 
 ranef.ebp <- function(object, ...) {
-    ranef(object$model)
+  throw_class_error(object, "ebp")
+  ranef(object$model)
 }
 
 # Extract random effects of emdi objects
@@ -594,6 +604,7 @@ ranef.ebp <- function(object, ...) {
 #' @importFrom nlme ranef random.effects
 
 ranef.fh <- function(object, ...) {
+  throw_class_error(object, "fh")
   random_effects <- object$model$random_effects
   row.names(random_effects) <- object$ind$Domain
   random_effects
