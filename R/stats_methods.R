@@ -21,7 +21,7 @@
 # 
 # coef(emdi_model)
 # }
-#' @aliases coefficients
+#' @aliases coefficients 
 #' @export
 #' @method coef ebp
 #' @importFrom stats coef coefficients
@@ -59,6 +59,7 @@ coef.ebp <- function(object, ...) {
 #' @export
 #' @method coef fh
 #' @importFrom stats coef coefficients
+#' @rdname emdiObject
 
 coef.fh <- function(object, ...) {
   throw_class_error(object, "fh")
@@ -145,37 +146,6 @@ confint.emdi <- function(object, parm = 'all', level = 0.95,  ...) {
   
 }
 
-# Extract the AIC from a model fit of an emdi object
-#
-# Method \code{extractAIC.emdi} extracts the Akaike Information Criterion from 
-# a model fit of an emdi object.
-# 
-# @param fit an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For objects of class fh a single number is returned. For class direct 
-# and ebp no AIC value is available.
-# @seealso \code{\link{fh}}, \code{\link[stats]{extractAIC}}
-# @examples
-# \donttest{
-# # Example for class fh
-# combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain", 
-#                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
-# 
-# fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
-# combined_data = combined_data, domains = "Domain", method = "ml", 
-# MSE = TRUE)
-# 
-# extractAIC(fh_std)
-# }
-#' @export
-#' @method extractAIC ebp
-#' @importFrom stats extractAIC
-
-extractAIC.ebp <- function(fit, ...) {
-  throw_class_error(object, "ebp")
-  cat("For an object of class ebp no AIC value is available since the used 
-      estimation approach is REML.")
-}
 
 # Extract the AIC from a model fit of an emdi object
 #
@@ -204,7 +174,7 @@ extractAIC.ebp <- function(fit, ...) {
 #' @importFrom stats extractAIC
 
 extractAIC.fh <- function(fit, ...) {
-  throw_class_error(object, "fh")
+  throw_class_error(fit, "fh")
   fit$model$model_select$AIC
 }
 
@@ -365,7 +335,7 @@ fitted.fh <- function(object, ...) {
 #' @importFrom stats formula
 
 formula.ebp <- function(x, ...) {
-  throw_class_error(object, "ebp")
+  throw_class_error(x, "ebp")
   x$fixed
 }
 
@@ -397,7 +367,7 @@ formula.ebp <- function(x, ...) {
 #' @importFrom stats formula
 
 formula.fh <- function(x, ...) {
-  throw_class_error(object, "fh")
+  throw_class_error(x, "fh")
   x$fixed
 }
 
@@ -429,6 +399,7 @@ formula.fh <- function(x, ...) {
 logLik.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
   object$model$logLik
+  cat('Estimation approach used iS reml.')
 }
 
 
@@ -459,7 +430,12 @@ logLik.ebp <- function(object, ...) {
 
 logLik.fh <- function(object, ...) {
   throw_class_error(object, "fh")
-  object$model$model_select$loglike
+  if(!is.null(object$model$model_select$loglike)) {
+    object$model$model_select$loglike
+    cat(paste0('Estimation approach used is ', object$method$method, '.')) }
+  else {
+    cat(paste0('No likelihood is returned for estimation approach', object$method$method, '.')) 
+  }
 }
 
 # Extract the number of `observations´ from a fit of an emdi object
@@ -533,6 +509,9 @@ nobs.fh <- function(object, ...) {
 #' @param object an object of type "emdi".
 #' @param ... additional arguments that are not used in this method.
 #' @return Data frame with domain predictors.
+#' @details For a better selection of prediction results, it is referred to 
+#' method \code{\link{estimators}}. This methods allows to select among the indicators 
+#' of interest. 
 #' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}
 #' @examples
 #' \donttest{
@@ -652,38 +631,6 @@ sigma.ebp <- function(object, ...) {
   object$model$sigma
 }
 
-# Extract residual standard deviation of emdi objects
-#
-# Method \code{sigma.emdi} extracts the residual standard deviation from an emdi 
-# object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For class ebp, the estimated within-group error standard deviation is 
-# returned. For class fh, sigma is not available, since it is not defined for 
-# area-level models. For class direct, the method is not applicable.
-# @seealso \code{\link{ebp}}
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# sigma(emdi_model)
-# }
-#' @export
-#' @method sigma fh
-#' @importFrom stats sigma
-
-sigma.fh <- function(object, ...) {
-  throw_class_error(object, "fh")
-  cat("For an object of class fh no residual standard deviation is available, 
-      since it is not defined for area-level models.")
-  }
-
 
 # Constructs a terms object from an emdi object
 #
@@ -711,7 +658,7 @@ sigma.fh <- function(object, ...) {
 #' @importFrom stats aov terms
 
 terms.ebp <- function(x, ...) {
-  throw_class_error(object, "ebp")
+  throw_class_error(x, "ebp")
   terms(aov(x$fixed, x$framework$smp_data))
 }
 
@@ -741,7 +688,7 @@ terms.ebp <- function(x, ...) {
 #' @importFrom stats aov terms
 
 terms.fh <- function(x, ...) {
-  throw_class_error(object, "fh")
+  throw_class_error(x, "fh")
   terms(aov(x$fixed, x$framework$combined_data))
 }
 

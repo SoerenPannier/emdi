@@ -19,6 +19,11 @@ Method \code{predict.emdi} extracts the direct estimates, the empirical
 best linear unbiased or empirical best predictors for all domains from an emdi 
 object.
 }
+\details{
+For a better selection of prediction results, it is referred to 
+method \code{\link{estimators}}. This methods allows to select among the indicators 
+of interest.
+}
 \examples{
 \donttest{
 # Example for class ebp
