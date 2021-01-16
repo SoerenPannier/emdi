@@ -33,6 +33,7 @@ compare <- function(model, ...) UseMethod("compare")
 #' Chandra, H., Salvati, N. and Chambers, R. (2015), A Spatially 
 #' Nonstationary Fay-Herriot Model for Small Area Estimation, Journal 
 #' of the Survey Statistics and Methodology, 3, 109-135.
+#' @describeIn compare drftgzhu
 #' @export
 #' @importFrom stats cor pchisq
 

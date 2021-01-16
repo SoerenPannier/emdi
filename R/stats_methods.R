@@ -145,37 +145,6 @@ confint.emdi <- function(object, parm = 'all', level = 0.95,  ...) {
   
 }
 
-# Extract the AIC from a model fit of an emdi object
-#
-# Method \code{extractAIC.emdi} extracts the Akaike Information Criterion from 
-# a model fit of an emdi object.
-# 
-# @param fit an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For objects of class fh a single number is returned. For class direct 
-# and ebp no AIC value is available.
-# @seealso \code{\link{fh}}, \code{\link[stats]{extractAIC}}
-# @examples
-# \donttest{
-# # Example for class fh
-# combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain", 
-#                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
-# 
-# fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
-# combined_data = combined_data, domains = "Domain", method = "ml", 
-# MSE = TRUE)
-# 
-# extractAIC(fh_std)
-# }
-#' @export
-#' @method extractAIC ebp
-#' @importFrom stats extractAIC
-
-extractAIC.ebp <- function(fit, ...) {
-  throw_class_error(fit, "ebp")
-  cat("For an object of class ebp no AIC value is available since the used 
-      estimation approach is REML.")
-}
 
 # Extract the AIC from a model fit of an emdi object
 #
@@ -651,38 +620,6 @@ sigma.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
   object$model$sigma
 }
-
-# Extract residual standard deviation of emdi objects
-#
-# Method \code{sigma.emdi} extracts the residual standard deviation from an emdi 
-# object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For class ebp, the estimated within-group error standard deviation is 
-# returned. For class fh, sigma is not available, since it is not defined for 
-# area-level models. For class direct, the method is not applicable.
-# @seealso \code{\link{ebp}}
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# sigma(emdi_model)
-# }
-#' @export
-#' @method sigma fh
-#' @importFrom stats sigma
-
-sigma.fh <- function(object, ...) {
-  throw_class_error(object, "fh")
-  cat("For an object of class fh no residual standard deviation is available, 
-      since it is not defined for area-level models.")
-  }
 
 
 # Constructs a terms object from an emdi object
