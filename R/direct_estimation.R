@@ -68,7 +68,7 @@
 #' Poverty and Social Exclusions, Technical Report, European Union.
 #' @seealso \code{\link{emdiObject}}, \code{\link[nlme]{lme}},
 #' \code{\link{estimators.emdi}}, \code{\link{print.emdi}}, 
-#' \code{\link{summary.emdi}}
+#' \code{\link{summary.direct}}
 #' @examples
 #' \donttest{
 #' # Loading sample data
@@ -233,7 +233,7 @@ direct <- function(y,
     successful_bootstraps = sucInd
     )
   
-  class(direct_out) <- c("emdi", "direct")
+  class(direct_out) <- c( "direct", "emdi")
   return(direct_out)
 }
 
