@@ -108,8 +108,8 @@
 #' Social Protection Committee (2001). Report on indicators in the field of
 #' poverty and social exclusions, Technical Report, European Union.
 #' @seealso \code{\link{emdiObject}}, \code{\link[nlme]{lme}},
-#' \code{\link{estimators.emdi}}, \code{\link{print.emdi}}, \code{\link{plot.emdi}},
-#' \code{\link{summary.emdi}}
+#' \code{\link{estimators.emdi}},  \code{\link{plot.emdi}},
+#' \code{\link{summary.ebp}}
 #' @examples
 #' \donttest{
 #' # Loading data - population and sample data
@@ -282,6 +282,6 @@ ebp <- function(fixed,
   if (cpus > 1 && parallel_mode != "socket") {
     RNGkind(RNG_kind[1]) # restoring RNG type
   }
-  class(ebp_out) <- c("emdi", "model", "ebp")
+  class(ebp_out) <- c("ebp", "emdi")
   return(ebp_out)
 }
