@@ -172,7 +172,7 @@ confint.emdi <- function(object, parm = 'all', level = 0.95,  ...) {
 #' @importFrom stats extractAIC
 
 extractAIC.ebp <- function(fit, ...) {
-  throw_class_error(object, "ebp")
+  throw_class_error(fit, "ebp")
   cat("For an object of class ebp no AIC value is available since the used 
       estimation approach is REML.")
 }
@@ -204,7 +204,7 @@ extractAIC.ebp <- function(fit, ...) {
 #' @importFrom stats extractAIC
 
 extractAIC.fh <- function(fit, ...) {
-  throw_class_error(object, "fh")
+  throw_class_error(fit, "fh")
   fit$model$model_select$AIC
 }
 
@@ -365,7 +365,7 @@ fitted.fh <- function(object, ...) {
 #' @importFrom stats formula
 
 formula.ebp <- function(x, ...) {
-  throw_class_error(object, "ebp")
+  throw_class_error(x, "ebp")
   x$fixed
 }
 
@@ -397,7 +397,7 @@ formula.ebp <- function(x, ...) {
 #' @importFrom stats formula
 
 formula.fh <- function(x, ...) {
-  throw_class_error(object, "fh")
+  throw_class_error(x, "fh")
   x$fixed
 }
 
@@ -711,7 +711,7 @@ sigma.fh <- function(object, ...) {
 #' @importFrom stats aov terms
 
 terms.ebp <- function(x, ...) {
-  throw_class_error(object, "ebp")
+  throw_class_error(x, "ebp")
   terms(aov(x$fixed, x$framework$smp_data))
 }
 
@@ -741,7 +741,7 @@ terms.ebp <- function(x, ...) {
 #' @importFrom stats aov terms
 
 terms.fh <- function(x, ...) {
-  throw_class_error(object, "fh")
+  throw_class_error(x, "fh")
   terms(aov(x$fixed, x$framework$combined_data))
 }
 
