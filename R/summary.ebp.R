@@ -115,7 +115,7 @@ summary.ebp <- function(object, ...) {
   )
   tempMod <- object$model
   tempMod$call$fixed <- object$fixed
-  r_squared <- r.squaredGLMM(tempMod)
+  r_squared <- suppressWarnings(r.squaredGLMM(tempMod))
   if (is.matrix(r_squared)) {
     r_marginal <- r_squared[1, 1]
     r_conditional <- r_squared[1, 2]

@@ -48,9 +48,10 @@ the empirical best prediction (class "ebp"). Objects of these classes have
 methods for various generic functions. See Details for more information.
 }
 \details{
-All emdi object have following methods: \code{\link{estimators.emdi}}, 
-\code{\link{confint.emdi}}, \code{\link{predict.emdi}}, 
-\code{\link{comparePred}}.
+All emdi objects have following methods: \code{\link{comparePred}},  
+\code{\link{confint.emdi}}, \code{\link{estimators.emdi}}, 
+\code{\link{predict.emdi}}. \cr \cr
+All ebp object have following methods:
 }
 \references{
 Alfons, A. and Templ, M. (2013). Estimation of Social Exclusion Indicators
