@@ -37,18 +37,20 @@ transformation and, if appropriate, backtransformation. Not filled for class dir
 \item{\code{successful_bootstraps}}{for class direct, a matrix with domains as 
  rows and indicators as columns. The cells contain the number of successful 
  bootstraps for each combination. For non-robust spatial Fay-Herriot, string
- with number of successful bootstraps. Not filled for other models in class model.}
+ with number of successful bootstraps. Not filled for other models.}
 }
 \description{
 An object of class emdi that represents point predictions of regional
 disaggregated indicators. Optionally, it also contains corresponding MSE
-estimates. Depending on the estimation, the object is also of class direct
-or model. For each provided model-based approach, an additional class is assigned:
-the Fay-Herriot approach ("fh"), and the empirical best prediction
-("ebp"). Objects of these classes have methods for the generic functions
-\code{\link{compare}}, \code{\link{compare_plot}}, \code{\link{estimators}}, 
-\code{\link{print}}, \code{\link{plot}} (only for class model), and 
-\code{\link{summary}}.
+estimates. Three different estimation approaches are implemented: 
+direct estimation (class 'direct), the Fay-Herriot model (class "fh"), and 
+the empirical best prediction (class "ebp"). Objects of these classes have 
+methods for various generic functions. See Details for more information.
+}
+\details{
+All emdi object have following methods: \code{\link{estimators.emdi}}, 
+\code{\link{confint.emdi}}, \code{\link{predict.emdi}}, 
+\code{\link{comparePred}}.
 }
 \references{
 Alfons, A. and Templ, M. (2013). Estimation of Social Exclusion Indicators
