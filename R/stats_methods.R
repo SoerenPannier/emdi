@@ -21,7 +21,7 @@
 # 
 # coef(emdi_model)
 # }
-#' @aliases coefficients
+#' @aliases coefficients 
 #' @export
 #' @method coef ebp
 #' @importFrom stats coef coefficients
@@ -59,6 +59,7 @@ coef.ebp <- function(object, ...) {
 #' @export
 #' @method coef fh
 #' @importFrom stats coef coefficients
+#' @rdname emdiObject
 
 coef.fh <- function(object, ...) {
   throw_class_error(object, "fh")
@@ -429,6 +430,7 @@ formula.fh <- function(x, ...) {
 logLik.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
   object$model$logLik
+  cat('Estimation approach used iS reml.')
 }
 
 
@@ -459,7 +461,12 @@ logLik.ebp <- function(object, ...) {
 
 logLik.fh <- function(object, ...) {
   throw_class_error(object, "fh")
-  object$model$model_select$loglike
+  if(!is.null(object$model$model_select$loglike)) {
+    object$model$model_select$loglike
+    cat(paste0('Estimation approach used is ', object$method$method, '.')) }
+  else {
+    cat(paste0('No likelihood is returned for estimation approach', object$method$method, '.')) 
+  }
 }
 
 # Extract the number of `observations´ from a fit of an emdi object
@@ -533,6 +540,9 @@ nobs.fh <- function(object, ...) {
 #' @param object an object of type "emdi".
 #' @param ... additional arguments that are not used in this method.
 #' @return Data frame with domain predictors.
+#' @details For a better selection of prediction results, it is referred to 
+#' method \code{\link{estimators}}. This methods allows to select among the indicators 
+#' of interest. 
 #' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}
 #' @examples
 #' \donttest{
