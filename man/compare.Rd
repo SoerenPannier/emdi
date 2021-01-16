@@ -5,12 +5,12 @@
 \alias{compare.fh}
 \title{Compare function}
 \usage{
-compare(model, ...)
+compare(object, ...)
 
-\method{compare}{fh}(model, ...)
+\method{compare}{fh}(object, ...)
 }
 \arguments{
-\item{model}{an object of type "model","fh".}
+\item{object}{an object of type "fh".}
 
 \item{...}{further arguments passed to or from other methods.}
 }
@@ -19,22 +19,25 @@ The return of \code{compare} depends on the class of its argument. The
 documentation of particular methods gives detailed information about the
 return of that method.
 
-The null hypothesis, the value W of the test statistic, the degrees 
-of freedom and the p value of the Brown test; and the correlation coefficient 
-of the synthetic part and the direct estimator \cite{(Chandra et al. 2015)}.
+For the \code{fh} method the null hypothesis, the value W of the test 
+statistic, the degrees of freedom and the p value of the Brown test; and the 
+correlation coefficient of the synthetic part and the direct estimator 
+\cite{(Chandra et al. 2015)}.
 }
 \description{
 Function \code{compare} is a generic function used to assess the quality of 
 the model-based estimates by comparing them with the direct estimates.
 
-Method \code{compare.fh} assesses the quality of the model-based estimates by 
-comparing them with the direct estimates based on a goodness-of-fit test 
-proposed by \cite{Brown et al. (2001)} and by computing the correlation between the 
-regression-synthetic part of the Fay-Herriot model and the direct estimates.
+Method \code{compare.fh} assesses the quality of the model-based estimates 
+of the Fay-Herriot model by comparing them with the direct estimates based on 
+a goodness-of-fit test proposed by \cite{Brown et al. (2001)} and by computing 
+the correlation between the regression-synthetic part of the Fay-Herriot model 
+and the direct estimates.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{fh}: drftgzhu
+\item \code{fh}: Assess the quality of the model-based estimates of a 
+Fay-Herriot model by comparing them with the direct estimates
 }}
 
 \references{

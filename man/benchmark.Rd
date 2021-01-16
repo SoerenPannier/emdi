@@ -7,7 +7,7 @@
 benchmark(object, benchmark, share, type = "raking", overwrite = FALSE)
 }
 \arguments{
-\item{object}{an object of type "model","fh".}
+\item{object}{an object of type "fh".}
 
 \item{benchmark}{a number determining the benchmark value.}
 

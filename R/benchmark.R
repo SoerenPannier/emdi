@@ -2,7 +2,7 @@
 #'
 #' This function benchmarks the EBLUP estimates of an area-level model.
 #'
-#' @param object an object of type "model","fh".
+#' @param object an object of type "fh".
 #' @param benchmark a number determining the benchmark value.
 #' @param share a vector containing the shares of the population size per area and 
 #' the total population size (N_d/N).Values must be sorted like the domains in 
@@ -103,6 +103,9 @@ check_benchmark_arguments <- function(object, benchmark, share, type,
   if(!inherits(object, "fh")){
     stop('Object needs to be fh object.')
   }
+  
+  throw_class_error(object, "fh")
+  
   if ((any(is.na(object$ind$FH)))){
     stop("If no predictions for out-of-sample domains 
          are available, the benchmarking algorithm does not work.")

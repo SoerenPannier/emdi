@@ -1,6 +1,6 @@
 #' Compare predictions of emdi objects
 #'
-#' Method \code{comparePred.emdi} compares predictions of emdi objects.
+#' Method \code{comparePred.emdi} compares predictions of two emdi objects.
 #' 
 #' @param object1 an object of type "emdi".
 #' @param object2 an object of type "emdi".
