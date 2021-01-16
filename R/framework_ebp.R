@@ -68,7 +68,7 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
   # Number of households in sample per domain
   smp_domains_vec_tmp <- as.numeric(smp_domains_vec)
   n_smp <- as.vector(table(smp_domains_vec_tmp))
-
+  
   # Indicator variables that indicate if domain is in- or out-of-sample
   obs_dom <- pop_domains_vec %in% unique(smp_domains_vec)
   dist_obs_dom <- unique(pop_domains_vec) %in% unique(smp_domains_vec)
@@ -145,7 +145,7 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
               dist_obs_dom     = dist_obs_dom,
               indicator_list   = indicator_list,
               indicator_names  = indicator_names,
-              threshold         = threshold
+              threshold        = threshold
               )
          )
 }

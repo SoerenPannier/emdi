@@ -227,6 +227,7 @@ direct <- function(y,
     framework = framework[c("N_dom_smp",
                          "N_smp",
                          "smp_domains",
+                         "smp_data",
                          "smp_domains_vec")],
     call = call,
     successful_bootstraps = sucInd

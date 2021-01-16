@@ -126,7 +126,8 @@ model_select <- function(framework, sigmau2, method, interval,
                            BIC = BIC,
                            R2 = R2_regular,
                            AdjR2 = AdjR2)
-  } else if (framework$correlation == "no" & is.null(B)) {
+  } else if (framework$correlation == "no" & transformation == "no" & 
+             !(B > 1) & method != "me") {
     criteria <- data.frame(loglike = loglike,
                            AIC = AIC,
                            BIC = BIC,
@@ -134,7 +135,7 @@ model_select <- function(framework, sigmau2, method, interval,
                            R2 = R2_regular,
                            AdjR2 = AdjR2)
   } else if (framework$correlation == "no" & transformation == "no" & 
-             !is.null(B) & method != "me") {
+             (B > 1) & method != "me") {
     criteria <- data.frame(loglike = loglike,
                            AIC = AIC, AICc = AICc, AICb1 = AICb1, AICb2 = AICb2,
                            BIC = BIC,

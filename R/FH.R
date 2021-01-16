@@ -75,7 +75,7 @@
 #' of the EBLUPs and MSE estimates. Required argument when a transformation is chosen. 
 #' Available methods are 
 #' (i) crude bias-correction following \cite{Neves et al. (2013)} and 
-#' \cite{Rao and Molina (2015)} when the log transformation is chosen 
+#' \cite{Rao (2003)} when the log transformation is chosen 
 #' ("\code{bc_crude}"),
 #' (ii) bias-correction following \cite{Slud and Maiti (2006)} when the 
 #' log transformations is chosen ("\code{bc_sm}"),
@@ -139,12 +139,13 @@
 #' robust extensions of the Fay-Herriot model. For an extensive overview of the possible 
 #' MSE options, please refer to the vignette. Required argument when 
 #' \code{MSE = TRUE}. Defaults to "\code{analytical}".
-#' @param B a number determining the number of bootstrap iterations. When a 
-#' bootstrap MSE estimator is chosen, \code{B} regulates the MSE estimation. 
-#' When the standard FH model is applied and \code{B} is not \code{NULL}, the 
-#' information criteria by Marhuenda et al. (2014) are computed. The number must 
-#' be greater than 1. Defaults to 50. For practical applications, 
-#' values larger than 200 are recommended.
+#' @param B either a single number or a numeric vector with two elements. The 
+#' single number or the first element defines the number of bootstrap iterations 
+#' when a bootstrap MSE estimator is chosen. When the standard FH 
+#' model is applied and the information criteria by Marhuenda et al. (2014) 
+#' should be computed, the second element of \code{B} is needed and must be 
+#' greater than 1. Defaults to c(50,0). For practical applications, values larger 
+#' than 200 are recommended.
 #' @param seed an integer to set the seed for the random number generator. For 
 #' the usage of random number generation see details. If seed is set to 
 #' \code{NULL}, seed is chosen randomly. Defaults to \code{123}.
@@ -237,7 +238,7 @@
 #' fh_arcsin <- fh(fixed = MTMED ~ cash + age_ben + rent + house_allow,
 #' vardir = "Var_MTMED", combined_data = combined_data, domains = "Domain", 
 #' method = "ml", transformation = "arcsin", backtransformation = "bc", 
-#' eff_smpsize = "n", MSE = TRUE, mse_type = "boot", B = 50)
+#' eff_smpsize = "n", MSE = TRUE, mse_type = "boot", B = c(50,0))
 #' 
 #' # Example 3: Spatial Fay-Herriot model
 #' # Load proximity matrix
@@ -280,7 +281,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                backtransformation = NULL, eff_smpsize = NULL,
                correlation = "no", corMatrix = NULL, 
                Ci = NULL, tol = 0.0001, maxit = 100,
-               MSE = FALSE, mse_type = "analytical", B = 50, seed = 123) {
+               MSE = FALSE, mse_type = "analytical", B = c(50,0), seed = 123) {
 
   # Agrument checking ----------------------------------------------------------
   fh_combinations(fixed = fixed, vardir = vardir, combined_data = combined_data, 
@@ -326,6 +327,11 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
   upper <- var(framework$direct)
   interval <- c(0, upper)
   }
+  
+  # Number of bootstrap iterations
+  if (length(B) == 1){
+    B <- c(B, 0)
+  }
 
   if (!(method == "reblup" | method == "reblupbc")) {
     # Estimate sigma u ---------------------------------------------------------
@@ -345,7 +351,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
         # Criteria for model selection -----------------------------------------
          criteria <- model_select(framework = framework, sigmau2 = sigmau2, 
                                   method = method, interval = interval, 
-                                  eblup = eblup, B = B, vardir = vardir,
+                                  eblup = eblup, B = B[2], vardir = vardir,
                                   transformation = transformation,
                                   combined_data = framework$combined_data)
       }
@@ -356,7 +362,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
         # Criteria for model selection -----------------------------------------
         criteria <- model_select(framework = framework, sigmau2 = sigmau2,
                                  method = method, interval = interval, 
-                                 eblup = eblup, B = B, vardir = vardir,
+                                 eblup = eblup, B = B[2], vardir = vardir,
                                  transformation = transformation,
                                  combined_data = framework$combined_data)
       }
@@ -371,7 +377,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
       # Criteria for model selection -----------------------------------------
       criteria <- model_select(framework = framework, sigmau2 = sigmau2,
                                method = method, interval = interval, 
-                               eblup = eblup, B = B, vardir = vardir,
+                               eblup = eblup, B = B[2], vardir = vardir,
                                transformation = transformation,
                                combined_data = framework$combined_data)
     }
@@ -387,7 +393,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                                 sigmau2 = sigmau2, vardir = vardir, Ci = Ci,
                                 eblup = eblup, transformation = transformation,
                                 method = method, interval = interval,
-                                mse_type = mse_type, B = B)
+                                mse_type = mse_type, B = B[1])
         MSE <- MSE_data$MSE_data
         MSE_method <- MSE_data$MSE_method
         if (mse_type == "spatialnonparboot" | mse_type == "spatialnonparbootbc" |
@@ -417,13 +423,15 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                       model = list(coefficients = eblup$coefficients,
                                    variance = sigmau2,
                                    random_effects = eblup$random_effects,
+                                   fitted = eblup$fitted,
                                    real_residuals = eblup$real_res,
                                    std_real_residuals = eblup$std_real_res,
                                    model_select = criteria,
                                    correlation = correlation,
                                    seed = seed),
                       framework = framework[c("direct", "vardir", "N_dom_smp",
-                                              "N_dom_unobs")],
+                                              "N_dom_unobs", "combined_data", 
+                                              "domains")],
                       transformation = list(transformation = transformation,
                                             backtransformation = backtransformation),
                       method = list(method = method,
@@ -442,13 +450,15 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                       model = list(coefficients = eblup$coefficients,
                                    variance = sigmau2,
                                    random_effects = eblup$random_effects,
+                                   fitted = eblup$fitted,
                                    real_residuals = eblup$real_res,
                                    std_real_residuals = eblup$std_real_res,
                                    model_select = criteria,
                                    correlation = correlation,
                                    seed = seed),
                       framework = framework[c("direct", "vardir", "N_dom_smp",
-                                              "N_dom_unobs")],
+                                              "N_dom_unobs", "combined_data", 
+                                              "domains")],
                       transformation = list(transformation = transformation,
                                             backtransformation = backtransformation),
                       method = list(method = method,
@@ -472,6 +482,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                     model = list(coefficients = eblup$coefficients,
                                  variance = sigmau2,
                                  random_effects = eblup$random_effects,
+                                 fitted = eblup$fitted,
                                  real_residuals = eblup$real_res,
                                  std_real_residuals = eblup$std_real_res,
                                  gamma = Gamma,
@@ -479,7 +490,8 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                                  correlation = correlation,
                                  seed = seed),
                     framework = framework[c("direct", "vardir", "N_dom_smp",
-                                            "N_dom_unobs")],
+                                            "N_dom_unobs", "combined_data", 
+                                            "domains")],
                     transformation = list(transformation = transformation,
                                           backtransformation = backtransformation),
                     method = list(method = method,
@@ -496,13 +508,15 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                     model = list(coefficients = eblup$coefficients,
                                  variance = sigmau2$sigmau_YL,
                                  random_effects = eblup$random_effects,
+                                 fitted = eblup$fitted,
                                  real_residuals = eblup$real_res,
                                  std_real_residuals = eblup$std_real_res,
                                  gamma = Gamma,
                                  model_select = criteria,
                                  correlation = correlation),
                     framework = framework[c("direct", "vardir", "N_dom_smp",
-                                            "N_dom_unobs")],
+                                            "N_dom_unobs", "combined_data", 
+                                            "domains")],
                     transformation = list(transformation = transformation,
                                           backtransformation = backtransformation),
                     method = list(method = method,
@@ -540,7 +554,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                                      method = method, interval = interval,
                                      MSE = MSE,
                                      mse_type = mse_type,
-                                     B = B)
+                                     B = B[1])
       
       out <- list(ind = result_data$EBLUP_data,
                   MSE = result_data$MSE_data,
@@ -548,6 +562,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                   model = list(coefficients = eblup$coefficients,
                                variance = sigmau2,
                                random_effects = eblup$random_effects[, 1],
+                               fitted = eblup$fitted,
                                real_residuals = eblup$real_res[, 1],
                                std_real_residuals = eblup$std_real_res[, 1],
                                gamma = Gamma,
@@ -555,7 +570,8 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                                correlation = correlation,
                                seed = seed),
                   framework = framework[c("direct", "vardir", "N_dom_smp",
-                                          "N_dom_unobs")],
+                                          "N_dom_unobs", "combined_data", 
+                                          "domains")],
                   transformation = list(transformation = transformation,
                                         backtransformation = backtransformation),
                   method = list(method = method,
@@ -577,7 +593,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
       MSE_data <- wrapper_MSE(framework = framework, 
                               combined_data = framework$combined_data,
                               vardir = vardir, eblup = eblup,
-                              mse_type = mse_type, method = method, B = B)
+                              mse_type = mse_type, method = method, B = B[1])
       MSE <- MSE_data$MSE_data
       MSE_method <- MSE_data$MSE_method
     } else {
@@ -592,6 +608,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                 model = list(coefficients = eblup$coefficients,
                              variance = eblup$variance,
                              random_effects = as.matrix(eblup$random_effects),
+                             fitted = eblup$fitted,
                              real_residuals = as.matrix(eblup$real_res),
                              std_real_residuals = as.matrix(eblup$std_real_res),
                              correlation = correlation,
@@ -599,7 +616,8 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                              c = c,
                              seed = seed),
                 framework = framework[c("direct", "vardir", "N_dom_smp",
-                                        "N_dom_unobs")],
+                                        "N_dom_unobs", "combined_data", 
+                                        "domains")],
                 transformation = list(transformation = transformation,
                                       backtransformation = backtransformation),
                 method = list(method = method,

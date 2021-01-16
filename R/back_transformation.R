@@ -22,12 +22,12 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
 
       # Crude means that we do not add 0.5 * sigmau2 * (1 - gamma) but the MSE as approximation
       # of the term. This enables to get estimates also for out-of-sample estimates.
-      # Following Rao 2003, p. 133
+      # Following Rao 2003, Neves et al. 2013
       EBLUP_data$FH <- exp(eblup$EBLUP_data$FH + 0.5 * estim_MSE$MSE_data$FH)
 
       if (MSE == TRUE) {
         # The MSE is backtransformed following Rao 2003, p. 133
-        MSE_data$FH <- exp(eblup$EBLUP_data$FH)^2 * estim_MSE$MSE_data$FH
+        MSE_data$FH <- exp(eblup$EBLUP_data$FH + 0.5 * estim_MSE$MSE_data$FH)^2 * estim_MSE$MSE_data$FH
         MSE_method <- estim_MSE$MSE_method
       } else {
         MSE_data <- NULL
