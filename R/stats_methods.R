@@ -623,7 +623,6 @@ residuals.fh <- function(object, ...) {
 # sigma(emdi_model)
 # }
 #' @export
-#' @method sigma ebp
 #' @importFrom stats sigma
 
 sigma.ebp <- function(object, ...) {

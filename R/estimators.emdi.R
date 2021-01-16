@@ -159,6 +159,7 @@ print.estimators.emdi <- function(x,...) {
 #' }
 #' @importFrom utils head
 #' @export
+
 head.estimators.emdi <- function(x, n = 6L, addrownums = NULL, ...) {
   head(x$ind, n = n, addrownums = addrownums, ...)
 }
