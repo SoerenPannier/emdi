@@ -157,7 +157,7 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
       cat("Please note that the model selection criteria are only computed based on 
        the in-sample domains. \n \n ")
     }
-    class(fit) <- c("emdi", "model", "fh", "step_fh")
+    class(fit) <- c("step_fh")
     fit
   }
   
@@ -333,6 +333,15 @@ Otherwise the comparison of models based on information criteria would not be va
 }
 
 
+#' @export
+print.step_fh <- function(x, ...) {
+  cat("\n")
+  cat("Call:\n ")
+  print(x$call)
+  cat("\n")
+  cat("Coefficients:\n ")
+  print(x$model$coefficients)
+} 
 
 
 
