@@ -4,8 +4,8 @@
 # Function called in fh
 
 fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k, 
-                     c, transformation, backtransformation, eff_smpsize,
-                     correlation, corMatrix, Ci, tol, maxit, MSE, 
+                     mult_constant, transformation, backtransformation, 
+                     eff_smpsize, correlation, corMatrix, Ci, tol, maxit, MSE, 
                      mse_type, B, seed){
   
   if (is.null(fixed) || !inherits(fixed, "formula")) {
@@ -54,8 +54,9 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
   if (is.null(k)  || !(is.numeric(k) && length(k) == 1)) { 
     stop("k needs to be a single numeric value. See also help(fh).")
   }
-  if (is.null(c)  || !(is.numeric(c) && length(c) == 1)) { 
-    stop("c needs to be a single numeric value. See also help(fh).")
+  if (is.null(mult_constant)  || !(is.numeric(mult_constant) && 
+                                   length(mult_constant) == 1)) { 
+    stop("mult_constant needs to be a single numeric value. See also help(fh).")
   }
   if (is.null(transformation) ||  !is.character(transformation) || 
       !(transformation == "arcsin" || transformation == "log" 
@@ -218,9 +219,9 @@ fh_fw_check1 <- function(fixed, vardir, combined_data, domains, eff_smpsize = NU
 # Check all possible allowed combinations
 
 fh_combinations <- function(fixed, vardir, combined_data, domains, method, 
-                            interval, k, c, transformation, backtransformation, 
-                            eff_smpsize, correlation, corMatrix, Ci, tol, 
-                            maxit, MSE, mse_type, B, seed){
+                            interval, k, mult_constant, transformation, 
+                            backtransformation, eff_smpsize, correlation, 
+                            corMatrix, Ci, tol, maxit, MSE, mse_type, B, seed){
   
   if (is.null(transformation) ||  !is.character(transformation) || 
       !(transformation == "arcsin" || transformation == "log" 
@@ -287,9 +288,9 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
          the arguments k, tol and maxit are required and cannot be ''NULL''. 
          See also help(fh).")
   }
-  if ((method == "reblupbc") && is.null(c)){
+  if ((method == "reblupbc") && is.null(mult_constant)){
     stop("For the bias corrected robust estimation method (method = ''reblupbc''), 
-         the argument c is required and cannot be ''NULL''. See also help(fh).")
+         the argument mult_constant is required and cannot be ''NULL''. See also help(fh).")
   }
   if ((correlation == "spatial") && (is.null(corMatrix) || is.null(tol) || 
                                      is.null(maxit))){
