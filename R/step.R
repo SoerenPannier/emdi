@@ -3,7 +3,7 @@
 #' This generic function selects a model by different criteria in a stepwise 
 #' algorithm.
 #'
-#' @param object an object of type "emdi","model".
+#' @param object an object of type "emdi".
 #' @param scope formula or a list including two formulas (\code{lower} and 
 #' \code{upper}) specifying the models considered in the step function. 
 #' Defaults to \code{NULL}.
@@ -16,9 +16,9 @@
 #' provided during the stepwise procedure. Defaults to \code{TRUE}.
 #' @param steps a number determining the maximum number of steps. Defaults to 1000.
 #' @param ... arguments to be passed to or from other methods.
-#' @return The return of \code{step} depends on the class of its argument. The
-#' documentation of particular methods gives detailed information about the
-#' return of that method.
+#' @return The return of \code{step} depends on the class of its argument. Please 
+#' refer to the documentation of the step function of the stats package for 
+#' details of the default method.
 #' @export
 #' @importFrom stats factor.scope 
 
@@ -26,7 +26,7 @@ step <- function (object, scope, criteria, direction, trace, steps,
                   ...) UseMethod("step") 
 
 
-#' Method \code{step.default} performs a variable selection for lm models.
+#' Method \code{step.default} performs a variable selection for lm models by AIC.
 #'
 #' @param object an object of type "emdi","model" or a \code{lm} object.
 #' @param ... arguments to be passed to or from other methods.
@@ -36,7 +36,7 @@ step <- function (object, scope, criteria, direction, trace, steps,
 #' the stats package for details.
 #' @seealso \code{\link[stats]{step}}
 #' @export
-#' @rdname step 
+#' @describeIn step Selects a lm model by AIC
 #' @method step default
 #' @importFrom stats step 
 step.default <- function(object,...) stats::step(object, ...)
@@ -46,8 +46,8 @@ step.default <- function(object,...) stats::step(object, ...)
 #' Method \code{step.fh} selects a Fay-Herriot model by different 
 #' information criteria in a stepwise algorithm.
 #'
-#' @param object an object of type "emdi","model","fh" that contains the chosen 
-#' information criteria.
+#' @param object an object of type "fh" that contains the chosen 
+#' information criterion or of type "lm" for the default method.
 #' @param scope formula or a list including two formulas (\code{lower} and 
 #' \code{upper}) specifying the models considered in the step function. 
 #' Defaults to \code{NULL}.
@@ -63,15 +63,15 @@ step.default <- function(object,...) stats::step(object, ...)
 #' provided during the stepwise procedure. Defaults to \code{TRUE}.
 #' @param steps a number determining the maximum number of steps. Defaults to 1000.
 #' @param ... additional arguments that are not used in this method.
-#' @return Information about the resulting "best" model due to the chosen 
-#' information criterion: 
+#' @return For the fh method information about the resulting "best" model due to 
+#' the chosen information criterion is provided: 
 #' \item{\code{call}}{the function call that produced the object.}
 #' \item{\code{coefficients}}{data frame containing the estimated regression 
 #' coefficients, the standard errors and the \code{t}- and \code{p}-values of 
 #' the explanatory variables.} 
 #' @details The information criteria "\code{AICc}", "\code{AICb1}", 
 #' "\code{AICb2}", "\code{KIC}", "\code{KICc}", "\code{KICb1}" and 
-#' "\code{KICb2}" are especially developed for FH models by 
+#' "\code{KICb2}" are especially developed for Fay-Herriot models by 
 #' \cite{Marhuenda et al. (2014)}. They are based on a bootstrap 
 #' algorithm. If one of the criteria is chosen, make sure that the 
 #' bootstrap iterations (\code{B}) of the fh object are set to a positive number. 
@@ -108,6 +108,7 @@ step.default <- function(object,...) stats::step(object, ...)
 #' step(fh_std, criteria = "KICb2")
 #' }
 #' @export
+#' @describeIn step Selects a Fay-Herriot model by different information criteria
 #' @method step fh
 #' @importFrom stats factor.scope   
 #' @importFrom utils capture.output

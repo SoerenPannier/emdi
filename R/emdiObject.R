@@ -38,10 +38,31 @@
 #'  bootstraps for each combination. For non-robust spatial Fay-Herriot, string
 #'  with number of successful bootstraps. Not filled for other models.}
 #' @details 
-#' All emdi objects have following methods: \code{\link{comparePred}},  
-#' \code{\link{confint.emdi}}, \code{\link{estimators.emdi}}, 
-#' \code{\link{predict.emdi}}. \cr \cr
-#' All ebp object have following methods: 
+#' Objects of class "emdi" have following methods: \code{\link[emdi]{comparePred.emdi}},  
+#' \code{\link[emdi]{confint.emdi}}, \code{\link[emdi]{estimators}}, 
+#' \code{\link[emdi]{predict.emdi}}. \cr \cr
+#' Objects of class "direct", "ebp" and "fh" have method for following generic 
+#' functions: \code{getData} (for default 
+#' documentation, see \code{\link[nlme]{getData}}), \code{getGroups} (for default
+#' documentation, see \code{\link[nlme]{getGroups}}), \code{getGroupsFormula} 
+#' (for default documentation, see \code{\link[nlme]{getGroupsFormula}}), 
+#' \code{getResponse} (for default documentation, see \code{\link[nlme]{getResponse}}) \cr \cr
+#' Objects of class "ebp" and "fh" have methods for following generic functions: 
+#' \code{coef} (for default documentation, see \code{\link[stats]{coef}}), 
+#' \code{family} (for default
+#' documentation, see \code{\link[stats]{family}}), \code{fitted} (for default
+#' documentation, see \code{\link[stats]{fitted}}), \code{fixef} (for 
+#' default documentation, see \code{\link[nlme]{fixef}}), \code{formula} (for 
+#' default documentation, see \code{\link[stats]{formula}}), \code{logLik} (for
+#' default documentation, see \code{\link[stats]{logLik}}), \code{nobs} (for
+#' default documentation, see \code{\link[stats]{nobs}}), \code{ranef} (for default 
+#' documentation, see \code{\link[nlme]{ranef}}), \code{residuals} 
+#' (for default documentation, see \code{\link[stats]{residuals}}), \code{terms} 
+#' (for default documentation, see \code{\link[stats]{terms}}) \cr \cr
+#' Objects of class "ebp" have additionally methods for following generic 
+#' functions: \code{sigma} (for default documentation, see \code{\link[stats]{sigma}})\cr \cr
+#' Objects of class "fh" have additionally methods for following generic functions: 
+#' \code{extractAIC} (for default documentation, see \code{\link[stats]{extractAIC}})
 #' 
 #' @references
 #' Alfons, A. and Templ, M. (2013). Estimation of Social Exclusion Indicators

@@ -12,7 +12,7 @@ fh(
   method = "reml",
   interval = NULL,
   k = 1.345,
-  c = 1,
+  mult_constant = 1,
   transformation = "no",
   backtransformation = NULL,
   eff_smpsize = NULL,
@@ -76,12 +76,12 @@ variance of the random effects. Defaults to \code{NULL}.}
 the standard or spatial Fay-Herriot model is chosen. Defaults to \code{1.345}. 
 For detailed information, please refer to \cite{Warnholz (2016)}.}
 
-\item{c}{numeric multiplier constant used in the bias corrected version of the 
+\item{mult_constant}{numeric multiplier constant used in the bias corrected version of the 
 robust estimation methods. Required argument when the robust version of 
 the standard or spatial Fay-Herriot model is chosen. Default is to make no 
-correction for realizations of direct estimator within \code{c = 1} times the 
-standard deviation of direct estimator. For detailed information, please refer 
-to \cite{Warnholz (2016)}.}
+correction for realizations of direct estimator within \code{mult_constant = 1} 
+times the standard deviation of direct estimator. For detailed information, 
+please refer to \cite{Warnholz (2016)}.}
 
 \item{transformation}{a character that determines the type of transformation 
 of the dependent variable and of the sampling variances. Methods that can be chosen
@@ -253,11 +253,9 @@ correlation = "spatial", corMatrix = eusilcA_prox, MSE = TRUE,
 mse_type = "analytical")
 
 # Example 4: Robust Fay-Herriot model 
-# Please note that the example runs for several minutes. For a short check
-# change B to a lower value.
 fh_robust <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
 combined_data = combined_data, domains = "Domain", method = "reblupbc", 
-k = 1.345, c = 1, MSE = TRUE, mse_type = "pseudo")
+k = 1.345, mult_constant = 1, MSE = TRUE, mse_type = "pseudo")
 
 # Example 5: Ybarra-Lohr model
 # Create MSE array
@@ -277,7 +275,6 @@ Chen S., Lahiri P. (2002), A weighted jackknife MSPE estimator in small-area
 estimation, "Proceeding of the Section on Survey Research Methods", American 
 Statistical Association, 473 - 477. \cr \cr
 Datta, G. S. and Lahiri, P. (2000), A unified measure of uncertainty of 
-estimated best linear unbiased predictors in small area estimation problems, 
 Statistica Sinica 10(2), 613-627. \cr \cr
 Fay, R. E. and Herriot, R. A. (1979), Estimates of income for small places:
 An application of James-Stein procedures to census data, Journal of the 

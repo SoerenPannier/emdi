@@ -58,12 +58,12 @@
 #' @param k numeric tuning constant. Required argument when the robust version of 
 #' the standard or spatial Fay-Herriot model is chosen. Defaults to \code{1.345}. 
 #' For detailed information, please refer to \cite{Warnholz (2016)}.
-#' @param c numeric multiplier constant used in the bias corrected version of the 
+#' @param mult_constant numeric multiplier constant used in the bias corrected version of the 
 #' robust estimation methods. Required argument when the robust version of 
 #' the standard or spatial Fay-Herriot model is chosen. Default is to make no 
-#' correction for realizations of direct estimator within \code{c = 1} times the 
-#' standard deviation of direct estimator. For detailed information, please refer 
-#' to \cite{Warnholz (2016)}.
+#' correction for realizations of direct estimator within \code{mult_constant = 1} 
+#' times the standard deviation of direct estimator. For detailed information, 
+#' please refer to \cite{Warnholz (2016)}.
 #' @param transformation a character that determines the type of transformation 
 #' of the dependent variable and of the sampling variances. Methods that can be chosen
 #' (i) no transformation ("\code{no}"),
@@ -175,7 +175,6 @@
 #' estimation, "Proceeding of the Section on Survey Research Methods", American 
 #' Statistical Association, 473 - 477. \cr \cr
 #' Datta, G. S. and Lahiri, P. (2000), A unified measure of uncertainty of 
-#' estimated best linear unbiased predictors in small area estimation problems, 
 #' Statistica Sinica 10(2), 613-627. \cr \cr
 #' Fay, R. E. and Herriot, R. A. (1979), Estimates of income for small places:
 #' An application of James-Stein procedures to census data, Journal of the 
@@ -249,11 +248,9 @@
 #' mse_type = "analytical")
 #' 
 #' # Example 4: Robust Fay-Herriot model 
-#' # Please note that the example runs for several minutes. For a short check
-#' # change B to a lower value.
 #' fh_robust <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
 #' combined_data = combined_data, domains = "Domain", method = "reblupbc", 
-#' k = 1.345, c = 1, MSE = TRUE, mse_type = "pseudo")
+#' k = 1.345, mult_constant = 1, MSE = TRUE, mse_type = "pseudo")
 #' 
 #' # Example 5: Ybarra-Lohr model
 #' # Create MSE array
@@ -277,7 +274,7 @@
 
 
 fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
-               interval = NULL, k = 1.345, c = 1, transformation = "no",
+               interval = NULL, k = 1.345, mult_constant = 1, transformation = "no",
                backtransformation = NULL, eff_smpsize = NULL,
                correlation = "no", corMatrix = NULL, 
                Ci = NULL, tol = 0.0001, maxit = 100,
@@ -286,7 +283,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
   # Agrument checking ----------------------------------------------------------
   fh_combinations(fixed = fixed, vardir = vardir, combined_data = combined_data, 
                   domains = domains, method = method, interval = interval, k = k, 
-                  c = c, transformation = transformation, 
+                  mult_constant = mult_constant, transformation = transformation, 
                   backtransformation = backtransformation, eff_smpsize = eff_smpsize, 
                   correlation = correlation, corMatrix = corMatrix,  
                   Ci = Ci, tol = tol, maxit = maxit, MSE = MSE, mse_type = mse_type, 
@@ -294,7 +291,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
   
   fh_check(fixed = fixed, vardir = vardir, combined_data = combined_data, 
            domains = domains, method = method, interval = interval, k = k, 
-           c = c, transformation = transformation, 
+           mult_constant = mult_constant, transformation = transformation, 
            backtransformation = backtransformation, eff_smpsize = eff_smpsize, 
            correlation = correlation, corMatrix = corMatrix, 
            Ci = Ci, tol = tol, maxit = maxit, MSE = MSE, mse_type = mse_type, 
@@ -349,7 +346,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
         Gamma$Gamma <- NA
         Gamma$Gamma[framework$obs_dom == TRUE] <- as.numeric(eblup$gamma)
         # Criteria for model selection -----------------------------------------
-         criteria <- model_select(framework = framework, sigmau2 = sigmau2, 
+        criteria <- model_select(framework = framework, sigmau2 = sigmau2, 
                                   method = method, interval = interval, 
                                   eblup = eblup, B = B[2], vardir = vardir,
                                   transformation = transformation,
@@ -585,7 +582,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
     # Standard EBLUP -----------------------------------------------------------
     eblup <- eblup_robust(framework = framework, vardir = vardir, 
                           combined_data = combined_data,
-                          method = method, k = k, c = c, 
+                          method = method, k = k, mult_constant = mult_constant, 
                           correlation = correlation, corMatrix = corMatrix)
     
     # MSE ----------------------------------------------------------------------
@@ -613,7 +610,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                              std_real_residuals = as.matrix(eblup$std_real_res),
                              correlation = correlation,
                              k = k,
-                             c = c,
+                             mult_constant = mult_constant,
                              seed = seed),
                 framework = framework[c("direct", "vardir", "N_dom_smp",
                                         "N_dom_unobs", "combined_data", 

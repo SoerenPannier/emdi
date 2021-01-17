@@ -24,9 +24,11 @@
 #' summary(emdi_direct)
 #' 
 #' }
+#' @noRd
 #' @export
 #' @importFrom moments skewness kurtosis
 #' @importFrom MuMIn r.squaredGLMM
+#' @rdname summary.emdi 
 
 summary.direct <- function(object, ...) {
   throw_class_error(object, "direct")

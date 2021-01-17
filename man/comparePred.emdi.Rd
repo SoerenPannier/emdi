@@ -22,7 +22,7 @@ column names are duplicated, the suffixes "_1" and "_2" are added to their names
 set to \code{TRUE}, the data frame contains the MSE estimates of the emdi objects.
 }
 \description{
-Method \code{comparePred.emdi} compares predictions of emdi objects.
+Method \code{comparePred.emdi} compares predictions of two emdi objects.
 }
 \examples{
 \donttest{

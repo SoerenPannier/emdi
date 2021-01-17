@@ -300,8 +300,9 @@ test_that("Does the fh function in emdi return the same variance, EBLUP and MSE
               grapes$Domain <- c(1:15)
               fh_robustbc <- fh(fixed = grapehect ~ area + workdays - 1, vardir = "var",
                                 combined_data = grapes, domains = "Domain",
-                                method = "reblupbc", tol = 1e-06, maxit = 100, k = 1.345, 
-                                c = 2, MSE = TRUE, mse_type = "pseudo")
+                                method = "reblupbc", tol = 1e-06, maxit = 100, 
+                                k = 1.345, mult_constant = 2, MSE = TRUE, 
+                                mse_type = "pseudo")
               
               # Estimation with fitRFH of saeRobust (benchmark)
               fh_robustbc_saeRobust <- read.csv("FH/fh_robustbc_saeRobust.csv", sep = ",", 
@@ -357,10 +358,12 @@ test_that("Does the fh function in emdi return the same variance, EBLUP and MSE
               
               # Estimation with fh of emdi
               grapes$Domain <- c(1:15)
-              fh_robustbc_boot <- fh(fixed = grapehect ~ area + workdays - 1, vardir = "var", 
-                                     combined_data = grapes, domains = "Domain", 
-                                     method = "reblupbc", tol = 1e-06, maxit = 100, k = 1.345, 
-                                     c = 2, MSE = TRUE, mse_type = "boot", B = 3, seed = 123)
+              fh_robustbc_boot <- fh(fixed = grapehect ~ area + workdays - 1, 
+                                     vardir = "var", combined_data = grapes, 
+                                     domains = "Domain", method = "reblupbc", 
+                                     tol = 1e-06, maxit = 100, k = 1.345, 
+                                     mult_constant = 2, MSE = TRUE, 
+                                     mse_type = "boot", B = 3, seed = 123)
               
               # Estimation with fitRFH of saeRobust (benchmark)
               fh_robustbc_boot_saeRobust <- read.csv("FH/fh_robustbc_boot_saeRobust.csv", 
@@ -426,7 +429,7 @@ test_that("Does the fh function in emdi return the same variance, correlation
               fh_robust_spatial_bc <- fh(fixed = grapehect ~ area + workdays - 1, vardir = "var",
                                          combined_data = grapes, domains = "Domain",
                                          method = "reblupbc", tol = 1e-06, maxit = 100, 
-                                         k = 1.345, c = 2, 
+                                         k = 1.345, mult_constant = 2, 
                                          correlation = "spatial", corMatrix = grapesprox, 
                                          MSE = TRUE, mse_type = "pseudo")
               
@@ -503,8 +506,9 @@ test_that("Does the fh function in emdi return the same variance, correlation
               fh_robust_spatial_bc_boot <- fh(fixed = grapehect ~ area + workdays - 1, 
                                               vardir = "var", combined_data = grapes, 
                                               domains = "Domain", method = "reblupbc", 
-                                              tol = 1e-06, maxit = 100, k = 1.345, c = 2, 
-                                              correlation = "spatial", corMatrix = grapesprox,
+                                              tol = 1e-06, maxit = 100, k = 1.345, 
+                                              mult_constant = 2, correlation = "spatial", 
+                                              corMatrix = grapesprox,
                                               MSE = TRUE, mse_type = "boot", 
                                               B = 3, seed = 123)
               

@@ -1,6 +1,6 @@
 #' Compare predictions of emdi objects
 #'
-#' Method \code{comparePred.emdi} compares predictions of emdi objects.
+#' Method \code{comparePred.emdi} compares predictions of two emdi objects.
 #' 
 #' @param object1 an object of type "emdi".
 #' @param object2 an object of type "emdi".
@@ -128,27 +128,7 @@ comparePred.emdi <- function(object1, object2, MSE = FALSE, ...) {
   data
 }
 
-# Extract fixed effects from an emdi object
-#
-# Method \code{fixef.emdi} extracts the fixed effects from an emdi 
-# object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For class ebp and fh a vector containing the fixed effects is 
-# returned. For class direct no fixed effects are available.
-# @seealso \code{\link{ebp}}, \code{\link{fh}}
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# fixef(emdi_model)
-# }
+# Extract fixed effects from an emdi object ------------------------------------
 #' @aliases fixed.effects
 #' @export
 #' @method fixef ebp
@@ -159,27 +139,7 @@ fixef.ebp <- function(object, ...) {
   object$model$coefficients$fixed
 }
 
-# Extract fixed effects from an emdi object
-#
-# Method \code{fixef.emdi} extracts the fixed effects from an emdi 
-# object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For class ebp and fh a vector containing the fixed effects is 
-# returned. For class direct no fixed effects are available.
-# @seealso \code{\link{ebp}}, \code{\link{fh}}
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# fixef(emdi_model)
-# }
+
 #' @aliases fixed.effects
 #' @export
 #' @method fixef fh
@@ -193,26 +153,8 @@ fixef.fh <- function(object, ...) {
 }
 
 
-# Extract emdi object data
-#
-# Method \code{getData.emdi} extracts the data frame used to fit the model.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return Data frame used to fit the model. For classes direct and ebp the 
-# sample data is returned. For class fh the combined data set is returned.
-# @seealso \code{\link{direct}}, \code{\link{ebp}},
-# \code{\link{fh}}, \code{\link[nlme]{getData}}
-# @examples
-# \donttest{
-# # Example for class direct
-# emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
-# smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
-# boot_type = "naive", B = 50, seed = 123, X_calib = NULL, totals = NULL, 
-# na.rm = TRUE)
-# 
-# getData(emdi_direct)
-# }
+# Extract emdi object data -----------------------------------------------------
+
 #' @export
 #' @method getData direct
 #' @importFrom nlme getData
@@ -222,26 +164,6 @@ getData.direct <- function(object, ...) {
   object$framework$smp_data
 }
 
-# Extract emdi object data
-#
-# Method \code{getData.emdi} extracts the data frame used to fit the model.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return Data frame used to fit the model. For classes direct and ebp the 
-# sample data is returned. For class fh the combined data set is returned.
-# @seealso \code{\link{direct}}, \code{\link{ebp}},
-# \code{\link{fh}}, \code{\link[nlme]{getData}}
-# @examples
-# \donttest{
-# # Example for class direct
-# emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
-# smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
-# boot_type = "naive", B = 50, seed = 123, X_calib = NULL, totals = NULL, 
-# na.rm = TRUE)
-# 
-# getData(emdi_direct)
-# }
 #' @export
 #' @method getData ebp
 #' @importFrom nlme getData
@@ -251,26 +173,6 @@ getData.ebp <- function(object, ...) {
   object$framework$smp_data
 }
 
-# Extract emdi object data
-#
-# Method \code{getData.emdi} extracts the data frame used to fit the model.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return Data frame used to fit the model. For classes direct and ebp the 
-# sample data is returned. For class fh the combined data set is returned.
-# @seealso \code{\link{direct}}, \code{\link{ebp}},
-# \code{\link{fh}}, \code{\link[nlme]{getData}}
-# @examples
-# \donttest{
-# # Example for class direct
-# emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
-# smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
-# boot_type = "naive", B = 50, seed = 123, X_calib = NULL, totals = NULL, 
-# na.rm = TRUE)
-# 
-# getData(emdi_direct)
-# }
 #' @export
 #' @method getData fh
 #' @importFrom nlme getData
@@ -280,25 +182,8 @@ getData.fh <- function(object, ...) {
   object$framework$combined_data
 }
 
-# Extract grouping factors from an emdi object
-#
-# Method \code{getGroups.emdi} extracts grouping factors from an emdi object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return A vector containing the grouping factors.
-# @seealso \code{\link{direct}}, \code{\link{ebp}},
-# \code{\link{fh}}, \code{\link[nlme]{getGroups}}
-# @examples
-# \donttest{
-# # Example for class direct
-# emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
-# smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
-# boot_type = "naive", B = 50, seed = 123, X_calib = NULL, totals = NULL, 
-# na.rm = TRUE)
-# 
-# getGroups(emdi_direct)
-# }
+# Extract grouping factors from an emdi object ---------------------------------
+
 #' @export
 #' @method getGroups direct
 #' @importFrom nlme getGroups
@@ -308,25 +193,7 @@ getGroups.direct <- function(object, ...) {
   object$framework$smp_domains_vec
 }
 
-# Extract grouping factors from an emdi object
-#
-# Method \code{getGroups.emdi} extracts grouping factors from an emdi object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return A vector containing the grouping factors.
-# @seealso \code{\link{direct}}, \code{\link{ebp}},
-# \code{\link{fh}}, \code{\link[nlme]{getGroups}}
-# @examples
-# \donttest{
-# # Example for class direct
-# emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
-# smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
-# boot_type = "naive", B = 50, seed = 123, X_calib = NULL, totals = NULL, 
-# na.rm = TRUE)
-# 
-# getGroups(emdi_direct)
-# }
+
 #' @export
 #' @method getGroups ebp
 #' @importFrom nlme getGroups
@@ -336,25 +203,7 @@ getGroups.ebp <- function(object, ...) {
   object$framework$smp_domains_vec
 }
 
-# Extract grouping factors from an emdi object
-#
-# Method \code{getGroups.emdi} extracts grouping factors from an emdi object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return A vector containing the grouping factors.
-# @seealso \code{\link{direct}}, \code{\link{ebp}},
-# \code{\link{fh}}, \code{\link[nlme]{getGroups}}
-# @examples
-# \donttest{
-# # Example for class direct
-# emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
-# smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
-# boot_type = "naive", B = 50, seed = 123, X_calib = NULL, totals = NULL, 
-# na.rm = TRUE)
-# 
-# getGroups(emdi_direct)
-# }
+
 #' @export
 #' @method getGroups fh
 #' @importFrom nlme getGroups
@@ -365,27 +214,8 @@ getGroups.fh <- function(object, ...) {
 }
 
 
-# Extract grouping formula from an emdi object
-#
-# Method \code{getGroupsFormula.emdi} extracts the grouping formula from an 
-# emdi object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return A one-sided formula.
-# @seealso \code{\link{direct}}, \code{\link{ebp}},
-# \code{\link{fh}}, \code{\link[nlme]{getGroupsFormula}}
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# getGroupsFormula(emdi_model)
-# }
+# Extract grouping formula from an emdi object ---------------------------------
+
 #' @export
 #' @method getGroupsFormula direct
 #' @importFrom nlme getGroupsFormula
@@ -395,27 +225,7 @@ getGroupsFormula.direct <- function(object, ...) {
   eval(parse(text = paste("~", object$framework$smp_domains)))
 }
 
-# Extract grouping formula from an emdi object
-#
-# Method \code{getGroupsFormula.emdi} extracts the grouping formula from an 
-# emdi object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return A one-sided formula.
-# @seealso \code{\link{direct}}, \code{\link{ebp}},
-# \code{\link{fh}}, \code{\link[nlme]{getGroupsFormula}}
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# getGroupsFormula(emdi_model)
-# }
+
 #' @export
 #' @method getGroupsFormula ebp
 #' @importFrom nlme getGroupsFormula
@@ -425,27 +235,7 @@ getGroupsFormula.ebp <- function(object, ...) {
   eval(parse(text = paste("~", object$framework$smp_domains)))
 }
 
-# Extract grouping formula from an emdi object
-#
-# Method \code{getGroupsFormula.emdi} extracts the grouping formula from an 
-# emdi object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return A one-sided formula.
-# @seealso \code{\link{direct}}, \code{\link{ebp}},
-# \code{\link{fh}}, \code{\link[nlme]{getGroupsFormula}}
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# getGroupsFormula(emdi_model)
-# }
+
 #' @export
 #' @method getGroupsFormula fh
 #' @importFrom nlme getGroupsFormula
@@ -456,25 +246,7 @@ getGroupsFormula.fh <- function(object, ...) {
 }
 
 # Extract response variable from an emdi object
-#
-# Method \code{getResponse.emdi} extracts the response variable from an emdi 
-# object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return Vector containing the response variable. 
-# @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}, \code{\link[nlme]{getResponse}}
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# getResponse(emdi_model)
-# }
+
 #' @export
 #' @method getResponse direct
 #' @importFrom nlme getResponse
@@ -485,26 +257,7 @@ getResponse.direct <- function(object, ...) {
   
 }
 
-# Extract response variable from an emdi object
-#
-# Method \code{getResponse.emdi} extracts the response variable from an emdi 
-# object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return Vector containing the response variable. 
-# @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}, \code{\link[nlme]{getResponse}}
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# getResponse(emdi_model)
-# }
+
 #' @export
 #' @method getResponse ebp
 #' @importFrom nlme getResponse
@@ -514,26 +267,7 @@ getResponse.ebp <- function(object, ...) {
   makeXY(object$fixed, object$framework$smp_data)$y
 }
 
-# Extract response variable from an emdi object
-#
-# Method \code{getResponse.emdi} extracts the response variable from an emdi 
-# object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return Vector containing the response variable. 
-# @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}, \code{\link[nlme]{getResponse}}
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# getResponse(emdi_model)
-# }
+
 #' @export
 #' @method getResponse fh
 #' @importFrom nlme getResponse
@@ -543,29 +277,8 @@ getResponse.fh <- function(object, ...) {
   object$framework$direct
 }
 
-# Extract random effects of emdi objects
-#
-# Method \code{ranef.emdi} extracts the random effects from an emdi 
-# object.
-#
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For class ebp and fh, a vector containing the estimated random effects 
-# at domain level is returned. 
-# For class direct, the method is not applicable.
-# @seealso \code{\link{ebp}}, \code{\link{fh}}
-# @aliases random.effects
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# ranef(emdi_model)
-# }
+# Extract random effects of emdi objects ---------------------------------------
+
 #' @aliases random.effects
 #' @export
 #' @method ranef ebp
@@ -576,28 +289,7 @@ ranef.ebp <- function(object, ...) {
   ranef(object$model)
 }
 
-# Extract random effects of emdi objects
-#
-# Method \code{ranef.emdi} extracts the random effects from an emdi 
-# object.
-#
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For class ebp and fh, a vector containing the estimated random effects 
-# at domain level is returned. 
-# For class direct, the method is not applicable.
-# @seealso \code{\link{ebp}}, \code{\link{fh}}
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# ranef(emdi_model)
-# }
+
 #' @aliases random.effects
 #' @export
 #' @method ranef fh
