@@ -39,10 +39,11 @@
 #' # Example: Receive first overview
 #' summary(emdi_model)
 #' }
-#' 
+#' @noRd
 #' @export
 #' @importFrom moments skewness kurtosis
 #' @importFrom MuMIn r.squaredGLMM
+#' @rdname summary.emdi
 
 summary.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")

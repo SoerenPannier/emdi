@@ -42,9 +42,11 @@
 #' # Example: Receive first overview
 #' summary(fh_std)
 #' }
+#' @noRd
 #' @export
 #' @importFrom moments skewness kurtosis
 #' @importFrom MuMIn r.squaredGLMM
+#' @rdname summary.emdi
 
 summary.fh <- function(object, ...) {
   throw_class_error(object, "fh")

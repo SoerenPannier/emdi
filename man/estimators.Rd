@@ -42,8 +42,8 @@ The return of \code{estimators} depends on the class of its argument. The
 documentation of particular methods gives detailed information about the
 return of that method.
 
-an object of type "estimators.emdi" with point and/or MSE
-estimates and/or calculated CV's per domain obtained from
+The return of \code{estimators.emdi} is an object of type "estimators.emdi" with 
+point and/or MSE estimates and/or calculated CV's per domain obtained from
 \code{emdiObject$ind} and, if chosen, \code{emdiObject$MSE}. These objects
 contain two elements, one data frame \code{ind} and a character naming the
 indicator or indicator group \code{ind_name}.
@@ -58,6 +58,14 @@ disaggregated indicators. Coefficients of variation are calculated
 using these estimators. This method enables to select for which indicators
 the estimates shall be returned. The returned object is suitable for
 printing with the \code{print.estimators.emdi} method.
+}
+\details{
+Objects of class "estimators.emdi" have methods for following generic
+functions: \code{head} and \code{tail} (for default documentation, see 
+\code{\link[utils]{head}}),  \code{as.matrix} (for default documentation, see
+\code{\link[base]{as.matrix.default}}), \code{as.data.frame} (for default documentation, 
+see \code{\link[base]{as.data.frame.default}}), \code{subset} (for default 
+documentation, see \code{\link[base]{subset}}).
 }
 \examples{
 \donttest{
@@ -76,7 +84,12 @@ list(my_max = function(y, threshold){max(y)},
 my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 
 # Example 1: Choose Gini coefficient, MSE and CV
-estimators(emdi_model, indicator = "Gini", MSE = TRUE, CV = TRUE)
+gini <- estimators(emdi_model, indicator = "Gini", MSE = TRUE, CV = TRUE)
+head(gini)
+tail(gini)
+as.data.frame(gini)
+as.matrix(gini)
+subset(gini, Domain = 'Wien')
 
 # Example 2: Choose custom indicators without MSE and CV
 estimators(emdi_model, indicator = "Custom")

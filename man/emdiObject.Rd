@@ -44,7 +44,7 @@ methods for various generic functions. See Details for more information.
 }
 \details{
 Objects of class "emdi" have following methods: \code{\link[emdi]{comparePred.emdi}},  
-\code{\link[emdi]{confint.emdi}}, \code{\link[emdi]{estimators.emdi}}, 
+\code{\link[emdi]{confint.emdi}}, \code{\link[emdi]{estimators}}, 
 \code{\link[emdi]{predict.emdi}}. \cr \cr
 Objects of class "direct", "ebp" and "fh" have method for following generic 
 functions: \code{getData} (for default 

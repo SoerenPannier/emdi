@@ -67,7 +67,7 @@
 #' Social Protection Committee (2001). Report on Indicators in the Field of
 #' Poverty and Social Exclusions, Technical Report, European Union.
 #' @seealso \code{\link{emdiObject}}, \code{\link[nlme]{lme}},
-#' \code{\link{estimators.emdi}}, \code{\link{summary.direct}}
+#' \code{\link{estimators.emdi}}, \code{\link{summary.emdi}}
 #' @examples
 #' \donttest{
 #' # Loading sample data

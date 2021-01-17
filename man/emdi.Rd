@@ -23,8 +23,7 @@ The three estimation functions are called \code{\link{direct}},
 \code{\link{ebp}} and \code{\link{fh}}. For all functions several methods are 
 available as \code{\link{estimators.emdi}}, \code{\link{compare_plot.emdi}}, 
 \code{\link{plot.emdi}} (only for emdi objects obtained by functions 
-\code{ebp} or \code{fh}), \code{print}, \code{\link{summary.direct}},
-\code{\link{summary.fh}} and \code{\link{summary.ebp}}. 
+\code{ebp} or \code{fh}), \code{print}, \code{\link{summary.emdi}},
 Furthermore, functions \code{\link{map_plot}} and \code{\link{write.excel}} 
 help to visualize and export results. For the estimation function \code{fh}, 
 the stepwise variable selection function \code{\link{step}}, benchmarking 

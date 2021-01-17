@@ -185,5 +185,5 @@ poverty and social exclusions, Technical Report, European Union.
 \seealso{
 \code{\link{emdiObject}}, \code{\link[nlme]{lme}},
 \code{\link{estimators.emdi}},  \code{\link{plot.emdi}},
-\code{\link{summary.ebp}}
+\code{\link{summary.emdi}}
 }

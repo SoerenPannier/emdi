@@ -277,7 +277,6 @@ Chen S., Lahiri P. (2002), A weighted jackknife MSPE estimator in small-area
 estimation, "Proceeding of the Section on Survey Research Methods", American 
 Statistical Association, 473 - 477. \cr \cr
 Datta, G. S. and Lahiri, P. (2000), A unified measure of uncertainty of 
-estimated best linear unbiased predictors in small area estimation problems, 
 Statistica Sinica 10(2), 613-627. \cr \cr
 Fay, R. E. and Herriot, R. A. (1979), Estimates of income for small places:
 An application of James-Stein procedures to census data, Journal of the 
