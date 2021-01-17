@@ -137,7 +137,7 @@ print.summary.fh <- function(x, ...) {
     if (x$method$method == "reblup") {
       cat("k = ", x$model$k, "\n")
     } else if (x$method$method == "reblupbc") {
-      cat("k = ", x$model$k, ", c = ", x$model$c, "\n")
+      cat("k = ", x$model$k, ", mult_constant = ", x$model$mult_constant, "\n")
     }
     
   } else {
