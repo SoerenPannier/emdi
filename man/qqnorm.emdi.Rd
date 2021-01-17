@@ -2,9 +2,18 @@
 % Please edit documentation in R/qqnorm.R
 \name{qqnorm.emdi}
 \alias{qqnorm.emdi}
+\alias{qqnorm.ebp}
+\alias{qqnorm.fh}
+\alias{qqnorm.direct}
 \title{Quantile-quantile plots for an emdi object}
 \usage{
 \method{qqnorm}{emdi}(y, color = c("blue", "lightblue3"), gg_theme = NULL, ...)
+
+\method{qqnorm}{ebp}(y, color = c("blue", "lightblue3"), gg_theme = NULL, ...)
+
+\method{qqnorm}{fh}(y, color = c("blue", "lightblue3"), gg_theme = NULL, ...)
+
+\method{qqnorm}{direct}(y, ...)
 }
 \arguments{
 \item{y}{an object of type "emdi", "model", representing point and, if chosen,
