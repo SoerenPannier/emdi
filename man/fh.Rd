@@ -12,7 +12,7 @@ fh(
   method = "reml",
   interval = NULL,
   k = 1.345,
-  c = 1,
+  mult_constant = 1,
   transformation = "no",
   backtransformation = NULL,
   eff_smpsize = NULL,
@@ -76,12 +76,12 @@ variance of the random effects. Defaults to \code{NULL}.}
 the standard or spatial Fay-Herriot model is chosen. Defaults to \code{1.345}. 
 For detailed information, please refer to \cite{Warnholz (2016)}.}
 
-\item{c}{numeric multiplier constant used in the bias corrected version of the 
+\item{mult_constant}{numeric multiplier constant used in the bias corrected version of the 
 robust estimation methods. Required argument when the robust version of 
 the standard or spatial Fay-Herriot model is chosen. Default is to make no 
-correction for realizations of direct estimator within \code{c = 1} times the 
-standard deviation of direct estimator. For detailed information, please refer 
-to \cite{Warnholz (2016)}.}
+correction for realizations of direct estimator within \code{mult_constant = 1} 
+times the standard deviation of direct estimator. For detailed information, 
+please refer to \cite{Warnholz (2016)}.}
 
 \item{transformation}{a character that determines the type of transformation 
 of the dependent variable and of the sampling variances. Methods that can be chosen
@@ -257,7 +257,7 @@ mse_type = "analytical")
 # change B to a lower value.
 fh_robust <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
 combined_data = combined_data, domains = "Domain", method = "reblupbc", 
-k = 1.345, c = 1, MSE = TRUE, mse_type = "pseudo")
+k = 1.345, mult_constant = 1, MSE = TRUE, mse_type = "pseudo")
 
 # Example 5: Ybarra-Lohr model
 # Create MSE array

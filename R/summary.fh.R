@@ -119,6 +119,7 @@ summary.fh <- function(object, ...) {
 
 
 #' @export
+#' @importFrom stats printCoefmat
 print.summary.fh <- function(x, ...) {
   throw_class_error(x, "fh")
   cat("Call:\n ")

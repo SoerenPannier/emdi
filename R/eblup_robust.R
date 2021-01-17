@@ -1,5 +1,5 @@
-eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, c,
-                         correlation, corMatrix) {
+eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, 
+                         mult_constant, correlation, corMatrix) {
   
   if (correlation == "no"){
     eblupobject <- saeRobust::rfh(framework$formula, data = framework$data,
@@ -13,7 +13,8 @@ eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir, c,
   } 
   
   eblupobject$linear <- stats::predict(eblupobject, type = "linear")$linear
-  eblupobject$reblupbc <- stats::predict(eblupobject, type = "reblupbc", c = c)$reblupbc
+  eblupobject$reblupbc <- stats::predict(eblupobject, type = "reblupbc", 
+                                         c = mult_constant)$reblupbc
   # Inference for coefficients
   eblup_coef <- data.frame(coefficients = eblupobject$coefficients)
   
