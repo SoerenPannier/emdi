@@ -79,7 +79,7 @@
 #' @param na.rm if \code{TRUE}, observations with \code{NA} values are deleted 
 #' from the population and sample data. For the EBP procedure complete observations  
 #' are required. Defaults to \code{FALSE}. 
-#' @return An object of class "emdi", "model", "ebp" that provides estimators for regional
+#' @return An object of class "emdi", "ebp" that provides estimators for regional
 #' disaggregated indicators and optionally corresponding MSE estimates. Generic
 #' functions such as \code{\link{compare_plot}}, \code{\link{estimators}},  
 #' \code{\link{print}}, \code{\link{plot}} and \code{\link{summary}} have 
@@ -109,7 +109,7 @@
 #' poverty and social exclusions, Technical Report, European Union.
 #' @seealso \code{\link{emdiObject}}, \code{\link[nlme]{lme}},
 #' \code{\link{estimators.emdi}},  \code{\link{plot.emdi}},
-#' \code{\link{summary.emdi}}
+#' \code{\link{emdi_summaries}}
 #' @examples
 #' \donttest{
 #' # Loading data - population and sample data

@@ -28,7 +28,7 @@ step <- function (object, scope, criteria, direction, trace, steps,
 
 #' Method \code{step.default} performs a variable selection for lm models by AIC.
 #'
-#' @param object an object of type "emdi","model" or a \code{lm} object.
+#' @param object an object of type "emdi", or a \code{lm} object.
 #' @param ... arguments to be passed to or from other methods.
 #' @details The default method of the generic function \code{step} 
 #' applies the \code{step} function for \code{lm} models of the stats package. 

@@ -40,13 +40,14 @@ coef.fh <- function(object, ...) {
 #' one is returned. Note, additional custom indicators can be
 #' defined as argument for model-based approaches (see also \code{\link{ebp}})
 #' and do not appear in groups of indicators even though these might belong to
-#' one of the groups. If the \code{model} argument is of type "model","fh", 
+#' one of the groups. If the \code{model} argument is of type "fh", 
 #' indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi 
 #' object is overwritten by function benchmark). Defaults to "all".
 #' @param level the confidence level required. Defaults to 0.95.
 #' @param ... additional arguments that are not used in this method.
 #' @return For emdi objects, a data frame with the point estimator and lower and
 #' upper bounds is returned.
+#' @aliases intervals
 #' @details The confidence intervals are constructed using following equation 
 #' (exemplarily for the 95\% interval): 
 #' \ifelse{html}{\out{CI<sub>d</sub> = y&#770;<sub>d</sub> +/- 1.96 &#8730; MSE(y&#770;<sub>d</sub>)}}{\deqn{CI_{d} = \hat{ind}_{d} +/- 1.96 \sqrt{MSE(\hat{y}_{d})}}}

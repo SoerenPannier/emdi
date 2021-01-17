@@ -1,49 +1,48 @@
-#' Summarizes an emdi ebp Object
-#'
-#' Additional information about the data and model in small area estimation
-#' methods and components of an emdi object are extracted. The returned object
-#' is suitable for printing  with the \code{print.summary.ebp} method.
-#' @param object an object of type "ebp", representing point and MSE
-#' estimates. 
-#' @param ... additional arguments that are not used in this method.
-#' @return an object of type "summary.ebp" with information about the 
-#' sample and population data, the usage of transformation, normality 
-#' tests and information of the model fit.
-#' @references 
-#' Lahiri, P. and Suntornchost, J. (2015), Variable selection for linear mixed
-#' models with applications in small area estimation, The Indian Journal of 
-#' Statistics 77-B(2), 312-320. \cr \cr
-#' Nakagawa S, Schielzeth H (2013). A general and simple method for obtaining R2 
-#' from generalized linear mixed-effects models. Methods in Ecology and Evolution, 
-#' 4(2), 133-142.
-#' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}},
-#' \code{\link{fh}}, \code{\link[MuMIn]{r.squaredGLMM}}, \code{\link[moments]{skewness}},
-#' \code{\link[moments]{kurtosis}}, \code{\link[stats]{shapiro.test}}
-#' @examples
-#' \donttest{
-#' # Example for models of type ebp
-#' 
-#' # Loading data - population and sample data
-#' data("eusilcA_pop")
-#' data("eusilcA_smp")
-#'
-#' # Example with two additional indicators
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
-#' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
-#' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' threshold = function(y){0.6 * median(y)}, L = 50, MSE = TRUE, B = 50,
-#' custom_indicator = list( my_max = function(y, threshold){max(y)},
-#' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
-#'
-#' # Example: Receive first overview
-#' summary(emdi_model)
-#' }
-#' @noRd
+# Summarizes an emdi ebp Object
+#
+# Additional information about the data and model in small area estimation
+# methods and components of an emdi object are extracted. The returned object
+# is suitable for printing  with the \code{print.summary.ebp} method.
+# @param object an object of type "ebp", representing point and MSE
+# estimates. 
+# @param ... additional arguments that are not used in this method.
+# @return an object of type "summary.ebp" with information about the 
+# sample and population data, the usage of transformation, normality 
+# tests and information of the model fit.
+# @references 
+# Lahiri, P. and Suntornchost, J. (2015), Variable selection for linear mixed
+# models with applications in small area estimation, The Indian Journal of 
+# Statistics 77-B(2), 312-320. \cr \cr
+# Nakagawa S, Schielzeth H (2013). A general and simple method for obtaining R2 
+# from generalized linear mixed-effects models. Methods in Ecology and Evolution, 
+# 4(2), 133-142.
+# @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}},
+# \code{\link{fh}}, \code{\link[MuMIn]{r.squaredGLMM}}, \code{\link[moments]{skewness}},
+# \code{\link[moments]{kurtosis}}, \code{\link[stats]{shapiro.test}}
+# @examples
+# \donttest{
+# # Example for models of type ebp
+# 
+# # Loading data - population and sample data
+# data("eusilcA_pop")
+# data("eusilcA_smp")
+#
+# # Example with two additional indicators
+# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
+# self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
+# fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+# threshold = function(y){0.6 * median(y)}, L = 50, MSE = TRUE, B = 50,
+# custom_indicator = list( my_max = function(y, threshold){max(y)},
+# my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
+#
+# # Example: Receive first overview
+# summary(emdi_model)
+# }
 #' @export
 #' @importFrom moments skewness kurtosis
 #' @importFrom MuMIn r.squaredGLMM
-#' @rdname summary.emdi
+#' @rdname emdi_summaries
 
 summary.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
