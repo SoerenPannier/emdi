@@ -1,7 +1,7 @@
 #' Exports an emdiObject to an Excel file or OpenDocument Spreadsheet 
 #'
 #' Function \code{write.excel} enables the user to export point and MSE 
-#' estimates as well as diagnostics from \code{summary.emdi} to an Excel file. 
+#' estimates as well as diagnostics from the \code{summary} to an Excel file. 
 #' The user can choose if the results should be reported in one or several Excel 
 #' sheets. Furthermore, a selection of indicators can be specified. 
 #' Respectively the function \code{write.ods} enables the export to OpenDocument
