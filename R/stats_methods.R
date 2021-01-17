@@ -1,26 +1,5 @@
-# Extract model coefficients of emdi objects
-#
-# Method \code{coef.emdi} extracts the model coefficients from an emdi 
-# object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For class ebp, a matrix with the extracted coefficients by domains 
-# is returned. For class fh, a vector of the extracted coefficients is returned. 
-# For class direct, the method is not applicable.
-# @seealso \code{\link{ebp}}, \code{\link{fh}}
-# @aliases coefficients
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# coef(emdi_model)
-# }
+# Extract model coefficients of emdi objects -----------------------------------
+
 #' @aliases coefficients 
 #' @export
 #' @method coef ebp
@@ -32,34 +11,10 @@ coef.ebp <- function(object, ...) {
 }
 
 
-# Extract model coefficients of emdi objects
-#
-# Method \code{coef.emdi} extracts the model coefficients from an emdi 
-# object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For class ebp, a matrix with the extracted coefficients by domains 
-# is returned. For class fh, a vector of the extracted coefficients is returned. 
-# For class direct, the method is not applicable.
-# @seealso \code{\link{ebp}}, \code{\link{fh}}
-# @aliases coefficients
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# coef(emdi_model)
-# }
-#' @aliases coefficients
+#' @aliases coefficients 
 #' @export
 #' @method coef fh
 #' @importFrom stats coef coefficients
-#' @rdname emdiObject
 
 coef.fh <- function(object, ...) {
   throw_class_error(object, "fh")
@@ -67,6 +22,7 @@ coef.fh <- function(object, ...) {
   names(fixed_effects) <- row.names(object$model$coefficients)
   fixed_effects
 }
+
 
 #' Confidence intervals for emdi objects
 #'
@@ -147,28 +103,7 @@ confint.emdi <- function(object, parm = 'all', level = 0.95,  ...) {
 }
 
 
-# Extract the AIC from a model fit of an emdi object
-#
-# Method \code{extractAIC.emdi} extracts the Akaike Information Criterion from 
-# a model fit of an emdi object.
-# 
-# @param fit an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For objects of class fh a single number is returned. For class direct 
-# and ebp no AIC value is available.
-# @seealso \code{\link{fh}}, \code{\link[stats]{extractAIC}}
-# @examples
-# \donttest{
-# # Example for class fh
-# combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain", 
-#                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
-# 
-# fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
-# combined_data = combined_data, domains = "Domain", method = "ml", 
-# MSE = TRUE)
-# 
-# extractAIC(fh_std)
-# }
+# Extract the AIC from a model fit of an emdi object ---------------------------
 #' @export
 #' @method extractAIC fh
 #' @importFrom stats extractAIC
@@ -178,27 +113,7 @@ extractAIC.fh <- function(fit, ...) {
   fit$model$model_select$AIC
 }
 
-# Extracts family object of emdi object
-#
-# Method \code{family.emdi} extracts family objects from emdi objects.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For objects of class ebp and fh among others characters of the family 
-# and link names are returned. For class direct no model family is available.
-# @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link[stats]{extractAIC}}
-# @examples
-# \donttest{
-# # Example for class fh
-# combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain", 
-#                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
-# 
-# fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
-# combined_data = combined_data, domains = "Domain", method = "ml", 
-# MSE = TRUE)
-# 
-# family(fh_std)
-# }
+# Extracts family object of emdi object ----------------------------------------
 #' @export
 #' @method family ebp
 #' @importFrom stats family gaussian
@@ -208,27 +123,7 @@ family.ebp <- function(object, ...) {
   gaussian(link = "identity")
 }
 
-# Extracts family object of emdi object
-#
-# Method \code{family.emdi} extracts family objects from emdi objects.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For objects of class ebp and fh among others characters of the family 
-# and link names are returned. For class direct no model family is available.
-# @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link[stats]{extractAIC}}
-# @examples
-# \donttest{
-# # Example for class fh
-# combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain", 
-#                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
-# 
-# fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
-# combined_data = combined_data, domains = "Domain", method = "ml", 
-# MSE = TRUE)
-# 
-# family(fh_std)
-# }
+
 #' @export
 #' @method family fh
 #' @importFrom stats family gaussian
@@ -238,30 +133,8 @@ family.fh <- function(object, ...) {
   gaussian(link = "identity")
 }
 
-# Extract fitted values of emdi objects
-#
-# Method \code{fitted.emdi} extracts the model fitted values from an emdi 
-# object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For classes ebp and fh a vector containing the fitted values that are 
-# only based on the fixed effects is returned. For class direct no model fitted 
-# values are available.
-# @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link[stats]{fitted}}
-# @aliases fitted.values
-# @examples
-# \donttest{
-# # Example for class fh
-# combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain", 
-#                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
-#                               
-# fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
-#           combined_data = combined_data, domains = "Domain", method = "ml", 
-#           MSE = TRUE)
-# 
-# fitted(fh_std)
-# }
+# Extract fitted values of emdi objects ----------------------------------------
+
 #' @aliases fitted.values
 #' @export
 #' @method fitted ebp
@@ -273,30 +146,7 @@ fitted.ebp <- function(object, ...) {
   
 }
 
-# Extract fitted values of emdi objects
-#
-# Method \code{fitted.emdi} extracts the model fitted values from an emdi 
-# object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For classes ebp and fh a vector containing the fitted values that are 
-# only based on the fixed effects is returned. For class direct no model fitted 
-# values are available.
-# @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link[stats]{fitted}}
-# @aliases fitted.values
-# @examples
-# \donttest{
-# # Example for class fh
-# combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain", 
-#                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
-#                               
-# fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
-#           combined_data = combined_data, domains = "Domain", method = "ml", 
-#           MSE = TRUE)
-# 
-# fitted(fh_std)
-# }
+
 #' @aliases fitted.values
 #' @export
 #' @method fitted fh
@@ -307,29 +157,8 @@ fitted.fh <- function(object, ...) {
   object$model$fitted
 }
 
-# Extract the model formula of an emdi object
-#
-# Method \code{formula.emdi} extracts the model formula of an emdi object.
-# 
-# @param x an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return Two-sided linear formula object describing the fixed-effects part of 
-# the regression model with the dependent variable on the left of a ~ operator 
-# and the explanatory variables on the right, separated by + operators. Method 
-# is not defined for emdi objects of class direct.
-# @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link[stats]{formula}}
-# @examples
-# \donttest{
-# # Example for class fh
-# combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain", 
-#                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
-#                               
-# fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
-#           combined_data = combined_data, domains = "Domain", method = "ml", 
-#           MSE = TRUE)
-# 
-# formula(fh_std)
-# }
+# Extract the model formula of an emdi object ----------------------------------
+
 #' @export
 #' @method formula ebp
 #' @importFrom stats formula
@@ -339,29 +168,7 @@ formula.ebp <- function(x, ...) {
   x$fixed
 }
 
-# Extract the model formula of an emdi object
-#
-# Method \code{formula.emdi} extracts the model formula of an emdi object.
-# 
-# @param x an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return Two-sided linear formula object describing the fixed-effects part of 
-# the regression model with the dependent variable on the left of a ~ operator 
-# and the explanatory variables on the right, separated by + operators. Method 
-# is not defined for emdi objects of class direct.
-# @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link[stats]{formula}}
-# @examples
-# \donttest{
-# # Example for class fh
-# combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain", 
-#                               smp_data = eusilcA_smpAgg, smp_domains = "Domain")
-#                               
-# fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
-#           combined_data = combined_data, domains = "Domain", method = "ml", 
-#           MSE = TRUE)
-# 
-# formula(fh_std)
-# }
+
 #' @export
 #' @method formula fh
 #' @importFrom stats formula
@@ -371,27 +178,7 @@ formula.fh <- function(x, ...) {
   x$fixed
 }
 
-# Extract log-Likelihood of emdi objects
-#
-# Method \code{logLik.emdi} extracts the log-Likelihood from an emdi 
-# object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For class ebp and fh, a vector containing the log-Likelihood. For 
-# class direct, the method is not applicable.
-# @seealso \code{\link{ebp}}, \code{\link{fh}}
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# logLik(emdi_model)
-# }
+# Extract log-Likelihood of emdi objects ---------------------------------------
 #' @export
 #' @method logLik ebp
 #' @importFrom stats logLik
@@ -403,27 +190,6 @@ logLik.ebp <- function(object, ...) {
 }
 
 
-# Extract log-Likelihood of emdi objects
-#
-# Method \code{logLik.emdi} extracts the log-Likelihood from an emdi 
-# object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For class ebp and fh, a vector containing the log-Likelihood. For 
-# class direct, the method is not applicable.
-# @seealso \code{\link{ebp}}, \code{\link{fh}}
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# logLik(emdi_model)
-# }
 #' @export
 #' @method logLik fh
 #' @importFrom stats logLik
@@ -438,27 +204,7 @@ logLik.fh <- function(object, ...) {
   }
 }
 
-# Extract the number of `observations´ from a fit of an emdi object
-#
-# Method \code{nobs.emdi} extracts the number of `observations´ from a 
-# fit of an emdi object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return Single number.
-# @seealso \code{\link{direct}}, \code{\link{ebp}},
-# \code{\link{fh}}, \code{\link[stats]{nobs}}
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# nobs(emdi_model)
-# }
+# Extract the number of `observations´ from a fit of an emdi object ------------
 #' @export
 #' @method nobs ebp
 #' @importFrom stats nobs
@@ -470,26 +216,6 @@ nobs.ebp <- function(object, ...) {
 }
 
 # Extract the number of `observations´ from a fit of an emdi object
-#
-# Method \code{nobs.emdi} extracts the number of `observations´ from a 
-# fit of an emdi object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return Single number.
-# @seealso \code{\link{direct}}, \code{\link{ebp}},
-# \code{\link{fh}}, \code{\link[stats]{nobs}}
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# nobs(emdi_model)
-# }
 #' @export
 #' @method nobs fh
 #' @importFrom stats nobs
@@ -532,29 +258,8 @@ predict.emdi <- function(object, ...) {
 }
 
 
-# Extract residuals of emdi objects
-#
-# Method \code{residuals.emdi} extracts the residuals from an emdi 
-# object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For class ebp, a vector containing the residuals is returned. 
-# For class fh, a data frame containing the realized and standardized realized 
-# residuals. For class direct, the method is not applicable.
-# @seealso \code{\link{ebp}}, \code{\link{fh}}
-# @aliases resid
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# residuals(emdi_model)
-# }
+# Extract residuals of emdi objects --------------------------------------------
+
 #' @aliases resid
 #' @export
 #' @method residuals ebp
@@ -563,32 +268,9 @@ predict.emdi <- function(object, ...) {
 residuals.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
   as.numeric(residuals(object$model, level = 0, type = "pearson"))
-  #as.numeric(object$model$residuals[, 2])
 }
 
-# Extract residuals of emdi objects
-#
-# Method \code{residuals.emdi} extracts the residuals from an emdi 
-# object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For class ebp, a vector containing the residuals is returned. 
-# For class fh, a data frame containing the realized and standardized realized 
-# residuals. For class direct, the method is not applicable.
-# @seealso \code{\link{ebp}}, \code{\link{fh}}
-# @aliases resid
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# residuals(emdi_model)
-# }
+
 #' @aliases resid
 #' @export
 #' @method residuals fh
@@ -600,28 +282,8 @@ residuals.fh <- function(object, ...) {
              std_real_residuals = object$model$std_real_residuals)
 }
 
-# Extract residual standard deviation of emdi objects
-#
-# Method \code{sigma.emdi} extracts the residual standard deviation from an emdi 
-# object.
-# 
-# @param object an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For class ebp, the estimated within-group error standard deviation is 
-# returned. For class fh, sigma is not available, since it is not defined for 
-# area-level models. For class direct, the method is not applicable.
-# @seealso \code{\link{ebp}}
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# sigma(emdi_model)
-# }
+# Extract residual standard deviation of emdi objects --------------------------
+
 #' @export
 #' @method sigma ebp
 #' @importFrom stats sigma
@@ -632,27 +294,8 @@ sigma.ebp <- function(object, ...) {
 }
 
 
-# Constructs a terms object from an emdi object
-#
-# Method \code{terms.emdi} constructs a terms object from an emdi object.
-# 
-# @param x an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For classes ebp and fh a \code{\link[stats]{terms.object}} is returned. 
-# For class direct no terms object is available.
-# @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link[stats]{terms}}, 
-# \code{\link[stats]{terms.object}}
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# terms(emdi_model)
-# }
+# Constructs a terms object from an emdi object --------------------------------
+
 #' @export
 #' @method terms ebp
 #' @importFrom stats aov terms
@@ -662,27 +305,6 @@ terms.ebp <- function(x, ...) {
   terms(aov(x$fixed, x$framework$smp_data))
 }
 
-# Constructs a terms object from an emdi object
-#
-# Method \code{terms.emdi} constructs a terms object from an emdi object.
-# 
-# @param x an object of type "emdi".
-# @param ... additional arguments that are not used in this method.
-# @return For classes ebp and fh a \code{\link[stats]{terms.object}} is returned. 
-# For class direct no terms object is available.
-# @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link[stats]{terms}}, 
-# \code{\link[stats]{terms.object}}
-# @examples
-# \donttest{
-# # Example for class ebp
-# emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-# unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-# house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-# pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-# na.rm = TRUE)
-# 
-# terms(emdi_model)
-# }
 #' @export
 #' @method terms fh
 #' @importFrom stats aov terms
