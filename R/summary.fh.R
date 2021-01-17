@@ -149,7 +149,7 @@ print.summary.fh <- function(x, ...) {
   cat("MSE method: ", x$method$MSE_method, "\n")
   cat("\n")
   cat("Coefficients:\n")
-  print(x$model$coefficients)
+  printCoefmat(as.matrix(x$model$coefficients), has.Pvalue = TRUE)
 
   cat("\n")
   cat("Explanatory measures:\n")
