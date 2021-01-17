@@ -136,7 +136,7 @@ print.summary.fh <- function(x, ...) {
     if (x$method$method == "reblup") {
       cat("k = ", x$model$k, "\n")
     } else if (x$method$method == "reblupbc") {
-      cat("k = ", x$model$k, ", c = ", x$model$c, "\n")
+      cat("k = ", x$model$k, ", mult_constant = ", x$model$mult_constant, "\n")
     }
     
   } else {
@@ -151,7 +151,12 @@ print.summary.fh <- function(x, ...) {
   cat("MSE method: ", x$method$MSE_method, "\n")
   cat("\n")
   cat("Coefficients:\n")
-  printCoefmat(as.matrix(x$model$coefficients), has.Pvalue = TRUE)
+  if (x$method$method == "reblup" | x$method$method == "reblupbc") {
+    printCoefmat(as.matrix(x$model$coefficients))
+  } else {
+    printCoefmat(as.matrix(x$model$coefficients), has.Pvalue = TRUE)
+  }
+  
 
   cat("\n")
   cat("Explanatory measures:\n")

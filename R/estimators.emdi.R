@@ -97,31 +97,31 @@ estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
 #' @export
 
 estimators.emdi <- function(object, indicator = "all", MSE = FALSE, CV = FALSE, ...) {
-
+  
   estimators_check(object = object, indicator = indicator,
                    MSE = MSE, CV = CV)
-
+  
   # Only point estimates
   all_ind <- point_emdi(object = object, indicator = indicator)
   selected <- colnames(all_ind$ind)[-1]
-
+  
   if ( MSE == TRUE || CV == TRUE ) {
     all_precisions <- mse_emdi(object = object, indicator = indicator, CV = TRUE)
     colnames(all_precisions$ind) <- paste0(colnames(all_precisions$ind), "_MSE")
     colnames(all_precisions$ind_cv) <- paste0(colnames(all_precisions$ind_cv), "_CV")
     combined <- data.frame(all_ind$ind, all_precisions$ind, all_precisions$ind_cv)
     endings <- c("","_MSE", "_CV")[c(TRUE,MSE,CV)]
-
+    
     combined <- combined[,c("Domain",paste0(rep(selected,each = length(endings)),
-                                           endings))]
+                                            endings))]
   } else {
     combined <- all_ind$ind
   }
-
+  
   estimators_emdi <- list(ind = combined, ind_name = all_ind$ind_name)
-
+  
   class(estimators_emdi) <- "estimators.emdi"
-
+  
   return(estimators_emdi)
 }
 
@@ -174,9 +174,4 @@ subset.estimators.emdi <- function(x, ...) {
   x <- as.data.frame(x)
   subset(x = x,  ...)
 }
-
-
-
-
-
 

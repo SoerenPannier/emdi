@@ -286,7 +286,6 @@ residuals.fh <- function(object, ...) {
 # Extract residual standard deviation of emdi objects --------------------------
 
 #' @export
-#' @method sigma ebp
 #' @importFrom stats sigma
 
 sigma.ebp <- function(object, ...) {
