@@ -137,167 +137,109 @@ plot.emdi <- function(x,
                       color = c("blue", "lightblue3"),
                       gg_theme = NULL,
                       cooks = TRUE,
-                      range = NULL, ...){
-
+                      range = NULL, ...) {
   plot_check(x = x, label = label, color = color, cooks = cooks, range = range)
+  Residuals <- Random <- index <- lambda <- log_likelihood <- cooksdist <-  NULL
+  
   plotList <- vector(mode = "list", length = 5)
   plotList <- lapply(plotList, function(x) NA)
   names(plotList) <- c("qq_plots", "density_res","density_ran",
                        "cooks_distance", "likelihood")
-  Residuals <- Random <- index <- lambda <- log_likelihood <- NULL
-  # avoid note due to ggplot2
-  # Preparation for plots
-
-  if (inherits(x, "ebp")) {
-    residuals <- residuals(x$model, level = 0, type = "pearson")
-    rand.eff <- nlme::ranef(x$model)$'(Intercept)'
-    srand.eff <- (rand.eff - mean(rand.eff)) / sd(rand.eff)
-    tmp <- as.matrix(random.effects(x$model))[,1]
-
-    model <- x$model
-    model$call$fixed <- x$fixed
-  } else if (inherits(x, "fh")) {
-    
-    if (any(is.na(x$model$std_real_residuals))) {
-      residuals <- x$model$std_real_residuals[!is.na(x$model$std_real_residuals)]
-      warning("At least one value in the standardized realized residuals is NA. Only
-              numerical values are plotted.")
-    } else {
-      residuals <- x$model$std_real_residuals
-    }
-    residuals <- (residuals - mean(residuals)) / sd(residuals)
-    rand.eff <- x$model$random_effects
-    srand.eff <- (rand.eff - mean(rand.eff)) / sd(rand.eff)
-    tmp <- srand.eff
-  }
-
-
-  # Check for label
+  extra_args <- list(...)
+  residuals <- extra_args[["residuals"]]
+  srand.eff <- extra_args[["srand.eff"]]
+  tmp <- extra_args[["tmp"]]
+  cook_df <- extra_args[["cook_df"]]
+  indexer <- extra_args[["indexer"]]
+  likelihoods <- extra_args[["likelihoods"]]
+  boxcox <- extra_args[["boxcox"]]
+  
   label <- define_label(x = x, label = label)
-
+  
   ## QQ Plots
   # Residuals
   res <- qplot(sample = residuals) +
     geom_abline(colour = color[1]) +
     ggtitle(label$qq_res["title"]) + ylab(label$qq_res["y_lab"]) +
     xlab(label$qq_res["x_lab"]) + gg_theme
-
+  
   # Random effects
-  ran <- ggplot(data.frame(tmp) ,aes(sample = tmp)) +
-    stat_qq(distribution = qnorm,dparams = list(mean = mean(tmp),
-                                              sd = sd(tmp))) +
-    geom_abline(intercept = 0, slope = 1,na.rm = TRUE, col = color[1]) +
+  ran <- ggplot(data.frame(tmp), aes(sample = tmp)) +
+    stat_qq(distribution = qnorm, dparams = list(mean = mean(tmp),
+                                                 sd = sd(tmp))) +
+    geom_abline(intercept = 0, slope = 1, na.rm = TRUE, col = color[1]) +
     ggtitle(label$qq_ran["title"]) + ylab(label$qq_ran["y_lab"]) +
     xlab(label$qq_ran["x_lab"]) + gg_theme
-
+  
   plotList[[1]] <- arrangeGrob(res, ran ,ncol = 2)
   grid.arrange(plotList[[1]])
   cat("Press [enter] to continue")
   line <- readline()
-
+  
   print( (plotList[[2]] <- ggplot(data.frame(Residuals = residuals),
                                   aes(x = Residuals),
-                        fill = color[2], color = color[2]) +
-                        geom_density(fill = color[2], color = color[2],
-                                     alpha = 0.4) +
-                        stat_function(fun = dnorm) + ylab(label$d_res["y_lab"]) +
-                        xlab(label$d_res["x_lab"]) +
-                        ggtitle(label$d_res["title"]) + gg_theme))
+                                  fill = color[2], color = color[2]) +
+            geom_density(fill = color[2], color = color[2],
+                         alpha = 0.4) +
+            stat_function(fun = dnorm) + ylab(label$d_res["y_lab"]) +
+            xlab(label$d_res["x_lab"]) +
+            ggtitle(label$d_res["title"]) + gg_theme))
   cat("Press [enter] to continue")
   line <- readline()
   print( (plotList[[3]] <- ggplot(data.frame(Random = srand.eff), aes(x = Random),
-                        fill = color[2], color = color[2]) +
-                        geom_density(fill = color[2], color = color[2],
-                                     alpha = 0.4) +
-                        stat_function(fun = dnorm) + ylab(label$d_ran["y_lab"]) +
-                        xlab(label$d_ran["x_lab"]) +
-                        ggtitle(label$d_ran["title"]) +
-                        gg_theme))
-
-  if (cooks == TRUE && inherits(x, "ebp")) {
-    
-    cooksdist <- NULL
-    # Supress warning is used here due to a small bug in the 
-    # HLMdiag:::.extract.lmeDesign which is underlying the here used
-    # cooks distance. The given warning has no relevance in this case.
-    try(cooksdist <- as.vector(suppressWarnings(cooks.distance(model))), 
-        silent = TRUE)
-    if (is.null(cooksdist)) {
-      cooks <- FALSE
-      warning(paste0("Cook's distance could not be calculated, this is usually due",
-                     " to exceedence of available memory. Try using cooks = FALSE to ",
-                     "avoid this message and improve computation time."))
-    } else {
-      cook_df <- data.frame(index = seq_along(cooksdist), cooksdist)
-      indexer <- cook_df[order(cooksdist, decreasing = TRUE),][seq_len(3),]
-    }
-    
-    if (cooks == TRUE) {
-      cat("Press [enter] to continue")
-      line <- readline()
-      print((plotList[[4]] <- ggplot(data = cook_df, aes(x = index, y = cooksdist)) +
-              geom_segment(aes(x = index, y = 0, xend = index, yend = cooksdist),
-                           colour = color[1]) +
-              xlab("Index") + ylab(label$cooks["y_lab"])
-            + geom_text(label = indexer[,1], data = indexer) +
-              ggtitle(label$cooks["title"]) + gg_theme))
-    }
-  }
-
-
-  if (inherits(x, "ebp")) {
-    if (x$transformation == "box.cox") {
-
-
-
-    if (is.null(range)) {
-      range <- seq(x$transform_param$optimal_lambda - .2,
-                   x$transform_param$optimal_lambda + .2,
-                   by = 0.025)
-    } else {
-      range <- range
-    }
-
-    likelihoods <- vapply(range,
-                          function(lam, fixed , smp_data, smp_domains,
-                                   transformation)
-                          {
-                            result <- NULL
-                            try(result <- -as.numeric(
-                              generic_opt(lam, fixed, smp_data, smp_domains, transformation)),
-                              silent = TRUE)
-                            if (is.null(result)) result <- NA
-                            result
-                          }, numeric(1),   fixed = x$fixed, smp_data = x$framework$smp_data,
-                          smp_domains = x$framework$smp_domains,
-                          transformation = x$transformation)
-
+                                  fill = color[2], color = color[2]) +
+            geom_density(fill = color[2], color = color[2],
+                         alpha = 0.4) +
+            stat_function(fun = dnorm) + ylab(label$d_ran["y_lab"]) +
+            xlab(label$d_ran["x_lab"]) +
+            ggtitle(label$d_ran["title"]) +
+            gg_theme))
+  
+  if (cooks == TRUE) {
     cat("Press [enter] to continue")
     line <- readline()
-
+    print((plotList[[4]] <- ggplot(data = cook_df, aes(x = index, y = cooksdist)) +
+             geom_segment(aes(x = index, y = 0, xend = index, yend = cooksdist),
+                          colour = color[1]) +
+             xlab("Index") + ylab(label$cooks["y_lab"])
+           + geom_text(label = indexer[,1], data = indexer) +
+             ggtitle(label$cooks["title"]) + gg_theme))
+  }
+  
+  if (boxcox == TRUE) {
+    cat("Press [enter] to continue")
+    line <- readline()
+    
     if (any(label$box_cox["x_lab"] == "expression(lambda)") ||
-       any(label$box_cox["x_lab"] == "expression(Lambda)")) {
-
-       x_lab <- expression(lambda)
+        any(label$box_cox["x_lab"] == "expression(Lambda)")) {
+      
+      x_lab <- expression(lambda)
     } else {
       x_lab <- label$box_cox["x_lab"]
     }
     if (any(is.na(likelihoods))) {
       warning(paste0("For some lambda in the chosen range, the ",
-              "likelihood does not converge. ",
-              "For these lambdas no likelihood is plotted. ",
-              "Choose a different range to avoid this behaviour"))
+                     "likelihood does not converge. ",
+                     "For these lambdas no likelihood is plotted. ",
+                     "Choose a different range to avoid this behaviour"))
     }
     print((plotList[[5]] <- ggplot(data.frame(lambda = range,
-                                               log_likelihood = likelihoods),
-                  aes(x = lambda, y = log_likelihood)) + geom_line() +
+                                              log_likelihood = likelihoods),
+                                   aes(x = lambda, y = log_likelihood)) + geom_line() +
              xlab(x_lab) + ylab(label$box_cox["y_lab"]) +
              geom_vline(xintercept = range[which.max(likelihoods)],
                         colour = color[1]) + ggtitle(label$box_cox["title"]) +
-                          gg_theme))
+             gg_theme))
   }
-}
   invisible(plotList)
+}
+
+
+
+#' @rdname plot.emdi
+#' @export
+plot.direct <- function(x, ...) {
+  cat("For emdi objects obtained by direct estimation diagnostic plots are not reasonable.")
 }
 
 
@@ -349,7 +291,7 @@ define_label <- function(x, label){
       }
 
 
-    } else if (label == "blank"){
+    } else if (label == "blank") {
       label <- list(qq_res = c(title = "",
                                y_lab = "",
                                x_lab = ""),
@@ -368,7 +310,7 @@ define_label <- function(x, label){
                     box_cox = c(title = "",
                                 y_lab = "",
                                 x_lab = ""))
-    } else if (label == "no_title"){
+    } else if (label == "no_title") {
 
       if (inherits(x, "ebp")) {
         label <- list(qq_res = c(title = "",

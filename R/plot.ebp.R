@@ -1,0 +1,83 @@
+#' @rdname plot.emdi
+#' @export
+plot.ebp <- function(x,
+                     label = "orig",
+                     color = c("blue", "lightblue3"),
+                     gg_theme = NULL,
+                     cooks = TRUE,
+                     range = NULL, ...) { 
+  plot_check(x = x, label = label, color = color, cooks = cooks, range = range)
+
+  # Preparation for plots
+  residuals <- residuals(x$model, level = 0, type = "pearson")
+  rand.eff <- nlme::ranef(x$model)$'(Intercept)'
+  srand.eff <- (rand.eff - mean(rand.eff)) / sd(rand.eff)
+  tmp <- as.matrix(random.effects(x$model))[,1]
+  model <- x$model
+  model$call$fixed <- x$fixed
+  cook_df <- NULL
+  indexer <- NULL
+  likelihoods <- NULL
+  boxcox <- FALSE
+  
+  if (cooks == TRUE) {
+    cooksdist <- NULL
+    # Supress warning is used here due to a small bug in the 
+    # HLMdiag:::.extract.lmeDesign which is underlying the here used
+    # cooks distance. The given warning has no relevance in this case.
+    try(cooksdist <- as.vector(suppressWarnings(cooks.distance(model))), 
+        silent = TRUE)
+    if (is.null(cooksdist)) {
+      cooks <- FALSE
+      warning(
+        paste0("Cook's distance could not be calculated, this is usually due",
+               " to exceedence of available memory. Try using cooks = FALSE to ",
+               "avoid this message and improve computation time.")
+        )
+    } else {
+      cook_df <- data.frame(index = seq_along(cooksdist), cooksdist)
+      indexer <- cook_df[order(cooksdist, decreasing = TRUE),][seq_len(3),]
+    }
+  }
+  
+  if (x$transformation == "box.cox") {
+    boxcox = TRUE
+    if (is.null(range)) {
+      range <- seq(x$transform_param$optimal_lambda - .2,
+                   x$transform_param$optimal_lambda + .2,
+                   by = 0.025)
+    } else {
+      range <- range
+    }
+    
+    likelihoods <- vapply(range,
+                          function(lam, fixed , smp_data, smp_domains,
+                                   transformation)
+                          {
+                            result <- NULL
+                            try(result <- -as.numeric(
+                              generic_opt(lam, fixed, smp_data, 
+                                          smp_domains, transformation)),
+                              silent = TRUE)
+                            if (is.null(result)) result <- NA
+                            result
+                          }, numeric(1),   fixed = x$fixed, 
+                          smp_data = x$framework$smp_data,
+                          smp_domains = x$framework$smp_domains,
+                          transformation = x$transformation)
+    
+    if (any(is.na(likelihoods))) {
+      warning(paste0("For some lambda in the chosen range, the ",
+                     "likelihood does not converge. ",
+                     "For these lambdas no likelihood is plotted. ",
+                     "Choose a different range to avoid this behaviour"))
+    }
+  }
+  NextMethod("plot", cooks = cooks, range = range,
+             boxcox = boxcox, cook_df = cook_df,
+             indexer = indexer, likelihoods = likelihoods,
+             residuals = residuals, 
+             srand.eff = srand.eff, tmp = tmp
+             )
+}
+
