@@ -1,14 +1,14 @@
 #' Summarizes an emdiObject
 #'
 #' Additional information about the data and model in small area estimation
-#' methods and components of an emdi object are extracted. The returned object
-#' is suitable for printing  with the \code{print.summary.emdi} method.
-#' @param object an object of type "emdi", representing point and MSE
-#' estimates. Objects differ depending on the estimation method: direct
-#' vs. model-based.
+#' methods and components of an emdi object are extracted. The generic function
+#' summary has methods for classes "direct", "ebp" and "fh" and the returned object
+#' is suitable for printing  with the \code{print}.
+#' @param object an object of type "direct", "ebp" or "fh", representing point 
+#' and MSE estimates. Objects differ depending on the estimation method.
 #' @param ... additional arguments that are not used in this method.
-#' @return an object of type "summary.emdi" with information about the 
-#' sample and population data, the usage of transformation, normality 
+#' @return an object of type "summary.direct", "summary.ebp" or "summary.fh" with 
+#' information about the sample and population data, the usage of transformation, normality 
 #' tests and information of the model fit.
 #' @references 
 #' Lahiri, P. and Suntornchost, J. (2015), Variable selection for linear mixed
@@ -62,5 +62,5 @@
 #' # Example 2: Receive first overview
 #' summary(fh_std)
 #' }
-#' @name summary.emdi
+#' @name emdi_summaries
 NULL

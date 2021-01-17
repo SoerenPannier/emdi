@@ -149,7 +149,7 @@
 #' @param seed an integer to set the seed for the random number generator. For 
 #' the usage of random number generation see details. If seed is set to 
 #' \code{NULL}, seed is chosen randomly. Defaults to \code{123}.
-#' @return An object of class "fh", "model" and "emdi" that provides estimators 
+#' @return An object of class "fh", and "emdi" that provides estimators 
 #' for regional disaggregated indicators like means and ratios and optionally 
 #' corresponding MSE estimates. Generic functions such as \code{\link{compare}},
 #' \code{\link{compare_plot}}, \code{\link{estimators}}, \code{\link{print}}, 
