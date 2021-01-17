@@ -51,12 +51,12 @@
 #' \code{coef} (for default documentation, see \code{\link[stats]{coef}}), 
 #' \code{family} (for default
 #' documentation, see \code{\link[stats]{family}}), \code{fitted} (for default
-#' documentation, see \code{\link[stats]{fitted}}), \code{fixef} (for 
-#' default documentation, see \code{\link[nlme]{fixef}}), \code{formula} (for 
+#' documentation, see \code{\link[stats]{fitted.values}}), \code{fixef} (for 
+#' default documentation, see \code{\link[nlme]{fixed.effects}}), \code{formula} (for 
 #' default documentation, see \code{\link[stats]{formula}}), \code{logLik} (for
 #' default documentation, see \code{\link[stats]{logLik}}), \code{nobs} (for
 #' default documentation, see \code{\link[stats]{nobs}}), \code{ranef} (for default 
-#' documentation, see \code{\link[nlme]{ranef}}), \code{residuals} 
+#' documentation, see \code{\link[nlme]{random.effects}}), \code{residuals} 
 #' (for default documentation, see \code{\link[stats]{residuals}}), \code{terms} 
 #' (for default documentation, see \code{\link[stats]{terms}}) \cr \cr
 #' Objects of class "ebp" have additionally methods for following generic 

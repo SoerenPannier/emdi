@@ -61,8 +61,8 @@ estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
 #' @details Objects of class "estimators.emdi" have methods for following generic
 #' functions: \code{head} and \code{tail} (for default documentation, see 
 #' \code{\link[utils]{head}}),  \code{as.matrix} (for default documentation, see
-#' \code{\link[base]{as.matrix.default}}), \code{as.data.frame} (for default documentation, 
-#' see \code{\link[base]{as.data.frame.default}}), \code{subset} (for default 
+#' \code{\link[base]{matrix}}), \code{as.data.frame} (for default documentation, 
+#' see \code{\link[base]{as.data.frame}}), \code{subset} (for default 
 #' documentation, see \code{\link[base]{subset}}).
 #' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
 #' \code{\link{fh}}
