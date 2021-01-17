@@ -69,32 +69,10 @@
 qqnorm.emdi <- function(y, color = c("blue", "lightblue3"),
                         gg_theme = NULL, ...) {
   
-  Residuals <- Random <- index <- lambda <- log_likelihood <- NULL
-  # avoid note due to ggplot2
-  # Preparation for plots
-  
-  if (inherits(y, "ebp")) {
-    residuals <- residuals(y$model, level = 0, type = "pearson")
-    rand.eff <- nlme::ranef(y$model)$'(Intercept)'
-    srand.eff <- (rand.eff - mean(rand.eff)) / sd(rand.eff)
-    tmp <- as.matrix(random.effects(y$model))[,1]
-    
-    model <- y$model
-    model$call$fixed <- y$fixed
-  } else if (inherits(y, "fh")) {
-    
-    if (any(is.na(y$model$std_real_residuals))) {
-      residuals <- y$model$std_real_residuals[!is.na(y$model$std_real_residuals)]
-      warning("At least one value in the standardized realized residuals is NA. Only
-              numerical values are plotted.")
-    } else {
-      residuals <- y$model$std_real_residuals
-    }
-    residuals <- (residuals - mean(residuals)) / sd(residuals)
-    rand.eff <- y$model$random_effects
-    srand.eff <- (rand.eff - mean(rand.eff)) / sd(rand.eff)
-    tmp <- srand.eff
-  }
+  extra_args <- list(...)
+  residuals <- extra_args[["residuals"]]
+  tmp <- extra_args[["tmp"]]
+
   ## QQ Plots
   # Residuals
   res <- qplot(sample = residuals) +
@@ -104,15 +82,60 @@ qqnorm.emdi <- function(y, color = c("blue", "lightblue3"),
   
   # Random effects
   ran <- ggplot(data.frame(tmp) ,aes(sample = tmp)) +
-    stat_qq(distribution = qnorm,dparams = list(mean = mean(tmp),
+    stat_qq(distribution = qnorm, dparams = list(mean = mean(tmp),
                                                 sd = sd(tmp))) +
     geom_abline(intercept = 0, slope = 1,na.rm = TRUE, col = color[1]) +
     ggtitle("Random effect") + ylab("Quantiles of random effects") +
     xlab("Theoretical quantiles") + gg_theme
   
   invisible(grid.arrange(arrangeGrob(res, ran ,ncol = 2)))
+}
+
+
+#' @rdname qqnorm.emdi
+#' @export
+qqnorm.ebp <- function(y, color = c("blue", "lightblue3"),
+                        gg_theme = NULL, ...) {
+
+  residuals <- residuals(y$model, level = 0, type = "pearson")
+  rand.eff <- nlme::ranef(y$model)$'(Intercept)'
+  srand.eff <- (rand.eff - mean(rand.eff)) / sd(rand.eff)
+  tmp <- as.matrix(random.effects(y$model))[,1]
+  
+  model <- y$model
+  model$call$fixed <- y$fixed
+  
+  NextMethod("qqnorm",
+             residuals = residuals, 
+             tmp = tmp
+             )
+}
+
+#' @rdname qqnorm.emdi
+#' @export
+qqnorm.fh <- function(y, color = c("blue", "lightblue3"),
+                       gg_theme = NULL, ...) {
+  
+  if (any(is.na(y$model$std_real_residuals))) {
+    residuals <- y$model$std_real_residuals[!is.na(y$model$std_real_residuals)]
+    warning("At least one value in the standardized realized residuals is NA. Only
+              numerical values are plotted.")
+  } else {
+    residuals <- y$model$std_real_residuals
   }
+  residuals <- (residuals - mean(residuals)) / sd(residuals)
+  rand.eff <- y$model$random_effects
+  srand.eff <- (rand.eff - mean(rand.eff)) / sd(rand.eff)
+  tmp <- srand.eff
+  
+  NextMethod("qqnorm",
+             residuals = residuals, 
+             tmp = tmp
+  )
+}
 
-
-
-
+#' @rdname qqnorm.emdi
+#' @export
+qqnorm.direct <- function(y, ...) {
+  cat("For emdi objects obtained by direct estimation diagnostic plots are not reasonable.")
+}
