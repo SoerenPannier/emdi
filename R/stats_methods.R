@@ -201,7 +201,8 @@ logLik.fh <- function(object, ...) {
     object$model$model_select$loglike
     cat(paste0('Estimation approach used is ', object$method$method, '.')) }
   else {
-    cat(paste0('No likelihood is returned for estimation approach', object$method$method, '.')) 
+    cat(paste0('No likelihood is returned for estimation approach', 
+               object$method$method, '.')) 
   }
 }
 

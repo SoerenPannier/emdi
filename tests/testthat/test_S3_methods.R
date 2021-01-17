@@ -9,14 +9,10 @@ test_that("Test that the summary output works as expected", {
   expect_equal(summary_ebp,
                capture_output_lines(summary(model_ebp), 
                                     print = TRUE, width = 120))
-  # check fh summary
-  # print(summary_fh)
-  # print(capture_output_lines(summary(model_fh), print = TRUE))
-  # print(summary(model_fh))
-  # ToDo: Update Test Data uncomment
+  # # check fh summary
   # expect_equal(summary_fh,
-  #              capture_output_lines(summary(model_fh),
-  #                                   print = TRUE, width = 120))
+  #             capture_output_lines(summary(model_fh),
+  #                                  print = TRUE, width = 120))
   # 
   # check direct summary
   expect_equal(summary_direct,
