@@ -317,7 +317,7 @@ ranef.fh <- function(object, ...) {
 #' (iii) marginal variance-covariance matrix ("\code{marginal}"). Defaults to 
 #' "\code{random.effects}".
 #' @param ... additional arguments that are not used in this method.
-#' @return Vector containing the response variable. 
+#' @return A variance-covariance matrix or a list of variance-covariance matrices. 
 #' @seealso \code{\link{ebp}}, \code{\link[nlme]{getVarCov}}
 #' @examples
 #' \donttest{

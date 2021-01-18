@@ -24,7 +24,7 @@ Types that can be chosen
 \item{...}{additional arguments that are not used in this method.}
 }
 \value{
-Vector containing the response variable.
+A variance-covariance matrix or a list of variance-covariance matrices.
 }
 \description{
 Extract variance-covariance matrix from a fitted model of class ebp
