@@ -12,13 +12,13 @@ compare_plot.ebp <- function(model = NULL, direct = NULL, indicator = "all",
   
   if (inherits(direct, "fh")) {
     stop(paste0("It is not possible to compare the point and MSE estimates of a",
-                " model of type 'model','fh', to the point and MSE estimates of",
-                " a 'model', 'ebp' object.")) 
+                " model of type 'fh', to the point and MSE estimates of",
+                " an 'ebp' object.")) 
   }
   
   if ((inherits(model, "ebp") & is.null(direct)) | 
       (inherits(direct, "ebp") & is.null(model))) {
-    stop(paste0("If the model is of type 'model','ebp', the input argument 
+    stop(paste0("If the model is of type 'ebp', the input argument 
                   direct is required."))
   } else if (inherits(model, "ebp") & inherits(direct, "direct")) {
     compare_plot_ebp(model = model, direct = direct, indicator = indicator,
@@ -34,13 +34,13 @@ compare_plot.ebp <- function(model = NULL, direct = NULL, indicator = "all",
 #' For all indicators or a selection of indicators two plots are returned. The
 #' first plot is a scatter plot of estimates to compare and the second is a line
 #' plot with these estimates.
-#' @param model an object of type "emdi","model", representing point and MSE
+#' @param model an object of type "emdi", either "ebp" or "fh", representing point and MSE
 #' estimates
 #' @param direct an object of type "emdi","direct", representing point
-#' and MSE estimates. If the input argument \code{model} is of type "model","ebp",
+#' and MSE estimates. If the input argument \code{model} is of type "ebp",
 #' \code{direct} is required. If the input argument \code{model} is of type 
-#' "model","fh", the \code{direct} component is already included in the input 
-#' argument \code{model}..
+#' "fh", the \code{direct} component is already included in the input 
+#' argument \code{model}.
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
 #' (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",

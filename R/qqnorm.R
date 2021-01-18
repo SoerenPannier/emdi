@@ -3,9 +3,9 @@
 #' Normal quantile-quantile plots of the underlying model in the EBP (see also
 #' \code{\link{ebp}}) or Fay-Herriot (see also \code{\link{fh}}) approaches are 
 #' obtained. The plots are obtained by \code{\link[ggplot2]{ggplot}}.
-#' @param y an object of type "emdi", "model", representing point and, if chosen,
-#' MSE estimates obtained by the EBP or Fay-Herriot approach (see also
-#' \code{\link{ebp}} and \code{\link{fh}}).
+#' @param y a model object of type "emdi", either "ebp" or "fh", representing 
+#' point and, if chosen, MSE estimates obtained by the EBP or Fay-Herriot approach 
+#' (see also \code{\link{ebp}} and \code{\link{fh}}).
 #' @param color a character vector with two elements. The first element defines
 #' the color for the line in the QQ-plots, for the Cook's Distance plot and for
 #' the Box-Cox plot. The second element defines the color for the densities.

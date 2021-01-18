@@ -12,8 +12,8 @@ compare_plot.fh <- function(model = NULL, direct = NULL, indicator = "all",
   
   if (inherits(direct, "ebp")) {
     stop(paste0("It is not possible to compare the point and MSE estimates of a
-            model of type 'model','fh', to the point and MSE estimates of a 
-            'model','ebp' object.")) 
+            model of type 'fh', to the point and MSE estimates of an 
+            'ebp' object.")) 
   }
 
   if (inherits(model, "fh")  & inherits(direct, "direct")) {
@@ -33,8 +33,8 @@ compare_plot.fh <- function(model = NULL, direct = NULL, indicator = "all",
 #' For all indicators or a selection of indicators two plots are returned. The
 #' first plot is a scatter plot of estimates to compare and the second is a line
 #' plot with these estimates.
-#' @param model an object of type "emdi","model", representing point and MSE
-#' estimates.
+#' @param model an object of type "emdi", either "ebp" or "fh", representing point 
+#' and MSE estimates.
 #' @param direct an object of type "emdi","direct", representing point
 #' and MSE estimates.
 #' @param indicator optional character vector that selects which indicators

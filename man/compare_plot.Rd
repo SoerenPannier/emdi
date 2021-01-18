@@ -19,13 +19,13 @@ compare_plot(
 )
 }
 \arguments{
-\item{model}{an object of type "emdi","model", representing point and MSE
-estimates.}
+\item{model}{a model object of type "emdi", either "ebp" or "fh", representing 
+point and MSE estimates.}
 
 \item{direct}{an object of type "emdi","direct", representing point
-and MSE estimates. If the input argument \code{model} is of type "model","ebp",
+and MSE estimates. If the input argument \code{model} is of type "ebp",
 \code{direct} is required. If the input argument \code{model} is of type 
-"model","fh", the \code{direct} component is already included in the input 
+"fh", the \code{direct} component is already included in the input 
 argument \code{model}.}
 
 \item{indicator}{optional character vector that selects which indicators

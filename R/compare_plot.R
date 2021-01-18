@@ -3,12 +3,12 @@
 #' Function \code{compare_plot} is a generic function used to produce plots 
 #' comparing point and existing MSE/CV estimates of direct and model-based
 #' estimation for all indicators or a selection of indicators. 
-#' @param model an object of type "emdi","model", representing point and MSE
-#' estimates.
+#' @param model a model object of type "emdi", either "ebp" or "fh", representing 
+#' point and MSE estimates.
 #' @param direct an object of type "emdi","direct", representing point
-#' and MSE estimates. If the input argument \code{model} is of type "model","ebp",
+#' and MSE estimates. If the input argument \code{model} is of type "ebp",
 #' \code{direct} is required. If the input argument \code{model} is of type 
-#' "model","fh", the \code{direct} component is already included in the input 
+#' "fh", the \code{direct} component is already included in the input 
 #' argument \code{model}.
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned. Defaults to "all".
@@ -59,12 +59,12 @@ compare_plot <- function(model, direct,  indicator = "all", MSE = FALSE,
 #' indicator. If the input arguments MSE and CV are set to TRUE, two extra plots 
 #' are created, respectively: the MSE/CV estimates of the direct and model-based 
 #' estimates are compared by boxplots and scatter plots.
-#' @param model an object of type "emdi","model", representing point and MSE
-#' estimates.
+#' @param model a model object of type "emdi", either "ebp" or "fh", representing 
+#' point and MSE estimates.
 #' @param direct an object of type "emdi","direct", representing point
-#' and MSE estimates. If the input argument \code{model} is of type "model","ebp",
+#' and MSE estimates. If the input argument \code{model} is of type "ebp",
 #' \code{direct} is required. If the input argument \code{model} is of type 
-#' "model","fh", the \code{direct} component is already included in the input 
+#' "fh", the \code{direct} component is already included in the input 
 #' argument \code{model}.
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
@@ -76,7 +76,7 @@ compare_plot <- function(model, direct,  indicator = "all", MSE = FALSE,
 #' one is returned. Note, additional custom indicators can be
 #' defined as argument for the EBP approaches (see also \code{\link{ebp}})
 #' and do not appear in groups of indicators even though these might belong to
-#' one of the groups. If the \code{model} argument is of type "model","fh", 
+#' one of the groups. If the \code{model} argument is of type "fh", 
 #' indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi 
 #' object is overwritten by function \code{\link{benchmark}}). Defaults to "all".
 #' @param MSE optional logical. If \code{TRUE}, the MSE estimates of the direct 
