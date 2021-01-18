@@ -158,7 +158,7 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
       cat("Please note that the model selection criteria are only computed based on 
        the in-sample domains. \n \n ")
     }
-    class(fit) <- c("step_fh")
+    class(fit) <- c("step_fh", "fh", "emdi")
     fit
   }
   
