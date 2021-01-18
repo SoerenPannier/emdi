@@ -302,6 +302,52 @@ ranef.fh <- function(object, ...) {
   random_effects
 }
 
+#' Extract variance-covariance matrix from a fitted model of class ebp
+#
+#' Method \code{getVarCov.ebp} extracts the variance-covariance matrix from a fitted 
+#' model of class ebp.
+# 
+#' @param obj an object of type "ebp".
+#' @param individuals vector of levels of the in-sample domains can be specified 
+#' for the types "\code{conditional}" or "\code{marginal}".
+#' @param type a character that determines the type of variance-covariance matrix. 
+#' Types that can be chosen
+#' (i) random-effects variance-covariance matrix ("\code{random.effects}"),
+#' (ii) conditional variance-covariance matrix ("\code{conditional}"), 
+#' (iii) marginal variance-covariance matrix ("\code{marginal}"). Defaults to 
+#' "\code{random.effects}".
+#' @param ... additional arguments that are not used in this method.
+#' @return Vector containing the response variable. 
+#' @seealso \code{\link{ebp}}, \code{\link[nlme]{getVarCov}}
+#' @examples
+#' \donttest{
+#' # Example for class ebp
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
+#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
+#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
+#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
+#' na.rm = TRUE)
+#' 
+#' getVarCov(emdi_model)
+#' }
+#' @export
+#' @method getVarCov ebp
+#' @importFrom nlme getVarCov
+
+getVarCov.ebp <- function(obj, individuals, type = "random.effects", ...) {
+  throw_class_error(obj, "ebp")
+  
+  if (is.null(type) || !(type == "random.effects" 
+                         || type == "conditional" 
+                         || type == "marginal")) {
+    stop("The three options for type are ''random.effects'', ''conditional'' 
+         or ''marginal''.")
+  }
+  
+  getVarCov(obj$model, individuals = individuals, type = type)
+  
+}
+
 
 
 
