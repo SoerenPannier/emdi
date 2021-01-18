@@ -315,4 +315,20 @@ terms.fh <- function(x, ...) {
   terms(aov(x$fixed, x$framework$combined_data))
 }
 
+# Extract variance-covariance matrix of the main parameters of emdi objects ----
 
+#' @export
+#' @method vcov ebp
+#' @importFrom stats vcov
+
+vcov.ebp <- function(object, ...) {
+  
+  if(!inherits(object, "ebp")){
+    throw_class_error(object, "ebp")
+    vcov(object$model, ...)
+  }
+  if(!inherits(object, "summary.ebp")){
+    throw_class_error(object, "summary.ebp")
+    vcov(summary(object$model), ...)
+  }
+}
