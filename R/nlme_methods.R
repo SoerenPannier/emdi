@@ -303,7 +303,7 @@ ranef.fh <- function(object, ...) {
 }
 
 #' Extract variance-covariance matrix from a fitted model of class ebp
-#
+#'
 #' Method \code{getVarCov.ebp} extracts the variance-covariance matrix from a fitted 
 #' model of class ebp.
 # 
@@ -348,9 +348,95 @@ getVarCov.ebp <- function(obj, individuals, type = "random.effects", ...) {
   
 }
 
+#' Extract variance-covariance matrix from a fitted model of class fh
+#'
+#' Method \code{getVarCov.fh} extracts the variance-covariance matrix from a fitted 
+#' model of class fh.
+# 
+#' @param obj an object of type "fh".
+#' @param individuals vector of levels of the in-sample domains can be specified 
+#' for the types "\code{conditional}" or "\code{marginal}".
+#' @param type a character that determines the type of variance-covariance matrix. 
+#' Types that can be chosen
+#' (i) random-effects variance-covariance matrix ("\code{random.effects}"),
+#' (ii) conditional variance-covariance matrix ("\code{conditional}"), 
+#' (iii) marginal variance-covariance matrix ("\code{marginal}"). Defaults to 
+#' "\code{random.effects}".
+#' @param ... additional arguments that are not used in this method.
+#' @return A variance-covariance matrix or a list of variance-covariance matrices. 
+#' @seealso \code{\link{fh}}, \code{\link[nlme]{getVarCov}}
+#' @examples
+#' \donttest{
+#' # Example for class fh
+#' combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
+#'                              smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+#'
+#' fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+#'              combined_data = combined_data, domains = "Domain", method = "ml", 
+#'              MSE = TRUE)
+#' 
+#' getVarCov(fh_std)
+#' }
+#' @export
+#' @method getVarCov fh
+#' @importFrom nlme getVarCov
 
+getVarCov.fh <- function(obj, individuals, type = "random.effects", ...) {
+  throw_class_error(obj, "fh")
+  
+  if (is.null(type) || !(type == "random.effects" 
+                         || type == "conditional" 
+                         || type == "marginal")) {
+    stop("The three options for type are ''random.effects'', ''conditional'' 
+         or ''marginal''.")
+  }
+  
+  if (type == "random.effects"){
+    result <- list(varmat = matrix(obj$model$variance, nrow = 1, ncol = 1, 
+                            dimnames = list(c("(Intercept)"), c("(Intercept)"))),
+                   std.dev = sqrt(obj$model$variance))
+    class(result) <- c("getVarCov.fh", "VarCov_random")
+  } else if (type == "conditional"){
+    i <- individuals
+    result <- list(varmat = matrix(obj$framework$vardir[i], nrow = 1, ncol = 1,
+                                   dimnames = list(c("1"), c("1"))),
+                   std.dev = sqrt(obj$framework$vardir[i]),
+                   domain = levels(obj$ind$Domain)[i])
+    class(result) <- c("getVarCov.fh", "VarCov_conditional")
+  } else if (type == "marginal"){
+    i <- individuals
+    D <- diag(1, obj$framework$N_dom_smp)
+    # Total variance-covariance matrix - only values on the diagonal due to
+    # independence of error terms
+    V <- obj$model$variance * D%*%t(D) + diag(as.numeric(obj$framework$vardir))
+    result <- list(varmat = matrix(V[i,i], nrow = 1, ncol = 1, 
+                                   dimnames = list(c("1"), c("1"))),
+                   std.dev = sqrt(V[i,i]),
+                   domain = levels(obj$ind$Domain)[i])
+    class(result) <- c("getVarCov.fh", "VarCov_marginal")
+  }
+  result
+}
 
-
+#' @export
+print.getVarCov.fh <- function(x, ...) {
+  
+  if(inherits(x, "VarCov_random")){
+    cat("Random effects variance covariance matrix\n")
+    print(x$varmat)
+    cat("  Standard Deviations:", round(x$std.dev, 2),"\n")
+  } else if(inherits(x, "VarCov_conditional")){
+    cat("domain", x$domain, "\n")
+    cat("Conditional variance covariance matrix\n")
+    print(x$varmat)
+    cat("  Standard Deviations:", round(x$std.dev, 2),"\n")
+  } else if(inherits(x, "VarCov_marginal")){
+    cat("domain", x$domain, "\n")
+    cat("Marginal variance covariance matrix\n")
+    print(x$varmat)
+    cat("  Standard Deviations:", round(x$std.dev, 2),"\n")
+  }
+}
 
 
 
