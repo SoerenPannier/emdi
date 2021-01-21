@@ -381,7 +381,7 @@ getVarCov.ebp <- function(obj, individuals, type = "random.effects", ...) {
 #' @method getVarCov fh
 #' @importFrom nlme getVarCov
 
-getVarCov.fh <- function(obj, individuals, type = "random.effects", ...) {
+getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
   throw_class_error(obj, "fh")
   
   if (is.null(type) || !(type == "random.effects" 
@@ -392,28 +392,95 @@ getVarCov.fh <- function(obj, individuals, type = "random.effects", ...) {
   }
   
   if (type == "random.effects"){
-    result <- list(varmat = matrix(obj$model$variance, nrow = 1, ncol = 1, 
-                            dimnames = list(c("(Intercept)"), c("(Intercept)"))),
-                   std.dev = sqrt(obj$model$variance))
+    if (obj$model$correlation == "spatial"){
+      result <- list(varmat = matrix(obj$model$variance$variance, nrow = 1, ncol = 1, 
+                                     dimnames = list(c("(Intercept)"), c("(Intercept)"))),
+                     std.dev = sqrt(obj$model$variance$variance))
+    } else {
+      result <- list(varmat = matrix(obj$model$variance, nrow = 1, ncol = 1, 
+                                     dimnames = list(c("(Intercept)"), c("(Intercept)"))),
+                     std.dev = sqrt(obj$model$variance))
+    }
+    
     class(result) <- c("getVarCov.fh", "VarCov_random")
-  } else if (type == "conditional"){
-    i <- individuals
-    result <- list(varmat = matrix(obj$framework$vardir[i], nrow = 1, ncol = 1,
-                                   dimnames = list(c("1"), c("1"))),
-                   std.dev = sqrt(obj$framework$vardir[i]),
-                   domain = levels(obj$ind$Domain)[i])
-    class(result) <- c("getVarCov.fh", "VarCov_conditional")
-  } else if (type == "marginal"){
-    i <- individuals
-    D <- diag(1, obj$framework$N_dom_smp)
-    # Total variance-covariance matrix - only values on the diagonal due to
-    # independence of error terms
-    V <- obj$model$variance * D%*%t(D) + diag(as.numeric(obj$framework$vardir))
-    result <- list(varmat = matrix(V[i,i], nrow = 1, ncol = 1, 
-                                   dimnames = list(c("1"), c("1"))),
-                   std.dev = sqrt(V[i,i]),
-                   domain = levels(obj$ind$Domain)[i])
-    class(result) <- c("getVarCov.fh", "VarCov_marginal")
+  } else {
+    result <- list()
+    
+    for(i in individuals){
+      
+      if (!(is.numeric(i) || is.character(i))) {
+        stop("individuals must be numeric or a character specifying a level of a 
+         in-sample domain.")
+      }
+      if (is.numeric(i)) {
+        i <- obj$ind$Domain[obj$ind$Out == 0][i]
+      }
+      if (!(i %in% obj$ind$Domain[obj$ind$Out == 0])) {
+        stop(paste0("No variance-covariance matrix is available. Individual '",
+                    i, "' is not contained in the sample and therefore not used for the model fitting."))
+      }
+      
+      if (type == "conditional"){
+        D <- diag(1, obj$framework$N_dom_smp)
+        
+        if (obj$method$method == "me"){
+          Beta.hat.tCiBeta.hat <- NULL
+          for(i in seq_len(obj$framework$N_dom_smp)){
+            Beta.hat.tCiBeta.hat[i] <- 
+              t(obj$model$coefficients$coefficients)%*%obj$framework$Ci[,,i]%*%obj$model$coefficients$coefficients
+          }
+          V <- diag(obj$framework$vardir) + diag(as.numeric(Beta.hat.tCiBeta.hat))
+          result[[as.character(i)]] <- list(varmat = matrix(V[i, i], 
+                                                            nrow = 1, ncol = 1, dimnames = list(c("1"), c("1"))),
+                                            std.dev = sqrt(V[i, i]),
+                                            domain = i)
+        } else {
+          result[[as.character(i)]] <- list(varmat = matrix(obj$framework$vardir[obj$ind$Domain == i], 
+                                                            nrow = 1, ncol = 1, dimnames = list(c("1"), c("1"))),
+                                            std.dev = sqrt(obj$framework$vardir[obj$ind$Domain == i]),
+                                            domain = i)
+        }
+        class(result) <- c("getVarCov.fh", "VarCov_conditional")
+      } else if (type == "marginal"){
+        D <- diag(1, obj$framework$N_dom_smp)
+        
+        if (obj$model$correlation == "spatial"){
+          Wt <- t(obj$framework$W)
+          A <- solve((D - obj$model$variance$correlation*Wt)%*%
+                       (D - obj$model$variance$correlation*obj$framework$W))
+          G <- obj$model$variance$variance*A
+          # Total variance-covariance matrix 
+          V <- matrix(G + D*obj$framework$vardir,
+                      nrow = obj$framework$N_dom_smp, ncol = obj$framework$N_dom_smp,
+                      dimnames = list(obj$ind$Domain[obj$ind$Out== 0], 
+                                      obj$ind$Domain[obj$ind$Out== 0]))
+        } else if (obj$method$method == "me") {
+          Beta.hat.tCiBeta.hat <- NULL
+          for(i in seq_len(obj$framework$N_dom_smp)){
+            Beta.hat.tCiBeta.hat[i] <- 
+              t(obj$model$coefficients$coefficients)%*%obj$framework$Ci[,,i]%*%obj$model$coefficients$coefficients
+          }
+          # Total variance-covariance matrix - only values on the diagonal due to
+          # independence of error terms
+          V <- obj$model$variance * D%*%t(D) + diag(obj$framework$vardir) + 
+            diag(as.numeric(Beta.hat.tCiBeta.hat))
+        } else {
+        # Total variance-covariance matrix - only values on the diagonal due to
+        # independence of error terms
+        V <- matrix(obj$model$variance * D%*%t(D) + diag(as.numeric(obj$framework$vardir)),
+                    nrow = obj$framework$N_dom_smp, ncol = obj$framework$N_dom_smp,
+                    dimnames = list(obj$ind$Domain[obj$ind$Out== 0], 
+                                    obj$ind$Domain[obj$ind$Out== 0]))
+        }
+        
+        result[[as.character(i)]] <- list(varmat = matrix(V[i, i], 
+                                       nrow = 1, ncol = 1, 
+                                       dimnames = list(c("1"), c("1"))),
+                                       std.dev = sqrt(V[i, i]),
+                                       domain = i)
+        class(result) <- c("getVarCov.fh", "VarCov_marginal")
+      }
+    } 
   }
   result
 }
@@ -426,15 +493,19 @@ print.getVarCov.fh <- function(x, ...) {
     print(x$varmat)
     cat("  Standard Deviations:", round(x$std.dev, 2),"\n")
   } else if(inherits(x, "VarCov_conditional")){
-    cat("domain", x$domain, "\n")
-    cat("Conditional variance covariance matrix\n")
-    print(x$varmat)
-    cat("  Standard Deviations:", round(x$std.dev, 2),"\n")
+    for (i in names(x)){
+      cat("domain", as.character(x[[i]]$domain), "\n")
+      cat("Conditional variance covariance matrix\n")
+      print(x[[i]]$varmat)
+      cat("  Standard Deviations:", round(x[[i]]$std.dev, 2),"\n")
+    }
   } else if(inherits(x, "VarCov_marginal")){
-    cat("domain", x$domain, "\n")
+    for (i in names(x)){
+    cat("domain", as.character(x[[i]]$domain), "\n")
     cat("Marginal variance covariance matrix\n")
-    print(x$varmat)
-    cat("  Standard Deviations:", round(x$std.dev, 2),"\n")
+    print(x[[i]]$varmat)
+    cat("  Standard Deviations:", round(x[[i]]$std.dev, 2),"\n")
+    }
   }
 }
 

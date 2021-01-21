@@ -455,7 +455,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                                    seed = seed),
                       framework = framework[c("direct", "vardir", "N_dom_smp",
                                               "N_dom_unobs", "combined_data", 
-                                              "domains")],
+                                              "domains", "W")],
                       transformation = list(transformation = transformation,
                                             backtransformation = backtransformation),
                       method = list(method = method,
@@ -513,7 +513,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                                  correlation = correlation),
                     framework = framework[c("direct", "vardir", "N_dom_smp",
                                             "N_dom_unobs", "combined_data", 
-                                            "domains")],
+                                            "domains", "Ci")],
                     transformation = list(transformation = transformation,
                                           backtransformation = backtransformation),
                     method = list(method = method,
@@ -598,12 +598,19 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
       MSE_method <- "no mse estimated"
     }
     
+    if (correlation == "spatial"){
+    sigmau2 <- data.frame(correlation = unname(eblup$variance[1]), 
+                          variance = unname(eblup$variance[2]))
+    row.names(sigmau2) <- ""
+    } else if (correlation == "no"){
+      sigmau2 <- unname(eblup$variance[1])
+    }
     
     out <- list(ind = eblup$EBLUP_data,
                 MSE = MSE,
                 transform_param = NULL,
                 model = list(coefficients = eblup$coefficients,
-                             variance = eblup$variance,
+                             variance = sigmau2,
                              random_effects = as.matrix(eblup$random_effects),
                              fitted = eblup$fitted,
                              real_residuals = as.matrix(eblup$real_res),
@@ -614,7 +621,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                              seed = seed),
                 framework = framework[c("direct", "vardir", "N_dom_smp",
                                         "N_dom_unobs", "combined_data", 
-                                        "domains")],
+                                        "domains", "W")],
                 transformation = list(transformation = transformation,
                                       backtransformation = backtransformation),
                 method = list(method = method,
