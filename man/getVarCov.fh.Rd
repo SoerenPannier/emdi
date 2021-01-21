@@ -4,7 +4,7 @@
 \alias{getVarCov.fh}
 \title{Extract variance-covariance matrix from a fitted model of class fh}
 \usage{
-\method{getVarCov}{fh}(obj, individuals, type = "random.effects", ...)
+\method{getVarCov}{fh}(obj, individuals = 1, type = "random.effects", ...)
 }
 \arguments{
 \item{obj}{an object of type "fh".}
