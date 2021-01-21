@@ -111,7 +111,14 @@ confint.emdi <- function(object, parm = 'all', level = 0.95,  ...) {
 
 extractAIC.fh <- function(fit, ...) {
   throw_class_error(fit, "fh")
-  fit$model$model_select$AIC
+  if(!is.null(fit$model$model_select$AIC)) {
+    cat(paste0('Estimation approach used is ', fit$method$method, ': ', 
+               round(fit$model$model_select$AIC, 5))) 
+    }
+  else {
+    cat(paste0('No AIC is returned for estimation approach ', 
+               fit$method$method, '.')) 
+  }
 }
 
 # Extracts family object of emdi object ----------------------------------------
@@ -187,7 +194,7 @@ formula.fh <- function(x, ...) {
 logLik.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
   object$model$logLik
-  cat('Estimation approach used iS reml.')
+  cat('Estimation approach used is reml.')
 }
 
 
@@ -198,10 +205,11 @@ logLik.ebp <- function(object, ...) {
 logLik.fh <- function(object, ...) {
   throw_class_error(object, "fh")
   if(!is.null(object$model$model_select$loglike)) {
-    object$model$model_select$loglike
-    cat(paste0('Estimation approach used is ', object$method$method, '.')) }
+    cat(paste0('Estimation approach used is ', object$method$method, ': ', 
+               round(object$model$model_select$loglike, 5))) 
+  }
   else {
-    cat(paste0('No likelihood is returned for estimation approach', 
+    cat(paste0('No likelihood is returned for estimation approach ', 
                object$method$method, '.')) 
   }
 }

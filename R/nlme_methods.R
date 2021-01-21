@@ -170,6 +170,9 @@ getData.direct <- function(object, ...) {
 
 getData.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
+  if (object$transformation != "no"){
+    cat('The untransformed sample data set of the ebp object is returned. \n \n')
+  }
   object$framework$smp_data
 }
 
@@ -179,6 +182,7 @@ getData.ebp <- function(object, ...) {
 
 getData.fh <- function(object, ...) {
   throw_class_error(object, "fh")
+  cat('The combined data set (combined_data) of the fh object is returned. \n \n')
   object$framework$combined_data
 }
 
@@ -275,31 +279,6 @@ getResponse.ebp <- function(object, ...) {
 getResponse.fh <- function(object, ...) {
   throw_class_error(object, "fh")
   object$framework$direct
-}
-
-# Extract random effects of emdi objects ---------------------------------------
-
-#' @aliases random.effects
-#' @export
-#' @method ranef ebp
-#' @importFrom nlme ranef random.effects
-
-ranef.ebp <- function(object, ...) {
-  throw_class_error(object, "ebp")
-  ranef(object$model)
-}
-
-
-#' @aliases random.effects
-#' @export
-#' @method ranef fh
-#' @importFrom nlme ranef random.effects
-
-ranef.fh <- function(object, ...) {
-  throw_class_error(object, "fh")
-  random_effects <- object$model$random_effects
-  row.names(random_effects) <- object$ind$Domain
-  random_effects
 }
 
 #' Extract variance-covariance matrix from a fitted model of class ebp
@@ -465,19 +444,19 @@ getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
           V <- obj$model$variance * D%*%t(D) + diag(obj$framework$vardir) + 
             diag(as.numeric(Beta.hat.tCiBeta.hat))
         } else {
-        # Total variance-covariance matrix - only values on the diagonal due to
-        # independence of error terms
-        V <- matrix(obj$model$variance * D%*%t(D) + diag(as.numeric(obj$framework$vardir)),
-                    nrow = obj$framework$N_dom_smp, ncol = obj$framework$N_dom_smp,
-                    dimnames = list(obj$ind$Domain[obj$ind$Out== 0], 
-                                    obj$ind$Domain[obj$ind$Out== 0]))
+          # Total variance-covariance matrix - only values on the diagonal due to
+          # independence of error terms
+          V <- matrix(obj$model$variance * D%*%t(D) + diag(as.numeric(obj$framework$vardir)),
+                      nrow = obj$framework$N_dom_smp, ncol = obj$framework$N_dom_smp,
+                      dimnames = list(obj$ind$Domain[obj$ind$Out== 0], 
+                                      obj$ind$Domain[obj$ind$Out== 0]))
         }
         
         result[[as.character(i)]] <- list(varmat = matrix(V[i, i], 
-                                       nrow = 1, ncol = 1, 
-                                       dimnames = list(c("1"), c("1"))),
-                                       std.dev = sqrt(V[i, i]),
-                                       domain = i)
+                                                          nrow = 1, ncol = 1, 
+                                                          dimnames = list(c("1"), c("1"))),
+                                          std.dev = sqrt(V[i, i]),
+                                          domain = i)
         class(result) <- c("getVarCov.fh", "VarCov_marginal")
       }
     } 
@@ -501,15 +480,37 @@ print.getVarCov.fh <- function(x, ...) {
     }
   } else if(inherits(x, "VarCov_marginal")){
     for (i in names(x)){
-    cat("domain", as.character(x[[i]]$domain), "\n")
-    cat("Marginal variance covariance matrix\n")
-    print(x[[i]]$varmat)
-    cat("  Standard Deviations:", round(x[[i]]$std.dev, 2),"\n")
+      cat("domain", as.character(x[[i]]$domain), "\n")
+      cat("Marginal variance covariance matrix\n")
+      print(x[[i]]$varmat)
+      cat("  Standard Deviations:", round(x[[i]]$std.dev, 2),"\n")
     }
   }
 }
 
 
+# Extract random effects of emdi objects ---------------------------------------
+
+#' @aliases random.effects
+#' @export
+#' @method ranef ebp
+#' @importFrom nlme ranef random.effects
+
+ranef.ebp <- function(object, ...) {
+  throw_class_error(object, "ebp")
+  ranef(object$model)
+}
 
 
+#' @aliases random.effects
+#' @export
+#' @method ranef fh
+#' @importFrom nlme ranef random.effects
+
+ranef.fh <- function(object, ...) {
+  throw_class_error(object, "fh")
+  random_effects <- object$model$random_effects
+  row.names(random_effects) <- object$ind$Domain
+  random_effects
+}
 
