@@ -433,6 +433,12 @@ getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
                       nrow = obj$framework$N_dom_smp, ncol = obj$framework$N_dom_smp,
                       dimnames = list(obj$ind$Domain[obj$ind$Out== 0], 
                                       obj$ind$Domain[obj$ind$Out== 0]))
+          result[[as.character(i)]] <- list(varmat = matrix(V[i, i], 
+                                                            nrow = 1, ncol = 1, 
+                                                            dimnames = list(c("1"), c("1"))),
+                                            std.dev = sqrt(V[i, i]),
+                                            domain = i,
+                                            correlation = "spatial")
         } else if (obj$method$method == "me") {
           Beta.hat.tCiBeta.hat <- NULL
           for(i in seq_len(obj$framework$N_dom_smp)){
@@ -443,6 +449,11 @@ getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
           # independence of error terms
           V <- obj$model$variance * D%*%t(D) + diag(obj$framework$vardir) + 
             diag(as.numeric(Beta.hat.tCiBeta.hat))
+          result[[as.character(i)]] <- list(varmat = matrix(V[i, i], 
+                                                            nrow = 1, ncol = 1, 
+                                                            dimnames = list(c("1"), c("1"))),
+                                            std.dev = sqrt(V[i, i]),
+                                            domain = i)
         } else {
           # Total variance-covariance matrix - only values on the diagonal due to
           # independence of error terms
@@ -450,13 +461,13 @@ getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
                       nrow = obj$framework$N_dom_smp, ncol = obj$framework$N_dom_smp,
                       dimnames = list(obj$ind$Domain[obj$ind$Out== 0], 
                                       obj$ind$Domain[obj$ind$Out== 0]))
+          result[[as.character(i)]] <- list(varmat = matrix(V[i, i], 
+                                                            nrow = 1, ncol = 1, 
+                                                            dimnames = list(c("1"), c("1"))),
+                                            std.dev = sqrt(V[i, i]),
+                                            domain = i)
         }
         
-        result[[as.character(i)]] <- list(varmat = matrix(V[i, i], 
-                                                          nrow = 1, ncol = 1, 
-                                                          dimnames = list(c("1"), c("1"))),
-                                          std.dev = sqrt(V[i, i]),
-                                          domain = i)
         class(result) <- c("getVarCov.fh", "VarCov_marginal")
       }
     } 
@@ -484,6 +495,13 @@ print.getVarCov.fh <- function(x, ...) {
       cat("Marginal variance covariance matrix\n")
       print(x[[i]]$varmat)
       cat("  Standard Deviations:", round(x[[i]]$std.dev, 2),"\n")
+    }
+    if (x[[1]]$correlation == "spatial"){
+      cat("\n")
+      cat('Please note, if the correlation argument of the fh object is set to 
+spatial, the variance covariance matrix has non-zero off-diagonal elements, 
+because the assumption of independency of the error terms does not hold. The diagonal 
+elements are returned.')
     }
   }
 }
