@@ -192,7 +192,7 @@ formula.fh <- function(x, ...) {
 
 logLik.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
-  cat('Estimation approach used iS reml: ', object$model$logLik)
+  cat('Estimation approach used iS reml: ', round(object$model$logLik, 5))
   invisible(object$model$logLik)
 }
 
@@ -204,7 +204,7 @@ logLik.ebp <- function(object, ...) {
 logLik.fh <- function(object, ...) {
   throw_class_error(object, "fh")
   if(!is.null(object$model$model_select$loglike)) {
-    cat('Estimation approach used is ', object$method$method, ':', object$model$model_select$loglike) 
+    cat('Estimation approach used is ', object$method$method, ':', round(object$model$model_select$loglike, 5)) 
     invisible(object$model$model_select$loglike)
     }
   else {

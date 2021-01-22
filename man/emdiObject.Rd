@@ -43,32 +43,39 @@ the empirical best prediction (class "ebp"). Objects of these classes have
 methods for various generic functions. See Details for more information.
 }
 \details{
-Objects of class "emdi" have following methods: \code{\link[emdi]{compare_plot.emdi}},
-\code{\link[emdi]{comparePred.emdi}}, \code{\link[emdi]{confint.emdi}}, 
+Objects of class "emdi" have following methods: \code{\link[emdi]{comparePred.emdi}}, 
+\code{\link[emdi]{confint.emdi}}, 
 \code{\link[emdi]{estimators}}, \code{\link[emdi]{plot.emdi}}, 
 \code{\link[emdi]{predict.emdi}}, \code{\link[emdi]{qqnorm.emdi}}\cr \cr
 Objects of class "direct", "ebp" and "fh" have method for following generic 
-functions: \code{getData} (for default 
-documentation, see \code{\link[nlme]{getData}}), \code{getGroups} (for default
-documentation, see \code{\link[nlme]{getGroups}}), \code{getGroupsFormula} 
-(for default documentation, see \code{\link[nlme]{getGroupsFormula}}), 
-\code{getResponse} (for default documentation, see \code{\link[nlme]{getResponse}}) \cr \cr
-Objects of class "ebp" and "fh" have methods for following generic functions: 
+functions: \code{compare_plot} (for documentation, see \code{\link[emdi]{compare_plots_emdi}}), 
+\code{getData} (for default documentation, see \code{\link[nlme]{getData}}), 
+\code{getGroups} (for default documentation, see \code{\link[nlme]{getGroups}}), 
+\code{getGroupsFormula} (for default documentation, see \code{\link[nlme]{getGroupsFormula}}), 
+\code{getResponse} (for default documentation, see \code{\link[nlme]{getResponse}}), 
+\code{plot} (for documentation, see \code{\link[emdi]{plot.emdi}}), \code{print}, 
+\code{qqnorm} (for documentation, see \code{\link[emdi]{qqnorm.emdi}}) and
+\code{summary} (for documentation, see \code{\link[emdi]{emdi_summaries}}).\cr \cr
+Objects of class "ebp" and "fh" additionally have methods for following generic functions: 
 \code{coef} (for default documentation, see \code{\link[stats]{coef}}), 
 \code{family} (for default
 documentation, see \code{\link[stats]{family}}), \code{fitted} (for default
 documentation, see \code{\link[stats]{fitted.values}}), \code{fixef} (for 
 default documentation, see \code{\link[nlme]{fixed.effects}}), \code{formula} (for 
-default documentation, see \code{\link[stats]{formula}}), \code{logLik} (for
+default documentation, see \code{\link[stats]{formula}}), \code{getVarCov} 
+(for documentation, see \code{\link[emdi]{getVarCov.ebp}} and 
+\code{\link[emdi]{getVarCov.fh}}),\code{logLik} (for
 default documentation, see \code{\link[stats]{logLik}}), \code{nobs} (for
 default documentation, see \code{\link[stats]{nobs}}), \code{ranef} (for default 
 documentation, see \code{\link[nlme]{random.effects}}), \code{residuals} 
 (for default documentation, see \code{\link[stats]{residuals}}), \code{terms} 
-(for default documentation, see \code{\link[stats]{terms}}) \cr \cr
+(for default documentation, see \code{\link[stats]{terms}}), \code{vcov} 
+(for default documentation, see \code{\link[stats]{vcov}}) \cr \cr
 Objects of class "ebp" have additionally methods for following generic 
 functions: \code{sigma} (for default documentation, see \code{\link[stats]{sigma}})\cr \cr
 Objects of class "fh" have additionally methods for following generic functions: 
-\code{extractAIC} (for default documentation, see \code{\link[stats]{extractAIC}})
+\code{\link[emdi]{compare}}, \code{extractAIC} (for default documentation, 
+see \code{\link[stats]{extractAIC}}) and \code{\link[emdi]{step}}.
 }
 \references{
 Alfons, A. and Templ, M. (2013). Estimation of Social Exclusion Indicators

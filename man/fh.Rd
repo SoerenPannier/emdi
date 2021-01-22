@@ -183,13 +183,9 @@ the usage of random number generation see details. If seed is set to
 \value{
 An object of class "fh", and "emdi" that provides estimators 
 for regional disaggregated indicators like means and ratios and optionally 
-corresponding MSE estimates. Generic functions such as \code{\link{compare}},
-\code{\link{compare_plot}}, \code{\link{estimators}}, \code{\link{print}}, 
-\code{\link{plot}}, \code{\link{step}} and \code{\link{summary}} have methods 
-that can be used to obtain further information. Additionally, for the standard 
-Fay-Herriot model that is estimated via ML variance estimation a model selection 
-function is provided (\code{\link{step}}). See \code{\link{emdiObject}} for 
-descriptions of components of objects of class "fh".
+corresponding MSE estimates. Several generic functions have methods for the 
+returend object. For a full list and descriptions of the components of objects 
+of class "emdi", see \code{\link{emdiObject}}.
 }
 \description{
 Function \code{fh} estimates indicators using the Fay-Herriot approach by

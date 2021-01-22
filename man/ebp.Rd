@@ -114,12 +114,10 @@ are required. Defaults to \code{FALSE}.}
 }
 \value{
 An object of class "emdi", "ebp" that provides estimators for regional
-disaggregated indicators and optionally corresponding MSE estimates. Generic
-functions such as \code{\link{compare_plot}}, \code{\link{estimators}},  
-\code{\link{print}}, \code{\link{plot}} and \code{\link{summary}} have 
-methods that can be used to obtain further information. See 
-\code{\link{emdiObject}} for descriptions of components of objects 
-of class "emdi".
+disaggregated indicators and optionally corresponding MSE estimates. Several 
+generic functions have methods for the 
+returend object. For a full list and descriptions of the components of objects 
+of class "emdi", see \code{\link{emdiObject}}.
 }
 \description{
 Function \code{ebp} estimates indicators using the Empirical Best Prediction

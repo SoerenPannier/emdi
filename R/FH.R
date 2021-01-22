@@ -151,13 +151,9 @@
 #' \code{NULL}, seed is chosen randomly. Defaults to \code{123}.
 #' @return An object of class "fh", and "emdi" that provides estimators 
 #' for regional disaggregated indicators like means and ratios and optionally 
-#' corresponding MSE estimates. Generic functions such as \code{\link{compare}},
-#' \code{\link{compare_plot}}, \code{\link{estimators}}, \code{\link{print}}, 
-#' \code{\link{plot}}, \code{\link{step}} and \code{\link{summary}} have methods 
-#' that can be used to obtain further information. Additionally, for the standard 
-#' Fay-Herriot model that is estimated via ML variance estimation a model selection 
-#' function is provided (\code{\link{step}}). See \code{\link{emdiObject}} for 
-#' descriptions of components of objects of class "fh".
+#' corresponding MSE estimates. Several generic functions have methods for the 
+#' returend object. For a full list and descriptions of the components of objects 
+#' of class "emdi", see \code{\link{emdiObject}}.
 #' @details In the bootstrap approaches, random number generation is used. Thus, a 
 #' seed is set by the argument \code{seed}. \cr \cr
 #' Out-of-sample EBLUPs are available for all area-level models except for the 
