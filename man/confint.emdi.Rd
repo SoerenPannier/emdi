@@ -2,7 +2,6 @@
 % Please edit documentation in R/stats_methods.R
 \name{confint.emdi}
 \alias{confint.emdi}
-\alias{intervals}
 \title{Confidence intervals for emdi objects}
 \usage{
 \method{confint}{emdi}(object, parm = "all", level = 0.95, ...)

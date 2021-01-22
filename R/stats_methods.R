@@ -47,7 +47,6 @@ coef.fh <- function(object, ...) {
 #' @param ... additional arguments that are not used in this method.
 #' @return For emdi objects, a data frame with the point estimator and lower and
 #' upper bounds is returned.
-#' @aliases intervals
 #' @details The confidence intervals are constructed using following equation 
 #' (exemplarily for the 95\% interval): 
 #' \ifelse{html}{\out{CI<sub>d</sub> = y&#770;<sub>d</sub> +/- 1.96 &#8730; MSE(y&#770;<sub>d</sub>)}}{\deqn{CI_{d} = \hat{ind}_{d} +/- 1.96 \sqrt{MSE(\hat{y}_{d})}}}
