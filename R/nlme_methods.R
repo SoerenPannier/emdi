@@ -298,7 +298,7 @@ ranef.ebp <- function(object, ...) {
 ranef.fh <- function(object, ...) {
   throw_class_error(object, "fh")
   random_effects <- object$model$random_effects
-  row.names(random_effects) <- object$ind$Domain
+  row.names(random_effects) <- object$ind$Domain[object$ind$Out == 0]
   random_effects
 }
 

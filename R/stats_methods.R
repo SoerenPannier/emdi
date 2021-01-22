@@ -143,8 +143,7 @@ family.fh <- function(object, ...) {
 
 fitted.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
-  as.numeric(object$model$fitted[,1])
-  
+  fitted(object$model, ...)
 }
 
 
@@ -186,8 +185,8 @@ formula.fh <- function(x, ...) {
 
 logLik.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
-  object$model$logLik
-  cat('Estimation approach used iS reml.')
+  cat('Estimation approach used iS reml: ', object$model$logLik)
+  invisible(object$model$logLik)
 }
 
 
@@ -198,8 +197,9 @@ logLik.ebp <- function(object, ...) {
 logLik.fh <- function(object, ...) {
   throw_class_error(object, "fh")
   if(!is.null(object$model$model_select$loglike)) {
-    object$model$model_select$loglike
-    cat(paste0('Estimation approach used is ', object$method$method, '.')) }
+    cat('Estimation approach used is ', object$method$method, ':', object$model$model_select$loglike) 
+    invisible(object$model$model_select$loglike)
+    }
   else {
     cat(paste0('No likelihood is returned for estimation approach', object$method$method, '.')) 
   }
@@ -268,7 +268,7 @@ predict.emdi <- function(object, ...) {
 
 residuals.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
-  as.numeric(residuals(object$model, level = 0, type = "pearson"))
+  residuals(object$model, ...)
 }
 
 
@@ -279,8 +279,13 @@ residuals.ebp <- function(object, ...) {
 
 residuals.fh <- function(object, ...) {
   throw_class_error(object, "fh")
-  data.frame(real_residuals = object$model$real_residuals, 
-             std_real_residuals = object$model$std_real_residuals)
+  type <- ''
+  try(type <- list(...)[[1]])
+  if (type == 'standardized') {
+    object$model$std_real_residuals
+  } else {
+    object$model$real_residuals
+  }
 }
 
 # Extract residual standard deviation of emdi objects --------------------------
