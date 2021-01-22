@@ -16,9 +16,9 @@
 \method{qqnorm}{direct}(y, ...)
 }
 \arguments{
-\item{y}{an object of type "emdi", "model", representing point and, if chosen,
-MSE estimates obtained by the EBP or Fay-Herriot approach (see also
-\code{\link{ebp}} and \code{\link{fh}}).}
+\item{y}{a model object of type "emdi", either "ebp" or "fh", representing 
+point and, if chosen, MSE estimates obtained by the EBP or Fay-Herriot approach 
+(see also \code{\link{ebp}} and \code{\link{fh}}).}
 
 \item{color}{a character vector with two elements. The first element defines
 the color for the line in the QQ-plots, for the Cook's Distance plot and for

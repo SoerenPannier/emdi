@@ -111,7 +111,14 @@ confint.emdi <- function(object, parm = 'all', level = 0.95,  ...) {
 
 extractAIC.fh <- function(fit, ...) {
   throw_class_error(fit, "fh")
-  fit$model$model_select$AIC
+  if(!is.null(fit$model$model_select$AIC)) {
+    cat(paste0('Estimation approach used is ', fit$method$method, ': ', 
+               round(fit$model$model_select$AIC, 5))) 
+    }
+  else {
+    cat(paste0('No AIC is returned for estimation approach ', 
+               fit$method$method, '.')) 
+  }
 }
 
 # Extracts family object of emdi object ----------------------------------------
@@ -201,7 +208,8 @@ logLik.fh <- function(object, ...) {
     invisible(object$model$model_select$loglike)
     }
   else {
-    cat(paste0('No likelihood is returned for estimation approach', object$method$method, '.')) 
+    cat(paste0('No likelihood is returned for estimation approach ', 
+               object$method$method, '.')) 
   }
 }
 
@@ -319,4 +327,54 @@ terms.fh <- function(x, ...) {
   terms(aov(x$fixed, x$framework$combined_data))
 }
 
+# Extract variance-covariance matrix of the main parameters of emdi objects ----
 
+#' @export
+#' @method vcov ebp
+#' @importFrom stats vcov
+
+vcov.ebp <- function(object, ...) {
+    throw_class_error(object, "ebp")
+    vcov(object$model, ...)
+}
+
+
+# Extract variance-covariance matrix of the main parameters of emdi objects ----
+
+#' @export
+#' @method vcov fh
+#' @importFrom stats vcov
+
+vcov.fh <- function(object, ...) {
+    throw_class_error(object, "fh")
+  
+  if (object$method$method == "reblup" | object$method$method == "reblupbc") {
+    D <- diag(1, object$framework$N_dom_smp)
+    model_X <- makeXY(object$fixed, object$framework$combined_data)$x
+    
+    if (object$model$correlation == "no"){
+      # Total variance-covariance matrix - only values on the diagonal due to
+      # independence of error terms
+      V <- object$model$variance * D%*%t(D) + diag(as.numeric(object$framework$vardir))
+      # Inverse of the total variance
+      Vi <- solve(V)
+      # Inverse of X'ViX
+      beta_vcov <- solve(t(model_X)%*%Vi%*%model_X) 
+    } else if (object$model$correlation == "spatial"){
+      Wt <- t(object$framework$W)
+      A <- solve((D - object$model$variance$correlation*Wt)%*%
+                   (D - object$model$variance$correlation*object$framework$W))
+      G <- object$model$variance$variance*A
+      # Total variance-covariance matrix 
+      V <- G + D*object$framework$vardir
+      # Inverse of the total variance
+      Vi <- solve(V)
+      # Inverse of X'ViX
+      beta_vcov <- solve(t(model_X)%*%Vi%*%model_X)
+    }
+    
+    beta_vcov
+  } else {
+    object$model$beta_vcov
+  }
+}

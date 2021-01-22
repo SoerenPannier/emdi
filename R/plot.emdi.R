@@ -11,9 +11,9 @@
 #' only returned in case a Box-Cox transformation is chosen. The range of the
 #' x-axis is optional but necessary to change if there are convergence problems.
 #' All plots are obtained by \code{\link[ggplot2]{ggplot}}.
-#' @param x an object of type "emdi", "model", representing point and, if chosen,
-#' MSE estimates obtained by the EBP or Fay-Herriot approach (see also
-#' \code{\link{ebp}} and \code{\link{fh}}).
+#' @param x an object of type "emdi", either "ebp" or "fh", representing point 
+#' and, if chosen, MSE estimates obtained by the EBP or Fay-Herriot approach 
+#' (see also \code{\link{ebp}} and \code{\link{fh}}).
 #' @param label argument that enables to customize title and axis labels. There
 #' are three instant options to label the diagnostic plot: (i) original labels ("orig"),
 #' (ii) axis lables but no title ("no_title"), (iii) neither axis

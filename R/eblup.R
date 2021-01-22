@@ -65,7 +65,8 @@ eblup_FH <- function(framework, sigmau2, combined_data) {
                     coefficients = eblup_coef,
                     real_res = real_res,
                     std_real_res = std_real_res,
-                    random_effects = u.hat)
+                    random_effects = u.hat,
+                    beta_vcov = Q)
 
   return(eblup_out)
 }
@@ -142,7 +143,8 @@ eblup_SFH <- function(framework, sigmau2, combined_data) {
                     real_res = real_res,
                     V = V,
                     std_real_res = std_real_res,
-                    random_effects = u.hat)
+                    random_effects = u.hat,
+                    beta_vcov = Q)
   
   return(eblup_out)
 }
@@ -225,7 +227,8 @@ eblup_YL <- function(framework, sigmau2, combined_data) {
                     coefficients = eblup_coef,
                     real_res = real_res,
                     std_real_res = std_real_res,
-                    random_effects = u.hat)
+                    random_effects = u.hat,
+                    beta_vcov = Q)
   
   return(eblup_out)
 }

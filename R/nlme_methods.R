@@ -170,6 +170,9 @@ getData.direct <- function(object, ...) {
 
 getData.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
+  if (object$transformation != "no"){
+    cat('The untransformed sample data set of the ebp object is returned. \n \n')
+  }
   object$framework$smp_data
 }
 
@@ -179,6 +182,7 @@ getData.ebp <- function(object, ...) {
 
 getData.fh <- function(object, ...) {
   throw_class_error(object, "fh")
+  cat('The combined data set (combined_data) of the fh object is returned. \n \n')
   object$framework$combined_data
 }
 
@@ -277,6 +281,232 @@ getResponse.fh <- function(object, ...) {
   object$framework$direct
 }
 
+#' Extract variance-covariance matrix from a fitted model of class ebp
+#'
+#' Method \code{getVarCov.ebp} extracts the variance-covariance matrix from a fitted 
+#' model of class ebp.
+# 
+#' @param obj an object of type "ebp".
+#' @param individuals vector of levels of the in-sample domains can be specified 
+#' for the types "\code{conditional}" or "\code{marginal}".
+#' @param type a character that determines the type of variance-covariance matrix. 
+#' Types that can be chosen
+#' (i) random-effects variance-covariance matrix ("\code{random.effects}"),
+#' (ii) conditional variance-covariance matrix ("\code{conditional}"), 
+#' (iii) marginal variance-covariance matrix ("\code{marginal}"). Defaults to 
+#' "\code{random.effects}".
+#' @param ... additional arguments that are not used in this method.
+#' @return A variance-covariance matrix or a list of variance-covariance matrices. 
+#' @seealso \code{\link{ebp}}, \code{\link[nlme]{getVarCov}}
+#' @examples
+#' \donttest{
+#' # Example for class ebp
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
+#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
+#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
+#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
+#' na.rm = TRUE)
+#' 
+#' getVarCov(emdi_model)
+#' }
+#' @export
+#' @method getVarCov ebp
+#' @importFrom nlme getVarCov
+
+getVarCov.ebp <- function(obj, individuals, type = "random.effects", ...) {
+  throw_class_error(obj, "ebp")
+  
+  if (is.null(type) || !(type == "random.effects" 
+                         || type == "conditional" 
+                         || type == "marginal")) {
+    stop("The three options for type are ''random.effects'', ''conditional'' 
+         or ''marginal''.")
+  }
+  
+  getVarCov(obj$model, individuals = individuals, type = type)
+  
+}
+
+#' Extract variance-covariance matrix from a fitted model of class fh
+#'
+#' Method \code{getVarCov.fh} extracts the variance-covariance matrix from a fitted 
+#' model of class fh.
+# 
+#' @param obj an object of type "fh".
+#' @param individuals vector of levels of the in-sample domains can be specified 
+#' for the types "\code{conditional}" or "\code{marginal}".
+#' @param type a character that determines the type of variance-covariance matrix. 
+#' Types that can be chosen
+#' (i) random-effects variance-covariance matrix ("\code{random.effects}"),
+#' (ii) conditional variance-covariance matrix ("\code{conditional}"), 
+#' (iii) marginal variance-covariance matrix ("\code{marginal}"). Defaults to 
+#' "\code{random.effects}".
+#' @param ... additional arguments that are not used in this method.
+#' @return A variance-covariance matrix or a list of variance-covariance matrices. 
+#' @seealso \code{\link{fh}}, \code{\link[nlme]{getVarCov}}
+#' @examples
+#' \donttest{
+#' # Example for class fh
+#' combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
+#'                              smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+#'
+#' fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+#'              combined_data = combined_data, domains = "Domain", method = "ml", 
+#'              MSE = TRUE)
+#' 
+#' getVarCov(fh_std)
+#' }
+#' @export
+#' @method getVarCov fh
+#' @importFrom nlme getVarCov
+
+getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
+  throw_class_error(obj, "fh")
+  
+  if (is.null(type) || !(type == "random.effects" 
+                         || type == "conditional" 
+                         || type == "marginal")) {
+    stop("The three options for type are ''random.effects'', ''conditional'' 
+         or ''marginal''.")
+  }
+  
+  if (type == "random.effects"){
+    if (obj$model$correlation == "spatial"){
+      result <- list(varmat = matrix(obj$model$variance$variance, nrow = 1, ncol = 1, 
+                                     dimnames = list(c("(Intercept)"), c("(Intercept)"))),
+                     std.dev = sqrt(obj$model$variance$variance))
+    } else {
+      result <- list(varmat = matrix(obj$model$variance, nrow = 1, ncol = 1, 
+                                     dimnames = list(c("(Intercept)"), c("(Intercept)"))),
+                     std.dev = sqrt(obj$model$variance))
+    }
+    
+    class(result) <- c("getVarCov.fh", "VarCov_random")
+  } else {
+    result <- list()
+    
+    for(i in individuals){
+      
+      if (!(is.numeric(i) || is.character(i))) {
+        stop("individuals must be numeric or a character specifying a level of a 
+         in-sample domain.")
+      }
+      if (is.numeric(i)) {
+        i <- obj$ind$Domain[obj$ind$Out == 0][i]
+      }
+      if (!(i %in% obj$ind$Domain[obj$ind$Out == 0])) {
+        stop(paste0("No variance-covariance matrix is available. Individual '",
+                    i, "' is not contained in the sample and therefore not used for the model fitting."))
+      }
+      
+      if (type == "conditional"){
+        D <- diag(1, obj$framework$N_dom_smp)
+        
+        if (obj$method$method == "me"){
+          Beta.hat.tCiBeta.hat <- NULL
+          for(i in seq_len(obj$framework$N_dom_smp)){
+            Beta.hat.tCiBeta.hat[i] <- 
+              t(obj$model$coefficients$coefficients)%*%obj$framework$Ci[,,i]%*%obj$model$coefficients$coefficients
+          }
+          V <- diag(obj$framework$vardir) + diag(as.numeric(Beta.hat.tCiBeta.hat))
+          result[[as.character(i)]] <- list(varmat = matrix(V[i, i], 
+                                                            nrow = 1, ncol = 1, dimnames = list(c("1"), c("1"))),
+                                            std.dev = sqrt(V[i, i]),
+                                            domain = i)
+        } else {
+          result[[as.character(i)]] <- list(varmat = matrix(obj$framework$vardir[obj$ind$Domain == i], 
+                                                            nrow = 1, ncol = 1, dimnames = list(c("1"), c("1"))),
+                                            std.dev = sqrt(obj$framework$vardir[obj$ind$Domain == i]),
+                                            domain = i)
+        }
+        class(result) <- c("getVarCov.fh", "VarCov_conditional")
+      } else if (type == "marginal"){
+        D <- diag(1, obj$framework$N_dom_smp)
+        
+        if (obj$model$correlation == "spatial"){
+          Wt <- t(obj$framework$W)
+          A <- solve((D - obj$model$variance$correlation*Wt)%*%
+                       (D - obj$model$variance$correlation*obj$framework$W))
+          G <- obj$model$variance$variance*A
+          # Total variance-covariance matrix 
+          V <- matrix(G + D*obj$framework$vardir,
+                      nrow = obj$framework$N_dom_smp, ncol = obj$framework$N_dom_smp,
+                      dimnames = list(obj$ind$Domain[obj$ind$Out== 0], 
+                                      obj$ind$Domain[obj$ind$Out== 0]))
+          result[[as.character(i)]] <- list(varmat = matrix(V[i, i], 
+                                                            nrow = 1, ncol = 1, 
+                                                            dimnames = list(c("1"), c("1"))),
+                                            std.dev = sqrt(V[i, i]),
+                                            domain = i,
+                                            correlation = "spatial")
+        } else if (obj$method$method == "me") {
+          Beta.hat.tCiBeta.hat <- NULL
+          for(i in seq_len(obj$framework$N_dom_smp)){
+            Beta.hat.tCiBeta.hat[i] <- 
+              t(obj$model$coefficients$coefficients)%*%obj$framework$Ci[,,i]%*%obj$model$coefficients$coefficients
+          }
+          # Total variance-covariance matrix - only values on the diagonal due to
+          # independence of error terms
+          V <- obj$model$variance * D%*%t(D) + diag(obj$framework$vardir) + 
+            diag(as.numeric(Beta.hat.tCiBeta.hat))
+          result[[as.character(i)]] <- list(varmat = matrix(V[i, i], 
+                                                            nrow = 1, ncol = 1, 
+                                                            dimnames = list(c("1"), c("1"))),
+                                            std.dev = sqrt(V[i, i]),
+                                            domain = i)
+        } else {
+          # Total variance-covariance matrix - only values on the diagonal due to
+          # independence of error terms
+          V <- matrix(obj$model$variance * D%*%t(D) + diag(as.numeric(obj$framework$vardir)),
+                      nrow = obj$framework$N_dom_smp, ncol = obj$framework$N_dom_smp,
+                      dimnames = list(obj$ind$Domain[obj$ind$Out== 0], 
+                                      obj$ind$Domain[obj$ind$Out== 0]))
+          result[[as.character(i)]] <- list(varmat = matrix(V[i, i], 
+                                                            nrow = 1, ncol = 1, 
+                                                            dimnames = list(c("1"), c("1"))),
+                                            std.dev = sqrt(V[i, i]),
+                                            domain = i)
+        }
+        
+        class(result) <- c("getVarCov.fh", "VarCov_marginal")
+      }
+    } 
+  }
+  result
+}
+
+#' @export
+print.getVarCov.fh <- function(x, ...) {
+  
+  if(inherits(x, "VarCov_random")){
+    cat("Random effects variance covariance matrix\n")
+    print(x$varmat)
+    cat("  Standard Deviations:", round(x$std.dev, 2),"\n")
+  } else if(inherits(x, "VarCov_conditional")){
+    for (i in names(x)){
+      cat("domain", as.character(x[[i]]$domain), "\n")
+      cat("Conditional variance covariance matrix\n")
+      print(x[[i]]$varmat)
+      cat("  Standard Deviations:", round(x[[i]]$std.dev, 2),"\n")
+    }
+  } else if(inherits(x, "VarCov_marginal")){
+    for (i in names(x)){
+      cat("domain", as.character(x[[i]]$domain), "\n")
+      cat("Marginal variance covariance matrix\n")
+      print(x[[i]]$varmat)
+      cat("  Standard Deviations:", round(x[[i]]$std.dev, 2),"\n")
+    }
+    if (x[[1]]$correlation == "spatial"){
+      cat("\n")
+      cat('Please note, if the correlation argument of the fh object is set to 
+spatial, the variance covariance matrix has non-zero off-diagonal elements, 
+because the assumption of independency of the error terms does not hold. The diagonal 
+elements are returned.')
+    }
+  }
+}
+
+
 # Extract random effects of emdi objects ---------------------------------------
 
 #' @aliases random.effects
@@ -301,12 +531,4 @@ ranef.fh <- function(object, ...) {
   row.names(random_effects) <- object$ind$Domain[object$ind$Out == 0]
   random_effects
 }
-
-
-
-
-
-
-
-
 

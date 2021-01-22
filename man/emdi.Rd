@@ -21,7 +21,7 @@ function, benchmarking options and spatial correlation tests are provided.
 \details{
 The three estimation functions are called \code{\link{direct}}, 
 \code{\link{ebp}} and \code{\link{fh}}. For all functions several methods are 
-available as \code{\link{estimators.emdi}}, \code{\link{compare_plot.emdi}}, 
+available as \code{\link{estimators.emdi}}, \code{\link{compare_plot}}, 
 \code{\link{plot.emdi}} (only for emdi objects obtained by functions 
 \code{ebp} or \code{fh}), \code{print}, \code{\link{emdi_summaries}},
 Furthermore, functions \code{\link{map_plot}} and \code{\link{write.excel}} 

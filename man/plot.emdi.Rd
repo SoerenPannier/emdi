@@ -40,9 +40,9 @@
 )
 }
 \arguments{
-\item{x}{an object of type "emdi", "model", representing point and, if chosen,
-MSE estimates obtained by the EBP or Fay-Herriot approach (see also
-\code{\link{ebp}} and \code{\link{fh}}).}
+\item{x}{an object of type "emdi", either "ebp" or "fh", representing point 
+and, if chosen, MSE estimates obtained by the EBP or Fay-Herriot approach 
+(see also \code{\link{ebp}} and \code{\link{fh}}).}
 
 \item{label}{argument that enables to customize title and axis labels. There
 are three instant options to label the diagnostic plot: (i) original labels ("orig"),
