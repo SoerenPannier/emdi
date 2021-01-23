@@ -44,7 +44,6 @@ methods for various generic functions. See Details for more information.
 }
 \details{
 Objects of class "emdi" have following methods: \code{\link[emdi]{comparePred.emdi}}, 
-\code{\link[emdi]{confint.emdi}}, 
 \code{\link[emdi]{estimators}}, \code{\link[emdi]{plot.emdi}}, 
 \code{\link[emdi]{predict.emdi}}, \code{\link[emdi]{qqnorm.emdi}}\cr \cr
 Objects of class "direct", "ebp" and "fh" have method for following generic 
@@ -58,6 +57,7 @@ functions: \code{compare_plot} (for documentation, see \code{\link[emdi]{compare
 \code{summary} (for documentation, see \code{\link[emdi]{emdi_summaries}}).\cr \cr
 Objects of class "ebp" and "fh" additionally have methods for following generic functions: 
 \code{coef} (for default documentation, see \code{\link[stats]{coef}}), 
+\code{confint} (for default documentation, see \code{\link[stats]{confint}}),
 \code{family} (for default
 documentation, see \code{\link[stats]{family}}), \code{fitted} (for default
 documentation, see \code{\link[stats]{fitted.values}}), \code{fixef} (for 
