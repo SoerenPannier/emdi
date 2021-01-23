@@ -33,10 +33,10 @@ coef.fh <- function(object, ...) {
 confint.ebp <- function(object, parm = NULL, level = 0.95, ...) {
   
   if (!is.null(parm)) {
-    confidence_intervals <- intervals(ebp_model$model, level = level)$fixed
+    confidence_intervals <- intervals(object$model, level = level)$fixed
     subset(confidence_intervals, rownames(confidence_intervals) %in% parm)
   } else {
-    intervals(ebp_model$model, level = level)$fixed
+    intervals(object$model, level = level)$fixed
   }
   
 }
