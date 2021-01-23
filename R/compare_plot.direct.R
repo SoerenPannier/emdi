@@ -10,7 +10,7 @@ compare_plot.direct <- function(model = NULL, direct = NULL, indicator = "all",
                      label = label, color = color, shape = shape,
                      line_type = line_type, gg_theme = gg_theme)
   
-  if (inherits(direct, "ebp") || inherits(direct, "model")) {
+  if (inherits(direct, "ebp") || inherits(direct, "fh")) {
     warning("Wrong use of the compare plot interface. Model needs to be either ",
             "of class ebp or fh. compare_plot is now called with the arguments ",
             "swapped.")
