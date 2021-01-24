@@ -21,5 +21,7 @@ included in \code{smp_data}.}
 a combined data set.
 }
 \description{
-This function combines different data sets.
+This function combines the aggregated population information with the 
+aggregated sample data. The merge is based on the domains. Out-of-sample 
+domains will have NA values for the variables from the sample data.
 }

@@ -23,10 +23,10 @@ compare <- function(object, ...) UseMethod("compare")
 #'
 #' @param object an object of type "fh".
 #' @param ... further arguments passed to or from other methods.
-#' @return For the \code{fh} method the null hypothesis, the value W of the test 
+#' @return For the method for class "fh", the null hypothesis, the value W of the test 
 #' statistic, the degrees of freedom and the p value of the Brown test; and the 
 #' correlation coefficient of the synthetic part and the direct estimator 
-#' \cite{(Chandra et al. 2015)}.
+#' \cite{(Chandra et al. 2015)} are returned.
 #' @references 
 #' Brown, G., R. Chambers, P. Heady, and D. Heasman (2001). Evaluation of small 
 #' area estimation methods: An application to unemployment estimates from the UK
@@ -35,8 +35,7 @@ compare <- function(object, ...) UseMethod("compare")
 #' Chandra, H., Salvati, N. and Chambers, R. (2015), A Spatially 
 #' Nonstationary Fay-Herriot Model for Small Area Estimation, Journal 
 #' of the Survey Statistics and Methodology, 3, 109-135.
-#' @describeIn compare Assess the quality of the model-based estimates of a 
-#' Fay-Herriot model by comparing them with the direct estimates
+#' @rdname compare 
 #' @export
 #' @importFrom stats cor pchisq
 

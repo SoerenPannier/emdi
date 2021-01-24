@@ -15,31 +15,25 @@
 #'
 #' @details
 #' The three estimation functions are called \code{\link{direct}}, 
-#' \code{\link{ebp}} and \code{\link{fh}}. For all functions several methods are 
-#' available as \code{\link{estimators.emdi}}, \code{\link{compare_plot}}, 
-#' \code{\link{plot.emdi}} (only for emdi objects obtained by functions 
-#' \code{ebp} or \code{fh}), \code{print}, \code{\link{emdi_summaries}},
-#' Furthermore, functions \code{\link{map_plot}} and \code{\link{write.excel}} 
-#' help to visualize and export results. For the estimation function \code{fh}, 
-#' the stepwise variable selection function \code{\link{step}}, benchmarking 
-#' options \code{\link{benchmark}}, a method to assess the quality of 
-#' the model-based estimates \code{\link{compare.fh}} and a function to 
-#' detect spatial structures \code{\link{spatialcor.tests}} are provided.
-#' 
+#' \code{\link{ebp}} and \code{\link{fh}}. For all functions, several methods are 
+#' available as \code{\link{estimators.emdi}} and \code{\link{emdi_summaries}}. 
+#' For a full list, please see \code{\link{emdiObject}}. Furthermore, functions 
+#' \code{\link{map_plot}} and \code{\link{write.excel}} help to visualize and 
+#' export results. 
 #' An overview of all currently provided functions can be requested by
 #' \code{library(help=emdi)}.
 #'
 #' @references
-#' Kreutzmann, A., Pannier, S., Rojas-Perilla, N., Schmid, T., Templ, M. 
-#' and Tzavidis, N. (2019). The {R} Package {emdi} for Estimating and 
-#' Mapping Regionally Disaggregated Indicators, Journal of Statistical Software,
-#' Vol. 91, No. 7, 1--33, <doi:10.18637/jss.v091.i07> \cr \cr
 #' Battese, G.E., Harter, R.M. and Fuller, W.A. (1988). An Error-Components
 #' Model for Predictions of County Crop Areas Using Survey and Satellite Data.
 #' Journal of the American Statistical Association, Vol.83, No. 401, 28-36. \cr \cr
 #' Fay, R. E. and Herriot, R. A. (1979), Estimates of income for small places:
 #' An application of James-Stein procedures to census data, Journal of the 
 #' American Statistical Association 74(366), 269-277. \cr \cr
+#' Kreutzmann, A., Pannier, S., Rojas-Perilla, N., Schmid, T., Templ, M. 
+#' and Tzavidis, N. (2019). The {R} Package {emdi} for Estimating and 
+#' Mapping Regionally Disaggregated Indicators, Journal of Statistical Software,
+#' Vol. 91, No. 7, 1--33, <doi:10.18637/jss.v091.i07> \cr \cr
 #' Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
 #' indicators. The Canadian Journal of Statistics, Vol. 38, No.3, 369-385.
 #' @docType package

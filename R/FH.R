@@ -4,7 +4,7 @@
 #' \cite{Fay and Herriot (1979)}. Empirical best linear unbiased predictors 
 #' (EBLUPs) and mean squared error (MSE) estimates are provided. Additionally, 
 #' different extensions of the standard Fay-Herriot model are available: \cr 
-#' Adjusted estimation methods for the variance of the random effects (see also \cite{Li 
+#' Adjusted estimation methods for the variance of the random effects (see \cite{Li 
 #' and Lahiri (2010)} and \cite{Yoshimori and Lahiri (2014)}) are offered. Log 
 #' and arcsin transformation for the dependent variable and two types of 
 #' backtransformation can be chosen - a crude version
@@ -13,7 +13,7 @@
 #' \cite{Hadam et al. (2020)} for arcsin transformed variables. A spatial extension 
 #' to the Fay-Herriot model following \cite{Petrucci and Salvati (2006)} is also 
 #' included. In addition, it is possible to estimate a robust version of the 
-#' standard and of the spatial model (see also \cite{Warnholz (2017)}). Finally, 
+#' standard and of the spatial model (see \cite{Warnholz (2016)}). Finally, 
 #' a Fay-Herriot model can be estimated when the auxiliary information is measured 
 #' with error following \cite{Ybarra and Lohr (2008)}.
 #'
@@ -40,9 +40,9 @@
 #' (iv) adjusted ML following \cite{Li and Lahiri (2010)} ("\code{ampl}"),
 #' (v) adjusted REML following \cite{Yoshimori and Lahiri (2014)} ("\code{amrl_yl}"),
 #' (vi) adjusted ML following \cite{Yoshimori and Lahiri (2014)} ("\code{ampl_yl}"),
-#' (vii) robustified maximum likelihood with robust eblup prediction following
+#' (vii) robustified maximum likelihood with robust EBLUP prediction following
 #' \cite{Warnholz (2017)} ("\code{reblup}"), 
-#' (viii) robustified maximum likelihood with robust and bias-corrected eblup 
+#' (viii) robustified maximum likelihood with robust and bias-corrected EBLUP 
 #' prediction following \cite{Warnholz (2017)} ("\code{reblupbc}"),
 #' (ix) estimation of the measurement error model of \cite{Ybarra and Lohr 
 #' (2008)} ("\code{me}"). Defaults to "\code{reml}".
@@ -68,17 +68,17 @@
 #' of the dependent variable and of the sampling variances. Methods that can be chosen
 #' (i) no transformation ("\code{no}"),
 #' (ii) log transformation ("\code{log}") of the dependent variable and of 
-#' the sampling variances following \cite{Neves et al. (2013)}, 
+#' the sampling variances, 
 #' (iii) arcsin transformation ("\code{arcsin}") of the dependent variable and of 
-#' the sampling variances following \cite{Jiang et al. (2001)}. Defaults to "\code{no}".
+#' the sampling variances following. Defaults to "\code{no}". For more information, 
+#' how the direct estimate and its variance are transformed, please see the package 
+#' vignette "A Framework for Producing Small Area Estimates Based on Area-Level Models in R".
 #' @param backtransformation a character that determines the type of backtransformation 
 #' of the EBLUPs and MSE estimates. Required argument when a transformation is chosen. 
 #' Available methods are 
-#' (i) crude bias-correction following \cite{Neves et al. (2013)} and 
-#' \cite{Rao (2003)} when the log transformation is chosen 
-#' ("\code{bc_crude}"),
-#' (ii) bias-correction following \cite{Slud and Maiti (2006)} when the 
-#' log transformations is chosen ("\code{bc_sm}"),
+#' (i) crude bias-correction following \cite{Rao (2015)} when the log transformation 
+#' is chosen ("\code{bc_crude}"), (ii) bias-correction following \cite{Slud and Maiti (2006)} 
+#' when the log transformations is chosen ("\code{bc_sm}"),
 #' (iii) naive back transformation when the arcsin transformation 
 #' is chosen ("\code{naive}"),
 #' (iii) bias-corrected back transformation following \cite{Hadam et al. (2020)} 
@@ -181,7 +181,7 @@
 #' Data Analysis, 52, 5242–5252. \cr \cr
 #' Hadam, S., Wuerz, N. and Kreutzmann, A.-K. (2020), Estimating 
 #' regional unemployment with mobile network data for Functional Urban Areas in 
-#' Germany, Freie Universitaet Berlin. \cr \cr
+#' Germany, Refubium - Freie Universitaet Berlin Repository, 1-28. \cr \cr
 #' Jiang, J., Lahiri, P., Wan, S.-M. and Wu, C.-H. (2001), Jackknifing in the 
 #' Fay–Herriot model with an example. In Proc. Sem. Funding Opportunity in 
 #' Survey Research, Washington DC: Bureau of Labor Statistics, 75–97. \cr \cr
@@ -207,13 +207,13 @@
 #' Fay-Herriot models, Journal of the Royal Statistical Society:Series B 68(2),
 #' 239-257.\cr \cr
 #' Warnholz, S. (2016), saeRobust: Robust small area estimation. R package. \cr \cr
+#' Warnholz, S. (2016b). Small area estimation using robust extensions to area 
+#' level models. Ph.D. thesis, Freie Universitaet Berlin. \cr \cr
 #' Ybarra, L. and Lohr, S. (2008), Small area estimation when auxiliary 
 #' information is measured with error, Biometrika, 95(4), 919-931.\cr \cr
 #' Yoshimori, M. and Lahiri, P. (2014), A new adjusted maximum likelihood method
 #' for the Fay-Herriot small area model, Journal of Multivariate Analysis 124, 
-#' 281-294. \cr \cr
-#' Warnholz, S. (2016b). Small area estimation using robust extensions to area 
-#' level models. Ph.D. thesis, Freie Universitaet Berlin.
+#' 281-294. 
 #' @examples
 #' \donttest{
 #' # Loading data - population and sample data

@@ -19,10 +19,10 @@ The return of \code{compare} depends on the class of its argument. The
 documentation of particular methods gives detailed information about the
 return of that method.
 
-For the \code{fh} method the null hypothesis, the value W of the test 
+For the method for class "fh", the null hypothesis, the value W of the test 
 statistic, the degrees of freedom and the p value of the Brown test; and the 
 correlation coefficient of the synthetic part and the direct estimator 
-\cite{(Chandra et al. 2015)}.
+\cite{(Chandra et al. 2015)} are returned.
 }
 \description{
 Function \code{compare} is a generic function used to assess the quality of 
@@ -34,12 +34,6 @@ a goodness-of-fit test proposed by \cite{Brown et al. (2001)} and by computing
 the correlation between the regression-synthetic part of the Fay-Herriot model 
 and the direct estimates.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{fh}: Assess the quality of the model-based estimates of a 
-Fay-Herriot model by comparing them with the direct estimates
-}}
-
 \references{
 Brown, G., R. Chambers, P. Heady, and D. Heasman (2001). Evaluation of small 
 area estimation methods: An application to unemployment estimates from the UK

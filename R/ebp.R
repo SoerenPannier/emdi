@@ -32,7 +32,7 @@
 #' function will be evaluated once for the point estimation and in each iteration 
 #' of the parametric bootstrap. A threshold is needed for calculation e.g. of 
 #' head count ratios and poverty gaps. The  argument defaults to \code{NULL}. 
-#' In this case the threshold is set to 60\% of the median of the variable that 
+#' In this case, the threshold is set to 60\% of the median of the variable that 
 #' is selected as dependent variable similary to the at-risk-of-poverty rate 
 #' used in the EU (see also \cite{Social Protection Committee 2001}). However, 
 #' any desired threshold can be chosen.
@@ -60,17 +60,17 @@
 #' For practical applications, values larger than 200 are recommended (see also 
 #' \cite{Molina, I. and Rao, J.N.K. (2010)}).
 #' @param seed an integer to set the seed for the random number generator. For 
-#' the usage of random number generation see details. If seed is set to 
+#' the usage of random number generation, see Details. If seed is set to 
 #' \code{NULL}, seed is chosen randomly. Defaults to \code{123}.
 #' @param boot_type character string to choose between different MSE estimation 
 #' procedures,currently a \code{"parametric"} and a semi-parametric \code{"wild"} 
 #' bootstrap are possible. Defaults to \code{"parametric"}. 
 #' @param parallel_mode modus of parallelization, defaults to an automatic selection 
 #' of a suitable mode, depending on the operating system, if the number of 
-#' \code{cpus} is chosen higher than 1. For details see 
+#' \code{cpus} is chosen higher than 1. For details, see 
 #' \code{\link[parallelMap]{parallelStart}}.
 #' @param cpus number determining the kernels that are used for the 
-#' parallelization. Defaults to 1. For details see 
+#' parallelization. Defaults to 1. For details, see 
 #' \code{\link[parallelMap]{parallelStart}}.
 #' @param custom_indicator a list of functions containing the indicators to be
 #' calculated additionally. Such functions must and must only depend on the
@@ -91,16 +91,16 @@
 #' (10\%, 25\%, 75\% and 90\%), head count ratio, poverty gap, Gini coefficient
 #' and the quintile share ratio.
 #' @references
-#' Kreutzmann, A., Pannier, S., Rojas-Perilla, N., Schmid, T., Templ, M. 
-#' and Tzavidis, N. (2019). The {R} Package {emdi} for Estimating and 
-#' Mapping Regionally Disaggregated Indicators, Journal of Statistical Software,
-#' Vol. 91, No. 7, 1--33, <doi:10.18637/jss.v091.i07> \cr \cr
 #' Battese, G.E., Harter, R.M. and Fuller, W.A. (1988). An Error-Components
 #' Model for Predictions of County Crop Areas Using Survey and Satellite Data.
 #' Journal of the American Statistical Association, Vol.83, No. 401, 28-36. \cr \cr
 #' Gonzalez-Manteiga, W. et al. (2008). Bootstrap mean squared error of
 #' a small-area EBLUP. Journal of Statistical Computation and Simulation,
 #' 78:5, 443-462. \cr \cr
+#' Kreutzmann, A., Pannier, S., Rojas-Perilla, N., Schmid, T., Templ, M. 
+#' and Tzavidis, N. (2019). The {R} Package {emdi} for Estimating and 
+#' Mapping Regionally Disaggregated Indicators, Journal of Statistical Software,
+#' Vol. 91, No. 7, 1--33, <doi:10.18637/jss.v091.i07> \cr \cr
 #' Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
 #' indicators. The Canadian Journal of Statistics, Vol. 38, No.3, 369-385. \cr \cr
 #' Social Protection Committee (2001). Report on indicators in the field of

@@ -4,12 +4,12 @@
 #' 
 #' @param object1 an object of type "emdi".
 #' @param object2 an object of type "emdi".
-#' @param MSE if \code{TRUE}, MSE estimates are calculated. Defaults to \code{FALSE}.
+#' @param MSE if \code{TRUE}, MSE estimates are also returned. Defaults to \code{FALSE}.
 #' @param ... additional arguments that are not used in this method.
 #' @return Data frame containing the point estimates of both emdi objects. If 
 #' column names are duplicated, the suffixes "_1" and "_2" are added to their names.
 #' "_1" and "_2" standing for object1 and object2, respectively. If \code{MSE} is 
-#' set to \code{TRUE}, the data frame contains the MSE estimates of the emdi objects.
+#' set to \code{TRUE}, the data frame also contains the MSE estimates of the emdi objects.
 #' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}
 #' @examples
 #' \donttest{

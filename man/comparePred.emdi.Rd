@@ -11,7 +11,7 @@
 
 \item{object2}{an object of type "emdi".}
 
-\item{MSE}{if \code{TRUE}, MSE estimates are calculated. Defaults to \code{FALSE}.}
+\item{MSE}{if \code{TRUE}, MSE estimates are also returned. Defaults to \code{FALSE}.}
 
 \item{...}{additional arguments that are not used in this method.}
 }
@@ -19,7 +19,7 @@
 Data frame containing the point estimates of both emdi objects. If 
 column names are duplicated, the suffixes "_1" and "_2" are added to their names.
 "_1" and "_2" standing for object1 and object2, respectively. If \code{MSE} is 
-set to \code{TRUE}, the data frame contains the MSE estimates of the emdi objects.
+set to \code{TRUE}, the data frame also contains the MSE estimates of the emdi objects.
 }
 \description{
 Method \code{comparePred.emdi} compares predictions of two emdi objects.

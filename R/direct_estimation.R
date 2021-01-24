@@ -24,7 +24,7 @@
 #' estimation and in each iteration of the parametric bootstrap. See Example 2 
 #' for using a function as threshold.  A threshold is needed for calculation e.g. 
 #' of head count ratios and poverty gaps. The argument defaults to \code{NULL}. 
-#' In this case the threshold is set to 60\% of the median of the variable that 
+#' In this case, the threshold is set to 60\% of the median of the variable that 
 #' is selected as \code{y} similarly to the at-risk-of-poverty rate used in the 
 #' EU (see also \cite{Social Protection Committee 2001}). However, any desired 
 #' threshold can be chosen.
@@ -72,7 +72,7 @@
 #' # Loading sample data
 #' data("eusilcA_smp")
 #'
-#' # Example 1: Without weights and naive bootstrap
+#' # Example 1: With weights and naive bootstrap
 #' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
 #' smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
 #' boot_type = "naive", B = 50, seed = 123, X_calib = NULL, totals = NULL, 

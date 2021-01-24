@@ -18,7 +18,7 @@
 #' (Direct), point predictions (FH), benchmarked point predictions (FH_Bench) and 
 #' a variable indicating out-of-sample domains Out (1 for out-of-sample, 0 for 
 #' in-sample) . If overwrite is set to TRUE, the fh object is returned, but the 
-#' point predictions of the ind data frame are substituted by the benchmarked 
+#' point predictions of the ind data frame are complemented by the benchmarked 
 #' results.
 #' @details
 #' The benchmarking algorithm only works, if FH estimates are available. 

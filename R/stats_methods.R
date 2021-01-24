@@ -184,8 +184,8 @@ nobs.fh <- function(object, ...) {
 #' @param ... additional arguments that are not used in this method.
 #' @return Data frame with domain predictors.
 #' @details For a better selection of prediction results, it is referred to 
-#' method \code{\link{estimators}}. This methods allows to select among the indicators 
-#' of interest. 
+#' the generic function \code{\link{estimators}}. The methods for object of class 
+#' "emdi" allows to select among the indicators of interest. 
 #' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}
 #' @examples
 #' \donttest{

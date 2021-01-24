@@ -13,10 +13,7 @@
 #' For using this argument, package \pkg{ggplot2} must be loaded via
 #' \code{library(ggplot2)}. See also Example 4.
 #' @param ... optional arguments passed to generic function.
-#' @return Two Q-Q plots in one grid, two density plots, a Cook's distance plot
-#' and a likelihood plot for the optimal parameter of the Box-Cox transformation
-#' obtained by \code{\link[ggplot2]{ggplot}}. The latter two plots are only provided
-#' for ebp object.
+#' @return Two Q-Q plots in one grid obtained by \code{\link[ggplot2]{ggplot}}. 
 #' @seealso \code{\link{emdiObject}}, \code{\link{ebp}}, \code{\link{fh}}
 #' @examples
 #' \donttest{

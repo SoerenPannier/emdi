@@ -8,7 +8,8 @@
 #' respective row sums amount to 1. 
 #' 
 #' @details For a description of how to create the proximity matrix, 
-#' see the package vignette.
+#' see the package vignette "A Framework for Producing Small Area Estimates Based 
+#' on Area-Level Models in R". 
 #' 
 #' @docType data
 "eusilcA_prox"
