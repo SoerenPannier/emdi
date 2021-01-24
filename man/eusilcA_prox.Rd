@@ -18,6 +18,7 @@ domains of the \code{\link{eusilcA_smpAgg}} data set.
 }
 \details{
 For a description of how to create the proximity matrix, 
-see the package vignette.
+see the package vignette "A Framework for Producing Small Area Estimates Based 
+on Area-Level Models in R".
 }
 \keyword{datasets}

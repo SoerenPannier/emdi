@@ -21,8 +21,8 @@ object.
 }
 \details{
 For a better selection of prediction results, it is referred to 
-method \code{\link{estimators}}. This methods allows to select among the indicators 
-of interest.
+the generic function \code{\link{estimators}}. The methods for object of class 
+"emdi" allows to select among the indicators of interest.
 }
 \examples{
 \donttest{

@@ -27,7 +27,8 @@ When creating the proximity matrix \code{corMatrix}, please make
 sure that the elements of \code{direct} and \code{corMatrix} are sorted 
 equally and that \code{direct} and \code{corMatrix} do not contain any 
 \code{NA}s. For a description of how to create the proximity matrix, 
-see the package vignette. If direct estimates do not exist for every area 
+see the package vignette "A Framework for Producing Small Area Estimates Based 
+on Area-Level Models in R". If direct estimates do not exist for every area 
 contained in the proximity matrix, the proximity matrix needs to be 
 subsetted to the areas contained in the direct vector.
 }
