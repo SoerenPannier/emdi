@@ -131,6 +131,8 @@
 #' @importFrom gridExtra arrangeGrob grid.arrange
 #' @importFrom stats shapiro.test logLik cooks.distance
 #' @importFrom HLMdiag mdffits
+#' @name plot.emdi
+#' @order 1
 
 plot.emdi <- function(x,
                       label = "orig",

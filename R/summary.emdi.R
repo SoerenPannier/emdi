@@ -63,4 +63,5 @@
 #' summary(fh_std)
 #' }
 #' @name emdi_summaries
+#' @order 1
 NULL

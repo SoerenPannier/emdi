@@ -1,4 +1,4 @@
-#' @rdname compare_plots_emdi
+#' @rdname compare_plot
 #' @export
 compare_plot.fh <- function(model = NULL, direct = NULL, indicator = "all",
                               MSE = FALSE, CV = FALSE, label = "orig",
