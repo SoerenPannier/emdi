@@ -22,7 +22,14 @@ Types that can be chosen
 \item{...}{additional arguments that are not used in this method.}
 }
 \value{
-A variance-covariance matrix or a list of variance-covariance matrices.
+A variance-covariance matrix or a list of variance-covariance matrices, 
+if more than one individual is selected. For all types the dimensions of the 
+matrices are 1 x 1. For type "\code{marginal}" the diagonal elements of the 
+variance covariances matrices are returned for the chosen 
+individual. Please note, if the correlation argument of the fh object is set to 
+spatial, the variance covariance matrix has non-zero off-diagonal elements, 
+because the assumption of independency of the error terms does not hold. For 
+the non-spatial models the off-diagonal elements are zero.
 }
 \description{
 Method \code{getVarCov.fh} extracts the variance-covariance matrix from a fitted 

@@ -22,7 +22,10 @@ Types that can be chosen
 \item{...}{additional arguments that are not used in this method.}
 }
 \value{
-A variance-covariance matrix or a list of variance-covariance matrices.
+A variance-covariance matrix or a list of variance-covariance matrices, 
+if more than one individual is selected. The dimensions of the matrices are 
+1 x 1 for type "\code{random.effects}" and number of in-sample domains x number 
+of in-sample domains for types "\code{conditional}" and "\code{marginal}".
 }
 \description{
 Method \code{getVarCov.ebp} extracts the variance-covariance matrix from a fitted 
