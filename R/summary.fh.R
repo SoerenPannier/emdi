@@ -109,13 +109,7 @@ print.summary.fh <- function(x, ...) {
   cat("MSE method: ", x$method$MSE_method, "\n")
   cat("\n")
   cat("Coefficients:\n")
-  if (x$method$method == "reblup" | x$method$method == "reblupbc") {
-    printCoefmat(as.matrix(x$model$coefficients))
-  } else {
-    printCoefmat(as.matrix(x$model$coefficients), has.Pvalue = TRUE)
-  }
-  
-
+  printCoefmat(as.matrix(x$model$coefficients), has.Pvalue = TRUE)
   cat("\n")
   cat("Explanatory measures:\n")
   if (is.null(x$model$model_select)) {

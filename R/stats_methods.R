@@ -286,34 +286,5 @@ vcov.ebp <- function(object, ...) {
 
 vcov.fh <- function(object, ...) {
     throw_class_error(object, "fh")
-  
-  if (object$method$method == "reblup" | object$method$method == "reblupbc") {
-    D <- diag(1, object$framework$N_dom_smp)
-    model_X <- makeXY(object$fixed, object$framework$combined_data)$x
-    
-    if (object$model$correlation == "no"){
-      # Total variance-covariance matrix - only values on the diagonal due to
-      # independence of error terms
-      V <- object$model$variance * D%*%t(D) + diag(as.numeric(object$framework$vardir))
-      # Inverse of the total variance
-      Vi <- solve(V)
-      # Inverse of X'ViX
-      beta_vcov <- solve(t(model_X)%*%Vi%*%model_X) 
-    } else if (object$model$correlation == "spatial"){
-      Wt <- t(object$framework$W)
-      A <- solve((D - object$model$variance$correlation*Wt)%*%
-                   (D - object$model$variance$correlation*object$framework$W))
-      G <- object$model$variance$variance*A
-      # Total variance-covariance matrix 
-      V <- G + D*object$framework$vardir
-      # Inverse of the total variance
-      Vi <- solve(V)
-      # Inverse of X'ViX
-      beta_vcov <- solve(t(model_X)%*%Vi%*%model_X)
-    }
-    
-    beta_vcov
-  } else {
     object$model$beta_vcov
-  }
 }
