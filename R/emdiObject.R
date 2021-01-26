@@ -43,7 +43,7 @@
 #' \code{\link[emdi]{estimators}}, \code{\link[emdi]{plot.emdi}}, 
 #' \code{\link[emdi]{predict.emdi}}, \code{\link[emdi]{qqnorm.emdi}}\cr \cr
 #' Objects of class "direct", "ebp" and "fh" have methods for following generic 
-#' functions: \code{compare_plot} (for documentation, see \code{\link[emdi]{compare_plots_emdi}}), 
+#' functions: \code{compare_plot} (for documentation, see \code{\link[emdi]{compare_plot}}), 
 #' \code{getData} (for default documentation, see \code{\link[nlme]{getData}}), 
 #' \code{getGroups} (for default documentation, see \code{\link[nlme]{getGroups}}), 
 #' \code{getGroupsFormula} (for default documentation, see \code{\link[nlme]{getGroupsFormula}}), 
