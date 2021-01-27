@@ -149,10 +149,10 @@
 #' @param seed an integer to set the seed for the random number generator. For 
 #' the usage of random number generation see details. If seed is set to 
 #' \code{NULL}, seed is chosen randomly. Defaults to \code{123}.
-#' @return An object of class "fh", and "emdi" that provides estimators 
+#' @return An object of class "fh", "emdi" that provides estimators 
 #' for regional disaggregated indicators like means and ratios and optionally 
 #' corresponding MSE estimates. Several generic functions have methods for the 
-#' returend object. For a full list and descriptions of the components of objects 
+#' returned object. For a full list and descriptions of the components of objects 
 #' of class "emdi", see \code{\link{emdiObject}}.
 #' @details In the bootstrap approaches, random number generation is used. Thus, a 
 #' seed is set by the argument \code{seed}. \cr \cr

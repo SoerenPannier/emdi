@@ -528,6 +528,42 @@ elements are returned.')
   }
 }
 
+#' @export
+#' @method intervals ebp
+#' @importFrom nlme intervals
+
+intervals.ebp <- function(object, parm = NULL, level = 0.95, ...) {
+  throw_class_error(object, "ebp")
+  if (!is.null(parm)) {
+    confidence_intervals <- intervals(object$model, level = level)$fixed
+    subset(confidence_intervals, rownames(confidence_intervals) %in% parm)
+  } else {
+    intervals(object$model, level = level)$fixed
+  }
+  
+}
+
+#' @export
+#' @method intervals fh
+#' @importFrom nlme intervals
+
+intervals.fh <- function(object, parm = NULL, level = 0.95, ...) {
+  throw_class_error(object, "fh")
+  coefmat <- object$model$coefficients
+  
+  coefs <- coefmat[,1]
+  stds <- coefmat[,2]
+  dist <- qnorm(p = (1 - level) / 2, 0, stds)
+  ret_value <- data.frame(lower = coefs + dist,
+                          est. = coefs,         
+                          upper = coefs + abs(dist),
+                          row.names = row.names(coefmat))
+  if (is.null(parm)) {
+    as.matrix(ret_value)  
+  } else {
+    as.matrix(ret_value[parm, ])
+  }
+}
 
 # Extract random effects of emdi objects ---------------------------------------
 

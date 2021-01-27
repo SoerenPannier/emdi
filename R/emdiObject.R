@@ -60,7 +60,8 @@
 #' default documentation, see \code{\link[nlme]{fixed.effects}}), \code{formula} (for 
 #' default documentation, see \code{\link[stats]{formula}}), \code{getVarCov} 
 #' (for documentation, see \code{\link[emdi]{getVarCov.ebp}} and 
-#' \code{\link[emdi]{getVarCov.fh}}),\code{logLik} (for
+#' \code{\link[emdi]{getVarCov.fh}}), \code{intervals} (for
+#' default documentation, see \code{\link[nlme]{intervals}}), \code{logLik} (for
 #' default documentation, see \code{\link[stats]{logLik}}), \code{nobs} (for
 #' default documentation, see \code{\link[stats]{nobs}}), \code{ranef} (for default 
 #' documentation, see \code{\link[nlme]{random.effects}}), \code{residuals} 

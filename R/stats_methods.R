@@ -42,7 +42,7 @@ confint.ebp <- function(object, parm = NULL, level = 0.95, ...) {
 }
 
 #' @export
-#' @importFrom nlme intervals
+#' @method confint fh
 #' @importFrom stats confint
 confint.fh <- function(object, parm = NULL, level = 0.95, ...) {
   throw_class_error(object, "fh")
