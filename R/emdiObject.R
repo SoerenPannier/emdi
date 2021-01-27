@@ -39,7 +39,7 @@
 #'  bootstraps for each combination. For non-robust spatial Fay-Herriot, string
 #'  with number of successful bootstraps. Not filled for other models.}
 #' @details 
-#' Objects of class "emdi" have following methods: \code{\link[emdi]{comparePred.emdi}}, 
+#' Objects of class "emdi" have following methods: \code{\link[emdi]{compare_pred.emdi}}, 
 #' \code{\link[emdi]{estimators}}, \code{\link[emdi]{plot.emdi}}, 
 #' \code{\link[emdi]{predict.emdi}}, \code{\link[emdi]{qqnorm.emdi}}\cr \cr
 #' Objects of class "direct", "ebp" and "fh" have methods for following generic 
