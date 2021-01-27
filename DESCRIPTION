@@ -26,7 +26,8 @@ Description: Functions that support estimating, assessing and mapping regional
     see "The {R} Package {emdi} for Estimating and Mapping Regionally Disaggregated Indicators"
     by Kreutzmann et al. (2019) <doi:10.18637/jss.v091.i07>.
 Depends:
-    R (>= 3.5.0)
+    R (>= 3.5.0),
+    nlme
 License: GPL-2
 URL: https://github.com/SoerenPannier/emdi
 LazyData: true
