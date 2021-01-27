@@ -39,15 +39,15 @@
 #'  bootstraps for each combination. For non-robust spatial Fay-Herriot, string
 #'  with number of successful bootstraps. Not filled for other models.}
 #' @details 
-#' Objects of class "emdi" have following methods: \code{\link[emdi]{compare_pred.emdi}}, 
+#' Objects of class "emdi" have following methods: \code{\link[emdi]{compare_pred}}, 
 #' \code{\link[emdi]{estimators}}, \code{\link[emdi]{plot.emdi}}, 
 #' \code{\link[emdi]{predict.emdi}}, \code{\link[emdi]{qqnorm.emdi}}\cr \cr
 #' Objects of class "direct", "ebp" and "fh" have methods for following generic 
 #' functions: \code{compare_plot} (for documentation, see \code{\link[emdi]{compare_plot}}), 
-#' \code{getData} (for default documentation, see \code{\link[nlme]{getData}}), 
-#' \code{getGroups} (for default documentation, see \code{\link[nlme]{getGroups}}), 
-#' \code{getGroupsFormula} (for default documentation, see \code{\link[nlme]{getGroupsFormula}}), 
-#' \code{getResponse} (for default documentation, see \code{\link[nlme]{getResponse}}), 
+#' \code{getData} (for documentation, see \code{\link[emdi]{getData}}), 
+#' \code{getGroups} (for documentation, see \code{\link[emdi]{getGroups}}), 
+#' \code{getGroupsFormula} (for documentation, see \code{\link[emdi]{getGroupsFormula}}), 
+#' \code{getResponse} (for documentation, see \code{\link[emdi]{getResponse}}), 
 #' \code{plot} (for documentation, see \code{\link[emdi]{plot.emdi}}), \code{print}, 
 #' \code{qqnorm} (for documentation, see \code{\link[emdi]{qqnorm.emdi}}) and
 #' \code{summary} (for documentation, see \code{\link[emdi]{emdi_summaries}}).\cr \cr
@@ -57,14 +57,13 @@
 #' \code{family} (for default
 #' documentation, see \code{\link[stats]{family}}), \code{fitted} (for default
 #' documentation, see \code{\link[stats]{fitted.values}}), \code{fixef} (for 
-#' default documentation, see \code{\link[nlme]{fixed.effects}}), \code{formula} (for 
+#' documentation, see \code{\link[emdi]{fixef}}), \code{formula} (for 
 #' default documentation, see \code{\link[stats]{formula}}), \code{getVarCov} 
-#' (for documentation, see \code{\link[emdi]{getVarCov.ebp}} and 
-#' \code{\link[emdi]{getVarCov.fh}}), \code{intervals} (for
-#' default documentation, see \code{\link[nlme]{intervals}}), \code{logLik} (for
+#' (for documentation, see \code{\link[emdi]{getVarCov}}), \code{intervals} (for
+#' documentation, see \code{\link[emdi]{intervals}}), \code{logLik} (for
 #' default documentation, see \code{\link[stats]{logLik}}), \code{nobs} (for
-#' default documentation, see \code{\link[stats]{nobs}}), \code{ranef} (for default 
-#' documentation, see \code{\link[nlme]{random.effects}}), \code{residuals} 
+#' default documentation, see \code{\link[stats]{nobs}}), \code{ranef} (for 
+#' documentation, see \code{\link[emdi]{ranef}}), \code{residuals} 
 #' (for default documentation, see \code{\link[stats]{residuals}}), \code{terms} 
 #' (for default documentation, see \code{\link[stats]{terms}}), \code{vcov} 
 #' (for default documentation, see \code{\link[stats]{vcov}}) \cr \cr
