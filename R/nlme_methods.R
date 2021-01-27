@@ -9,7 +9,6 @@ fixef.ebp <- function(object, ...) {
   object$model$coefficients$fixed
 }
 
-
 #' @aliases fixed.effects
 #' @export
 #' @method fixef fh
@@ -24,32 +23,29 @@ fixef.fh <- function(object, ...) {
 
 
 # Extract emdi object data -----------------------------------------------------
-
-#' @export
-#' @method getData direct
 #' @importFrom nlme getData
+#' @export getData
+getData
 
+#' @export getData.direct
+#' @export
 getData.direct <- function(object, ...) {
   throw_class_error(object, "direct")
   object$framework$smp_data
 }
 
+#' @export getData.ebp
 #' @export
-#' @method getData ebp
-#' @importFrom nlme getData
-
 getData.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
-  if (object$transformation != "no"){
+  if (object$transformation != "no") {
     cat('The untransformed sample data set of the ebp object is returned. \n \n')
   }
   object$framework$smp_data
 }
 
-#' @export
-#' @method getData fh
-#' @importFrom nlme getData
-
+#' @export getData.fh
+#' @export 
 getData.fh <- function(object, ...) {
   throw_class_error(object, "fh")
   cat('The combined data set (combined_data) of the fh object is returned. \n \n')
