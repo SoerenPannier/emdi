@@ -293,9 +293,9 @@ add_summary_fh <- function(object, wb, headlines_cs) {
                                        "k", "MSE estimation")]
     } else if (su$method$method == "reblupbc") {
       estimMethods$k <- su$model$k
-      estimMethods$c <- su$model$c
+      estimMethods$mult_constant <- su$model$mult_constant
       estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
-                                       "k", "c", "MSE estimation")]
+                                       "k", "mult_constant", "MSE estimation")]
     }
   } else if (su$model$correlation == 'spatial') {
     estimMethods <- data.frame(su$method$method, su$model$variance['variance'], 
@@ -309,9 +309,9 @@ add_summary_fh <- function(object, wb, headlines_cs) {
                                        "k", "Spatial correlation", "MSE estimation")]
     } else if (su$method$method == "reblupbc") {
       estimMethods$k <- su$model$k
-      estimMethods$c <- su$model$c
+      estimMethods$mult_constant <- su$model$mult_constant
       estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
-                                       "k", "c", "Spatial correlation", "MSE estimation")]
+                                       "k", "mult_constant", "Spatial correlation", "MSE estimation")]
     }
   }
     

@@ -341,7 +341,7 @@ print.step_fh <- function(x, ...) {
   print(x$call)
   cat("\n")
   cat("Coefficients:\n ")
-  print(x$model$coefficients)
+  printCoefmat(as.matrix(x$model$coefficients), has.Pvalue = TRUE)
 } 
 
 

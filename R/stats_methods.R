@@ -219,6 +219,7 @@ nobs.fh <- function(object, ...) {
 #' }
 #' @export
 #' @method predict emdi
+#' @importFrom stats predict
 
 predict.emdi <- function(object, ...) {
   object$ind
@@ -246,7 +247,7 @@ residuals.ebp <- function(object, ...) {
 residuals.fh <- function(object, ...) {
   throw_class_error(object, "fh")
   type <- ''
-  try(type <- list(...)[[1]])
+  try(type <- list(...)[[1]], silent = TRUE)
   if (type == 'standardized') {
     object$model$std_real_residuals
   } else {

@@ -532,7 +532,7 @@ elements are returned.')
 #' @method intervals ebp
 #' @importFrom nlme intervals
 
-intervals.ebp <- function(object, parm = NULL, level = 0.95, ...) {
+intervals.ebp <- function(object, level = 0.95, parm = NULL, ...) {
   throw_class_error(object, "ebp")
   if (!is.null(parm)) {
     confidence_intervals <- intervals(object$model, level = level)$fixed
@@ -547,7 +547,7 @@ intervals.ebp <- function(object, parm = NULL, level = 0.95, ...) {
 #' @method intervals fh
 #' @importFrom nlme intervals
 
-intervals.fh <- function(object, parm = NULL, level = 0.95, ...) {
+intervals.fh <- function(object, level = 0.95, parm = NULL, ...) {
   throw_class_error(object, "fh")
   coefmat <- object$model$coefficients
   

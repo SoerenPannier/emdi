@@ -113,10 +113,10 @@ from the population and sample data. For the EBP procedure complete observations
 are required. Defaults to \code{FALSE}.}
 }
 \value{
-An object of class "emdi", "ebp" that provides estimators for regional
+An object of class "ebp", "emdi" that provides estimators for regional
 disaggregated indicators and optionally corresponding MSE estimates. Several 
 generic functions have methods for the 
-returend object. For a full list and descriptions of the components of objects 
+returned object. For a full list and descriptions of the components of objects 
 of class "emdi", see \code{\link{emdiObject}}.
 }
 \description{

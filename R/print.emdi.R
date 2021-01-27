@@ -95,15 +95,8 @@ print.fh <- function(x, ...) {
     cat("Variance of random effects: ", x$model$variance, "\n")
   } else {
     cat("Estimated variance component(s): ", x$model$correlation, "correlation assumed\n")
-    if (x$method$method == "reblup" | x$method$method == "reblupbc") {
-      cat("Variance of random effects: ", unname(x$model$variance[2]),"\n")
-      cat("Spatial correlation parameter: ", unname(x$model$variance[1]),"\n")
-    }
-    else {
-      cat("Variance of random effects: ", x$model$variance[1,2],"\n")
-      cat("Spatial correlation parameter: ", x$model$variance[1,1],"\n")
-    }
-    
+    cat("Variance of random effects: ", x$model$variance$variance,"\n")
+    cat("Spatial correlation parameter: ", x$model$variance$correlation,"\n")
   }
   cat("MSE method: ", x$method$MSE_method, "\n")
   cat("\n")
