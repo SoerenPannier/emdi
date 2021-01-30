@@ -48,11 +48,9 @@ Objects of class "emdi" have following methods: \code{\link[emdi]{compare_pred}}
 \code{\link[emdi]{estimators}}, \code{\link[emdi]{plot.emdi}}, 
 \code{\link[emdi]{predict.emdi}}, \code{\link[emdi]{qqnorm.emdi}}\cr \cr
 Objects of class "direct", "ebp" and "fh" have methods for following generic 
-functions: \code{compare_plot} (for documentation, see \code{\link[emdi]{compare_plot}}), 
-\code{getData} (for documentation, see \code{\link[emdi]{getData}}), 
-\code{getGroups} (for documentation, see \code{\link[emdi]{getGroups}}), 
-\code{getGroupsFormula} (for documentation, see \code{\link[emdi]{getGroupsFormula}}), 
-\code{getResponse} (for documentation, see \code{\link[emdi]{getResponse}}), 
+functions: \code{\link[emdi]{compare_plot}}, \code{\link[emdi]{getData}}, 
+\code{\link[emdi]{getGroups}}, \code{\link[emdi]{getGroupsFormula}}, 
+\code{\link[emdi]{getResponse}}, 
 \code{plot} (for documentation, see \code{\link[emdi]{plot.emdi}}), \code{print}, 
 \code{qqnorm} (for documentation, see \code{\link[emdi]{qqnorm.emdi}}) and
 \code{summary} (for documentation, see \code{\link[emdi]{emdi_summaries}}).\cr \cr
@@ -61,17 +59,14 @@ Objects of class "ebp" and "fh" additionally have methods for following generic 
 \code{confint} (for default documentation, see \code{\link[stats]{confint}}),
 \code{family} (for default
 documentation, see \code{\link[stats]{family}}), \code{fitted} (for default
-documentation, see \code{\link[stats]{fitted.values}}), \code{fixef} (for 
-documentation, see \code{\link[emdi]{fixef}}), \code{formula} (for 
-default documentation, see \code{\link[stats]{formula}}), \code{getVarCov} 
-(for documentation, see \code{\link[emdi]{getVarCov}}), \code{intervals} (for
-documentation, see \code{\link[emdi]{intervals}}), \code{logLik} (for
+documentation, see \code{\link[stats]{fitted.values}}), \code{\link[emdi]{fixef}}, 
+\code{formula} (for default documentation, see \code{\link[stats]{formula}}), 
+\code{\link[emdi]{getVarCov}}, \code{\link[emdi]{intervals}}, \code{logLik} (for
 default documentation, see \code{\link[stats]{logLik}}), \code{nobs} (for
-default documentation, see \code{\link[stats]{nobs}}), \code{ranef} (for 
-documentation, see \code{\link[emdi]{ranef}}), \code{residuals} 
-(for default documentation, see \code{\link[stats]{residuals}}), \code{terms} 
-(for default documentation, see \code{\link[stats]{terms}}), \code{vcov} 
-(for default documentation, see \code{\link[stats]{vcov}}) \cr \cr
+default documentation, see \code{\link[stats]{nobs}}), \code{\link[emdi]{ranef}}, 
+\code{residuals} (for default documentation, see \code{\link[stats]{residuals}}), 
+\code{terms} (for default documentation, see \code{\link[stats]{terms}}), 
+\code{vcov} (for default documentation, see \code{\link[stats]{vcov}}) \cr \cr
 Objects of class "ebp" have additionally methods for following generic 
 functions: \code{sigma} (for default documentation, see \code{\link[stats]{sigma}})\cr \cr
 Objects of class "fh" have additionally methods for following generic functions: 

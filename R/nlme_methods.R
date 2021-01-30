@@ -5,7 +5,7 @@
 #' 
 #' @param object an object of type "emdi", depending on the used method either "ebp" or "fh".
 #' @param ... additional arguments that are not used in this method.
-#' @return For classes ebp and fh a vector containing the fixed effects is 
+#' @return For classes "ebp" and "fh" a vector containing the fixed effects is 
 #' returned. 
 #' @details The alias \code{fixed.effects} can also be used instead of \code{fixef}. 
 #' The generic function \code{fixef} is imported from package nlme and 
@@ -75,8 +75,8 @@ fixed.effects.fh <- function(object, ...) {
 #' @param object an object of type "emdi", depending on the method either "direct", 
 #' "ebp" or "fh".
 #' @param ... additional arguments that are not used in this method.
-#' @return Data frame used to fit the model. For classes direct and ebp the 
-#' (untranformed) sample data is returned. For class fh the combined data set is returned.
+#' @return Data frame used to fit the model. For classes "direct" and "ebp" the 
+#' (untransformed) sample data is returned. For class "fh" the combined data set is returned.
 #' @details The generic function \code{getData} is imported from package nlme and 
 #' re-exported to make the S3-methods available, even though the nlme package 
 #' itself is not loaded or attached. For default documentation, 
@@ -296,7 +296,7 @@ getResponse.fh <- function(object, ...) {
 #' Extract variance-covariance matrix from an emdi object
 #'
 #' Methods \code{getVarCov.ebp} and \code{getVarCov.fh} extract the 
-#' variance-covariance matrix from a fitted model of class ebp or fh.
+#' variance-covariance matrix from a fitted model of class "ebp" or "fh".
 # 
 #' @param obj an object of type "emdi", either "ebp" or "fh".
 #' @param individuals vector of levels of the in-sample domains can be specified 
@@ -315,7 +315,7 @@ getResponse.fh <- function(object, ...) {
 #' "\code{conditional}" and "\code{marginal}". For method \code{getVarCov.fh}, 
 #' for all types the dimensions of the matrices are 1 x 1. For type "\code{marginal}" 
 #' the diagonal elements of the variance covariances matrices are returned for the chosen 
-#' individual. Please note, if the correlation argument of the fh object is set to 
+#' individual. Please note, if the correlation argument of the "fh" object is set to 
 #' spatial, the variance covariance matrix has non-zero off-diagonal elements, 
 #' because the assumption of independency of the error terms does not hold. For 
 #' the non-spatial models the off-diagonal elements are zero. 
@@ -345,7 +345,7 @@ getVarCov
 #' @export
 #' @rdname getVarCov
 
-getVarCov.ebp <- function(obj, individuals, type = "random.effects", ...) {
+getVarCov.ebp <- function(obj, individuals = 1, type = "random.effects", ...) {
   throw_class_error(obj, "ebp")
   
   if (is.null(type) || !(type == "random.effects" 

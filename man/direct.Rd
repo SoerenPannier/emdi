@@ -83,10 +83,10 @@ might not be used in the additional function. Defaults to \code{NULL}.}
 from the sample data. Defaults to \code{FALSE}.}
 }
 \value{
-An object of class "emdi", "direct" that provides direct estimators 
+An object of class "direct", "emdi" that provides direct estimators 
 for regional disaggregated indicators and optionally corresponding variance 
 estimates. Several generic functions have methods for the 
-returend object. For a full list and descriptions of the components of objects 
+returned object. For a full list and descriptions of the components of objects 
 of class "emdi", see \code{\link{emdiObject}}.
 }
 \description{

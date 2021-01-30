@@ -117,9 +117,9 @@ add_summary_ods_fh <- function(object, wb, headlines_cs) {
                                        "k", "Spatial correlation", "MSE estimation")]
     } else if (su$method$method == "reblupbc") {
       estimMethods$k <- su$model$k
-      estimMethods$c <- su$model$c
+      estimMethods$mult_constant <- su$model$mult_constant
       estimMethods <- estimMethods[, c("Variance estimation", "Estimated variance", 
-                                       "k", "c", "Spatial correlation", "MSE estimation")]
+                                       "k", "mult_constant", "Spatial correlation", "MSE estimation")]
     }
   }
   readODS::write_ods(x = estimMethods, path = paste0(wb, "_sumEstimMethods", ".ods"))

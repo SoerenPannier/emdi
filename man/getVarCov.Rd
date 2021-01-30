@@ -6,7 +6,7 @@
 \alias{getVarCov.fh}
 \title{Extract variance-covariance matrix from an emdi object}
 \usage{
-\method{getVarCov}{ebp}(obj, individuals, type = "random.effects", ...)
+\method{getVarCov}{ebp}(obj, individuals = 1, type = "random.effects", ...)
 
 \method{getVarCov}{fh}(obj, individuals = 1, type = "random.effects", ...)
 }
@@ -33,14 +33,14 @@ number of in-sample domains x number of in-sample domains for types
 "\code{conditional}" and "\code{marginal}". For method \code{getVarCov.fh}, 
 for all types the dimensions of the matrices are 1 x 1. For type "\code{marginal}" 
 the diagonal elements of the variance covariances matrices are returned for the chosen 
-individual. Please note, if the correlation argument of the fh object is set to 
+individual. Please note, if the correlation argument of the "fh" object is set to 
 spatial, the variance covariance matrix has non-zero off-diagonal elements, 
 because the assumption of independency of the error terms does not hold. For 
 the non-spatial models the off-diagonal elements are zero.
 }
 \description{
 Methods \code{getVarCov.ebp} and \code{getVarCov.fh} extract the 
-variance-covariance matrix from a fitted model of class ebp or fh.
+variance-covariance matrix from a fitted model of class "ebp" or "fh".
 }
 \details{
 The generic function \code{getVarCov} is imported from package nlme and 

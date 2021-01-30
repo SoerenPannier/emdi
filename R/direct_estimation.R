@@ -51,10 +51,10 @@
 #' might not be used in the additional function. Defaults to \code{NULL}.
 #' @param na.rm if \code{TRUE}, observations with \code{NA} values are deleted 
 #' from the sample data. Defaults to \code{FALSE}. 
-#' @return An object of class "emdi", "direct" that provides direct estimators 
+#' @return An object of class "direct", "emdi" that provides direct estimators 
 #' for regional disaggregated indicators and optionally corresponding variance 
 #' estimates. Several generic functions have methods for the 
-#' returend object. For a full list and descriptions of the components of objects 
+#' returned object. For a full list and descriptions of the components of objects 
 #' of class "emdi", see \code{\link{emdiObject}}.
 #' @details The set of predefined indicators includes the mean, median, four 
 #' further quantiles (10\%, 25\%, 75\% and 90\%), head count ratio, poverty gap, 

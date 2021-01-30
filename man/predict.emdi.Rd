@@ -20,7 +20,7 @@ best linear unbiased or empirical best predictors for all domains from an emdi
 object.
 }
 \details{
-For a better selection of prediction results, it is referred to 
+For a better selection of prediction results, it is referred to use 
 the generic function \code{\link{estimators}}. The methods for object of class 
 "emdi" allows to select among the indicators of interest.
 }

@@ -47,7 +47,7 @@ provided during the stepwise procedure. Defaults to \code{TRUE}.}
 }
 \value{
 The return of \code{step} depends on the class of its argument. Please 
-refer to the documentation of the step function of the stats package for 
+refer to the documentation of the \code{\link[stats]{step}} function of the stats package for 
 details of the default method.
 
 For the fh method information about the resulting "best" model due to 
@@ -63,7 +63,7 @@ algorithm.
 }
 \details{
 The default method of the generic function \code{step} 
-applies the \code{step} function for \code{lm} models of the stats package. 
+applies the \code{\link[stats]{step}} function for \code{lm} models of the stats package. 
 Please refer to the documentation of the \code{step} function of 
 the stats package for details.
 
@@ -72,21 +72,14 @@ The information criteria "\code{AICc}", "\code{AICb1}",
 "\code{KICb2}" are especially developed for Fay-Herriot models by 
 \cite{Marhuenda et al. (2014)}. They are based on a bootstrap 
 algorithm. If one of the criteria is chosen, make sure that the 
-bootstrap iterations (\code{B}) of the fh object are set to a positive number. 
-For some model extensions of the fh model only the "\code{AIC}" and 
+bootstrap iterations (\code{B}) of the "fh" object are set to a positive number. 
+For some model extensions of the Fay-Herriot model only the "\code{AIC}" and 
 the "\code{BIC}" information criteria are provided and for some none 
 of the information criteria are defined. Check the model_select 
-component of the fh object (objectname$model$model_select). If no 
+component of the "fh" object (objectname$model$model_select). If no 
 criteria are provided, it is not possible to apply the stepwise 
 variable selection algorithm.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{default}: Selects a lm model by AIC
-
-\item \code{fh}: Selects a Fay-Herriot model by different information criteria
-}}
-
 \examples{
 \donttest{
 # Loading data - population and sample data

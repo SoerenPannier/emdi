@@ -23,7 +23,7 @@
 \item{...}{additional arguments that are not used in this method.}
 }
 \value{
-For classes ebp and fh a vector containing the fixed effects is 
+For classes "ebp" and "fh" a vector containing the fixed effects is 
 returned.
 }
 \description{

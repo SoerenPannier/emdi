@@ -35,7 +35,7 @@ compare_plot.fh <- function(model = NULL, direct = NULL, indicator = "all",
 #' plot with these estimates.
 #' @param model an object of type "emdi", either "ebp" or "fh", representing point 
 #' and MSE estimates.
-#' @param direct an object of type "emdi","direct", representing point
+#' @param direct an object of type "direct","emdi", representing point
 #' and MSE estimates.
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");

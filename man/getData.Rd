@@ -20,8 +20,8 @@
 \item{...}{additional arguments that are not used in this method.}
 }
 \value{
-Data frame used to fit the model. For classes direct and ebp the 
-(untranformed) sample data is returned. For class fh the combined data set is returned.
+Data frame used to fit the model. For classes "direct" and "ebp" the 
+(untransformed) sample data is returned. For class "fh" the combined data set is returned.
 }
 \description{
 Methods \code{getData.direct}, \code{getData.ebp} and \code{getData.fh} extract 

@@ -30,11 +30,6 @@ of two model objects.
 
 Method \code{compare_pred.emdi} compares predictions of two emdi objects.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{emdi}: Compare predictions of two emdi objects
-}}
-
 \examples{
 \donttest{
 # Example for class ebp

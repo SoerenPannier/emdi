@@ -5,7 +5,7 @@
 #' estimation for all indicators or a selection of indicators. 
 #' @param model a model object of type "emdi", either "ebp" or "fh", representing 
 #' point and MSE estimates.
-#' @param direct an object of type "emdi","direct", representing point
+#' @param direct an object of type "direct","emdi", representing point
 #' and MSE estimates. If the input argument \code{model} is of type "ebp",
 #' \code{direct} is required. If the input argument \code{model} is of type 
 #' "fh", the \code{direct} component is already included in the input 
@@ -55,7 +55,7 @@ compare_plot <- function(model, direct,  indicator = "all", MSE = FALSE,
 #' estimates are compared by boxplots and scatter plots.
 #' @param model a model object of type "emdi", either "ebp" or "fh", representing 
 #' point and MSE estimates.
-#' @param direct an object of type "emdi","direct", representing point
+#' @param direct an object of type "direct","emdi", representing point
 #' and MSE estimates. If the input argument \code{model} is of type "ebp",
 #' \code{direct} is required. If the input argument \code{model} is of type 
 #' "fh", the \code{direct} component is already included in the input 

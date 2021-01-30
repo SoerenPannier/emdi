@@ -173,7 +173,7 @@ compare_pred <- function(object1, object2, MSE = FALSE, ...) UseMethod("compare_
 #' compare_pred(emdi_model_1, emdi_model_2)
 #' }
 #' @export
-#' @describeIn compare_pred Compare predictions of two emdi objects
+#' @rdname compare_pred
 #' @method compare_pred emdi
 
 

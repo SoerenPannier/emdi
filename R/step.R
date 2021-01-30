@@ -17,8 +17,9 @@
 #' @param steps a number determining the maximum number of steps. Defaults to 1000.
 #' @param ... arguments to be passed to or from other methods.
 #' @return The return of \code{step} depends on the class of its argument. Please 
-#' refer to the documentation of the step function of the stats package for 
+#' refer to the documentation of the \code{\link[stats]{step}} function of the stats package for 
 #' details of the default method.
+#' @name step
 #' @export
 #' @importFrom stats factor.scope 
 
@@ -31,12 +32,12 @@ step <- function (object, scope, criteria, direction, trace, steps,
 #' @param object an object of type "emdi", or a \code{lm} object.
 #' @param ... arguments to be passed to or from other methods.
 #' @details The default method of the generic function \code{step} 
-#' applies the \code{step} function for \code{lm} models of the stats package. 
+#' applies the \code{\link[stats]{step}} function for \code{lm} models of the stats package. 
 #' Please refer to the documentation of the \code{step} function of 
 #' the stats package for details.
 #' @seealso \code{\link[stats]{step}}
 #' @export
-#' @describeIn step Selects a lm model by AIC
+#' @rdname step 
 #' @method step default
 #' @importFrom stats step 
 step.default <- function(object,...) stats::step(object, ...)
@@ -74,11 +75,11 @@ step.default <- function(object,...) stats::step(object, ...)
 #' "\code{KICb2}" are especially developed for Fay-Herriot models by 
 #' \cite{Marhuenda et al. (2014)}. They are based on a bootstrap 
 #' algorithm. If one of the criteria is chosen, make sure that the 
-#' bootstrap iterations (\code{B}) of the fh object are set to a positive number. 
-#' For some model extensions of the fh model only the "\code{AIC}" and 
+#' bootstrap iterations (\code{B}) of the "fh" object are set to a positive number. 
+#' For some model extensions of the Fay-Herriot model only the "\code{AIC}" and 
 #' the "\code{BIC}" information criteria are provided and for some none 
 #' of the information criteria are defined. Check the model_select 
-#' component of the fh object (objectname$model$model_select). If no 
+#' component of the "fh" object (objectname$model$model_select). If no 
 #' criteria are provided, it is not possible to apply the stepwise 
 #' variable selection algorithm.
 #' @references 
@@ -108,7 +109,7 @@ step.default <- function(object,...) stats::step(object, ...)
 #' step(fh_std, criteria = "KICb2")
 #' }
 #' @export
-#' @describeIn step Selects a Fay-Herriot model by different information criteria
+#' @rdname step
 #' @method step fh
 #' @importFrom stats factor.scope   
 #' @importFrom utils capture.output

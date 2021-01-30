@@ -69,7 +69,7 @@ compare_plot(
 \item{model}{a model object of type "emdi", either "ebp" or "fh", representing 
 point and MSE estimates.}
 
-\item{direct}{an object of type "emdi","direct", representing point
+\item{direct}{an object of type "direct","emdi", representing point
 and MSE estimates. If the input argument \code{model} is of type "ebp",
 \code{direct} is required. If the input argument \code{model} is of type 
 "fh", the \code{direct} component is already included in the input 
