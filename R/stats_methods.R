@@ -150,7 +150,7 @@ formula.fh <- function(x, ...) {
 
 logLik.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
-  cat('Estimation approach used iS reml: ', round(object$model$logLik, 5))
+  cat('Estimation approach used is reml: ', round(object$model$logLik, 5))
   invisible(object$model$logLik)
 }
 
