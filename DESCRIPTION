@@ -40,14 +40,11 @@ Imports:
     gridExtra,
     openxlsx,
     reshape2,
-    graphics,
     stats,
     parallelMap,
     HLMdiag,
     parallel,
     boot,
-    rgeos,
-    maptools,
     MASS,
     readODS,
     formula.tools,
@@ -57,5 +54,8 @@ Suggests:
     testthat,
     R.rsp,
     simFrame,
-    laeken
+    laeken,
+    rgeos,
+    maptools,
+    graphics
 VignetteBuilder: R.rsp
