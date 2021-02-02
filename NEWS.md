@@ -1,3 +1,10 @@
+# emdi 2.0.2
+* Many S3-methods in the style of stats and nlme are implemented for the classes fh and ebp
+* Structure of S3-classes has been cleaned up
+* An additional bootstrap parameter in the fh-function was added to allow for seperatly controling the two seperate bootstraps
+* Renaming the robustness constant in the fh function
+* Minor fixes in the documentation
+
 # emdi 2.0.1
 * Robustifying tests to comply with alternative BLAS/LAPACK implementations
 * Robustifying tests to work with r-oldrel
