@@ -462,10 +462,9 @@ test_that("Does the fh function in emdi return the same variance, correlation
 test_that("Does the fh function in emdi return the same variance, correlation 
            parameter, EBLUP and MSE estimates as the functions rfh and mse 
           (boot) of package saeRobust?",{
-            
             select <- as.logical(Sys.getenv("_R_TEST_ROBUST_TRUEFALSE_"))
             if (is.na(select)) {
-              select <- TRUE
+              select <- FALSE
             }
             ############################ REBLUP model fitting ############################
             
