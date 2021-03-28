@@ -36,6 +36,12 @@ print.ebp <- function(x, ...) {
                                    Shift_parameter = round(x$transform_param$shift_par,3),
                                    row.names       = ""
     )
+  } else if (x$transformation == "dual") {
+    transform_method <- data.frame(Transformation  = x$transformation,
+                                   Method          = x$method,
+                                   Optimal_lambda  = x$transform_param$optimal_lambda,
+                                   row.names       = ""
+    )
   } else if (x$transformation == "log") {
     transform_method <- data.frame(Transformation  = x$transformation,
                                    Shift_parameter = round(x$transform_param$shift_par,3),

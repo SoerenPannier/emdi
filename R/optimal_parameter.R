@@ -72,6 +72,7 @@ reml <- function(fixed          = fixed,
                                                  transformation = transformation,
                                                  lambda         = lambda
                                                  )
+  
   model_REML <- NULL
   try(model_REML <- lme(fixed     = fixed,
                         data      = sd_transformed_data,

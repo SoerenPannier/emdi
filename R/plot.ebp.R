@@ -40,7 +40,7 @@ plot.ebp <- function(x,
     }
   }
   
-  if (x$transformation == "box.cox") {
+  if (x$transformation == "box.cox" | x$transformation == "dual") {
     boxcox = TRUE
     if (is.null(range)) {
       range <- seq(x$transform_param$optimal_lambda - .2,

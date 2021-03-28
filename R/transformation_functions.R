@@ -70,6 +70,8 @@ data_transformation <- function(fixed,
     log_transform(y = y_vector, shift = 0)
   } else if (transformation == "box.cox") {
     box_cox(y = y_vector, lambda = lambda, shift = 0)
+  } else if (transformation == "dual") {
+    dual(y = y_vector, lambda = lambda, shift = NULL)
   }
 
   smp_data[paste(fixed[2])] <- transformed$y
@@ -92,12 +94,14 @@ std_data_transformation <- function(fixed=fixed,
 
   std_transformed <- if (transformation == "box.cox"){
     as.data.frame(box_cox_std(y = y_vector, lambda = lambda))
+    } else if (transformation == "dual") {
+      as.data.frame(dual_std(y = y_vector, lambda = lambda))
     } else if (transformation == "log") {
     smp_data[paste(fixed[2])]
     } else if (transformation == "no") {
     smp_data[paste(fixed[2])]
     }
-
+  
   smp_data[paste(fixed[2])] <- std_transformed
   return(transformed_data = smp_data)
 } # End std_data_transformation
@@ -112,6 +116,8 @@ back_transformation <- function(y, transformation, lambda, shift) {
     log_transform_back(y = y, shift = shift)
   } else if (transformation == "box.cox") {
     box_cox_back(y = y, lambda = lambda, shift = shift)
+  } else if (transformation == "dual") {
+    dual_back(y = y, lambda = lambda)
   }
   return(y = back_transformed)
 } # End back_transform
@@ -224,3 +230,52 @@ box_cox_back <- function(y, lambda, shift = 0) {
   return(y = y)
 } #  End box_cox_back
 
+
+# The dual transformation ----------------------------------------------------------------------
+
+# Transformation: dual
+dual <-  function(y, lambda = lambda, shift = NULL) {
+  lambda_absolute <- abs(lambda)
+  
+  if (lambda_absolute <= 1e-12) {  #case lambda=0
+    yt <-  log(y)
+  } else if (lambda > 1e-12){
+    yt <- (y^(lambda) - y^(-lambda))/(2 * lambda)
+  } else {
+    stop("lambda cannot be negative for the dual transformation")
+  }
+  return(list(y = yt, shift = NULL))
+  #return(y = yt)
+}
+
+# Standardized transformation: dual
+dual_std <- function(y, lambda) {
+  
+  yt <- dual(y, lambda)$y
+  
+  zt <- if (abs(lambda) > 1e-12) {
+    geo <- geometric.mean(y^(lambda -1) + y^(-lambda -1))
+    zt <- yt * 2 / geo
+  } else {
+    zt <- geometric.mean(y) * log(y)
+  }
+  
+  y <- zt
+  
+  return(y)
+}
+
+# Back transformation: dual
+dual_back <- function(y, lambda = lambda) {
+  lambda_absolute <- abs(lambda)
+  if(lambda_absolute <= 1e-12)
+  {
+    y <- exp(y)
+  }
+  else
+  {
+    y <- (lambda * y + sqrt(lambda^2 * y^2 + 1))^(1/lambda)
+  }
+  
+  return(y = y)
+}

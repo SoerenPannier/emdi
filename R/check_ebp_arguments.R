@@ -56,7 +56,7 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
           See also help(ebp).')
   }
   if (is.null(transformation) || !(transformation == "box.cox" 
-        || transformation == "log" 
+        || transformation == "log" || transformation == "dual"
         || transformation == "no")) {
     stop("The three options for transformation are ''no'', ''log'' or ''box.cox''." )
   }

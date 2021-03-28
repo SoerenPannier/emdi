@@ -28,6 +28,12 @@ summary.ebp <- function(object, ...) {
                                    Shift_parameter = round(object$transform_param$shift_par,3),
                                    row.names       = ""
     )
+  } else if (object$transformation == "dual") {
+    transform_method <- data.frame(Transformation  = object$transformation,
+                                   Method          = object$method,
+                                   Optimal_lambda  = object$transform_param$optimal_lambda,
+                                   row.names       = ""
+    )
   } else if (object$transformation == "log") {
     transform_method <- data.frame(Transformation  = object$transformation,
                                    Shift_parameter = round(object$transform_param$shift_par,3),
