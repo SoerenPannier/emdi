@@ -40,8 +40,9 @@ plot.ebp <- function(x,
     }
   }
   
-  if (x$transformation == "box.cox" | x$transformation == "dual") {
+  if (x$transformation == "box.cox" | x$transformation == "dual" | x$transformation == "log.shift") {
     boxcox = TRUE
+
     if (is.null(range)) {
       range <- seq(x$transform_param$optimal_lambda - .2,
                    x$transform_param$optimal_lambda + .2,
@@ -49,6 +50,7 @@ plot.ebp <- function(x,
     } else {
       range <- range
     }
+    
     
     likelihoods <- vapply(range,
                           function(lam, fixed , smp_data, smp_domains,

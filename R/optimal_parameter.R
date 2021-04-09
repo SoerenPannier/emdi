@@ -19,6 +19,7 @@ optimal_parameter <- function(generic_opt,
                                   interval       = interval,
                                   maximum        = FALSE
                                   )$minimum
+    
 
   } else {
     optimal_parameter <- NULL
@@ -72,6 +73,7 @@ reml <- function(fixed          = fixed,
                                                  transformation = transformation,
                                                  lambda         = lambda
                                                  )
+  
   
   model_REML <- NULL
   try(model_REML <- lme(fixed     = fixed,

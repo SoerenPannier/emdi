@@ -28,7 +28,7 @@ summary.ebp <- function(object, ...) {
                                    Shift_parameter = round(object$transform_param$shift_par,3),
                                    row.names       = ""
     )
-  } else if (object$transformation == "dual") {
+  } else if (object$transformation == "dual" | object$transformation == "log.shift") {
     transform_method <- data.frame(Transformation  = object$transformation,
                                    Method          = object$method,
                                    Optimal_lambda  = object$transform_param$optimal_lambda,

@@ -156,6 +156,7 @@ plot.emdi <- function(x,
   likelihoods <- extra_args[["likelihoods"]]
   boxcox <- extra_args[["boxcox"]]
   
+  
   label <- define_label(x = x, label = label)
   
   ## QQ Plots
