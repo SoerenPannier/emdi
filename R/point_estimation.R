@@ -10,7 +10,7 @@
 point_estim <- function (framework,
                          fixed,
                          transformation,
-                         interval=c(-1,2),
+                         interval,
                          L,
                          keep_data  = FALSE
                          ) {

@@ -13,7 +13,7 @@ ebp(
   L = 50,
   threshold = NULL,
   transformation = "box.cox",
-  interval = c(-1, 2),
+  interval = "default",
   MSE = FALSE,
   B = 50,
   seed = 123,

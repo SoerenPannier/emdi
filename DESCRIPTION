@@ -41,6 +41,7 @@ Imports:
     openxlsx,
     reshape2,
     stats,
+    stringr,
     parallelMap,
     HLMdiag,
     parallel,

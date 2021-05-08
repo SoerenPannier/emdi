@@ -131,6 +131,7 @@
 #' @importFrom gridExtra arrangeGrob grid.arrange
 #' @importFrom stats shapiro.test logLik cooks.distance
 #' @importFrom HLMdiag mdffits
+#' @importFrom stringr str_to_title
 #' @name plot.emdi
 #' @order 1
 
@@ -154,7 +155,7 @@ plot.emdi <- function(x,
   cook_df <- extra_args[["cook_df"]]
   indexer <- extra_args[["indexer"]]
   likelihoods <- extra_args[["likelihoods"]]
-  boxcox <- extra_args[["boxcox"]]
+  opt_lambda <- extra_args[["opt_lambda"]]
   
   
   label <- define_label(x = x, label = label)
@@ -209,16 +210,16 @@ plot.emdi <- function(x,
              ggtitle(label$cooks["title"]) + gg_theme))
   }
   
-  if (boxcox == TRUE) {
+  if (opt_lambda == TRUE) {
     cat("Press [enter] to continue")
     line <- readline()
     
-    if (any(label$box_cox["x_lab"] == "expression(lambda)") ||
-        any(label$box_cox["x_lab"] == "expression(Lambda)")) {
+    if (any(label$opt_lambda["x_lab"] == "expression(lambda)") ||
+        any(label$opt_lambda["x_lab"] == "expression(Lambda)")) {
       
       x_lab <- expression(lambda)
     } else {
-      x_lab <- label$box_cox["x_lab"]
+      x_lab <- label$opt_lambda["x_lab"]
     }
     if (any(is.na(likelihoods))) {
       warning(paste0("For some lambda in the chosen range, the ",
@@ -229,9 +230,9 @@ plot.emdi <- function(x,
     print((plotList[[5]] <- ggplot(data.frame(lambda = range,
                                               log_likelihood = likelihoods),
                                    aes(x = lambda, y = log_likelihood)) + geom_line() +
-             xlab(x_lab) + ylab(label$box_cox["y_lab"]) +
+             xlab(x_lab) + ylab(label$opt_lambda["y_lab"]) +
              geom_vline(xintercept = range[which.max(likelihoods)],
-                        colour = color[1]) + ggtitle(label$box_cox["title"]) +
+                        colour = color[1]) + ggtitle(label$opt_lambda["title"]) +
              gg_theme))
   }
   invisible(plotList)
@@ -268,7 +269,7 @@ define_label <- function(x, label){
                       cooks = c(title = "Cook's Distance Plot",
                                 y_lab = "Cook's Distance",
                                 x_lab = "Index"),
-                      box_cox = c(title = "Box-Cox - REML",
+                      opt_lambda = c(title = paste0(str_to_title(gsub("\\.","-", x$transformation)), ' - REML'),
                                   y_lab = "Log-Likelihood",
                                   x_lab = "expression(lambda)"))
 
@@ -288,7 +289,7 @@ define_label <- function(x, label){
                       cooks = c(title = "",
                                 y_lab = "",
                                 x_lab = ""),
-                      box_cox = c(title = "",
+                      opt_lambda = c(title = "",
                                   y_lab = "",
                                   x_lab = ""))
       }
@@ -310,7 +311,7 @@ define_label <- function(x, label){
                     cooks = c(title = "",
                               y_lab = "",
                               x_lab = ""),
-                    box_cox = c(title = "",
+                    opt_lambda = c(title = "",
                                 y_lab = "",
                                 x_lab = ""))
     } else if (label == "no_title") {
@@ -331,7 +332,7 @@ define_label <- function(x, label){
                       cooks = c(title = "",
                                 y_lab = "Cook's Distance",
                                 x_lab = "Index"),
-                      box_cox = c(title = "",
+                      opt_lambda = c(title = "",
                                   y_lab = "Log-Likelihood",
                                   x_lab = "expression(lambda)"))
 
@@ -351,7 +352,7 @@ define_label <- function(x, label){
                       cooks = c(title = "",
                                 y_lab = "",
                                 x_lab = ""),
-                      box_cox = c(title = "",
+                      opt_lambda = c(title = "",
                                   y_lab = "",
                                   x_lab = ""))
       }
@@ -362,10 +363,10 @@ define_label <- function(x, label){
 
     if (!any(names(label) %in% c("qq_res", "qq_ran",
                                "d_res", "d_ran",
-                               "cooks", "box_cox"))) {
+                               "cooks", "opt_lambda"))) {
      stop("List elements must have following names even though not
           all must be included: qq_res, qq_ran, d_res, d_ran, cooks,
-          box_cox. Every list element must have the elements title,
+          opt_lambda. Every list element must have the elements title,
           y_lab and x_lab. See also help(plot.emdi).")
     }
     for (i in names(label)) {
@@ -391,7 +392,7 @@ define_label <- function(x, label){
                          cooks = c(title = "Cook's Distance Plot",
                                    y_lab = "Cook's Distance",
                                    x_lab = "Index"),
-                         box_cox = c(title = "Box-Cox - REML",
+                         opt_lambda = c(title = paste0(str_to_title(gsub("\\.","-", x$transformation)), ' - REML'),
                                      y_lab = "Log-Likelihood",
                                      x_lab = "expression(lambda)"))
 
@@ -420,18 +421,18 @@ define_label <- function(x, label){
       } else {
         label$cooks <- orig_label$cooks
       }
-      if (any(names(label) == "box_cox")) {
-        label$box_cox <- label$box_cox
+      if (any(names(label) == "opt_lambda")) {
+        label$opt_lambda <- label$opt_lambda
       } else {
-        label$box_cox <- orig_label$box_cox
+        label$opt_lambda <- orig_label$opt_lambda
       }
   }
 
   if (any(!(names(label) %in%  c("qq_res", "qq_ran",
                                "d_res", "d_ran",
-                               "cooks", "box_cox")))) {
+                               "cooks", "opt_lambda")))) {
     warning("One or more list elements are not called qq_res, qq_ran, d_res,
-             d_ran, cooks or box_cox. The changes are for this/these element(s)
+             d_ran, cooks or opt_lambda. The changes are for this/these element(s)
             is/are not done. Instead the original labels are used.")
   }
 

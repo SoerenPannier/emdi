@@ -60,12 +60,16 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
         || transformation == "no")) {
     stop("The three options for transformation are ''no'', ''log'' or ''box.cox''." )
   }
-  if (length(interval) != 2 || !is.vector(interval, mode = "numeric") ||
-      !(interval[1] < interval[2])) {
-    stop("interval needs to be a numeric vector of length 2 
-         defining a lower and upper limit for the estimation of the optimal 
-         transformation parameter. The value of the lower limit needs to be 
-         smaller than the upper limit. See also help(ebp).")
+  if (any(interval != 'default') & !is.vector(interval, mode = "numeric") & 
+      length(interval) != 2 & !(interval[1] < interval[2])) {
+         stop("interval needs to be a numeric vector of length 2 
+              defining a lower and upper limit for the estimation of the optimal 
+              transformation parameter. The value of the lower limit needs to be 
+              smaller than the upper limit. You can also choose 'default'. See also help(ebp).")
+  }
+  if (transformation == 'dual' & any(interval < 0)) {
+    stop("For the dual transformation, lambda needs to be positive, so the lower 
+          limit of the interval cannot be negative. See also help(ebp).")
   }
   if (!is.logical(MSE) || length(MSE) != 1) {
     stop("MSE must be a logical value. Set MSE to TRUE or FALSE. See also

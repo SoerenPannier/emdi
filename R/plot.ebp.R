@@ -18,7 +18,7 @@ plot.ebp <- function(x,
   cook_df <- NULL
   indexer <- NULL
   likelihoods <- NULL
-  boxcox <- FALSE
+  opt_lambda <- FALSE
   
   if (cooks == TRUE) {
     cooksdist <- NULL
@@ -41,12 +41,21 @@ plot.ebp <- function(x,
   }
   
   if (x$transformation == "box.cox" | x$transformation == "dual" | x$transformation == "log.shift") {
-    boxcox = TRUE
+    opt_lambda = TRUE
 
     if (is.null(range)) {
-      range <- seq(x$transform_param$optimal_lambda - .2,
-                   x$transform_param$optimal_lambda + .2,
-                   by = 0.025)
+      #range <- seq(x$transform_param$optimal_lambda - .2,
+      #             x$transform_param$optimal_lambda + .2,
+      #             by = 0.025)
+      if (x$transformation == 'box.cox') {
+        range <- seq(-1, 2, length = 50)
+      } else if (x$transformation == 'dual') {
+        range <- seq(0, 2, length = 50)
+      } else if (x$transformation == 'log.shift') {
+        vector <- x$framework$smp_data[paste(x$fixed[2])]
+        range <- seq(min(vector), max(vector), length = 50)
+      }
+      
     } else {
       range <- range
     }
@@ -76,7 +85,7 @@ plot.ebp <- function(x,
     }
   }
   NextMethod("plot", cooks = cooks, range = range,
-             boxcox = boxcox, cook_df = cook_df,
+             opt_lambda = opt_lambda, cook_df = cook_df,
              indexer = indexer, likelihoods = likelihoods,
              residuals = residuals, 
              srand.eff = srand.eff, tmp = tmp
