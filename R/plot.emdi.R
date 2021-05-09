@@ -20,7 +20,7 @@
 #' labels nor title ("blank").
 #' (iv) individual labels by a list that needs to
 #' have below structure. Six elements can be defined called \code{qq_res, qq_ran,
-#' d_res, d_ran, cooks} and \code{box_cox} for the six different plots and these
+#' d_res, d_ran, cooks} and \code{opt_lambda} for the six different plots and these
 #' list elements need to have three elements each called \code{title, y_lab and
 #' x_lab}. Only the labels for the plots that should be different to the original
 #' need to be specified. Please see the details section for an example 
@@ -46,7 +46,9 @@
 #' and a likelihood plot for the optimal parameter of the Box-Cox transformation
 #' obtained by \code{\link[ggplot2]{ggplot}}. The latter two plots are only provided
 #' for ebp object.
-#' @details The default settings of the \code{label} argument are as follows:\cr
+#' @details The default settings of the \code{label} argument are as follows (please
+#' note that the title for opt_lambda depends on the chosen transformation, for 
+#' the example Box-Cox is shown):\cr
 ##' \describe{
 ##' \item{list(}{}
 ##' \item{qq_res =}{c(title="Error term", y_lab="Quantiles of pearson residuals",
@@ -63,7 +65,7 @@
 ##' \item{cooks =}{c(title="Cook's Distance Plot",
 ##'                y_lab="Cook's Distance",
 ##'                x_lab="Index"),}
-##' \item{box_cox =}{c(title="Box-Cox - REML",
+##' \item{opt_lambda =}{c(title="Box-Cox - REML",
 ##'                y_lab="Log-Likelihood",
 ##'                x_lab="expression(lambda)"))}
 ##' }
@@ -360,10 +362,18 @@ define_label <- function(x, label){
     }
 
   } else if (inherits(label, "list")) {
+    
+    if(any(names(label) == 'box_cox')) {
+      warning("In following versions of package emdi, the list element
+              box_cox will be renamed into opt_lambda.")
+    }
 
     if (!any(names(label) %in% c("qq_res", "qq_ran",
                                "d_res", "d_ran",
-                               "cooks", "opt_lambda"))) {
+                               "cooks", "opt_lambda")) || 
+        !any(names(label) %in% c("qq_res", "qq_ran",
+                                 "d_res", "d_ran",
+                                 "cooks", "box_cox"))) {
      stop("List elements must have following names even though not
           all must be included: qq_res, qq_ran, d_res, d_ran, cooks,
           opt_lambda. Every list element must have the elements title,
@@ -421,16 +431,21 @@ define_label <- function(x, label){
       } else {
         label$cooks <- orig_label$cooks
       }
-      if (any(names(label) == "opt_lambda")) {
-        label$opt_lambda <- label$opt_lambda
-      } else {
+      if (any(names(label) == "opt_lambda") || any(names(label) == "box_cox")) {
+        if (any(names(label) == "opt_lambda")) {
+          label$opt_lambda <- label$opt_lambda
+        } else if (any(names(label) == "box_cox")) {
+          label$opt_lambda <- label$box_cox
+        }
+      }
+      else {
         label$opt_lambda <- orig_label$opt_lambda
       }
   }
 
   if (any(!(names(label) %in%  c("qq_res", "qq_ran",
                                "d_res", "d_ran",
-                               "cooks", "opt_lambda")))) {
+                               "cooks", "opt_lambda", "box_cox")))) {
     warning("One or more list elements are not called qq_res, qq_ran, d_res,
              d_ran, cooks or opt_lambda. The changes are for this/these element(s)
             is/are not done. Instead the original labels are used.")

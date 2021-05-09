@@ -1,0 +1,158 @@
+---
+title: "Transformations for the EBP in emdi"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Transformations for the EBP in emdi
+
+The R package emdi allows a range of data transformations for the function ebp 
+to get domain specific indicators obtained by Empirical Best Prediction (EBP). 
+Since the relies on the normality assumption for the error terms transformations 
+may help to achieve the normality. 
+
+With emdi version XX, the following options for the transformation argument in function 
+ebp will be available: 
+\begin{itemize}
+\item \texttt{no}: No transformation 
+\item \texttt{log}: Log transformation with a deterministic shift
+\item \texttt{box.cox}: Box-Cox transformation with a deterministic shift
+\item \texttt{dual}: Dual transformation with a deterministic shift
+\item \texttt{log.shift}: Log transformation with an optimized shift
+\end{itemize}
+
+While the log transformation does not rely on a transformation parameter, the 
+Box-Cox, Dual and Log-shift transformation depend on a transformation parameter 
+lambda that can be estimated from the data to find the optimal transformation 
+parameter. The estimation approach provided in emdi is the restricted maximum 
+likelihood following Gurka (2006). 
+
+A comparison of the various data-driven transformations in the EBP, can be found 
+in Rojas et al (2019). 
+
+```{r installation}
+library(devtools)
+build('C:/Users/Ann-Kristin/Documents/emdiWeltbank')
+library(emdi)
+# Load sample data set
+data("eusilcA_smp")
+data('eusilcA_pop')
+```
+
+## Transformation without transformation parameter
+
+### Log transformation 
+
+The log transformation does not depend on a transformation parameter but the 
+vector of the dependent variable is shifted to the positive range by a deterministic 
+shift. 
+
+```{r log}
+ebp_log <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+                   unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
+                   fam_allow + house_allow + cap_inv + tax_adj, 
+               pop_data = eusilcA_pop, pop_domains = "district", 
+               smp_data = eusilcA_smp, smp_domains = "district",
+               threshold = 10885.33, MSE = FALSE, 
+               transformation = 'log')
+summary(ebp_log)
+```
+
+The transformation is log with a zero shift since there are no negative values in 
+the dependent variable in this example. The Shapiro-Wilk test rejects normality 
+for both error terms. Additional to the tests shown in the summary, the plot 
+method can be used to assess the normality of the error terms.
+
+```{r log_plot}
+plot(ebp_log)
+```
+
+## Transformation with transformation parameter
+
+### Box-Cox transformation 
+
+The Box-Cox transformation depends on one transformation parameter and is only 
+defined for positive y. Therefore, a deterministic shift first shifts the dependent 
+variable to the positive range and then the transformation is applied. For the 
+estimation of the transformation parameter, an interval for the optimization needs 
+to be defined. In emdi, a default option can be chosen which equals an interval 
+between -1 and 2. This interval will be reasonable for many applications but it 
+can happen that the interval needs to be adjusted. This can be done with a numeric
+vector of length two defining the lower and upper limit of the interval, e.g. 
+c(-1, 2) for the default interval. 
+
+```{r bc}
+ebp_bc <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+                   unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
+                   fam_allow + house_allow + cap_inv + tax_adj, 
+               pop_data = eusilcA_pop, pop_domains = "district", 
+               smp_data = eusilcA_smp, smp_domains = "district",
+               threshold = 10885.33, MSE = FALSE, 
+               transformation = 'bc', interval = 'default')
+summary(ebp_bc)
+```
+
+
+```{r bc_plot}
+plot(ebp_bc)
+```
+
+### Dual transformation 
+
+The Box-Cox transformation depends on one transformation parameter and is only 
+defined for positive y. Therefore, a deterministic shift first shifts the dependent 
+variable to the positive range and then the transformation is applied. For the 
+estimation of the transformation parameter, an interval for the optimization needs 
+to be defined. In emdi, a default option can be chosen which equals an interval 
+between -1 and 2. This interval will be reasonable for many applications but it 
+can happen that the interval needs to be adjusted. This can be done with a numeric
+vector of length two defining the lower and upper limit of the interval, e.g. 
+c(-1, 2) for the default interval. 
+
+```{r dual}
+ebp_dual <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+                   unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
+                   fam_allow + house_allow + cap_inv + tax_adj, 
+               pop_data = eusilcA_pop, pop_domains = "district", 
+               smp_data = eusilcA_smp, smp_domains = "district",
+               threshold = 10885.33, MSE = FALSE, 
+               transformation = 'dual', interval = 'default')
+summary(ebp_dual)
+```
+
+
+```{r dual_plot}
+plot(ebp_dual)
+```
+
+
+### Log-Shift transformation 
+
+The Box-Cox transformation depends on one transformation parameter and is only 
+defined for positive y. Therefore, a deterministic shift first shifts the dependent 
+variable to the positive range and then the transformation is applied. For the 
+estimation of the transformation parameter, an interval for the optimization needs 
+to be defined. In emdi, a default option can be chosen which equals an interval 
+between -1 and 2. This interval will be reasonable for many applications but it 
+can happen that the interval needs to be adjusted. This can be done with a numeric
+vector of length two defining the lower and upper limit of the interval, e.g. 
+c(-1, 2) for the default interval. 
+
+```{r logShift}
+ebp_logShift <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+                   unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
+                   fam_allow + house_allow + cap_inv + tax_adj, 
+               pop_data = eusilcA_pop, pop_domains = "district", 
+               smp_data = eusilcA_smp, smp_domains = "district",
+               threshold = 10885.33, MSE = FALSE, 
+               transformation = 'log.shift', interval = 'default')
+summary(ebp_logShift)
+```
+
+
+```{r logShift_plot}
+plot(ebp_logShift)
+```
