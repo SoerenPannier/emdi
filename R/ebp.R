@@ -36,17 +36,19 @@
 #' is selected as dependent variable similary to the at-risk-of-poverty rate 
 #' used in the EU (see also \cite{Social Protection Committee 2001}). However, 
 #' any desired threshold can be chosen.
-#' @param transformation a character string. Three different transformation
+#' @param transformation a character string. Five different transformation
 #' types for the dependent variable can be chosen (i) no transformation ("no");
-#' (ii) log transformation ("log"); (iii) Box-Cox transformation ("box.cox").
+#' (ii) log transformation ("log"); (iii) Box-Cox transformation ("box.cox"); 
+#' (iv) Dual transformation ("dual"); (v) Log-Shift transformation ("log.shift").
 #' Defaults to \code{"box.cox"}.
-#' @param interval a numeric vector containing a lower and upper limit
-#' determining an interval for the estimation of the optimal parameter. The 
-#' interval is passed to function \code{\link[stats]{optimize}} for the 
-#' optimization. Defaults to c(-1,2). If the convergence fails, it is often 
-#' advisable to choose a smaller more suitable interval. For right skewed 
-#' distributions the negative values may be excluded, also values larger than 1 
-#' are seldom observed. 
+#' @param interval a string equal to 'default' or a numeric vector containing a 
+#' lower and upper limit determining an interval for the estimation of the optimal 
+#' parameter. The interval is passed to function \code{\link[stats]{optimize}} for 
+#' the optimization. Defaults to 'default' which equals c(-1,2) for Box-Cox, 
+#' c(0,2) for Dual and c(min(y), max(y)) for Log-Shift transformation. If the 
+#' convergence fails, it is often advisable to choose a smaller more suitable 
+#' interval. For right skewed distributions, the negative values may be excluded, 
+#' also values larger than 1 are seldom observed. 
 #' @param L a number determining the number of Monte-Carlo simulations that 
 #' must be at least 1. Defaults to 50. For practical applications, values 
 #' larger than 200 are recommended (see also 

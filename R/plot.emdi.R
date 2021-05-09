@@ -8,8 +8,8 @@
 #' log-likelihood of the estimation of the optimal parameter in Box-Cox
 #' transformations (the latter two only for ebp). The return depends on the
 #' transformation such that a plot for the optimal parameter is
-#' only returned in case a Box-Cox transformation is chosen. The range of the
-#' x-axis is optional but necessary to change if there are convergence problems.
+#' only returned in case a transformation with transformation parameter is chosen. 
+#' The range of the x-axis is optional but necessary to change if there are convergence problems.
 #' All plots are obtained by \code{\link[ggplot2]{ggplot}}.
 #' @param x an object of type "emdi", either "ebp" or "fh", representing point 
 #' and, if chosen, MSE estimates obtained by the EBP or Fay-Herriot approach 
@@ -37,14 +37,14 @@
 #' set to \code{FALSE}. It defaults to \code{TRUE}.
 #' @param range optional sequence determining the range of the x-axis for plots
 #' of the optimal transformation parameter that defaults to \code{NULL}. In that
-#' case a range of the optimal parameter +2/-1 is used for the plots of the
+#' case a range of the default interval is used for the plots of the
 #' optimal parameter. This leads in some cases to convergence problems such that
 #' it should be changed to e.g. the selected \code{interval}. This means for the
 #' default interval \code{seq(-1, 2, by = 0.05)}.
 #' @param ... optional arguments passed to generic function.
 #' @return Two Q-Q plots in one grid, two density plots, a Cook's distance plot
-#' and a likelihood plot for the optimal parameter of the Box-Cox transformation
-#' obtained by \code{\link[ggplot2]{ggplot}}. The latter two plots are only provided
+#' and a likelihood plot for the optimal parameter of transformations with transformation 
+#' parameter obtained by \code{\link[ggplot2]{ggplot}}. The latter two plots are only provided
 #' for ebp object.
 #' @details The default settings of the \code{label} argument are as follows (please
 #' note that the title for opt_lambda depends on the chosen transformation, for 

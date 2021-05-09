@@ -15,8 +15,8 @@
 #' Function \code{data_transformation} transforms the dependent variable from 
 #' the formula object \code{fixed} in the given sample data set. Thus, it 
 #' returns the original sample data set with transformed dependent variable. 
-#' For the transformation three types can be chosen, particularly no, natural 
-#' log and Box-Cox transformation.  
+#' For the transformation five types can be chosen, particularly no, natural 
+#' log, Box-Cox, Dual and Log-Shift transformation.  
 #'
 #' @param fixed a two-sided linear formula object describing the
 #' fixed-effects part of the nested error linear regression model with the
@@ -27,17 +27,19 @@
 #' \code{fixed}. If transformed data is further used to fit a nested error
 #' linear regression model, \code{smp_data} also needs to comprise the variable
 #' named in \code{smp_domains} (see \code{\link{ebp}}).
-#' @param transformation a character string. Three different transformation
+#' @param transformation a character string. Five different transformation
 #' methods for the dependent variable can be chosen (i) no transformation ("no");
 #' (ii) natural log transformation ("log"); (iii) Box-Cox transformation
-#' ("box.cox").
-#' @param lambda a scalar parameter that determines the Box-Cox transformation. 
-#' In case of no and natural log transformation \code{lambda} can be set to NULL.
+#' ("box.cox"); (iv) Dual transformation ("dual"); (v) Log-Shift transformation
+#' ("log.shift")..
+#' @param lambda a scalar parameter that determines the transformations with 
+#' transformation parameter. In case of no and natural log transformation 
+#' \code{lambda} can be set to NULL.
 #' @return a named list with two elements, a data frame containing the data set
 #' with transformed dependent variable (\code{transformed_data}) and a shift 
 #' parameter \code{shift} if present. In case of no transformation, the original 
 #' data frame is returned and the shift parameter is NULL.
-#' @details For the natural log and Box-Cox transformation the dependent variable 
+#' @details For the natural log and Box-Cox transformation, the dependent variable 
 #' is shifted such that all values are greater than zero since the transformations 
 #' are not applicable for values equal to or smaller than zero. The shift is 
 #' calculated as follows: 

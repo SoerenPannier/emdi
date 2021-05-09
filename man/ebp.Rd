@@ -63,18 +63,20 @@ is selected as dependent variable similary to the at-risk-of-poverty rate
 used in the EU (see also \cite{Social Protection Committee 2001}). However, 
 any desired threshold can be chosen.}
 
-\item{transformation}{a character string. Three different transformation
+\item{transformation}{a character string. Five different transformation
 types for the dependent variable can be chosen (i) no transformation ("no");
-(ii) log transformation ("log"); (iii) Box-Cox transformation ("box.cox").
+(ii) log transformation ("log"); (iii) Box-Cox transformation ("box.cox"); 
+(iv) Dual transformation ("dual"); (v) Log-Shift transformation ("log.shift").
 Defaults to \code{"box.cox"}.}
 
-\item{interval}{a numeric vector containing a lower and upper limit
-determining an interval for the estimation of the optimal parameter. The 
-interval is passed to function \code{\link[stats]{optimize}} for the 
-optimization. Defaults to c(-1,2). If the convergence fails, it is often 
-advisable to choose a smaller more suitable interval. For right skewed 
-distributions the negative values may be excluded, also values larger than 1 
-are seldom observed.}
+\item{interval}{a string equal to 'default' or a numeric vector containing a 
+lower and upper limit determining an interval for the estimation of the optimal 
+parameter. The interval is passed to function \code{\link[stats]{optimize}} for 
+the optimization. Defaults to 'default' which equals c(-1,2) for Box-Cox, 
+c(0,2) for Dual and c(min(y), max(y)) for Log-Shift transformation. If the 
+convergence fails, it is often advisable to choose a smaller more suitable 
+interval. For right skewed distributions, the negative values may be excluded, 
+also values larger than 1 are seldom observed.}
 
 \item{MSE}{if \code{TRUE}, MSE estimates using a parametric bootstrap approach
 are calculated (see also \cite{Gonzalez-Manteiga et al. (2008)}). Defaults
