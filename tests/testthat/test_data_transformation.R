@@ -106,10 +106,8 @@ test_that("Test if data_transformation returns correctly
                                    lambda=lambda,
                                    transformation="dual")$shift
   
-  
-  
   expect_equal(transformed_y_dual, as.numeric(as.character(data_dual$y)))
-  expect_equal(shift_dual, NULL)
+  expect_equal(shift_dual, data_dual$m[1])
   expect_equal(std_transformed_y_dual, as.numeric(as.character(data_dual_std[,1])))
   
   # Log-Shift transformation
@@ -203,7 +201,7 @@ test_that("Does back transformation gives sample value?", {
   back_trans_dual <- back_transformation(y=as.numeric(as.character(data_dual$y)), 
                                        transformation="dual",
                                        lambda=lambda,
-                                       shift=NULL)
+                                       shift=data_dual$m[1])
   expect_equal(back_trans_dual, incomedata$income)
   
   back_trans_logshift <- back_transformation(y=as.numeric(as.character(data_logshift$y)), 

@@ -73,9 +73,9 @@ Defaults to \code{"box.cox"}.}
 lower and upper limit determining an interval for the estimation of the optimal 
 parameter. The interval is passed to function \code{\link[stats]{optimize}} for 
 the optimization. Defaults to 'default' which equals c(-1,2) for Box-Cox, 
-c(0,2) for Dual and c(min(y), max(y)) for Log-Shift transformation. If the 
-convergence fails, it is often advisable to choose a smaller more suitable 
-interval. For right skewed distributions, the negative values may be excluded, 
+c(0,2) for Dual and an interval based on the range of y for Log-Shift 
+transformation. If the convergence fails, it is often advisable to choose a 
+smaller more suitable interval. For right skewed distributions, the negative values may be excluded, 
 also values larger than 1 are seldom observed.}
 
 \item{MSE}{if \code{TRUE}, MSE estimates using a parametric bootstrap approach

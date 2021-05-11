@@ -53,7 +53,16 @@ plot.ebp <- function(x,
         range <- seq(0, 2, length = 50)
       } else if (x$transformation == 'log.shift') {
         vector <- x$framework$smp_data[paste(x$fixed[2])]
-        range <- seq(min(vector), max(vector), length = 50)
+        span <- range(vector)
+        if( (span[1]+1) <= 1) {
+          lower <- abs(span[1])+1
+        } else {
+          lower <- 0
+        }
+        
+        upper = diff(span) / 2
+        
+        range <- seq(lower, upper, length = 50)
       }
       
     } else {

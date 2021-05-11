@@ -73,8 +73,9 @@ set to \code{FALSE}. It defaults to \code{TRUE}.}
 of the optimal transformation parameter that defaults to \code{NULL}. In that
 case a range of the default interval is used for the plots of the
 optimal parameter. This leads in some cases to convergence problems such that
-it should be changed to e.g. the selected \code{interval}. This means for the
-default interval \code{seq(-1, 2, by = 0.05)}.}
+it should be changed to e.g. the selected \code{interval}. The default value 
+depends on the chosen data driven transformation and equals the default 
+interval for the estimation of the optimal parameter.}
 
 \item{...}{optional arguments passed to generic function.}
 }

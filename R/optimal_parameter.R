@@ -11,11 +11,21 @@ optimal_parameter <- function(generic_opt,
     # no lambda -> no estimation -> no optmimization
     
     if (transformation == 'box.cox' & any(interval == 'default')) {
-      interval = c(-1, 2)
+      interval <- c(-1, 2)
     } else if (transformation == 'dual' & any(interval == 'default')) {
-      interval = c(0, 2)
+      interval <- c(0, 2)
     } else if (transformation == 'log.shift' & any(interval == 'default')) {
-      interval = c(min(smp_data[paste(fixed[2])]), max(smp_data[paste(fixed[2])]))
+      #interval = c(min(smp_data[paste(fixed[2])]), max(smp_data[paste(fixed[2])]))
+      span <- range(smp_data[paste(fixed[2])])
+      if( (span[1]+1) <= 1) {
+        lower <- abs(span[1])+1
+        } else {
+        lower <- 0
+        }
+      
+      upper = diff(span) / 2
+      
+      interval <- c(lower, upper)
     } 
 
     # Estimation of optimal lambda parameters
