@@ -21,14 +21,14 @@ summary.ebp <- function(object, ...) {
   sizedom_smp_pop <- rbind(Sample_domains = smp_size_dom,
                            Population_domains = pop_size_dom)
   
-  if (object$transformation == "box.cox") {
+  if (object$transformation == "box.cox" | object$transformation == "dual") {
     transform_method <- data.frame(Transformation  = object$transformation,
                                    Method          = object$method,
                                    Optimal_lambda  = object$transform_param$optimal_lambda,
                                    Shift_parameter = round(object$transform_param$shift_par,3),
                                    row.names       = ""
     )
-  } else if (object$transformation == "dual" | object$transformation == "log.shift") {
+  } else if (object$transformation == "log.shift") {
     transform_method <- data.frame(Transformation  = object$transformation,
                                    Method          = object$method,
                                    Optimal_lambda  = object$transform_param$optimal_lambda,
