@@ -39,7 +39,7 @@
 #' with transformed dependent variable (\code{transformed_data}) and a shift 
 #' parameter \code{shift} if present. In case of no transformation, the original 
 #' data frame is returned and the shift parameter is NULL.
-#' @details For the natural log and Box-Cox transformation, the dependent variable 
+#' @details For the natural log, Box-Cox and Dual transformation, the dependent variable 
 #' is shifted such that all values are greater than zero since the transformations 
 #' are not applicable for values equal to or smaller than zero. The shift is 
 #' calculated as follows: 

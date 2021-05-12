@@ -234,7 +234,9 @@ plot.emdi <- function(x,
                                               log_likelihood = likelihoods),
                                    aes(x = lambda, y = log_likelihood)) + geom_line() +
              xlab(x_lab) + ylab(label$opt_lambda["y_lab"]) +
-             geom_vline(xintercept = range[which.max(likelihoods)],
+             #geom_vline(xintercept = range[which.max(likelihoods)],
+             #            colour = color[1]) + ggtitle(label$opt_lambda["title"]) +
+             geom_vline(xintercept = x$transform_param$optimal_lambda,
                         colour = color[1]) + ggtitle(label$opt_lambda["title"]) +
              gg_theme))
   }
