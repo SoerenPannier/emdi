@@ -18,7 +18,7 @@ point_estim <- function (framework,
   # Transformation of data -------------------------------------------------------
 
   # Estimating the optimal parameter by optimization
-
+  # browser()
   # Optimal parameter function returns the minimum of the optimization
   # functions from generic_opt; the minimum is the optimal lambda.
   # The function can be found in the script optimal_parameter.R
@@ -32,6 +32,7 @@ point_estim <- function (framework,
 
   # Data_transformation function returns transformed data and shift parameter.
   # The function can be found in the script transformation_functions.R
+  # browser()
   transformation_par <- data_transformation(fixed          = fixed,
                                             smp_data       = framework$smp_data,
                                             transformation = transformation,
@@ -44,26 +45,28 @@ point_estim <- function (framework,
   # Estimation of the nested error linear regression model
   # See Molina and Rao (2010) p. 374
   # lme function is included in the nlme package which is imported.
+  
+    mixed_model <- nlme::lme(fixed  = fixed,
+                             data   = transformation_par$transformed_data ,
+                             random = as.formula(paste0("~ 1 | as.factor(", 
+                                                        framework$smp_domains, ")")),
+                             method = "REML",
+                             keep.data = keep_data)
 
-  mixed_model <- nlme::lme(fixed  = fixed,
-                     data   = transformation_par$transformed_data ,
-                     random = as.formula(paste0("~ 1 | as.factor(", 
-                                                framework$smp_domains, ")")),
-                     method = "REML",
-                     keep.data = keep_data)
 
   # Function model_par extracts the needed parameters theta from the nested
   # error linear regression model. It returns the beta coefficients (betas),
   # sigmae2est, sigmau2est and the random effect (rand_eff).
-
+  #browser()
   est_par <- model_par(mixed_model = mixed_model,
-                       framework   = framework
+                       framework   = framework,
+                       fixed       = fixed,
+                       transformation_par = transformation_par
                        )
-
+# browser()
   # Function gen_model calculates the parameters in the generating model.
   # See Molina and Rao (2010) p. 375 (20)
   # The function returns sigmav2est and the constant part mu.
-
   gen_par <- gen_model(model_par   = est_par,
                        fixed       = fixed,
                        framework   = framework
@@ -105,24 +108,103 @@ point_estim <- function (framework,
 # sigmae2est, sigmau2est and the random effect (rand_eff).
 
 model_par <- function(framework,
-                      mixed_model) {
-  # fixed parametersn
-  betas <- nlme::fixed.effects(mixed_model)
-  # Estimated error variance
-  sigmae2est <- mixed_model$sigma^2
-  # VarCorr(fit2) is the estimated random error variance
-  sigmau2est <- as.numeric(nlme::VarCorr(mixed_model)[1,1])
-  # Random effect: vector with zeros for all domains, filled with
-  rand_eff <- rep(0, length(unique(framework$pop_domains_vec)))
-  # random effect for in-sample domains (dist_obs_dom)
-  rand_eff[framework$dist_obs_dom] <- (random.effects(mixed_model)[[1]])
-
-  return(list(betas      = betas,
-              sigmae2est = sigmae2est,
-              sigmau2est = sigmau2est,
-              rand_eff   = rand_eff
-              )
-         )
+                      mixed_model,
+                      fixed,
+                      transformation_par) {
+  # browser()
+  if(is.null(framework$weights)) {
+    # fixed parametersn
+    betas <- nlme::fixed.effects(mixed_model)
+    # Estimated error variance
+    sigmae2est <- mixed_model$sigma^2
+    # VarCorr(fit2) is the estimated random error variance
+    sigmau2est <- as.numeric(nlme::VarCorr(mixed_model)[1,1])
+    # Random effect: vector with zeros for all domains, filled with
+    # browser()
+    rand_eff <- rep(0, length(unique(framework$pop_domains_vec)))
+    # random effect for in-sample domains (dist_obs_dom)
+    rand_eff[framework$dist_obs_dom] <- (random.effects(mixed_model)[[1]])
+    
+    return(list(betas      = betas,
+                sigmae2est = sigmae2est,
+                sigmau2est = sigmau2est,
+                rand_eff   = rand_eff
+                )
+    )
+  } else {
+    # fixed parameters
+    betas <- nlme::fixed.effects(mixed_model)
+    # Estimated error variance
+    sigmae2est<-mixed_model$sigma^2
+    # VarCorr(fit2) is the estimated random error variance
+    sigmau2est <- as.numeric(nlme::VarCorr(mixed_model)[1,1])
+    # Random effect: vector with zeros for all domains, filled with
+    # browser()
+    # rand_eff <- rep(0, length(unique(framework$pop_domains_vec)))
+    # # random effect for in-sample domains (dist_obs_dom)
+    # rand_eff[framework$dist_obs_dom] <- (random.effects(mixed_model)[[1]])
+       
+    
+  
+    # Calculations needed for pseudo EB
+    
+    wsum     <- rep(0, framework$N_dom_smp)
+    meanysdw <- rep(0, framework$N_dom_smp)
+    meanXsw  <- matrix(0 ,nrow = framework$N_dom_smp, ncol = length(betas)) # p = number of aux variables including intercept
+    delta2d  <- rep(0,framework$N_dom_smp)
+    gammadw  <- rep(0,framework$N_dom_smp)
+    nums0    <- matrix(0, nrow = length(betas), ncol = 1)
+    dens0    <- matrix(0, nrow = length(betas), ncol = length(betas))
+    
+    for (d in 1:framework$N_dom_smp){
+      domain  <- as.character(unique(framework$smp_domains_vec)[d])
+      
+      # Domain means of of the dependent variable
+      ysd     <- transformation_par$transformed_data[[as.character(mixed_model$terms[[2]])]][
+        framework$smp_domains_vec == domain]
+      wsd     <- transformation_par$transformed_data[[as.character(framework$weights)]][
+        framework$smp_domains_vec == domain]
+      wsum[d] <- sum(wsd)
+      Xsd     <- model.matrix(fixed, framework$smp_data)[framework$smp_domains_vec == domain,]
+      
+      # weighted mean ot the dependent variable
+      meanysdw[d] <- sum(wsd * ysd) / wsum[d]
+      
+      # weighted means of the auxilliary information
+      for (k in 1:length(betas)){
+        meanXsw[d,k] <- sum(wsd * Xsd[,k]) / wsum[d]      
+      }
+      
+      delta2d[d] <- sum(wsd^2) / (wsum[d]^2)
+      gammadw[d] <- sigmau2est / (sigmau2est + sigmae2est * delta2d[d])
+      dwsd       <- diag(wsd)
+      ysd_ast    <- ysd - gammadw[d] * meanysdw[d]
+      Xsd_Wsd    <- t(Xsd) %*% dwsd
+      Xsd_ast    <- Xsd - matrix(rep(gammadw[d] * meanXsw[d,], framework$n_smp[d]),
+                                 nrow = framework$n_smp[d], byrow = TRUE)
+      
+      nums0 <- nums0 + (Xsd_Wsd %*% ysd_ast)
+      dens0 <- dens0 + (Xsd_Wsd %*% Xsd_ast)
+      
+    }
+    
+    
+    betas    <- solve(dens0) %*% nums0
+    # Random effect: vector with zeros for all domains, filled with
+    rand_eff <- rep(0, length(unique(framework$pop_domains_vec)))
+    # random effect for in-sample domains (dist_obs_dom)
+    rand_eff[framework$dist_obs_dom] <- gammadw * (meanysdw - meanXsw %*% betas) # (random.effects(mixed_model)[[1]])
+    # rand_eff <- gammadw * (meanysdw - meanXsw %*% betas)
+    
+    return(list(betas      = betas,
+                sigmae2est = sigmae2est,
+                sigmau2est = sigmau2est,
+                rand_eff   = rand_eff,
+                gammaw     = gammadw
+                )
+    )
+  }
+  
 } # End model_par
 
 
@@ -132,22 +214,42 @@ model_par <- function(framework,
 gen_model <- function(fixed,
                       framework,
                       model_par) {
-  # Parameter for calculating variance of new random effect
-  gamma <- model_par$sigmau2est / (model_par$sigmau2est +
-                                     model_par$sigmae2est / framework$n_smp)
-  # Variance of new random effect
-  sigmav2est <- model_par$sigmau2est * (1 - gamma)
-  # Random effect in constant part of y for in-sample households
-  rand_eff_pop <- rep(model_par$rand_eff, framework$n_pop)
-  # Model matrix for population covariate information
-  framework$pop_data[[paste0(fixed[2])]] = seq_len(nrow(framework$pop_data))
-  X_pop <- model.matrix(fixed, framework$pop_data)
+  if(is.null(framework$weights)) {
+    # Parameter for calculating variance of new random effect
+    gamma <- model_par$sigmau2est / (model_par$sigmau2est +
+                                       model_par$sigmae2est / framework$n_smp)
+    # Variance of new random effect
+    sigmav2est <- model_par$sigmau2est * (1 - gamma)
+    # Random effect in constant part of y for in-sample households
+    rand_eff_pop <- rep(model_par$rand_eff, framework$n_pop)
+    # Model matrix for population covariate information
+    framework$pop_data[[paste0(fixed[2])]] = seq_len(nrow(framework$pop_data))
+    X_pop <- model.matrix(fixed, framework$pop_data)
+    
+    # Constant part of predicted y
+    mu_fixed <- X_pop %*% model_par$betas
+    mu <- mu_fixed + rand_eff_pop
+    
+    return(list(sigmav2est = sigmav2est, mu = mu, mu_fixed = mu_fixed))
+  } else {
+    # Parameter for calculating variance of new random effect
+    gamma <- model_par$gammaw 
+    # Variance of new random effect
+    sigmav2est <- model_par$sigmau2est * (1 - gamma) 
+    # Random effect in constant part of y for in-sample households
+    rand_eff_pop <- rep(model_par$rand_eff, framework$n_pop) ####### change
+    # Model matrix for population covariate information
+    framework$pop_data[[paste0(fixed[2])]] <- seq_len(nrow(framework$pop_data))
+    X_pop <- model.matrix(fixed, framework$pop_data)
+    
+    # Constant part of predicted y
+    mu_fixed <- X_pop %*% model_par$betas
+    mu <- mu_fixed + rand_eff_pop
 
-  # Constant part of predicted y
-  mu_fixed <- X_pop %*% model_par$betas
-  mu <- mu_fixed + rand_eff_pop
-
-  return(list(sigmav2est = sigmav2est, mu = mu, mu_fixed = mu_fixed))
+    
+    return(list(sigmav2est = sigmav2est, mu = mu, mu_fixed = mu_fixed))
+  }
+  
 } # End gen_model
 
 
@@ -171,7 +273,7 @@ monte_carlo <- function(transformation,
   ests_mcmc <- array(dim = c(framework$N_dom_pop,L,length(framework$indicator_names)))
 
   for (l in seq_len(L)) {
-
+  
     # Errors in generating model: individual error term and random effect
     # See below for function errors_gen.
     errors <- errors_gen(framework = framework,
@@ -185,7 +287,8 @@ monte_carlo <- function(transformation,
                                       lambda         = lambda,
                                       shift          = shift,
                                       gen_model      = gen_model,
-                                      errors_gen     = errors
+                                      errors_gen     = errors,
+                                      framework      = framework
                                       )
 
     # Calculation of indicators for each Monte Carlo population
@@ -216,8 +319,9 @@ monte_carlo <- function(transformation,
 # See Molina and Rao (2010) p. 375 (20)
 
 errors_gen <- function(framework, model_par, gen_model) {
-  # individual error term in generating model epsilon
-  epsilon <- rnorm(framework$N_pop, 0, sqrt(model_par$sigmae2est))
+    # individual error term in generating model epsilon
+    epsilon <- rnorm(framework$N_pop, 0, sqrt(model_par$sigmae2est))
+  
   # empty vector for new random effect in generating model
   vu <- vector(length = framework$N_pop)
   # new random effect for out-of-sample domains
@@ -236,6 +340,7 @@ errors_gen <- function(framework, model_par, gen_model) {
                                 )
 
   return(list(epsilon = epsilon, vu = vu))
+
 } # End errors_gen
 
 # The function prediction_y returns a predicted income vector which can be used
@@ -245,9 +350,12 @@ prediction_y <- function(transformation,
                          lambda,
                          shift,
                          gen_model,
-                         errors_gen) {
+                         errors_gen,
+                         framework) {
+  
   # predicted population income vector
   y_pred <- gen_model$mu + errors_gen$epsilon + errors_gen$vu
+  
   # back-transformation of predicted population income vector
   y_pred <- back_transformation(y              = y_pred,
                                 transformation = transformation,

@@ -80,7 +80,11 @@
 #' Defaults to \code{NULL}.
 #' @param na.rm if \code{TRUE}, observations with \code{NA} values are deleted 
 #' from the population and sample data. For the EBP procedure complete observations  
-#' are required. Defaults to \code{FALSE}. 
+#' are required. Defaults to \code{FALSE}.
+#' @param weights a character string containing the name of a variable that
+#' indicates weights in the sample data. If a character string ist provided
+#' a weighted version of ebp will be used.The variable has to be numeric. 
+#' Defaults to \code{NULL}.
 #' @return An object of class "ebp", "emdi" that provides estimators for regional
 #' disaggregated indicators and optionally corresponding MSE estimates. Several 
 #' generic functions have methods for the 
@@ -162,9 +166,9 @@ ebp <- function(fixed,
                                        "socket", "multicore"),
                 cpus = 1,
                 custom_indicator = NULL, 
-                na.rm = FALSE
+                na.rm = FALSE,
+                weights = NULL
 ) {
-
 
   ebp_check1(fixed = fixed, pop_data = pop_data, pop_domains = pop_domains,
              smp_data = smp_data, smp_domains = smp_domains, L = L) 
@@ -172,7 +176,7 @@ ebp <- function(fixed,
   ebp_check2(threshold = threshold, transformation = transformation, 
              interval = interval, MSE = MSE, boot_type = boot_type, B = B, 
              custom_indicator = custom_indicator, cpus = cpus,  seed = seed,
-             na.rm = na.rm)
+             na.rm = na.rm, weights = weights)
 
   # Save function call ---------------------------------------------------------
 
@@ -201,13 +205,14 @@ ebp <- function(fixed,
                               custom_indicator = custom_indicator,
                               fixed            = fixed,
                               threshold        = threshold,
-                              na.rm            = na.rm
+                              na.rm            = na.rm,
+                              weights          = weights
                               )
 
 
   
   # Point Estimation -----------------------------------------------------------
-
+  # browser()
   # The function point_estim can be found in script point_estimation.R
   point_estim <- point_estim(framework      = framework,
                                   fixed          = fixed,

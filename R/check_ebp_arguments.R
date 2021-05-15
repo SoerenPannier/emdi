@@ -42,7 +42,7 @@ ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L){
 }
 
 ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B, 
-                       custom_indicator, cpus, seed, na.rm){
+                       custom_indicator, cpus, seed, na.rm, weights){
   if (!is.null(threshold) && !(is.numeric(threshold) && length(threshold) == 1)
        && !inherits(threshold, "function")) { 
     stop("threshold needs to be a single numeric value or a function of y. 
@@ -119,14 +119,26 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
     stop("na.rm needs to be a logical value. Set na.rm to TRUE or FALSE. See 
          also help(ebp).")
   }
+  if(is.character(weights) && length(weights) != 1 || !is.character(weights) && !is.null(weights)) {
+    stop('Weights must be a vector of lenght 1 and of class character 
+         specifying the variable name of a numeric variable 
+         indicating weights in the sample data. See also help(ebp).')
+  }
+  if(!is.null(weights) && !(transformation == "log"|| transformation == "no")) {
+    stop("Weighted ebp can only be used without transformation or the log-
+    transformation")
+  }
+  if(!is.null(weights) && isTRUE(MSE) && boot_type == "wild") {
+    stop("The weighted version of ebp is only available with the ''parametric'' 
+         bootstrap.")
+  }
     
 }
 
 
 # Functions called in notation
 fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data, 
-                      fixed, smp_domains, threshold) {
-  
+                      fixed, smp_domains, threshold, weights) {
   if (!all(mod_vars %in% colnames(pop_data))) {
     stop(paste0("Variable ", mod_vars[which(!(mod_vars %in% colnames(smp_data)))], " is not contained in pop_data.
                 Please provide valid variable names for the explanatory variables."))
@@ -152,6 +164,21 @@ fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data,
    stop(paste0(as.character(fixed[2])," must be the name of a variable that 
                is a numeric vector."))
  }
+  if (is.character(weights)) {
+    if(!(weights %in% colnames(smp_data)))
+    stop(paste0("The weights variable ", weights, " is not contained in smp_data.
+                Please provide a valid variable name for the weights variable."))
+  }
+  if (is.character(weights)) {
+    if (!is.numeric(smp_data[[weights]]))
+    stop(paste0("The variable ", weights, " must be the name of a variable that
+                is a numeric vector."))
+  }
+  if(is.character(weights)) {
+    if(!all(smp_data[[weights]] > 0))
+    stop(paste0("Negativ or zero weights are included in ", weights, " Please remove 
+                obersvations with negative or zero values."))
+  }
   
  if (dim(pop_data)[1] < dim(smp_data)[1]) {
     stop("The population data set cannot have less observations than the 
