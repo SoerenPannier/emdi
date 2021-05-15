@@ -269,7 +269,7 @@ test_that("Does the fh function in emdi return the same variance, EBLUP and MSE
             
             select <- as.logical(Sys.getenv("_R_TEST_ROBUST_TRUEFALSE_"))
             if (is.na(select)) {
-              select <- TRUE
+              select <- FALSE
             }
             
             ############################ REBLUP model fitting ############################
@@ -328,7 +328,7 @@ test_that("Does the fh function in emdi return the same variance, EBLUP and MSE
             
             select <- as.logical(Sys.getenv("_R_TEST_ROBUST_TRUEFALSE_"))
             if (is.na(select)) {
-              select <- TRUE
+              select <- FALSE
             }
             
             ############################ REBLUP model fitting ############################
@@ -393,7 +393,7 @@ test_that("Does the fh function in emdi return the same variance, correlation
             
             select <- as.logical(Sys.getenv("_R_TEST_ROBUST_TRUEFALSE_"))
             if (is.na(select)) {
-              select <- TRUE
+              select <- FALSE
             }
             ############################ REBLUP model fitting ############################
             if (select) {
