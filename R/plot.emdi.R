@@ -39,8 +39,9 @@
 #' of the optimal transformation parameter that defaults to \code{NULL}. In that
 #' case a range of the default interval is used for the plots of the
 #' optimal parameter. This leads in some cases to convergence problems such that
-#' it should be changed to e.g. the selected \code{interval}. This means for the
-#' default interval \code{seq(-1, 2, by = 0.05)}.
+#' it should be changed to e.g. the selected \code{interval}. The default value 
+#' depends on the chosen data driven transformation and equals the default 
+#' interval for the estimation of the optimal parameter.
 #' @param ... optional arguments passed to generic function.
 #' @return Two Q-Q plots in one grid, two density plots, a Cook's distance plot
 #' and a likelihood plot for the optimal parameter of transformations with transformation 
@@ -233,7 +234,9 @@ plot.emdi <- function(x,
                                               log_likelihood = likelihoods),
                                    aes(x = lambda, y = log_likelihood)) + geom_line() +
              xlab(x_lab) + ylab(label$opt_lambda["y_lab"]) +
-             geom_vline(xintercept = range[which.max(likelihoods)],
+             #geom_vline(xintercept = range[which.max(likelihoods)],
+             #            colour = color[1]) + ggtitle(label$opt_lambda["title"]) +
+             geom_vline(xintercept = x$transform_param$optimal_lambda,
                         colour = color[1]) + ggtitle(label$opt_lambda["title"]) +
              gg_theme))
   }

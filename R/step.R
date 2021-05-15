@@ -100,7 +100,7 @@ step.default <- function(object,...) stats::step(object, ...)
 #' # Estimate FH model that contains all variables that should be considered
 #' fh_std <- fh(fixed = Mean ~ cash + self_empl + unempl_ben, vardir = "Var_Mean",
 #' combined_data = combined_data, domains = "Domain", method = "ml", 
-#' MSE = TRUE)
+#' B = c(0,50))
 #' 
 #' # Example 1: Use default settings
 #' step(fh_std)

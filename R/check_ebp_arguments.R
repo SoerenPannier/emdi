@@ -61,8 +61,8 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
     stop("The five options for transformation are ''no'', ''log'', ''box.cox'', 
          ''dual'' or ''log.shift''." )
   }
-  if (any(interval != 'default') & !is.vector(interval, mode = "numeric") & 
-      length(interval) != 2 & !(interval[1] < interval[2])) {
+  if (any(interval != 'default') & (!is.vector(interval, mode = "numeric") || 
+      length(interval) != 2 || !(interval[1] < interval[2]))) {
          stop("interval needs to be a numeric vector of length 2 
               defining a lower and upper limit for the estimation of the optimal 
               transformation parameter. The value of the lower limit needs to be 

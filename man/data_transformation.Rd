@@ -42,7 +42,7 @@ For the transformation five types can be chosen, particularly no, natural
 log, Box-Cox, Dual and Log-Shift transformation.
 }
 \details{
-For the natural log and Box-Cox transformation, the dependent variable 
+For the natural log, Box-Cox and Dual transformation, the dependent variable 
 is shifted such that all values are greater than zero since the transformations 
 are not applicable for values equal to or smaller than zero. The shift is 
 calculated as follows: 

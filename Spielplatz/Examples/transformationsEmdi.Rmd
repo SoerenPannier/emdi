@@ -34,8 +34,7 @@ A comparison of the various data-driven transformations in the EBP, can be found
 in Rojas et al (2019). 
 
 ```{r installation}
-library(devtools)
-build('C:/Users/Ann-Kristin/Documents/emdiWeltbank')
+install.packages('C:/Users/Ann-Kristin/Documents/emdi_2.0.2.tar.gz', repos = NULL, type="source")
 library(emdi)
 # Load sample data set
 data("eusilcA_smp")
@@ -91,7 +90,7 @@ ebp_bc <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
                pop_data = eusilcA_pop, pop_domains = "district", 
                smp_data = eusilcA_smp, smp_domains = "district",
                threshold = 10885.33, MSE = FALSE, 
-               transformation = 'bc', interval = 'default')
+               transformation = 'box.cox', interval = 'default')
 summary(ebp_bc)
 ```
 
@@ -102,15 +101,16 @@ plot(ebp_bc)
 
 ### Dual transformation 
 
-The Box-Cox transformation depends on one transformation parameter and is only 
+The Dual transformation depends on one transformation parameter and is only 
 defined for positive y. Therefore, a deterministic shift first shifts the dependent 
 variable to the positive range and then the transformation is applied. For the 
 estimation of the transformation parameter, an interval for the optimization needs 
 to be defined. In emdi, a default option can be chosen which equals an interval 
-between -1 and 2. This interval will be reasonable for many applications but it 
+between 0 and 2 since the Dual transformation does not allow for negative transformation 
+parameter. The interval will be reasonable for many applications but it 
 can happen that the interval needs to be adjusted. This can be done with a numeric
 vector of length two defining the lower and upper limit of the interval, e.g. 
-c(-1, 2) for the default interval. 
+c(0, 2) for the default interval. 
 
 ```{r dual}
 ebp_dual <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
@@ -131,15 +131,17 @@ plot(ebp_dual)
 
 ### Log-Shift transformation 
 
-The Box-Cox transformation depends on one transformation parameter and is only 
-defined for positive y. Therefore, a deterministic shift first shifts the dependent 
-variable to the positive range and then the transformation is applied. For the 
-estimation of the transformation parameter, an interval for the optimization needs 
-to be defined. In emdi, a default option can be chosen which equals an interval 
-between -1 and 2. This interval will be reasonable for many applications but it 
+The Log-Shift transformation depends on one transformation parameter and is only 
+defined for positive y. The transformation parameter is the shift such that there 
+is no extra deterministic shift even though the positive scale of y is ensured 
+internally.For the estimation of the transformation parameter, an interval for the 
+optimization needs to be defined. In emdi, a default option can be chosen where the
+interval is based on the total range of y. If $min(y) + 1 <= 1$, the lower limit of the 
+interval is $|min(y)| + 1$, otherwise the lower limit is 0. The upper limit is 
+$\frac{max(y) - min(y)}{2}$. This interval will be reasonable for many applications but it 
 can happen that the interval needs to be adjusted. This can be done with a numeric
 vector of length two defining the lower and upper limit of the interval, e.g. 
-c(-1, 2) for the default interval. 
+c(20000, 30000) for the default interval. 
 
 ```{r logShift}
 ebp_logShift <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
