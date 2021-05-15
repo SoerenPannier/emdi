@@ -200,7 +200,8 @@ model_par <- function(framework,
                 sigmae2est = sigmae2est,
                 sigmau2est = sigmau2est,
                 rand_eff   = rand_eff,
-                gammaw     = gammadw
+                gammaw     = gammadw,
+                delta2     = delta2d
                 )
     )
   }
