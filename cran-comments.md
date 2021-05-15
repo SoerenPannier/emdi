@@ -1,7 +1,7 @@
 ## Test environments
-* Ubuntu 16.04.6 LTS (on travis-ci), R 4.0.2
-* Windows10 R 4.0.3 local development environment
-* win-builder: R-4.0.2, R 3.6.3, R Under development
+* Ubuntu 16.04.6 LTS (on travis-ci), R 4.0.5
+* Windows10 R 4.0.5 local development environment
+* win-builder: R-4.0.5, R 3.6.3, R Under development 4.1.0
 
 
 ## R CMD check results

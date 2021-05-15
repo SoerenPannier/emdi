@@ -1,3 +1,8 @@
+# emdi 2.0.3
+* Robustifying tests to comply with alternative implementations
+* Updated example for step
+
+
 # emdi 2.0.2
 * Many S3-methods in the style of stats and nlme are implemented for the classes direct, ebp and fh
 * Structure of S3-classes has been cleaned up
