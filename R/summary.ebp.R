@@ -132,10 +132,18 @@ print.summary.ebp <- function(x,...) {
   cat("Units in population: ", x$size_pop, "\n")
   print(x$size_dom)
   cat("\n")
-  cat("Explanatory measures:\n")
+  if(is.null(x$call$weights)) {
+    cat("Explanatory measures:\n") 
+  } else {
+    cat("Explanatory measures for the mixed model:\n")
+  }
   print(x$coeff_determ)
   cat("\n")
-  cat("Residual diagnostics:\n")
+  if(is.null(x$call$weights)) {
+    cat("Residual diagnostics:\n") 
+  } else {
+    cat("Residual diagnostics for the mixed model:\n")
+  }
   print(x$normality)
   cat("\n")
   cat("ICC: ", x$icc, "\n")
