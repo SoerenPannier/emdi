@@ -253,6 +253,7 @@ superpopulation <-  function(framework, model_par, gen_model, lambda, shift,
   vu_pop <- rep(vu_tmp, framework$n_pop)
   #  superpopulation income vector
   Y_pop_b <- gen_model$mu_fixed + eps + vu_pop
+  
   Y_pop_b <- back_transformation(y             = Y_pop_b,
                                  transformation = transformation,
                                  lambda         = lambda,

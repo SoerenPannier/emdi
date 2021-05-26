@@ -18,7 +18,8 @@ test_that("Does monte_carlo function give benchmark results?", {
                         "provlab",
                         4282.081,
                         custom_indicator = NULL,
-                        na.rm = TRUE)
+                        na.rm = TRUE,
+                        weights = NULL)
   # Fixed optimal parameter and shift (benchmark values)
   ebp_optpar_bc <- read.csv2("EBP/ebp_optpar_bc.csv", sep = ",", 
                              stringsAsFactors = TRUE)  

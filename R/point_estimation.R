@@ -138,19 +138,12 @@ model_par <- function(framework,
     sigmae2est<-mixed_model$sigma^2
     # VarCorr(fit2) is the estimated random error variance
     sigmau2est <- as.numeric(nlme::VarCorr(mixed_model)[1,1])
-    # Random effect: vector with zeros for all domains, filled with
-    # browser()
-    # rand_eff <- rep(0, length(unique(framework$pop_domains_vec)))
-    # # random effect for in-sample domains (dist_obs_dom)
-    # rand_eff[framework$dist_obs_dom] <- (random.effects(mixed_model)[[1]])
-       
-    
   
     # Calculations needed for pseudo EB
     
     wsum     <- rep(0, framework$N_dom_smp)
     meanysdw <- rep(0, framework$N_dom_smp)
-    meanXsw  <- matrix(0 ,nrow = framework$N_dom_smp, ncol = length(betas)) # p = number of aux variables including intercept
+    meanXsw  <- matrix(0 ,nrow = framework$N_dom_smp, ncol = length(betas)) 
     delta2d  <- rep(0,framework$N_dom_smp)
     gammadw  <- rep(0,framework$N_dom_smp)
     nums0    <- matrix(0, nrow = length(betas), ncol = 1)
@@ -167,10 +160,10 @@ model_par <- function(framework,
       wsum[d] <- sum(wsd)
       Xsd     <- model.matrix(fixed, framework$smp_data)[framework$smp_domains_vec == domain,]
       
-      # weighted mean ot the dependent variable
+      # weighted mean of the dependent variable
       meanysdw[d] <- sum(wsd * ysd) / wsum[d]
       
-      # weighted means of the auxilliary information
+      # weighted means of the auxiliary information
       for (k in 1:length(betas)){
         meanXsw[d,k] <- sum(wsd * Xsd[,k]) / wsum[d]      
       }

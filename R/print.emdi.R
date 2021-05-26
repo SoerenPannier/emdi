@@ -24,7 +24,12 @@ print.direct <- function(x, ...) {
 print.ebp <- function(x, ...) {
   throw_class_error(x, "ebp")
   
-  cat("Empirical Best Prediction\n")
+  if(is.null(x$call$weights)) {
+    cat("Empirical Best Prediction\n")
+  } else {
+    cat("Empirical Best Prediction with sampling weights\n")
+  }
+  
   cat("\n")
   cat("Out-of-sample domains: ", x$framework$N_dom_unobs, "\n")
   cat("In-sample domains: ", x$framework$N_dom_smp, "\n")
