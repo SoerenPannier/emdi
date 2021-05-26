@@ -21,7 +21,8 @@ ebp(
   parallel_mode = ifelse(grepl("windows", .Platform$OS.type), "socket", "multicore"),
   cpus = 1,
   custom_indicator = NULL,
-  na.rm = FALSE
+  na.rm = FALSE,
+  weights = NULL
 )
 }
 \arguments{
@@ -113,6 +114,11 @@ Defaults to \code{NULL}.}
 \item{na.rm}{if \code{TRUE}, observations with \code{NA} values are deleted 
 from the population and sample data. For the EBP procedure complete observations  
 are required. Defaults to \code{FALSE}.}
+
+\item{weights}{a character string containing the name of a variable that
+indicates weights in the sample data. If a character string ist provided
+a weighted version of ebp will be used.The variable has to be numeric. 
+Defaults to \code{NULL}.}
 }
 \value{
 An object of class "ebp", "emdi" that provides estimators for regional
