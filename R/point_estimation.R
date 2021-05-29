@@ -4,7 +4,9 @@
 
 # This function implements the transformation of data, estimation of the nested
 # error linear regression model and the monte-carlo approximation to predict
-# the desired indicators. See corresponding functions below.
+# the desired indicators. If the weighted version of the approach is used, then
+# additional estimation steps are taken in order to calculate weighted regression
+# coefficients before the monte-carlo approximation. See corresponding functions below.
 
 
 point_estim <- function (framework,

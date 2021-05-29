@@ -116,8 +116,8 @@ from the population and sample data. For the EBP procedure complete observations
 are required. Defaults to \code{FALSE}.}
 
 \item{weights}{a character string containing the name of a variable that
-indicates weights in the sample data. If a character string ist provided
-a weighted version of ebp will be used.The variable has to be numeric. 
+indicates weights in the sample data. If a character string is provided
+a weighted version of the ebp will be used.The variable has to be numeric. 
 Defaults to \code{NULL}.}
 }
 \value{
@@ -136,6 +136,11 @@ also \cite{Gonzalez-Manteiga et al. (2008)}). The unit-level model of
 \cite{Battese, Harter and Fuller (1988)} is fitted by the restricted maximum
 likelihood (REML) method and one of
 three different transformation types for the dependent variable can be chosen.
+This approach can be extended to data under informative sampling using weights
+and is based on \cite{Guadarrama et al. (2018)}. Model  estimation combines 
+the uni-level model of \cite{Battese, Harter and Fuller (1988)} and the approach
+of \cite{You and Rao (2002)} using survey weights. At the moment only the log-
+transformation is supported for this method.
 }
 \details{
 For Monte-Carlo approximations and in the parametric bootstrap
@@ -170,6 +175,13 @@ threshold = function(y){0.6 * median(y)}, transformation = "log",
 L = 50, MSE = TRUE, boot_type = "wild", B = 50, custom_indicator = 
 list(my_max = function(y, threshold){max(y)},
 my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
+
+Example 3: With default setting but na.rm=TRUE under informative sampling.
+emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
+unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
+house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
+weights = "weight", na.rm = TRUE)
 }
 }
 \references{
@@ -179,6 +191,9 @@ Journal of the American Statistical Association, Vol.83, No. 401, 28-36. \cr \cr
 Gonzalez-Manteiga, W. et al. (2008). Bootstrap mean squared error of
 a small-area EBLUP. Journal of Statistical Computation and Simulation,
 78:5, 443-462. \cr \cr
+Guadarrama, M., Molina, I. and Rao, J.N.K. (2018). Small area estimation of 
+general parameters under complex sampling designs. Computational Statistics & 
+Data Analysis, Vol. 121, 20-40. \cr \cr 
 Kreutzmann, A., Pannier, S., Rojas-Perilla, N., Schmid, T., Templ, M. 
 and Tzavidis, N. (2019). The {R} Package {emdi} for Estimating and 
 Mapping Regionally Disaggregated Indicators, Journal of Statistical Software,
@@ -187,6 +202,9 @@ Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
 indicators. The Canadian Journal of Statistics, Vol. 38, No.3, 369-385. \cr \cr
 Social Protection Committee (2001). Report on indicators in the field of
 poverty and social exclusions, Technical Report, European Union.
+You, Y., Rao, J.N.K. (2002).  A pseudo-empirical best linear unbiased prediction 
+approach to small area estimation using survey weights. The  Canadian Journal 
+of Statistics. Vol. 30, No. 3, 431–439.
 }
 \seealso{
 \code{\link{emdiObject}}, \code{\link[nlme]{lme}},
