@@ -59,13 +59,13 @@ point_estim <- function (framework,
   # Function model_par extracts the needed parameters theta from the nested
   # error linear regression model. It returns the beta coefficients (betas),
   # sigmae2est, sigmau2est and the random effect (rand_eff).
-  #browser()
+
   est_par <- model_par(mixed_model = mixed_model,
                        framework   = framework,
                        fixed       = fixed,
                        transformation_par = transformation_par
                        )
-# browser()
+
   # Function gen_model calculates the parameters in the generating model.
   # See Molina and Rao (2010) p. 375 (20)
   # The function returns sigmav2est and the constant part mu.
@@ -90,6 +90,12 @@ point_estim <- function (framework,
                                       gen_model      = gen_par
                                       )
 
+  mixed_model$coefficients_weighted <- if(!is.null(framework$weights)) {
+                                          as.numeric(est_par$betas)
+                                          } else {NULL}
+  names(mixed_model$coefficients_weighted) <-if(!is.null(framework$weights)) {
+                                                rownames(est_par$betas)
+                                                } else {NULL}
   return(list(ind            = indicator_prediction,
               optimal_lambda = optimal_lambda,
               shift_par      = shift_par,
@@ -188,8 +194,8 @@ model_par <- function(framework,
     # Random effect: vector with zeros for all domains, filled with
     rand_eff <- rep(0, length(unique(framework$pop_domains_vec)))
     # random effect for in-sample domains (dist_obs_dom)
-    rand_eff[framework$dist_obs_dom] <- gammadw * (meanysdw - meanXsw %*% betas) # (random.effects(mixed_model)[[1]])
-    # rand_eff <- gammadw * (meanysdw - meanXsw %*% betas)
+    rand_eff[framework$dist_obs_dom] <- gammadw * (meanysdw - meanXsw %*% betas)
+
     
     return(list(betas      = betas,
                 sigmae2est = sigmae2est,
