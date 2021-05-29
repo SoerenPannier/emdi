@@ -5,9 +5,14 @@
 #' @method coef ebp
 #' @importFrom stats coef coefficients
 
-coef.ebp <- function(object, ...) {
+coef.ebp <- function(object, weights = FALSE, ...) {
   throw_class_error(object, "ebp")
-  coef(object$model)
+  if(isFALSE(weights)) {
+    coef(object$model) 
+  } else {
+      object$model$coefficients_weighted
+    }
+
 }
 
 
