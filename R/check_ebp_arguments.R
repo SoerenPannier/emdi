@@ -175,9 +175,9 @@ fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data,
                 is a numeric vector."))
   }
   if(is.character(weights)) {
-    if(!all(smp_data[[weights]] > 0))
+    if(!all(smp_data[[weights]] >= 1))
     stop(paste0("Negativ or zero weights are included in ", weights, " Please remove 
-                obersvations with negative or zero values."))
+                obersvations with weight values smaller than 1."))
   }
   
  if (dim(pop_data)[1] < dim(smp_data)[1]) {

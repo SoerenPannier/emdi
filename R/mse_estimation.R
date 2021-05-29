@@ -167,14 +167,14 @@ mse_estim <- function(framework,
   
   if (boot_type == "wild") {  
     bootstrap_sample <- bootstrap_par_wild(fixed          = fixed,
-                                      transformation = transformation,
-                                      framework      = framework,
-                                      model_par      = model_par,
-                                      lambda         = lambda,
-                                      shift          = shift,
-                                      vu_tmp         = superpop$vu_tmp,
-                                      res_s          = res_s,
-                                      fitted_s       = fitted_s
+                                           transformation = transformation,
+                                           framework      = framework,
+                                           model_par      = model_par,
+                                           lambda         = lambda,
+                                           shift          = shift,
+                                           vu_tmp         = superpop$vu_tmp,
+                                           res_s          = res_s,
+                                           fitted_s       = fitted_s
     )
   }else {
     bootstrap_sample <- bootstrap_par(fixed          = fixed,
