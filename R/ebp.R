@@ -264,16 +264,7 @@ ebp <- function(fixed,
     ebp_out <- list(ind             = point_estim$ind,
                     MSE             = mse_estimates,
                     transform_param = point_estim[c("optimal_lambda","shift_par")],
-                    model           = if(is.null(weights)) {
-                      point_estim$model
-                    } else {
-                      list(model  = point_estim$model,
-                           betas  = point_estim$model_par$betas,
-                           delta  = point_estim$model_par$delta2,
-                           sigmau = point_estim$model_par$sigmau2est,
-                           sigmav = point_estim$gen_model$sigmav2est
-                             )
-                      },
+                    model           = point_estim$model,
                     framework       = framework[c("N_dom_unobs",
                                                   "N_dom_smp",
                                                   "N_smp",
