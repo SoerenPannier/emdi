@@ -151,7 +151,7 @@
 #' list(my_max = function(y, threshold){max(y)},
 #' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
 #' 
-#' Example 3: With default setting but na.rm=TRUE under informative sampling.
+#' # Example 3: With default setting but na.rm=TRUE under informative sampling.
 #' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
 #' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
 #' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
