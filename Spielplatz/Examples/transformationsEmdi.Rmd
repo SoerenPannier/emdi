@@ -33,8 +33,11 @@ likelihood following Gurka (2006).
 A comparison of the various data-driven transformations in the EBP, can be found 
 in Rojas et al (2019). 
 
-```{r installation}
-install.packages('C:/Users/Ann-Kristin/Documents/emdi_2.0.2.tar.gz', repos = NULL, type="source")
+```{r installation, echo=FALSE}
+install.packages('C:/Users/Ann-Kristin/Documents/emdi_2.0.3.tar.gz', repos = NULL, type="source")
+```
+
+```{r installation2}
 library(emdi)
 # Load sample data set
 data("eusilcA_smp")
