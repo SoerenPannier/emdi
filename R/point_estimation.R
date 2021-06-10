@@ -15,10 +15,10 @@ point_estim <- function (framework,
                          interval,
                          L,
                          keep_data  = FALSE
-                         ) {
-
+) {
+  
   # Transformation of data -------------------------------------------------------
-
+  
   # Estimating the optimal parameter by optimization
   # browser()
   # Optimal parameter function returns the minimum of the optimization
@@ -30,8 +30,8 @@ point_estim <- function (framework,
                                       smp_domains    = framework$smp_domains,
                                       transformation = transformation,
                                       interval       = interval
-                                      )
-
+  )
+  
   # Data_transformation function returns transformed data and shift parameter.
   # The function can be found in the script transformation_functions.R
   # browser()
@@ -39,41 +39,41 @@ point_estim <- function (framework,
                                             smp_data       = framework$smp_data,
                                             transformation = transformation,
                                             lambda         = optimal_lambda
-                                            )
+  )
   shift_par <- transformation_par$shift
-
+  
   # Model estimation, model parameter and parameter of generating model --------
-
+  
   # Estimation of the nested error linear regression model
   # See Molina and Rao (2010) p. 374
   # lme function is included in the nlme package which is imported.
   
-    mixed_model <- nlme::lme(fixed  = fixed,
-                             data   = transformation_par$transformed_data ,
-                             random = as.formula(paste0("~ 1 | as.factor(", 
-                                                        framework$smp_domains, ")")),
-                             method = "REML",
-                             keep.data = keep_data)
-
-
+  mixed_model <- nlme::lme(fixed  = fixed,
+                           data   = transformation_par$transformed_data ,
+                           random = as.formula(paste0("~ 1 | as.factor(", 
+                                                      framework$smp_domains, ")")),
+                           method = "REML",
+                           keep.data = keep_data)
+  
+  
   # Function model_par extracts the needed parameters theta from the nested
   # error linear regression model. It returns the beta coefficients (betas),
   # sigmae2est, sigmau2est and the random effect (rand_eff).
-
+  
   est_par <- model_par(mixed_model = mixed_model,
                        framework   = framework,
                        fixed       = fixed,
                        transformation_par = transformation_par
-                       )
-
+  )
+  
   # Function gen_model calculates the parameters in the generating model.
   # See Molina and Rao (2010) p. 375 (20)
   # The function returns sigmav2est and the constant part mu.
   gen_par <- gen_model(model_par   = est_par,
                        fixed       = fixed,
                        framework   = framework
-                       )
-
+  )
+  
   # Monte-Carlo approximation --------------------------------------------------
   if(inherits(framework$threshold, "function")) {
     framework$threshold <- 
@@ -88,22 +88,22 @@ point_estim <- function (framework,
                                       shift          = shift_par,
                                       model_par      = est_par,
                                       gen_model      = gen_par
-                                      )
-
+  )
+  
   mixed_model$coefficients_weighted <- if(!is.null(framework$weights)) {
-                                          as.numeric(est_par$betas)
-                                          } else {NULL}
+    as.numeric(est_par$betas)
+  } else {NULL}
   names(mixed_model$coefficients_weighted) <-if(!is.null(framework$weights)) {
-                                                rownames(est_par$betas)
-                                                } else {NULL}
+    rownames(est_par$betas)
+  } else {NULL}
   return(list(ind            = indicator_prediction,
               optimal_lambda = optimal_lambda,
               shift_par      = shift_par,
               model_par      = est_par,
               gen_model      = gen_par,
               model          = mixed_model
-              )
-         )
+  )
+  )
 } # End point estimation function
 
 
@@ -137,7 +137,7 @@ model_par <- function(framework,
                 sigmae2est = sigmae2est,
                 sigmau2est = sigmau2est,
                 rand_eff   = rand_eff
-                )
+    )
     )
   } else {
     # fixed parameters
@@ -146,64 +146,64 @@ model_par <- function(framework,
     sigmae2est<-mixed_model$sigma^2
     # VarCorr(fit2) is the estimated random error variance
     sigmau2est <- as.numeric(nlme::VarCorr(mixed_model)[1,1])
-  
+    
     # Calculations needed for pseudo EB
     
-    wsum     <- rep(0, framework$N_dom_smp)
-    meanysdw <- rep(0, framework$N_dom_smp)
-    meanXsw  <- matrix(0 ,nrow = framework$N_dom_smp, ncol = length(betas)) 
-    delta2d  <- rep(0,framework$N_dom_smp)
-    gammadw  <- rep(0,framework$N_dom_smp)
-    nums0    <- matrix(0, nrow = length(betas), ncol = 1)
-    dens0    <- matrix(0, nrow = length(betas), ncol = length(betas))
+    weight_sum    <- rep(0, framework$N_dom_smp)
+    mean_dep      <- rep(0, framework$N_dom_smp)
+    mean_indep    <- matrix(0 ,nrow = framework$N_dom_smp, ncol = length(betas)) 
+    delta2        <- rep(0,framework$N_dom_smp)
+    gamma_weight  <- rep(0,framework$N_dom_smp)
+    num           <- matrix(0, nrow = length(betas), ncol = 1)
+    den           <- matrix(0, nrow = length(betas), ncol = length(betas))
     
     for (d in 1:framework$N_dom_smp){
       domain  <- as.character(unique(framework$smp_domains_vec)[d])
       
       # Domain means of of the dependent variable
-      ysd     <- transformation_par$transformed_data[[as.character(mixed_model$terms[[2]])]][
+      dep_smp       <- transformation_par$transformed_data[[as.character(mixed_model$terms[[2]])]][
         framework$smp_domains_vec == domain]
-      wsd     <- transformation_par$transformed_data[[as.character(framework$weights)]][
+      weight_smp    <- transformation_par$transformed_data[[as.character(framework$weights)]][
         framework$smp_domains_vec == domain]
-      wsum[d] <- sum(wsd)
-      Xsd     <- model.matrix(fixed, framework$smp_data)[framework$smp_domains_vec == domain,]
+      weight_sum[d] <- sum(weight_smp)
+      indep_smp     <- model.matrix(fixed, framework$smp_data)[framework$smp_domains_vec == domain,]
       
       # weighted mean of the dependent variable
-      meanysdw[d] <- sum(wsd * ysd) / wsum[d]
+      mean_dep[d] <- sum(weight_smp * dep_smp) / weight_sum[d]
       
       # weighted means of the auxiliary information
       for (k in 1:length(betas)){
-        meanXsw[d,k] <- sum(wsd * Xsd[,k]) / wsum[d]      
+        mean_indep[d,k] <- sum(weight_smp * indep_smp[,k]) / weight_sum[d]      
       }
       
-      delta2d[d] <- sum(wsd^2) / (wsum[d]^2)
-      gammadw[d] <- sigmau2est / (sigmau2est + sigmae2est * delta2d[d])
-      dwsd       <- diag(wsd)
-      ysd_ast    <- ysd - gammadw[d] * meanysdw[d]
-      Xsd_Wsd    <- t(Xsd) %*% dwsd
-      Xsd_ast    <- Xsd - matrix(rep(gammadw[d] * meanXsw[d,], framework$n_smp[d]),
-                                 nrow = framework$n_smp[d], byrow = TRUE)
+      delta2[d]       <- sum(weight_smp^2) / (weight_sum[d]^2)
+      gamma_weight[d] <- sigmau2est / (sigmau2est + sigmae2est * delta2[d])
+      weight_smp_diag <- diag(weight_smp)
+      dep_var_ast     <- dep_smp - gamma_weight[d] * mean_dep[d]
+      indep_weight    <- t(indep_smp) %*% weight_smp_diag
+      indep_var_ast   <- indep_smp - matrix(rep(gamma_weight[d] * mean_indep[d,], framework$n_smp[d]),
+                            nrow = framework$n_smp[d], byrow = TRUE)
       
-      nums0 <- nums0 + (Xsd_Wsd %*% ysd_ast)
-      dens0 <- dens0 + (Xsd_Wsd %*% Xsd_ast)
+      num <- num + (indep_weight %*% dep_var_ast)
+      den <- den + (indep_weight %*% indep_var_ast)
       
     }
     
     
-    betas    <- solve(dens0) %*% nums0
+    betas    <- solve(den) %*% num
     # Random effect: vector with zeros for all domains, filled with
     rand_eff <- rep(0, length(unique(framework$pop_domains_vec)))
     # random effect for in-sample domains (dist_obs_dom)
-    rand_eff[framework$dist_obs_dom] <- gammadw * (meanysdw - meanXsw %*% betas)
-
+    rand_eff[framework$dist_obs_dom] <- gamma_weight * (mean_dep - mean_indep %*% betas)
+    
     
     return(list(betas      = betas,
                 sigmae2est = sigmae2est,
                 sigmau2est = sigmau2est,
                 rand_eff   = rand_eff,
-                gammaw     = gammadw,
-                delta2     = delta2d
-                )
+                gammaw     = gamma_weight,
+                delta2     = delta2
+    )
     )
   }
   
@@ -247,7 +247,7 @@ gen_model <- function(fixed,
     # Constant part of predicted y
     mu_fixed <- X_pop %*% model_par$betas
     mu <- mu_fixed + rand_eff_pop
-
+    
     
     return(list(sigmav2est = sigmav2est, mu = mu, mu_fixed = mu_fixed))
   }
@@ -267,22 +267,22 @@ monte_carlo <- function(transformation,
                         shift,
                         model_par,
                         gen_model) {
-
-  # Preparing matrices for indicators for the Monte-Carlo simulation
-#   quant10s = quant25s = mediane = quant75s = quant90s = ginis = qsrs = pgaps =
-#     hcrs = means <- matrix(nrow=framework$N_dom_pop, ncol=L)
-
-  ests_mcmc <- array(dim = c(framework$N_dom_pop,L,length(framework$indicator_names)))
-
-  for (l in seq_len(L)) {
   
+  # Preparing matrices for indicators for the Monte-Carlo simulation
+  #   quant10s = quant25s = mediane = quant75s = quant90s = ginis = qsrs = pgaps =
+  #     hcrs = means <- matrix(nrow=framework$N_dom_pop, ncol=L)
+  
+  ests_mcmc <- array(dim = c(framework$N_dom_pop,L,length(framework$indicator_names)))
+  
+  for (l in seq_len(L)) {
+    
     # Errors in generating model: individual error term and random effect
     # See below for function errors_gen.
     errors <- errors_gen(framework = framework,
                          model_par = model_par,
                          gen_model = gen_model
-                         )
-
+    )
+    
     # Prediction of population vector y
     # See below for function prediction_y.
     population_vector <- prediction_y(transformation = transformation,
@@ -291,29 +291,29 @@ monte_carlo <- function(transformation,
                                       gen_model      = gen_model,
                                       errors_gen     = errors,
                                       framework      = framework
-                                      )
-
+    )
+    
     # Calculation of indicators for each Monte Carlo population
-      ests_mcmc[,l,] <- matrix(nrow=framework$N_dom_pop, data = unlist(lapply(
+    ests_mcmc[,l,] <- matrix(nrow=framework$N_dom_pop, data = unlist(lapply(
       framework$indicator_list, function(f, threshold){matrix(nrow=framework$N_dom_pop, 
-                                                             data = unlist(tapply(
-                                                              population_vector,
-                                                              framework$pop_domains_vec, 
-                                                              f, 
-                                                              threshold = framework$threshold,
-                                                              simplify = TRUE)),byrow = TRUE)}, 
+                                                              data = unlist(tapply(
+                                                                population_vector,
+                                                                framework$pop_domains_vec, 
+                                                                f, 
+                                                                threshold = framework$threshold,
+                                                                simplify = TRUE)),byrow = TRUE)}, 
       threshold = framework$threshold)))
-
+    
   } # End for loop
-
-
+  
+  
   # Point estimations of indicators by taking the mean
-
+  
   point_estimates <- data.frame(Domain = unique(framework$pop_domains_vec) , 
                                 apply(ests_mcmc, c(3), rowMeans))
   colnames(point_estimates) <- c("Domain", framework$indicator_names)
   return(point_estimates)
-
+  
 } # End Monte-Carlo
 
 
@@ -321,8 +321,8 @@ monte_carlo <- function(transformation,
 # See Molina and Rao (2010) p. 375 (20)
 
 errors_gen <- function(framework, model_par, gen_model) {
-    # individual error term in generating model epsilon
-    epsilon <- rnorm(framework$N_pop, 0, sqrt(model_par$sigmae2est))
+  # individual error term in generating model epsilon
+  epsilon <- rnorm(framework$N_pop, 0, sqrt(model_par$sigmae2est))
   
   # empty vector for new random effect in generating model
   vu <- vector(length = framework$N_pop)
@@ -330,19 +330,19 @@ errors_gen <- function(framework, model_par, gen_model) {
   vu[!framework$obs_dom] <- rep(rnorm(framework$N_dom_unobs,
                                       0,
                                       sqrt(model_par$sigmau2est)
-                                      ),
-                                framework$n_pop[!framework$dist_obs_dom]
-                                )
+  ),
+  framework$n_pop[!framework$dist_obs_dom]
+  )
   # new random effect for in-sample-domains
   vu[framework$obs_dom]  <- rep(rnorm(rep(1, framework$N_dom_smp),
                                       0,
                                       sqrt(gen_model$sigmav2est)
-                                      ),
-                                framework$n_pop[framework$dist_obs_dom]
-                                )
-
+  ),
+  framework$n_pop[framework$dist_obs_dom]
+  )
+  
   return(list(epsilon = epsilon, vu = vu))
-
+  
 } # End errors_gen
 
 # The function prediction_y returns a predicted income vector which can be used
@@ -363,9 +363,9 @@ prediction_y <- function(transformation,
                                 transformation = transformation,
                                 lambda         = lambda,
                                 shift          = shift
-                                )
+  )
   y_pred[!is.finite(y_pred)] <- 0
-
+  
   return(y_pred)
 } # End prediction_y
 
