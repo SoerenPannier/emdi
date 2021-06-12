@@ -3,6 +3,8 @@
 # Install the package
 install.packages("emdi")
 library(emdi)
+install.packages('C:/Users/Ann-Kristin/Documents/emdi_2.0.3.tar.gz', repos = NULL, type="source")
+library("emdi")
 
 # The ggplot2 package is loaded additionally since we use theme_set for a better
 # representation of the plots in the paper but it is otherwise not needed to 
@@ -31,7 +33,7 @@ emdi_bc <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
                  custom_indicator = list(my_max = function(y, threshold){max(y)},
                                          my_min = function(y, threshold){min(y)}))  
 summary(emdi_bc)
-
+qqnorm(emdi_bc)
 
 # Box-Cox with default and negative values in y  -------------------------------
 emdi_bc <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
@@ -43,6 +45,7 @@ emdi_bc <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
                custom_indicator = list(my_max = function(y, threshold){max(y)},
                                        my_min = function(y, threshold){min(y)}))  
 summary(emdi_bc)
+qqnorm(emdi_bc)
 
 
 # Box-Cox with interval  -------------------------------------------------------
@@ -67,6 +70,7 @@ emdi_dual <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
                custom_indicator = list(my_max = function(y, threshold){max(y)},
                                        my_min = function(y, threshold){min(y)}))  
 summary(emdi_dual)
+qqnorm(emdi_dual)
 
 # Dual with default and negative values in y  ----------------------------------
 emdi_dual <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
@@ -113,6 +117,7 @@ emdi_logShift <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
                  custom_indicator = list(my_max = function(y, threshold){max(y)},
                                          my_min = function(y, threshold){min(y)}))  
 summary(emdi_logShift)
+qqnorm(emdi_logShift)
 
 # Log-shift with interval  -----------------------------------------------------
 emdi_logShift <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
