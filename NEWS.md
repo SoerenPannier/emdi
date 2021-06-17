@@ -1,3 +1,6 @@
+# emdi 2.1.0
+* TODO: Felix or AK
+
 # emdi 2.0.3
 * Robustifying tests to comply with alternative implementations
 * Updated example for step
