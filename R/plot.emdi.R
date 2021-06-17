@@ -8,8 +8,8 @@
 #' log-likelihood of the estimation of the optimal parameter in Box-Cox
 #' transformations (the latter two only for ebp). The return depends on the
 #' transformation such that a plot for the optimal parameter is
-#' only returned in case a Box-Cox transformation is chosen. The range of the
-#' x-axis is optional but necessary to change if there are convergence problems.
+#' only returned in case a transformation with transformation parameter is chosen. 
+#' The range of the x-axis is optional but necessary to change if there are convergence problems.
 #' All plots are obtained by \code{\link[ggplot2]{ggplot}}.
 #' @param x an object of type "emdi", either "ebp" or "fh", representing point 
 #' and, if chosen, MSE estimates obtained by the EBP or Fay-Herriot approach 
@@ -20,7 +20,7 @@
 #' labels nor title ("blank").
 #' (iv) individual labels by a list that needs to
 #' have below structure. Six elements can be defined called \code{qq_res, qq_ran,
-#' d_res, d_ran, cooks} and \code{box_cox} for the six different plots and these
+#' d_res, d_ran, cooks} and \code{opt_lambda} for the six different plots and these
 #' list elements need to have three elements each called \code{title, y_lab and
 #' x_lab}. Only the labels for the plots that should be different to the original
 #' need to be specified. Please see the details section for an example 
@@ -37,16 +37,19 @@
 #' set to \code{FALSE}. It defaults to \code{TRUE}.
 #' @param range optional sequence determining the range of the x-axis for plots
 #' of the optimal transformation parameter that defaults to \code{NULL}. In that
-#' case a range of the optimal parameter +2/-1 is used for the plots of the
+#' case a range of the default interval is used for the plots of the
 #' optimal parameter. This leads in some cases to convergence problems such that
-#' it should be changed to e.g. the selected \code{interval}. This means for the
-#' default interval \code{seq(-1, 2, by = 0.05)}.
+#' it should be changed to e.g. the selected \code{interval}. The default value 
+#' depends on the chosen data driven transformation and equals the default 
+#' interval for the estimation of the optimal parameter.
 #' @param ... optional arguments passed to generic function.
 #' @return Two Q-Q plots in one grid, two density plots, a Cook's distance plot
-#' and a likelihood plot for the optimal parameter of the Box-Cox transformation
-#' obtained by \code{\link[ggplot2]{ggplot}}. The latter two plots are only provided
+#' and a likelihood plot for the optimal parameter of transformations with transformation 
+#' parameter obtained by \code{\link[ggplot2]{ggplot}}. The latter two plots are only provided
 #' for ebp object.
-#' @details The default settings of the \code{label} argument are as follows:\cr
+#' @details The default settings of the \code{label} argument are as follows (please
+#' note that the title for opt_lambda depends on the chosen transformation, for 
+#' the example Box-Cox is shown):\cr
 ##' \describe{
 ##' \item{list(}{}
 ##' \item{qq_res =}{c(title="Error term", y_lab="Quantiles of pearson residuals",
@@ -63,7 +66,7 @@
 ##' \item{cooks =}{c(title="Cook's Distance Plot",
 ##'                y_lab="Cook's Distance",
 ##'                x_lab="Index"),}
-##' \item{box_cox =}{c(title="Box-Cox - REML",
+##' \item{opt_lambda =}{c(title="Box-Cox - REML",
 ##'                y_lab="Log-Likelihood",
 ##'                x_lab="expression(lambda)"))}
 ##' }
@@ -131,6 +134,7 @@
 #' @importFrom gridExtra arrangeGrob grid.arrange
 #' @importFrom stats shapiro.test logLik cooks.distance
 #' @importFrom HLMdiag mdffits
+#' @importFrom stringr str_to_title
 #' @name plot.emdi
 #' @order 1
 
@@ -154,7 +158,8 @@ plot.emdi <- function(x,
   cook_df <- extra_args[["cook_df"]]
   indexer <- extra_args[["indexer"]]
   likelihoods <- extra_args[["likelihoods"]]
-  boxcox <- extra_args[["boxcox"]]
+  opt_lambda <- extra_args[["opt_lambda"]]
+  
   
   label <- define_label(x = x, label = label)
   
@@ -208,16 +213,16 @@ plot.emdi <- function(x,
              ggtitle(label$cooks["title"]) + gg_theme))
   }
   
-  if (boxcox == TRUE) {
+  if (opt_lambda == TRUE) {
     cat("Press [enter] to continue")
     line <- readline()
     
-    if (any(label$box_cox["x_lab"] == "expression(lambda)") ||
-        any(label$box_cox["x_lab"] == "expression(Lambda)")) {
+    if (any(label$opt_lambda["x_lab"] == "expression(lambda)") ||
+        any(label$opt_lambda["x_lab"] == "expression(Lambda)")) {
       
       x_lab <- expression(lambda)
     } else {
-      x_lab <- label$box_cox["x_lab"]
+      x_lab <- label$opt_lambda["x_lab"]
     }
     if (any(is.na(likelihoods))) {
       warning(paste0("For some lambda in the chosen range, the ",
@@ -228,9 +233,11 @@ plot.emdi <- function(x,
     print((plotList[[5]] <- ggplot(data.frame(lambda = range,
                                               log_likelihood = likelihoods),
                                    aes(x = lambda, y = log_likelihood)) + geom_line() +
-             xlab(x_lab) + ylab(label$box_cox["y_lab"]) +
-             geom_vline(xintercept = range[which.max(likelihoods)],
-                        colour = color[1]) + ggtitle(label$box_cox["title"]) +
+             xlab(x_lab) + ylab(label$opt_lambda["y_lab"]) +
+             #geom_vline(xintercept = range[which.max(likelihoods)],
+             #            colour = color[1]) + ggtitle(label$opt_lambda["title"]) +
+             geom_vline(xintercept = x$transform_param$optimal_lambda,
+                        colour = color[1]) + ggtitle(label$opt_lambda["title"]) +
              gg_theme))
   }
   invisible(plotList)
@@ -267,7 +274,7 @@ define_label <- function(x, label){
                       cooks = c(title = "Cook's Distance Plot",
                                 y_lab = "Cook's Distance",
                                 x_lab = "Index"),
-                      box_cox = c(title = "Box-Cox - REML",
+                      opt_lambda = c(title = paste0(str_to_title(gsub("\\.","-", x$transformation)), ' - REML'),
                                   y_lab = "Log-Likelihood",
                                   x_lab = "expression(lambda)"))
 
@@ -287,7 +294,7 @@ define_label <- function(x, label){
                       cooks = c(title = "",
                                 y_lab = "",
                                 x_lab = ""),
-                      box_cox = c(title = "",
+                      opt_lambda = c(title = "",
                                   y_lab = "",
                                   x_lab = ""))
       }
@@ -309,7 +316,7 @@ define_label <- function(x, label){
                     cooks = c(title = "",
                               y_lab = "",
                               x_lab = ""),
-                    box_cox = c(title = "",
+                    opt_lambda = c(title = "",
                                 y_lab = "",
                                 x_lab = ""))
     } else if (label == "no_title") {
@@ -330,7 +337,7 @@ define_label <- function(x, label){
                       cooks = c(title = "",
                                 y_lab = "Cook's Distance",
                                 x_lab = "Index"),
-                      box_cox = c(title = "",
+                      opt_lambda = c(title = "",
                                   y_lab = "Log-Likelihood",
                                   x_lab = "expression(lambda)"))
 
@@ -350,7 +357,7 @@ define_label <- function(x, label){
                       cooks = c(title = "",
                                 y_lab = "",
                                 x_lab = ""),
-                      box_cox = c(title = "",
+                      opt_lambda = c(title = "",
                                   y_lab = "",
                                   x_lab = ""))
       }
@@ -358,13 +365,21 @@ define_label <- function(x, label){
     }
 
   } else if (inherits(label, "list")) {
+    
+    if(any(names(label) == 'box_cox')) {
+      warning("In following versions of package emdi, the list element
+              box_cox will be renamed into opt_lambda.")
+    }
 
     if (!any(names(label) %in% c("qq_res", "qq_ran",
                                "d_res", "d_ran",
-                               "cooks", "box_cox"))) {
+                               "cooks", "opt_lambda")) || 
+        !any(names(label) %in% c("qq_res", "qq_ran",
+                                 "d_res", "d_ran",
+                                 "cooks", "box_cox"))) {
      stop("List elements must have following names even though not
           all must be included: qq_res, qq_ran, d_res, d_ran, cooks,
-          box_cox. Every list element must have the elements title,
+          opt_lambda. Every list element must have the elements title,
           y_lab and x_lab. See also help(plot.emdi).")
     }
     for (i in names(label)) {
@@ -390,7 +405,7 @@ define_label <- function(x, label){
                          cooks = c(title = "Cook's Distance Plot",
                                    y_lab = "Cook's Distance",
                                    x_lab = "Index"),
-                         box_cox = c(title = "Box-Cox - REML",
+                         opt_lambda = c(title = paste0(str_to_title(gsub("\\.","-", x$transformation)), ' - REML'),
                                      y_lab = "Log-Likelihood",
                                      x_lab = "expression(lambda)"))
 
@@ -419,18 +434,23 @@ define_label <- function(x, label){
       } else {
         label$cooks <- orig_label$cooks
       }
-      if (any(names(label) == "box_cox")) {
-        label$box_cox <- label$box_cox
-      } else {
-        label$box_cox <- orig_label$box_cox
+      if (any(names(label) == "opt_lambda") || any(names(label) == "box_cox")) {
+        if (any(names(label) == "opt_lambda")) {
+          label$opt_lambda <- label$opt_lambda
+        } else if (any(names(label) == "box_cox")) {
+          label$opt_lambda <- label$box_cox
+        }
+      }
+      else {
+        label$opt_lambda <- orig_label$opt_lambda
       }
   }
 
   if (any(!(names(label) %in%  c("qq_res", "qq_ran",
                                "d_res", "d_ran",
-                               "cooks", "box_cox")))) {
+                               "cooks", "opt_lambda", "box_cox")))) {
     warning("One or more list elements are not called qq_res, qq_ran, d_res,
-             d_ran, cooks or box_cox. The changes are for this/these element(s)
+             d_ran, cooks or opt_lambda. The changes are for this/these element(s)
             is/are not done. Instead the original labels are used.")
   }
 

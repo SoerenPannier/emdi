@@ -21,11 +21,17 @@ summary.ebp <- function(object, ...) {
   sizedom_smp_pop <- rbind(Sample_domains = smp_size_dom,
                            Population_domains = pop_size_dom)
   
-  if (object$transformation == "box.cox") {
+  if (object$transformation == "box.cox" | object$transformation == "dual") {
     transform_method <- data.frame(Transformation  = object$transformation,
                                    Method          = object$method,
                                    Optimal_lambda  = object$transform_param$optimal_lambda,
                                    Shift_parameter = round(object$transform_param$shift_par,3),
+                                   row.names       = ""
+    )
+  } else if (object$transformation == "log.shift") {
+    transform_method <- data.frame(Transformation  = object$transformation,
+                                   Method          = object$method,
+                                   Optimal_lambda  = object$transform_param$optimal_lambda,
                                    row.names       = ""
     )
   } else if (object$transformation == "log") {
@@ -126,10 +132,18 @@ print.summary.ebp <- function(x,...) {
   cat("Units in population: ", x$size_pop, "\n")
   print(x$size_dom)
   cat("\n")
-  cat("Explanatory measures:\n")
+  if(is.null(x$call$weights)) {
+    cat("Explanatory measures:\n") 
+  } else {
+    cat("Explanatory measures for the mixed model:\n")
+  }
   print(x$coeff_determ)
   cat("\n")
-  cat("Residual diagnostics:\n")
+  if(is.null(x$call$weights)) {
+    cat("Residual diagnostics:\n") 
+  } else {
+    cat("Residual diagnostics for the mixed model:\n")
+  }
   print(x$normality)
   cat("\n")
   cat("ICC: ", x$icc, "\n")

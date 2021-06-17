@@ -7,18 +7,18 @@
 
 
 framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, 
-                     threshold, custom_indicator = NULL, na.rm) {
+                     threshold, custom_indicator = NULL, na.rm, weights) {
 
-  
   # Reduction of number of variables
   mod_vars <- all.vars(fixed)
   mod_vars <- mod_vars[mod_vars != as.character(fixed[2])]
-  smp_vars <- c(as.character(fixed[2]), mod_vars, smp_domains)
+  smp_vars <- c(as.character(fixed[2]), mod_vars, smp_domains, weights)
   pop_vars <- c(mod_vars, pop_domains)
   smp_data <- smp_data[, smp_vars]
+  weights  <- weights
   fw_check1(pop_data = pop_data, mod_vars = mod_vars, pop_domains = pop_domains, 
            smp_data = smp_data, fixed = fixed, smp_domains = smp_domains, 
-           threshold = threshold)
+           threshold = threshold, weights = weights)
  
 
   pop_data <- pop_data[, pop_vars]
@@ -145,7 +145,8 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
               dist_obs_dom     = dist_obs_dom,
               indicator_list   = indicator_list,
               indicator_names  = indicator_names,
-              threshold        = threshold
+              threshold        = threshold,
+              weights          = weights
               )
          )
 }

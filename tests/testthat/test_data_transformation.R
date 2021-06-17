@@ -28,6 +28,22 @@ test_that("Test that transformed_data is data_frame", {
   expect_equal(class(std_data_transformation(income~educ1, incomedata, lambda=1,
                                    transformation="box.cox")),
                "data.frame")
+  
+  expect_equal(class(data_transformation(income~educ1, smp_data=incomedata, lambda=1,
+                                         transformation="dual")$transformed_data),
+               "data.frame")
+  
+  expect_equal(class(std_data_transformation(income~educ1, incomedata, lambda=1,
+                                             transformation="dual")),
+               "data.frame")
+  
+  expect_equal(class(data_transformation(income~educ1, smp_data=incomedata, lambda=1,
+                                         transformation="log.shift")$transformed_data),
+               "data.frame")
+  
+  expect_equal(class(std_data_transformation(income~educ1, incomedata, lambda=1,
+                                             transformation="log.shift")),
+               "data.frame")
 
 })
 
@@ -38,13 +54,20 @@ test_that("Test that transformed_data is data_frame", {
 data_bc <- read.csv2("EBP/data_bc.csv", sep = ",", stringsAsFactors = TRUE)
 data_bc_std <- read.csv2("EBP/data_bc_std.csv", sep = ",", stringsAsFactors = TRUE)
 data_log <- read.csv2("EBP/data_log.csv", sep = ",", stringsAsFactors = TRUE)
+data_dual <- read.csv2("EBP/data_dual.csv", sep = ",", stringsAsFactors = TRUE)
+data_dual_std <- read.csv2("EBP/data_dual_std.csv", sep = ",", stringsAsFactors = TRUE)
+data_logshift <- read.csv2("EBP/data_logshift.csv", sep = ",", stringsAsFactors = TRUE)
+data_logshift_std <- read.csv2("EBP/data_logshift_std.csv", sep = ",", stringsAsFactors = TRUE)
 ebp_optpar_bc <- read.csv2("EBP/ebp_optpar_bc.csv", sep = ",", stringsAsFactors = TRUE)
 
 test_that("Test if data_transformation returns correctly 
           transformed y and a correct shift paramter",{
 
   lambda <- as.numeric(as.character(ebp_optpar_bc[,"Optpar"]))
-  
+  std_transformed_y_bc <-  as.vector(std_data_transformation(income~educ1, 
+                                           smp_data=incomedata, 
+                                           lambda=lambda,
+                                           transformation="box.cox")$income)
   # Compare benchmark data with transformed y-vector and shift parameter
   # by data_transformation
   
@@ -60,14 +83,55 @@ test_that("Test if data_transformation returns correctly
                                    lambda=lambda,
                                    transformation="box.cox")$shift
   
-  std_transformed_y_bc <-  as.vector(std_data_transformation(income~educ1, 
-                                           smp_data=incomedata, 
-                                           lambda=lambda,
-                                           transformation="box.cox")$income)
+  
   
   expect_equal(transformed_y_bc, as.numeric(as.character(data_bc$y)))
   expect_equal(shift_bc, data_bc$m[1])
   expect_equal(std_transformed_y_bc, as.numeric(as.character(data_bc_std[,1])))
+  
+  # Dual transformation
+  transformed_y_dual <-  data_transformation(income~educ1, 
+                                           smp_data=incomedata, 
+                                           lambda=lambda,
+                                           transformation="dual")$transformed_data$income
+  transformed_y_dual <- as.vector(transformed_y_dual)
+  
+  std_transformed_y_dual <-  as.vector(std_data_transformation(income~educ1, 
+                                                             smp_data=incomedata, 
+                                                             lambda=lambda,
+                                                             transformation="dual")$income)
+  
+  shift_dual <-  data_transformation(income~educ1, 
+                                   smp_data=incomedata, 
+                                   lambda=lambda,
+                                   transformation="dual")$shift
+  
+  expect_equal(transformed_y_dual, as.numeric(as.character(data_dual$y)))
+  expect_equal(shift_dual, data_dual$m[1])
+  expect_equal(std_transformed_y_dual, as.numeric(as.character(data_dual_std[,1])))
+  
+  # Log-Shift transformation
+  transformed_y_logshift <-  data_transformation(income~educ1, 
+                                             smp_data=incomedata, 
+                                             lambda=lambda,
+                                             transformation="log.shift")$transformed_data$income
+  transformed_y_logshift <- as.vector(transformed_y_logshift)
+  
+  std_transformed_y_logshift <-  as.vector(std_data_transformation(income~educ1, 
+                                                               smp_data=incomedata, 
+                                                               lambda=lambda,
+                                                               transformation="log.shift")$income)
+  
+  shift_logshift <-  data_transformation(income~educ1, 
+                                     smp_data=incomedata, 
+                                     lambda=lambda,
+                                     transformation="log.shift")$shift
+  
+  
+  
+  expect_equal(transformed_y_logshift, as.numeric(as.character(data_logshift$y)))
+  expect_equal(shift_logshift, NULL)
+  expect_equal(std_transformed_y_logshift, as.numeric(as.character(data_logshift_std[,1])))
   
   # Log transformation, lambda is NULL for log transformation
   transformed_y_log <- as.vector(data_transformation(income~educ1, 
@@ -133,6 +197,18 @@ test_that("Does back transformation gives sample value?", {
                                        lambda=lambda,
                                        shift=data_bc$m[1])
   expect_equal(back_trans_bc, incomedata$income)
+  
+  back_trans_dual <- back_transformation(y=as.numeric(as.character(data_dual$y)), 
+                                       transformation="dual",
+                                       lambda=lambda,
+                                       shift=data_dual$m[1])
+  expect_equal(back_trans_dual, incomedata$income)
+  
+  back_trans_logshift <- back_transformation(y=as.numeric(as.character(data_logshift$y)), 
+                                       transformation="log.shift",
+                                       lambda=lambda,
+                                       shift=NULL)
+  expect_equal(back_trans_logshift, incomedata$income)
 
 })
 

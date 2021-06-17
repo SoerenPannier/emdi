@@ -24,7 +24,12 @@ print.direct <- function(x, ...) {
 print.ebp <- function(x, ...) {
   throw_class_error(x, "ebp")
   
-  cat("Empirical Best Prediction\n")
+  if(is.null(x$call$weights)) {
+    cat("Empirical Best Prediction\n")
+  } else {
+    cat("Empirical Best Prediction with sampling weights\n")
+  }
+  
   cat("\n")
   cat("Out-of-sample domains: ", x$framework$N_dom_unobs, "\n")
   cat("In-sample domains: ", x$framework$N_dom_smp, "\n")
@@ -34,6 +39,12 @@ print.ebp <- function(x, ...) {
                                    Method          = x$method,
                                    Optimal_lambda  = x$transform_param$optimal_lambda,
                                    Shift_parameter = round(x$transform_param$shift_par,3),
+                                   row.names       = ""
+    )
+  } else if (x$transformation == "dual") {
+    transform_method <- data.frame(Transformation  = x$transformation,
+                                   Method          = x$method,
+                                   Optimal_lambda  = x$transform_param$optimal_lambda,
                                    row.names       = ""
     )
   } else if (x$transformation == "log") {

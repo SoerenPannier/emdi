@@ -7,7 +7,8 @@
 \description{
 The package \pkg{emdi} supports estimating and mapping regional
 disaggregated indicators. For estimating these indicators, direct estimation, 
-the unit-level Empirical Best Prediction approach by \cite{Molina and Rao (2010)}, 
+the unit-level Empirical Best Prediction approach by \cite{Molina and Rao (2010)},
+the extension for data under informative selection by \cite{Guadarrama et al. (2018)},   
 the area-level model by \cite{Fay and Herriot (1979)} and various 
 extensions of it (adjusted variance estimation methods, log and arcsin transformation, 
 spatial, robust and measurement error models) are provided. Depending on 
@@ -41,4 +42,7 @@ Mapping Regionally Disaggregated Indicators, Journal of Statistical Software,
 Vol. 91, No. 7, 1--33, \doi{10.18637/jss.v091.i07} \cr \cr
 Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
 indicators. The Canadian Journal of Statistics, Vol. 38, No.3, 369-385.
+Guadarrama, M., Molina, I. and Rao, J.N.K. (2018). Small area estimation of 
+general parameters under complex sampling designs. Computational Statistics & 
+Data Analysis, Vol. 121, 20-40.
 }

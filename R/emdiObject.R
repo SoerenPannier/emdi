@@ -31,8 +31,8 @@
 #' transformation and, if appropriate, backtransformation. Not filled for class "direct".}
 #' \item{\code{transform_param}}{a list with two elements, \code{optimal_lambda}
 #'    and \code{shift_par}, where the first contains the optimal parameter for a
-#'    Box-Cox transformation or NULL for no and log transformation and the
-#'    second the potential shift parameter in the log or Box-Cox transformation
+#'    transformation with transformation parameter or NULL for no and log transformation 
+#'    and the second the potential shift parameter in the log or Box-Cox transformation
 #'    and NULL for no transformation. Not filled for class "fh" and "direct".}
 #' \item{\code{successful_bootstraps}}{for class "direct", a matrix with domains as 
 #'  rows and indicators as columns. The cells contain the number of successful 
