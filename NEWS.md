@@ -1,5 +1,7 @@
 # emdi 2.1.0
-* TODO: Felix or AK
+* Extension of the ebp function to allow informative sampling
+* Additional data-driven transformations for the ebp 
+* New additional vignette
 
 # emdi 2.0.3
 * Robustifying tests to comply with alternative implementations
