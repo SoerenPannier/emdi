@@ -1,8 +1,10 @@
-## Test environments
-* Ubuntu 16.04.6 LTS (on travis-ci), R 4.0.5
-* Windows10 R 4.0.5 local development environment
-* win-builder: R-4.0.5, R 3.6.3, R Under development 4.1.0
+## Note
+* Additional issues on Cran have been fixed.
 
+## Test environments
+* Ubuntu 16.04.6 LTS (on travis-ci), R 4.0.2
+* Windows10 R 4.1.0 local development environment
+* win-builder: R-4.0.5, R 4.1.0, R Under development (unstable) (2021-07-01 r80574)
 
 ## R CMD check results
 
