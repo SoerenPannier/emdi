@@ -1,3 +1,7 @@
+## This is a resubmission
+* dois in readme have been fixed
+* tarball size was reduced below 4mb
+
 ## Note
 * Additional issues on Cran have been fixed.
 
