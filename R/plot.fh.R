@@ -22,7 +22,7 @@ plot.fh <- function(x,
   
   
   NextMethod("plot", cooks = FALSE, boxcox = FALSE, 
-             cook_df = NULL, indexer = NULL, likelihoods = NULL,
-             residuals = residuals, srand.eff = srand.eff, tmp = tmp
+             cook_df = NULL, indexer = NULL, likelihoods = NULL, 
+             opt_lambda = FALSE, residuals = residuals, srand.eff = srand.eff, tmp = tmp
              )
 }
