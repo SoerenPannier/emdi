@@ -1,4 +1,7 @@
 ## This is a resubmission
+* cat and print changed to message where applicable
+* curly brackets removed from citations (as requested)
+* Note regarding multicore: vignettes are static and examples not using multicore
 * bug in plot.fh fixed
 * all donttest examples checked and running
 * dois in readme have been fixed
