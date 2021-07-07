@@ -127,7 +127,7 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
       (is.null(object$model$seed)))  {
     object$call$seed <- 123
     catmessage <- capture.output(object <- eval(object$call))
-    cat("Seed in fh object not defined, 123 used as default seed. \n")
+    message("Seed in fh object not defined, 123 used as default seed. \n")
   }
   
   startobject <- object
@@ -155,8 +155,8 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
     fit$call$formula <- NULL
     invisible(fit <- eval(fit$call))
     if (catmessage == TRUE){
-      cat("\n")
-      cat("Please note that the model selection criteria are only computed based on 
+      message("\n")
+      message("Please note that the model selection criteria are only computed based on 
        the in-sample domains. \n \n ")
     }
     class(fit) <- c("step_fh", "fh", "emdi")
@@ -197,7 +197,7 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
     stop(criteria, "is -infinity for this model, so 'step' cannot proceed", sep = " ")
   nm <- 1
   if (trace == TRUE) {
-    cat("Start: ", criteria, " = ",format(round(bcriteria, 2)), "\n", 
+    message("Start: ", criteria, " = ",format(round(bcriteria, 2)), "\n", 
         cut.string(deparse(fit$fixed)), "\n\n", sep = "")
     flush.console()
   }
@@ -261,7 +261,7 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
     bcriteria <- fit$model$model_select[[criteria]]
     edf <- length(attr(terms(fit$fixed), "term.labels")) + 1 
     if (trace == TRUE) {
-      cat("\nStep: ", criteria, " = ", format(round(bcriteria, 2)), "\n", 
+      message("\nStep: ", criteria, " = ", format(round(bcriteria, 2)), "\n", 
           cut.string(deparse(fit$fixed)), "\n\n", sep = "")
       flush.console()
     }
@@ -283,10 +283,10 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
 step_check <- function(object, scope, criteria, direction, trace, 
                        steps){
   
-  if(!inherits(object, "fh")){
+  if (!inherits(object, "fh")) {
     stop('Object needs to be fh object.')
   }
-  if (!(object$method$method == "ml")){
+  if (!(object$method$method == "ml")) {
     stop('The variance estimation method of the random effect has to be ml. 
 Otherwise the comparison of models based on information criteria would not be valid.')
   }

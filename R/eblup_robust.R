@@ -74,7 +74,7 @@ eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir,
   EBLUP_data$Out[framework$obs_dom == FALSE] <- 1
   
   if (!all(framework$obs_dom == TRUE)) {
-    cat("Please note that the results are only returned for in-sample domains.
+    message("Please note that the results are only returned for in-sample domains.
         For more information see help(fh).")
   }
 
