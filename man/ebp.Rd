@@ -204,7 +204,7 @@ Guadarrama, M., Molina, I. and Rao, J.N.K. (2018). Small area estimation of
 general parameters under complex sampling designs. Computational Statistics & 
 Data Analysis, Vol. 121, 20-40. \cr \cr 
 Kreutzmann, A., Pannier, S., Rojas-Perilla, N., Schmid, T., Templ, M. 
-and Tzavidis, N. (2019). The {R} Package {emdi} for Estimating and 
+and Tzavidis, N. (2019). The R Package emdi for Estimating and 
 Mapping Regionally Disaggregated Indicators, Journal of Statistical Software,
 Vol. 91, No. 7, 1--33, <doi:10.18637/jss.v091.i07> \cr \cr
 Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
