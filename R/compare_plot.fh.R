@@ -95,7 +95,7 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
     Data$FH_Bench_Direct <- Data$FH_Direct
   }
   if ('FH_Bench' %in% indicator & !("FH_Bench" %in% selected_indicators)) {
-    cat('emdi object does not contain benchmarked fh estimates. Only 
+    message('emdi object does not contain benchmarked fh estimates. Only 
             FH estimates are compared with direct. See also help(benchmark).')
   }
   
@@ -120,8 +120,8 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE, CV = 
   }
   
   if (model$framework$N_dom_unobs > 0) {
-    cat("Please note that since all of the comparisons need a direct estimator, 
-  the plots are only created for in-sample domains. \n \n")
+    message("Please note that since all of the comparisons need a direct estimator, 
+            the plots are only created for in-sample domains. \n \n")
   }
   
   compare_plots(object = Data, type = "area", 

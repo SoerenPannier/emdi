@@ -16,7 +16,7 @@ parametric_bootstrap <- function(framework,
                                  boot_type,
                                  parallel_mode,
                                  cpus) {
-  cat('\r', "Bootstrap started                                                                        ")
+  message('\r', "Bootstrap started                                                                        ")
   if (boot_type == "wild") {
     res_s <- residuals(point_estim$model)
     fitted_s <- fitted(point_estim$model, level = 1)
@@ -78,7 +78,7 @@ parametric_bootstrap <- function(framework,
       )
   }
   
-  cat('\r', "Bootstrap completed", "\n")
+  message('\r', "Bootstrap completed", "\n")
   if (.Platform$OS.type == "windows") {
     flush.console()
   }
@@ -382,7 +382,7 @@ mse_estim_wrapper <-  function(i,
                            remaining %% 3600 %/% 60,  # minutes
                            remaining %% 60 %/% 1) # seconds)
 
-      cat('\r', i, " of ", B, " Bootstrap iterations completed \t Approximately ",
+      message('\r', i, " of ", B, " Bootstrap iterations completed \t Approximately ",
           remaining, " remaining \n")
       if (.Platform$OS.type == "windows") flush.console()
     }

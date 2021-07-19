@@ -83,7 +83,7 @@ To check if a zip application is available they recommend the command
 \code{shell("zip")}.
 }
 \examples{
-\donttest{
+\dontrun{
 # Loading data - population and sample data
 data("eusilcA_pop")
 data("eusilcA_smp")

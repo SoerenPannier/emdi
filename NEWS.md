@@ -2,6 +2,7 @@
 * Extension of the ebp function to allow informative sampling
 * Additional data-driven transformations for the ebp 
 * New additional vignette
+* Example in write.ods fixed
 
 # emdi 2.0.3
 * Robustifying tests to comply with alternative implementations

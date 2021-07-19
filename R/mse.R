@@ -134,13 +134,13 @@ li_lahiri <- function(framework, sigmau2, combined_data, method) {
     # Shrinkage factor
     Bd <- framework$vardir/(sigmau2 + framework$vardir)
     #V is the variance covariance matrix
-    V <- sigmau2 * Z.area%*%t(Z.area) + I * psi[,1]
+    V <- sigmau2 * Z.area %*% t(Z.area) + I * psi[,1]
     Vi <- solve(V)
     Xt <- t(X)
-    XVi <- Xt%*%Vi
-    Q <- solve(XVi%*%X)
-    P <- Vi - (Vi%*%X%*%Q%*%XVi)
-    b.s <- Q%*%XVi%*%Y
+    XVi <- Xt %*% Vi
+    Q <- solve(XVi %*% X)
+    P <- Vi - (Vi %*% X %*% Q %*% XVi)
+    b.s <- Q %*% XVi %*% Y
 
     if (method == "ampl") {
       Bias <- (sum(diag(P - Vi)) + (2/sigmau2)) / sum(diag(Vi^2))
@@ -165,7 +165,7 @@ li_lahiri <- function(framework, sigmau2, combined_data, method) {
       MSE_data$FH[framework$obs_dom == FALSE] <- NA
       MSE_data$Out[framework$obs_dom == FALSE] <- 1
 
-    cat("Please note that only for in-sample-domains a correction following
+    message("Please note that only for in-sample-domains a correction following
         Li and Lahiri (2010) is implemented. For the out-of-sample domains,
         no estimate for the MSE is returned. For the reference see help(fh).")
     }
@@ -187,13 +187,13 @@ yoshimori_lahiri <- function(framework, sigmau2, combined_data, method) {
   # Shrinkage factor
   Bd <- framework$vardir/(sigmau2 + framework$vardir)
   #V is the variance covariance matrix
-  V <- sigmau2 * Z.area%*%t(Z.area) + I * psi[,1]
+  V <- sigmau2 * Z.area %*% t(Z.area) + I * psi[,1]
   Vi <- solve(V)
   Xt <- t(X)
-  XVi <- Xt%*%Vi
-  Q <- solve(XVi%*%X)
-  P <- Vi - (Vi%*%X%*%Q%*%XVi)
-  b.s <- Q%*%XVi%*%Y
+  XVi <- Xt %*% Vi
+  Q <- solve(XVi %*% X)
+  P <- Vi - (Vi %*% X %*% Q %*% XVi)
+  b.s <- Q %*% XVi %*% Y
 
   if (method == "ampl_yl") {
     Bias <- (sum(diag(P - Vi))) / sum(diag(Vi^2))
@@ -214,7 +214,7 @@ yoshimori_lahiri <- function(framework, sigmau2, combined_data, method) {
     MSE_data$FH[framework$obs_dom == FALSE] <- NA
     MSE_data$Out[framework$obs_dom == FALSE] <- 1
 
-    cat("Please note that only for in-sample-domains a correction following
+    message("Please note that only for in-sample-domains a correction following
         Yoshimori and Lahiri (2014) is implemented. For the out-of-sample domains,
         no estimate for the MSE is returned. For the reference see help(fh).")
   }
@@ -351,13 +351,10 @@ prasad_rao_spatial <- function(framework, sigmau2, combined_data, method) {
     MSE_data$FH[framework$obs_dom == FALSE] <- NA
     MSE_data$Out[framework$obs_dom == FALSE] <- 1
     
-    cat("Please note that only for in-sample-domains an analytical MSE for the 
-spatial FH model is implemented. For the out-of-sample domains,
+    message("Please note that only for in-sample-domains an analytical MSE for the 
+        spatial FH model is implemented. For the out-of-sample domains,
         no estimate for the MSE is returned. For the reference see help(fh).")
   }
- # }
-  
-  
   return(MSE_data)
 }
 
@@ -418,13 +415,13 @@ slud_maiti <- function(framework, sigmau2, eblup, combined_data) {
     MSE_data$FH[framework$obs_dom == FALSE] <- NA
     MSE_data$Out[framework$obs_dom == FALSE] <- 1
 
-    cat("Please note that EBLUP and MSE results are only returned for in-sample 
-domains. For more information see help(fh).")
+    message("Please note that EBLUP and MSE results are only returned for in-sample 
+        domains. For more information see help(fh).")
   }
 
   return(MSE_data)
 
-  }
+}
 
 
 
@@ -575,7 +572,7 @@ boot_arcsin_2 <- function(sigmau2, vardir, combined_data, framework,
     
     est_value_boot[,b] <- int_value
     
-    cat("b =",b,"\n")
+    message("b =",b,"\n")
   } # End of bootstrap runs
   
   # KI
@@ -753,7 +750,7 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
       next
     }  
     
-    cat("b =",b,"\n")
+    message("b =",b,"\n")
     
     # Bootstrap values                                   
     rho.tmp.boot <- sigmau2.boot$rho
@@ -830,9 +827,9 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
                      MSE_method = "naive non-parametric bootstrap",
                      successful_bootstraps = notSuc)
     if (!all(framework$obs_dom == TRUE)) {
-      cat("Please note that only for in-sample-domains the non-parametric 
+      message("Please note that only for in-sample-domains the non-parametric 
       bootstrap MSE estimator for the spatial FH model is implemented. 
-For the out-of-sample domains, no estimate for the MSE is returned. For the 
+      For the out-of-sample domains, no estimate for the MSE is returned. For the 
         reference see help(fh).")
     }
   }
@@ -845,9 +842,9 @@ For the out-of-sample domains, no estimate for the MSE is returned. For the
                      MSE_method = "bias corrected non-parametric bootstrap",
                      successful_bootstraps = notSuc)
     if (!all(framework$obs_dom == TRUE)) {
-      cat("Please note that only for in-sample-domains the bias corrected 
-non-parametric bootstrap MSE estimator for the spatial FH model is implemented. 
-For the out-of-sample domains, no estimate for the MSE is returned. For the 
+      message("Please note that only for in-sample-domains the bias corrected 
+        non-parametric bootstrap MSE estimator for the spatial FH model is implemented. 
+        For the out-of-sample domains, no estimate for the MSE is returned. For the 
         reference see help(fh).")
     }
   }
@@ -954,7 +951,7 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     }  
     
     
-    cat("b =",b,"\n")
+    message("b =",b,"\n")
     
     rho.tmp.boot <- sigmau2.boot$rho
     sigma2.tmp.boot <- sigmau2.boot$sigmau2  
@@ -1026,8 +1023,8 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
                      MSE_method = "naive parametric bootstrap",
                      successful_bootstraps = notSuc)
     if (!all(framework$obs_dom == TRUE)) {
-    cat("Please note that only for in-sample-domains the naive parametric bootstrap MSE 
-estimator for the spatial FH model is implemented. For the out-of-sample domains, 
+    message("Please note that only for in-sample-domains the naive parametric bootstrap MSE 
+        estimator for the spatial FH model is implemented. For the out-of-sample domains, 
         no estimate for the MSE is returned. For the reference see help(fh).")
     }
   }
@@ -1041,9 +1038,9 @@ estimator for the spatial FH model is implemented. For the out-of-sample domains
                      MSE_method = "bias corrected parametric bootstrap",
                      successful_bootstraps = notSuc)
     if (!all(framework$obs_dom == TRUE)) {
-    cat("Please note that only for in-sample-domains the bias corrected parametric 
-bootstrap MSE estimator for the spatial FH model is implemented. For the 
-out-of-sample domains, no estimate for the MSE is returned. For the reference 
+    message("Please note that only for in-sample-domains the bias corrected parametric 
+        bootstrap MSE estimator for the spatial FH model is implemented. For the 
+        out-of-sample domains, no estimate for the MSE is returned. For the reference 
         see help(fh).")
     }
   }
@@ -1074,8 +1071,7 @@ jiang_jackknife <- function(framework, combined_data, sigmau2, eblup, transforma
   }
 
   for (domain in seq_len(m)) {
-    cat("domain =",domain,"\n") 
-
+    message("domain =",domain,"\n") 
 
     data_insample <- combined_data[framework$obs_dom,]
     data_tmp <- data_insample[-domain,]
@@ -1134,7 +1130,7 @@ jiang_jackknife <- function(framework, combined_data, sigmau2, eblup, transforma
     MSE_data$FH[framework$obs_dom == FALSE] <- NA
     MSE_data$Out[framework$obs_dom == FALSE] <- 1
 
-    cat("Please note that the jackknife MSE is only available for in-sample
+    message("Please note that the jackknife MSE is only available for in-sample
         domains.")
   }
 
@@ -1189,7 +1185,7 @@ chen_weighted_jackknife <- function(framework, combined_data, sigmau2, eblup, tr
   }
 
   for (domain in seq_len(m)) {
-    cat("domain =",domain,"\n")
+    message("domain =",domain,"\n")
 
 
     data_insample <- combined_data[framework$obs_dom,]
@@ -1305,7 +1301,7 @@ chen_weighted_jackknife <- function(framework, combined_data, sigmau2, eblup, tr
     MSE_data$FH[framework$obs_dom == FALSE] <- NA
     MSE_data$Out[framework$obs_dom == FALSE] <- 1
 
-    cat("Please note that the jackknife MSE is only available for in-sample
+    message("Please note that the jackknife MSE is only available for in-sample
         domains.")
   }
 
@@ -1341,7 +1337,7 @@ jiang_jackknife_yl  <- function(framework, combined_data, sigmau2, eblup, method
   }
   
   for (domain in seq_len(m)) {
-    cat("domain =",domain,"\n")
+    message("domain =",domain,"\n")
     
     
     data_insample <- framework$combined_data[framework$obs_dom,]
@@ -1426,7 +1422,7 @@ jiang_jackknife_yl  <- function(framework, combined_data, sigmau2, eblup, method
     MSE_data$FH[framework$obs_dom == FALSE] <- NA
     MSE_data$Out[framework$obs_dom == FALSE] <- 1
     
-    cat("Please note that the jackknife MSE is only available for in-sample
+    message("Please note that the jackknife MSE is only available for in-sample
         domains.")
   }
   

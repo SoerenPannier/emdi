@@ -87,7 +87,7 @@ benchmark <- function(object, benchmark, share, type = "raking", overwrite = FAL
     object$ind <- object$ind[, c('Domain', 'Direct', 'FH', 'FH_Bench', 'Out')]
     object['MSE'] <- list(NULL)
 
-    cat("Please note that only point estimates are benchmarked. Thus, the 
+    message("Please note that only point estimates are benchmarked. Thus, the 
             MSE element in the new emdi object is NULL.")
     result <- object
   }

@@ -248,7 +248,7 @@ plot.emdi <- function(x,
 #' @rdname plot.emdi
 #' @export
 plot.direct <- function(x, ...) {
-  cat("For emdi objects obtained by direct estimation diagnostic plots are not reasonable.")
+  message("For emdi objects obtained by direct estimation diagnostic plots are not reasonable.")
 }
 
 
