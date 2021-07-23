@@ -25,7 +25,8 @@ Description: Functions that support estimating, assessing and mapping regional
     estimates, map plots can be easily created. Furthermore, results can easily be
     exported to excel. For a detailed description of the package and the methods used
     see "The R Package emdi for Estimating and Mapping Regionally Disaggregated Indicators" 
-    by Kreutzmann et al. (2019) <doi:10.18637/jss.v091.i07> and the second package vignette "A Framework for Producing Small Area Estimates Based on Area-Level Models in {R}".
+    by Kreutzmann et al. (2019) <doi:10.18637/jss.v091.i07> and the second package vignette 
+    "A Framework for Producing Small Area Estimates Based on Area-Level Models in R".
 Depends:
     R (>= 3.5.0)
 License: GPL-2
