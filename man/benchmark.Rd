@@ -11,13 +11,12 @@ benchmark(object, benchmark, share, type = "raking", overwrite = FALSE)
 
 \item{benchmark}{a number determining the benchmark value.}
 
-\item{share}{a vector containing the shares of the population size per area and 
-the total population size (N_d/N).Values must be sorted like the domains in 
-the fh object.}
+\item{share}{a vector containing the shares of the population size per area 
+and the total population size (N_d/N).Values must be sorted like the domains 
+in the fh object.}
 
-\item{type}{Character indicating the type of benchmarking. Types that can be chosen
-(i) Raking ("\code{raking}"),
-(ii) Ratio adjustment ("\code{ratio}"),
+\item{type}{Character indicating the type of benchmarking. Types that can be 
+chosen (i) Raking ("\code{raking}"), (ii) Ratio adjustment ("\code{ratio}"),
 (iii) MSE adjustment ("\code{MSE_adj}"). Defaults to "\code{raking}".}
 
 \item{overwrite}{if \code{TRUE}, the benchmarked FH estimates are added to 
@@ -26,11 +25,11 @@ NULL since these are not benchmarked. Defaults to \code{FALSE}.}
 }
 \value{
 A data frame containing a domain indicator (Domain), direct estimates 
-(Direct), point predictions (FH), benchmarked point predictions (FH_Bench) and 
-a variable indicating out-of-sample domains Out (1 for out-of-sample, 0 for 
-in-sample) . If overwrite is set to TRUE, the fh object is returned, but the 
-point predictions of the ind data frame are complemented by the benchmarked 
-results.
+(Direct), point predictions (FH), benchmarked point predictions (FH_Bench) 
+and a variable indicating out-of-sample domains Out (1 for out-of-sample, 0 
+for in-sample) . If overwrite is set to TRUE, the fh object is returned, but 
+the point predictions of the ind data frame are complemented by the 
+benchmarked results.
 }
 \description{
 This function benchmarks the EBLUP estimates of an area-level model.
@@ -49,8 +48,10 @@ data("eusilcA_popAgg")
 data("eusilcA_smpAgg")
 
 # Combine sample and population data
-combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
-                             smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+combined_data <- combine_data(pop_data = eusilcA_popAgg, 
+                              pop_domains = "Domain",
+                              smp_data = eusilcA_smpAgg, 
+                              smp_domains = "Domain")
 
 # Estimate Fay-Herriot model
 fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
@@ -59,7 +60,8 @@ MSE = TRUE)
 
 # Benchmark the point estimates
 
-# Example 1: Receive data frame with point estimates and their benchmarked results
+# Example 1: Receive data frame with point estimates and their benchmarked
+# results
 fh_bench <- benchmark(fh_std, benchmark = 20140.09, 
 share = eusilcA_popAgg$ratio_n, type = "ratio")
 

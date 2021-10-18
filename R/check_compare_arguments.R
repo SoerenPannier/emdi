@@ -2,18 +2,21 @@ compare_plot_check <- function(model, indicator, label, color, shape,
                                 line_type, gg_theme) {
   
 
-  if (is.null(indicator) || !all(indicator == "all" | indicator == "Quantiles" 
-                              | indicator == "quantiles"
-                              | indicator == "Poverty" | indicator == "poverty" 
-                              | indicator == "Inequality" | indicator == "inequality" 
-                              | indicator == "Custom" | indicator == "custom" 
-                              | indicator %in% names(model$ind[-1]))) {
+  if (is.null(indicator) || !all(indicator == "all" | indicator == "Quantiles" |
+                                 indicator == "quantiles" |
+                                 indicator == "Poverty" |
+                                 indicator == "poverty" |
+                                 indicator == "Inequality" |
+                                 indicator == "inequality" |
+                                 indicator == "Custom" | indicator == "custom" |
+                                 indicator %in% names(model$ind[-1]))) {
     stop(paste0("The argument indicator is set to ", indicator, ". The argument 
                 only allows to be set to all, a name of estimated indicators or 
                 indicator groups as described in help(estimators.emdi)."))
   }
   
-  if (is.null(label) || (!(label == "orig" || label == "no_title" || label == "blank"))) {
+  if (is.null(label) || (!(label == "orig" || label == "no_title" ||
+                           label == "blank"))) {
     stop("label can be one of the following characters 'orig', 
          'no_title' or 'blank'.")
   }
@@ -40,7 +43,8 @@ compare_plot_check <- function(model, indicator, label, color, shape,
 compare_plot_check2 <- function(ind_direct, ind_model) {
   if (!any(ind_direct$Domain %in% ind_model$Domain)) {
     stop("Domain identifiers between direct and model estimates never match.
-         Please verify you are comparing estimates obtained on the same sample.")
+         Please verify you are comparing estimates obtained on the same 
+         sample.")
   }
   if (!all(ind_direct$Domain %in% ind_model$Domain)) {
     warning(paste("Not all domains contained in the direct",

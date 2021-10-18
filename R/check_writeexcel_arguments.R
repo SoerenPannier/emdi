@@ -1,4 +1,4 @@
-writeexcel_check <- function(object, file, split){
+writeexcel_check <- function(object, file, split) {
   if (!inherits(object, "emdi")) {
     stop('First object needs to be of class emdi.')
   }
@@ -11,7 +11,7 @@ writeexcel_check <- function(object, file, split){
   }
 }
 
-writeods_check <- function(object, file, split){
+writeods_check <- function(object, file, split) {
   if (!inherits(object, "emdi")) {
     stop('First object needs to be of class emdi.')
   }
@@ -25,6 +25,7 @@ writeods_check <- function(object, file, split){
   testZIP <- 1
   try(testZIP <- shell("zip"), silent = TRUE)
   if (testZIP == 1) {
-    stop("No zipping application was found, see details in help(write.ods) for details.")
+    stop("No zipping application was found, see details in help(write.ods) for 
+         details.")
   }
 }

@@ -5,8 +5,8 @@
 #'
 #' @param object an object of type "emdi".
 #' @param ... further arguments passed to or from other methods.
-#' @return The return of \code{compare} depends on the class of its argument. The
-#' documentation of particular methods gives detailed information about the
+#' @return The return of \code{compare} depends on the class of its argument. 
+#' The documentation of particular methods gives detailed information about the
 #' return of that method.
 #' @export
 
@@ -16,17 +16,17 @@ compare <- function(object, ...) UseMethod("compare")
 #' Compare function
 #'
 #' Method \code{compare.fh} assesses the quality of the model-based estimates 
-#' of the Fay-Herriot model by comparing them with the direct estimates based on 
-#' a goodness-of-fit test proposed by \cite{Brown et al. (2001)} and by computing 
-#' the correlation between the regression-synthetic part of the Fay-Herriot model 
-#' and the direct estimates.
+#' of the Fay-Herriot model by comparing them with the direct estimates based 
+#' on a goodness-of-fit test proposed by \cite{Brown et al. (2001)} and by 
+#' computing the correlation between the regression-synthetic part of the 
+#' Fay-Herriot model and the direct estimates.
 #'
 #' @param object an object of type "fh".
 #' @param ... further arguments passed to or from other methods.
-#' @return For the method for class "fh", the null hypothesis, the value W of the test 
-#' statistic, the degrees of freedom and the p value of the Brown test; and the 
-#' correlation coefficient of the synthetic part and the direct estimator 
-#' \cite{(Chandra et al. 2015)} are returned.
+#' @return For the method for class "fh", the null hypothesis, the value W of 
+#' the test statistic, the degrees of freedom and the p value of the Brown test; 
+#' and the correlation coefficient of the synthetic part and the direct 
+#' estimator \cite{(Chandra et al. 2015)} are returned.
 #' @references 
 #' Brown, G., R. Chambers, P. Heady, and D. Heasman (2001). Evaluation of small 
 #' area estimation methods: An application to unemployment estimates from the UK
@@ -39,7 +39,7 @@ compare <- function(object, ...) UseMethod("compare")
 #' @export
 #' @importFrom stats cor pchisq
 
-compare.fh <- function(object, ...){
+compare.fh <- function(object, ...) {
 
   throw_class_error(object, "fh")
    
@@ -87,8 +87,8 @@ compare.fh <- function(object, ...){
  class(results) <- "compare.fh"
  
  if (object$framework$N_dom_unobs > 0) {
-   message("Please note that the computation of both test statistics is only based 
-       on in-sample domains.","\n")
+   message("Please note that the computation of both test statistics is only 
+           based on in-sample domains.","\n")
  }
  return(results)
 }
@@ -131,17 +131,19 @@ print.compare.fh <- function(x, ...)
 
 #' Compare predictions of model objects
 #'
-#' Function \code{compare_pred} is a generic function used to compare predictions 
-#' of two model objects.
+#' Function \code{compare_pred} is a generic function used to compare 
+#' predictions of two model objects.
 #' 
 #' @param object1 an object of type "emdi".
 #' @param object2 an object of type "emdi".
-#' @param MSE if \code{TRUE}, MSE estimates are also returned. Defaults to \code{FALSE}.
+#' @param MSE if \code{TRUE}, MSE estimates are also returned. Defaults to 
+#' \code{FALSE}.
 #' @param ... further arguments passed to or from other methods.
 #' @export
 #' @name compare_pred
 
-compare_pred <- function(object1, object2, MSE = FALSE, ...) UseMethod("compare_pred") 
+compare_pred <- function(object1, object2, MSE = FALSE, ...) 
+  UseMethod("compare_pred") 
 
 #' Compare predictions of emdi objects
 #'
@@ -149,12 +151,14 @@ compare_pred <- function(object1, object2, MSE = FALSE, ...) UseMethod("compare_
 #' 
 #' @param object1 an object of type "emdi".
 #' @param object2 an object of type "emdi".
-#' @param MSE if \code{TRUE}, MSE estimates are also returned. Defaults to \code{FALSE}.
+#' @param MSE if \code{TRUE}, MSE estimates are also returned. Defaults to 
+#' \code{FALSE}.
 #' @param ... further arguments passed to or from other methods.
 #' @return Data frame containing the point estimates of both emdi objects. If 
-#' column names are duplicated, the suffixes "_1" and "_2" are added to their names.
-#' "_1" and "_2" standing for object1 and object2, respectively. If \code{MSE} is 
-#' set to \code{TRUE}, the data frame also contains the MSE estimates of the emdi objects.
+#' column names are duplicated, the suffixes "_1" and "_2" are added to their 
+#' names. "_1" and "_2" standing for object1 and object2, respectively. If 
+#' \code{MSE} is set to \code{TRUE}, the data frame also contains the MSE 
+#' estimates of the emdi objects.
 #' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}
 #' @examples
 #' \donttest{
@@ -206,7 +210,8 @@ compare_pred.emdi <- function(object1, object2, MSE = FALSE, ...) {
    }
    
    if ((MSE == TRUE) && (is.null(object1$MSE) || is.null(object2$MSE))) {
-      stop('If MSE is set to TRUE, both emdi objects need to contain MSE estimates.')
+      stop('If MSE is set to TRUE, both emdi objects need to contain MSE 
+           estimates.')
    }
    
    
@@ -226,11 +231,12 @@ compare_pred.emdi <- function(object1, object2, MSE = FALSE, ...) {
       object2data <- object2data[ , -4] # remove column Out
    }
    
-   order_direct_ebp <- c("Domain", "Mean_1", "Mean_2", "Head_Count_1", "Head_Count_2",
-                         "Poverty_Gap_1", "Poverty_Gap_2", "Gini_1", "Gini_2",
-                         "Quintile_Share_1", "Quintile_Share_2", "Quantile_10_1",
-                         "Quantile_10_2", "Quantile_25_1", "Quantile_25_2",
-                         "Median_1", "Median_2", "Quantile_75_1", "Quantile_75_2",
+   order_direct_ebp <- c("Domain", "Mean_1", "Mean_2", "Head_Count_1", 
+                         "Head_Count_2", "Poverty_Gap_1", "Poverty_Gap_2", 
+                         "Gini_1", "Gini_2", "Quintile_Share_1", 
+                         "Quintile_Share_2", "Quantile_10_1", "Quantile_10_2", 
+                         "Quantile_25_1", "Quantile_25_2", "Median_1", 
+                         "Median_2", "Quantile_75_1", "Quantile_75_2",
                          "Quantile_90_1", "Quantile_90_2")
    
    if ( (inherits(object1, "ebp") && inherits(object2, "ebp")) ||
@@ -254,13 +260,14 @@ compare_pred.emdi <- function(object1, object2, MSE = FALSE, ...) {
       if (dim(data)[2] == 21) {
          data <- data[, order_direct_ebp]
       } else if (dim(data)[2] > 21) {
-         custom_indicators <- colnames(data)[(which(!colnames(data) %in% order_direct_ebp))]
+         custom_indicators <- colnames(data)[(which(!colnames(data) %in% 
+                                                      order_direct_ebp))]
          data <- data[, c(order_direct_ebp, custom_indicators)]
       }
       
    } else if (inherits(object1, "fh") && inherits(object2, "fh")) {
       data <- merge(object1data, object2data, by.x = "Domain", by.y = "Domain", 
-                    suffixes = c("_1","_2"))
+                    suffixes = c("_1", "_2"))
       data <- data[, c("Domain", "Direct_1", "Direct_2", "FH_1", "FH_2")]
    } else if ((inherits(object1, "direct") && inherits(object2, "fh")) ||
              (inherits(object1, "fh") && inherits(object2, "direct"))) {

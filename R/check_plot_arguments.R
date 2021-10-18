@@ -4,8 +4,8 @@ plot_check <- function(x, label, color, cooks, range) {
     stop('First object needs to be of class emdi, model. For emdi objects
          obtained by direct estimation diagnostic plots are not reasonable.')
   }
-  if (is.null(label) || (!(label == "orig" || label == "no_title" || label == "blank") 
-                         && !inherits(label, "list"))) {
+  if (is.null(label) || (!(label == "orig" || label == "no_title" || 
+                           label == "blank")  && !inherits(label, "list"))) {
     stop("label can be either one of the following characters 'orig', 
          'no_title' or 'blank' or a list as specified in help(plot.emdi).")
   }

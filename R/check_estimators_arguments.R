@@ -18,21 +18,25 @@ estimators_check <- function(object,
                                 indicator == "FH" | 
                                 indicator == "FH_Bench" 
                                 | indicator == "Direct")) {
-      stop(paste0("The argument indicator is set to ", indicator, ". The argument 
-                  only allows to be set to all, FH, Direct or FH_Bench (if benchmark
-                  function is used before)."))
+      stop(paste0("The argument indicator is set to ", indicator, ". The 
+                  argument only allows to be set to all, FH, Direct or FH_Bench 
+                  (if benchmark function is used before)."))
     }
   } else {
-    if (is.null(indicator) || !all(indicator == "all" | indicator == "All" | 
-                                indicator == "Quantiles" 
-                                | indicator == "quantiles"
-                                | indicator == "Poverty" | indicator == "poverty" 
-                                | indicator == "Inequality" | indicator == "inequality" 
-                                | indicator == "Custom" | indicator == "custom" 
-                                | indicator %in% names(object$ind[-1]))) {
-      stop(paste0("The argument indicator is set to ", indicator, ". The argument 
-                  only allows to be set to all, a name of estimated indicators or 
-                  indicator groups as described in help(estimators.emdi)."))
+    if (is.null(indicator) || !all(indicator == "all" | indicator == "All" |
+                                indicator == "Quantiles" |
+                                indicator == "quantiles" |
+                                indicator == "Poverty" |
+                                indicator == "poverty" |
+                                indicator == "Inequality" |
+                                indicator == "inequality" |
+                                indicator == "Custom" |
+                                indicator == "custom" |
+                                indicator %in% names(object$ind[-1]))) {
+      stop(paste0("The argument indicator is set to ", indicator, ". The 
+                  argument only allows to be set to all, a name of estimated 
+                  indicators or indicator groups as described in 
+                  help(estimators.emdi)."))
     }
   }
   

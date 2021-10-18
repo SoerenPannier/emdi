@@ -20,14 +20,15 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
                                   combined_data = combined_data,
                                   method = method)
 
-      # Crude means that we do not add 0.5 * sigmau2 * (1 - gamma) but the MSE as approximation
-      # of the term. This enables to get estimates also for out-of-sample estimates.
-      # Following Rao 2003, Neves et al. 2013
+      # Crude means that we do not add 0.5 * sigmau2 * (1 - gamma) but the MSE
+      # as approximation of the term. This enables to get estimates also for
+      # out-of-sample estimates. Following Rao 2003, Neves et al. 2013.
       EBLUP_data$FH <- exp(eblup$EBLUP_data$FH + 0.5 * estim_MSE$MSE_data$FH)
 
       if (MSE == TRUE) {
         # The MSE is backtransformed following Rao 2003, p. 133
-        MSE_data$FH <- exp(eblup$EBLUP_data$FH + 0.5 * estim_MSE$MSE_data$FH)^2 * estim_MSE$MSE_data$FH
+        MSE_data$FH <- exp(eblup$EBLUP_data$FH + 0.5 *
+                             estim_MSE$MSE_data$FH)^2 * estim_MSE$MSE_data$FH
         MSE_method <- estim_MSE$MSE_method
       } else {
         MSE_data <- NULL
@@ -39,17 +40,19 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
                                   combined_data = combined_data,
                                   method = method)
 
-      # Slud and Maiti show the correct backtransformation for the log case which
-      # is adding 0.5 * sigmau2 * (1-gamma) to the point estimator on the transformed
-      # scale and backtransform the term by the exponential
-      EBLUP_data$FH[framework$obs_dom == TRUE] <- exp(eblup$EBLUP_data$FH[framework$obs_dom == TRUE] + (0.5 * sigmau2 * (1 - eblup$gamma)))
+      # Slud and Maiti show the correct backtransformation for the log case
+      # which is adding 0.5 * sigmau2 * (1-gamma) to the point estimator on the 
+      # transformed scale and backtransform the term by the exponential
+      EBLUP_data$FH[framework$obs_dom == TRUE] <- 
+        exp(eblup$EBLUP_data$FH[framework$obs_dom == TRUE] +
+              (0.5 * sigmau2 * (1 - eblup$gamma)))
       EBLUP_data$FH[framework$obs_dom == FALSE] <- NA
-
 
       if (MSE == TRUE) {
         SM_MSE <- slud_maiti(framework = framework, sigmau2 = sigmau2,
                              eblup = eblup, combined_data = combined_data)
-        MSE_data$FH[framework$obs_dom == TRUE] <- SM_MSE$FH[framework$obs_dom == TRUE]
+        MSE_data$FH[framework$obs_dom == TRUE] <- 
+          SM_MSE$FH[framework$obs_dom == TRUE]
         MSE_method <- "slud-maiti"
       } else {
         MSE_data <- NULL
@@ -68,11 +71,11 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
 
       if (MSE == TRUE) {
         if (mse_type == "boot") {
-          tmp_out <- boot_arcsin_2(sigmau2 = sigmau2, combined_data = combined_data,
-                                   framework = framework, eblup = eblup,
-                                   eblup_corr = EBLUP_data$FH,
-                                   method = method, interval = interval,
-                                   B = B, backtransformation = backtransformation)
+          tmp_out <- boot_arcsin_2(sigmau2 = sigmau2, combined_data = 
+                                     combined_data, framework = framework, 
+                                   eblup = eblup, eblup_corr = EBLUP_data$FH,
+                                   method = method, interval = interval, B = B, 
+                                   backtransformation = backtransformation)
           MSE_boot <- tmp_out[[2]]
           MSE_data$FH <- MSE_boot$MSE
           MSE_method <- "bootstrap"
@@ -80,19 +83,26 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
         } else if (mse_type == "jackknife" | mse_type == "weighted_jackknife") {
 
           if (mse_type  == "jackknife") {
-            jack_mse <- wrapper_MSE(framework = framework, combined_data = combined_data,
-                                    sigmau2 = sigmau2, vardir = vardir, eblup = eblup,
-                                    transformation = transformation, method = method,
-                                    interval = interval, mse_type = mse_type)
+            jack_mse <- wrapper_MSE(framework = framework, combined_data =
+                                      combined_data, sigmau2 = sigmau2,
+                                    vardir = vardir, eblup = eblup,
+                                    transformation = transformation,
+                                    method = method, interval = interval,
+                                    mse_type = mse_type)
           } else if (mse_type == "weighted_jackknife") {
-            jack_mse <- wrapper_MSE(framework = framework, combined_data = combined_data,
-                                    sigmau2 = sigmau2, vardir = vardir, eblup = eblup,
-                                    transformation = transformation, method = method,
-                                    interval = interval, mse_type = mse_type)
+            jack_mse <- wrapper_MSE(framework = framework, combined_data = 
+                                      combined_data, sigmau2 = sigmau2, 
+                                    vardir = vardir, eblup = eblup, 
+                                    transformation = transformation, 
+                                    method = method, interval = interval, 
+                                    mse_type = mse_type)
           }
 
 
-          back_jack_mse <- 2 * sin(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]) * cos(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]) * jack_mse$MSE_data$FH[jack_mse$MSE_data$Out == 0]
+          back_jack_mse <- 2 * 
+            sin(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]) * 
+            cos(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]) * 
+            jack_mse$MSE_data$FH[jack_mse$MSE_data$Out == 0]
 
           MSE_data$FH[framework$obs_dom == TRUE] <- back_jack_mse
           MSE_data$FH[framework$obs_dom == FALSE] <- NA
@@ -130,16 +140,17 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
       }
 
       EBLUP_data$FH[eblup$EBLUP_data$Out == 0] <- int_value
-      EBLUP_data$FH[eblup$EBLUP_data$Out == 1] <- (sin(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 1]))^2
+      EBLUP_data$FH[eblup$EBLUP_data$Out == 1] <- 
+        (sin(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 1]))^2
 
 
       if (MSE == TRUE) {
         if (mse_type == "boot") {
-          tmp_out <- boot_arcsin_2(sigmau2 = sigmau2, combined_data = combined_data,
-                                   framework = framework, eblup = eblup,
-                                   eblup_corr = EBLUP_data$FH,
-                                   method = method, interval = interval,
-                                   B = B, backtransformation = backtransformation)
+          tmp_out <- boot_arcsin_2(sigmau2 = sigmau2, combined_data =
+                                     combined_data, framework = framework,
+                                   eblup = eblup, eblup_corr = EBLUP_data$FH,
+                                   method = method, interval = interval, B = B,
+                                   backtransformation = backtransformation)
           MSE_boot <- tmp_out[[2]]
 
           MSE_data$FH <- MSE_boot$MSE
@@ -148,18 +159,25 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
         } else if (mse_type == "jackknife" | mse_type == "weighted_jackknife") {
 
           if (mse_type == "jackknife") {
-            jack_mse <- wrapper_MSE(framework = framework, combined_data = combined_data,
-                                    sigmau2 = sigmau2, vardir = vardir, eblup = eblup,
-                                    transformation = transformation, method = method,
-                                    interval = interval, mse_type = mse_type)
+            jack_mse <- wrapper_MSE(framework = framework, combined_data =
+                                      combined_data, sigmau2 = sigmau2,
+                                    vardir = vardir, eblup = eblup,
+                                    transformation = transformation,
+                                    method = method, interval = interval,
+                                    mse_type = mse_type)
           } else if (mse_type == "weighted_jackknife") {
-            jack_mse <- wrapper_MSE(framework = framework, combined_data = combined_data,
-                                    sigmau2 = sigmau2, vardir = vardir, eblup = eblup,
-                                    transformation = transformation, method = method,
-                                    interval = interval, mse_type = mse_type)
+            jack_mse <- wrapper_MSE(framework = framework, combined_data =
+                                      combined_data, sigmau2 = sigmau2,
+                                    vardir = vardir, eblup = eblup,
+                                    transformation = transformation,
+                                    method = method, interval = interval,
+                                    mse_type = mse_type)
           }
 
-          back_jack_mse <- 2 * sin(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]) * cos(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]) * jack_mse$MSE_data$FH[jack_mse$MSE_data$Out == 0]
+          back_jack_mse <- 2 *
+            sin(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]) *
+            cos(eblup$EBLUP_data$FH[eblup$EBLUP_data$Out == 0]) *
+            jack_mse$MSE_data$FH[jack_mse$MSE_data$Out == 0]
 
           MSE_data$FH[framework$obs_dom == TRUE] <- back_jack_mse
           MSE_data$FH[framework$obs_dom == FALSE] <- NA
@@ -171,7 +189,7 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
         MSE_method <- "no mse estimated"
       }
 
-      }
+    }
 
   }
 

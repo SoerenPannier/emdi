@@ -14,19 +14,21 @@ compare_pred(object1, object2, MSE = FALSE, ...)
 
 \item{object2}{an object of type "emdi".}
 
-\item{MSE}{if \code{TRUE}, MSE estimates are also returned. Defaults to \code{FALSE}.}
+\item{MSE}{if \code{TRUE}, MSE estimates are also returned. Defaults to 
+\code{FALSE}.}
 
 \item{...}{further arguments passed to or from other methods.}
 }
 \value{
 Data frame containing the point estimates of both emdi objects. If 
-column names are duplicated, the suffixes "_1" and "_2" are added to their names.
-"_1" and "_2" standing for object1 and object2, respectively. If \code{MSE} is 
-set to \code{TRUE}, the data frame also contains the MSE estimates of the emdi objects.
+column names are duplicated, the suffixes "_1" and "_2" are added to their 
+names. "_1" and "_2" standing for object1 and object2, respectively. If 
+\code{MSE} is set to \code{TRUE}, the data frame also contains the MSE 
+estimates of the emdi objects.
 }
 \description{
-Function \code{compare_pred} is a generic function used to compare predictions 
-of two model objects.
+Function \code{compare_pred} is a generic function used to compare 
+predictions of two model objects.
 
 Method \code{compare_pred.emdi} compares predictions of two emdi objects.
 }
