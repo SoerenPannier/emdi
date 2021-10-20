@@ -1,7 +1,7 @@
-estimators_check <- function(object, 
-                             indicator, 
-                             MSE, 
-                             CV){
+estimators_check <- function(object,
+                             indicator,
+                             MSE,
+                             CV) {
 
   if (is.null(object$MSE) && (MSE == TRUE || CV == TRUE)) {
     stop('No MSE estimates in emdi object: arguments MSE and CV have to be FALSE
@@ -14,12 +14,12 @@ estimators_check <- function(object,
     stop("CV must be a logical value. Set CV to TRUE or FALSE.")
   }
   if (inherits(object, "fh")) {
-    if (is.null(indicator) || !all(indicator == "all" | indicator == "All" | 
-                                indicator == "FH" | 
-                                indicator == "FH_Bench" 
+    if (is.null(indicator) || !all(indicator == "all" | indicator == "All" |
+                                indicator == "FH" |
+                                indicator == "FH_Bench"
                                 | indicator == "Direct")) {
-      stop(paste0("The argument indicator is set to ", indicator, ". The 
-                  argument only allows to be set to all, FH, Direct or FH_Bench 
+      stop(paste0("The argument indicator is set to ", indicator, ". The
+                  argument only allows to be set to all, FH, Direct or FH_Bench
                   (if benchmark function is used before)."))
     }
   } else {
@@ -33,11 +33,11 @@ estimators_check <- function(object,
                                 indicator == "Custom" |
                                 indicator == "custom" |
                                 indicator %in% names(object$ind[-1]))) {
-      stop(paste0("The argument indicator is set to ", indicator, ". The 
-                  argument only allows to be set to all, a name of estimated 
-                  indicators or indicator groups as described in 
+      stop(paste0("The argument indicator is set to ", indicator, ". The
+                  argument only allows to be set to all, a name of estimated
+                  indicators or indicator groups as described in
                   help(estimators.emdi)."))
     }
   }
-  
+
 }

@@ -1,7 +1,7 @@
 framework_FH <- function(combined_data, fixed, vardir, domains,
                          transformation, eff_smpsize, correlation, corMatrix,
                          Ci, tol, maxit) {
-  
+
   # Get sample and population data
   obs_dom <- !is.na(combined_data[[paste(lhs(fixed))]])
 
@@ -16,30 +16,31 @@ framework_FH <- function(combined_data, fixed, vardir, domains,
   vardir_orig <- NULL
   #direct_orig <- direct
   #vardir_orig <- vardir
-  
+
   if (!all(is.na(vardir) ==  is.na(direct))) {
-    stop(paste0("Except for out-of-sample domains the variable ",vardirname, " 
+    stop(paste0("Except for out-of-sample domains the variable ",vardirname, "
                 containing the domain-specific sampling variances must not have
-                NAs.")) 
+                NAs."))
   }
 
-  if (transformation == "log" | transformation == "log" | transformation == "log") {
+  if (transformation == "log" | transformation == "log" |
+      transformation == "log") {
     direct_orig <- direct
     vardir_orig <- vardir
-    vardir <- (1 / direct)^2 * vardir
+    vardir <- (1 / direct) ^ 2 * vardir
     direct <- log(direct)
   } else if (transformation == "arcsin" | transformation == "arcsin") {
     direct_orig <- direct
     vardir_orig <- vardir
     direct <- asin(sqrt(direct))
-    vardir <-  1/ (4 * data[, eff_smpsize])
+    vardir <-  1 / (4 * data[, eff_smpsize])
   }
 
   if (is.null(domains)) {
     combined_data$Domain <- seq_len(nrow(combined_data))
     domains <- "Domain"
   }
-  
+
   # Number of areas
   m <- length(direct)
   M <- length(combined_data[[paste(lhs(fixed))]])
@@ -47,16 +48,18 @@ framework_FH <- function(combined_data, fixed, vardir, domains,
   N_dom_unobs <- M - m
   # Number of covariates
   p <- ncol(model_X)
-  
-  if (!is.null(corMatrix)){
+
+  if (!is.null(corMatrix)) {
     corMatrix <- corMatrix
-    if (is.matrix(corMatrix) == FALSE){corMatrix <- as.matrix(corMatrix)}
+    if (is.matrix(corMatrix) == FALSE) {
+      corMatrix <- as.matrix(corMatrix)
+      }
   }
-  
-  if (!is.null(Ci)){
+
+  if (!is.null(Ci)) {
     Ci <- Ci
   }
-  
+
   framework_out <- list(obs_dom = obs_dom,
                         N_dom_smp = m,
                         N_dom_unobs = N_dom_unobs,

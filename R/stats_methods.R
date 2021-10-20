@@ -1,14 +1,14 @@
 # Extract model coefficients of emdi objects -----------------------------------
 
-#' @aliases coefficients 
+#' @aliases coefficients
 #' @export
 #' @method coef ebp
 #' @importFrom stats coef coefficients
 
 coef.ebp <- function(object, weights = FALSE, ...) {
   throw_class_error(object, "ebp")
-  if(isFALSE(weights)) {
-    coef(object$model) 
+  if (isFALSE(weights)) {
+    coef(object$model)
   } else {
       object$model$coefficients_weighted
     }
@@ -16,7 +16,7 @@ coef.ebp <- function(object, weights = FALSE, ...) {
 }
 
 
-#' @aliases coefficients 
+#' @aliases coefficients
 #' @export
 #' @method coef fh
 #' @importFrom stats coef coefficients
@@ -43,7 +43,7 @@ confint.ebp <- function(object, parm = NULL, level = 0.95, ...) {
   } else {
     intervals(object$model, level = level)$fixed
   }
-  
+
 }
 
 #' @export
@@ -52,16 +52,16 @@ confint.ebp <- function(object, parm = NULL, level = 0.95, ...) {
 confint.fh <- function(object, parm = NULL, level = 0.95, ...) {
   throw_class_error(object, "fh")
   coefmat <- object$model$coefficients
-  
+
   coefs <- coefmat[,1]
   stds <- coefmat[,2]
   dist <- qnorm(p = (1 - level) / 2, 0, stds)
   ret_value <- data.frame(lower = coefs + dist,
-                 est. = coefs,         
+                 est. = coefs,
                  upper = coefs + abs(dist),
                  row.names = row.names(coefmat))
   if (is.null(parm)) {
-    as.matrix(ret_value)  
+    as.matrix(ret_value)
   } else {
     as.matrix(ret_value[parm, ])
   }
@@ -75,13 +75,13 @@ confint.fh <- function(object, parm = NULL, level = 0.95, ...) {
 extractAIC.fh <- function(fit, ...) {
   throw_class_error(fit, "fh")
   if (!is.null(fit$model$model_select$AIC)) {
-    message(paste0('Estimation approach used is ', fit$method$method, ': ', 
+    message(paste0('Estimation approach used is ', fit$method$method, ': ',
                round(fit$model$model_select$AIC, 5)))
     invisible(fit$model$model_select$AIC)
   }
   else {
-    message(paste0('No AIC is returned for estimation approach ', 
-               fit$method$method, '.')) 
+    message(paste0('No AIC is returned for estimation approach ',
+               fit$method$method, '.'))
   }
 }
 
@@ -167,13 +167,14 @@ logLik.ebp <- function(object, ...) {
 
 logLik.fh <- function(object, ...) {
   throw_class_error(object, "fh")
-  if(!is.null(object$model$model_select$loglike)) {
-    message('Estimation approach used is ', object$method$method, ':', round(object$model$model_select$loglike, 5)) 
+  if (!is.null(object$model$model_select$loglike)) {
+    message('Estimation approach used is ', object$method$method, ':',
+            round(object$model$model_select$loglike, 5))
     invisible(object$model$model_select$loglike)
     }
   else {
-    message(paste0('No likelihood is returned for estimation approach ', 
-               object$method$method, '.')) 
+    message(paste0('No likelihood is returned for estimation approach ',
+               object$method$method, '.'))
   }
 }
 
@@ -181,7 +182,7 @@ logLik.fh <- function(object, ...) {
 #' @export
 #' @method nobs ebp
 #' @importFrom stats nobs
- 
+
 nobs.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
   N_obs <- object$framework$N_smp
@@ -202,25 +203,25 @@ nobs.fh <- function(object, ...) {
 #' Predictions from emdi objects
 #'
 #' Method \code{predict.emdi} extracts the direct estimates, the empirical
-#' best linear unbiased or empirical best predictors for all domains from an emdi 
-#' object.
-#' 
+#' best linear unbiased or empirical best predictors for all domains from an
+#' emdi object.
+#'
 #' @param object an object of type "emdi".
 #' @param ... additional arguments that are not used in this method.
 #' @return Data frame with domain predictors.
-#' @details For a better selection of prediction results, it is referred to use 
-#' the generic function \code{\link{estimators}}. The methods for object of class 
-#' "emdi" allows to select among the indicators of interest. 
+#' @details For a better selection of prediction results, it is referred to use
+#' the generic function \code{\link{estimators}}. The methods for object of
+#' class "emdi" allows to select among the indicators of interest.
 #' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}
 #' @examples
 #' \donttest{
 #' # Example for class ebp
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
+#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
 #' na.rm = TRUE)
-#' 
+#'
 #' predict(emdi_model)
 #' }
 #' @export

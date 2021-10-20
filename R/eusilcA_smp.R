@@ -1,16 +1,19 @@
 #' Simulated eusilc data - sample data
 #'
-#' The data set is a simple random sample of data set \code{\link{eusilcA_pop}} 
-#' which is based on \code{\link[simFrame]{eusilcP}} from package \pkg{simFrame}. 
+#' The data set is a simple random sample of data set \code{\link{eusilcA_pop}}
+#' which is based on \code{\link[simFrame]{eusilcP}} from package
+#' \pkg{simFrame}.
 #'
 #' @format A data frame with 1000 observations and 18 variables:
 #' \describe{
-#' \item{eqIncome}{numeric; a simplified version of the equivalized household income.}
-#' \item{eqsize}{numeric; the equivalized household size according to the 
+#' \item{eqIncome}{numeric; a simplified version of the equivalized household
+#' income.}
+#' \item{eqsize}{numeric; the equivalized household size according to the
 #' modified OECD scale.}
 #' \item{gender}{factor; the person's gender (levels: male and female).}
 #' \item{cash}{numeric; employee cash or near cash income (net).}
-#' \item{self_empl}{numeric; cash benefits or losses from self-employment (net).}
+#' \item{self_empl}{numeric; cash benefits or losses from self-employment
+#' (net).}
 #' \item{unempl_ben}{numeric; unemployment benefits (net).}
 #' \item{age_ben}{numeric; old-age benefits (net).}
 #' \item{surv_ben}{numeric; survivor's benefits (net).}

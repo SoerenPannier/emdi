@@ -23,17 +23,17 @@ shall be returned: (i) all calculated indicators ("all");
 one is returned. Note, additional custom indicators can be
 defined as argument for model-based approaches (see also \code{\link{ebp}})
 and do not appear in groups of indicators even though these might belong to
-one of the groups. If the \code{model} argument is of type "fh", 
-indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi 
+one of the groups. If the \code{model} argument is of type "fh",
+indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi
 object is overwritten by function benchmark). Defaults to "all".}
 
-\item{MSE}{optional logical. If \code{TRUE}, MSE estimates for selected indicators
-per domain are added to the data frame of point estimates. Defaults to
-\code{FALSE}.}
-
-\item{CV}{optional logical. If \code{TRUE}, coefficients of variation for selected
+\item{MSE}{optional logical. If \code{TRUE}, MSE estimates for selected
 indicators per domain are added to the data frame of point estimates.
 Defaults to \code{FALSE}.}
+
+\item{CV}{optional logical. If \code{TRUE}, coefficients of variation for
+selected indicators per domain are added to the data frame of point
+estimates. Defaults to \code{FALSE}.}
 
 \item{...}{other parameters that can be passed to function \code{estimators}.}
 }
@@ -42,11 +42,11 @@ The return of \code{estimators} depends on the class of its argument. The
 documentation of particular methods gives detailed information about the
 return of that method.
 
-The return of \code{estimators.emdi} is an object of type "estimators.emdi" with 
-point and/or MSE estimates and/or calculated CV's per domain obtained from
-\code{emdiObject$ind} and, if chosen, \code{emdiObject$MSE}. These objects
-contain two elements, one data frame \code{ind} and a character naming the
-indicator or indicator group \code{ind_name}.
+The return of \code{estimators.emdi} is an object of type "estimators.emdi"
+with point and/or MSE estimates and/or calculated CV's per domain obtained
+from \code{emdiObject$ind} and, if chosen, \code{emdiObject$MSE}. These
+objects contain two elements, one data frame \code{ind} and a character
+naming the indicator or indicator group \code{ind_name}.
 }
 \description{
 Function \code{estimators} is a generic function used to present point and
@@ -60,12 +60,12 @@ the estimates shall be returned. The returned object is suitable for
 printing with the \code{print.estimators.emdi} method.
 }
 \details{
-Objects of class "estimators.emdi" have methods for following generic
-functions: \code{head} and \code{tail} (for default documentation, see 
-\code{\link[utils]{head}}),  \code{as.matrix} (for default documentation, see
-\code{\link[base]{matrix}}), \code{as.data.frame} (for default documentation, 
-see \code{\link[base]{as.data.frame}}), \code{subset} (for default 
-documentation, see \code{\link[base]{subset}}).
+Objects of class "estimators.emdi" have methods for following
+generic functions: \code{head} and \code{tail} (for default documentation,
+see \code{\link[utils]{head}}),  \code{as.matrix} (for default documentation,
+see \code{\link[base]{matrix}}), \code{as.data.frame} (for default
+documentation, see \code{\link[base]{as.data.frame}}), \code{subset} (for
+default documentation, see \code{\link[base]{subset}}).
 }
 \examples{
 \donttest{
@@ -96,6 +96,6 @@ estimators(emdi_model, indicator = "Custom")
 }
 }
 \seealso{
-\code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
+\code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}},
 \code{\link{fh}}
 }

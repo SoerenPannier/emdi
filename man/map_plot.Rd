@@ -19,26 +19,26 @@ map_plot(
 )
 }
 \arguments{
-\item{object}{an object of type emdi, containing the estimates to be 
+\item{object}{an object of type emdi, containing the estimates to be
 visualized.}
 
 \item{indicator}{optional character vector that selects which indicators
 shall be returned: (i) all calculated indicators ("all");
 (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
-"Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini", 
-"Quintile_Share" or the function name/s of "custom_indicator/s"; 
-(iii) groups of indicators: "Quantiles", "Poverty" or 
-"Inequality". Note, additional custom indicators can be 
-defined as argument for model-based approaches (see also \code{\link{ebp}}) 
-and do not appear in groups of indicators even though these might belong to 
-one of the groups. If the \code{model} argument is of type "fh", 
-indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi 
+"Quantile_75", "Quantile_90", "Head_Count", "Poverty_Gap", "Gini",
+"Quintile_Share" or the function name/s of "custom_indicator/s";
+(iii) groups of indicators: "Quantiles", "Poverty" or
+"Inequality". Note, additional custom indicators can be
+defined as argument for model-based approaches (see also \code{\link{ebp}})
+and do not appear in groups of indicators even though these might belong to
+one of the groups. If the \code{model} argument is of type "fh",
+indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi
 object is overwritten by function benchmark). Defaults to "all".}
 
-\item{MSE}{optional logical. If \code{TRUE}, the MSE is also visualized. 
+\item{MSE}{optional logical. If \code{TRUE}, the MSE is also visualized.
 Defaults to \code{FALSE}.}
 
-\item{CV}{optional logical. If \code{TRUE}, the CV is also visualized. 
+\item{CV}{optional logical. If \code{TRUE}, the CV is also visualized.
 Defaults to \code{FALSE}.}
 
 \item{map_obj}{an \code{SpatialPolygonsDataFrame} object as defined by the
@@ -47,27 +47,27 @@ Defaults to \code{FALSE}.}
 \item{map_dom_id}{a character string containing the name of a variable in
 \code{map_obj} that indicates the domains.}
 
-\item{map_tab}{a \code{data.frame} object with two columns that match the 
-domain variable from the census data set (first column) with the domain 
-variable in the map_obj (second column). This should only be used if the IDs 
+\item{map_tab}{a \code{data.frame} object with two columns that match the
+domain variable from the census data set (first column) with the domain
+variable in the map_obj (second column). This should only be used if the IDs
 in both objects differ.}
 
-\item{color}{a \code{vector} of length 2 defining the lowest and highest 
+\item{color}{a \code{vector} of length 2 defining the lowest and highest
 color in the plots.}
 
-\item{scale_points}{a structure defining the lowest, the mid and the highest 
-value of the colorscale. If a numeric vector of length two is given, this scale
-will be used for every plot. Alternatively, a list defining colors for each 
-plot separately may be given.}
+\item{scale_points}{a structure defining the lowest, the mid and the highest
+value of the colorscale. If a numeric vector of length two is given, this
+scale will be used for every plot. Alternatively, a list defining colors for
+each plot separately may be given.}
 
-\item{guide}{character passed to 
+\item{guide}{character passed to
 \code{scale_colour_gradient} from \pkg{ggplot2}.
 Possible values are "none", "colourbar", and "legend".}
 
-\item{return_data}{if set to \code{TRUE}, a fortified data frame including the 
-map data as well as the chosen indicators is returned. Customized maps can 
-easily be obtained from this data frame via the package \pkg{ggplot2}. Defaults 
-to \code{FALSE}.}
+\item{return_data}{if set to \code{TRUE}, a fortified data frame including
+the map data as well as the chosen indicators is returned. Customized maps
+can easily be obtained from this data frame via the package \pkg{ggplot2}.
+Defaults to \code{FALSE}.}
 }
 \value{
 Creates the plots demanded, and, if selected, a fortified data.frame
@@ -83,21 +83,23 @@ data("eusilcA_pop")
 data("eusilcA_smp")
 
 # Generate emdi object with additional indicators; here via function ebp()
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
-                    self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
-                    fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-                  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-                  threshold = 11064.82, transformation = "box.cox", L= 50, MSE = TRUE, B = 50)
+emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
+                    self_empl + unempl_ben + age_ben + surv_ben + sick_ben +
+                    dis_ben + rent + fam_allow + house_allow + cap_inv +
+                    tax_adj, pop_data = eusilcA_pop,
+                  pop_domains = "district", smp_data = eusilcA_smp,
+                  smp_domains = "district", threshold = 11064.82,
+                  transformation = "box.cox", L= 50, MSE = TRUE, B = 50)
 
 # Load shape file
 load_shapeaustria()
 
 # Create map plot for mean indicator - point and MSE estimates but no CV
-map_plot(object = emdi_model, MSE = TRUE, CV = FALSE, 
-         map_obj = shape_austria_dis, indicator = c("Mean"), 
+map_plot(object = emdi_model, MSE = TRUE, CV = FALSE,
+         map_obj = shape_austria_dis, indicator = c("Mean"),
          map_dom_id = "PB")
 
-# Create a suitable mapping table to use numerical identifiers of the shape 
+# Create a suitable mapping table to use numerical identifiers of the shape
 # file
 
 # First find the right order
@@ -110,13 +112,13 @@ map_tab <- data.frame(pop_data_id = emdi_model$ind$Domain[dom_ord],
 # Create map plot for mean indicator - point and CV estimates but no MSE
 # using the numerical domain identifiers of the shape file
 
-map_plot(object = emdi_model, MSE = FALSE, CV = TRUE, 
-         map_obj = shape_austria_dis, indicator = c("Mean"), 
+map_plot(object = emdi_model, MSE = FALSE, CV = TRUE,
+         map_obj = shape_austria_dis, indicator = c("Mean"),
          map_dom_id = "BKZ", map_tab = map_tab)
 
         }
 }
 \seealso{
-\code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}, \code{\link{emdiObject}},
-\code{\link[maptools]{readShapePoly}}
+\code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}},
+\code{\link{emdiObject}}, \code{\link[maptools]{readShapePoly}}
 }
