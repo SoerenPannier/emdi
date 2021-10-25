@@ -102,7 +102,7 @@ datta_lahiri <- function(framework, sigmau2, combined_data) {
     mse_out <- rep(0, framework$M - framework$m)
     # Covariates for out-of-sample domains
     pred_data_tmp <- combined_data[framework$obs_dom == FALSE,]
-    pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1,0,1))
+    pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1, 0, 1))
     formula.tools::lhs(framework$formula) <- quote(helper)
     pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
     pred_X <- pred_data$x
