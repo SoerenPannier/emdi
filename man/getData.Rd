@@ -37,10 +37,12 @@ see \code{\link[nlme]{getData}}.
 \examples{
 \donttest{
 # Example for class direct
-emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
-smp_domains = "district", weights = "weight", threshold = 11064.82,
-var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL,
-totals = NULL, na.rm = TRUE)
+emdi_direct <- direct(
+  y = "eqIncome", smp_data = eusilcA_smp,
+  smp_domains = "district", weights = "weight", threshold = 11064.82,
+  var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL,
+  totals = NULL, na.rm = TRUE
+)
 
 getData(emdi_direct)
 }

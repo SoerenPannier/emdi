@@ -26,60 +26,64 @@
 #' data("eusilcA_prox")
 #'
 #' # Compute spatial correlation tests
-#' spatialcor.tests(direct = eusilcA_smpAgg$Mean,
-#' corMatrix = eusilcA_prox)
+#' spatialcor.tests(
+#'   direct = eusilcA_smpAgg$Mean,
+#'   corMatrix = eusilcA_prox
+#' )
 #' @importFrom spdep geary.test mat2listw moran.test
 #' @export
 
 
-spatialcor.tests <- function(direct, corMatrix){
-
+spatialcor.tests <- function(direct, corMatrix) {
   spatialcor_check(direct = direct, corMatrix = corMatrix)
 
   if (is.matrix(corMatrix) == FALSE) {
-    corMatrix <- as.matrix(corMatrix)}
+    corMatrix <- as.matrix(corMatrix)
+  }
   corMatrix_list <- mat2listw(corMatrix)
-  moran <- moran.test(direct, corMatrix_list, randomisation = TRUE,
-                      zero.policy = TRUE, alternative = "greater")
-  geary <- geary.test(direct, corMatrix_list, randomisation = TRUE,
-                      zero.policy = TRUE, alternative = "greater")
-  out <- data.frame(Statistics = c("Moran's I", "Geary's C"),
-                    Value = c(unname(moran$estimate[1]),
-                              unname(geary$estimate[1])),
-                    p.value = c(moran$p.value, geary$p.value))
+  moran <- moran.test(direct, corMatrix_list,
+    randomisation = TRUE,
+    zero.policy = TRUE, alternative = "greater"
+  )
+  geary <- geary.test(direct, corMatrix_list,
+    randomisation = TRUE,
+    zero.policy = TRUE, alternative = "greater"
+  )
+  out <- data.frame(
+    Statistics = c("Moran's I", "Geary's C"),
+    Value = c(
+      unname(moran$estimate[1]),
+      unname(geary$estimate[1])
+    ),
+    p.value = c(moran$p.value, geary$p.value)
+  )
   out
-
 }
 
-spatialcor_check <- function(direct, corMatrix){
-
+spatialcor_check <- function(direct, corMatrix) {
   if (!is.vector(direct)) {
-    stop('direct must be a vector.')
+    stop("direct must be a vector.")
   }
   if (any(is.na(direct))) {
-    stop('direct must not contain NAs.')
+    stop("direct must not contain NAs.")
   }
   if (any(is.na(corMatrix))) {
-    stop('corMatrix must not contain NAs.')
+    stop("corMatrix must not contain NAs.")
   }
   if (!(is.matrix(corMatrix) || is.data.frame(corMatrix))) {
-    stop('corMatrix must be a matrix or data frame.')
+    stop("corMatrix must be a matrix or data frame.")
   }
   if (dim(corMatrix)[1] != dim(corMatrix)[2]) {
-    stop('corMatrix must be a matrix or data frame with same number of rows and
-         columns equal to the length of direct.')
+    stop("corMatrix must be a matrix or data frame with same number of rows and
+         columns equal to the length of direct.")
   }
   if (length(direct) != dim(corMatrix)[1]) {
-    stop('The vector containing the direct estimates must have the same length
-        as the dimensions of corMatrix.')
+    stop("The vector containing the direct estimates must have the same length
+        as the dimensions of corMatrix.")
   }
   if (all(corMatrix == 0)) {
-    stop('The elements of corMatrix are all equal to 0. Please provide a
+    stop("The elements of corMatrix are all equal to 0. Please provide a
        valid proximity matrix. A description how a proximity matrix
-          can be computed can be found in the vignette.')
+          can be computed can be found in the vignette.")
   }
 }
-
-
-
-

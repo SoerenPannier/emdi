@@ -74,23 +74,35 @@
 #' data("eusilcA_smp")
 #'
 #' # Example 1: With weights and naive bootstrap
-#' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
-#' smp_domains = "district", weights = "weight", threshold = 11064.82,
-#' var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL,
-#' totals = NULL, na.rm = TRUE)
+#' emdi_direct <- direct(
+#'   y = "eqIncome", smp_data = eusilcA_smp,
+#'   smp_domains = "district", weights = "weight", threshold = 11064.82,
+#'   var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL,
+#'   totals = NULL, na.rm = TRUE
+#' )
 #'
 #' # Example 2: With function as threshold
-#' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
-#' smp_domains = "district", weights = "weight", threshold =
-#' function(y, weights){0.6 * laeken::weightedMedian(y, weights)}, na.rm = TRUE)
+#' emdi_direct <- direct(
+#'   y = "eqIncome", smp_data = eusilcA_smp,
+#'   smp_domains = "district", weights = "weight", threshold =
+#'     function(y, weights) {
+#'       0.6 * laeken::weightedMedian(y, weights)
+#'     }, na.rm = TRUE
+#' )
 #'
 #' # Example 3: With custom indicators
-#' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
-#' smp_domains = "district", weights = "weight", threshold = 10859.24,
-#' var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL,
-#' totals = NULL, custom_indicator = list(my_max = function(y, weights,
-#' threshold){max(y)}, my_min = function(y, weights, threshold){min(y)}),
-#' na.rm = TRUE)
+#' emdi_direct <- direct(
+#'   y = "eqIncome", smp_data = eusilcA_smp,
+#'   smp_domains = "district", weights = "weight", threshold = 10859.24,
+#'   var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL,
+#'   totals = NULL, custom_indicator = list(my_max = function(y, weights,
+#'                                                            threshold) {
+#'     max(y)
+#'   }, my_min = function(y, weights, threshold) {
+#'     min(y)
+#'   }),
+#'   na.rm = TRUE
+#' )
 #' }
 #' @export
 #' @importFrom boot boot
@@ -111,15 +123,14 @@ direct <- function(y,
                    X_calib = NULL,
                    totals = NULL,
                    custom_indicator = NULL,
-                   na.rm = FALSE){
-
-
-
-  direct_check(y = y, smp_data = smp_data, smp_domains = smp_domains,
-                weights = weights, design = design, threshold = threshold,
-                var = var, boot_type = boot_type,
-                B = B, seed = seed, X_calib = X_calib, totals = totals,
-                na.rm = na.rm, custom_indicator = custom_indicator)
+                   na.rm = FALSE) {
+  direct_check(
+    y = y, smp_data = smp_data, smp_domains = smp_domains,
+    weights = weights, design = design, threshold = threshold,
+    var = var, boot_type = boot_type,
+    B = B, seed = seed, X_calib = X_calib, totals = totals,
+    na.rm = na.rm, custom_indicator = custom_indicator
+  )
 
   # Save call ------------------------------------------------------------------
   call <- match.call()
@@ -127,59 +138,65 @@ direct <- function(y,
   # Data manipulation and notational framework ---------------------------------
 
   # The function framework_dir can be found in script framework_direct.R
-  framework <- framework_dir(y = y,
-                             smp_data = smp_data,
-                             smp_domains = smp_domains,
-                             weights = weights,
-                             threshold = threshold,
-                             custom_indicator = custom_indicator,
-                             na.rm = na.rm)
+  framework <- framework_dir(
+    y = y,
+    smp_data = smp_data,
+    smp_domains = smp_domains,
+    weights = weights,
+    threshold = threshold,
+    custom_indicator = custom_indicator,
+    na.rm = na.rm
+  )
 
-  result_point <- mapply( FUN = point_estim_direct,
-                          direct_estimator =  framework$indicator_list,
-                          indicator_name =  framework$indicator_names,
-                          MoreArgs = list(
-                                framework = framework,
-                                boot_type = boot_type,
-                                B = B,
-                                seed = seed,
-                                X_calib = X_calib,
-                                totals = totals
-                          ),
-                  SIMPLIFY = F
+  result_point <- mapply(
+    FUN = point_estim_direct,
+    direct_estimator = framework$indicator_list,
+    indicator_name = framework$indicator_names,
+    MoreArgs = list(
+      framework = framework,
+      boot_type = boot_type,
+      B = B,
+      seed = seed,
+      X_calib = X_calib,
+      totals = totals
+    ),
+    SIMPLIFY = F
   )
 
   warnlist <- character()
   if (var == TRUE) {
     envir <- environment()
-    res <- mapply(FUN = direct_variance,
-                  direct_estimator =  framework$indicator_list,
-                  indicator_name =  framework$indicator_names,
-                  indicator = result_point,
-                  MoreArgs = list(
-                           y = framework$y,
-                           weights = framework$weights,
-                           smp_data = framework$smp_data,
-                           smp_domains = framework$smp_domains_vec,
-                           design = design,
-                           bootType = boot_type,
-                           B = B,
-                           seed = seed,
-                           X_calib = X_calib,
-                           totals = totals,
-                           threshold = framework$threshold,
-                           envir = envir
-                           ),
-                  SIMPLIFY = F
+    res <- mapply(
+      FUN = direct_variance,
+      direct_estimator = framework$indicator_list,
+      indicator_name = framework$indicator_names,
+      indicator = result_point,
+      MoreArgs = list(
+        y = framework$y,
+        weights = framework$weights,
+        smp_data = framework$smp_data,
+        smp_domains = framework$smp_domains_vec,
+        design = design,
+        bootType = boot_type,
+        B = B,
+        seed = seed,
+        X_calib = X_calib,
+        totals = totals,
+        threshold = framework$threshold,
+        envir = envir
+      ),
+      SIMPLIFY = F
     )
     if (length(warnlist) > 0) {
-      warning(paste0("For the following domains at least one bootstrap failed ",
-                     ", this may be due to a very small sample size. For these
+      warning(paste0(
+        "For the following domains at least one bootstrap failed ",
+        ", this may be due to a very small sample size. For these
                      domains ", "the variance estimation is based on a reduced
                      number of ", "bootstrap iteration. To see the number of
-                     successful" , " bootstrap iterations for each domain and
+                     successful", " bootstrap iterations for each domain and
                      indicator, have a look at", " the value
-                     successful_bootstraps in the returned object."))
+                     successful_bootstraps in the returned object."
+      ))
     }
   } else {
     res <- result_point
@@ -187,64 +204,63 @@ direct <- function(y,
   ####### Putting together the emdi object
 
 
-  ind <- cbind(res[[1]]$valueByDomain$Domain,
-              as.data.frame(lapply(res, function(erg){erg$valueByDomain[,2]}))
+  ind <- cbind(
+    res[[1]]$valueByDomain$Domain,
+    as.data.frame(lapply(res, function(erg) {
+      erg$valueByDomain[, 2]
+    }))
   )
   if (!var) {
     MSE <- NULL
     colnames(ind) <- c("Domain", framework$indicator_names)
-    } else {
-      MSE <- cbind(res[[1]]$varByDomain$Domain,
-              as.data.frame(lapply(res, function(erg){erg$varByDomain[,2]}))
-              )
-      colnames(MSE) <- colnames(ind) <- c("Domain", framework$indicator_names)
-    }
+  } else {
+    MSE <- cbind(
+      res[[1]]$varByDomain$Domain,
+      as.data.frame(lapply(res, function(erg) {
+        erg$varByDomain[, 2]
+      }))
+    )
+    colnames(MSE) <- colnames(ind) <- c("Domain", framework$indicator_names)
+  }
 
   if (length(warnlist) > 0) {
     failed_BS <- do.call(rbind, lapply(strsplit(warnlist, split = ":_:"), t))
     colnames(failed_BS) <- c("Domain", "Indicator")
     failed_BS <- as.data.frame(failed_BS)
     failed_BS$Domain <- factor(failed_BS$Domain,
-                               levels = levels(framework$smp_domains_vec))
+      levels = levels(framework$smp_domains_vec)
+    )
     failed_BS$Indicator <- factor(failed_BS$Indicator,
-                                  levels = framework$indicator_names)
+      levels = framework$indicator_names
+    )
     sucInd <- B - table(failed_BS$Domain, failed_BS$Indicator)
-  }
-  else {
-    failed_BS <- matrix(data = 0,
-                        nrow = length(levels(framework$smp_domains_vec)),
-                        ncol = length(framework$indicator_names),
-                        dimnames = list(levels(framework$smp_domains_vec),
-                                        framework$indicator_names)
-                        )
+  } else {
+    failed_BS <- matrix(
+      data = 0,
+      nrow = length(levels(framework$smp_domains_vec)),
+      ncol = length(framework$indicator_names),
+      dimnames = list(
+        levels(framework$smp_domains_vec),
+        framework$indicator_names
+      )
+    )
     sucInd <- B - failed_BS
-
   }
 
-   direct_out <- list(
+  direct_out <- list(
     ind = ind,
     MSE = MSE,
-    framework = framework[c("N_dom_smp",
-                         "N_smp",
-                         "smp_domains",
-                         "smp_data",
-                         "smp_domains_vec")],
+    framework = framework[c(
+      "N_dom_smp",
+      "N_smp",
+      "smp_domains",
+      "smp_data",
+      "smp_domains_vec"
+    )],
     call = call,
     successful_bootstraps = sucInd
-    )
+  )
 
-  class(direct_out) <- c( "direct", "emdi")
+  class(direct_out) <- c("direct", "emdi")
   return(direct_out)
 }
-
-
-
-
-
-
-
-
-
-
-
-

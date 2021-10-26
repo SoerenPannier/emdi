@@ -73,14 +73,22 @@ estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
 #' data("eusilcA_smp")
 #'
 #' # Generate emdi object with additional indicators; here via function ebp()
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
-#' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
-#' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' threshold = 11064.82, transformation = "box.cox",
-#' L = 50, MSE = TRUE, B = 50, custom_indicator =
-#' list(my_max = function(y, threshold){max(y)},
-#' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash +
+#'     self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
+#'     fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#'   threshold = 11064.82, transformation = "box.cox",
+#'   L = 50, MSE = TRUE, B = 50, custom_indicator =
+#'     list(
+#'       my_max = function(y, threshold) {
+#'         max(y)
+#'       },
+#'       my_min = function(y, threshold) {
+#'         min(y)
+#'       }
+#'     ), na.rm = TRUE, cpus = 1
+#' )
 #'
 #' # Example 1: Choose Gini coefficient, MSE and CV
 #' gini <- estimators(emdi_model, indicator = "Gini", MSE = TRUE, CV = TRUE)
@@ -88,7 +96,7 @@ estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
 #' tail(gini)
 #' as.data.frame(gini)
 #' as.matrix(gini)
-#' subset(gini, Domain = 'Wien')
+#' subset(gini, Domain = "Wien")
 #'
 #' # Example 2: Choose custom indicators without MSE and CV
 #' estimators(emdi_model, indicator = "Custom")
@@ -98,26 +106,35 @@ estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
 
 estimators.emdi <- function(object, indicator = "all", MSE = FALSE,
                             CV = FALSE, ...) {
-
-  estimators_check(object = object, indicator = indicator,
-                   MSE = MSE, CV = CV)
+  estimators_check(
+    object = object, indicator = indicator,
+    MSE = MSE, CV = CV
+  )
 
   # Only point estimates
   all_ind <- point_emdi(object = object, indicator = indicator)
   selected <- colnames(all_ind$ind)[-1]
 
-  if ( MSE == TRUE || CV == TRUE ) {
-    all_precisions <- mse_emdi(object = object, indicator = indicator,
-                               CV = TRUE)
+  if (MSE == TRUE || CV == TRUE) {
+    all_precisions <- mse_emdi(
+      object = object, indicator = indicator,
+      CV = TRUE
+    )
     colnames(all_precisions$ind) <- paste0(colnames(all_precisions$ind), "_MSE")
-    colnames(all_precisions$ind_cv) <- paste0(colnames(all_precisions$ind_cv),
-                                              "_CV")
-    combined <- data.frame(all_ind$ind, all_precisions$ind,
-                           all_precisions$ind_cv)
-    endings <- c("","_MSE", "_CV")[c(TRUE,MSE,CV)]
+    colnames(all_precisions$ind_cv) <- paste0(
+      colnames(all_precisions$ind_cv),
+      "_CV"
+    )
+    combined <- data.frame(
+      all_ind$ind, all_precisions$ind,
+      all_precisions$ind_cv
+    )
+    endings <- c("", "_MSE", "_CV")[c(TRUE, MSE, CV)]
 
-    combined <- combined[,c("Domain",paste0(rep(selected,each =
-                                                  length(endings)), endings))]
+    combined <- combined[, c("Domain", paste0(rep(selected,
+      each =
+        length(endings)
+    ), endings))]
   } else {
     combined <- all_ind$ind
   }
@@ -132,7 +149,7 @@ estimators.emdi <- function(object, indicator = "all", MSE = FALSE,
 # Prints estimators.emdi objects
 #' @export
 
-print.estimators.emdi <- function(x,...) {
+print.estimators.emdi <- function(x, ...) {
   cat(paste0("Indicator/s: ", x$ind_name, "\n"))
   print(x$ind)
 }
@@ -161,14 +178,14 @@ tail.estimators.emdi <- function(x, n = 6L, keepnums = TRUE,
 # Transforms estimators.emdi objects into a matrix object
 #' @export
 
-as.matrix.estimators.emdi <- function(x,...) {
-  as.matrix(x$ind[,-1])
+as.matrix.estimators.emdi <- function(x, ...) {
+  as.matrix(x$ind[, -1])
 }
 
 # Transforms estimators.emdi objects into a dataframe object
 #' @export
 
-as.data.frame.estimators.emdi <- function(x,...) {
+as.data.frame.estimators.emdi <- function(x, ...) {
   as.data.frame(x$ind, ...)
 }
 
@@ -177,6 +194,5 @@ as.data.frame.estimators.emdi <- function(x,...) {
 
 subset.estimators.emdi <- function(x, ...) {
   x <- as.data.frame(x)
-  subset(x = x,  ...)
+  subset(x = x, ...)
 }
-

@@ -27,11 +27,13 @@ class "emdi" allows to select among the indicators of interest.
 \examples{
 \donttest{
 # Example for class ebp
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
-house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-na.rm = TRUE)
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+  na.rm = TRUE
+)
 
 predict(emdi_model)
 }

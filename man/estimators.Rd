@@ -74,14 +74,22 @@ data("eusilcA_pop")
 data("eusilcA_smp")
 
 # Generate emdi object with additional indicators; here via function ebp()
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
-self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
-fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-threshold = 11064.82, transformation = "box.cox",
-L = 50, MSE = TRUE, B = 50, custom_indicator =
-list(my_max = function(y, threshold){max(y)},
-my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash +
+    self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
+    fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+  threshold = 11064.82, transformation = "box.cox",
+  L = 50, MSE = TRUE, B = 50, custom_indicator =
+    list(
+      my_max = function(y, threshold) {
+        max(y)
+      },
+      my_min = function(y, threshold) {
+        min(y)
+      }
+    ), na.rm = TRUE, cpus = 1
+)
 
 # Example 1: Choose Gini coefficient, MSE and CV
 gini <- estimators(emdi_model, indicator = "Gini", MSE = TRUE, CV = TRUE)
@@ -89,7 +97,7 @@ head(gini)
 tail(gini)
 as.data.frame(gini)
 as.matrix(gini)
-subset(gini, Domain = 'Wien')
+subset(gini, Domain = "Wien")
 
 # Example 2: Choose custom indicators without MSE and CV
 estimators(emdi_model, indicator = "Custom")

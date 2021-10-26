@@ -12,7 +12,6 @@
 
 
 Reml <- function(interval, direct, x, vardir, areanumber) {
-
   A.reml <- function(interval, direct, x, vardir, areanumber) {
     psi <- matrix(c(vardir), areanumber, 1)
     Y <- matrix(c(direct), areanumber, 1)
@@ -20,22 +19,23 @@ Reml <- function(interval, direct, x, vardir, areanumber) {
     Z.area <- diag(1, areanumber)
     sigma.u_log <- interval[1]
     I <- diag(1, areanumber)
-    #V is the variance covariance matrix
+    # V is the variance covariance matrix
     V <- sigma.u_log * Z.area %*% t(Z.area) + I * psi[, 1]
     Vi <- solve(V)
     Xt <- t(X)
     XVi <- Xt %*% Vi
     Q <- solve(XVi %*% X)
     P <- Vi - (Vi %*% X %*% Q %*% XVi)
-    Beta.hat <- Q %*% XVi %*% Y
 
-    ee = eigen(V)
-    - (areanumber / 2) * log(2 * pi) - 0.5 * sum(log(ee$value)) - (0.5) *
+    ee <- eigen(V)
+    -(areanumber / 2) * log(2 * pi) - 0.5 * sum(log(ee$value)) - (0.5) *
       log(det(t(X) %*% Vi %*% X)) - (0.5) * t(Y) %*% P %*% Y
   }
-  ottimo <- optimize(A.reml, interval, maximum = TRUE,
-                     vardir = vardir, areanumber = areanumber,
-                     direct = direct, x = x)
+  ottimo <- optimize(A.reml, interval,
+    maximum = TRUE,
+    vardir = vardir, areanumber = areanumber,
+    direct = direct, x = x
+  )
 
   estsigma2u <- ottimo$maximum
 
@@ -57,32 +57,33 @@ Reml <- function(interval, direct, x, vardir, areanumber) {
 #' @noRd
 
 AMRL <- function(interval, direct, x, vardir, areanumber) {
-
-  AR <- function(interval, direct, x, vardir, areanumber){
+  AR <- function(interval, direct, x, vardir, areanumber) {
     psi <- matrix(c(vardir), areanumber, 1)
     Y <- matrix(c(direct), areanumber, 1)
     X <- x
     Z.area <- diag(1, areanumber)
     sigma.u_log <- interval[1]
     I <- diag(1, areanumber)
-    #V is the variance covariance matrix
-    V <- sigma.u_log * Z.area %*% t(Z.area) + I * psi[,1]
+    # V is the variance covariance matrix
+    V <- sigma.u_log * Z.area %*% t(Z.area) + I * psi[, 1]
     Vi <- solve(V)
     Xt <- t(X)
     XVi <- Xt %*% Vi
     Q <- solve(XVi %*% X)
     P <- Vi - (Vi %*% X %*% Q %*% XVi)
-    Beta.hat <- Q %*% XVi %*% Y
 
     ee <- eigen(V)
-    log(sigma.u_log) - (areanumber/2) * log(2*pi) - 0.5 * sum(log(ee$value)) -
-      (0.5) * log(det(t(X) %*% Vi %*% X)) - (0.5) * t(Y) %*% P %*% Y
+    log(sigma.u_log) - (areanumber / 2) * log(2 * pi) - 0.5 *
+      sum(log(ee$value)) - (0.5) * log(det(t(X) %*% Vi %*% X)) -
+      (0.5) * t(Y) %*% P %*% Y
   }
 
 
-  ottimo <- optimize(AR, interval, maximum = TRUE,
-                     vardir = vardir, areanumber = areanumber,
-                     direct = direct, x = x)
+  ottimo <- optimize(AR, interval,
+    maximum = TRUE,
+    vardir = vardir, areanumber = areanumber,
+    direct = direct, x = x
+  )
 
   estsigma2u <- ottimo$maximum
 
@@ -104,7 +105,6 @@ AMRL <- function(interval, direct, x, vardir, areanumber) {
 #' @noRd
 
 AMRL_YL <- function(interval, direct, x, vardir, areanumber) {
-
   AR_YL <- function(interval, direct, x, vardir, areanumber) {
     psi <- matrix(c(vardir), areanumber, 1)
     Y <- matrix(c(direct), areanumber, 1)
@@ -112,14 +112,13 @@ AMRL_YL <- function(interval, direct, x, vardir, areanumber) {
     Z.area <- diag(1, areanumber)
     sigma.u_log <- interval[1]
     I <- diag(1, areanumber)
-    #V is the variance covariance matrix
-    V <- sigma.u_log * Z.area %*% t(Z.area) + I * psi[,1]
+    # V is the variance covariance matrix
+    V <- sigma.u_log * Z.area %*% t(Z.area) + I * psi[, 1]
     Vi <- solve(V)
     Xt <- t(X)
     XVi <- Xt %*% Vi
     Q <- solve(XVi %*% X)
     P <- Vi - (Vi %*% X %*% Q %*% XVi)
-    Beta.hat <- Q %*% XVi %*% Y
     Bd <- diag(vardir / (sigma.u_log + vardir))
 
     ee <- eigen(V)
@@ -128,9 +127,11 @@ AMRL_YL <- function(interval, direct, x, vardir, areanumber) {
       exp(-(0.5) * log(det(t(X) %*% Vi %*% X))) * exp(-(0.5) * t(Y) %*% P %*% Y)
   }
 
-  ottimo <- optimize(AR_YL, interval, maximum = TRUE,
-                     vardir = vardir, areanumber = areanumber,
-                     direct = direct, x = x)
+  ottimo <- optimize(AR_YL, interval,
+    maximum = TRUE,
+    vardir = vardir, areanumber = areanumber,
+    direct = direct, x = x
+  )
 
   estsigma2u <- ottimo$maximum
 
@@ -152,8 +153,7 @@ AMRL_YL <- function(interval, direct, x, vardir, areanumber) {
 #' @noRd
 
 AMPL <- function(interval, direct, x, vardir, areanumber) {
-
-  AP <- function(interval, direct,x, vardir, areanumber) {
+  AP <- function(interval, direct, x, vardir, areanumber) {
     psi <- matrix(c(vardir), areanumber, 1)
     Y <- matrix(c(direct), areanumber, 1)
     X <- x
@@ -161,22 +161,23 @@ AMPL <- function(interval, direct, x, vardir, areanumber) {
     sigma.u_log <- interval[1]
     I <- diag(1, areanumber)
     # V is the variance covariance matrix
-    V <- sigma.u_log * Z.area %*% t(Z.area) + I * psi[,1]
+    V <- sigma.u_log * Z.area %*% t(Z.area) + I * psi[, 1]
     Vi <- solve(V)
     Xt <- t(X)
     XVi <- Xt %*% Vi
     Q <- solve(XVi %*% X)
     P <- Vi - (Vi %*% X %*% Q %*% XVi)
-    Beta.hat <- Q %*% XVi %*% Y
 
-    ee = eigen(V)
-    log(sigma.u_log) - (areanumber/2) * log(2 * pi) - 0.5 * sum(log(ee$value)) -
-      (0.5) * t(Y) %*% P %*% Y
+    ee <- eigen(V)
+    log(sigma.u_log) - (areanumber / 2) * log(2 * pi) -
+      0.5 * sum(log(ee$value)) - (0.5) * t(Y) %*% P %*% Y
   }
 
-  ottimo <- optimize(AP, interval, maximum = TRUE,
-                     vardir = vardir, areanumber = areanumber,
-                     direct = direct, x = x)
+  ottimo <- optimize(AP, interval,
+    maximum = TRUE,
+    vardir = vardir, areanumber = areanumber,
+    direct = direct, x = x
+  )
 
   estsigma2u <- ottimo$maximum
 
@@ -198,7 +199,6 @@ AMPL <- function(interval, direct, x, vardir, areanumber) {
 #' @noRd
 
 AMPL_YL <- function(interval, direct, x, vardir, areanumber) {
-
   AP_YL <- function(interval, direct, x, vardir, areanumber) {
     psi <- matrix(c(vardir), areanumber, 1)
     Y <- matrix(c(direct), areanumber, 1)
@@ -213,18 +213,19 @@ AMPL_YL <- function(interval, direct, x, vardir, areanumber) {
     XVi <- Xt %*% Vi
     Q <- solve(XVi %*% X)
     P <- Vi - (Vi %*% X %*% Q %*% XVi)
-    Beta.hat <- Q %*% XVi %*% Y
     Bd <- diag(vardir / (sigma.u_log + vardir))
 
-    ee = eigen(V)
-    (atan(sum(diag((I - Bd))))) ^ (1 / areanumber) *
-      (2 * pi) ^ (-(areanumber / 2)) * exp(-0.5 * sum(log(ee$value))) *
+    ee <- eigen(V)
+    (atan(sum(diag((I - Bd)))))^(1 / areanumber) *
+      (2 * pi)^(-(areanumber / 2)) * exp(-0.5 * sum(log(ee$value))) *
       exp(-(0.5) * t(Y) %*% P %*% Y)
   }
 
-  ottimo <- optimize(AP_YL, interval, maximum = TRUE,
-                     vardir = vardir, areanumber = areanumber,
-                     direct = direct, x = x)
+  ottimo <- optimize(AP_YL, interval,
+    maximum = TRUE,
+    vardir = vardir, areanumber = areanumber,
+    direct = direct, x = x
+  )
   estsigma2u <- ottimo$maximum
 
   return(sigmau_ampl_yl = estsigma2u)
@@ -245,8 +246,7 @@ AMPL_YL <- function(interval, direct, x, vardir, areanumber) {
 #' @noRd
 
 MPL <- function(interval, direct, x, vardir, areanumber) {
-
-  ML <- function(interval, direct,x, vardir, areanumber) {
+  ML <- function(interval, direct, x, vardir, areanumber) {
     psi <- matrix(c(vardir), areanumber, 1)
     Y <- matrix(c(direct), areanumber, 1)
     X <- x
@@ -254,22 +254,23 @@ MPL <- function(interval, direct, x, vardir, areanumber) {
     sigma.u_log <- interval[1]
     I <- diag(1, areanumber)
     # V is the variance covariance matrix
-    V <- sigma.u_log * Z.area %*% t(Z.area) + I * psi[,1]
+    V <- sigma.u_log * Z.area %*% t(Z.area) + I * psi[, 1]
     Vi <- solve(V)
     Xt <- t(X)
     XVi <- Xt %*% Vi
     Q <- solve(XVi %*% X)
     P <- Vi - (Vi %*% X %*% Q %*% XVi)
-    Beta.hat <- Q %*% XVi %*% Y
 
-    ee = eigen(V)
-    - (areanumber / 2) * log(2 * pi) - 0.5 * sum(log(ee$value)) -
+    ee <- eigen(V)
+    -(areanumber / 2) * log(2 * pi) - 0.5 * sum(log(ee$value)) -
       (0.5) * t(Y) %*% P %*% Y
   }
 
-  ottimo <- optimize(ML, interval, maximum = TRUE,
-                     vardir = vardir, areanumber = areanumber,
-                     direct = direct, x = x)
+  ottimo <- optimize(ML, interval,
+    maximum = TRUE,
+    vardir = vardir, areanumber = areanumber,
+    direct = direct, x = x
+  )
 
   estsigma2u <- ottimo$maximum
 
@@ -289,7 +290,6 @@ MPL <- function(interval, direct, x, vardir, areanumber) {
 #' @noRd
 
 SML <- function(direct, X, vardir, areanumber, W, maxit, tol) {
-
   Xt <- t(X)
   tdirect <- t(direct)
   Wt <- t(W)
@@ -300,8 +300,8 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol) {
   final.param <- matrix(0, 2, 1)
 
   # Scores vector and Fisher information matrix
-  score.vec <- matrix(0,2,1)
-  fisher <- matrix(0,2,2)
+  score.vec <- matrix(0, 2, 1)
+  fisher <- matrix(0, 2, 2)
 
   # Set initial values
   est.sigma2 <- 0
@@ -312,8 +312,7 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol) {
   # Fisher-scoring algorithm
   iter <- 0
   conv <- tol + 1
-  while ((conv > tol) & (iter < maxit))
-  {
+  while ((conv > tol) & (iter < maxit)) {
     iter <- iter + 1
 
     # Derivative of covariance matrix V: variance
@@ -332,7 +331,6 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol) {
     XVi <- Xt %*% Vi
     Q <- solve(XVi %*% X)
     P <- Vi - (Vi %*% X %*% Q %*% XVi)
-    Beta.hat <- Q %*% XVi %*% direct
 
     # Scores vector
     P.der.sigma <- P %*% der.sigma
@@ -342,9 +340,9 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol) {
     Vi.der.vrho <- Vi %*% der.vrho
 
     # Scores vector
-    score.vec[1,1] <- (-0.5) * sum(diag(Vi.der.sigma)) +
+    score.vec[1, 1] <- (-0.5) * sum(diag(Vi.der.sigma)) +
       (0.5) * (tdirect %*% P.der.sigma %*% P.direct)
-    score.vec[2,1] <- (-0.5) * sum(diag(Vi.der.vrho)) +
+    score.vec[2, 1] <- (-0.5) * sum(diag(Vi.der.vrho)) +
       (0.5) * (tdirect %*% P.der.rho %*% P.direct)
 
     # Fisher information matrix
@@ -359,10 +357,12 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol) {
     final.param <- est.param + solve(fisher) %*% score.vec
 
     # Restricting the spatial correlation to (-0.999,0.999)
-    if (final.param[2, 1] <= -1)
+    if (final.param[2, 1] <= -1) {
       final.param[2, 1] <- -0.999
-    if (final.param[2, 1] >= 1)
+    }
+    if (final.param[2, 1] >= 1) {
       final.param[2, 1] <- 0.999
+    }
 
     est.sigma2[iter + 1] <- final.param[1, 1]
     est.rho[iter + 1] <- final.param[2, 1]
@@ -370,10 +370,11 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol) {
   }
 
   # Final estimators
-  if (est.rho[iter + 1] == -0.999)
+  if (est.rho[iter + 1] == -0.999) {
     est.rho[iter + 1] <- -1
-  else if (est.rho[iter + 1] == 0.999)
+  } else if (est.rho[iter + 1] == 0.999) {
     est.rho[iter + 1] <- 1
+  }
   rho <- est.rho[iter + 1]
 
   est.sigma2[iter + 1] <- max(est.sigma2[iter + 1], 0)
@@ -383,8 +384,9 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol) {
 
   if (iter >= maxit && conv >= tol) {
     convergence <- FALSE
-  } else
+  } else {
     convergence <- TRUE
+  }
 
   return(list(sigmau2 = sigma2u, rho = rho, convergence = convergence))
 }
@@ -400,8 +402,7 @@ SML <- function(direct, X, vardir, areanumber, W, maxit, tol) {
 #' @return estimated sigmau2 and beta coefficients and convergence (TRUE/FALSE).
 #' @noRd
 
-SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
-
+SREML <- function(direct, X, vardir, areanumber, W, maxit, tol) {
   Xt <- t(X)
   tdirect <- t(direct)
   Wt <- t(W)
@@ -443,15 +444,14 @@ SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
     XVi <- Xt %*% Vi # Inverse of X'ViX
     Q <- solve(XVi %*% X)
     P <- Vi - (Vi %*% X %*% Q %*% XVi)
-    Beta.hat <- Q %*% XVi %*% direct
 
     # Scores vector
     P.der.sigma <- P %*% der.sigma
     P.der.rho <- P %*% der.vrho
     P.direct <- P %*% direct
-    score.vec[1,1] <- (-0.5) * sum(diag(P.der.sigma)) +
+    score.vec[1, 1] <- (-0.5) * sum(diag(P.der.sigma)) +
       (0.5) * (tdirect %*% P.der.sigma %*% P.direct)
-    score.vec[2,1] <- (-0.5) * sum(diag(P.der.rho)) +
+    score.vec[2, 1] <- (-0.5) * sum(diag(P.der.rho)) +
       (0.5) * (tdirect %*% P.der.rho %*% P.direct)
 
     # Fisher information matrix
@@ -466,10 +466,12 @@ SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
     final.param <- est.param + solve(fisher) %*% score.vec
 
     # Restricting the spatial correlation to (-0.999,0.999)
-    if (final.param[2, 1] <= -1)
+    if (final.param[2, 1] <= -1) {
       final.param[2, 1] <- -0.999
-    if (final.param[2, 1] >= 1)
+    }
+    if (final.param[2, 1] >= 1) {
       final.param[2, 1] <- 0.999
+    }
 
 
     est.sigma2[iter + 1] <- final.param[1, 1]
@@ -477,27 +479,26 @@ SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
     conv <- max(abs(final.param - est.param) / est.param)
   }
 
-    # Final estimators
-    if (est.rho[iter + 1] == -0.999)
-      est.rho[iter + 1] <- -1
-    else if (est.rho[iter + 1] == 0.999)
-      est.rho[iter + 1] <- 1
-    rho <- est.rho[iter + 1]
+  # Final estimators
+  if (est.rho[iter + 1] == -0.999) {
+    est.rho[iter + 1] <- -1
+  } else if (est.rho[iter + 1] == 0.999) {
+    est.rho[iter + 1] <- 1
+  }
+  rho <- est.rho[iter + 1]
 
-    est.sigma2[iter + 1] <- max(est.sigma2[iter + 1], 0)
-    sigma2u <- est.sigma2[iter + 1]
+  est.sigma2[iter + 1] <- max(est.sigma2[iter + 1], 0)
+  sigma2u <- est.sigma2[iter + 1]
 
-    # Convergence
+  # Convergence
 
-    if (iter >= maxit && conv >= tol) {
-      convergence <- FALSE
-    } else {
-      convergence <- TRUE
-    }
+  if (iter >= maxit && conv >= tol) {
+    convergence <- FALSE
+  } else {
+    convergence <- TRUE
+  }
 
-    return(list(sigmau2 = sigma2u, rho = rho, convergence = convergence))
-
-
+  return(list(sigmau2 = sigma2u, rho = rho, convergence = convergence))
 }
 #' Function for estimating sigmau2 and beta following Ybarra and Lohr.
 #'
@@ -512,7 +513,7 @@ SREML <- function(direct, X, vardir, areanumber, W, maxit, tol){
 #' @return estimated sigmau2 and estimated beta coefficients.
 #' @noRd
 
-ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
+ybarralohr <- function(direct, x, vardir, Ci, areanumber, p, tol, maxit) {
 
   # Paper pages 923-924
   wi <- rep(1, areanumber)
@@ -536,7 +537,6 @@ ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
   }
 
   while (conv > tol & iter < maxit) {
-
     wi.tmp <- wi
 
     # wC
@@ -558,9 +558,6 @@ ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
     decomp <- eigen(GiwCGi)
     P <- decomp$vectors
 
-    # Lambda
-    Lambda <- diag(decomp$values)
-
     # D
     Djj <- rep(0, p)
     cond <- which((1 - decomp$values) > 1 / areanumber)
@@ -571,7 +568,6 @@ ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
     Beta.hat <- Gi %*% P %*% D %*% t(P) %*% Gi %*%
       t(t(as.matrix(wi * direct, areanumber, 1)) %*% t(x))
 
-    # b^tCib
     Beta.hat.tCiBeta.hat <- NULL
     for (i in seq_len(areanumber)) {
       Beta.hat.tCiBeta.hat[i] <- t(Beta.hat) %*% Ci[, , i] %*% Beta.hat
@@ -592,14 +588,14 @@ ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
     # Convergence
     conv <- mean(abs(wi - wi.tmp))
     iter <- iter + 1
-
   }
 
   estsigma2u <- sigmau2
 
-  return(list(sigmau_YL = estsigma2u, betahatw = Beta.hat,
-              Beta.hat.tCiBeta.hat = Beta.hat.tCiBeta.hat))
-
+  return(list(
+    sigmau_YL = estsigma2u, betahatw = Beta.hat,
+    Beta.hat.tCiBeta.hat = Beta.hat.tCiBeta.hat
+  ))
 }
 
 
@@ -620,44 +616,60 @@ ybarralohr <- function(direct, x, vardir, Ci, areanumber,p, tol, maxit) {
 #' @noRd
 
 wrapper_estsigmau2 <- function(framework, method, interval) {
-
   sigmau2 <- if (method == "reml" & framework$correlation == "no") {
-    Reml(interval = interval, vardir = framework$vardir, x = framework$model_X,
-                          direct = framework$direct, areanumber = framework$m)
+    Reml(
+      interval = interval, vardir = framework$vardir, x = framework$model_X,
+      direct = framework$direct, areanumber = framework$m
+    )
   } else if (method == "amrl") {
-    AMRL(interval = interval, vardir = framework$vardir, x = framework$model_X,
-                    direct = framework$direct, areanumber = framework$m)
+    AMRL(
+      interval = interval, vardir = framework$vardir, x = framework$model_X,
+      direct = framework$direct, areanumber = framework$m
+    )
   } else if (method == "amrl_yl") {
-    AMRL_YL(interval = interval, vardir = framework$vardir,
-            x = framework$model_X, direct = framework$direct,
-            areanumber = framework$m)
+    AMRL_YL(
+      interval = interval, vardir = framework$vardir,
+      x = framework$model_X, direct = framework$direct,
+      areanumber = framework$m
+    )
   } else if (method == "ampl") {
-    AMPL(interval = interval, vardir = framework$vardir,
-         x = framework$model_X, direct = framework$direct,
-         areanumber = framework$m)
+    AMPL(
+      interval = interval, vardir = framework$vardir,
+      x = framework$model_X, direct = framework$direct,
+      areanumber = framework$m
+    )
   } else if (method == "ampl_yl") {
-    AMPL_YL(interval = interval, vardir = framework$vardir,
-            x = framework$model_X, direct = framework$direct,
-            areanumber = framework$m)
+    AMPL_YL(
+      interval = interval, vardir = framework$vardir,
+      x = framework$model_X, direct = framework$direct,
+      areanumber = framework$m
+    )
   } else if (method == "ml" & framework$correlation == "no") {
-    MPL(interval = interval, vardir = framework$vardir,
-        x = framework$model_X, direct = framework$direct,
-        areanumber = framework$m)
+    MPL(
+      interval = interval, vardir = framework$vardir,
+      x = framework$model_X, direct = framework$direct,
+      areanumber = framework$m
+    )
   } else if (method == "ml" & framework$correlation == "spatial") {
-    SML(direct = framework$direct, X = framework$model_X,
-        vardir = framework$vardir, areanumber = framework$m, W = framework$W,
-        tol = framework$tol, maxit = framework$maxit)
+    SML(
+      direct = framework$direct, X = framework$model_X,
+      vardir = framework$vardir, areanumber = framework$m, W = framework$W,
+      tol = framework$tol, maxit = framework$maxit
+    )
   } else if (method == "reml" & framework$correlation == "spatial") {
-    SREML(direct = framework$direct, X = framework$model_X,
-        vardir = framework$vardir, areanumber = framework$m, W = framework$W,
-        tol = framework$tol, maxit = framework$maxit)
+    SREML(
+      direct = framework$direct, X = framework$model_X,
+      vardir = framework$vardir, areanumber = framework$m, W = framework$W,
+      tol = framework$tol, maxit = framework$maxit
+    )
   } else if (method == "me") {
-    ybarralohr(vardir = framework$vardir, direct = framework$direct,
-               x = framework$model_X, Ci = framework$Ci, tol = framework$tol,
-               maxit = framework$maxit, p = framework$p,
-               areanumber = framework$m)
+    ybarralohr(
+      vardir = framework$vardir, direct = framework$direct,
+      x = framework$model_X, Ci = framework$Ci, tol = framework$tol,
+      maxit = framework$maxit, p = framework$p,
+      areanumber = framework$m
+    )
   }
 
   return(sigmau2)
 }
-

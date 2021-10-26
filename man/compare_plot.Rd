@@ -165,26 +165,36 @@ data("eusilcA_pop")
 data("eusilcA_smp")
 
 # Generation of two emdi objects
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
-self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
-fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-threshold = function(y){0.6 * median(y)}, L = 50, MSE = TRUE,
-na.rm = TRUE, cpus = 1)
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash +
+    self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
+    fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+  threshold = function(y) {
+    0.6 * median(y)
+  }, L = 50, MSE = TRUE,
+  na.rm = TRUE, cpus = 1
+)
 
-emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
-smp_domains = "district", weights = "weight", threshold = 11161.44,
-var = TRUE, boot_type = "naive", B = 50, seed = 123, na.rm = TRUE)
+emdi_direct <- direct(
+  y = "eqIncome", smp_data = eusilcA_smp,
+  smp_domains = "district", weights = "weight", threshold = 11161.44,
+  var = TRUE, boot_type = "naive", B = 50, seed = 123, na.rm = TRUE
+)
 
 # Example 1: Receive first overview
 compare_plot(model = emdi_model, direct = emdi_direct)
 
 # Example 2: Change plot theme
 library(ggplot2)
-compare_plot(emdi_model, emdi_direct, indicator = "Median",
-gg_theme = theme(axis.line = element_line(size = 3, colour = "grey80"),
-plot.background = element_rect(fill = "lightblue3"),
-legend.position = "none"))
+compare_plot(emdi_model, emdi_direct,
+  indicator = "Median",
+  gg_theme = theme(
+    axis.line = element_line(size = 3, colour = "grey80"),
+    plot.background = element_rect(fill = "lightblue3"),
+    legend.position = "none"
+  )
+)
 
 # Example for comparison of direct estimates and models of type fh
 
@@ -193,15 +203,19 @@ data("eusilcA_popAgg")
 data("eusilcA_smpAgg")
 
 # Combine sample and population data
-combined_data <- combine_data(pop_data = eusilcA_popAgg,
-                              pop_domains = "Domain",
-                              smp_data = eusilcA_smpAgg,
-                              smp_domains = "Domain")
+combined_data <- combine_data(
+  pop_data = eusilcA_popAgg,
+  pop_domains = "Domain",
+  smp_data = eusilcA_smpAgg,
+  smp_domains = "Domain"
+)
 
 # Generation of the emdi object
-fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-             combined_data = combined_data, domains = "Domain",
-             method = "ml", MSE = TRUE)
+fh_std <- fh(
+  fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+  combined_data = combined_data, domains = "Domain",
+  method = "ml", MSE = TRUE
+)
 # Example 3: Receive first overview
 compare_plot(fh_std)
 

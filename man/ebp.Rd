@@ -167,31 +167,45 @@ data("eusilcA_pop")
 data("eusilcA_smp")
 
 # Example 1: With default setting but na.rm=TRUE
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
-house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-na.rm = TRUE)
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+  na.rm = TRUE
+)
 
 
 # Example 2: With MSE, two additional indicators and function as threshold -
 # Please note that the example runs for several minutes. For a short check
 # change L and B to lower values.
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
-self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
-fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-threshold = function(y){0.6 * median(y)}, transformation = "log",
-L = 50, MSE = TRUE, boot_type = "wild", B = 50, custom_indicator =
-list(my_max = function(y, threshold){max(y)},
-my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash +
+    self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
+    fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+  threshold = function(y) {
+    0.6 * median(y)
+  }, transformation = "log",
+  L = 50, MSE = TRUE, boot_type = "wild", B = 50, custom_indicator =
+    list(
+      my_max = function(y, threshold) {
+        max(y)
+      },
+      my_min = function(y, threshold) {
+        min(y)
+      }
+    ), na.rm = TRUE, cpus = 1
+)
 
 # Example 3: With default setting but na.rm=TRUE under informative sampling.
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
-house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-weights = "weight", transformation = 'log', na.rm = TRUE)
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+  weights = "weight", transformation = "log", na.rm = TRUE
+)
 }
 }
 \references{

@@ -38,8 +38,10 @@ data("eusilcA_smpAgg")
 data("eusilcA_prox")
 
 # Compute spatial correlation tests
-spatialcor.tests(direct = eusilcA_smpAgg$Mean,
-corMatrix = eusilcA_prox)
+spatialcor.tests(
+  direct = eusilcA_smpAgg$Mean,
+  corMatrix = eusilcA_prox
+)
 }
 \references{
 Bivand, R. (2019), spdep: Spatial Dependence: Weighting Schemes,

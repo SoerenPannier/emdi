@@ -229,46 +229,58 @@ data("eusilcA_popAgg")
 data("eusilcA_smpAgg")
 
 # Combine sample and population data
-combined_data <- combine_data(pop_data = eusilcA_popAgg,
-                              pop_domains = "Domain",
-                              smp_data = eusilcA_smpAgg,
-                              smp_domains = "Domain")
+combined_data <- combine_data(
+  pop_data = eusilcA_popAgg,
+  pop_domains = "Domain",
+  smp_data = eusilcA_smpAgg,
+  smp_domains = "Domain"
+)
 
 # Example 1: Standard Fay-Herriot model and analytical MSE
-fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-combined_data = combined_data, domains = "Domain", method = "ml",
-MSE = TRUE)
+fh_std <- fh(
+  fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+  combined_data = combined_data, domains = "Domain", method = "ml",
+  MSE = TRUE
+)
 
 # Example 2: arcsin transformation of the dependent variable
-fh_arcsin <- fh(fixed = MTMED ~ cash + age_ben + rent + house_allow,
-vardir = "Var_MTMED", combined_data = combined_data, domains = "Domain",
-method = "ml", transformation = "arcsin", backtransformation = "bc",
-eff_smpsize = "n", MSE = TRUE, mse_type = "boot", B = c(50,0))
+fh_arcsin <- fh(
+  fixed = MTMED ~ cash + age_ben + rent + house_allow,
+  vardir = "Var_MTMED", combined_data = combined_data, domains = "Domain",
+  method = "ml", transformation = "arcsin", backtransformation = "bc",
+  eff_smpsize = "n", MSE = TRUE, mse_type = "boot", B = c(50, 0)
+)
 
 # Example 3: Spatial Fay-Herriot model
 # Load proximity matrix
 data("eusilcA_prox")
-fh_spatial <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-combined_data = combined_data, domains = "Domain", method = "reml",
-correlation = "spatial", corMatrix = eusilcA_prox, MSE = TRUE,
-mse_type = "analytical")
+fh_spatial <- fh(
+  fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+  combined_data = combined_data, domains = "Domain", method = "reml",
+  correlation = "spatial", corMatrix = eusilcA_prox, MSE = TRUE,
+  mse_type = "analytical"
+)
 
 # Example 4: Robust Fay-Herriot model
-fh_robust <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-combined_data = combined_data, domains = "Domain", method = "reblupbc",
-k = 1.345, mult_constant = 1, MSE = TRUE, mse_type = "pseudo")
+fh_robust <- fh(
+  fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+  combined_data = combined_data, domains = "Domain", method = "reblupbc",
+  k = 1.345, mult_constant = 1, MSE = TRUE, mse_type = "pseudo"
+)
 
 # Example 5: Ybarra-Lohr model
 # Create MSE array
 P <- 1
 M <- length(eusilcA_smpAgg$Mean)
-Ci_array <- array(data = 0, dim=c(P+1,P+1,M))
-for(i in 1:M){
- Ci_array[2,2,i] <- eusilcA_smpAgg$Var_Cash[i]
+Ci_array <- array(data = 0, dim = c(P + 1, P + 1, M))
+for (i in 1:M) {
+  Ci_array[2, 2, i] <- eusilcA_smpAgg$Var_Cash[i]
 }
-fh_yl <- fh(fixed = Mean ~ Cash, vardir= "Var_Mean",
-combined_data = eusilcA_smpAgg, domains ="Domain", method = "me",
-Ci = Ci_array, MSE = TRUE, mse_type = "jackknife")
+fh_yl <- fh(
+  fixed = Mean ~ Cash, vardir = "Var_Mean",
+  combined_data = eusilcA_smpAgg, domains = "Domain", method = "me",
+  Ci = Ci_array, MSE = TRUE, mse_type = "jackknife"
+)
 }
 }
 \references{

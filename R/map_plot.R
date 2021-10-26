@@ -54,21 +54,25 @@
 #' data("eusilcA_smp")
 #'
 #' # Generate emdi object with additional indicators; here via function ebp()
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
-#'                     self_empl + unempl_ben + age_ben + surv_ben + sick_ben +
-#'                     dis_ben + rent + fam_allow + house_allow + cap_inv +
-#'                     tax_adj, pop_data = eusilcA_pop,
-#'                   pop_domains = "district", smp_data = eusilcA_smp,
-#'                   smp_domains = "district", threshold = 11064.82,
-#'                   transformation = "box.cox", L= 50, MSE = TRUE, B = 50)
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash +
+#'     self_empl + unempl_ben + age_ben + surv_ben + sick_ben +
+#'     dis_ben + rent + fam_allow + house_allow + cap_inv +
+#'     tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp,
+#'   smp_domains = "district", threshold = 11064.82,
+#'   transformation = "box.cox", L = 50, MSE = TRUE, B = 50
+#' )
 #'
 #' # Load shape file
 #' load_shapeaustria()
 #'
 #' # Create map plot for mean indicator - point and MSE estimates but no CV
-#' map_plot(object = emdi_model, MSE = TRUE, CV = FALSE,
-#'          map_obj = shape_austria_dis, indicator = c("Mean"),
-#'          map_dom_id = "PB")
+#' map_plot(
+#'   object = emdi_model, MSE = TRUE, CV = FALSE,
+#'   map_obj = shape_austria_dis, indicator = c("Mean"),
+#'   map_dom_id = "PB"
+#' )
 #'
 #' # Create a suitable mapping table to use numerical identifiers of the shape
 #' # file
@@ -77,17 +81,20 @@
 #' dom_ord <- match(shape_austria_dis@data$PB, emdi_model$ind$Domain)
 #'
 #' # Create the mapping table based on the order obtained above
-#' map_tab <- data.frame(pop_data_id = emdi_model$ind$Domain[dom_ord],
-#'                       shape_id = shape_austria_dis@data$BKZ)
+#' map_tab <- data.frame(
+#'   pop_data_id = emdi_model$ind$Domain[dom_ord],
+#'   shape_id = shape_austria_dis@data$BKZ
+#' )
 #'
 #' # Create map plot for mean indicator - point and CV estimates but no MSE
 #' # using the numerical domain identifiers of the shape file
 #'
-#' map_plot(object = emdi_model, MSE = FALSE, CV = TRUE,
-#'          map_obj = shape_austria_dis, indicator = c("Mean"),
-#'          map_dom_id = "BKZ", map_tab = map_tab)
-#'
-#'         }
+#' map_plot(
+#'   object = emdi_model, MSE = FALSE, CV = TRUE,
+#'   map_obj = shape_austria_dis, indicator = c("Mean"),
+#'   map_dom_id = "BKZ", map_tab = map_tab
+#' )
+#' }
 #' @export
 #' @importFrom reshape2 melt
 #' @importFrom ggplot2 aes geom_polygon facet_wrap fortify coord_equal labs
@@ -104,15 +111,16 @@ map_plot <- function(object,
                      color = c("white", "red4"),
                      scale_points = NULL,
                      guide = "colourbar",
-                     return_data = FALSE
-                     ){
+                     return_data = FALSE) {
   if (is.null(map_obj)) {
     message("No Map Object has been provided. An artificial polygone is used for
             visualization")
-    map_pseudo(object = object , indicator = indicator, panelplot = FALSE,
-               MSE = MSE, CV = CV)
+    map_pseudo(
+      object = object, indicator = indicator, panelplot = FALSE,
+      MSE = MSE, CV = CV
+    )
   } else if (class(map_obj) != "SpatialPolygonsDataFrame" ||
-             attr(class(map_obj), "package") != "sp") {
+    attr(class(map_obj), "package") != "sp") {
     stop("map_obj is not of class SpatialPolygonsDataFrame from the sp package")
   } else {
     if (length(color) != 2 || !is.vector(color)) {
@@ -121,39 +129,47 @@ map_plot <- function(object,
     }
 
     plot_real(object,
-              indicator = indicator,
-              MSE = MSE,
-              CV = CV,
-              map_obj = map_obj,
-              map_dom_id = map_dom_id,
-              map_tab = map_tab,
-              col = color,
-              scale_points = scale_points,
-              return_data = return_data,
-              guide = guide
+      indicator = indicator,
+      MSE = MSE,
+      CV = CV,
+      map_obj = map_obj,
+      map_dom_id = map_dom_id,
+      map_tab = map_tab,
+      col = color,
+      scale_points = scale_points,
+      return_data = return_data,
+      guide = guide
     )
   }
 }
 
-map_pseudo <- function(object, indicator, panelplot, MSE, CV)
-{
-  x <- y <- id <- value <- NULL #avoid note due to usage in ggplot
-  values <-  estimators(object = object, indicator = indicator,
-                                 MSE = MSE, CV = CV)$ind
+map_pseudo <- function(object, indicator, panelplot, MSE, CV) {
+  x <- y <- id <- value <- NULL # avoid note due to usage in ggplot
+  values <- estimators(
+    object = object, indicator = indicator,
+    MSE = MSE, CV = CV
+  )$ind
   indicator <- colnames(values)[-1]
 
   tplot <- get_polygone(values = values)
 
   if (panelplot) {
-    ggplot(tplot, aes(x = x, y = y)) + geom_polygon(aes(group = id,
-                                                        fill = value)) +
-      facet_wrap(~ variable,
-                 ncol = ceiling(sqrt(length(unique(tplot$variable)))))
+    ggplot(tplot, aes(x = x, y = y)) +
+      geom_polygon(aes(
+        group = id,
+        fill = value
+      )) +
+      facet_wrap(~variable,
+        ncol = ceiling(sqrt(length(unique(tplot$variable))))
+      )
   } else {
     for (ind in indicator) {
-      print(ggplot(tplot[tplot$variable == ind,], aes(x = x, y = y)) +
-              ggtitle(paste0(ind)) + geom_polygon(aes(group = id,
-                                                      fill = value)) )
+      print(ggplot(tplot[tplot$variable == ind, ], aes(x = x, y = y)) +
+        ggtitle(paste0(ind)) +
+        geom_polygon(aes(
+          group = id,
+          fill = value
+        )))
       cat("Press [enter] to continue")
       line <- readline()
     }
@@ -170,8 +186,7 @@ plot_real <- function(object,
                       col = col,
                       scale_points = NULL,
                       return_data = FALSE,
-                      guide = NULL
-) {
+                      guide = NULL) {
   if (!is.null(map_obj) && is.null(map_dom_id)) {
     stop("No Domain ID for the map object is given")
   }
@@ -179,14 +194,20 @@ plot_real <- function(object,
 
 
 
-  map_data <- estimators(object = object, indicator = indicator,
-                                  MSE = MSE, CV = CV)$ind
+  map_data <- estimators(
+    object = object, indicator = indicator,
+    MSE = MSE, CV = CV
+  )$ind
 
   if (!is.null(map_tab)) {
-    map_data <- merge(x = map_data, y = map_tab,
-                      by.x = "Domain", by.y = names(map_tab)[1])
-    matcher <- match(map_obj@data[map_dom_id][, 1],
-                     map_data[,names(map_tab)[2]])
+    map_data <- merge(
+      x = map_data, y = map_tab,
+      by.x = "Domain", by.y = names(map_tab)[1]
+    )
+    matcher <- match(
+      map_obj@data[map_dom_id][, 1],
+      map_data[, names(map_tab)[2]]
+    )
 
     if (any(is.na(matcher))) {
       if (all(is.na(matcher))) {
@@ -196,12 +217,14 @@ plot_real <- function(object,
                  Check map_tab")
       }
     }
-    map_data <- map_data[matcher,]
-    map_data <- map_data[,!colnames(map_data) %in% c("Domain",
-                                                     map_dom_id,
-                                                     names(map_tab)), drop = F]
+    map_data <- map_data[matcher, ]
+    map_data <- map_data[, !colnames(map_data) %in% c(
+      "Domain",
+      map_dom_id,
+      names(map_tab)
+    ), drop = F]
   } else {
-    matcher <- match(map_obj@data[map_dom_id][,1], map_data[,"Domain"])
+    matcher <- match(map_obj@data[map_dom_id][, 1], map_data[, "Domain"])
 
     if (any(is.na(matcher))) {
       if (all(is.na(matcher))) {
@@ -219,25 +242,31 @@ plot_real <- function(object,
 
   map_obj.fort <- fortify(map_obj, region = map_dom_id)
   map_obj.fort <- merge(map_obj.fort, map_obj@data,
-                        by.x = "id", by.y = map_dom_id)
+    by.x = "id", by.y = map_dom_id
+  )
 
   indicator <- colnames(map_data)
   indicator <- indicator[!(indicator %in% "Domain")]
   for (ind in indicator) {
-    map_obj.fort[ind][,1][!is.finite(map_obj.fort[ind][,1])] <- NA
-    scale_point <- get_scale_points(map_obj.fort[ind][,1], ind, scale_points)
-    print(ggplot(map_obj.fort, aes(long, lat, group = group,
-                                   fill = map_obj.fort[ind][,1])) +
-            geom_polygon(color = "azure3") + coord_equal() +
-            labs(x = "", y = "", fill = ind) +
-            ggtitle(gsub(pattern = "_",replacement = " ",x = ind)) +
-            scale_fill_gradient(low = col[1], high = col[2],
-                                limits = scale_point, guide = guide) +
-            theme(axis.ticks = element_blank(), axis.text = element_blank(),
-                  legend.title = element_blank())
-
-    )
-    if (!ind == tail(indicator,1)) {
+    map_obj.fort[ind][, 1][!is.finite(map_obj.fort[ind][, 1])] <- NA
+    scale_point <- get_scale_points(map_obj.fort[ind][, 1], ind, scale_points)
+    print(ggplot(map_obj.fort, aes(long, lat,
+      group = group,
+      fill = map_obj.fort[ind][, 1]
+    )) +
+      geom_polygon(color = "azure3") +
+      coord_equal() +
+      labs(x = "", y = "", fill = ind) +
+      ggtitle(gsub(pattern = "_", replacement = " ", x = ind)) +
+      scale_fill_gradient(
+        low = col[1], high = col[2],
+        limits = scale_point, guide = guide
+      ) +
+      theme(
+        axis.ticks = element_blank(), axis.text = element_blank(),
+        legend.title = element_blank()
+      ))
+    if (!ind == tail(indicator, 1)) {
       cat("Press [enter] to continue")
       line <- readline()
     }
@@ -249,7 +278,7 @@ plot_real <- function(object,
 
 get_polygone <- function(values) {
   if (is.null(dim(values))) {
-    values = as.data.frame(values)
+    values <- as.data.frame(values)
   }
   n <- nrow(values)
   cols <- ceiling(sqrt(n))
@@ -257,17 +286,18 @@ get_polygone <- function(values) {
 
   values["id"] <- seq_len(nrow(values))
 
-  poly <- data.frame(id = rep(seq_len(n), each = 4),
-                     ordering = seq_len((n*4)),
-                     x = c(0,1,1,0) + rep(0:(cols - 1), each = (cols * 4)),
-                     y = rep(c(0,0,1,1) + rep(0:(cols - 1), each = 4), cols)
+  poly <- data.frame(
+    id = rep(seq_len(n), each = 4),
+    ordering = seq_len((n * 4)),
+    x = c(0, 1, 1, 0) + rep(0:(cols - 1), each = (cols * 4)),
+    y = rep(c(0, 0, 1, 1) + rep(0:(cols - 1), each = 4), cols)
   )
 
   combo <- merge(poly, values, by = "id", all = TRUE, sort = FALSE)
-  melt(combo[order(combo$ordering),], id.vars = c("id","x","y","ordering"))
+  melt(combo[order(combo$ordering), ], id.vars = c("id", "x", "y", "ordering"))
 }
 
-get_scale_points <- function(y, ind, scale_points){
+get_scale_points <- function(y, ind, scale_points) {
   result <- NULL
   if (!is.null(scale_points)) {
     if (class(scale_points) == "numeric" && length(scale_points) == 2) {
@@ -284,8 +314,7 @@ get_scale_points <- function(y, ind, scale_points){
         pointset <- scale_points[[indicator_name]]
         try(result <- pointset[[measure]])
       }
-      if (is.null(result) || length(result) != 2)
-      {
+      if (is.null(result) || length(result) != 2) {
         warning("scale_points is of no apropriate form, default values will
                  be used. See the descriptions and examples for details")
         result <- NULL
@@ -298,5 +327,3 @@ get_scale_points <- function(y, ind, scale_points){
   }
   return(result)
 }
-
-

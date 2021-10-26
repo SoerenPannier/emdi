@@ -92,26 +92,42 @@ data("eusilcA_smp")
 
 # Generate emdi object with two additional indicators; here via function
 # ebp()
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
-self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
-fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-threshold = function(y){0.6 * median(y)}, L = 50, MSE = TRUE, B = 50,
-custom_indicator = list( my_max = function(y, threshold){max(y)},
-my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash +
+    self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
+    fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+  threshold = function(y) {
+    0.6 * median(y)
+  }, L = 50, MSE = TRUE, B = 50,
+  custom_indicator = list(
+    my_max = function(y, threshold) {
+      max(y)
+    },
+    my_min = function(y, threshold) {
+      min(y)
+    }
+  ), na.rm = TRUE, cpus = 1
+)
 
 # Example 1: Export estimates for all indicators and uncertainty measures
 # and diagnostics to Excel
-write.excel(emdi_model, file = "excel_output_all.xlsx", indicator = "all",
-MSE = TRUE, CV = TRUE)
+write.excel(emdi_model,
+  file = "excel_output_all.xlsx", indicator = "all",
+  MSE = TRUE, CV = TRUE
+)
 
 # Example 2: Single Excel sheets for point, MSE and CV estimates
-write.excel(emdi_model, file = "excel_output_all_split.xlsx",
-            indicator = "all", MSE = TRUE, CV = TRUE, split = TRUE)
+write.excel(emdi_model,
+  file = "excel_output_all_split.xlsx",
+  indicator = "all", MSE = TRUE, CV = TRUE, split = TRUE
+)
 
 # Example 3: Same as example 1 but for an ODS output
-write.ods(emdi_model, file = "ods_output_all.ods", indicator = "all",
-MSE = TRUE, CV = TRUE)
+write.ods(emdi_model,
+  file = "ods_output_all.ods", indicator = "all",
+  MSE = TRUE, CV = TRUE
+)
 }
 
 }

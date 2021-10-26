@@ -86,8 +86,8 @@ Alfons, A. and Templ, M. (2013). Estimation of Social Exclusion Indicators
 from Complex Surveys: The \R Package \pkg{laeken}. Journal of
 Statistical Software, 54(15), 1-25.  \cr \cr
 Fay R.E., Herriot R.A. (1979) Estimates of income for small places: An
-application of James–Stein procedures to census data. Journal of the American
-Statistical Association, Vol. 74, 269–277.  \cr \cr
+application of James–Stein procedures to census data. Journal of the
+American Statistical Association, Vol. 74, 269–277.  \cr \cr
 Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
 indicators. The Canadian Journal of Statistics, Vol. 38, No.3, 369-385.
 }

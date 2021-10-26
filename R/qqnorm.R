@@ -23,11 +23,13 @@
 #' data("eusilcA_smp")
 #'
 #' # With default setting but na.rm = TRUE; with Box-Cox transformation
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
-#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' na.rm = TRUE)
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+#'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#'   na.rm = TRUE
+#' )
 #'
 #' # Example 1: Creation of default diagnostic plots
 #' qqnorm(emdi_model)
@@ -39,19 +41,22 @@
 #' data("eusilcA_smpAgg")
 #'
 #' # Combine sample and population data
-#' combined_data <- combine_data(pop_data = eusilcA_popAgg,
-#'                               pop_domains = "Domain",
-#'                               smp_data = eusilcA_smpAgg,
-#'                               smp_domains = "Domain")
+#' combined_data <- combine_data(
+#'   pop_data = eusilcA_popAgg,
+#'   pop_domains = "Domain",
+#'   smp_data = eusilcA_smpAgg,
+#'   smp_domains = "Domain"
+#' )
 #'
 #' # Generation of the emdi object
-#' fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-#'              combined_data = combined_data, domains = "Domain",
-#'              method = "ml", MSE = TRUE)
+#' fh_std <- fh(
+#'   fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+#'   combined_data = combined_data, domains = "Domain",
+#'   method = "ml", MSE = TRUE
+#' )
 #'
 #' # Example 5: Creation of default diagnostic plots for Fay-Herriot model
 #' qqnorm(fh_std)
-#'
 #' }
 #' @export
 #' @method qqnorm emdi
@@ -67,7 +72,6 @@
 
 qqnorm.emdi <- function(y, color = c("blue", "lightblue3"),
                         gg_theme = NULL, ...) {
-
   extra_args <- list(...)
   residuals <- extra_args[["residuals"]]
   tmp <- extra_args[["tmp"]]
@@ -80,41 +84,43 @@ qqnorm.emdi <- function(y, color = c("blue", "lightblue3"),
     xlab("Theoretical quantiles") + gg_theme
 
   # Random effects
-  ran <- ggplot(data.frame(tmp) ,aes(sample = tmp)) +
-    stat_qq(distribution = qnorm, dparams = list(mean = mean(tmp),
-                                                sd = sd(tmp))) +
-    geom_abline(intercept = 0, slope = 1,na.rm = TRUE, col = color[1]) +
-    ggtitle("Random effect") + ylab("Quantiles of random effects") +
-    xlab("Theoretical quantiles") + gg_theme
+  ran <- ggplot(data.frame(tmp), aes(sample = tmp)) +
+    stat_qq(distribution = qnorm, dparams = list(
+      mean = mean(tmp),
+      sd = sd(tmp)
+    )) +
+    geom_abline(intercept = 0, slope = 1, na.rm = TRUE, col = color[1]) +
+    ggtitle("Random effect") +
+    ylab("Quantiles of random effects") +
+    xlab("Theoretical quantiles") +
+    gg_theme
 
-  invisible(grid.arrange(arrangeGrob(res, ran ,ncol = 2)))
+  invisible(grid.arrange(arrangeGrob(res, ran, ncol = 2)))
 }
 
 
 #' @rdname qqnorm.emdi
 #' @export
 qqnorm.ebp <- function(y, color = c("blue", "lightblue3"),
-                        gg_theme = NULL, ...) {
-
+                       gg_theme = NULL, ...) {
   residuals <- residuals(y$model, level = 0, type = "pearson")
-  rand.eff <- nlme::ranef(y$model)$'(Intercept)'
+  rand.eff <- nlme::ranef(y$model)$"(Intercept)"
   srand.eff <- (rand.eff - mean(rand.eff)) / sd(rand.eff)
-  tmp <- as.matrix(random.effects(y$model))[,1]
+  tmp <- as.matrix(random.effects(y$model))[, 1]
 
   model <- y$model
   model$call$fixed <- y$fixed
 
   NextMethod("qqnorm",
-             residuals = residuals,
-             tmp = tmp
-             )
+    residuals = residuals,
+    tmp = tmp
+  )
 }
 
 #' @rdname qqnorm.emdi
 #' @export
 qqnorm.fh <- function(y, color = c("blue", "lightblue3"),
-                       gg_theme = NULL, ...) {
-
+                      gg_theme = NULL, ...) {
   if (any(is.na(y$model$std_real_residuals))) {
     residuals <- y$model$std_real_residuals[!is.na(y$model$std_real_residuals)]
     warning("At least one value in the standardized realized residuals is NA.
@@ -128,8 +134,8 @@ qqnorm.fh <- function(y, color = c("blue", "lightblue3"),
   tmp <- srand.eff
 
   NextMethod("qqnorm",
-             residuals = residuals,
-             tmp = tmp
+    residuals = residuals,
+    tmp = tmp
   )
 }
 

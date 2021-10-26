@@ -33,13 +33,23 @@
 #' data("eusilcA_smp")
 #'
 #' # Example with two additional indicators
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
-#' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
-#' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' threshold = function(y){0.6 * median(y)}, L = 50, MSE = TRUE, B = 50,
-#' custom_indicator = list( my_max = function(y, threshold){max(y)},
-#' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash +
+#'     self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
+#'     fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#'   threshold = function(y) {
+#'     0.6 * median(y)
+#'   }, L = 50, MSE = TRUE, B = 50,
+#'   custom_indicator = list(
+#'     my_max = function(y, threshold) {
+#'       max(y)
+#'     },
+#'     my_min = function(y, threshold) {
+#'       min(y)
+#'     }
+#'   ), na.rm = TRUE, cpus = 1
+#' )
 #'
 #' # Example 1: Receive first overview
 #' summary(emdi_model)
@@ -52,15 +62,19 @@
 #' data("eusilcA_smpAgg")
 #'
 #' # Combine sample and population data
-#' combined_data <- combine_data(pop_data = eusilcA_popAgg,
-#'                               pop_domains = "Domain",
-#'                               smp_data = eusilcA_smpAgg,
-#'                               smp_domains = "Domain")
+#' combined_data <- combine_data(
+#'   pop_data = eusilcA_popAgg,
+#'   pop_domains = "Domain",
+#'   smp_data = eusilcA_smpAgg,
+#'   smp_domains = "Domain"
+#' )
 #'
 #' # Generation of the emdi object
-#' fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-#'              combined_data = combined_data, domains = "Domain",
-#'              method = "ml", MSE = TRUE)
+#' fh_std <- fh(
+#'   fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+#'   combined_data = combined_data, domains = "Domain",
+#'   method = "ml", MSE = TRUE
+#' )
 #'
 #' # Example 2: Receive first overview
 #' summary(fh_std)

@@ -8,9 +8,9 @@ mapplot_check <- function(object,
     stop("First object needs to be of class emdi.")
   }
 
-  if (!is.null(map_obj) && !(inherits(map_dom_id, "character")
-                             && length(map_dom_id) == 1)) {
-      stop("A domain ID needs to be given by argument map_dom_id. This
+  if (!is.null(map_obj) && !(inherits(map_dom_id, "character") &&
+    length(map_dom_id) == 1)) {
+    stop("A domain ID needs to be given by argument map_dom_id. This
            argument  must be a vector of lenght 1 and of class character
            specifying the variable (name) in map_obj. Thus, it needs to be
            contained in map_obj. See also help(map_plot).")
@@ -21,11 +21,11 @@ mapplot_check <- function(object,
   }
 
   if (length(col) != 2 || !is.vector(col)) {
-      stop("col needs to be a vector of length 2
+    stop("col needs to be a vector of length 2
            defining the lower and upper color of the map plot.")
   }
-  if (!is.null(map_tab) && !(inherits(map_tab, "data.frame")
-                             && dim(map_tab)[2] == 2)) {
+  if (!is.null(map_tab) && !(inherits(map_tab, "data.frame") &&
+    dim(map_tab)[2] == 2)) {
     stop("If the IDs in the data object and shape file differ a mapping
          table needs to be used. This table needs to be a data frame with
          two colums. See also help(map_plot).")
@@ -34,5 +34,4 @@ mapplot_check <- function(object,
     stop("return_data needs to be a logical value. Set na.rm to TRUE or FALSE.
          See also help(map_plot).")
   }
-
-  }
+}

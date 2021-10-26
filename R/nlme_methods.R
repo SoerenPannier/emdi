@@ -18,11 +18,13 @@
 #' @examples
 #' \donttest{
 #' # Example for class ebp
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
-#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' na.rm = TRUE)
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+#'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#'   na.rm = TRUE
+#' )
 #'
 #' fixef(emdi_model)
 #' }
@@ -89,10 +91,12 @@ fixed.effects.fh <- function(object, ...) {
 #' @examples
 #' \donttest{
 #' # Example for class direct
-#' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
-#' smp_domains = "district", weights = "weight", threshold = 11064.82,
-#' var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL,
-#' totals = NULL, na.rm = TRUE)
+#' emdi_direct <- direct(
+#'   y = "eqIncome", smp_data = eusilcA_smp,
+#'   smp_domains = "district", weights = "weight", threshold = 11064.82,
+#'   var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL,
+#'   totals = NULL, na.rm = TRUE
+#' )
 #'
 #' getData(emdi_direct)
 #' }
@@ -149,10 +153,12 @@ getData.fh <- function(object, ...) {
 #' @examples
 #' \donttest{
 #' # Example for class direct
-#' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
-#' smp_domains = "district", weights = "weight", threshold = 11064.82,
-#' var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL,
-#' totals = NULL, na.rm = TRUE)
+#' emdi_direct <- direct(
+#'   y = "eqIncome", smp_data = eusilcA_smp,
+#'   smp_domains = "district", weights = "weight", threshold = 11064.82,
+#'   var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL,
+#'   totals = NULL, na.rm = TRUE
+#' )
 #'
 #' getGroups(emdi_direct)
 #' }
@@ -205,11 +211,13 @@ getGroups.fh <- function(object, ...) {
 #' @examples
 #' \donttest{
 #' # Example for class ebp
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
-#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' na.rm = TRUE)
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+#'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#'   na.rm = TRUE
+#' )
 #'
 #' getGroupsFormula(emdi_model)
 #' }
@@ -260,11 +268,13 @@ getGroupsFormula.fh <- function(object, ...) {
 #' @examples
 #' \donttest{
 #' # Example for class ebp
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
-#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' na.rm = TRUE)
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+#'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#'   na.rm = TRUE
+#' )
 #'
 #' getResponse(emdi_model)
 #' }
@@ -279,7 +289,6 @@ getResponse
 getResponse.direct <- function(object, ...) {
   throw_class_error(object, "direct")
   object$framework$smp_data[, object$call$y]
-
 }
 
 #' @export getResponse.ebp
@@ -334,14 +343,18 @@ getResponse.fh <- function(object, ...) {
 #' @examples
 #' \donttest{
 #' # Example for class fh
-#' combined_data <- combine_data(pop_data = eusilcA_popAgg,
-#'                               pop_domains = "Domain",
-#'                               smp_data = eusilcA_smpAgg,
-#'                               smp_domains = "Domain")
+#' combined_data <- combine_data(
+#'   pop_data = eusilcA_popAgg,
+#'   pop_domains = "Domain",
+#'   smp_data = eusilcA_smpAgg,
+#'   smp_domains = "Domain"
+#' )
 #'
-#' fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-#'              combined_data = combined_data, domains = "Domain",
-#'              method = "ml", MSE = TRUE)
+#' fh_std <- fh(
+#'   fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+#'   combined_data = combined_data, domains = "Domain",
+#'   method = "ml", MSE = TRUE
+#' )
 #'
 #' getVarCov(fh_std)
 #' }
@@ -357,15 +370,14 @@ getVarCov
 getVarCov.ebp <- function(obj, individuals = 1, type = "random.effects", ...) {
   throw_class_error(obj, "ebp")
 
-  if (is.null(type) || !(type == "random.effects"
-                         || type == "conditional"
-                         || type == "marginal")) {
+  if (is.null(type) || !(type == "random.effects" ||
+    type == "conditional" ||
+    type == "marginal")) {
     stop("The three options for type are ''random.effects'', ''conditional''
          or ''marginal''.")
   }
 
   getVarCov(obj$model, individuals = individuals, type = type)
-
 }
 
 #' @export getVarCov.fh
@@ -375,25 +387,37 @@ getVarCov.ebp <- function(obj, individuals = 1, type = "random.effects", ...) {
 getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
   throw_class_error(obj, "fh")
 
-  if (is.null(type) || !(type == "random.effects"
-                         || type == "conditional"
-                         || type == "marginal")) {
+  if (is.null(type) || !(type == "random.effects" ||
+    type == "conditional" ||
+    type == "marginal")) {
     stop("The three options for type are ''random.effects'', ''conditional''
          or ''marginal''.")
   }
 
   if (type == "random.effects") {
     if (obj$model$correlation == "spatial") {
-      result <- list(varmat = matrix(obj$model$variance$variance, nrow = 1,
-                                     ncol = 1,
-                                     dimnames = list(c("(Intercept)"),
-                                                     c("(Intercept)"))),
-                     std.dev = sqrt(obj$model$variance$variance))
+      result <- list(
+        varmat = matrix(obj$model$variance$variance,
+          nrow = 1,
+          ncol = 1,
+          dimnames = list(
+            c("(Intercept)"),
+            c("(Intercept)")
+          )
+        ),
+        std.dev = sqrt(obj$model$variance$variance)
+      )
     } else {
-      result <- list(varmat = matrix(obj$model$variance, nrow = 1, ncol = 1,
-                                     dimnames = list(c("(Intercept)"),
-                                                     c("(Intercept)"))),
-                     std.dev = sqrt(obj$model$variance))
+      result <- list(
+        varmat = matrix(obj$model$variance,
+          nrow = 1, ncol = 1,
+          dimnames = list(
+            c("(Intercept)"),
+            c("(Intercept)")
+          )
+        ),
+        std.dev = sqrt(obj$model$variance)
+      )
     }
 
     class(result) <- c("getVarCov.fh", "VarCov_random")
@@ -401,7 +425,6 @@ getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
     result <- list()
 
     for (i in individuals) {
-
       if (!(is.numeric(i) || is.character(i))) {
         stop("individuals must be numeric or a character specifying a level of
              a in-sample domain.")
@@ -410,9 +433,11 @@ getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
         i <- as.character(obj$ind$Domain[obj$ind$Out == 0][i])
       }
       if (!(i %in% obj$ind$Domain[obj$ind$Out == 0])) {
-        stop(paste0("No variance-covariance matrix is available. Individual '",
-                    i, "' is not contained in the sample and therefore not used
-                    for the model fitting."))
+        stop(paste0(
+          "No variance-covariance matrix is available. Individual '",
+          i, "' is not contained in the sample and therefore not used
+                    for the model fitting."
+        ))
       }
 
       if (type == "conditional") {
@@ -426,33 +451,49 @@ getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
               obj$framework$Ci[, , j] %*% obj$model$coefficients$coefficients
           }
           V <- matrix(diag(obj$framework$vardir) +
-                        diag(as.numeric(Beta.hat.tCiBeta.hat)),
-                      nrow = obj$framework$N_dom_smp,
-                      ncol = obj$framework$N_dom_smp,
-                      dimnames = list(obj$ind$Domain[obj$ind$Out == 0],
-                                      obj$ind$Domain[obj$ind$Out == 0]))
-          result[[as.character(i)]] <- list(varmat = matrix(V[i, i],
-                                                            nrow = 1,
-                                                            ncol = 1,
-                                                            dimnames =
-                                                              list(c("1"),
-                                                                   c("1"))),
-                                            std.dev = sqrt(V[i, i]),
-                                            domain = i)
+            diag(as.numeric(Beta.hat.tCiBeta.hat)),
+          nrow = obj$framework$N_dom_smp,
+          ncol = obj$framework$N_dom_smp,
+          dimnames = list(
+            obj$ind$Domain[obj$ind$Out == 0],
+            obj$ind$Domain[obj$ind$Out == 0]
+          )
+          )
+          result[[as.character(i)]] <- list(
+            varmat = matrix(V[i, i],
+              nrow = 1,
+              ncol = 1,
+              dimnames =
+                list(
+                  c("1"),
+                  c("1")
+                )
+            ),
+            std.dev = sqrt(V[i, i]),
+            domain = i
+          )
         } else {
           V <- matrix(diag(obj$framework$vardir),
-                      nrow = obj$framework$N_dom_smp,
-                      ncol = obj$framework$N_dom_smp,
-                      dimnames = list(obj$ind$Domain[obj$ind$Out == 0],
-                                      obj$ind$Domain[obj$ind$Out == 0]))
-          result[[as.character(i)]] <- list(varmat = matrix(V[i, i],
-                                                            nrow = 1,
-                                                            ncol = 1,
-                                                            dimnames =
-                                                              list(c("1"),
-                                                                   c("1"))),
-                                            std.dev = sqrt(V[i, i]),
-                                            domain = i)
+            nrow = obj$framework$N_dom_smp,
+            ncol = obj$framework$N_dom_smp,
+            dimnames = list(
+              obj$ind$Domain[obj$ind$Out == 0],
+              obj$ind$Domain[obj$ind$Out == 0]
+            )
+          )
+          result[[as.character(i)]] <- list(
+            varmat = matrix(V[i, i],
+              nrow = 1,
+              ncol = 1,
+              dimnames =
+                list(
+                  c("1"),
+                  c("1")
+                )
+            ),
+            std.dev = sqrt(V[i, i]),
+            domain = i
+          )
         }
         class(result) <- c("getVarCov.fh", "VarCov_conditional")
       } else if (type == "marginal") {
@@ -460,24 +501,32 @@ getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
 
         if (obj$model$correlation == "spatial") {
           Wt <- t(obj$framework$W)
-          A <- solve((D - obj$model$variance$correlation*Wt) %*%
-                       (D - obj$model$variance$correlation*obj$framework$W))
-          G <- obj$model$variance$variance*A
+          A <- solve((D - obj$model$variance$correlation * Wt) %*%
+            (D - obj$model$variance$correlation * obj$framework$W))
+          G <- obj$model$variance$variance * A
           # Total variance-covariance matrix
-          V <- matrix(G + D*obj$framework$vardir,
-                      nrow = obj$framework$N_dom_smp,
-                      ncol = obj$framework$N_dom_smp,
-                      dimnames = list(obj$ind$Domain[obj$ind$Out == 0],
-                                      obj$ind$Domain[obj$ind$Out == 0]))
-          result[[as.character(i)]] <- list(varmat = matrix(V[i, i],
-                                                            nrow = 1,
-                                                            ncol = 1,
-                                                            dimnames =
-                                                              list(c("1"),
-                                                                   c("1"))),
-                                            std.dev = sqrt(V[i, i]),
-                                            domain = i,
-                                            correlation = "spatial")
+          V <- matrix(G + D * obj$framework$vardir,
+            nrow = obj$framework$N_dom_smp,
+            ncol = obj$framework$N_dom_smp,
+            dimnames = list(
+              obj$ind$Domain[obj$ind$Out == 0],
+              obj$ind$Domain[obj$ind$Out == 0]
+            )
+          )
+          result[[as.character(i)]] <- list(
+            varmat = matrix(V[i, i],
+              nrow = 1,
+              ncol = 1,
+              dimnames =
+                list(
+                  c("1"),
+                  c("1")
+                )
+            ),
+            std.dev = sqrt(V[i, i]),
+            domain = i,
+            correlation = "spatial"
+          )
         } else if (obj$method$method == "me") {
           Beta.hat.tCiBeta.hat <- NULL
           for (j in seq_len(obj$framework$N_dom_smp)) {
@@ -488,37 +537,53 @@ getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
           # Total variance-covariance matrix - only values on the diagonal due
           # to independence of error terms
           V <- matrix(obj$model$variance * D %*% t(D) +
-                        diag(obj$framework$vardir) +
+            diag(obj$framework$vardir) +
             diag(as.numeric(Beta.hat.tCiBeta.hat)),
-            nrow = obj$framework$N_dom_smp, ncol = obj$framework$N_dom_smp,
-            dimnames = list(obj$ind$Domain[obj$ind$Out == 0],
-                            obj$ind$Domain[obj$ind$Out == 0]))
-          result[[as.character(i)]] <- list(varmat = matrix(V[i, i],
-                                                            nrow = 1,
-                                                            ncol = 1,
-                                                            dimnames =
-                                                              list(c("1"),
-                                                                   c("1"))),
-                                            std.dev = sqrt(V[i, i]),
-                                            domain = i,
-                                            correlation = "no")
+          nrow = obj$framework$N_dom_smp, ncol = obj$framework$N_dom_smp,
+          dimnames = list(
+            obj$ind$Domain[obj$ind$Out == 0],
+            obj$ind$Domain[obj$ind$Out == 0]
+          )
+          )
+          result[[as.character(i)]] <- list(
+            varmat = matrix(V[i, i],
+              nrow = 1,
+              ncol = 1,
+              dimnames =
+                list(
+                  c("1"),
+                  c("1")
+                )
+            ),
+            std.dev = sqrt(V[i, i]),
+            domain = i,
+            correlation = "no"
+          )
         } else {
           # Total variance-covariance matrix - only values on the diagonal due
           # to independence of error terms
           V <- matrix(obj$model$variance * D %*% t(D) +
-                        diag(as.numeric(obj$framework$vardir)),
-                      nrow = obj$framework$N_dom_smp,
-                      ncol = obj$framework$N_dom_smp,
-                      dimnames = list(obj$ind$Domain[obj$ind$Out == 0],
-                                      obj$ind$Domain[obj$ind$Out == 0]))
-          result[[as.character(i)]] <- list(varmat = matrix(V[i, i],
-                                                            nrow = 1, ncol = 1,
-                                                            dimnames =
-                                                              list(c("1"),
-                                                                   c("1"))),
-                                            std.dev = sqrt(V[i, i]),
-                                            domain = i,
-                                            correlation = "no")
+            diag(as.numeric(obj$framework$vardir)),
+          nrow = obj$framework$N_dom_smp,
+          ncol = obj$framework$N_dom_smp,
+          dimnames = list(
+            obj$ind$Domain[obj$ind$Out == 0],
+            obj$ind$Domain[obj$ind$Out == 0]
+          )
+          )
+          result[[as.character(i)]] <- list(
+            varmat = matrix(V[i, i],
+              nrow = 1, ncol = 1,
+              dimnames =
+                list(
+                  c("1"),
+                  c("1")
+                )
+            ),
+            std.dev = sqrt(V[i, i]),
+            domain = i,
+            correlation = "no"
+          )
         }
 
         class(result) <- c("getVarCov.fh", "VarCov_marginal")
@@ -530,24 +595,23 @@ getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
 
 #' @export
 print.getVarCov.fh <- function(x, ...) {
-
   if (inherits(x, "VarCov_random")) {
     cat("Random effects variance covariance matrix\n")
     print(x$varmat)
-    cat("  Standard Deviations:", round(x$std.dev, 2),"\n")
+    cat("  Standard Deviations:", round(x$std.dev, 2), "\n")
   } else if (inherits(x, "VarCov_conditional")) {
     for (i in names(x)) {
       cat("domain", as.character(x[[i]]$domain), "\n")
       cat("Conditional variance covariance matrix\n")
       print(x[[i]]$varmat)
-      cat("  Standard Deviations:", round(x[[i]]$std.dev, 2),"\n")
+      cat("  Standard Deviations:", round(x[[i]]$std.dev, 2), "\n")
     }
   } else if (inherits(x, "VarCov_marginal")) {
     for (i in names(x)) {
       cat("domain", as.character(x[[i]]$domain), "\n")
       cat("Marginal variance covariance matrix\n")
       print(x[[i]]$varmat)
-      cat("  Standard Deviations:", round(x[[i]]$std.dev, 2),"\n")
+      cat("  Standard Deviations:", round(x[[i]]$std.dev, 2), "\n")
     }
     if (x[[1]]$correlation == "spatial") {
       cat("\n")
@@ -584,11 +648,13 @@ print.getVarCov.fh <- function(x, ...) {
 #' @examples
 #' \donttest{
 #' # Example for class ebp
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
-#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' na.rm = TRUE)
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+#'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#'   na.rm = TRUE
+#' )
 #'
 #' intervals(emdi_model)
 #' }
@@ -608,7 +674,6 @@ intervals.ebp <- function(object, level = 0.95, parm = NULL, ...) {
   } else {
     intervals(object$model, level = level)$fixed
   }
-
 }
 
 #' @export intervals.fh
@@ -618,13 +683,15 @@ intervals.fh <- function(object, level = 0.95, parm = NULL, ...) {
   throw_class_error(object, "fh")
   coefmat <- object$model$coefficients
 
-  coefs <- coefmat[,1]
-  stds <- coefmat[,2]
+  coefs <- coefmat[, 1]
+  stds <- coefmat[, 2]
   dist <- qnorm(p = (1 - level) / 2, 0, stds)
-  ret_value <- data.frame(lower = coefs + dist,
-                          est. = coefs,
-                          upper = coefs + abs(dist),
-                          row.names = row.names(coefmat))
+  ret_value <- data.frame(
+    lower = coefs + dist,
+    est. = coefs,
+    upper = coefs + abs(dist),
+    row.names = row.names(coefmat)
+  )
   if (is.null(parm)) {
     as.matrix(ret_value)
   } else {
@@ -652,11 +719,13 @@ intervals.fh <- function(object, level = 0.95, parm = NULL, ...) {
 #' @examples
 #' \donttest{
 #' # Example for class ebp
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
-#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' na.rm = TRUE)
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+#'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#'   na.rm = TRUE
+#' )
 #'
 #' ranef(emdi_model)
 #' }
@@ -702,4 +771,3 @@ random.effects.fh <- function(object, ...) {
   row.names(random_effects) <- object$ind$Domain[object$ind$Out == 0]
   random_effects
 }
-

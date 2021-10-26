@@ -8,7 +8,8 @@
 #' districts.
 #' @export
 
-load_shapeaustria <- function(){
+load_shapeaustria <- function() {
   load(system.file("shapes/shape_austria_dis.rda", package = "emdi"),
-       envir = .GlobalEnv)
+    envir = .GlobalEnv
+  )
 }

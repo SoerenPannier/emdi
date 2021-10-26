@@ -227,46 +227,58 @@
 #' data("eusilcA_smpAgg")
 #'
 #' # Combine sample and population data
-#' combined_data <- combine_data(pop_data = eusilcA_popAgg,
-#'                               pop_domains = "Domain",
-#'                               smp_data = eusilcA_smpAgg,
-#'                               smp_domains = "Domain")
+#' combined_data <- combine_data(
+#'   pop_data = eusilcA_popAgg,
+#'   pop_domains = "Domain",
+#'   smp_data = eusilcA_smpAgg,
+#'   smp_domains = "Domain"
+#' )
 #'
 #' # Example 1: Standard Fay-Herriot model and analytical MSE
-#' fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-#' combined_data = combined_data, domains = "Domain", method = "ml",
-#' MSE = TRUE)
+#' fh_std <- fh(
+#'   fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+#'   combined_data = combined_data, domains = "Domain", method = "ml",
+#'   MSE = TRUE
+#' )
 #'
 #' # Example 2: arcsin transformation of the dependent variable
-#' fh_arcsin <- fh(fixed = MTMED ~ cash + age_ben + rent + house_allow,
-#' vardir = "Var_MTMED", combined_data = combined_data, domains = "Domain",
-#' method = "ml", transformation = "arcsin", backtransformation = "bc",
-#' eff_smpsize = "n", MSE = TRUE, mse_type = "boot", B = c(50,0))
+#' fh_arcsin <- fh(
+#'   fixed = MTMED ~ cash + age_ben + rent + house_allow,
+#'   vardir = "Var_MTMED", combined_data = combined_data, domains = "Domain",
+#'   method = "ml", transformation = "arcsin", backtransformation = "bc",
+#'   eff_smpsize = "n", MSE = TRUE, mse_type = "boot", B = c(50, 0)
+#' )
 #'
 #' # Example 3: Spatial Fay-Herriot model
 #' # Load proximity matrix
 #' data("eusilcA_prox")
-#' fh_spatial <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-#' combined_data = combined_data, domains = "Domain", method = "reml",
-#' correlation = "spatial", corMatrix = eusilcA_prox, MSE = TRUE,
-#' mse_type = "analytical")
+#' fh_spatial <- fh(
+#'   fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+#'   combined_data = combined_data, domains = "Domain", method = "reml",
+#'   correlation = "spatial", corMatrix = eusilcA_prox, MSE = TRUE,
+#'   mse_type = "analytical"
+#' )
 #'
 #' # Example 4: Robust Fay-Herriot model
-#' fh_robust <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-#' combined_data = combined_data, domains = "Domain", method = "reblupbc",
-#' k = 1.345, mult_constant = 1, MSE = TRUE, mse_type = "pseudo")
+#' fh_robust <- fh(
+#'   fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+#'   combined_data = combined_data, domains = "Domain", method = "reblupbc",
+#'   k = 1.345, mult_constant = 1, MSE = TRUE, mse_type = "pseudo"
+#' )
 #'
 #' # Example 5: Ybarra-Lohr model
 #' # Create MSE array
 #' P <- 1
 #' M <- length(eusilcA_smpAgg$Mean)
-#' Ci_array <- array(data = 0, dim=c(P+1,P+1,M))
-#' for(i in 1:M){
-#'  Ci_array[2,2,i] <- eusilcA_smpAgg$Var_Cash[i]
+#' Ci_array <- array(data = 0, dim = c(P + 1, P + 1, M))
+#' for (i in 1:M) {
+#'   Ci_array[2, 2, i] <- eusilcA_smpAgg$Var_Cash[i]
 #' }
-#' fh_yl <- fh(fixed = Mean ~ Cash, vardir= "Var_Mean",
-#' combined_data = eusilcA_smpAgg, domains ="Domain", method = "me",
-#' Ci = Ci_array, MSE = TRUE, mse_type = "jackknife")
+#' fh_yl <- fh(
+#'   fixed = Mean ~ Cash, vardir = "Var_Mean",
+#'   combined_data = eusilcA_smpAgg, domains = "Domain", method = "me",
+#'   Ci = Ci_array, MSE = TRUE, mse_type = "jackknife"
+#' )
 #' }
 #' @export
 #' @importFrom formula.tools lhs lhs<-
@@ -282,25 +294,29 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
                transformation = "no", backtransformation = NULL,
                eff_smpsize = NULL, correlation = "no", corMatrix = NULL,
                Ci = NULL, tol = 0.0001, maxit = 100,
-               MSE = FALSE, mse_type = "analytical", B = c(50,0), seed = 123) {
+               MSE = FALSE, mse_type = "analytical", B = c(50, 0), seed = 123) {
 
   # Agrument checking ----------------------------------------------------------
-  fh_combinations(fixed = fixed, vardir = vardir, combined_data = combined_data,
-                  domains = domains, method = method, interval = interval,
-                  k = k, mult_constant = mult_constant,
-                  transformation = transformation,
-                  backtransformation = backtransformation,
-                  eff_smpsize = eff_smpsize, correlation = correlation,
-                  corMatrix = corMatrix,  Ci = Ci, tol = tol, maxit = maxit,
-                  MSE = MSE, mse_type = mse_type, B = B, seed = seed)
+  fh_combinations(
+    fixed = fixed, vardir = vardir, combined_data = combined_data,
+    domains = domains, method = method, interval = interval,
+    k = k, mult_constant = mult_constant,
+    transformation = transformation,
+    backtransformation = backtransformation,
+    eff_smpsize = eff_smpsize, correlation = correlation,
+    corMatrix = corMatrix, Ci = Ci, tol = tol, maxit = maxit,
+    MSE = MSE, mse_type = mse_type, B = B, seed = seed
+  )
 
-  fh_check(fixed = fixed, vardir = vardir, combined_data = combined_data,
-           domains = domains, method = method, interval = interval, k = k,
-           mult_constant = mult_constant, transformation = transformation,
-           backtransformation = backtransformation, eff_smpsize = eff_smpsize,
-           correlation = correlation, corMatrix = corMatrix,
-           Ci = Ci, tol = tol, maxit = maxit, MSE = MSE, mse_type = mse_type,
-           B = B, seed = seed)
+  fh_check(
+    fixed = fixed, vardir = vardir, combined_data = combined_data,
+    domains = domains, method = method, interval = interval, k = k,
+    mult_constant = mult_constant, transformation = transformation,
+    backtransformation = backtransformation, eff_smpsize = eff_smpsize,
+    correlation = correlation, corMatrix = corMatrix,
+    Ci = Ci, tol = tol, maxit = maxit, MSE = MSE, mse_type = mse_type,
+    B = B, seed = seed
+  )
 
 
 
@@ -311,79 +327,97 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
   call <- match.call()
 
   # Set seed if desired
-  if(!is.null(seed)) {
-      set.seed(seed)
+  if (!is.null(seed)) {
+    set.seed(seed)
   }
 
   # Notational framework -------------------------------------------------------
-  framework <- framework_FH(combined_data = combined_data, fixed = fixed,
-                            vardir = vardir, domains = domains,
-                            transformation = transformation,
-                            eff_smpsize = eff_smpsize,
-                            correlation = correlation,
-                            corMatrix = corMatrix, Ci = Ci, tol = tol,
-                            maxit = maxit)
+  framework <- framework_FH(
+    combined_data = combined_data, fixed = fixed,
+    vardir = vardir, domains = domains,
+    transformation = transformation,
+    eff_smpsize = eff_smpsize,
+    correlation = correlation,
+    corMatrix = corMatrix, Ci = Ci, tol = tol,
+    maxit = maxit
+  )
 
 
   # Limits for interval
   if (is.null(interval)) {
-  upper <- var(framework$direct)
-  interval <- c(0, upper)
+    upper <- var(framework$direct)
+    interval <- c(0, upper)
   }
 
   # Number of bootstrap iterations
-  if (length(B) == 1){
+  if (length(B) == 1) {
     B <- c(B, 0)
   }
 
   if (!(method == "reblup" | method == "reblupbc")) {
     # Estimate sigma u ---------------------------------------------------------
-    sigmau2 <- wrapper_estsigmau2(framework = framework, method = method,
-                                  interval = interval)
+    sigmau2 <- wrapper_estsigmau2(
+      framework = framework, method = method,
+      interval = interval
+    )
 
 
     if (method != "me") {
-      if (correlation == "no"){
+      if (correlation == "no") {
         # Standard EBLUP -------------------------------------------------------
-        eblup <- eblup_FH(framework = framework, sigmau2 = sigmau2,
-                          combined_data = combined_data)
+        eblup <- eblup_FH(
+          framework = framework, sigmau2 = sigmau2,
+          combined_data = combined_data
+        )
 
-        Gamma <- data.frame(Domain =
-                              framework$combined_data[[framework$domains]])
+        Gamma <- data.frame(
+          Domain =
+            framework$combined_data[[framework$domains]]
+        )
         Gamma$Gamma <- NA
         Gamma$Gamma[framework$obs_dom == TRUE] <- as.numeric(eblup$gamma)
         # Criteria for model selection -----------------------------------------
-        criteria <- model_select(framework = framework, sigmau2 = sigmau2,
-                                  method = method, interval = interval,
-                                  eblup = eblup, B = B[2], vardir = vardir,
-                                  transformation = transformation,
-                                  combined_data = framework$combined_data)
+        criteria <- model_select(
+          framework = framework, sigmau2 = sigmau2,
+          method = method, interval = interval,
+          eblup = eblup, B = B[2], vardir = vardir,
+          transformation = transformation,
+          combined_data = framework$combined_data
+        )
       }
       if ((method == "ml" | method == "reml") & correlation == "spatial") {
         # Spatial EBLUP --------------------------------------------------------
-        eblup <- eblup_SFH(framework = framework, sigmau2 = sigmau2,
-                           combined_data = combined_data)
+        eblup <- eblup_SFH(
+          framework = framework, sigmau2 = sigmau2,
+          combined_data = combined_data
+        )
         # Criteria for model selection -----------------------------------------
-        criteria <- model_select(framework = framework, sigmau2 = sigmau2,
-                                 method = method, interval = interval,
-                                 eblup = eblup, B = B[2], vardir = vardir,
-                                 transformation = transformation,
-                                 combined_data = framework$combined_data)
+        criteria <- model_select(
+          framework = framework, sigmau2 = sigmau2,
+          method = method, interval = interval,
+          eblup = eblup, B = B[2], vardir = vardir,
+          transformation = transformation,
+          combined_data = framework$combined_data
+        )
       }
     } else if (method == "me") {
       # Standard EBLUP ---------------------------------------------------------
-      eblup <- eblup_YL(framework = framework, sigmau2 = sigmau2,
-                        combined_data = combined_data)
+      eblup <- eblup_YL(
+        framework = framework, sigmau2 = sigmau2,
+        combined_data = combined_data
+      )
 
       Gamma <- data.frame(Domain = framework$combined_data[[framework$domains]])
       Gamma$Gamma <- NA
       Gamma$Gamma[framework$obs_dom == TRUE] <- as.numeric(eblup$gamma)
       # Criteria for model selection -----------------------------------------
-      criteria <- model_select(framework = framework, sigmau2 = sigmau2,
-                               method = method, interval = interval,
-                               eblup = eblup, B = B[2], vardir = vardir,
-                               transformation = transformation,
-                               combined_data = framework$combined_data)
+      criteria <- model_select(
+        framework = framework, sigmau2 = sigmau2,
+        method = method, interval = interval,
+        eblup = eblup, B = B[2], vardir = vardir,
+        transformation = transformation,
+        combined_data = framework$combined_data
+      )
     }
 
 
@@ -392,21 +426,22 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
 
       # Analytical MSE
       if (MSE == TRUE) {
-        MSE_data <- wrapper_MSE(framework = framework,
-                                combined_data = framework$combined_data,
-                                sigmau2 = sigmau2, vardir = vardir, Ci = Ci,
-                                eblup = eblup, transformation = transformation,
-                                method = method, interval = interval,
-                                mse_type = mse_type, B = B[1])
-        MSE <- MSE_data$MSE_data
-        MSE_method <- MSE_data$MSE_method
+        mse_data <- wrapper_MSE(
+          framework = framework,
+          combined_data = framework$combined_data,
+          sigmau2 = sigmau2, vardir = vardir, Ci = Ci,
+          eblup = eblup, transformation = transformation,
+          method = method, interval = interval,
+          mse_type = mse_type, B = B[1]
+        )
+        MSE <- mse_data$mse_data
+        MSE_method <- mse_data$MSE_method
         if (mse_type == "spatialnonparboot" |
-            mse_type == "spatialnonparbootbc" |
-            mse_type == "spatialparboot" |
-            mse_type == "spatialparbootbc") {
-          successful_bootstraps <- MSE_data$successful_bootstraps
+          mse_type == "spatialnonparbootbc" |
+          mse_type == "spatialparboot" |
+          mse_type == "spatialparbootbc") {
+          successful_bootstraps <- mse_data$successful_bootstraps
         }
-
       } else {
         MSE <- NULL
         MSE_method <- "no mse estimated"
@@ -415,140 +450,174 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
 
       if (method != "me") {
         if (!is.null(MSE) && (mse_type == "spatialnonparboot" ||
-                            mse_type == "spatialnonparbootbc" ||
-                            mse_type == "spatialparboot" ||
-                            mse_type == "spatialparbootbc")) {
-
-          sigmau2 <- data.frame(correlation = sigmau2$rho,
-                                variance = sigmau2$sigmau2,
-                                convergence = sigmau2$convergence)
+          mse_type == "spatialnonparbootbc" ||
+          mse_type == "spatialparboot" ||
+          mse_type == "spatialparbootbc")) {
+          sigmau2 <- data.frame(
+            correlation = sigmau2$rho,
+            variance = sigmau2$sigmau2,
+            convergence = sigmau2$convergence
+          )
           row.names(sigmau2) <- ""
 
-          out <- list(ind = eblup$EBLUP_data,
-                      MSE = MSE,
-                      transform_param = NULL,
-                      model = list(coefficients = eblup$coefficients,
-                                   variance = sigmau2,
-                                   random_effects = eblup$random_effects,
-                                   fitted = eblup$fitted,
-                                   real_residuals = eblup$real_res,
-                                   std_real_residuals = eblup$std_real_res,
-                                   model_select = criteria,
-                                   correlation = correlation,
-                                   seed = seed,
-                                   beta_vcov = eblup$beta_vcov),
-                      framework = framework[c("direct", "vardir", "N_dom_smp",
-                                              "N_dom_unobs", "combined_data",
-                                              "domains")],
-                      transformation = list(transformation = transformation,
-                                            backtransformation =
-                                              backtransformation),
-                      method = list(method = method,
-                                    MSE_method = MSE_method),
-                      fixed = fixed,
-                      call = call,
-                      successful_bootstraps = successful_bootstraps
+          out <- list(
+            ind = eblup$eblup_data,
+            MSE = MSE,
+            transform_param = NULL,
+            model = list(
+              coefficients = eblup$coefficients,
+              variance = sigmau2,
+              random_effects = eblup$random_effects,
+              fitted = eblup$fitted,
+              real_residuals = eblup$real_res,
+              std_real_residuals = eblup$std_real_res,
+              model_select = criteria,
+              correlation = correlation,
+              seed = seed,
+              beta_vcov = eblup$beta_vcov
+            ),
+            framework = framework[c(
+              "direct", "vardir", "N_dom_smp",
+              "N_dom_unobs", "combined_data",
+              "domains"
+            )],
+            transformation = list(
+              transformation = transformation,
+              backtransformation =
+                backtransformation
+            ),
+            method = list(
+              method = method,
+              MSE_method = MSE_method
+            ),
+            fixed = fixed,
+            call = call,
+            successful_bootstraps = successful_bootstraps
           )
         } else if (correlation == "spatial") {
-          sigmau2 <- data.frame(correlation = sigmau2$rho,
-                                variance = sigmau2$sigmau2,
-                                convergence = sigmau2$convergence)
+          sigmau2 <- data.frame(
+            correlation = sigmau2$rho,
+            variance = sigmau2$sigmau2,
+            convergence = sigmau2$convergence
+          )
           row.names(sigmau2) <- ""
-          out <- list(ind = eblup$EBLUP_data,
-                      MSE = MSE,
-                      transform_param = NULL,
-                      model = list(coefficients = eblup$coefficients,
-                                   variance = sigmau2,
-                                   random_effects = eblup$random_effects,
-                                   fitted = eblup$fitted,
-                                   real_residuals = eblup$real_res,
-                                   std_real_residuals = eblup$std_real_res,
-                                   model_select = criteria,
-                                   correlation = correlation,
-                                   seed = seed,
-                                   beta_vcov = eblup$beta_vcov),
-                      framework = framework[c("direct", "vardir", "N_dom_smp",
-                                              "N_dom_unobs", "combined_data",
-                                              "domains", "W")],
-                      transformation = list(transformation = transformation,
-                                            backtransformation =
-                                              backtransformation),
-                      method = list(method = method,
-                                    MSE_method = MSE_method),
-                      fixed = fixed,
-                      call = call,
-                      successful_bootstraps = NULL
-                      )
+          out <- list(
+            ind = eblup$eblup_data,
+            MSE = MSE,
+            transform_param = NULL,
+            model = list(
+              coefficients = eblup$coefficients,
+              variance = sigmau2,
+              random_effects = eblup$random_effects,
+              fitted = eblup$fitted,
+              real_residuals = eblup$real_res,
+              std_real_residuals = eblup$std_real_res,
+              model_select = criteria,
+              correlation = correlation,
+              seed = seed,
+              beta_vcov = eblup$beta_vcov
+            ),
+            framework = framework[c(
+              "direct", "vardir", "N_dom_smp",
+              "N_dom_unobs", "combined_data",
+              "domains", "W"
+            )],
+            transformation = list(
+              transformation = transformation,
+              backtransformation =
+                backtransformation
+            ),
+            method = list(
+              method = method,
+              MSE_method = MSE_method
+            ),
+            fixed = fixed,
+            call = call,
+            successful_bootstraps = NULL
+          )
         } else {
-
           if ((isTRUE(all.equal(round(sigmau2, 3), interval[1]))) ||
-             (isTRUE(all.equal(round(sigmau2, 3), interval[2])))) {
+            (isTRUE(all.equal(round(sigmau2, 3), interval[2])))) {
             warning("The estimate of the variance of the random effects falls at
             the interval limit. It is recommended to choose a larger
             interval for the estimation of the variance of the random effects
                 (specify interval input argument).")
           }
-        out <- list(ind = eblup$EBLUP_data,
-                    MSE = MSE,
-                    transform_param = NULL,
-                    model = list(coefficients = eblup$coefficients,
-                                 variance = sigmau2,
-                                 random_effects = eblup$random_effects,
-                                 fitted = eblup$fitted,
-                                 real_residuals = eblup$real_res,
-                                 std_real_residuals = eblup$std_real_res,
-                                 gamma = Gamma,
-                                 model_select = criteria,
-                                 correlation = correlation,
-                                 seed = seed,
-                                 beta_vcov = eblup$beta_vcov),
-                    framework = framework[c("direct", "vardir", "N_dom_smp",
-                                            "N_dom_unobs", "combined_data",
-                                            "domains")],
-                    transformation = list(transformation = transformation,
-                                          backtransformation =
-                                            backtransformation),
-                    method = list(method = method,
-                                  MSE_method = MSE_method),
-                    fixed = fixed,
-                    call = call,
-                    successful_bootstraps = NULL
-        )
+          out <- list(
+            ind = eblup$eblup_data,
+            MSE = MSE,
+            transform_param = NULL,
+            model = list(
+              coefficients = eblup$coefficients,
+              variance = sigmau2,
+              random_effects = eblup$random_effects,
+              fitted = eblup$fitted,
+              real_residuals = eblup$real_res,
+              std_real_residuals = eblup$std_real_res,
+              gamma = Gamma,
+              model_select = criteria,
+              correlation = correlation,
+              seed = seed,
+              beta_vcov = eblup$beta_vcov
+            ),
+            framework = framework[c(
+              "direct", "vardir", "N_dom_smp",
+              "N_dom_unobs", "combined_data",
+              "domains"
+            )],
+            transformation = list(
+              transformation = transformation,
+              backtransformation =
+                backtransformation
+            ),
+            method = list(
+              method = method,
+              MSE_method = MSE_method
+            ),
+            fixed = fixed,
+            call = call,
+            successful_bootstraps = NULL
+          )
         }
       } else if (method == "me") {
-        out <- list(ind = eblup$EBLUP_data,
-                    MSE = MSE,
-                    transform_param = NULL,
-                    model = list(coefficients = eblup$coefficients,
-                                 variance = sigmau2$sigmau_YL,
-                                 random_effects =
-                                   as.matrix(eblup$random_effects),
-                                 fitted = eblup$fitted,
-                                 real_residuals = eblup$real_res,
-                                 std_real_residuals = eblup$std_real_res,
-                                 gamma = Gamma,
-                                 model_select = criteria,
-                                 correlation = correlation,
-                                 beta_vcov = eblup$beta_vcov),
-                    framework = framework[c("direct", "vardir", "N_dom_smp",
-                                            "N_dom_unobs", "combined_data",
-                                            "domains", "Ci")],
-                    transformation = list(transformation = transformation,
-                                          backtransformation = backtransformation),
-                    method = list(method = method,
-                                  MSE_method = MSE_method),
-                    fixed = fixed,
-                    call = call,
-                    successful_bootstraps = NULL
+        out <- list(
+          ind = eblup$eblup_data,
+          MSE = MSE,
+          transform_param = NULL,
+          model = list(
+            coefficients = eblup$coefficients,
+            variance = sigmau2$sigmau_YL,
+            random_effects =
+              as.matrix(eblup$random_effects),
+            fitted = eblup$fitted,
+            real_residuals = eblup$real_res,
+            std_real_residuals = eblup$std_real_res,
+            gamma = Gamma,
+            model_select = criteria,
+            correlation = correlation,
+            beta_vcov = eblup$beta_vcov
+          ),
+          framework = framework[c(
+            "direct", "vardir", "N_dom_smp",
+            "N_dom_unobs", "combined_data",
+            "domains", "Ci"
+          )],
+          transformation = list(
+            transformation = transformation,
+            backtransformation = backtransformation
+          ),
+          method = list(
+            method = method,
+            MSE_method = MSE_method
+          ),
+          fixed = fixed,
+          call = call,
+          successful_bootstraps = NULL
         )
-
       }
-
-
     } else if (transformation != "no") {
-
       if ((isTRUE(all.equal(sigmau2, interval[1]))) ||
-         (isTRUE(all.equal(sigmau2, interval[2])))) {
+        (isTRUE(all.equal(sigmau2, interval[2])))) {
         warning("The estimate of the variance of the random effects falls at
             the interval limit. It is recommended to choose a larger
             interval for the estimation of the variance of the random effects
@@ -561,104 +630,129 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
       Gamma$Gamma[framework$obs_dom == TRUE] <- as.numeric(eblup$gamma)
 
       # Back-transformation
-      result_data <- backtransformed(framework = framework,
-                                     sigmau2 = sigmau2, vardir = vardir,
-                                     eblup = eblup,
-                                     transformation = transformation,
-                                     backtransformation = backtransformation,
-                                     combined_data = framework$combined_data,
-                                     method = method, interval = interval,
-                                     MSE = MSE,
-                                     mse_type = mse_type,
-                                     B = B[1])
+      result_data <- backtransformed(
+        framework = framework,
+        sigmau2 = sigmau2, vardir = vardir,
+        eblup = eblup,
+        transformation = transformation,
+        backtransformation = backtransformation,
+        combined_data = framework$combined_data,
+        method = method, interval = interval,
+        MSE = MSE,
+        mse_type = mse_type,
+        B = B[1]
+      )
 
-      out <- list(ind = result_data$EBLUP_data,
-                  MSE = result_data$MSE_data,
-                  transform_param = NULL,
-                  model = list(coefficients = eblup$coefficients,
-                               variance = sigmau2,
-                               random_effects =
-                                 as.matrix(eblup$random_effects[, 1]),
-                               fitted = eblup$fitted,
-                               real_residuals = eblup$real_res[, 1],
-                               std_real_residuals = eblup$std_real_res[, 1],
-                               gamma = Gamma,
-                               model_select = criteria,
-                               correlation = correlation,
-                               seed = seed,
-                               beta_vcov = eblup$beta_vcov),
-                  framework = framework[c("direct", "vardir", "N_dom_smp",
-                                          "N_dom_unobs", "combined_data",
-                                          "domains")],
-                  transformation = list(transformation = transformation,
-                                        backtransformation =
-                                          backtransformation),
-                  method = list(method = method,
-                                MSE_method = result_data$MSE_method),
-                  fixed = fixed,
-                  call = call,
-                  successful_bootstraps = NULL)
+      out <- list(
+        ind = result_data$eblup_data,
+        MSE = result_data$mse_data,
+        transform_param = NULL,
+        model = list(
+          coefficients = eblup$coefficients,
+          variance = sigmau2,
+          random_effects =
+            as.matrix(eblup$random_effects[, 1]),
+          fitted = eblup$fitted,
+          real_residuals = eblup$real_res[, 1],
+          std_real_residuals = eblup$std_real_res[, 1],
+          gamma = Gamma,
+          model_select = criteria,
+          correlation = correlation,
+          seed = seed,
+          beta_vcov = eblup$beta_vcov
+        ),
+        framework = framework[c(
+          "direct", "vardir", "N_dom_smp",
+          "N_dom_unobs", "combined_data",
+          "domains"
+        )],
+        transformation = list(
+          transformation = transformation,
+          backtransformation =
+            backtransformation
+        ),
+        method = list(
+          method = method,
+          MSE_method = result_data$MSE_method
+        ),
+        fixed = fixed,
+        call = call,
+        successful_bootstraps = NULL
+      )
     }
   } else if (method == "reblup" | method == "reblupbc") {
 
     # Standard EBLUP -----------------------------------------------------------
-    eblup <- eblup_robust(framework = framework, vardir = vardir,
-                          combined_data = combined_data,
-                          method = method, k = k, mult_constant = mult_constant,
-                          correlation = correlation, corMatrix = corMatrix)
+    eblup <- eblup_robust(
+      framework = framework, vardir = vardir,
+      combined_data = combined_data,
+      method = method, k = k, mult_constant = mult_constant,
+      correlation = correlation, corMatrix = corMatrix
+    )
 
     # MSE ----------------------------------------------------------------------
     if (MSE == TRUE) {
-      MSE_data <- wrapper_MSE(framework = framework,
-                              combined_data = framework$combined_data,
-                              vardir = vardir, eblup = eblup,
-                              mse_type = mse_type, method = method, B = B[1])
-      MSE <- MSE_data$MSE_data
-      MSE_method <- MSE_data$MSE_method
+      mse_data <- wrapper_MSE(
+        framework = framework,
+        combined_data = framework$combined_data,
+        vardir = vardir, eblup = eblup,
+        mse_type = mse_type, method = method, B = B[1]
+      )
+      MSE <- mse_data$mse_data
+      MSE_method <- mse_data$MSE_method
     } else {
       MSE <- NULL
       MSE_method <- "no mse estimated"
     }
 
     if (correlation == "spatial") {
-    sigmau2 <- data.frame(correlation = unname(eblup$variance[1]),
-                          variance = unname(eblup$variance[2]))
-    row.names(sigmau2) <- ""
+      sigmau2 <- data.frame(
+        correlation = unname(eblup$variance[1]),
+        variance = unname(eblup$variance[2])
+      )
+      row.names(sigmau2) <- ""
     } else if (correlation == "no") {
       sigmau2 <- unname(eblup$variance[1])
     }
 
-    out <- list(ind = eblup$EBLUP_data,
-                MSE = MSE,
-                transform_param = NULL,
-                model = list(coefficients = eblup$coefficients,
-                             variance = sigmau2,
-                             random_effects = as.matrix(eblup$random_effects),
-                             fitted = eblup$fitted,
-                             real_residuals = as.matrix(eblup$real_res),
-                             std_real_residuals = as.matrix(eblup$std_real_res),
-                             correlation = correlation,
-                             k = k,
-                             mult_constant = mult_constant,
-                             seed = seed,
-                             beta_vcov = eblup$beta_vcov),
-                framework = framework[c("direct", "vardir", "N_dom_smp",
-                                        "N_dom_unobs", "combined_data",
-                                        "domains", "W")],
-                transformation = list(transformation = transformation,
-                                      backtransformation = backtransformation),
-                method = list(method = method,
-                              MSE_method = MSE_method),
-                fixed = fixed,
-                call = call,
-                successful_bootstraps = NULL)
-
-
+    out <- list(
+      ind = eblup$eblup_data,
+      MSE = MSE,
+      transform_param = NULL,
+      model = list(
+        coefficients = eblup$coefficients,
+        variance = sigmau2,
+        random_effects = as.matrix(eblup$random_effects),
+        fitted = eblup$fitted,
+        real_residuals = as.matrix(eblup$real_res),
+        std_real_residuals = as.matrix(eblup$std_real_res),
+        correlation = correlation,
+        k = k,
+        mult_constant = mult_constant,
+        seed = seed,
+        beta_vcov = eblup$beta_vcov
+      ),
+      framework = framework[c(
+        "direct", "vardir", "N_dom_smp",
+        "N_dom_unobs", "combined_data",
+        "domains", "W"
+      )],
+      transformation = list(
+        transformation = transformation,
+        backtransformation = backtransformation
+      ),
+      method = list(
+        method = method,
+        MSE_method = MSE_method
+      ),
+      fixed = fixed,
+      call = call,
+      successful_bootstraps = NULL
+    )
   }
 
 
   class(out) <- c("fh", "emdi")
 
   return(out)
-
 }

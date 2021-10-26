@@ -88,15 +88,19 @@ data("eusilcA_popAgg")
 data("eusilcA_smpAgg")
 
 # Combine sample and population data
-combined_data <- combine_data(pop_data = eusilcA_popAgg,
-                              pop_domains = "Domain",
-                              smp_data = eusilcA_smpAgg,
-                              smp_domains = "Domain")
+combined_data <- combine_data(
+  pop_data = eusilcA_popAgg,
+  pop_domains = "Domain",
+  smp_data = eusilcA_smpAgg,
+  smp_domains = "Domain"
+)
 
 # Estimate FH model that contains all variables that should be considered
-fh_std <- fh(fixed = Mean ~ cash + self_empl + unempl_ben,
-             vardir = "Var_Mean", combined_data = combined_data,
-             domains = "Domain", method = "ml", B = c(0,50))
+fh_std <- fh(
+  fixed = Mean ~ cash + self_empl + unempl_ben,
+  vardir = "Var_Mean", combined_data = combined_data,
+  domains = "Domain", method = "ml", B = c(0, 50)
+)
 
 # Example 1: Use default settings
 step(fh_std)

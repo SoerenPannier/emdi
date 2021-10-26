@@ -1,15 +1,18 @@
 #' @rdname compare_plot
 #' @export
 compare_plot.fh <- function(model = NULL, direct = NULL, indicator = "all",
-                              MSE = FALSE, CV = FALSE, label = "orig",
-                              color = c("blue", "lightblue3"),
-                              shape = c(16, 16), line_type = c("solid",
-                                                               "solid"),
-                              gg_theme = NULL, ...) {
-
-  compare_plot_check(model = model, indicator = indicator,
-                     label = label, color = color, shape = shape,
-                     line_type = line_type, gg_theme = gg_theme)
+                            MSE = FALSE, CV = FALSE, label = "orig",
+                            color = c("blue", "lightblue3"),
+                            shape = c(16, 16), line_type = c(
+                              "solid",
+                              "solid"
+                            ),
+                            gg_theme = NULL, ...) {
+  compare_plot_check(
+    model = model, indicator = indicator,
+    label = label, color = color, shape = shape,
+    line_type = line_type, gg_theme = gg_theme
+  )
 
   if (inherits(direct, "ebp")) {
     stop(paste0("It is not possible to compare the point and MSE estimates of a
@@ -17,15 +20,19 @@ compare_plot.fh <- function(model = NULL, direct = NULL, indicator = "all",
             'ebp' object."))
   }
 
-  if (inherits(model, "fh")  & inherits(direct, "direct")) {
-    warning(paste0("fh models are only compared to their own inherrent direct ",
-                   "estimates. Hence, the argument direct is ignored."))
+  if (inherits(model, "fh") & inherits(direct, "direct")) {
+    warning(paste0(
+      "fh models are only compared to their own inherrent direct ",
+      "estimates. Hence, the argument direct is ignored."
+    ))
   }
 
-  compare_plot_fh(model = model, direct = model, indicator = indicator,
-                  MSE = MSE, CV = CV,
-                  label = label, color = color, shape = shape,
-                  line_type = line_type, gg_theme = gg_theme)
+  compare_plot_fh(
+    model = model, direct = model, indicator = indicator,
+    MSE = MSE, CV = CV,
+    label = label, color = color, shape = shape,
+    line_type = line_type, gg_theme = gg_theme
+  )
 }
 
 
@@ -81,7 +88,6 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE,
                             color = c("blue", "lightblue3"),
                             shape = c(16, 16), line_type = c("solid", "solid"),
                             gg_theme = NULL) {
-
   Model_based <- NULL
   Direct <- NULL
   ID <- NULL
@@ -90,24 +96,30 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE,
 
   Data <- point_emdi(object = model, indicator = "all")$ind
   Data <- Data[!is.na(Data$Direct), ]
-  selected_indicators <- colnames(Data)[!(colnames(Data) %in% c('Domain',
-                                                                'Direct'))]
-  colnames(Data) <- c("Domain", "FH_Direct",
-                      paste0(colnames(Data)[!(colnames(Data) %in%
-                                                c('Domain', 'Direct'))],
-                             "_Model"))
+  selected_indicators <- colnames(Data)[!(colnames(Data) %in% c(
+    "Domain",
+    "Direct"
+  ))]
+  colnames(Data) <- c(
+    "Domain", "FH_Direct",
+    paste0(
+      colnames(Data)[!(colnames(Data) %in%
+        c("Domain", "Direct"))],
+      "_Model"
+    )
+  )
   if ("FH_Bench" %in% selected_indicators) {
     Data$FH_Bench_Direct <- Data$FH_Direct
   }
-  if ('FH_Bench' %in% indicator & !("FH_Bench" %in% selected_indicators)) {
-    message('emdi object does not contain benchmarked fh estimates. Only
-            FH estimates are compared with direct. See also help(benchmark).')
+  if ("FH_Bench" %in% indicator & !("FH_Bench" %in% selected_indicators)) {
+    message("emdi object does not contain benchmarked fh estimates. Only
+            FH estimates are compared with direct. See also help(benchmark).")
   }
 
   if (!(any(indicator == "all") || any(indicator == "direct") ||
-        any(indicator == "Direct"))) {
+    any(indicator == "Direct"))) {
     selected_indicators <- selected_indicators[selected_indicators %in%
-                                                 indicator]
+      indicator]
   }
 
   if (is.null(model$MSE)) {
@@ -116,10 +128,14 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE,
 
   if (MSE == TRUE || CV == TRUE) {
     all_precisions <- mse_emdi(object = model, indicator = "all", CV = TRUE)
-    colnames(all_precisions$ind) <- c("Domain", paste0(c("FH_Direct",
-                                                         "FH_Model"), "_MSE"))
-    colnames(all_precisions$ind_cv) <- c("Domain", paste0(c("FH_Direct",
-                                                            "FH_Model"), "_CV"))
+    colnames(all_precisions$ind) <- c("Domain", paste0(c(
+      "FH_Direct",
+      "FH_Model"
+    ), "_MSE"))
+    colnames(all_precisions$ind_cv) <- c("Domain", paste0(c(
+      "FH_Direct",
+      "FH_Model"
+    ), "_CV"))
     combined <- merge(all_precisions$ind, all_precisions$ind_cv, id = "Domain")
     combined <- combined[!is.na(combined$FH_Direct_MSE), ]
 
@@ -133,10 +149,10 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE,
             estimator, the plots are only created for in-sample domains. \n \n")
   }
 
-  compare_plots(object = Data, type = "area",
-                selected_indicators = selected_indicators,
-                MSE = MSE, CV = CV, label = label, color = color,
-                shape = shape, line_type = line_type, gg_theme = gg_theme)
-
+  compare_plots(
+    object = Data, type = "area",
+    selected_indicators = selected_indicators,
+    MSE = MSE, CV = CV, label = label, color = color,
+    shape = shape, line_type = line_type, gg_theme = gg_theme
+  )
 }
-

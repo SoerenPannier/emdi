@@ -3,11 +3,10 @@
 
 # Function called in fh
 
-fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
+fh_check <- function(fixed, vardir, combined_data, domains, method, interval, k,
                      mult_constant, transformation, backtransformation,
                      eff_smpsize, correlation, corMatrix, Ci, tol, maxit, MSE,
                      mse_type, B, seed) {
-
   if (is.null(fixed) || !inherits(fixed, "formula")) {
     stop("Fixed must be a formula object. See also help(fh).")
   }
@@ -15,9 +14,9 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
     stop(paste0("The auxiliary variables must not contain NAs."))
   }
   if (is.null(vardir) || !(vardir %in% colnames(combined_data))) {
-    stop(paste0("The sampling variances variable ", vardir, " is not contained in
-                 combined_data. Please provide valid variable name for the
-                 sampling variances."))
+    stop(paste0("The sampling variances variable ", vardir, " is not contained
+                in combined_data. Please provide valid variable name for the
+                sampling variances."))
   }
   if (is.null(combined_data) || !is.data.frame(combined_data)) {
     stop("combined_data must be a data frame containing the direct estimates,
@@ -26,7 +25,7 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
          also eff_smpsize needs to be included. See also help(fh).")
   }
   if (!is.null(domains) && (!is.character(domains) || length(domains) != 1 ||
-      !(domains %in% colnames(combined_data)))) {
+    !(domains %in% colnames(combined_data)))) {
     stop("domains must be a vector of length 1 and of class character
          specifying the variable name of a numeric or factor variable
          indicating domains in the combined_data dataframe. See also
@@ -34,38 +33,38 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
   }
 
   if (is.null(method) || !(method == "reml" || method == "amrl" ||
-                           method == "amrl_yl" || method == "ampl" ||
-                           method == "ampl_yl" || method == "ml" ||
-                           method == "me" || method == "reblup" ||
-                           method == "reblupbc")) {
+    method == "amrl_yl" || method == "ampl" ||
+    method == "ampl_yl" || method == "ml" ||
+    method == "me" || method == "reblup" ||
+    method == "reblupbc")) {
     stop("The nine options for method are ''reml'', ''amrl'', ''amrl_yl'',
           ''ampl'', ''ampl_yl'', ''ml'', ''me'',''reblup'' or ''reblupbc''.")
   }
   if (!is.null(interval) && (length(interval) != 2 ||
-                             !is.vector(interval, mode = "numeric") ||
-                             !(interval[1] < interval[2]))) {
+    !is.vector(interval, mode = "numeric") ||
+    !(interval[1] < interval[2]))) {
     stop("interval needs to be a numeric vector of length 2
          defining a lower and upper limit for the estimation of the variance of
          the random effect. The value of the lower limit needs to be
          smaller than the upper limit. See also help(fh).")
   }
-  if (is.null(k)  || !(is.numeric(k) && length(k) == 1)) {
+  if (is.null(k) || !(is.numeric(k) && length(k) == 1)) {
     stop("k needs to be a single numeric value. See also help(fh).")
   }
-  if (is.null(mult_constant)  || !(is.numeric(mult_constant) &&
-                                   length(mult_constant) == 1)) {
+  if (is.null(mult_constant) || !(is.numeric(mult_constant) &&
+    length(mult_constant) == 1)) {
     stop("mult_constant needs to be a single numeric value. See also help(fh).")
   }
-  if (is.null(transformation) ||  !is.character(transformation) ||
-      !(transformation == "arcsin" || transformation == "log"
-        || transformation == "no")) {
+  if (is.null(transformation) || !is.character(transformation) ||
+    !(transformation == "arcsin" || transformation == "log" ||
+      transformation == "no")) {
     stop("transformation must be a character. The three options are ''no'',
          ''log'' or ''arcsin''.")
   }
-  if (!is.null(backtransformation) && !(backtransformation == "naive"
-                                   || backtransformation == "bc_crude"
-                                   || backtransformation == "bc_sm"
-                                   || backtransformation == "bc")) {
+  if (!is.null(backtransformation) && !(backtransformation == "naive" ||
+    backtransformation == "bc_crude" ||
+    backtransformation == "bc_sm" ||
+    backtransformation == "bc")) {
     stop("The four options for backtransformation are ''bc_crude'', ''bc_sm'',
          ''naive'' or ''bc''.")
   }
@@ -74,25 +73,25 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
                  contained in combined_data. Please provide valid variable name
                  for the effective sample size."))
   }
-  if (is.null(correlation) || !(correlation == "no"
-                           || correlation == "spatial")) {
+  if (is.null(correlation) || !(correlation == "no" ||
+    correlation == "spatial")) {
     stop("The options for correlation are ''no'' or ''spatial''.")
   }
   if (correlation == "spatial" &&
-     (!(is.matrix(corMatrix) || is.data.frame(corMatrix)))) {
+    (!(is.matrix(corMatrix) || is.data.frame(corMatrix)))) {
     stop("corMatrix must be a data frame or matrix containing the
          row-standardised proximity matrix. See also help(fh). A description
          how a proximity matrix can be computed can be found in the vignette.")
   }
   if (correlation == "spatial" &&
-      (dim(corMatrix)[1] != dim(corMatrix)[2])) {
+    (dim(corMatrix)[1] != dim(corMatrix)[2])) {
     stop("The columns and rows of corMatrix must have the same lengths. See also
          help(fh). A description how a proximity matrix can be computed can be
          found in the vignette.")
   }
   direct <- makeXY(fixed, combined_data)$y
   if (correlation == "spatial" &&
-      (dim(corMatrix)[1] != length(direct))) {
+    (dim(corMatrix)[1] != length(direct))) {
     stop("The columns and rows of corMatrix must have the same lengths
     like the number of areas. If out-of-sample areas exist, the columns
     and rows of corMatrix must have the same lengths like the number
@@ -106,10 +105,10 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
   }
   estcoef <- makeXY(formula = fixed, data = combined_data)
   if (method == "me" && !is.null(Ci) &&
-      (!(dim(Ci)[1] == dim(estcoef$x)[2]) ||
-       !(dim(Ci)[2] == dim(estcoef$x)[2]) ||
-       !(dim(Ci)[3] == dim(combined_data)[1]))) {
-   stop("Ci must be an array with dimension number of estimated regression
+    (!(dim(Ci)[1] == dim(estcoef$x)[2]) ||
+      !(dim(Ci)[2] == dim(estcoef$x)[2]) ||
+      !(dim(Ci)[3] == dim(combined_data)[1]))) {
+    stop("Ci must be an array with dimension number of estimated regression
         coefficients times number of estimated regression coefficients times
         number of areas containing the variance-covariance matrix of the
         explanatory variables for each area. The areas should be sorted like in
@@ -117,13 +116,13 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
         please refer to the Vignette.")
   }
   if ((method == "me") && (!is.numeric(tol) || !(is.numeric(tol) &&
-                                                     length(tol) == 1))) {
+    length(tol) == 1))) {
     stop("tol must be a single number determining the tolerance value for the
           convergence of weights for the estimation of the variance of the
           random effects and the beta coefficients. See help(fh).")
-     }
+  }
   if ((method == "me") && (!is.numeric(maxit) || !(is.numeric(maxit) &&
-                                                         length(maxit) == 1))) {
+    length(maxit) == 1))) {
     stop("maxit must be a single number determining the tolerance value for the
           convergence of weights for the estimation of the variance of the
           random effects and the beta coefficients. See help(fh).")
@@ -133,23 +132,23 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
           set to FALSE. See also help(fh).")
   }
   if (MSE == TRUE &&
-      (is.null(mse_type) || !(length(mse_type) == 1 &&
-                              (mse_type == "analytical" || mse_type == "boot" ||
-                               mse_type == "pseudo" ||
-                               mse_type == "jackknife" ||
-                               mse_type == "weighted_jackknife" ||
-                               mse_type == "spatialnonparboot" ||
-                               mse_type == "spatialnonparbootbc" ||
-                               mse_type == "spatialparboot" ||
-                               mse_type == "spatialparbootbc")))) {
+    (is.null(mse_type) || !(length(mse_type) == 1 &&
+      (mse_type == "analytical" || mse_type == "boot" ||
+        mse_type == "pseudo" ||
+        mse_type == "jackknife" ||
+        mse_type == "weighted_jackknife" ||
+        mse_type == "spatialnonparboot" ||
+        mse_type == "spatialnonparbootbc" ||
+        mse_type == "spatialparboot" ||
+        mse_type == "spatialparbootbc")))) {
     stop("The nine mse types are ''analytical'', ''boot'', ''pseudo'',
          ''jackknife'', ''weighted_jackknife'', ''spatialnonparboot'',
          ''spatialnonparbootbc'', ''spatialparboot'' or ''spatialparbootbc''.")
   }
   if (MSE == TRUE && (mse_type == "boot" || mse_type == "spatialparboot" ||
-                      mse_type == "spatialparbootbc" ||
-                      mse_type == "spatialnonparboot" ||
-                      mse_type == "spatialnonparbootbc") && is.null(B)) {
+    mse_type == "spatialparbootbc" ||
+    mse_type == "spatialnonparboot" ||
+    mse_type == "spatialnonparbootbc") && is.null(B)) {
     stop("If MSE is set to TRUE and a bootstrap MSE estimation method is chosen,
           the argument B is required and cannot be NULL. See also help(fh).")
   }
@@ -161,15 +160,15 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
          information criteria by Marhuenda et al. (2014). See also help(fh).")
   }
   if (MSE == TRUE && (mse_type == "boot" || mse_type == "spatialparboot" ||
-                      mse_type == "spatialparbootbc" ||
-                      mse_type == "spatialnonparboot" ||
-                      mse_type == "spatialnonparbootbc") && !(B[1] > 1)) {
+    mse_type == "spatialparbootbc" ||
+    mse_type == "spatialnonparboot" ||
+    mse_type == "spatialnonparbootbc") && !(B[1] > 1)) {
     stop("If MSE is set to TRUE and a bootstrap MSE estimation method is chosen,
           The number of bootstrap samples (B) needs to be greater than 1. See
          also help(fh).")
   }
   if (!is.null(seed) && (!is.numeric(seed) ||
-                         !(is.numeric(seed) && length(seed) == 1))) {
+    !(is.numeric(seed) && length(seed) == 1))) {
     stop("The seed must be a single value, interpreted as an integer, or NULL
          See also help(fh).")
   }
@@ -178,19 +177,18 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval,k,
 # Functions called in notation (framework)
 fh_fw_check1 <- function(fixed, vardir, combined_data, domains,
                          eff_smpsize = NULL, Ci = NULL) {
-
   if (!(domains %in% colnames(combined_data))) {
     stop(paste0("The domain variable ", domains, " is not contained in
                 combined_data. Please provide valid variable name for
                 domains."))
   }
   if (!(vardir %in% colnames(combined_data))) {
-    stop(paste0("The sampling variances variable ",vardir, " is not contained
+    stop(paste0("The sampling variances variable ", vardir, " is not contained
                 in combined_data. Please provide valid variable name for
                 vardir."))
   }
   if (!(eff_smpsize %in% colnames(combined_data))) {
-    stop(paste0("The effective sample size variable ",eff_smpsize, " is not
+    stop(paste0("The effective sample size variable ", eff_smpsize, " is not
                 contained in combined_data. Please provide valid variable name
                 for eff_smpsize."))
   }
@@ -202,16 +200,17 @@ fh_fw_check1 <- function(fixed, vardir, combined_data, domains,
   mod_vars <- all.vars(fixed)
   mod_vars <- mod_vars[mod_vars != as.character(fixed[2])]
   if (!all(mod_vars %in% colnames(combined_data))) {
-    stop(paste0("Variable ", mod_vars[which(!(mod_vars %in%
-                                                colnames(combined_data)))],
-                " is not contained in combined_data. Please provide valid
-                variables names for the explanatory variables."))
+    stop(paste0(
+      "Variable ", mod_vars[which(!(mod_vars %in%
+        colnames(combined_data)))],
+      " is not contained in combined_data. Please provide valid
+                variables names for the explanatory variables."
+    ))
   }
   if (!is.numeric(combined_data[[paste(fixed[2])]])) {
-    stop(paste0(as.character(fixed[2])," must be the name of a variable that
+    stop(paste0(as.character(fixed[2]), " must be the name of a variable that
                is a numeric vector."))
   }
-
 }
 
 ################################################################################
@@ -221,33 +220,36 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
                             interval, k, mult_constant, transformation,
                             backtransformation, eff_smpsize, correlation,
                             corMatrix, Ci, tol, maxit, MSE, mse_type, B, seed) {
-
-  if (is.null(transformation) ||  !is.character(transformation) ||
-      !(transformation == "arcsin" || transformation == "log"
-        || transformation == "no")) {
+  if (is.null(transformation) || !is.character(transformation) ||
+    !(transformation == "arcsin" || transformation == "log" ||
+      transformation == "no")) {
     stop("transformation must be a character. The three options are ''no'',
-         ''log'' or ''arcsin''." )
+         ''log'' or ''arcsin''.")
   }
   if ((method == "reml" || method == "ml") && correlation == "no" &&
-      transformation == "no" && MSE == TRUE && mse_type != "analytical") {
+    transformation == "no" && MSE == TRUE && mse_type != "analytical") {
+    # stop("For the ''reml'' and ''ml'' variance estimation methods without
+    #     incorporating a correlation structure (correlation = ''no'') and
+    #     without applying a transformation (transformation = ''no''), the
+    #     mse_type must be set to ''analytical''. See also help(fh).")
     stop("For the ''reml'' and ''ml'' variance estimation methods without
          incorporating a correlation structure (correlation = ''no'') and
          without applying a transformation (transformation = ''no''), the
          mse_type must be set to ''analytical''. See also help(fh).")
   }
   if ((method == "amrl" || method == "ampl" || method == "amrl_yl" ||
-       method == "ampl_yl") && MSE == TRUE && mse_type != "analytical") {
+    method == "ampl_yl") && MSE == TRUE && mse_type != "analytical") {
     stop("For the adjusted variance estimation methods, the mse_type must be set
           to ''analytical''. See also help(fh).")
   }
   if ((method == "amrl" || method == "ampl" || method == "amrl_yl" ||
-       method == "ampl_yl") && transformation != "no") {
+    method == "ampl_yl") && transformation != "no") {
     stop("For the adjusted variance estimation methods, it is not possible to
          apply a transformation. Transformation must be set to ''no''. See also
          help(fh).")
   }
   if ((method == "amrl" || method == "ampl" || method == "amrl_yl" ||
-       method == "ampl_yl") &&  correlation != "no") {
+    method == "ampl_yl") && correlation != "no") {
     stop("For the adjusted variance estimation methods, it is not possible to
          incorporate a correlation structure. Correlation must be set to ''no''.
          If correlation is set to ''spatial'' only ''reml'' and ''ml'' variance
@@ -273,7 +275,7 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
          be set to ''jackknife''. See also help(fh).")
   }
   if ((method == "reblup" || method == "reblupbc") && MSE == TRUE &&
-      !(mse_type == "boot" || mse_type == "pseudo")) {
+    !(mse_type == "boot" || mse_type == "pseudo")) {
     stop("For the robust estimation methods (method = ''reblup''/''reblupbc''),
           possible mse_types are ''boot'' and ''pseudo''. See also help(fh).")
   }
@@ -283,7 +285,7 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
          set to ''no''. See also help(fh).")
   }
   if ((method == "reblup" || method == "reblupbc") &&
-      (is.null(k) || is.null(tol) || is.null(maxit))) {
+    (is.null(k) || is.null(tol) || is.null(maxit))) {
     stop("For the robust estimation methods (method = ''reblup''/''reblupbc''),
          the arguments k, tol and maxit are required and cannot be ''NULL''.
          See also help(fh).")
@@ -294,7 +296,7 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
          cannot be ''NULL''. See also help(fh).")
   }
   if ((correlation == "spatial") && (is.null(corMatrix) || is.null(tol) ||
-                                     is.null(maxit))) {
+    is.null(maxit))) {
     stop("If correlation is set to ''spatial'' the arguments corMatrix, tol and
          maxit are required and cannot be ''NULL''. See also help(fh).")
   }
@@ -304,17 +306,17 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
          help(fh).")
   }
   if ((correlation == "spatial") && method == "reml" && MSE == TRUE &&
-      !(mse_type == "analytical" || mse_type == "spatialparboot" ||
-        mse_type == "spatialparbootbc" || mse_type == "spatialnonparboot" ||
-        mse_type == "spatialnonparbootbc")) {
+    !(mse_type == "analytical" || mse_type == "spatialparboot" ||
+      mse_type == "spatialparbootbc" || mse_type == "spatialnonparboot" ||
+      mse_type == "spatialnonparbootbc")) {
     stop("If correlation is set to ''spatial'' and ''reml'' variance estimation
           method is chosen, possible mse_types are ''analytical'',
           ''spatialparboot'', ''spatialparbootbc'', ''spatialnonparboot'' and
          ''spatialnonparbootbc''. See also help(fh).")
   }
   if ((correlation == "spatial") && method == "ml" && MSE == TRUE &&
-      !(mse_type == "analytical" || mse_type == "spatialparboot" ||
-        mse_type == "spatialparbootbc")) {
+    !(mse_type == "analytical" || mse_type == "spatialparboot" ||
+      mse_type == "spatialparbootbc")) {
     stop("If correlation is set to ''spatial'' and ''ml'' variance estimation
           method is chosen, possible mse_types are ''analytical'',
 ''spatialparboot'' and ''spatialparbootbc''. See also help(fh).")
@@ -324,7 +326,7 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
          required and cannot be NULL. See also help(fh).")
   }
   if ((transformation == "log") && !(backtransformation == "bc_crude" ||
-                                     backtransformation == "bc_sm")) {
+    backtransformation == "bc_sm")) {
     stop("If transformation is set to ''log'', possible backtransformations are
          ''bc_crude'' and ''bc_sm''. See also help(fh).")
   }
@@ -333,7 +335,7 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
          ''analytical''. See also help(fh).")
   }
   if ((transformation != "no") && (backtransformation == "bc_sm") &&
-      method != "ml") {
+    method != "ml") {
     stop("If backtransformation is set to ''bc_sm'', only ''ml'' variance
          estimation is possible. See also help(fh).")
   }
@@ -342,19 +344,19 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
          required and cannot be NULL. See also help(fh).")
   }
   if ((transformation == "arcsin") && !(backtransformation == "naive" ||
-                                     backtransformation == "bc")) {
+    backtransformation == "bc")) {
     stop("If transformation is set to ''arcsin'', possible backtransformations
          are ''naive'' and ''bc''. See also help(fh).")
   }
   if ((transformation == "arcsin") && (backtransformation == "naive") &&
-      (MSE == TRUE) && !(mse_type == "boot" || mse_type == "jackknife" ||
-        mse_type == "weighted_jackknife")) {
+    (MSE == TRUE) && !(mse_type == "boot" || mse_type == "jackknife" ||
+    mse_type == "weighted_jackknife")) {
     stop("If transformation is set to ''arcsin'' and backtransformation to
          ''naive'', the mse_type must be set to ''boot'', ''jackknife'' or
          ''weighted_jackknife''. See also help(fh).")
   }
   if ((transformation == "arcsin") && (backtransformation == "bc") &&
-      (MSE == TRUE) && !(mse_type == "boot")) {
+    (MSE == TRUE) && !(mse_type == "boot")) {
     stop("If transformation is set to ''arcsin'' and backtransformation to
          ''bc'', the mse_type must be set to ''boot''. See also help(fh).")
   }
@@ -367,7 +369,6 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
 
 combine_data_check <- function(pop_data, pop_domains, smp_data, smp_domains,
                                vardir) {
-
   if (!is.data.frame(pop_data)) {
     stop("Pop_data must be a data frame containing population data.
          See also help(combine_data).")
@@ -406,7 +407,7 @@ combine_data_check <- function(pop_data, pop_domains, smp_data, smp_domains,
                 Please provide valid variable name for the direct variances."))
   }
   if (!all(unique(as.character(smp_data[[smp_domains]])) %in%
-           unique(as.character(pop_data[[pop_domains]])))) {
+    unique(as.character(pop_data[[pop_domains]])))) {
     stop("The sample data contains domains that are
          not contained in the population data.")
   }

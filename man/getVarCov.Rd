@@ -52,14 +52,18 @@ see \code{\link[nlme]{getVarCov}}.
 \examples{
 \donttest{
 # Example for class fh
-combined_data <- combine_data(pop_data = eusilcA_popAgg,
-                              pop_domains = "Domain",
-                              smp_data = eusilcA_smpAgg,
-                              smp_domains = "Domain")
+combined_data <- combine_data(
+  pop_data = eusilcA_popAgg,
+  pop_domains = "Domain",
+  smp_data = eusilcA_smpAgg,
+  smp_domains = "Domain"
+)
 
-fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-             combined_data = combined_data, domains = "Domain",
-             method = "ml", MSE = TRUE)
+fh_std <- fh(
+  fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+  combined_data = combined_data, domains = "Domain",
+  method = "ml", MSE = TRUE
+)
 
 getVarCov(fh_std)
 }

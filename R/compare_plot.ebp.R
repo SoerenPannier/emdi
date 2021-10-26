@@ -1,31 +1,38 @@
 #' @rdname compare_plot
 #' @export
 compare_plot.ebp <- function(model = NULL, direct = NULL, indicator = "all",
-                              MSE = FALSE, CV = FALSE, label = "orig",
-                              color = c("blue", "lightblue3"),
-                              shape = c(16, 16), line_type = c("solid",
-                                                               "solid"),
-                              gg_theme = NULL, ...) {
-
-  compare_plot_check(model = model, indicator = indicator,
-                     label = label, color = color, shape = shape,
-                     line_type = line_type, gg_theme = gg_theme)
+                             MSE = FALSE, CV = FALSE, label = "orig",
+                             color = c("blue", "lightblue3"),
+                             shape = c(16, 16), line_type = c(
+                               "solid",
+                               "solid"
+                             ),
+                             gg_theme = NULL, ...) {
+  compare_plot_check(
+    model = model, indicator = indicator,
+    label = label, color = color, shape = shape,
+    line_type = line_type, gg_theme = gg_theme
+  )
 
   if (inherits(direct, "fh")) {
-    stop(paste0("It is not possible to compare the point and MSE estimates of
+    stop(paste0(
+      "It is not possible to compare the point and MSE estimates of
                 a", " model of type 'fh', to the point and MSE estimates of",
-                " an 'ebp' object."))
+      " an 'ebp' object."
+    ))
   }
 
   if ((inherits(model, "ebp") & is.null(direct)) |
-      (inherits(direct, "ebp") & is.null(model))) {
+    (inherits(direct, "ebp") & is.null(model))) {
     stop(paste0("If the model is of type 'ebp', the input argument
                   direct is required."))
   } else if (inherits(model, "ebp") & inherits(direct, "direct")) {
-    compare_plot_ebp(model = model, direct = direct, indicator = indicator,
-                     MSE = MSE, CV = CV,
-                     label = label, color = color, shape = shape,
-                     line_type = line_type, gg_theme = gg_theme)
+    compare_plot_ebp(
+      model = model, direct = direct, indicator = indicator,
+      MSE = MSE, CV = CV,
+      label = label, color = color, shape = shape,
+      line_type = line_type, gg_theme = gg_theme
+    )
   }
 }
 
@@ -85,7 +92,6 @@ compare_plot_ebp <- function(model, direct, indicator = "all", MSE = FALSE,
                              color = c("blue", "lightblue3"),
                              shape = c(16, 16), line_type = c("solid", "solid"),
                              gg_theme = NULL) {
-
   Model_based <- NULL
   Direct <- NULL
   ID <- NULL
@@ -94,8 +100,10 @@ compare_plot_ebp <- function(model, direct, indicator = "all", MSE = FALSE,
 
   ind_direct <- point_emdi(object = direct, indicator = indicator)$ind
   selected_direct <- colnames(ind_direct)[-1]
-  colnames(ind_direct) <- c("Domain",
-                            paste0(colnames(ind_direct)[-1], "_Direct"))
+  colnames(ind_direct) <- c(
+    "Domain",
+    paste0(colnames(ind_direct)[-1], "_Direct")
+  )
 
   ind_model <- point_emdi(object = model, indicator = indicator)$ind
   selected_model <- colnames(ind_model)[-1]
@@ -104,13 +112,12 @@ compare_plot_ebp <- function(model, direct, indicator = "all", MSE = FALSE,
 
   compare_plot_check2(ind_direct, ind_model)
 
-  Data <- merge(ind_direct, ind_model, by = "Domain" )
+  Data <- merge(ind_direct, ind_model, by = "Domain")
 
   matcher <- match(Data$Domain, names(smp_size))
   Data$smp_size <- as.numeric(smp_size)[matcher]
 
-  if (MSE == TRUE || CV == TRUE ) {
-
+  if (MSE == TRUE || CV == TRUE) {
     precisions_direct <-
       mse_emdi(object = direct, indicator = indicator, CV = TRUE)
     colnames(precisions_direct$ind) <-
@@ -134,13 +141,14 @@ compare_plot_ebp <- function(model, direct, indicator = "all", MSE = FALSE,
       Data <- merge(Data, precisions_model$ind_cv, id = "Domain")
       Data$smp_size2 <- Data$smp_size
     }
-
   }
 
   selected_indicators <- selected_model[selected_model %in% selected_direct]
 
-  compare_plots(object = Data, type = "unit",
-                selected_indicators = selected_indicators,
-                MSE = MSE, CV = CV, label = label, color = color,
-                shape = shape, line_type = line_type, gg_theme = gg_theme)
+  compare_plots(
+    object = Data, type = "unit",
+    selected_indicators = selected_indicators,
+    MSE = MSE, CV = CV, label = label, color = color,
+    shape = shape, line_type = line_type, gg_theme = gg_theme
+  )
 }

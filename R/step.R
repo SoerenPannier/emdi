@@ -25,7 +25,9 @@
 #' @importFrom stats factor.scope
 
 step <- function(object, scope, criteria, direction, trace, steps,
-                  ...) UseMethod("step")
+                 ...) {
+  UseMethod("step")
+}
 
 
 #' Method \code{step.default} performs a variable selection for lm models by
@@ -42,7 +44,7 @@ step <- function(object, scope, criteria, direction, trace, steps,
 #' @rdname step
 #' @method step default
 #' @importFrom stats step
-step.default <- function(object,...) stats::step(object, ...)
+step.default <- function(object, ...) stats::step(object, ...)
 
 
 
@@ -97,15 +99,19 @@ step.default <- function(object,...) stats::step(object, ...)
 #' data("eusilcA_smpAgg")
 #'
 #' # Combine sample and population data
-#' combined_data <- combine_data(pop_data = eusilcA_popAgg,
-#'                               pop_domains = "Domain",
-#'                               smp_data = eusilcA_smpAgg,
-#'                               smp_domains = "Domain")
+#' combined_data <- combine_data(
+#'   pop_data = eusilcA_popAgg,
+#'   pop_domains = "Domain",
+#'   smp_data = eusilcA_smpAgg,
+#'   smp_domains = "Domain"
+#' )
 #'
 #' # Estimate FH model that contains all variables that should be considered
-#' fh_std <- fh(fixed = Mean ~ cash + self_empl + unempl_ben,
-#'              vardir = "Var_Mean", combined_data = combined_data,
-#'              domains = "Domain", method = "ml", B = c(0,50))
+#' fh_std <- fh(
+#'   fixed = Mean ~ cash + self_empl + unempl_ben,
+#'   vardir = "Var_Mean", combined_data = combined_data,
+#'   domains = "Domain", method = "ml", B = c(0, 50)
+#' )
 #'
 #' # Example 1: Use default settings
 #' step(fh_std)
@@ -121,15 +127,16 @@ step.default <- function(object,...) stats::step(object, ...)
 
 step.fh <- function(object, scope = NULL, criteria = "AIC",
                     direction = "both", trace = TRUE,
-                    steps = 1000, ...){
-
-  step_check(object = object, scope = scope, criteria = criteria,
-             direction = direction, trace = trace, steps = steps)
+                    steps = 1000, ...) {
+  step_check(
+    object = object, scope = scope, criteria = criteria,
+    direction = direction, trace = trace, steps = steps
+  )
 
   if ((criteria == "AICc" || criteria == "AICb1" ||
-       criteria == "AICb2" || criteria == "KICc" ||
-       criteria == "KICb1" || criteria == "KICb2") &&
-      (is.null(object$model$seed)))  {
+    criteria == "AICb2" || criteria == "KICc" ||
+    criteria == "KICb1" || criteria == "KICb2") &&
+    (is.null(object$model$seed))) {
     object$call$seed <- 123
     catmessage <- capture.output(object <- eval(object$call))
     message("Seed in fh object not defined, 123 used as default seed. \n")
@@ -138,24 +145,28 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
   startobject <- object
 
   cut.string <- function(string) {
-    if (length(string) > 1L)
+    if (length(string) > 1L) {
       string[-1L] <- paste0("\n", string[-1L])
+    }
     string
   }
 
   step.results <- function(models, fit, object, catmessage) {
-    change <- vapply(models, "[[" , "change", FUN.VALUE = character(1))
+    change <- vapply(models, "[[", "change", FUN.VALUE = character(1))
     rdf <- vapply(models, "[[", "df.resid", FUN.VALUE = numeric(1))
     ddf <- c(NA, diff(rdf))
     infcriteria <- NULL
     infcriteria <- vapply(models, "[[", "criteria", FUN.VALUE = numeric(1))
-    heading <- c("Stepwise Model Path \nAnalysis of Deviance Table",
-                 "\nInitial Model:", deparse(object$fixed), "\nFinal Model:",
-                 deparse(fit$fixed), "\n")
-    aod <- data.frame(Step = I(change), Df = ddf, criteria = infcriteria,
-                      check.names = FALSE)
+    heading <- c(
+      "Stepwise Model Path \nAnalysis of Deviance Table",
+      "\nInitial Model:", deparse(object$fixed), "\nFinal Model:",
+      deparse(fit$fixed), "\n"
+    )
+    aod <- data.frame(
+      Step = I(change), Df = ddf, criteria = infcriteria,
+      check.names = FALSE
+    )
     attr(aod, "heading") <- heading
-    #fit$anova <- aod
     fit$call$MSE <- startobject$call$MSE
     fit$call$formula <- NULL
     invisible(fit <- eval(fit$call))
@@ -176,20 +187,23 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
   if (missing(scope)) {
     fdrop <- numeric()
     fadd <- attr(Terms, "factors")
-    if (md)
+    if (md) {
       forward <- FALSE
-  }
-  else {
-    if (is.list(scope)) {
-      fdrop <- if (!is.null(fdrop <- scope$lower))
-        attr(terms(update.formula(object$fixed, fdrop)), "factors")
-      else numeric()
-      fadd <- if (!is.null(fadd <- scope$upper))
-        attr(terms(update.formula(object$fixed, fadd)), "factors")
     }
-    else {
-      fadd <- if (!is.null(fadd <- scope))
+  } else {
+    if (is.list(scope)) {
+      fdrop <- if (!is.null(fdrop <- scope$lower)) {
+        attr(terms(update.formula(object$fixed, fdrop)), "factors")
+      } else {
+        numeric()
+      }
+      fadd <- if (!is.null(fadd <- scope$upper)) {
+        attr(terms(update.formula(object$fixed, fadd)), "factors")
+      }
+    } else {
+      fadd <- if (!is.null(fadd <- scope)) {
         attr(terms(update.formula(object$fixed, scope)), "factors")
+      }
       fdrop <- numeric()
     }
   }
@@ -198,17 +212,21 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
   fit <- object
   bcriteria <- fit$model$model_select[[criteria]]
   edf <- length(attr(terms(object$fixed), "term.labels")) + 1
-  if (bcriteria == -Inf)
+  if (bcriteria == -Inf) {
     stop(criteria, "is -infinity for this model, so 'step' cannot proceed",
-         sep = " ")
+      sep = " "
+    )
+  }
   nm <- 1
   if (trace == TRUE) {
-    message("Start: ", criteria, " = ",format(round(bcriteria, 2)), "\n",
-        cut.string(deparse(fit$fixed)), "\n\n", sep = "")
+    message("Start: ", criteria, " = ", format(round(bcriteria, 2)), "\n",
+      cut.string(deparse(fit$fixed)), "\n\n",
+      sep = ""
+    )
     flush.console()
   }
   models[[nm]] <- list(df.resid = n -
-                         edf,change = "", criteria = bcriteria)
+    edf, change = "", criteria = bcriteria)
 
   while (steps > 0) {
     steps <- steps - 1
@@ -218,8 +236,10 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
     aod <- NULL
     change <- NULL
     if (backward && length(scope$drop)) {
-      aod <- drop1.fh(fit, criteria = criteria, scope = scope$drop,
-                      scale = 0)
+      aod <- drop1.fh(fit,
+        criteria = criteria, scope = scope$drop,
+        scale = 0
+      )
       rn <- row.names(aod)
       row.names(aod) <- c(rn[1L], paste("-", rn[-1L]))
       if (any(aod$Df == 0, na.rm = TRUE)) {
@@ -229,67 +249,80 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
     }
     if (is.null(change)) {
       if (forward && length(scope$add)) {
-        aodf <- add1.fh(fit, criteria = criteria,scope = scope$add)
+        aodf <- add1.fh(fit, criteria = criteria, scope = scope$add)
         rn <- row.names(aodf)
         row.names(aodf) <- c(rn[1L], paste("+", rn[-1L]))
-        aod <- if (is.null(aod))
+        aod <- if (is.null(aod)) {
           aodf
-        else rbind(aod, aodf[-1, , drop = FALSE])
+        } else {
+          rbind(aod, aodf[-1, , drop = FALSE])
+        }
       }
       attr(aod, "heading") <- NULL
-      nzdf <- if (!is.null(aod$Df))
+      nzdf <- if (!is.null(aod$Df)) {
         aod$Df != 0 | is.na(aod$Df)
+      }
       aod <- aod[nzdf, ]
-      if (is.null(aod) || ncol(aod) == 0)
+      if (is.null(aod) || ncol(aod) == 0) {
         break
+      }
       nc <- match("criteria", names(aod))
       nc <- nc[!is.na(nc)][1L]
       o <- order(aod[, nc])
       names(aod) <- c("df", criteria)
-      if (trace == TRUE)
+      if (trace == TRUE) {
         print(aod[o, ])
-      if (o[1L] == 1)
+      }
+      if (o[1L] == 1) {
         break
+      }
       change <- rownames(aod)[o[1L]]
     }
 
     fit$call$fixed <- update(fit$fixed, as.formula(paste("~ . ", change)),
-                             evaluate = FALSE)
+      evaluate = FALSE
+    )
     fit$call$MSE <- FALSE
     fit$call$formula <- NULL
     catmessage <- capture.output(fit <- eval(fit$call))
 
     nnew <- fit$framework$N_dom_smp
-    if (all(is.finite(c(n, nnew))) && nnew != n)
+    if (all(is.finite(c(n, nnew))) && nnew != n) {
       stop("number of rows in use has changed: remove missing values?")
+    }
     Terms <- terms(fit$fixed)
 
     bcriteria <- fit$model$model_select[[criteria]]
     edf <- length(attr(terms(fit$fixed), "term.labels")) + 1
     if (trace == TRUE) {
       message("\nStep: ", criteria, " = ", format(round(bcriteria, 2)), "\n",
-          cut.string(deparse(fit$fixed)), "\n\n", sep = "")
+        cut.string(deparse(fit$fixed)), "\n\n",
+        sep = ""
+      )
       flush.console()
     }
-    if (bcriteria >= infcriteria + 1e-07)
+    if (bcriteria >= infcriteria + 1e-07) {
       break
+    }
     nm <- nm + 1
     models[[nm]] <- list(df.resid = n - edf, change = "", criteria = bcriteria)
   }
-  if (any(grepl(pattern = c("Please note that the model selection criteria are
+  if (any(grepl(
+    pattern = c("Please note that the model selection criteria are
                             only computed based on the in-sample domains."),
-                x = ""))) {
+    x = ""
+  ))) {
     catmessage <- TRUE
-    } else {catmessage <- FALSE}
+  } else {
+    catmessage <- FALSE
+  }
   step.results(models = models[seq(nm)], fit, object, catmessage)
-  #list(summary(results), invisible(results))
 }
 
 
 
 step_check <- function(object, scope, criteria, direction, trace,
-                       steps){
-
+                       steps) {
   if (!inherits(object, "fh")) {
     stop("Object needs to be fh object.")
   }
@@ -298,15 +331,15 @@ step_check <- function(object, scope, criteria, direction, trace,
          Otherwise the comparison of models based on information criteria would
          not be valid.")
   }
-  if (is.null(criteria) || !(criteria == "AIC"
-                             || criteria == "AICc"
-                             || criteria == "AICb1"
-                             || criteria == "AICb2"
-                             || criteria == "BIC"
-                             || criteria == "KIC"
-                             || criteria == "KICc"
-                             || criteria == "KICb1"
-                             || criteria == "KICb2"))  {
+  if (is.null(criteria) || !(criteria == "AIC" ||
+    criteria == "AICc" ||
+    criteria == "AICb1" ||
+    criteria == "AICb2" ||
+    criteria == "BIC" ||
+    criteria == "KIC" ||
+    criteria == "KICc" ||
+    criteria == "KICb1" ||
+    criteria == "KICb2")) {
     stop("The nine options for criteria are ''AIC', ''AICc'',
          ''AICb1'', ''AICb2'', ''BIC'', ''KIC'', ''KICc'', ''KICb1'',
          ''KICb2''.")
@@ -320,9 +353,9 @@ step_check <- function(object, scope, criteria, direction, trace,
          (objectname$model$model_select). If no criteria are provided, it is
          not possible to apply the stepwise variable selection algorithm.")
   }
-  if (is.null(direction) || !(direction == "forward"
-                              || direction == "backward"
-                              || direction == "both")) {
+  if (is.null(direction) || !(direction == "forward" ||
+    direction == "backward" ||
+    direction == "both")) {
     stop("The three options for direction are ''forward', ''backward'',
          ''both''.")
   }
@@ -331,9 +364,9 @@ step_check <- function(object, scope, criteria, direction, trace,
          is set to TRUE. See also help(step).")
   }
   if (!is.null(scope) && ((!inherits(scope, "formula")) &&
-                          (!inherits(scope, "list") ||
-                           (!inherits(scope[[1]], "formula") ||
-                            !inherits(scope[[2]], "formula")) ))) {
+    (!inherits(scope, "list") ||
+      (!inherits(scope[[1]], "formula") ||
+        !inherits(scope[[2]], "formula"))))) {
     stop("Scope must be a formula or a list including two formulas
          (lower and upper).")
   }
@@ -341,7 +374,6 @@ step_check <- function(object, scope, criteria, direction, trace,
     stop("steps must be a single number determining the maximum number of steps.
          See help(step).")
   }
-
 }
 
 
@@ -354,6 +386,3 @@ print.step_fh <- function(x, ...) {
   cat("Coefficients:\n ")
   printCoefmat(as.matrix(x$model$coefficients), has.Pvalue = TRUE)
 }
-
-
-

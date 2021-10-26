@@ -133,32 +133,42 @@ data("eusilcA_pop")
 data("eusilcA_smp")
 
 # With default setting but na.rm = TRUE; with Box-Cox transformation
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
-house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-na.rm = TRUE)
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+  na.rm = TRUE
+)
 
 # Example 1: Creation of default diagnostic plots
 plot(emdi_model)
 
 # Example 2: Creation of diagnostic plots without labels and titles,
 # different colors and without Cook's distance plot.
-plot(emdi_model, label = "no_title", color = c("red", "yellow"),
-cooks = FALSE)
+plot(emdi_model,
+  label = "no_title", color = c("red", "yellow"),
+  cooks = FALSE
+)
 
 # Example 3: Creation of diagnostic plots where labels and title differs for
 # residual plot
-plot(emdi_model, label = list(qq_res = c(title = "Pearson resid.",
-y_lab = "Quant.", x_lab = "Theo. Quant.")), color = c("red", "yellow"),
-cooks = FALSE)
+plot(emdi_model,
+  label = list(qq_res = c(
+    title = "Pearson resid.",
+    y_lab = "Quant.", x_lab = "Theo. Quant."
+  )), color = c("red", "yellow"),
+  cooks = FALSE
+)
 
 # Example 4: Usage of theme from ggplot2 within plot.emdi
 library(ggplot2)
-plot(emdi_model, gg_theme = theme(panel.background =
-element_rect(fill = "white", colour = "white"),
-plot.title = element_text(face = "bold"),
-title = element_text(color = "navy")))
+plot(emdi_model, gg_theme = theme(
+  panel.background =
+    element_rect(fill = "white", colour = "white"),
+  plot.title = element_text(face = "bold"),
+  title = element_text(color = "navy")
+))
 
 # Example for models of type fh
 
@@ -167,19 +177,22 @@ data("eusilcA_popAgg")
 data("eusilcA_smpAgg")
 
 # Combine sample and population data
-combined_data <- combine_data(pop_data = eusilcA_popAgg,
-                              pop_domains = "Domain",
-                              smp_data = eusilcA_smpAgg,
-                              smp_domains = "Domain")
+combined_data <- combine_data(
+  pop_data = eusilcA_popAgg,
+  pop_domains = "Domain",
+  smp_data = eusilcA_smpAgg,
+  smp_domains = "Domain"
+)
 
 # Generation of the emdi object
-fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-             combined_data = combined_data, domains = "Domain",
-             method = "ml", MSE = TRUE)
+fh_std <- fh(
+  fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+  combined_data = combined_data, domains = "Domain",
+  method = "ml", MSE = TRUE
+)
 
 # Example 5: Creation of default diagnostic plots for Fay-Herriot model
 plot(fh_std)
-
 }
 }
 \seealso{

@@ -147,31 +147,45 @@
 #' data("eusilcA_smp")
 #'
 #' # Example 1: With default setting but na.rm=TRUE
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
-#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' na.rm = TRUE)
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+#'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#'   na.rm = TRUE
+#' )
 #'
 #'
 #' # Example 2: With MSE, two additional indicators and function as threshold -
 #' # Please note that the example runs for several minutes. For a short check
 #' # change L and B to lower values.
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash +
-#' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
-#' fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' threshold = function(y){0.6 * median(y)}, transformation = "log",
-#' L = 50, MSE = TRUE, boot_type = "wild", B = 50, custom_indicator =
-#' list(my_max = function(y, threshold){max(y)},
-#' my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash +
+#'     self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
+#'     fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#'   threshold = function(y) {
+#'     0.6 * median(y)
+#'   }, transformation = "log",
+#'   L = 50, MSE = TRUE, boot_type = "wild", B = 50, custom_indicator =
+#'     list(
+#'       my_max = function(y, threshold) {
+#'         max(y)
+#'       },
+#'       my_min = function(y, threshold) {
+#'         min(y)
+#'       }
+#'     ), na.rm = TRUE, cpus = 1
+#' )
 #'
 #' # Example 3: With default setting but na.rm=TRUE under informative sampling.
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
-#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#' weights = "weight", transformation = 'log', na.rm = TRUE)
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+#'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#'   weights = "weight", transformation = "log", na.rm = TRUE
+#' )
 #' }
 #' @export
 #' @importFrom nlme fixed.effects VarCorr lme random.effects
@@ -190,26 +204,29 @@ ebp <- function(fixed,
                 L = 50,
                 threshold = NULL,
                 transformation = "box.cox",
-                interval = 'default',
+                interval = "default",
                 MSE = FALSE,
                 B = 50,
                 seed = 123,
                 boot_type = "parametric",
-                parallel_mode = ifelse(grepl("windows",.Platform$OS.type),
-                                       "socket", "multicore"),
+                parallel_mode = ifelse(grepl("windows", .Platform$OS.type),
+                  "socket", "multicore"
+                ),
                 cpus = 1,
                 custom_indicator = NULL,
                 na.rm = FALSE,
-                weights = NULL
-) {
+                weights = NULL) {
+  ebp_check1(
+    fixed = fixed, pop_data = pop_data, pop_domains = pop_domains,
+    smp_data = smp_data, smp_domains = smp_domains, L = L
+  )
 
-  ebp_check1(fixed = fixed, pop_data = pop_data, pop_domains = pop_domains,
-             smp_data = smp_data, smp_domains = smp_domains, L = L)
-
-  ebp_check2(threshold = threshold, transformation = transformation,
-             interval = interval, MSE = MSE, boot_type = boot_type, B = B,
-             custom_indicator = custom_indicator, cpus = cpus,  seed = seed,
-             na.rm = na.rm, weights = weights)
+  ebp_check2(
+    threshold = threshold, transformation = transformation,
+    interval = interval, MSE = MSE, boot_type = boot_type, B = B,
+    custom_indicator = custom_indicator, cpus = cpus, seed = seed,
+    na.rm = na.rm, weights = weights
+  )
 
   # Save function call ---------------------------------------------------------
 
@@ -222,36 +239,36 @@ ebp <- function(fixed,
     if (cpus > 1 && parallel_mode != "socket") {
       RNG_kind <- RNGkind()
       set.seed(seed, kind = "L'Ecuyer")
-    }
-    else {
+    } else {
       set.seed(seed)
     }
   }
 
   # The function framework_ebp can be found in script framework_ebp.R
-  framework <- framework_ebp( pop_data         = pop_data,
-                              pop_domains      = pop_domains,
-                              smp_data         = smp_data,
-                              smp_domains      = smp_domains,
-                              custom_indicator = custom_indicator,
-                              fixed            = fixed,
-                              threshold        = threshold,
-                              na.rm            = na.rm,
-                              weights          = weights
-                              )
+  framework <- framework_ebp(
+    pop_data = pop_data,
+    pop_domains = pop_domains,
+    smp_data = smp_data,
+    smp_domains = smp_domains,
+    custom_indicator = custom_indicator,
+    fixed = fixed,
+    threshold = threshold,
+    na.rm = na.rm,
+    weights = weights
+  )
 
 
 
   # Point Estimation -----------------------------------------------------------
-  # browser()
   # The function point_estim can be found in script point_estimation.R
-  point_estim <- point_estim(framework      = framework,
-                                  fixed          = fixed,
-                                  transformation = transformation,
-                                  interval       = interval,
-                                  L              = L,
-                                  keep_data      = TRUE
-                                  )
+  point_estim <- point_estim(
+    framework = framework,
+    fixed = fixed,
+    transformation = transformation,
+    interval = interval,
+    L = L,
+    keep_data = TRUE
+  )
 
 
 
@@ -259,62 +276,72 @@ ebp <- function(fixed,
 
   if (MSE == TRUE) {
 
-  # The function parametric_bootstrap can be found in script mse_estimation.R
-    mse_estimates <- parametric_bootstrap(framework      = framework,
-                                          point_estim    = point_estim,
-                                          fixed          = fixed,
-                                          transformation = transformation,
-                                          interval       = interval,
-                                          L              = L,
-                                          B              = B,
-                                          boot_type      = boot_type,
-                                          parallel_mode  = parallel_mode,
-                                          cpus           = cpus
-                                          )
+    # The function parametric_bootstrap can be found in script mse_estimation.R
+    mse_estimates <- parametric_bootstrap(
+      framework = framework,
+      point_estim = point_estim,
+      fixed = fixed,
+      transformation = transformation,
+      interval = interval,
+      L = L,
+      B = B,
+      boot_type = boot_type,
+      parallel_mode = parallel_mode,
+      cpus = cpus
+    )
 
 
 
-    ebp_out <- list(ind             = point_estim$ind,
-                    MSE             = mse_estimates,
-                    transform_param = point_estim[c("optimal_lambda",
-                                                    "shift_par")],
-                    model           = point_estim$model,
-                    framework       = framework[c("N_dom_unobs",
-                                                  "N_dom_smp",
-                                                  "N_smp",
-                                                  "N_pop",
-                                                  "smp_domains",
-                                                  "smp_data",
-                                                  "smp_domains_vec",
-                                                  "pop_domains_vec")],
-                    transformation  = transformation,
-                    method          = "reml",
-                    fixed           = fixed,
-                    call            = call,
-                    successful_bootstraps = NULL
-                    )
+    ebp_out <- list(
+      ind = point_estim$ind,
+      MSE = mse_estimates,
+      transform_param = point_estim[c(
+        "optimal_lambda",
+        "shift_par"
+      )],
+      model = point_estim$model,
+      framework = framework[c(
+        "N_dom_unobs",
+        "N_dom_smp",
+        "N_smp",
+        "N_pop",
+        "smp_domains",
+        "smp_data",
+        "smp_domains_vec",
+        "pop_domains_vec"
+      )],
+      transformation = transformation,
+      method = "reml",
+      fixed = fixed,
+      call = call,
+      successful_bootstraps = NULL
+    )
   } else {
-
-    ebp_out <- list(ind             = point_estim$ind,
-                    MSE             = NULL,
-                    transform_param = point_estim[c("optimal_lambda",
-                                                    "shift_par")],
-                    model           = point_estim$model,
-                    framework       = framework[c("N_dom_unobs",
-                                                  "N_dom_smp",
-                                                  "N_smp",
-                                                  "N_pop",
-                                                  "smp_domains",
-                                                  "smp_data",
-                                                  "smp_domains_vec",
-                                                  "pop_domains_vec",
-                                                  "response")],
-                    transformation  = transformation,
-                    method          = "reml",
-                    fixed           = fixed,
-                    call            = call,
-                    successful_bootstraps = NULL
-                    )
+    ebp_out <- list(
+      ind = point_estim$ind,
+      MSE = NULL,
+      transform_param = point_estim[c(
+        "optimal_lambda",
+        "shift_par"
+      )],
+      model = point_estim$model,
+      framework = framework[c(
+        "N_dom_unobs",
+        "N_dom_smp",
+        "N_smp",
+        "N_pop",
+        "smp_domains",
+        "smp_data",
+        "smp_domains_vec",
+        "pop_domains_vec",
+        "response"
+      )],
+      transformation = transformation,
+      method = "reml",
+      fixed = fixed,
+      call = call,
+      successful_bootstraps = NULL
+    )
   }
 
   if (cpus > 1 && parallel_mode != "socket") {

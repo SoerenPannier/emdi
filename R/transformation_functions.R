@@ -54,8 +54,8 @@
 #'
 #' # Transform dependent variable in sample data with Box-Cox transformation
 #' transform_data <- data_transformation(eqIncome ~ gender + eqsize + cash +
-#' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
-#' fam_allow + house_allow + cap_inv + tax_adj, eusilcA_smp, "box.cox", 0.7)
+#'   self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
+#'   fam_allow + house_allow + cap_inv + tax_adj, eusilcA_smp, "box.cox", 0.7)
 #' @export
 
 
@@ -63,7 +63,6 @@ data_transformation <- function(fixed,
                                 smp_data,
                                 transformation,
                                 lambda) {
-
   y_vector <- as.vector(smp_data[paste(fixed[2])])
 
   transformed <- if (transformation == "no") {
@@ -89,24 +88,23 @@ data_transformation <- function(fixed,
 # Function std_data_transformation only returns a data frame with transformed
 # dependent variable.
 
-std_data_transformation <- function(fixed=fixed,
+std_data_transformation <- function(fixed = fixed,
                                     smp_data,
                                     transformation,
                                     lambda) {
-
   y_vector <- as.matrix(smp_data[paste(fixed[2])])
 
   std_transformed <- if (transformation == "box.cox") {
     as.data.frame(box_cox_std(y = y_vector, lambda = lambda))
-    } else if (transformation == "dual") {
-      as.data.frame(dual_std(y = y_vector, lambda = lambda))
-    } else if (transformation == 'log.shift') {
-      as.data.frame(log_shift_opt_std(y = y_vector, lambda = lambda))
-    } else if (transformation == "log") {
-      smp_data[paste(fixed[2])]
-    } else if (transformation == "no") {
-      smp_data[paste(fixed[2])]
-    }
+  } else if (transformation == "dual") {
+    as.data.frame(dual_std(y = y_vector, lambda = lambda))
+  } else if (transformation == "log.shift") {
+    as.data.frame(log_shift_opt_std(y = y_vector, lambda = lambda))
+  } else if (transformation == "log") {
+    smp_data[paste(fixed[2])]
+  } else if (transformation == "no") {
+    smp_data[paste(fixed[2])]
+  }
 
   smp_data[paste(fixed[2])] <- std_transformed
   return(transformed_data = smp_data)
@@ -186,10 +184,10 @@ box_cox <- function(y, lambda = lambda, shift = 0) {
 
   lambda_cases <- function(y, lambda = lambda) {
     lambda_absolute <- abs(lambda)
-    if (lambda_absolute <= 1e-12) {  #case lambda=0
+    if (lambda_absolute <= 1e-12) { # case lambda=0
       y <- log(y + shift)
     } else {
-      y <- ((y + shift) ^ lambda - 1) / lambda
+      y <- ((y + shift)^lambda - 1) / lambda
     }
     return(y)
   }
@@ -202,7 +200,7 @@ box_cox <- function(y, lambda = lambda, shift = 0) {
 
 # Standardized transformation: Box Cox
 
-geometric.mean <- function(x) { #for RMLE in the parameter estimation
+geometric.mean <- function(x) { # for RMLE in the parameter estimation
 
   exp(mean(log(x)))
 }
@@ -215,7 +213,7 @@ box_cox_std <- function(y, lambda) {
 
   gm <- geometric.mean(y)
   y <- if (abs(lambda) > 1e-12) {
-    y <- (y ^ lambda - 1) / (lambda * ((gm) ^ (lambda - 1)))
+    y <- (y^lambda - 1) / (lambda * ((gm)^(lambda - 1)))
   } else {
     y <- gm * log(y)
   }
@@ -225,12 +223,11 @@ box_cox_std <- function(y, lambda) {
 
 # Back transformation: Box Cox
 box_cox_back <- function(y, lambda, shift = 0) {
-
-  lambda_cases_back <- function(y, lambda = lambda, shift){
-    if (abs(lambda) <= 1e-12) {   #case lambda=0
-      y <-  exp(y) - shift
+  lambda_cases_back <- function(y, lambda = lambda, shift) {
+    if (abs(lambda) <= 1e-12) { # case lambda=0
+      y <- exp(y) - shift
     } else {
-      y <- (lambda * y + 1) ^ (1 / lambda) - shift
+      y <- (lambda * y + 1)^(1 / lambda) - shift
     }
     return(y = y)
   }
@@ -243,8 +240,7 @@ box_cox_back <- function(y, lambda, shift = 0) {
 # The dual transformation ------------------------------------------------------
 
 # Transformation: dual
-dual <-  function(y, lambda = lambda, shift = 0) {
-
+dual <- function(y, lambda = lambda, shift = 0) {
   with_shift <- function(y, shift) {
     min <- min(y)
     if (min <= 0) {
@@ -259,20 +255,18 @@ dual <-  function(y, lambda = lambda, shift = 0) {
 
   lambda_absolute <- abs(lambda)
 
-  if (lambda_absolute <= 1e-12) {  #case lambda=0
-    yt <-  log(y + shift)
+  if (lambda_absolute <= 1e-12) { # case lambda=0
+    yt <- log(y + shift)
   } else if (lambda > 1e-12) {
-    yt <- ((y + shift) ^ (lambda) - (y + shift) ^ (-lambda))/(2 * lambda)
+    yt <- ((y + shift)^(lambda) - (y + shift)^(-lambda)) / (2 * lambda)
   } else {
     stop("lambda cannot be negative for the dual transformation")
   }
   return(list(y = yt, shift = shift))
-  #return(y = yt)
 }
 
 # Standardized transformation: dual
 dual_std <- function(y, lambda) {
-
   min <- min(y)
   if (min <= 0) {
     y <- y - min + 1
@@ -281,7 +275,7 @@ dual_std <- function(y, lambda) {
   yt <- dual(y, lambda)$y
 
   zt <- if (abs(lambda) > 1e-12) {
-    geo <- geometric.mean(y ^ (lambda - 1) + y ^ (-lambda - 1))
+    geo <- geometric.mean(y^(lambda - 1) + y^(-lambda - 1))
     zt <- yt * 2 / geo
   } else {
     zt <- geometric.mean(y) * log(y)
@@ -295,13 +289,10 @@ dual_std <- function(y, lambda) {
 # Back transformation: dual
 dual_back <- function(y, lambda = lambda, shift) {
   lambda_absolute <- abs(lambda)
-  if (lambda_absolute <= 1e-12)
-  {
+  if (lambda_absolute <= 1e-12) {
     y <- exp(y) - shift
-  }
-  else
-  {
-    y <- (lambda * y + sqrt(lambda ^ 2 * y ^ 2 + 1)) ^ (1/lambda) - shift
+  } else {
+    y <- (lambda * y + sqrt(lambda^2 * y^2 + 1))^(1 / lambda) - shift
   }
 
   return(y = y)
@@ -313,9 +304,7 @@ dual_back <- function(y, lambda = lambda, shift) {
 #  Transformation: log_shift_opt
 
 log_shift_opt <- function(y, lambda = lambda, shift = NULL) {
-
-  with_shift <-  function(y, lambda) {
-
+  with_shift <- function(y, lambda) {
     min <- min(y + lambda)
     if (min <= 0) {
       lambda <- lambda + abs(min) + 1
@@ -326,14 +315,13 @@ log_shift_opt <- function(y, lambda = lambda, shift = NULL) {
   }
 
   # Shift parameter
-  lambda <- with_shift(y = y, lambda = lambda )
+  lambda <- with_shift(y = y, lambda = lambda)
 
   log_trafo <- function(y, lambda = lambda) {
     y <- log(y + lambda)
     return(y)
   }
   yt <- log_trafo(y = y, lambda = lambda)
-  #return(y)
   return(list(y = yt, shift = NULL))
 } # End log_shift
 
@@ -341,13 +329,12 @@ log_shift_opt <- function(y, lambda = lambda, shift = NULL) {
 
 # Standardized transformation: Log_shift_opt
 
-geometric.mean <- function(x) { #for RMLE in the parameter estimation
+geometric.mean <- function(x) { # for RMLE in the parameter estimation
   exp(mean(log(x)))
 }
 
 log_shift_opt_std <- function(y, lambda) {
-
-  with_shift <-  function(y, lambda) {
+  with_shift <- function(y, lambda) {
     min <- min(y + lambda)
     if (min <= 0) {
       lambda <- lambda + abs(min(y)) + 1
@@ -358,7 +345,7 @@ log_shift_opt_std <- function(y, lambda) {
   }
 
   # Shift parameter
-  lambda <- with_shift(y = y, lambda = lambda )
+  lambda <- with_shift(y = y, lambda = lambda)
 
   log_trafo_std <- function(y, lambda = lambda) {
     gm <- geometric.mean(y + lambda)
@@ -371,11 +358,10 @@ log_shift_opt_std <- function(y, lambda) {
 
 # Back transformation: log_shift_opt
 log_shift_opt_back <- function(y, lambda) {
-  log_shift_opt_back <- function(y, lambda = lambda){
-    y <-  exp(y) - lambda
+  log_shift_opt_back <- function(y, lambda = lambda) {
+    y <- exp(y) - lambda
     return(y = y)
   }
   y <- log_shift_opt_back(y = y, lambda = lambda)
   return(y = y)
 } #  End log_shift_opt
-
