@@ -1,22 +1,21 @@
 # Extract model coefficients of emdi objects -----------------------------------
 
-#' @aliases coefficients 
+#' @aliases coefficients
 #' @export
 #' @method coef ebp
 #' @importFrom stats coef coefficients
 
 coef.ebp <- function(object, weights = FALSE, ...) {
   throw_class_error(object, "ebp")
-  if(isFALSE(weights)) {
-    coef(object$model) 
+  if (isFALSE(weights)) {
+    coef(object$model)
   } else {
-      object$model$coefficients_weighted
-    }
-
+    object$model$coefficients_weighted
+  }
 }
 
 
-#' @aliases coefficients 
+#' @aliases coefficients
 #' @export
 #' @method coef fh
 #' @importFrom stats coef coefficients
@@ -43,7 +42,6 @@ confint.ebp <- function(object, parm = NULL, level = 0.95, ...) {
   } else {
     intervals(object$model, level = level)$fixed
   }
-  
 }
 
 #' @export
@@ -52,16 +50,18 @@ confint.ebp <- function(object, parm = NULL, level = 0.95, ...) {
 confint.fh <- function(object, parm = NULL, level = 0.95, ...) {
   throw_class_error(object, "fh")
   coefmat <- object$model$coefficients
-  
-  coefs <- coefmat[,1]
-  stds <- coefmat[,2]
+
+  coefs <- coefmat[, 1]
+  stds <- coefmat[, 2]
   dist <- qnorm(p = (1 - level) / 2, 0, stds)
-  ret_value <- data.frame(lower = coefs + dist,
-                 est. = coefs,         
-                 upper = coefs + abs(dist),
-                 row.names = row.names(coefmat))
+  ret_value <- data.frame(
+    lower = coefs + dist,
+    est. = coefs,
+    upper = coefs + abs(dist),
+    row.names = row.names(coefmat)
+  )
   if (is.null(parm)) {
-    as.matrix(ret_value)  
+    as.matrix(ret_value)
   } else {
     as.matrix(ret_value[parm, ])
   }
@@ -75,13 +75,16 @@ confint.fh <- function(object, parm = NULL, level = 0.95, ...) {
 extractAIC.fh <- function(fit, ...) {
   throw_class_error(fit, "fh")
   if (!is.null(fit$model$model_select$AIC)) {
-    message(paste0('Estimation approach used is ', fit$method$method, ': ', 
-               round(fit$model$model_select$AIC, 5)))
+    message(paste0(
+      "Estimation approach used is ", fit$method$method, ": ",
+      round(fit$model$model_select$AIC, 5)
+    ))
     invisible(fit$model$model_select$AIC)
-  }
-  else {
-    message(paste0('No AIC is returned for estimation approach ', 
-               fit$method$method, '.')) 
+  } else {
+    message(paste0(
+      "No AIC is returned for estimation approach ",
+      fit$method$method, "."
+    ))
   }
 }
 
@@ -156,7 +159,7 @@ formula.fh <- function(x, ...) {
 
 logLik.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
-  message('Estimation approach used is reml: ', round(object$model$logLik, 5))
+  message("Estimation approach used is reml: ", round(object$model$logLik, 5))
   invisible(object$model$logLik)
 }
 
@@ -167,21 +170,25 @@ logLik.ebp <- function(object, ...) {
 
 logLik.fh <- function(object, ...) {
   throw_class_error(object, "fh")
-  if(!is.null(object$model$model_select$loglike)) {
-    message('Estimation approach used is ', object$method$method, ':', round(object$model$model_select$loglike, 5)) 
+  if (!is.null(object$model$model_select$loglike)) {
+    message(
+      "Estimation approach used is ", object$method$method, ":",
+      round(object$model$model_select$loglike, 5)
+    )
     invisible(object$model$model_select$loglike)
-    }
-  else {
-    message(paste0('No likelihood is returned for estimation approach ', 
-               object$method$method, '.')) 
+  } else {
+    message(paste0(
+      "No likelihood is returned for estimation approach ",
+      object$method$method, "."
+    ))
   }
 }
 
-# Extract the number of `observations´ from a fit of an emdi object ------------
+# Extract the number of `observations´ from a fit of an emdi object -----------
 #' @export
 #' @method nobs ebp
 #' @importFrom stats nobs
- 
+
 nobs.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
   N_obs <- object$framework$N_smp
@@ -202,25 +209,27 @@ nobs.fh <- function(object, ...) {
 #' Predictions from emdi objects
 #'
 #' Method \code{predict.emdi} extracts the direct estimates, the empirical
-#' best linear unbiased or empirical best predictors for all domains from an emdi 
-#' object.
-#' 
+#' best linear unbiased or empirical best predictors for all domains from an
+#' emdi object.
+#'
 #' @param object an object of type "emdi".
 #' @param ... additional arguments that are not used in this method.
 #' @return Data frame with domain predictors.
-#' @details For a better selection of prediction results, it is referred to use 
-#' the generic function \code{\link{estimators}}. The methods for object of class 
-#' "emdi" allows to select among the indicators of interest. 
+#' @details For a better selection of prediction results, it is referred to use
+#' the generic function \code{\link{estimators}}. The methods for object of
+#' class "emdi" allows to select among the indicators of interest.
 #' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}
 #' @examples
 #' \donttest{
 #' # Example for class ebp
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-#' na.rm = TRUE)
-#' 
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+#'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#'   na.rm = TRUE
+#' )
+#'
 #' predict(emdi_model)
 #' }
 #' @export
@@ -252,9 +261,9 @@ residuals.ebp <- function(object, ...) {
 
 residuals.fh <- function(object, ...) {
   throw_class_error(object, "fh")
-  type <- ''
+  type <- ""
   try(type <- list(...)[[1]], silent = TRUE)
-  if (type == 'standardized') {
+  if (type == "standardized") {
     object$model$std_real_residuals
   } else {
     object$model$real_residuals
@@ -299,8 +308,8 @@ terms.fh <- function(x, ...) {
 #' @importFrom stats vcov
 
 vcov.ebp <- function(object, ...) {
-    throw_class_error(object, "ebp")
-    vcov(object$model, ...)
+  throw_class_error(object, "ebp")
+  vcov(object$model, ...)
 }
 
 
@@ -311,6 +320,6 @@ vcov.ebp <- function(object, ...) {
 #' @importFrom stats vcov
 
 vcov.fh <- function(object, ...) {
-    throw_class_error(object, "fh")
-    object$model$beta_vcov
+  throw_class_error(object, "fh")
+  object$model$beta_vcov
 }
