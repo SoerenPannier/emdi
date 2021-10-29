@@ -312,7 +312,6 @@ getResponse.fh <- function(object, ...) {
 #'
 #' Methods \code{getVarCov.ebp} and \code{getVarCov.fh} extract the
 #' variance-covariance matrix from a fitted model of class "ebp" or "fh".
-#
 #' @param obj an object of type "emdi", either "ebp" or "fh".
 #' @param individuals vector of levels of the in-sample domains can be
 #' specified for the types "\code{conditional}" or "\code{marginal}".
@@ -333,7 +332,7 @@ getResponse.fh <- function(object, ...) {
 #' covariances matrices are returned for the chosen individual. Please note, if
 #' the correlation argument of the "fh" object is set to spatial, the variance
 #' covariance matrix has non-zero off-diagonal elements, because the assumption
-#' of independency of the error terms does not hold. For the non-spatial models,
+#' of independence of the error terms does not hold. For the non-spatial models,
 #' the off-diagonal elements are zero.
 #' @details The generic function \code{getVarCov} is imported from package nlme
 #' and re-exported to make the S3-methods available, even though the nlme

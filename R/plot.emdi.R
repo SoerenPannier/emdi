@@ -17,7 +17,7 @@
 #' (see also \code{\link{ebp}} and \code{\link{fh}}).
 #' @param label argument that enables to customize title and axis labels. There
 #' are three instant options to label the diagnostic plot: (i) original labels
-#' ("orig"), (ii) axis lables but no title ("no_title"), (iii) neither axis
+#' ("orig"), (ii) axis labels but no title ("no_title"), (iii) neither axis
 #' labels nor title ("blank").
 #' (iv) individual labels by a list that needs to
 #' have below structure. Six elements can be defined called
