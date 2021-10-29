@@ -30,14 +30,12 @@ plot.ebp <- function(x,
     )
     if (is.null(cooksdist)) {
       cooks <- FALSE
-      warning(
-        paste0(
-          "Cook's distance could not be calculated, this is usually due",
-          " to exceedence of available memory. Try using
-               cooks = FALSE to ",
-          "avoid this message and improve computation time."
-        )
-      )
+      warning(strwrap(prefix = " ", initial = "",
+                      paste0("Cook's distance could not be calculated, this is
+                             usually due to exceedence of available memory. Try
+                             using cooks = FALSE to avoid this message and
+                             improve computation time."
+                             )))
     } else {
       cook_df <- data.frame(index = seq_along(cooksdist), cooksdist)
       indexer <- cook_df[order(cooksdist, decreasing = TRUE), ][seq_len(3), ]
@@ -100,12 +98,12 @@ plot.ebp <- function(x,
     )
 
     if (any(is.na(likelihoods))) {
-      warning(paste0(
-        "For some lambda in the chosen range, the ",
-        "likelihood does not converge. ",
-        "For these lambdas no likelihood is plotted. ",
-        "Choose a different range to avoid this behaviour"
-      ))
+      warning(strwrap(prefix = " ", initial = "",
+                      paste0("For some lambda in the chosen range, the
+                             likelihood does not converge. For these lambdas,
+                             no likelihood is plotted. Choose a different range
+                             to avoid this behaviour"
+                             )))
     }
   }
   NextMethod("plot",

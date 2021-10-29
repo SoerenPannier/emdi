@@ -139,7 +139,9 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
     (is.null(object$model$seed))) {
     object$call$seed <- 123
     catmessage <- capture.output(object <- eval(object$call))
-    message("Seed in fh object not defined, 123 used as default seed. \n")
+    message(strwrap(prefix = " ", initial = "",
+                    "Seed in fh object not defined, 123 used as default
+                    seed."))
   }
 
   startobject <- object
@@ -172,8 +174,9 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
     invisible(fit <- eval(fit$call))
     if (catmessage == TRUE) {
       message("\n")
-      message("Please note that the model selection criteria are only computed
-              based of the in-sample domains. \n \n ")
+      message(strwrap(prefix = " ", initial = "",
+                      "Please note that the model selection criteria are only
+                      computed based of the in-sample domains."))
     }
     class(fit) <- c("step_fh", "fh", "emdi")
     fit

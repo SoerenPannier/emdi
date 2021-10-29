@@ -119,8 +119,9 @@ getData.direct <- function(object, ...) {
 getData.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
   if (object$transformation != "no") {
-    message("The untransformed sample data set of the ebp object
-            is returned. \n \n")
+    message(strwrap(prefix = " ", initial = "",
+                    "The untransformed sample data set of the ebp object
+                    is returned."))
   }
   object$framework$smp_data
 }
@@ -130,8 +131,9 @@ getData.ebp <- function(object, ...) {
 #' @rdname getData
 getData.fh <- function(object, ...) {
   throw_class_error(object, "fh")
-  message("The combined data set (combined_data) of the fh object
-          is returned. \n \n")
+  message(strwrap(prefix = " ", initial = "",
+                  "The combined data set (combined_data) of the fh object
+                  is returned."))
   object$framework$combined_data
 }
 

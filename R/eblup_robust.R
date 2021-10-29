@@ -94,8 +94,9 @@ eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir,
   eblup_data$Out[framework$obs_dom == FALSE] <- 1
 
   if (!all(framework$obs_dom == TRUE)) {
-    message("Please note that the results are only returned for in-sample
-            domains. For more information see help(fh).")
+    message(strwrap(prefix = " ", initial = "",
+                   "Please note that the results are only returned for
+                   in-sample domains. For more information see help(fh)."))
   }
 
   eblup_out <- list(

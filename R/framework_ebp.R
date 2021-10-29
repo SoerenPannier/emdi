@@ -141,8 +141,10 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
 
   if (is.null(threshold)) {
     threshold <- 0.6 * median(smp_data[[paste(fixed[2])]])
-    message("The threshold for the HCR and the PG is automatically set to 60% of
-          the median of the dependent variable and equals", threshold, "\n")
+    message(strwrap(prefix = " ", initial = "",
+                    paste0("The threshold for the HCR and the PG is
+                          automatically set to 60% of the median of the
+                          dependent variable and equals ", threshold)))
   }
 
 

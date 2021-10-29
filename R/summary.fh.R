@@ -16,8 +16,9 @@ summary.fh <- function(object, ...) {
     shapiro_stdres_W <- shapiro.test(object$model$std_real_residuals)[[1]]
     shapiro_stdres_p <- shapiro.test(object$model$std_real_residuals)[[2]]
   } else {
-    warning("Number of domains must be between 3 and 5000, otherwise the\n
-            Shapiro-Wilk test is not applicable.")
+    warning(strwrap(prefix = " ", initial = "",
+                    "Number of domains must be between 3 and 5000, otherwise
+                    the Shapiro-Wilk test is not applicable."))
     shapiro_stdres_W <- NA
     shapiro_stdres_p <- NA
   }

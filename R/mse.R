@@ -162,9 +162,11 @@ li_lahiri <- function(framework, sigmau2, combined_data, method) {
     mse_data$FH[framework$obs_dom == FALSE] <- NA
     mse_data$Out[framework$obs_dom == FALSE] <- 1
 
-    message("Please note that only for in-sample-domains a correction following
-        Li and Lahiri (2010) is implemented. For the out-of-sample domains,
-        no estimate for the MSE is returned. For the reference see help(fh).")
+    message(strwrap(prefix = " ", initial = "",
+                    "Please note that only for in-sample-domains a correction
+                    following Li and Lahiri (2010) is implemented. For the
+                    out-of-sample domains, no estimate for the MSE is returned.
+                    For the reference see help(fh)."))
   }
 
   return(mse_data)
@@ -211,10 +213,11 @@ yoshimori_lahiri <- function(framework, sigmau2, combined_data, method) {
     mse_data$FH[framework$obs_dom == FALSE] <- NA
     mse_data$Out[framework$obs_dom == FALSE] <- 1
 
-    message("Please note that only for in-sample-domains a correction following
-            Yoshimori and Lahiri (2014) is implemented. For the out-of-sample
-            domains, no estimate for the MSE is returned. For the reference see
-            help(fh).")
+    message(strwrap(prefix = " ", initial = "",
+                    "Please note that only for in-sample-domains a correction
+                    following Yoshimori and Lahiri (2014) is implemented. For
+                    the out-of-sample domains, no estimate for the MSE is
+                    returned. For the reference see help(fh)."))
   }
 
   return(mse_data)
@@ -352,10 +355,11 @@ prasad_rao_spatial <- function(framework, sigmau2, combined_data, method) {
     mse_data$FH[framework$obs_dom == FALSE] <- NA
     mse_data$Out[framework$obs_dom == FALSE] <- 1
 
-    message("Please note that only for in-sample-domains an analytical MSE for
-            the spatial FH model is implemented. For the out-of-sample domains,
-            no estimate for the MSE is returned. For the reference, see
-            help(fh).")
+    message(strwrap(prefix = " ", initial = "",
+                    "Please note that only for in-sample-domains an analytical
+                    MSE for the spatial FH model is implemented. For the
+                    out-of-sample domains, no estimate for the MSE is returned.
+                    For the reference, see help(fh)."))
   }
   return(mse_data)
 }
@@ -426,8 +430,9 @@ slud_maiti <- function(framework, sigmau2, eblup, combined_data) {
     mse_data$FH[framework$obs_dom == FALSE] <- NA
     mse_data$Out[framework$obs_dom == FALSE] <- 1
 
-    message("Please note that EBLUP and MSE results are only returned for
-            in-sample domains. For more information see help(fh).")
+    message(strwrap(prefix = " ", initial = "",
+                    "Please note that EBLUP and MSE results are only returned
+                    for in-sample domains. For more information see help(fh)."))
   }
 
   return(mse_data)
@@ -875,10 +880,12 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework,
       successful_bootstraps = notSuc
     )
     if (!all(framework$obs_dom == TRUE)) {
-      message("Please note that only for in-sample-domains the non-parametric
-      bootstrap MSE estimator for the spatial FH model is implemented.
-      For the out-of-sample domains, no estimate for the MSE is returned. For
-      the reference see help(fh).")
+      message(strwrap(prefix = " ", initial = "",
+                      "Please note that only for in-sample-domains the
+                      non-parametric bootstrap MSE estimator for the spatial FH
+                      model is implemented. For the out-of-sample domains, no
+                      estimate for the MSE is returned. For the reference,
+                      see help(fh)."))
     }
   }
   if (mse_type == "spatialnonparbootbc") {
@@ -892,10 +899,12 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework,
       successful_bootstraps = notSuc
     )
     if (!all(framework$obs_dom == TRUE)) {
-      message("Please note that only for in-sample-domains the bias corrected
-        non-parametric bootstrap MSE estimator for the spatial FH model is
-        implemented. For the out-of-sample domains, no estimate for the MSE is
-        returned. For the reference see help(fh).")
+      message(strwrap(prefix = " ", initial = "",
+                      "Please note that only for in-sample-domains the bias
+                      corrected non-parametric bootstrap MSE estimator for the
+                      spatial FH model is implemented. For the out-of-sample
+                      domains, no estimate for the MSE is returned. For the
+                      reference, see help(fh)."))
     }
   }
   return(mse_data)
@@ -1081,10 +1090,12 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
       successful_bootstraps = notSuc
     )
     if (!all(framework$obs_dom == TRUE)) {
-      message("Please note that only for in-sample-domains the naive parametric
-            bootstrap MSE estimator for the spatial FH model is implemented.
-            For the out-of-sample domains, no estimate for the MSE is returned.
-            For the reference see help(fh).")
+      message(strwrap(prefix = " ", initial = "",
+                      "Please note that only for in-sample-domains the naive
+                      parametric bootstrap MSE estimator for the spatial FH
+                      model is implemented. For the out-of-sample domains, no
+                      estimate for the MSE is returned. For the reference,
+                      see help(fh)."))
     }
   }
   if (mse_type == "spatialparbootbc") {
@@ -1099,10 +1110,12 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
       successful_bootstraps = notSuc
     )
     if (!all(framework$obs_dom == TRUE)) {
-      message("Please note that only for in-sample-domains the bias corrected
-            parametric bootstrap MSE estimator for the spatial FH model is
-            implemented. For the out-of-sample domains, no estimate for the MSE
-            is returned. For the reference see help(fh).")
+      message(strwrap(prefix = " ", initial = "",
+                      "Please note that only for in-sample-domains the bias
+                      corrected parametric bootstrap MSE estimator for the
+                      spatial FH model is implemented. For the out-of-sample
+                      domains, no estimate for the MSE is returned. For the
+                      reference, see help(fh)."))
     }
   }
   return(mse_data)
@@ -1204,8 +1217,9 @@ jiang_jackknife <- function(framework, combined_data, sigmau2, eblup,
     mse_data$FH[framework$obs_dom == FALSE] <- NA
     mse_data$Out[framework$obs_dom == FALSE] <- 1
 
-    message("Please note that the jackknife MSE is only available for in-sample
-        domains.")
+    message(strwrap(prefix = " ", initial = "",
+                    "Please note that the jackknife MSE is only available for
+                    in-sample domains."))
   }
 
   mse_out <- list(
@@ -1400,8 +1414,9 @@ chen_weighted_jackknife <- function(framework, combined_data, sigmau2, eblup,
     mse_data$FH[framework$obs_dom == FALSE] <- NA
     mse_data$Out[framework$obs_dom == FALSE] <- 1
 
-    message("Please note that the jackknife MSE is only available for in-sample
-        domains.")
+    message(strwrap(prefix = " ", initial = "",
+                    "Please note that the jackknife MSE is only available for
+                    in-sample domains."))
   }
 
   mse_out <- list(
@@ -1529,8 +1544,9 @@ jiang_jackknife_yl <- function(framework, combined_data, sigmau2, eblup,
     mse_data$FH[framework$obs_dom == FALSE] <- NA
     mse_data$Out[framework$obs_dom == FALSE] <- 1
 
-    message("Please note that the jackknife MSE is only available for in-sample
-        domains.")
+    message(strwrap(prefix = " ", initial = "",
+                    "Please note that the jackknife MSE is only available for
+                    in-sample domains."))
   }
 
   mse_out <- list(

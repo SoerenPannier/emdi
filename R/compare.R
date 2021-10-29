@@ -44,8 +44,9 @@ compare.fh <- function(object, ...) {
 
   if (is.null(object$MSE$FH)) {
     testresults <- NULL
-    message("The fh object does not contain MSE estimates. The Brown test
-               statistic cannot be computed.", "\n")
+    message(strwrap(prefix = " ", initial = "",
+                    "The fh object does not contain MSE estimates. The Brown
+                    test statistic cannot be computed."))
   } else {
     W_BL <- sum((object$ind$Direct[object$ind$Out == 0] -
       object$ind$FH[object$ind$Out == 0])^2 /
@@ -88,8 +89,9 @@ compare.fh <- function(object, ...) {
   class(results) <- "compare.fh"
 
   if (object$framework$N_dom_unobs > 0) {
-    message("Please note that the computation of both test statistics is only
-           based on in-sample domains.", "\n")
+    message(strwrap(prefix = " ", initial = "",
+                    "Please note that the computation of both test statistics
+                    is only based on in-sample domains."))
   }
   return(results)
 }

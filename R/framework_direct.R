@@ -11,11 +11,13 @@ framework_dir <- function(y, smp_data, smp_domains, weights,
     }
     smp_data <- smp_data[indices, ]
   } else if (any(is.na(smp_data[y]))) {
-    warning("There are NA-Values in the target variable and na.rm is set FALSE.
-            Therefore, only quantiles are estimated")
+    warning(strwrap(prefix = " ", initial = "",
+                    "There are NA-Values in the target variable and na.rm is
+                    set FALSE. Therefore, only quantiles are estimated"))
   } else if (!is.null(weights) && any(is.na(smp_data[weights]))) {
-    warning("There are NA-Values in the weights variable and na.rm is set FALSE.
-            Therefore, only quantiles are estimated")
+    warning(strwrap(prefix = " ", initial = "",
+                    "There are NA-Values in the weights variable and na.rm is
+                    set FALSE. Therefore, only quantiles are estimated"))
   }
 
 
@@ -54,21 +56,20 @@ framework_dir <- function(y, smp_data, smp_domains, weights,
   if (is.null(threshold)) {
     if (is.null(weights)) {
       threshold <- 0.6 * median(y_vec)
-      message(
-        "The threshold for the HCR and the PG is automatically set to
-              60% of the median of the dependent variable and equals",
-        threshold, "\n"
-      )
+      message(strwrap(prefix = " ", initial = "",
+                      paste0("The threshold for the HCR and the PG is automatically
+                      set to 60% of the median of the dependent variable and
+                      equals ", threshold)))
     } else if (!is.null(weights)) {
       threshold <- 0.6 * wtd.quantile(
         x = y_vec,
         weights = weights_vec,
         probs = .5
       )
-      message(
-        "The threshold for the HCR and the PG is automatically set to
-              60% of the weighted median of the dependent variable and equals",
-        threshold, "\n"
+      message(strwrap(prefix = " ", initial = "",
+                      paste0("The threshold for the HCR and the PG is
+                      automatically set to 60% of the weighted median of the
+                      dependent variable and equals ", threshold))
       )
     }
   }

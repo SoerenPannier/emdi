@@ -188,15 +188,16 @@ direct <- function(y,
       SIMPLIFY = F
     )
     if (length(warnlist) > 0) {
-      warning(paste0(
-        "For the following domains at least one bootstrap failed ",
-        ", this may be due to a very small sample size. For these
-                     domains ", "the variance estimation is based on a reduced
-                     number of ", "bootstrap iteration. To see the number of
-                     successful", " bootstrap iterations for each domain and
-                     indicator, have a look at", " the value
-                     successful_bootstraps in the returned object."
-      ))
+      warning(strwrap(prefix = " ", initial = "",
+                      paste0("For the following domains at least one bootstrap
+                             failed, this may be due to a very small sample
+                             size. For these domains the variance estimation is
+                             based on a reduced number of bootstrap iteration.
+                             To see the number of successful bootstrap
+                             iterations for each domain and indicator, have a
+                             look at the value successful_bootstraps in the
+                             returned object."
+                             )))
     }
   } else {
     res <- result_point

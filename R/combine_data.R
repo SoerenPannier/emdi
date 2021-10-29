@@ -22,7 +22,8 @@ combine_data <- function(pop_data, pop_domains, smp_data, smp_domains) {
     stop("All sample domains need to be available in population domains.")
   }
   if (all(pop_domains_vec %in% smp_domains_vec) == FALSE) {
-    message("Non-sampled domains exist.\n")
+    message(strwrap(prefix = " ", initial = "",
+                    "Non-sampled domains exist."))
   }
 
   data <- merge(smp_data, pop_data,

@@ -113,8 +113,9 @@ map_plot <- function(object,
                      guide = "colourbar",
                      return_data = FALSE) {
   if (is.null(map_obj)) {
-    message("No Map Object has been provided. An artificial polygone is used for
-            visualization")
+    message(strwrap(prefix = " ", initial = "", "No Map Object has been
+                    provided. An artificial polygone is used for
+                    visualization"))
     map_pseudo(
       object = object, indicator = indicator, panelplot = FALSE,
       MSE = MSE, CV = CV
@@ -213,8 +214,9 @@ plot_real <- function(object,
       if (all(is.na(matcher))) {
         stop("Domains of map_tab and Map object do not match. Check map_tab")
       } else {
-        warnings("Not all Domains of map_tab and Map object could be matched.
-                 Check map_tab")
+        warning(strwrap(prefix = " ", initial = "",
+                         "Not all Domains of map_tab and Map object could be
+                         matched. Check map_tab"))
       }
     }
     map_data <- map_data[matcher, ]
@@ -230,8 +232,9 @@ plot_real <- function(object,
       if (all(is.na(matcher))) {
         stop("Domain of EMDI and Map object do not match. Try using map_tab")
       } else {
-        warnings("Not all Domains of EMDI and Map object could be matched.
-                 Try using map_tab")
+        warning(strwrap(prefix = " ", initial = "",
+                        "Not all Domains of EMDI and Map object could be
+                        matched. Try using map_tab"))
       }
     }
     map_data <- map_data[matcher, ]
@@ -315,8 +318,10 @@ get_scale_points <- function(y, ind, scale_points) {
         try(result <- pointset[[measure]])
       }
       if (is.null(result) || length(result) != 2) {
-        warning("scale_points is of no apropriate form, default values will
-                 be used. See the descriptions and examples for details")
+        warning(strwrap(prefix = " ", initial = "",
+                        "scale_points is of no apropriate form, default values
+                        will be used. See the descriptions and examples for
+                        details"))
         result <- NULL
       }
     }

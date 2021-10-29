@@ -269,12 +269,12 @@ plot.emdi <- function(x,
       x_lab <- label$opt_lambda["x_lab"]
     }
     if (any(is.na(likelihoods))) {
-      warning(paste0(
-        "For some lambda in the chosen range, the ",
-        "likelihood does not converge. ",
-        "For these lambdas no likelihood is plotted. ",
-        "Choose a different range to avoid this behaviour"
-      ))
+      warning(strwrap(prefix = " ", initial = "",
+                      paste0("For some lambda in the chosen range, the
+                             likelihood does not converge. For these lambdas,
+                             no likelihood is plotted. Choose a different range
+                             to avoid this behaviour"
+                             )))
     }
     print((plotList[[5]] <- ggplot(
       data.frame(
@@ -303,8 +303,9 @@ plot.emdi <- function(x,
 #' @rdname plot.emdi
 #' @export
 plot.direct <- function(x, ...) {
-  message("For emdi objects obtained by direct estimation diagnostic plots are
-          not reasonable.")
+  message(strwrap(prefix = " ", initial = "",
+                  "For emdi objects obtained by direct estimation diagnostic
+                  plots are not reasonable."))
 }
 
 
@@ -493,8 +494,9 @@ define_label <- function(x, label) {
     }
   } else if (inherits(label, "list")) {
     if (any(names(label) == "box_cox")) {
-      warning("In following versions of package emdi, the list element
-              box_cox will be renamed into opt_lambda.")
+      warning(strwrap(prefix = " ", initial = "",
+                      "In following versions of package emdi, the list element
+                      box_cox will be renamed into opt_lambda."))
     }
 
     if (!any(names(label) %in% c(
@@ -599,9 +601,11 @@ define_label <- function(x, label) {
     "d_res", "d_ran",
     "cooks", "opt_lambda", "box_cox"
   )))) {
-    warning("One or more list elements are not called qq_res, qq_ran, d_res,
-             d_ran, cooks or opt_lambda. The changes are for this/these
-            element(s) is/are not done. Instead the original labels are used.")
+    warning(strwrap(prefix = " ", initial = "",
+                    "One or more list elements are not called qq_res, qq_ran,
+                    d_res, d_ran, cooks or opt_lambda. The changes are for
+                    this/these element(s) is/are not done. Instead the original
+                    labels are used."))
   }
 
   return(label)
