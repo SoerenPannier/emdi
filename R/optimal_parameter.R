@@ -103,9 +103,11 @@ reml <- function(fixed = fixed,
     keep.data = FALSE
   ), silent = TRUE)
   if (is.null(model_REML)) {
-    stop("The likelihood does not converge. One reason could be that the
-          interval for the estimation of an optimal transformation parameter is
-          not appropriate. Try another interval. See also help(ebp).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The likelihood does not converge. One reason could be that
+                 the interval for the estimation of an optimal transformation
+                 parameter is not appropriate. Try another interval. See also
+                 help(ebp)."))
   } else {
     model_REML <- model_REML
   }

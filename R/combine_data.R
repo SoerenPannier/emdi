@@ -19,7 +19,9 @@ combine_data <- function(pop_data, pop_domains, smp_data, smp_domains) {
   pop_domains_vec <- pop_data[, pop_domains]
 
   if (all(smp_domains_vec %in% pop_domains_vec) == FALSE) {
-    stop("All sample domains need to be available in population domains.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "All sample domains need to be available in population
+                 domains."))
   }
   if (all(pop_domains_vec %in% smp_domains_vec) == FALSE) {
     message(strwrap(prefix = " ", initial = "",

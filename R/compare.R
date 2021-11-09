@@ -201,28 +201,33 @@ compare_pred.emdi <- function(object1, object2, MSE = FALSE, ...) {
   if ((length(object1$ind$Domain) == length(object2$ind$Domain)) &&
     (!all(as.character(object1$ind$Domain) %in%
       as.character(object2$ind$Domain)))) {
-    stop("It is only possible to compare emdi objects with the same domains.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "It is only possible to compare emdi objects with the same
+                 domains."))
   }
 
   if ((length(object1$ind$Domain) < length(object2$ind$Domain)) &&
     !all(as.character(object1$ind$Domain) %in%
       as.character(object2$ind$Domain))) {
-    stop("The first object contains domains that are
-         not contained in the second object. It is only possible to compare
-         emdi objects with the same domains.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The first object contains domains that are not contained in
+                 the second object. It is only possible to compare emdi objects
+                 with the same domains."))
   }
 
   if ((length(object2$ind$Domain) < length(object1$ind$Domain)) &&
     !all(as.character(object2$ind$Domain) %in%
       as.character(object1$ind$Domain))) {
-    stop("The second object contains domains that are
-         not contained in the first object. It is only possible to compare
-         emdi objects with the same domains.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The second object contains domains that are not contained in
+                 the first object. It is only possible to compare emdi objects
+                 with the same domains."))
   }
 
   if ((MSE == TRUE) && (is.null(object1$MSE) || is.null(object2$MSE))) {
-    stop("If MSE is set to TRUE, both emdi objects need to contain MSE
-           estimates.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "If MSE is set to TRUE, both emdi objects need to contain MSE
+                 estimates."))
   }
 
 

@@ -374,8 +374,9 @@ getVarCov.ebp <- function(obj, individuals = 1, type = "random.effects", ...) {
   if (is.null(type) || !(type == "random.effects" ||
     type == "conditional" ||
     type == "marginal")) {
-    stop("The three options for type are ''random.effects'', ''conditional''
-         or ''marginal''.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The three options for type are ''random.effects'',
+                 ''conditional'' or ''marginal''."))
   }
 
   getVarCov(obj$model, individuals = individuals, type = type)
@@ -391,8 +392,9 @@ getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
   if (is.null(type) || !(type == "random.effects" ||
     type == "conditional" ||
     type == "marginal")) {
-    stop("The three options for type are ''random.effects'', ''conditional''
-         or ''marginal''.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The three options for type are ''random.effects'',
+                 ''conditional'' or ''marginal''."))
   }
 
   if (type == "random.effects") {
@@ -434,11 +436,11 @@ getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
         i <- as.character(obj$ind$Domain[obj$ind$Out == 0][i])
       }
       if (!(i %in% obj$ind$Domain[obj$ind$Out == 0])) {
-        stop(paste0(
-          "No variance-covariance matrix is available. Individual '",
-          i, "' is not contained in the sample and therefore not used
-                    for the model fitting."
-        ))
+        stop(strwrap(prefix = " ", initial = "",
+                     paste0("No variance-covariance matrix is available.
+                            Individual '", i, "' is not contained in the sample
+                            and therefore not used for the model fitting."
+                            )))
       }
 
       if (type == "conditional") {
@@ -616,10 +618,12 @@ print.getVarCov.fh <- function(x, ...) {
     }
     if (x[[1]]$correlation == "spatial") {
       cat("\n")
-      cat("Please note, if the correlation argument of the fh object is set to
-          spatial, the variance covariance matrix has non-zero off-diagonal
-          elements, because the assumption of independency of the error terms
-          does not hold. The diagonal elements are returned.")
+      cat(strwrap(prefix = " ", initial = "",
+                  "Please note, if the correlation argument of the fh object is
+                  set to spatial, the variance covariance matrix has non-zero
+                  off-diagonal elements, because the assumption of independency
+                  of the error terms does not hold. The diagonal elements are
+                  returned."))
     }
   }
 }

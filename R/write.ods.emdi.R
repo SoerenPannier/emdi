@@ -219,9 +219,11 @@ add_pointests_ods <- function(object, indicator, wb, headlines_cs) {
     indicator == "Inequality" | indicator == "inequality" |
     indicator == "Custom" | indicator == "custom" |
     indicator %in% names(object$ind[-1]))) {
-    stop(paste0("The argument indicator is set to ", indicator, ". The argument
-                only allows to be set to all, a name of estimated indicators or
-                indicator groups as described in help(estimators.emdi)."))
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0("The argument indicator is set to ", indicator, ". The
+                        argument only allows to be set to all, a name of
+                        estimated indicators or indicator groups as described
+                        in help(estimators.emdi).")))
   }
 
   data <- point_emdi(object = object, indicator = indicator)$ind

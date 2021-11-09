@@ -1,13 +1,16 @@
 mse_emdi <- function(object, indicator = "all", CV = FALSE) {
   if (is.null(object$MSE) && CV == TRUE) {
-    stop("No MSE estimates in emdi object: arguments MSE and CV have to be FALSE
-          or a new emdi object with variance/MSE needs to be generated.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "No MSE estimates in emdi object: arguments MSE and CV have to
+                 be FALSE or a new emdi object with variance/MSE needs to be
+                 generated."))
   }
   if ((ncol(object$ind) == 11) && any(indicator == "Custom" |
     indicator == "custom")) {
-    stop("No individual indicators are defined. Either select other indicators
-         or define custom indicators and generate a new emdi object. See also
-         help(ebp).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "No individual indicators are defined. Either select other
+                 indicators or define custom indicators and generate a new emdi
+                 object. See also help(ebp)."))
   }
 
   # Calculation of CVs

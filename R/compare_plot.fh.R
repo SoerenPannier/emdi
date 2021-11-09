@@ -15,9 +15,10 @@ compare_plot.fh <- function(model = NULL, direct = NULL, indicator = "all",
   )
 
   if (inherits(direct, "ebp")) {
-    stop(paste0("It is not possible to compare the point and MSE estimates of a
-            model of type 'fh', to the point and MSE estimates of an
-            'ebp' object."))
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0("It is not possible to compare the point and MSE
+                        estimates of a model of type 'fh', to the point and MSE
+                        estimates of an 'ebp' object.")))
   }
 
   if (inherits(model, "fh") & inherits(direct, "direct")) {

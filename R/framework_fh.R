@@ -16,9 +16,10 @@ framework_FH <- function(combined_data, fixed, vardir, domains,
   vardir_orig <- NULL
 
   if (!all(is.na(vardir) == is.na(direct))) {
-    stop(paste0("Except for out-of-sample domains the variable ", vardirname, "
-                containing the domain-specific sampling variances must not have
-                NAs."))
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0("Except for out-of-sample domains the variable ",
+                        vardirname, " containing the domain-specific sampling
+                        variances must not have NAs.")))
   }
 
   if (transformation == "log" | transformation == "log" |

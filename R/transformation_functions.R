@@ -260,7 +260,8 @@ dual <- function(y, lambda = lambda, shift = 0) {
   } else if (lambda > 1e-12) {
     yt <- ((y + shift)^(lambda) - (y + shift)^(-lambda)) / (2 * lambda)
   } else {
-    stop("lambda cannot be negative for the dual transformation")
+    stop(strwrap(prefix = " ", initial = "",
+                 "lambda cannot be negative for the dual transformation"))
   }
   return(list(y = yt, shift = shift))
 }

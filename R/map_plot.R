@@ -122,11 +122,14 @@ map_plot <- function(object,
     )
   } else if (class(map_obj) != "SpatialPolygonsDataFrame" ||
     attr(class(map_obj), "package") != "sp") {
-    stop("map_obj is not of class SpatialPolygonsDataFrame from the sp package")
+    stop(strwrap(prefix = " ", initial = "",
+                 "map_obj is not of class SpatialPolygonsDataFrame from the
+                 sp package"))
   } else {
     if (length(color) != 2 || !is.vector(color)) {
-      stop("col needs to be a vector of length 2
-           defining the starting, mid and upper color of the map-plot")
+      stop(strwrap(prefix = " ", initial = "",
+                   "col needs to be a vector of length 2 defining the starting,
+                   mid and upper color of the map-plot"))
     }
 
     plot_real(object,
@@ -212,7 +215,9 @@ plot_real <- function(object,
 
     if (any(is.na(matcher))) {
       if (all(is.na(matcher))) {
-        stop("Domains of map_tab and Map object do not match. Check map_tab")
+        stop(strwrap(prefix = " ", initial = "",
+                     "Domains of map_tab and Map object do not match. Check
+                     map_tab"))
       } else {
         warning(strwrap(prefix = " ", initial = "",
                          "Not all Domains of map_tab and Map object could be
@@ -230,7 +235,9 @@ plot_real <- function(object,
 
     if (any(is.na(matcher))) {
       if (all(is.na(matcher))) {
-        stop("Domain of EMDI and Map object do not match. Try using map_tab")
+        stop(strwrap(prefix = " ", initial = "",
+                     "Domain of EMDI and Map object do not match. Try using
+                     map_tab"))
       } else {
         warning(strwrap(prefix = " ", initial = "",
                         "Not all Domains of EMDI and Map object could be

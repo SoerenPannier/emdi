@@ -238,16 +238,18 @@ fh_fw_check1 <- function(fixed, vardir, combined_data, domains,
   mod_vars <- all.vars(fixed)
   mod_vars <- mod_vars[mod_vars != as.character(fixed[2])]
   if (!all(mod_vars %in% colnames(combined_data))) {
-    stop(paste0(
-      "Variable ", mod_vars[which(!(mod_vars %in%
-        colnames(combined_data)))],
-      " is not contained in combined_data. Please provide valid
-                variables names for the explanatory variables."
-    ))
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0("Variable ",
+                        mod_vars[which(!(mod_vars %in%
+                                           colnames(combined_data)))],
+                        " is not contained in combined_data. Please provide
+                        valid variables names for the explanatory
+                        variables.")))
   }
   if (!is.numeric(combined_data[[paste(fixed[2])]])) {
-    stop(paste0(as.character(fixed[2]), " must be the name of a variable that
-               is a numeric vector."))
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0(as.character(fixed[2]), " must be the name of a
+                        variable that is a numeric vector.")))
   }
 }
 
@@ -261,8 +263,9 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
   if (is.null(transformation) || !is.character(transformation) ||
     !(transformation == "arcsin" || transformation == "log" ||
       transformation == "no")) {
-    stop("transformation must be a character. The three options are ''no'',
-         ''log'' or ''arcsin''.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "transformation must be a character. The three options are
+                 ''no'',''log'' or ''arcsin''."))
   }
   if ((method == "reml" || method == "ml") && correlation == "no" &&
     transformation == "no" && MSE == TRUE && mse_type != "analytical") {
@@ -270,133 +273,170 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
     #     incorporating a correlation structure (correlation = ''no'') and
     #     without applying a transformation (transformation = ''no''), the
     #     mse_type must be set to ''analytical''. See also help(fh).")
-    stop("For the ''reml'' and ''ml'' variance estimation methods without
-         incorporating a correlation structure (correlation = ''no'') and
-         without applying a transformation (transformation = ''no''), the
-         mse_type must be set to ''analytical''. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "For the ''reml'' and ''ml'' variance estimation methods
+                 without incorporating a correlation structure
+                 (correlation = ''no'') and without applying a transformation
+                 (transformation = ''no''), the mse_type must be set to
+                 ''analytical''. See also help(fh)."))
   }
   if ((method == "amrl" || method == "ampl" || method == "amrl_yl" ||
     method == "ampl_yl") && MSE == TRUE && mse_type != "analytical") {
-    stop("For the adjusted variance estimation methods, the mse_type must be set
-          to ''analytical''. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "For the adjusted variance estimation methods, the mse_type
+                 must be set to ''analytical''. See also help(fh)."))
   }
   if ((method == "amrl" || method == "ampl" || method == "amrl_yl" ||
     method == "ampl_yl") && transformation != "no") {
-    stop("For the adjusted variance estimation methods, it is not possible to
-         apply a transformation. Transformation must be set to ''no''. See also
-         help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "For the adjusted variance estimation methods, it is not
+                 possible to apply a transformation. Transformation must be
+                 set to ''no''. See also help(fh)."))
   }
   if ((method == "amrl" || method == "ampl" || method == "amrl_yl" ||
     method == "ampl_yl") && correlation != "no") {
-    stop("For the adjusted variance estimation methods, it is not possible to
-         incorporate a correlation structure. Correlation must be set to ''no''.
-         If correlation is set to ''spatial'' only ''reml'' and ''ml'' variance
-         estimation methods are allowed. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "For the adjusted variance estimation methods, it is not
+                 possible to incorporate a correlation structure. Correlation
+                 must be set to ''no''. If correlation is set to ''spatial''
+                 only ''reml'' and ''ml'' variance estimation methods are
+                 allowed. See also help(fh)."))
   }
   if ((method == "me") && (is.null(Ci) || is.null(tol) || is.null(maxit))) {
-    stop("For the measurement error model (method = ''me''), the arguments
-         Ci, tol and maxit are required and cannot be ''NULL''. See also
-         help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "For the measurement error model (method = ''me''), the
+                 arguments Ci, tol and maxit are required and cannot be
+                 ''NULL''. See also help(fh)."))
   }
   if ((method == "me") && correlation != "no") {
-    stop("For the measurement error model (method = ''me''), it is not
-         possible to incorporate a correlation structure. Correlation must be
-         set to ''no''. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "For the measurement error model (method = ''me''), it is not
+                 possible to incorporate a correlation structure. Correlation
+                 must be set to ''no''. See also help(fh)."))
   }
   if ((method == "me") && transformation != "no") {
-    stop("For the measurement error model (method = ''me''), it is not
-         possible to apply a transformation. Transformation must be set to
-         ''no''. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "For the measurement error model (method = ''me''), it is not
+                 possible to apply a transformation. Transformation must be set
+                 to ''no''. See also help(fh)."))
   }
   if ((method == "me") && MSE == TRUE && mse_type != "jackknife") {
-    stop("For the measurement error model (method = ''me''), mse_type must
-         be set to ''jackknife''. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "For the measurement error model (method = ''me''), mse_type
+                 must be set to ''jackknife''. See also help(fh)."))
   }
   if ((method == "reblup" || method == "reblupbc") && MSE == TRUE &&
     !(mse_type == "boot" || mse_type == "pseudo")) {
-    stop("For the robust estimation methods (method = ''reblup''/''reblupbc''),
-          possible mse_types are ''boot'' and ''pseudo''. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "For the robust estimation methods
+                 (method = ''reblup''/''reblupbc''), possible mse_types are
+                 ''boot'' and ''pseudo''. See also help(fh)."))
   }
   if ((method == "reblup" || method == "reblupbc") && transformation != "no") {
-    stop("For the robust estimation methods (method = ''reblup''/''reblupbc''),
-         it is not possible to apply a transformation. Transformation must be
-         set to ''no''. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "For the robust estimation methods
+                 (method = ''reblup''/''reblupbc''), it is not possible to
+                 apply a transformation. Transformation must be set to ''no''.
+                 See also help(fh)."))
   }
   if ((method == "reblup" || method == "reblupbc") &&
     (is.null(k) || is.null(tol) || is.null(maxit))) {
-    stop("For the robust estimation methods (method = ''reblup''/''reblupbc''),
-         the arguments k, tol and maxit are required and cannot be ''NULL''.
-         See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "For the robust estimation methods
+                 (method = ''reblup''/''reblupbc''), the arguments k, tol and
+                 maxit are required and cannot be ''NULL''. See also
+                 help(fh)."))
   }
   if ((method == "reblupbc") && is.null(mult_constant)) {
-    stop("For the bias corrected robust estimation method
-        (method = ''reblupbc''), the argument mult_constant is required and
-         cannot be ''NULL''. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "For the bias corrected robust estimation method
+                 (method = ''reblupbc''), the argument mult_constant is
+                 required and cannot be ''NULL''. See also help(fh)."))
   }
   if ((correlation == "spatial") && (is.null(corMatrix) || is.null(tol) ||
     is.null(maxit))) {
-    stop("If correlation is set to ''spatial'' the arguments corMatrix, tol and
-         maxit are required and cannot be ''NULL''. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "If correlation is set to ''spatial'' the arguments corMatrix,
+                 tol and maxit are required and cannot be ''NULL''. See also
+                 help(fh)."))
   }
   if ((correlation == "spatial") && (transformation != "no")) {
-    stop("If correlation is set to ''spatial'', it is not possible to apply a
-         transformation. Transformation must be set to ''no''. See also
-         help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "If correlation is set to ''spatial'', it is not possible to
+                 apply a transformation. Transformation must be set to ''no''.
+                 See also help(fh)."))
   }
   if ((correlation == "spatial") && method == "reml" && MSE == TRUE &&
     !(mse_type == "analytical" || mse_type == "spatialparboot" ||
       mse_type == "spatialparbootbc" || mse_type == "spatialnonparboot" ||
       mse_type == "spatialnonparbootbc")) {
-    stop("If correlation is set to ''spatial'' and ''reml'' variance estimation
-          method is chosen, possible mse_types are ''analytical'',
-          ''spatialparboot'', ''spatialparbootbc'', ''spatialnonparboot'' and
-         ''spatialnonparbootbc''. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "If correlation is set to ''spatial'' and ''reml'' variance
+                 estimation method is chosen, possible mse_types are
+                 ''analytical'', ''spatialparboot'', ''spatialparbootbc'',
+                 ''spatialnonparboot'' and ''spatialnonparbootbc''. See also
+                 help(fh)."))
   }
   if ((correlation == "spatial") && method == "ml" && MSE == TRUE &&
     !(mse_type == "analytical" || mse_type == "spatialparboot" ||
       mse_type == "spatialparbootbc")) {
-    stop("If correlation is set to ''spatial'' and ''ml'' variance estimation
-          method is chosen, possible mse_types are ''analytical'',
-''spatialparboot'' and ''spatialparbootbc''. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "If correlation is set to ''spatial'' and ''ml'' variance
+                 estimation method is chosen, possible mse_types are
+                 ''analytical'', ''spatialparboot'' and ''spatialparbootbc''.
+                 See also help(fh)."))
   }
   if ((transformation != "no") && is.null(backtransformation)) {
-    stop("If a transformation is chosen, the argument backtransformation is
-         required and cannot be NULL. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "If a transformation is chosen, the argument
+                 backtransformation is required and cannot be NULL. See also
+                 help(fh)."))
   }
   if ((transformation == "log") && !(backtransformation == "bc_crude" ||
     backtransformation == "bc_sm")) {
-    stop("If transformation is set to ''log'', possible backtransformations are
-         ''bc_crude'' and ''bc_sm''. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "If transformation is set to ''log'', possible
+                 backtransformations are ''bc_crude'' and ''bc_sm''. See also
+                 help(fh)."))
   }
   if ((transformation == "log") && (MSE == TRUE) && mse_type != "analytical") {
-    stop("If transformation is set to ''log'', the mse_type must be set to
-         ''analytical''. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "If transformation is set to ''log'', the mse_type must be set
+                 to ''analytical''. See also help(fh)."))
   }
   if ((transformation != "no") && (backtransformation == "bc_sm") &&
     method != "ml") {
-    stop("If backtransformation is set to ''bc_sm'', only ''ml'' variance
-         estimation is possible. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "If backtransformation is set to ''bc_sm'', only ''ml''
+                 variance estimation is possible. See also help(fh)."))
   }
   if ((transformation == "arcsin") && is.null(eff_smpsize)) {
-    stop("If transformation is set to ''arcsin'', the argument eff_smpsize is
-         required and cannot be NULL. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "If transformation is set to ''arcsin'', the argument
+                 eff_smpsize is required and cannot be NULL. See also
+                 help(fh)."))
   }
   if ((transformation == "arcsin") && !(backtransformation == "naive" ||
     backtransformation == "bc")) {
-    stop("If transformation is set to ''arcsin'', possible backtransformations
-         are ''naive'' and ''bc''. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "If transformation is set to ''arcsin'', possible
+                 backtransformations are ''naive'' and ''bc''. See also
+                 help(fh)."))
   }
   if ((transformation == "arcsin") && (backtransformation == "naive") &&
     (MSE == TRUE) && !(mse_type == "boot" || mse_type == "jackknife" ||
     mse_type == "weighted_jackknife")) {
-    stop("If transformation is set to ''arcsin'' and backtransformation to
-         ''naive'', the mse_type must be set to ''boot'', ''jackknife'' or
-         ''weighted_jackknife''. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "If transformation is set to ''arcsin'' and backtransformation
+                 to ''naive'', the mse_type must be set to ''boot'',
+                 ''jackknife'' or ''weighted_jackknife''. See also help(fh)."))
   }
   if ((transformation == "arcsin") && (backtransformation == "bc") &&
     (MSE == TRUE) && !(mse_type == "boot")) {
-    stop("If transformation is set to ''arcsin'' and backtransformation to
-         ''bc'', the mse_type must be set to ''boot''. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "If transformation is set to ''arcsin'' and backtransformation
+                 to ''bc'', the mse_type must be set to ''boot''. See also
+                 help(fh)."))
   }
 }
 
@@ -408,49 +448,63 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
 combine_data_check <- function(pop_data, pop_domains, smp_data, smp_domains,
                                vardir) {
   if (!is.data.frame(pop_data)) {
-    stop("Pop_data must be a data frame containing population data.
-         See also help(combine_data).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "Pop_data must be a data frame containing population data.
+                 See also help(combine_data)."))
   }
   if (!is.character(pop_domains) || length(pop_domains) != 1) {
-    stop("Pop_domains must be a vector of length 1 and of class character
-         specifying the variable name of a numeric or factor variable
-         indicating domains in the population data. See also
-         help(combine_data).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "Pop_domains must be a vector of length 1 and of class
+                 character specifying the variable name of a numeric or factor
+                 variable indicating domains in the population data. See also
+                 help(combine_data)."))
   }
   if (!is.data.frame(smp_data)) {
-    stop("Smp_data must be a data frame containing sample data.
-         See also help(combine_data).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "Smp_data must be a data frame containing sample data. See
+                 also help(combine_data)."))
   }
   if (!is.character(smp_domains) || length(smp_domains) != 1) {
-    stop("Smp_domains must be a vector of length 1 and of class character
-          specifying the variable (name)  of a numeric or factor variable
-          indicating domains in the sample data. See also help(combine_data).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "Smp_domains must be a vector of length 1 and of class
+                 character specifying the variable (name)  of a numeric or
+                 factor variable indicating domains in the sample data. See
+                 also help(combine_data)."))
   }
   if (!is.character(vardir) || length(vardir) != 1) {
-    stop("vardir must be a vector of length 1 and of class character
-          specifying the variable (name)  of a numeric or factor variable
-          indicating the direct variances in the sample data. See also
-         help(combine_data).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "vardir must be a vector of length 1 and of class character
+                 specifying the variable (name)  of a numeric or factor
+                 variable indicating the direct variances in the sample data.
+                 See also help(combine_data)."))
   }
   if (!(pop_domains %in% colnames(pop_data))) {
-    stop(paste0("The domain variable ", pop_domains, " is not contained in
-                pop_data. Please provide valid variable name for pop_domains."))
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0("The domain variable ", pop_domains, " is not contained
+                        in pop_data. Please provide valid variable name for
+                        pop_domains.")))
   }
   if (!(smp_domains %in% colnames(smp_data))) {
-    stop(paste0("The domain variable ", smp_domains, " is not contained in
-                smp_data. Please provide valid variable name for smp_domains."))
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0("The domain variable ", smp_domains, " is not contained
+                        in smp_data. Please provide valid variable name for
+                        smp_domains.")))
   }
   if (!(vardir %in% colnames(smp_data))) {
-    stop(paste0("The variable ", vardir, " is not contained in smp_data.
-                Please provide valid variable name for the direct variances."))
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0("The variable ", vardir, " is not contained in
+                        smp_data. Please provide valid variable name for the
+                        direct variances.")))
   }
   if (!all(unique(as.character(smp_data[[smp_domains]])) %in%
     unique(as.character(pop_data[[pop_domains]])))) {
-    stop("The sample data contains domains that are
-         not contained in the population data.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The sample data contains domains that are not contained in
+                 the population data."))
   }
   if (dim(pop_data)[1] < dim(smp_data)[1]) {
-    stop("The population data set cannot have less observations than the
-         sample data set.")
+    stop(strwrap(prefix = " ", initial = "","
+                 The population data set cannot have less observations than the
+                 sample data set."))
   }
 }

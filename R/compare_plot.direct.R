@@ -27,6 +27,7 @@ compare_plot.direct <- function(model = NULL, direct = NULL, indicator = "all",
       gg_theme = gg_theme, ... = ...
     )
   } else {
-    stop("model needs to be either an ebp or a fh type model.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "model needs to be either an ebp or a fh type model."))
   }
 }

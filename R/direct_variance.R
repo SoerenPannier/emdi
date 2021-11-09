@@ -221,18 +221,22 @@ calibWeights <- function(X_calib,
   }
   n <- nrow(X_calib)
   if (length(d) != n) {
-    stop("length of 'd' not equal to number of rows in 'X_calib'")
+    stop(strwrap(prefix = " ", initial = "",
+                 "length of 'd' not equal to number of rows in 'X_calib'"))
   }
   p <- ncol(X_calib)
   if (length(totals) != p) {
-    stop("length of 'totals' not equal to number of columns in 'X_calib'")
+    stop(strwrap(prefix = " ", initial = "",
+                 "length of 'totals' not equal to number of columns in
+                 'X_calib'"))
   }
   if (is.null(q)) {
     q <- rep.int(1, n)
   } else {
     q <- as.numeric(q)
     if (length(q) != n) {
-      stop("length of 'q' not equal to number of rows in 'X_calib'")
+      stop(strwrap(prefix = " ", initial = "",
+                   "length of 'q' not equal to number of rows in 'X_calib'"))
     }
     if (any(is.infinite(q))) {
       stop("infinite values in 'q'")
