@@ -14,22 +14,26 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval, k,
     stop(paste0("The auxiliary variables must not contain NAs."))
   }
   if (is.null(vardir) || !(vardir %in% colnames(combined_data))) {
-    stop(paste0("The sampling variances variable ", vardir, " is not contained
-                in combined_data. Please provide valid variable name for the
-                sampling variances."))
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0("The sampling variances variable ", vardir, " is not
+                 contained in combined_data. Please provide valid variable name
+                 for the sampling variances.")))
   }
   if (is.null(combined_data) || !is.data.frame(combined_data)) {
-    stop("combined_data must be a data frame containing the direct estimates,
-         the sampling variances, the explanatory variables and the domains. If
-         the arcsin transformation in combination with bootstrap mse is chosen,
-         also eff_smpsize needs to be included. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "combined_data must be a data frame containing the direct
+                 estimates, the sampling variances, the explanatory variables
+                 and the domains. If the arcsin transformation in combination
+                 with bootstrap mse is chosen, also eff_smpsize needs to be
+                 included. See also help(fh)."))
   }
   if (!is.null(domains) && (!is.character(domains) || length(domains) != 1 ||
     !(domains %in% colnames(combined_data)))) {
-    stop("domains must be a vector of length 1 and of class character
-         specifying the variable name of a numeric or factor variable
-         indicating domains in the combined_data dataframe. See also
-         help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "domains must be a vector of length 1 and of class character
+                 specifying the variable name of a numeric or factor variable
+                 indicating domains in the combined_data dataframe. See also
+                 help(fh)."))
   }
 
   if (is.null(method) || !(method == "reml" || method == "amrl" ||
@@ -37,41 +41,50 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval, k,
     method == "ampl_yl" || method == "ml" ||
     method == "me" || method == "reblup" ||
     method == "reblupbc")) {
-    stop("The nine options for method are ''reml'', ''amrl'', ''amrl_yl'',
-          ''ampl'', ''ampl_yl'', ''ml'', ''me'',''reblup'' or ''reblupbc''.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The nine options for method are ''reml'', ''amrl'',
+                 ''amrl_yl'', ''ampl'', ''ampl_yl'', ''ml'', ''me'',''reblup''
+                 or ''reblupbc''."))
   }
   if (!is.null(interval) && (length(interval) != 2 ||
     !is.vector(interval, mode = "numeric") ||
     !(interval[1] < interval[2]))) {
-    stop("interval needs to be a numeric vector of length 2
-         defining a lower and upper limit for the estimation of the variance of
-         the random effect. The value of the lower limit needs to be
-         smaller than the upper limit. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "interval needs to be a numeric vector of length 2
+                 defining a lower and upper limit for the estimation of the
+                 variance of the random effect. The value of the lower limit
+                 needs to be smaller than the upper limit. See also
+                 help(fh)."))
   }
   if (is.null(k) || !(is.numeric(k) && length(k) == 1)) {
     stop("k needs to be a single numeric value. See also help(fh).")
   }
   if (is.null(mult_constant) || !(is.numeric(mult_constant) &&
     length(mult_constant) == 1)) {
-    stop("mult_constant needs to be a single numeric value. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "mult_constant needs to be a single numeric value. See also
+                 help(fh)."))
   }
   if (is.null(transformation) || !is.character(transformation) ||
     !(transformation == "arcsin" || transformation == "log" ||
       transformation == "no")) {
-    stop("transformation must be a character. The three options are ''no'',
-         ''log'' or ''arcsin''.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "transformation must be a character. The three options are
+                 ''no'', ''log'' or ''arcsin''."))
   }
   if (!is.null(backtransformation) && !(backtransformation == "naive" ||
     backtransformation == "bc_crude" ||
     backtransformation == "bc_sm" ||
     backtransformation == "bc")) {
-    stop("The four options for backtransformation are ''bc_crude'', ''bc_sm'',
-         ''naive'' or ''bc''.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The four options for backtransformation are ''bc_crude'',
+                 ''bc_sm'', ''naive'' or ''bc''."))
   }
   if (!is.null(eff_smpsize) && !(eff_smpsize %in% colnames(combined_data))) {
-    stop(paste0("The effective sample size variable ", eff_smpsize, " is not
-                 contained in combined_data. Please provide valid variable name
-                 for the effective sample size."))
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0("The effective sample size variable ", eff_smpsize,
+                 " is not contained in combined_data. Please provide valid
+                 variable name for the effective sample size.")))
   }
   if (is.null(correlation) || !(correlation == "no" ||
     correlation == "spatial")) {
@@ -79,57 +92,70 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval, k,
   }
   if (correlation == "spatial" &&
     (!(is.matrix(corMatrix) || is.data.frame(corMatrix)))) {
-    stop("corMatrix must be a data frame or matrix containing the
-         row-standardised proximity matrix. See also help(fh). A description
-         how a proximity matrix can be computed can be found in the vignette.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "corMatrix must be a data frame or matrix containing the
+                 row-standardised proximity matrix. See also help(fh). A
+                 description how a proximity matrix can be computed can be
+                 found in the vignette."))
   }
   if (correlation == "spatial" &&
     (dim(corMatrix)[1] != dim(corMatrix)[2])) {
-    stop("The columns and rows of corMatrix must have the same lengths. See also
-         help(fh). A description how a proximity matrix can be computed can be
-         found in the vignette.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The columns and rows of corMatrix must have the same lengths.
+                 See also help(fh). A description how a proximity matrix can be
+                 computed can be found in the vignette."))
   }
   direct <- makeXY(fixed, combined_data)$y
   if (correlation == "spatial" &&
     (dim(corMatrix)[1] != length(direct))) {
-    stop("The columns and rows of corMatrix must have the same lengths
-    like the number of areas. If out-of-sample areas exist, the columns
-    and rows of corMatrix must have the same lengths like the number
-    of in-sample areas. See also help(fh). A description how a proximity matrix
-          can be computed can be found in the vignette.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The columns and rows of corMatrix must have the same lengths
+                 like the number of areas. If out-of-sample areas exist, the
+                 columns and rows of corMatrix must have the same lengths like
+                 the number of in-sample areas. See also help(fh). A description
+                 how a proximity matrix can be computed can be found in the
+                 vignette."))
   }
   if (correlation == "spatial" && (all(corMatrix == 0))) {
-    stop("The elements of corMatrix are all equal to 0. No
-         neighbourhood structure can be identified. It is suggested to
-         apply a standard Fay-Herriot model.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The elements of corMatrix are all equal to 0. No
+                 neighbourhood structure can be identified. It is suggested to
+                 apply a standard Fay-Herriot model."))
   }
   estcoef <- makeXY(formula = fixed, data = combined_data)
   if (method == "me" && !is.null(Ci) &&
     (!(dim(Ci)[1] == dim(estcoef$x)[2]) ||
       !(dim(Ci)[2] == dim(estcoef$x)[2]) ||
       !(dim(Ci)[3] == dim(combined_data)[1]))) {
-    stop("Ci must be an array with dimension number of estimated regression
-        coefficients times number of estimated regression coefficients times
-        number of areas containing the variance-covariance matrix of the
-        explanatory variables for each area. The areas should be sorted like in
-        combined_data. See also help(fh). For an example how to create the array
-        please refer to the Vignette.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "Ci must be an array with dimension number of estimated
+                 regression coefficients times number of estimated regression
+                 coefficients times number of areas containing the
+                 variance-covariance matrix of the explanatory variables for
+                 each area. The areas should be sorted like in combined_data.
+                 See also help(fh). For an example how to create the array
+                 please refer to the Vignette."))
   }
   if ((method == "me") && (!is.numeric(tol) || !(is.numeric(tol) &&
     length(tol) == 1))) {
-    stop("tol must be a single number determining the tolerance value for the
-          convergence of weights for the estimation of the variance of the
-          random effects and the beta coefficients. See help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "tol must be a single number determining the tolerance value
+                 for the convergence of weights for the estimation of the
+                 variance of the random effects and the beta coefficients.
+                 See help(fh)."))
   }
   if ((method == "me") && (!is.numeric(maxit) || !(is.numeric(maxit) &&
     length(maxit) == 1))) {
-    stop("maxit must be a single number determining the tolerance value for the
-          convergence of weights for the estimation of the variance of the
-          random effects and the beta coefficients. See help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "maxit must be a single number determining the tolerance value
+                 for the convergence of weights for the estimation of the
+                 variance of the random effects and the beta coefficients.
+                 See help(fh)."))
   }
   if (!is.logical(MSE) || length(MSE) != 1) {
-    stop("MSE must be a logical value. Set MSE to TRUE or FALSE. The default is
-          set to FALSE. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "MSE must be a logical value. Set MSE to TRUE or FALSE. The
+                 default is set to FALSE. See also help(fh)."))
   }
   if (MSE == TRUE &&
     (is.null(mse_type) || !(length(mse_type) == 1 &&
@@ -141,36 +167,44 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval, k,
         mse_type == "spatialnonparbootbc" ||
         mse_type == "spatialparboot" ||
         mse_type == "spatialparbootbc")))) {
-    stop("The nine mse types are ''analytical'', ''boot'', ''pseudo'',
-         ''jackknife'', ''weighted_jackknife'', ''spatialnonparboot'',
-         ''spatialnonparbootbc'', ''spatialparboot'' or ''spatialparbootbc''.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The nine mse types are ''analytical'', ''boot'', ''pseudo'',
+                 ''jackknife'', ''weighted_jackknife'', ''spatialnonparboot'',
+                 ''spatialnonparbootbc'', ''spatialparboot'' or
+                 ''spatialparbootbc''."))
   }
   if (MSE == TRUE && (mse_type == "boot" || mse_type == "spatialparboot" ||
     mse_type == "spatialparbootbc" ||
     mse_type == "spatialnonparboot" ||
     mse_type == "spatialnonparbootbc") && is.null(B)) {
-    stop("If MSE is set to TRUE and a bootstrap MSE estimation method is chosen,
-          the argument B is required and cannot be NULL. See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "If MSE is set to TRUE and a bootstrap MSE estimation method
+                 is chosen, the argument B is required and cannot be NULL. See
+                 also help(fh)."))
   }
   if (!(is.numeric(B) && (length(B) == 1 || length(B) == 2))) {
-    stop("B needs to be either a single number or a numeric vector of length 2
-         defining the number of bootstrap iterations. The first element defines
-         the number of bootstrap iterations for the MSE estimation. The second
-         element determines the number of bootstrap iterations for the
-         information criteria by Marhuenda et al. (2014). See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "B needs to be either a single number or a numeric vector of
+                 length 2 defining the number of bootstrap iterations. The
+                 first element defines the number of bootstrap iterations for
+                 the MSE estimation. The second element determines the number
+                 of bootstrap iterations for the information criteria by
+                 Marhuenda et al. (2014). See also help(fh)."))
   }
   if (MSE == TRUE && (mse_type == "boot" || mse_type == "spatialparboot" ||
     mse_type == "spatialparbootbc" ||
     mse_type == "spatialnonparboot" ||
     mse_type == "spatialnonparbootbc") && !(B[1] > 1)) {
-    stop("If MSE is set to TRUE and a bootstrap MSE estimation method is chosen,
-          The number of bootstrap samples (B) needs to be greater than 1. See
-         also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "If MSE is set to TRUE and a bootstrap MSE estimation method
+                 is chosen, the number of bootstrap samples (B) needs to be
+                 greater than 1. See also help(fh)."))
   }
   if (!is.null(seed) && (!is.numeric(seed) ||
     !(is.numeric(seed) && length(seed) == 1))) {
-    stop("The seed must be a single value, interpreted as an integer, or NULL
-         See also help(fh).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The seed must be a single value, interpreted as an integer,
+                 or NULL See also help(fh)."))
   }
 }
 
@@ -178,24 +212,28 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval, k,
 fh_fw_check1 <- function(fixed, vardir, combined_data, domains,
                          eff_smpsize = NULL, Ci = NULL) {
   if (!(domains %in% colnames(combined_data))) {
-    stop(paste0("The domain variable ", domains, " is not contained in
-                combined_data. Please provide valid variable name for
-                domains."))
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0("The domain variable ", domains, " is not contained in
+                 combined_data. Please provide valid variable name for
+                        domains.")))
   }
   if (!(vardir %in% colnames(combined_data))) {
-    stop(paste0("The sampling variances variable ", vardir, " is not contained
-                in combined_data. Please provide valid variable name for
-                vardir."))
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0("The sampling variances variable ", vardir, " is not
+                        contained in combined_data. Please provide valid
+                        variable name for vardir.")))
   }
   if (!(eff_smpsize %in% colnames(combined_data))) {
-    stop(paste0("The effective sample size variable ", eff_smpsize, " is not
-                contained in combined_data. Please provide valid variable name
-                for eff_smpsize."))
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0("The effective sample size variable ", eff_smpsize, "
+                        is not contained in combined_data. Please provide valid
+                        variable name for eff_smpsize.")))
   }
   if (!(as.character(lhs(fixed))) %in% colnames(combined_data)) {
-    stop(paste0("Variable ", as.character(lhs(fixed)), " is not contained in
-                combined_data. Please provide valid variable name for the
-                dependent variable."))
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0("Variable ", as.character(lhs(fixed)), " is not
+                        contained in combined_data. Please provide valid
+                        variable name for the dependent variable.")))
   }
   mod_vars <- all.vars(fixed)
   mod_vars <- mod_vars[mod_vars != as.character(fixed[2])]
