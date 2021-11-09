@@ -1,4 +1,4 @@
-#' Spatial autocorrelation tests
+#' Spatial Autocorrelation Tests
 #'
 #' This function computes two spatial autocorrelation tests: Moran's I and
 #' Geary's C.

@@ -1,4 +1,4 @@
-#' Combines sample and population data
+#' Combines Sample and Population Data
 #'
 #' This function combines the aggregated population information with the
 #' aggregated sample data. The merge is based on the domains. Out-of-sample

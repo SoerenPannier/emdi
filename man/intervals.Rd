@@ -4,7 +4,7 @@
 \alias{intervals}
 \alias{intervals.ebp}
 \alias{intervals.fh}
-\title{Confidence intervals on coefficients of an emdi object}
+\title{Confidence Intervals on Coefficients of an emdi Object}
 \usage{
 \method{intervals}{ebp}(object, level = 0.95, parm = NULL, ...)
 

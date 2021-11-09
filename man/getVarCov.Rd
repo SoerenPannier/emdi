@@ -4,7 +4,7 @@
 \alias{getVarCov}
 \alias{getVarCov.ebp}
 \alias{getVarCov.fh}
-\title{Extract variance-covariance matrix from an emdi object}
+\title{Extract Variance-covariance Matrix from an emdi Object}
 \usage{
 \method{getVarCov}{ebp}(obj, individuals = 1, type = "random.effects", ...)
 

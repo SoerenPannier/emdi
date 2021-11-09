@@ -7,7 +7,7 @@
 \alias{compare_plot.direct}
 \alias{compare_plot.ebp}
 \alias{compare_plot.fh}
-\title{Shows plots for the comparison of estimates}
+\title{Shows Plots for the Comparison of Estimates}
 \usage{
 compare_plot(
   model,

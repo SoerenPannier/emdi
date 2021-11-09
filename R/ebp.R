@@ -1,4 +1,4 @@
-#' Empirical Best Prediction for disaggregated indicators
+#' Empirical Best Prediction for Disaggregated Indicators
 #'
 #' Function \code{ebp} estimates indicators using the Empirical Best Prediction
 #' approach by \cite{Molina and Rao (2010)}. Point predictions of indicators

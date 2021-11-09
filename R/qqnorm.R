@@ -1,4 +1,4 @@
-#' Quantile-quantile plots for an emdi object
+#' Quantile-quantile Plots for an emdi Object
 #'
 #' Normal quantile-quantile plots of the underlying model in the EBP (see also
 #' \code{\link{ebp}}) or Fay-Herriot (see also \code{\link{fh}}) approaches are

@@ -7,7 +7,7 @@
 \alias{fixed.effects.ebp}
 \alias{fixef.fh}
 \alias{fixed.effects.fh}
-\title{Extract fixed effects from an emdi object}
+\title{Extract Fixed Effects from an emdi Object}
 \usage{
 \method{fixef}{ebp}(object, ...)
 

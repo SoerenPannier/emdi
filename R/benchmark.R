@@ -1,4 +1,4 @@
-#' Benchmark function
+#' Benchmark Function
 #'
 #' This function benchmarks the EBLUP estimates of an area-level model.
 #'

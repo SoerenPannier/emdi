@@ -1,4 +1,4 @@
-#' Plots for an emdi object
+#' Plots for an emdi Object
 #'
 #' Diagnostic plots of the underlying model in the EBP (see also
 #' \code{\link{ebp}}) or Fay-Herriot (see also \code{\link{fh}}) approaches are

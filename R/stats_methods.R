@@ -1,4 +1,4 @@
-# Extract model coefficients of emdi objects -----------------------------------
+# Extract Model Coefficients of emdi Objects -----------------------------------
 
 #' @aliases coefficients
 #' @export
@@ -27,7 +27,7 @@ coef.fh <- function(object, ...) {
   fixed_effects
 }
 
-# Confidence intervals of an emdi object ---------------------------------------
+# Confidence Intervals of an emdi Object ---------------------------------------
 
 #' @export
 #' @method confint ebp
@@ -67,7 +67,7 @@ confint.fh <- function(object, parm = NULL, level = 0.95, ...) {
   }
 }
 
-# Extract the AIC from a model fit of an emdi object ---------------------------
+# Extract the AIC from a Model Fit of an emdi Object ---------------------------
 #' @export
 #' @method extractAIC fh
 #' @importFrom stats extractAIC
@@ -210,7 +210,7 @@ nobs.fh <- function(object, ...) {
   N_obs
 }
 
-#' Predictions from emdi objects
+#' Predictions from emdi Objects
 #'
 #' Method \code{predict.emdi} extracts the direct estimates, the empirical
 #' best linear unbiased or empirical best predictors for all domains from an

@@ -10,7 +10,7 @@
 
 # External documentation -------------------------------------------------------
 
-#' Tranforms dependent variables
+#' Tranforms Dependent Variables
 #'
 #' Function \code{data_transformation} transforms the dependent variable from
 #' the formula object \code{fixed} in the given sample data set. Thus, it

@@ -1,4 +1,4 @@
-#' Extract fixed effects from an emdi object
+#' Extract Fixed Effects from an emdi Object
 #'
 #' Methods \code{fixef.ebp} and \code{fixef.fh} extract the
 #' fixed effects from an emdi object of class "ebp" or "fh".
@@ -71,7 +71,7 @@ fixed.effects.fh <- function(object, ...) {
   fixed_effects
 }
 
-#' Extract emdi object data
+#' Extract emdi Object Data
 #'
 #' Methods \code{getData.direct}, \code{getData.ebp} and \code{getData.fh}
 #' extract the data frame used to fit the model.
@@ -137,7 +137,7 @@ getData.fh <- function(object, ...) {
   object$framework$combined_data
 }
 
-#' Extract grouping factors from an emdi object
+#' Extract Grouping Factors from an emdi Object
 #'
 #' Methods \code{getGroups.direct}, \code{getGroups.ebp} and
 #' \code{getGroups.fh} extract grouping factors from an emdi object.
@@ -194,7 +194,7 @@ getGroups.fh <- function(object, ...) {
 }
 
 
-#' Extract grouping formula from an emdi object
+#' Extract Grouping Formula from an emdi Object
 #'
 #' Methods \code{getGroupsFormula.direct}, \code{getGroupsFormula.ebp} and
 #' \code{getGroupsFormula.fh} extract the grouping formula from an
@@ -252,7 +252,7 @@ getGroupsFormula.fh <- function(object, ...) {
   eval(parse(text = paste("~", object$framework$domains)))
 }
 
-#' Extract response variable from an emdi object
+#' Extract Response Variable from an emdi Object
 #'
 #' Methods \code{getResponse.direct}, \code{getResponse.ebp} and
 #' \code{getResponse.fh} extract the response variable from an emdi object.
@@ -310,7 +310,7 @@ getResponse.fh <- function(object, ...) {
 }
 
 
-#' Extract variance-covariance matrix from an emdi object
+#' Extract Variance-covariance Matrix from an emdi Object
 #'
 #' Methods \code{getVarCov.ebp} and \code{getVarCov.fh} extract the
 #' variance-covariance matrix from a fitted model of class "ebp" or "fh".
@@ -621,14 +621,14 @@ print.getVarCov.fh <- function(x, ...) {
       cat(strwrap(prefix = " ", initial = "",
                   "Please note, if the correlation argument of the fh object is
                   set to spatial, the variance covariance matrix has non-zero
-                  off-diagonal elements, because the assumption of independency
+                  off-diagonal elements, because the assumption of independence
                   of the error terms does not hold. The diagonal elements are
                   returned."))
     }
   }
 }
 
-#' Confidence intervals on coefficients of an emdi object
+#' Confidence Intervals on Coefficients of an emdi Object
 #'
 #' Methods \code{intervals.ebp} and \code{intervals.fh} provide the approximate
 #' confidence intervals on the coefficients (fixed effects) of an emdi object.
@@ -704,7 +704,7 @@ intervals.fh <- function(object, level = 0.95, parm = NULL, ...) {
   }
 }
 
-#' Extract random effects of emdi objects
+#' Extract Random Effects of emdi Objects
 #'
 #' Methods \code{ranef.ebp} and \code{ranef.fh} extract the
 #' fixed effects from an emdi object of class "ebp" or "fh".

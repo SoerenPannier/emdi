@@ -5,7 +5,7 @@
 \alias{qqnorm.ebp}
 \alias{qqnorm.fh}
 \alias{qqnorm.direct}
-\title{Quantile-quantile plots for an emdi object}
+\title{Quantile-quantile Plots for an emdi Object}
 \usage{
 \method{qqnorm}{emdi}(y, color = c("blue", "lightblue3"), gg_theme = NULL, ...)
 

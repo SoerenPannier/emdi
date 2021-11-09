@@ -3,7 +3,7 @@
 \name{estimators}
 \alias{estimators}
 \alias{estimators.emdi}
-\title{Presents point, MSE and CV estimates}
+\title{Presents Point, MSE and CV Estimates}
 \usage{
 estimators(object, indicator, MSE, CV, ...)
 

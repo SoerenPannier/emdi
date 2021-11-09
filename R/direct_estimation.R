@@ -1,4 +1,4 @@
-#' Direct estimation of disaggregated indicators
+#' Direct Estimation of Disaggregated Indicators
 #'
 #' Function \code{direct} estimates indicators only based on sample information.
 #' The variance is estimated via a naive or calibrated bootstrap. The estimation

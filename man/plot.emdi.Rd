@@ -5,7 +5,7 @@
 \alias{plot.ebp}
 \alias{plot.direct}
 \alias{plot.fh}
-\title{Plots for an emdi object}
+\title{Plots for an emdi Object}
 \usage{
 \method{plot}{emdi}(
   x,

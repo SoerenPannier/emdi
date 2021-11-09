@@ -7,7 +7,7 @@
 \alias{random.effects.ebp}
 \alias{ranef.fh}
 \alias{random.effects.fh}
-\title{Extract random effects of emdi objects}
+\title{Extract Random Effects of emdi Objects}
 \usage{
 \method{ranef}{ebp}(object, ...)
 

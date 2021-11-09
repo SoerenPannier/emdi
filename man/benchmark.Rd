@@ -2,7 +2,7 @@
 % Please edit documentation in R/benchmark.R
 \name{benchmark}
 \alias{benchmark}
-\title{Benchmark function}
+\title{Benchmark Function}
 \usage{
 benchmark(object, benchmark, share, type = "raking", overwrite = FALSE)
 }

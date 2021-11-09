@@ -3,7 +3,7 @@
 \name{write.excel}
 \alias{write.excel}
 \alias{write.ods}
-\title{Exports an emdiObject to an Excel file or OpenDocument Spreadsheet}
+\title{Exports an emdiObject to an Excel File or OpenDocument Spreadsheet}
 \usage{
 write.excel(
   object,

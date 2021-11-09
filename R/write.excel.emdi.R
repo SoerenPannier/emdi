@@ -1,4 +1,4 @@
-#' Exports an emdiObject to an Excel file or OpenDocument Spreadsheet
+#' Exports an emdiObject to an Excel File or OpenDocument Spreadsheet
 #'
 #' Function \code{write.excel} enables the user to export point and MSE
 #' estimates as well as diagnostics from the \code{summary} to an Excel file.

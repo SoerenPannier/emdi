@@ -2,7 +2,7 @@
 % Please edit documentation in R/stats_methods.R
 \name{predict.emdi}
 \alias{predict.emdi}
-\title{Predictions from emdi objects}
+\title{Predictions from emdi Objects}
 \usage{
 \method{predict}{emdi}(object, ...)
 }

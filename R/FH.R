@@ -1,4 +1,4 @@
-#' Standard and extended Fay-Herriot models for disaggregated indicators
+#' Standard and Extended Fay-Herriot Models for Disaggregated Indicators
 #'
 #' Function \code{fh} estimates indicators using the Fay-Herriot approach by
 #' \cite{Fay and Herriot (1979)}. Empirical best linear unbiased predictors

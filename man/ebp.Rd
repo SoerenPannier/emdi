@@ -2,7 +2,7 @@
 % Please edit documentation in R/ebp.R
 \name{ebp}
 \alias{ebp}
-\title{Empirical Best Prediction for disaggregated indicators}
+\title{Empirical Best Prediction for Disaggregated Indicators}
 \usage{
 ebp(
   fixed,

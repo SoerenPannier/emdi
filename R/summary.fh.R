@@ -1,4 +1,4 @@
-# Summarizes an emdi fh object
+# Summarizes an emdi fh Object
 
 #' @export
 #' @importFrom moments skewness kurtosis

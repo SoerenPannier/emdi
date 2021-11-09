@@ -3,7 +3,7 @@
 \name{compare}
 \alias{compare}
 \alias{compare.fh}
-\title{Compare function}
+\title{Compare Function}
 \usage{
 compare(object, ...)
 

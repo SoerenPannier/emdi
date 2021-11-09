@@ -1,4 +1,4 @@
-#' Presents point, MSE and CV estimates
+#' Presents Point, MSE and CV Estimates
 #'
 #' Function \code{estimators} is a generic function used to present point and
 #' mean squared error (MSE) estimates and calculated coefficients of variation
@@ -23,7 +23,7 @@
 estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
 
 
-#' Presents point, MSE and/or CV estimates of an emdiObject
+#' Presents Point, MSE and/or CV Estimates of an emdiObject
 #'
 #' Method \code{estimators.emdi} presents point and MSE estimates for regional
 #' disaggregated indicators. Coefficients of variation are calculated

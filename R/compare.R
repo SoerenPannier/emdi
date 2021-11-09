@@ -1,4 +1,4 @@
-#' Compare function
+#' Compare Function
 #'
 #' Function \code{compare} is a generic function used to assess the quality of
 #' the model-based estimates by comparing them with the direct estimates.
@@ -13,7 +13,7 @@
 compare <- function(object, ...) UseMethod("compare")
 
 
-#' Compare function
+#' Compare Function
 #'
 #' Method \code{compare.fh} assesses the quality of the model-based estimates
 #' of the Fay-Herriot model by comparing them with the direct estimates based
@@ -96,7 +96,7 @@ compare.fh <- function(object, ...) {
   return(results)
 }
 
-#' Prints compare.fh objects
+#' Prints compare.fh Objects
 #'
 #' compare.fh object is printed.
 #'
@@ -136,7 +136,7 @@ print.compare.fh <- function(x, ...) {
   }
 }
 
-#' Compare predictions of model objects
+#' Compare Predictions of Model Objects
 #'
 #' Function \code{compare_pred} is a generic function used to compare
 #' predictions of two model objects.
@@ -153,7 +153,7 @@ compare_pred <- function(object1, object2, MSE = FALSE, ...) {
   UseMethod("compare_pred")
 }
 
-#' Compare predictions of emdi objects
+#' Compare Predictions of emdi Objects
 #'
 #' Method \code{compare_pred.emdi} compares predictions of two emdi objects.
 #'

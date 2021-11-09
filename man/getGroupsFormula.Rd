@@ -5,7 +5,7 @@
 \alias{getGroupsFormula.direct}
 \alias{getGroupsFormula.ebp}
 \alias{getGroupsFormula.fh}
-\title{Extract grouping formula from an emdi object}
+\title{Extract Grouping Formula from an emdi Object}
 \usage{
 \method{getGroupsFormula}{direct}(object, ...)
 

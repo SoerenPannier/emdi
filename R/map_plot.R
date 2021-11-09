@@ -1,6 +1,6 @@
 # External documentation -------------------------------------------------------
 
-#' Visualizes regional disaggregated estimates on a map
+#' Visualizes Regional Disaggregated Estimates on a Map
 #'
 #' Function \code{map_plot} creates spatial visualizations of the estimates
 #' obtained by small area estimation methods or direct estimation.
