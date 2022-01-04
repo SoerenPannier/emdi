@@ -1,3 +1,6 @@
+# emdi 2.1.1
+* Fix to account for the changed behavior of as.vector() on data frames
+
 # emdi 2.1.0
 * Extension of the ebp function to allow informative sampling
 * Additional data-driven transformations for the ebp 
