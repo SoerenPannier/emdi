@@ -1,3 +1,6 @@
+# emdi 2.1.1
+* Fix to account for the changed behavior of as.vector() on data frames
+
 # emdi 2.1.0
 * Extension of the ebp function to allow informative sampling
 * Additional data-driven transformations for the ebp 
@@ -12,7 +15,7 @@
 # emdi 2.0.2
 * Many S3-methods in the style of stats and nlme are implemented for the classes direct, ebp and fh
 * Structure of S3-classes has been cleaned up
-* The bootstrap parameter in the fh-function has been changed from a single number to a single number or a numeric vector with two elements to allow for seperately controlling the number of bootstrap iterations for the MSE estimation and the computation of the bootstrap based information criteria
+* The bootstrap parameter in the fh-function has been changed from a single number to a single number or a numeric vector with two elements to allow for separately controlling the number of bootstrap iterations for the MSE estimation and the computation of the bootstrap based information criteria
 * Renaming the robustness constant in the fh function
 * Minor fixes in the documentation
 * Reducing the sizes of the data sets used for test that tests to decrease testing time

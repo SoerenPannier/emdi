@@ -1,19 +1,11 @@
-## This is a resubmission
-* cat and print changed to message where applicable
-* curly brackets removed from citations (as requested)
-* Note regarding multicore: vignettes are static and examples not using multicore
-* bug in plot.fh fixed
-* all donttest examples checked and running
-* dois in readme have been fixed
-* tarball size was reduced below 4mb
-
 ## Note
-* Additional issues on Cran have been fixed.
+* Additional issues for R-Devel have been fixed.
 
 ## Test environments
-* Ubuntu 16.04.6 LTS (on travis-ci), R 4.0.2
 * Windows10 R 4.1.0 local development environment
-* win-builder: R-4.0.5
+* r-hub (devel): x86_64-pc-linux-gnu (64-bit) R Under development (unstable) (2022-01-03 r81439)
+* r-hub (cran): multiple
+* Winbuilder: R-Oldrel (4.0.5), R-Devel (unstable 2022-01-03 r81439 ucrt), R-Release (4.1.2)  
 
 ## R CMD check results
 
