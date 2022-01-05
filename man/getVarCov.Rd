@@ -4,7 +4,7 @@
 \alias{getVarCov}
 \alias{getVarCov.ebp}
 \alias{getVarCov.fh}
-\title{Extract variance-covariance matrix from an emdi object}
+\title{Extract Variance-covariance Matrix from an emdi Object}
 \usage{
 \method{getVarCov}{ebp}(obj, individuals = 1, type = "random.effects", ...)
 
@@ -36,7 +36,7 @@ method \code{getVarCov.fh}, for all types the dimensions of the matrices are
 covariances matrices are returned for the chosen individual. Please note, if
 the correlation argument of the "fh" object is set to spatial, the variance
 covariance matrix has non-zero off-diagonal elements, because the assumption
-of independency of the error terms does not hold. For the non-spatial models,
+of independence of the error terms does not hold. For the non-spatial models,
 the off-diagonal elements are zero.
 }
 \description{

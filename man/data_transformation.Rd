@@ -2,7 +2,7 @@
 % Please edit documentation in R/transformation_functions.R
 \name{data_transformation}
 \alias{data_transformation}
-\title{Tranforms dependent variables}
+\title{Tranforms Dependent Variables}
 \usage{
 data_transformation(fixed, smp_data, transformation, lambda)
 }

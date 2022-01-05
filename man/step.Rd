@@ -4,7 +4,7 @@
 \alias{step}
 \alias{step.default}
 \alias{step.fh}
-\title{Step function}
+\title{Step Function}
 \usage{
 step(object, scope, criteria, direction, trace, steps, ...)
 

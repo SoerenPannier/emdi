@@ -1,4 +1,4 @@
-# Summarizes an emdi direct object
+# Summarizes an emdi Direct Object
 
 #' @export
 #' @importFrom moments skewness kurtosis

@@ -5,7 +5,7 @@
 \alias{getData.direct}
 \alias{getData.ebp}
 \alias{getData.fh}
-\title{Extract emdi object data}
+\title{Extract emdi Object Data}
 \usage{
 \method{getData}{direct}(object, ...)
 

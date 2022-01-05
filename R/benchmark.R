@@ -1,4 +1,4 @@
-#' Benchmark function
+#' Benchmark Function
 #'
 #' This function benchmarks the EBLUP estimates of an area-level model.
 #'
@@ -99,8 +99,9 @@ benchmark <- function(object, benchmark, share, type = "raking",
     object$ind <- object$ind[, c("Domain", "Direct", "FH", "FH_Bench", "Out")]
     object["MSE"] <- list(NULL)
 
-    message("Please note that only point estimates are benchmarked. Thus, the
-            MSE element in the new emdi object is NULL.")
+    message(strwrap(prefix = " ", initial = "",
+                    "Please note that only point estimates are benchmarked.
+                    Thus, the MSE element in the new emdi object is NULL."))
     result <- object
   }
   return(result)
@@ -119,40 +120,48 @@ check_benchmark_arguments <- function(object, benchmark, share, type,
   throw_class_error(object, "fh")
 
   if ((any(is.na(object$ind$FH)))) {
-    stop("If no predictions for out-of-sample domains
-         are available, the benchmarking algorithm does not work.")
+    stop(strwrap(prefix = " ", initial = "",
+                "If no predictions for out-of-sample domains are available,
+                the benchmarking algorithm does not work."))
   }
   if (is.null(type) || !(is.character(type)) || !(type == "raking" ||
     type == "ratio" ||
     type == "MSE_adj")) {
-    stop("Type must be a character. The three options for types are ''raking'',
-         ''ratio'' and ''MSE_adj''.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "Type must be a character. The three options for types are
+                 ''raking'', ''ratio'' and ''MSE_adj''."))
   }
   if ((is.null(object$MSE)) && type == "MSE_adj") {
-    stop("If no MSE estimates are available,
-         ''MSE_adj'' benchmarking does not work. The fh object has to contain
-         MSE estimates. Therefore set the MSE argument of the fh function to
-         TRUE.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "If no MSE estimates are available, ''MSE_adj'' benchmarking
+                 does not work. The fh object has to contain MSE estimates.
+                 Therefore set the MSE argument of the fh function to TRUE."))
   }
   if ((any(is.na(object$MSE$FH))) && type == "MSE_adj") {
-    stop("For the benchmarking type ''MSE_adj'' the MSE estimates of the fh
-         object must not contain NAs. If no MSE estimates for out-of-sample
-         domains are available,''MSE_adj'' benchmarking does not work.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "For the benchmarking type ''MSE_adj'' the MSE estimates of
+                 the fh object must not contain NAs. If no MSE estimates for
+                 out-of-sample domains are available,''MSE_adj'' benchmarking
+                 does not work."))
   }
   if (is.null(benchmark) || !(is.numeric(benchmark) &&
     length(benchmark) == 1)) {
-    stop("benchmark needs to be a single numeric value. See also
-         help(benchmark).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "benchmark needs to be a single numeric value. See also
+                 help(benchmark)."))
   }
   if (!is.vector(share) || length(share) != length(object$ind$Domain)) {
-    stop("share must be a vector with length equal to the number of domains.
-         See also help(benchmark).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "share must be a vector with length equal to the number of
+                 domains. See also help(benchmark)."))
   }
   if (any(is.na(share))) {
     stop("share must not contain NAs.")
   }
   if (!is.logical(overwrite) || length(overwrite) != 1) {
-    stop("overwrite must be a logical value. Set overwrite to TRUE or FALSE. The
-          default is set to FALSE. See also help(benchmark).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "overwrite must be a logical value. Set overwrite to TRUE or
+                 FALSE. The default is set to FALSE. See also
+                 help(benchmark)."))
   }
 }

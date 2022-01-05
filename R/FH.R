@@ -1,4 +1,4 @@
-#' Standard and extended Fay-Herriot models for disaggregated indicators
+#' Standard and Extended Fay-Herriot Models for Disaggregated Indicators
 #'
 #' Function \code{fh} estimates indicators using the Fay-Herriot approach by
 #' \cite{Fay and Herriot (1979)}. Empirical best linear unbiased predictors
@@ -538,10 +538,13 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
         } else {
           if ((isTRUE(all.equal(round(sigmau2, 3), interval[1]))) ||
             (isTRUE(all.equal(round(sigmau2, 3), interval[2])))) {
-            warning("The estimate of the variance of the random effects falls at
-            the interval limit. It is recommended to choose a larger
-            interval for the estimation of the variance of the random effects
-                (specify interval input argument).")
+            warning(strwrap(prefix = " ", initial = "",
+                            "The estimate of the variance of the random effects
+                            falls at the interval limit. It is recommended to
+                            choose a larger interval for the estimation of the
+                            variance of the random effects (specify interval
+                            input argument)."
+                            ))
           }
           out <- list(
             ind = eblup$eblup_data,
@@ -618,10 +621,12 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
     } else if (transformation != "no") {
       if ((isTRUE(all.equal(sigmau2, interval[1]))) ||
         (isTRUE(all.equal(sigmau2, interval[2])))) {
-        warning("The estimate of the variance of the random effects falls at
-            the interval limit. It is recommended to choose a larger
-            interval for the estimation of the variance of the random effects
-                (specify interval input argument).")
+        warning(strwrap(prefix = " ", initial = "",
+                        "The estimate of the variance of the random effects
+                        falls at the interval limit. It is recommended to
+                        choose a larger interval for the estimation of the
+                        variance of the random effects (specify interval input
+                        argument)."))
       }
 
       # Shrinkage factor

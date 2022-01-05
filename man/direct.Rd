@@ -2,7 +2,7 @@
 % Please edit documentation in R/direct_estimation.R
 \name{direct}
 \alias{direct}
-\title{Direct estimation of disaggregated indicators}
+\title{Direct Estimation of Disaggregated Indicators}
 \usage{
 direct(
   y,

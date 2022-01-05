@@ -1,4 +1,4 @@
-#' Step function
+#' Step Function
 #'
 #' This generic function selects a model by different criteria in a stepwise
 #' algorithm.
@@ -30,8 +30,8 @@ step <- function(object, scope, criteria, direction, trace, steps,
 }
 
 
-#' Method \code{step.default} performs a variable selection for lm models by
-#' AIC.
+#' Method \code{step.default} Performs a Variable Selection for lm Models by
+#' AIC
 #'
 #' @param object an object of type "emdi", or a \code{lm} object.
 #' @param ... arguments to be passed to or from other methods.
@@ -48,8 +48,8 @@ step.default <- function(object, ...) stats::step(object, ...)
 
 
 
-#' Method \code{step.fh} selects a Fay-Herriot model by different
-#' information criteria in a stepwise algorithm.
+#' Method \code{step.fh} Selects a Fay-Herriot Model by Different
+#' Information Criteria in a Stepwise Algorithm
 #'
 #' @param object an object of type "fh" that contains the chosen
 #' information criterion or of type "lm" for the default method.
@@ -139,7 +139,9 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
     (is.null(object$model$seed))) {
     object$call$seed <- 123
     catmessage <- capture.output(object <- eval(object$call))
-    message("Seed in fh object not defined, 123 used as default seed. \n")
+    message(strwrap(prefix = " ", initial = "",
+                    "Seed in fh object not defined, 123 used as default
+                    seed."))
   }
 
   startobject <- object
@@ -172,8 +174,9 @@ step.fh <- function(object, scope = NULL, criteria = "AIC",
     invisible(fit <- eval(fit$call))
     if (catmessage == TRUE) {
       message("\n")
-      message("Please note that the model selection criteria are only computed
-              based of the in-sample domains. \n \n ")
+      message(strwrap(prefix = " ", initial = "",
+                      "Please note that the model selection criteria are only
+                      computed based of the in-sample domains."))
     }
     class(fit) <- c("step_fh", "fh", "emdi")
     fit
@@ -327,9 +330,10 @@ step_check <- function(object, scope, criteria, direction, trace,
     stop("Object needs to be fh object.")
   }
   if (!(object$method$method == "ml")) {
-    stop("The variance estimation method of the random effect has to be ml.
-         Otherwise the comparison of models based on information criteria would
-         not be valid.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The variance estimation method of the random effect has to be
+                 ml. Otherwise the comparison of models based on information
+                 criteria would not be valid."))
   }
   if (is.null(criteria) || !(criteria == "AIC" ||
     criteria == "AICc" ||
@@ -340,39 +344,47 @@ step_check <- function(object, scope, criteria, direction, trace,
     criteria == "KICc" ||
     criteria == "KICb1" ||
     criteria == "KICb2")) {
-    stop("The nine options for criteria are ''AIC', ''AICc'',
-         ''AICb1'', ''AICb2'', ''BIC'', ''KIC'', ''KICc'', ''KICb1'',
-         ''KICb2''.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The nine options for criteria are ''AIC', ''AICc'',
+                 ''AICb1'', ''AICb2'', ''BIC'', ''KIC'', ''KICc'', ''KICb1'',
+                 ''KICb2''."))
   }
   if (is.null(object$model$model_select[[criteria]])) {
-    stop("The fh object does not contain the chosen criterion. Please set the
-         second element of the input argument B of the fh function to a number
-         greater than 1 to receive results for all of the information criteria.
-         For some model extensions of the fh model the information criteria are
-         not defined. Check the model_select component of the fh object
-         (objectname$model$model_select). If no criteria are provided, it is
-         not possible to apply the stepwise variable selection algorithm.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The fh object does not contain the chosen criterion. Please
+                 set the second element of the input argument B of the fh
+                 function to a number greater than 1 to receive results for all
+                 of the information criteria. For some model extensions of the
+                 fh model the information criteria are not defined. Check the
+                 model_select component of the fh object
+                 (objectname$model$model_select). If no criteria are provided,
+                 it is not possible to apply the stepwise variable selection
+                 algorithm."))
   }
   if (is.null(direction) || !(direction == "forward" ||
     direction == "backward" ||
     direction == "both")) {
-    stop("The three options for direction are ''forward', ''backward'',
-         ''both''.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The three options for direction are ''forward', ''backward'',
+                 ''both''."))
   }
   if (!is.logical(trace) || length(trace) != 1) {
-    stop("trace must be a logical value. Set MSE to TRUE or FALSE. The default
-         is set to TRUE. See also help(step).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "trace must be a logical value. Set MSE to TRUE or FALSE. The
+                 default is set to TRUE. See also help(step)."))
   }
   if (!is.null(scope) && ((!inherits(scope, "formula")) &&
     (!inherits(scope, "list") ||
       (!inherits(scope[[1]], "formula") ||
         !inherits(scope[[2]], "formula"))))) {
-    stop("Scope must be a formula or a list including two formulas
-         (lower and upper).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "Scope must be a formula or a list including two formulas
+                 (lower and upper)."))
   }
   if (!is.numeric(steps) || !(is.numeric(steps) && length(steps) == 1)) {
-    stop("steps must be a single number determining the maximum number of steps.
-         See help(step).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "steps must be a single number determining the maximum number
+                 of steps. See help(step)."))
   }
 }
 

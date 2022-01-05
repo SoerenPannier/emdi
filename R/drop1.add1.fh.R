@@ -54,7 +54,8 @@ drop1.fh <- function(object, criteria, scope, ...) {
     )
     nnew <- nfit$framework$N_dom_smp
     if (all(is.finite(c(n0, nnew))) && nnew != n0) {
-      stop("number of rows in use has changed: remove missing values?")
+      stop(strwrap(prefix = " ", initial = "",
+                   "number of rows in use has changed: remove missing values?"))
     }
   }
   dfs <- ans[1L, 1L] - ans[, 1L]

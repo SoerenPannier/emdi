@@ -2,7 +2,7 @@
 % Please edit documentation in R/combine_data.R
 \name{combine_data}
 \alias{combine_data}
-\title{Combines sample and population data}
+\title{Combines Sample and Population Data}
 \usage{
 combine_data(pop_data, pop_domains, smp_data, smp_domains)
 }

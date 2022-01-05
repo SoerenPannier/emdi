@@ -1,12 +1,14 @@
 point_emdi <- function(object, indicator = "all") {
   if (is.null(object$ind)) {
-    stop("No estimates in object: method point not applicable")
+    stop(strwrap(prefix = " ", initial = "",
+                 "No estimates in object: method point not applicable"))
   }
   if ((ncol(object$ind) == 11) && any(indicator == "Custom" |
     indicator == "custom")) {
-    stop("No individual indicators are defined. Either select other indicators
-         or define custom indicators and generate a new emdi object. See also
-         help(direct) or help(ebp).")
+    stop(strwrap(prefix = " ", initial = "",
+                 "No individual indicators are defined. Either select other
+                 indicators or define custom indicators and generate a new emdi
+                 object. See also help(direct) or help(ebp)."))
   }
 
   if (any(indicator == "Quantiles") || any(indicator == "quantiles")) {

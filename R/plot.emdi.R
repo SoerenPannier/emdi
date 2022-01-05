@@ -1,4 +1,4 @@
-#' Plots for an emdi object
+#' Plots for an emdi Object
 #'
 #' Diagnostic plots of the underlying model in the EBP (see also
 #' \code{\link{ebp}}) or Fay-Herriot (see also \code{\link{fh}}) approaches are
@@ -17,7 +17,7 @@
 #' (see also \code{\link{ebp}} and \code{\link{fh}}).
 #' @param label argument that enables to customize title and axis labels. There
 #' are three instant options to label the diagnostic plot: (i) original labels
-#' ("orig"), (ii) axis lables but no title ("no_title"), (iii) neither axis
+#' ("orig"), (ii) axis labels but no title ("no_title"), (iii) neither axis
 #' labels nor title ("blank").
 #' (iv) individual labels by a list that needs to
 #' have below structure. Six elements can be defined called
@@ -269,12 +269,12 @@ plot.emdi <- function(x,
       x_lab <- label$opt_lambda["x_lab"]
     }
     if (any(is.na(likelihoods))) {
-      warning(paste0(
-        "For some lambda in the chosen range, the ",
-        "likelihood does not converge. ",
-        "For these lambdas no likelihood is plotted. ",
-        "Choose a different range to avoid this behaviour"
-      ))
+      warning(strwrap(prefix = " ", initial = "",
+                      "For some lambda in the chosen range, the
+                      likelihood does not converge. For these lambdas,
+                      no likelihood is plotted. Choose a different range
+                      to avoid this behaviour"
+                      ))
     }
     print((plotList[[5]] <- ggplot(
       data.frame(
@@ -303,8 +303,9 @@ plot.emdi <- function(x,
 #' @rdname plot.emdi
 #' @export
 plot.direct <- function(x, ...) {
-  message("For emdi objects obtained by direct estimation diagnostic plots are
-          not reasonable.")
+  message(strwrap(prefix = " ", initial = "",
+                  "For emdi objects obtained by direct estimation diagnostic
+                  plots are not reasonable."))
 }
 
 
@@ -493,8 +494,9 @@ define_label <- function(x, label) {
     }
   } else if (inherits(label, "list")) {
     if (any(names(label) == "box_cox")) {
-      warning("In following versions of package emdi, the list element
-              box_cox will be renamed into opt_lambda.")
+      warning(strwrap(prefix = " ", initial = "",
+                      "In following versions of package emdi, the list element
+                      box_cox will be renamed into opt_lambda."))
     }
 
     if (!any(names(label) %in% c(
@@ -507,16 +509,17 @@ define_label <- function(x, label) {
         "d_res", "d_ran",
         "cooks", "box_cox"
       ))) {
-      stop("List elements must have following names even though not
-          all must be included: qq_res, qq_ran, d_res, d_ran, cooks,
-          opt_lambda. Every list element must have the elements title,
-          y_lab and x_lab. See also help(plot.emdi).")
+      stop(strwrap(prefix = " ", initial = "",
+                   "List elements must have following names even though not
+                   all must be included: qq_res, qq_ran, d_res, d_ran, cooks,
+                   opt_lambda. Every list element must have the elements title,
+                   y_lab and x_lab. See also help(plot.emdi)."))
     }
     for (i in names(label)) {
       if (!all(names(label[[i]]) == c("title", "y_lab", "x_lab"))) {
-        stop("Every list element must have the elements title,
-             y_lab and x_lab in this order. See also
-             help(plot.emdi).")
+        stop(strwrap(prefix = " ", initial = "",
+                     "Every list element must have the elements title, y_lab
+                     and x_lab in this order. See also help(plot.emdi)."))
       }
     }
 
@@ -599,9 +602,11 @@ define_label <- function(x, label) {
     "d_res", "d_ran",
     "cooks", "opt_lambda", "box_cox"
   )))) {
-    warning("One or more list elements are not called qq_res, qq_ran, d_res,
-             d_ran, cooks or opt_lambda. The changes are for this/these
-            element(s) is/are not done. Instead the original labels are used.")
+    warning(strwrap(prefix = " ", initial = "",
+                    "One or more list elements are not called qq_res, qq_ran,
+                    d_res, d_ran, cooks or opt_lambda. The changes are for
+                    this/these element(s) is/are not done. Instead the original
+                    labels are used."))
   }
 
   return(label)

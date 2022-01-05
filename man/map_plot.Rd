@@ -2,7 +2,7 @@
 % Please edit documentation in R/map_plot.R
 \name{map_plot}
 \alias{map_plot}
-\title{Visualizes regional disaggregated estimates on a map}
+\title{Visualizes Regional Disaggregated Estimates on a Map}
 \usage{
 map_plot(
   object,

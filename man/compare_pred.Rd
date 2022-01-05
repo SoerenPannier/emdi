@@ -3,7 +3,7 @@
 \name{compare_pred}
 \alias{compare_pred}
 \alias{compare_pred.emdi}
-\title{Compare predictions of model objects}
+\title{Compare Predictions of Model Objects}
 \usage{
 compare_pred(object1, object2, MSE = FALSE, ...)
 

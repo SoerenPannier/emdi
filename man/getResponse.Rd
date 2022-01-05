@@ -5,7 +5,7 @@
 \alias{getResponse.direct}
 \alias{getResponse.ebp}
 \alias{getResponse.fh}
-\title{Extract response variable from an emdi object}
+\title{Extract Response Variable from an emdi Object}
 \usage{
 \method{getResponse}{direct}(object, ...)
 

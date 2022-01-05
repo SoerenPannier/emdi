@@ -10,7 +10,7 @@
 
 # External documentation -------------------------------------------------------
 
-#' Tranforms dependent variables
+#' Tranforms Dependent Variables
 #'
 #' Function \code{data_transformation} transforms the dependent variable from
 #' the formula object \code{fixed} in the given sample data set. Thus, it
@@ -260,7 +260,8 @@ dual <- function(y, lambda = lambda, shift = 0) {
   } else if (lambda > 1e-12) {
     yt <- ((y + shift)^(lambda) - (y + shift)^(-lambda)) / (2 * lambda)
   } else {
-    stop("lambda cannot be negative for the dual transformation")
+    stop(strwrap(prefix = " ", initial = "",
+                 "lambda cannot be negative for the dual transformation"))
   }
   return(list(y = yt, shift = shift))
 }

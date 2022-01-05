@@ -10,8 +10,9 @@ plot.fh <- function(x,
 
   if (any(is.na(x$model$std_real_residuals))) {
     residuals <- x$model$std_real_residuals[!is.na(x$model$std_real_residuals)]
-    warning("At least one value in the standardized realized residuals is NA.
-            Only numerical values are plotted.")
+    warning(strwrap(prefix = " ", initial = "",
+                    "At least one value in the standardized realized residuals
+                    is NA. Only numerical values are plotted."))
   } else {
     residuals <- x$model$std_real_residuals
   }

@@ -1,4 +1,4 @@
-#' Extract fixed effects from an emdi object
+#' Extract Fixed Effects from an emdi Object
 #'
 #' Methods \code{fixef.ebp} and \code{fixef.fh} extract the
 #' fixed effects from an emdi object of class "ebp" or "fh".
@@ -71,7 +71,7 @@ fixed.effects.fh <- function(object, ...) {
   fixed_effects
 }
 
-#' Extract emdi object data
+#' Extract emdi Object Data
 #'
 #' Methods \code{getData.direct}, \code{getData.ebp} and \code{getData.fh}
 #' extract the data frame used to fit the model.
@@ -119,8 +119,9 @@ getData.direct <- function(object, ...) {
 getData.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
   if (object$transformation != "no") {
-    message("The untransformed sample data set of the ebp object
-            is returned. \n \n")
+    message(strwrap(prefix = " ", initial = "",
+                    "The untransformed sample data set of the ebp object
+                    is returned."))
   }
   object$framework$smp_data
 }
@@ -130,12 +131,13 @@ getData.ebp <- function(object, ...) {
 #' @rdname getData
 getData.fh <- function(object, ...) {
   throw_class_error(object, "fh")
-  message("The combined data set (combined_data) of the fh object
-          is returned. \n \n")
+  message(strwrap(prefix = " ", initial = "",
+                  "The combined data set (combined_data) of the fh object
+                  is returned."))
   object$framework$combined_data
 }
 
-#' Extract grouping factors from an emdi object
+#' Extract Grouping Factors from an emdi Object
 #'
 #' Methods \code{getGroups.direct}, \code{getGroups.ebp} and
 #' \code{getGroups.fh} extract grouping factors from an emdi object.
@@ -192,7 +194,7 @@ getGroups.fh <- function(object, ...) {
 }
 
 
-#' Extract grouping formula from an emdi object
+#' Extract Grouping Formula from an emdi Object
 #'
 #' Methods \code{getGroupsFormula.direct}, \code{getGroupsFormula.ebp} and
 #' \code{getGroupsFormula.fh} extract the grouping formula from an
@@ -250,7 +252,7 @@ getGroupsFormula.fh <- function(object, ...) {
   eval(parse(text = paste("~", object$framework$domains)))
 }
 
-#' Extract response variable from an emdi object
+#' Extract Response Variable from an emdi Object
 #'
 #' Methods \code{getResponse.direct}, \code{getResponse.ebp} and
 #' \code{getResponse.fh} extract the response variable from an emdi object.
@@ -308,11 +310,10 @@ getResponse.fh <- function(object, ...) {
 }
 
 
-#' Extract variance-covariance matrix from an emdi object
+#' Extract Variance-covariance Matrix from an emdi Object
 #'
 #' Methods \code{getVarCov.ebp} and \code{getVarCov.fh} extract the
 #' variance-covariance matrix from a fitted model of class "ebp" or "fh".
-#
 #' @param obj an object of type "emdi", either "ebp" or "fh".
 #' @param individuals vector of levels of the in-sample domains can be
 #' specified for the types "\code{conditional}" or "\code{marginal}".
@@ -333,7 +334,7 @@ getResponse.fh <- function(object, ...) {
 #' covariances matrices are returned for the chosen individual. Please note, if
 #' the correlation argument of the "fh" object is set to spatial, the variance
 #' covariance matrix has non-zero off-diagonal elements, because the assumption
-#' of independency of the error terms does not hold. For the non-spatial models,
+#' of independence of the error terms does not hold. For the non-spatial models,
 #' the off-diagonal elements are zero.
 #' @details The generic function \code{getVarCov} is imported from package nlme
 #' and re-exported to make the S3-methods available, even though the nlme
@@ -373,8 +374,9 @@ getVarCov.ebp <- function(obj, individuals = 1, type = "random.effects", ...) {
   if (is.null(type) || !(type == "random.effects" ||
     type == "conditional" ||
     type == "marginal")) {
-    stop("The three options for type are ''random.effects'', ''conditional''
-         or ''marginal''.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The three options for type are ''random.effects'',
+                 ''conditional'' or ''marginal''."))
   }
 
   getVarCov(obj$model, individuals = individuals, type = type)
@@ -390,8 +392,9 @@ getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
   if (is.null(type) || !(type == "random.effects" ||
     type == "conditional" ||
     type == "marginal")) {
-    stop("The three options for type are ''random.effects'', ''conditional''
-         or ''marginal''.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The three options for type are ''random.effects'',
+                 ''conditional'' or ''marginal''."))
   }
 
   if (type == "random.effects") {
@@ -433,11 +436,11 @@ getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
         i <- as.character(obj$ind$Domain[obj$ind$Out == 0][i])
       }
       if (!(i %in% obj$ind$Domain[obj$ind$Out == 0])) {
-        stop(paste0(
-          "No variance-covariance matrix is available. Individual '",
-          i, "' is not contained in the sample and therefore not used
-                    for the model fitting."
-        ))
+        stop(strwrap(prefix = " ", initial = "",
+                     paste0("No variance-covariance matrix is available.
+                            Individual '", i, "' is not contained in the sample
+                            and therefore not used for the model fitting."
+                            )))
       }
 
       if (type == "conditional") {
@@ -615,15 +618,17 @@ print.getVarCov.fh <- function(x, ...) {
     }
     if (x[[1]]$correlation == "spatial") {
       cat("\n")
-      cat("Please note, if the correlation argument of the fh object is set to
-          spatial, the variance covariance matrix has non-zero off-diagonal
-          elements, because the assumption of independency of the error terms
-          does not hold. The diagonal elements are returned.")
+      cat(strwrap(prefix = " ", initial = "",
+                  "Please note, if the correlation argument of the fh object is
+                  set to spatial, the variance covariance matrix has non-zero
+                  off-diagonal elements, because the assumption of independence
+                  of the error terms does not hold. The diagonal elements are
+                  returned."))
     }
   }
 }
 
-#' Confidence intervals on coefficients of an emdi object
+#' Confidence Intervals on Coefficients of an emdi Object
 #'
 #' Methods \code{intervals.ebp} and \code{intervals.fh} provide the approximate
 #' confidence intervals on the coefficients (fixed effects) of an emdi object.
@@ -699,7 +704,7 @@ intervals.fh <- function(object, level = 0.95, parm = NULL, ...) {
   }
 }
 
-#' Extract random effects of emdi objects
+#' Extract Random Effects of emdi Objects
 #'
 #' Methods \code{ranef.ebp} and \code{ranef.fh} extract the
 #' fixed effects from an emdi object of class "ebp" or "fh".

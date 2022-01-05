@@ -1,4 +1,4 @@
-#' Spatial autocorrelation tests
+#' Spatial Autocorrelation Tests
 #'
 #' This function computes two spatial autocorrelation tests: Moran's I and
 #' Geary's C.
@@ -74,16 +74,19 @@ spatialcor_check <- function(direct, corMatrix) {
     stop("corMatrix must be a matrix or data frame.")
   }
   if (dim(corMatrix)[1] != dim(corMatrix)[2]) {
-    stop("corMatrix must be a matrix or data frame with same number of rows and
-         columns equal to the length of direct.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "corMatrix must be a matrix or data frame with same number of
+                 rows and columns equal to the length of direct."))
   }
   if (length(direct) != dim(corMatrix)[1]) {
-    stop("The vector containing the direct estimates must have the same length
-        as the dimensions of corMatrix.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The vector containing the direct estimates must have the same
+                 length as the dimensions of corMatrix."))
   }
   if (all(corMatrix == 0)) {
-    stop("The elements of corMatrix are all equal to 0. Please provide a
-       valid proximity matrix. A description how a proximity matrix
-          can be computed can be found in the vignette.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The elements of corMatrix are all equal to 0. Please provide
+                 a valid proximity matrix. A description how a proximity matrix
+                 can be computed can be found in the vignette."))
   }
 }

@@ -15,16 +15,18 @@ compare_plot.fh <- function(model = NULL, direct = NULL, indicator = "all",
   )
 
   if (inherits(direct, "ebp")) {
-    stop(paste0("It is not possible to compare the point and MSE estimates of a
-            model of type 'fh', to the point and MSE estimates of an
-            'ebp' object."))
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0("It is not possible to compare the point and MSE
+                        estimates of a model of type 'fh', to the point and MSE
+                        estimates of an 'ebp' object.")))
   }
 
   if (inherits(model, "fh") & inherits(direct, "direct")) {
-    warning(paste0(
-      "fh models are only compared to their own inherrent direct ",
-      "estimates. Hence, the argument direct is ignored."
-    ))
+    warning(strwrap(prefix = " ", initial = "",
+                    paste0("fh models are only compared to their own inherrent
+                           direct estimates. Hence, the argument direct is
+                           ignored."
+                           )))
   }
 
   compare_plot_fh(
@@ -112,8 +114,10 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE,
     Data$FH_Bench_Direct <- Data$FH_Direct
   }
   if ("FH_Bench" %in% indicator & !("FH_Bench" %in% selected_indicators)) {
-    message("emdi object does not contain benchmarked fh estimates. Only
-            FH estimates are compared with direct. See also help(benchmark).")
+    message(strwrap(prefix = " ", initial = "",
+                   "emdi object does not contain benchmarked fh estimates.
+                   Only FH estimates are compared with direct. See also
+                   help(benchmark)."))
   }
 
   if (!(any(indicator == "all") || any(indicator == "direct") ||
@@ -145,8 +149,10 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE,
   }
 
   if (model$framework$N_dom_unobs > 0) {
-    message("Please note that since all of the comparisons need a direct
-            estimator, the plots are only created for in-sample domains. \n \n")
+    message(strwrap(prefix = " ", initial = "",
+                   "Please note that since all of the comparisons need a direct
+                   estimator, the plots are only created for in-sample
+                   domains."))
   }
 
   compare_plots(

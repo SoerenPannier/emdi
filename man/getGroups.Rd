@@ -5,7 +5,7 @@
 \alias{getGroups.direct}
 \alias{getGroups.ebp}
 \alias{getGroups.fh}
-\title{Extract grouping factors from an emdi object}
+\title{Extract Grouping Factors from an emdi Object}
 \usage{
 \method{getGroups}{direct}(object, ...)
 

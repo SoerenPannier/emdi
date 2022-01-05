@@ -15,17 +15,18 @@ compare_plot.ebp <- function(model = NULL, direct = NULL, indicator = "all",
   )
 
   if (inherits(direct, "fh")) {
-    stop(paste0(
-      "It is not possible to compare the point and MSE estimates of
-                a", " model of type 'fh', to the point and MSE estimates of",
-      " an 'ebp' object."
-    ))
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0("It is not possible to compare the point and MSE
+                        estimates of a model of type 'fh', to the point and MSE
+                        estimates of an 'ebp' object."
+                        )))
   }
 
   if ((inherits(model, "ebp") & is.null(direct)) |
     (inherits(direct, "ebp") & is.null(model))) {
-    stop(paste0("If the model is of type 'ebp', the input argument
-                  direct is required."))
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0("If the model is of type 'ebp', the input argument
+                        direct is required.")))
   } else if (inherits(model, "ebp") & inherits(direct, "direct")) {
     compare_plot_ebp(
       model = model, direct = direct, indicator = indicator,

@@ -1,4 +1,4 @@
-#' Shows plots for the comparison of estimates
+#' Shows Plots for the Comparison of Estimates
 #'
 #' Function \code{compare_plot} is a generic function used to produce plots
 #' comparing point and existing MSE/CV estimates of direct and model-based
@@ -47,7 +47,7 @@ compare_plot <- function(model, direct, indicator = "all", MSE = FALSE,
 
 
 
-#' Shows plots for the comparison of estimates
+#' Shows Plots for the Comparison of Estimates
 #'
 #' Methods \code{compare_plot.direct}, \code{compare_plot.ebp} and
 #' \code{compare_plot.fh} produce plots comparing point and existing

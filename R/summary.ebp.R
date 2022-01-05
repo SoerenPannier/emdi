@@ -75,8 +75,10 @@ summary.ebp <- function(object, ...) {
     shapiro_W_res <-
       shapiro.test(residuals(object$model, level = 0, type = "pearson"))[[1]]
   } else {
-    warning("Number of observations exceeds 5000 or is lower then 3 and thus the
-            Shapiro-Wilk test is not applicable for the residuals.")
+    warning(strwrap(prefix = " ", initial = "",
+                    "Number of observations exceeds 5000 or is lower then 3 and
+                    thus the Shapiro-Wilk test is not applicable for the
+                    residuals."))
     shapiro_p_res <- NA
     shapiro_W_res <- NA
   }
@@ -86,8 +88,10 @@ summary.ebp <- function(object, ...) {
     shapiro_p_ran <- shapiro.test(ranef(object$model)$"(Intercept)")[[2]]
     shapiro_W_ran <- shapiro.test(ranef(object$model)$"(Intercept)")[[1]]
   } else {
-    warning("Number of domains exceeds 5000 or is lower then 3 and thus the
-            Shapiro-Wilk test is not applicable for the random effects.")
+    warning(strwrap(prefix = " ", initial = "",
+                    "Number of domains exceeds 5000 or is lower then 3 and thus
+                    the Shapiro-Wilk test is not applicable for the random
+                    effects."))
     shapiro_p_ran <- NA
     shapiro_W_ran <- NA
   }

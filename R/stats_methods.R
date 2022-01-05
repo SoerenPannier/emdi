@@ -1,4 +1,4 @@
-# Extract model coefficients of emdi objects -----------------------------------
+# Extract Model Coefficients of emdi Objects -----------------------------------
 
 #' @aliases coefficients
 #' @export
@@ -27,7 +27,7 @@ coef.fh <- function(object, ...) {
   fixed_effects
 }
 
-# Confidence intervals of an emdi object ---------------------------------------
+# Confidence Intervals of an emdi Object ---------------------------------------
 
 #' @export
 #' @method confint ebp
@@ -67,7 +67,7 @@ confint.fh <- function(object, parm = NULL, level = 0.95, ...) {
   }
 }
 
-# Extract the AIC from a model fit of an emdi object ---------------------------
+# Extract the AIC from a Model Fit of an emdi Object ---------------------------
 #' @export
 #' @method extractAIC fh
 #' @importFrom stats extractAIC
@@ -75,16 +75,17 @@ confint.fh <- function(object, parm = NULL, level = 0.95, ...) {
 extractAIC.fh <- function(fit, ...) {
   throw_class_error(fit, "fh")
   if (!is.null(fit$model$model_select$AIC)) {
-    message(paste0(
-      "Estimation approach used is ", fit$method$method, ": ",
-      round(fit$model$model_select$AIC, 5)
-    ))
+    message(strwrap(prefix = " ", initial = "",
+                    paste0("Estimation approach used is ",
+                           fit$method$method, ": ",
+                           round(fit$model$model_select$AIC, 5)
+                           )))
     invisible(fit$model$model_select$AIC)
   } else {
-    message(paste0(
-      "No AIC is returned for estimation approach ",
-      fit$method$method, "."
-    ))
+    message(strwrap(prefix = " ", initial = "",
+                    paste0("No AIC is returned for estimation approach ",
+                           fit$method$method, "."
+                           )))
   }
 }
 
@@ -159,7 +160,9 @@ formula.fh <- function(x, ...) {
 
 logLik.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
-  message("Estimation approach used is reml: ", round(object$model$logLik, 5))
+  message(strwrap(prefix = " ", initial = "",
+                  paste0("Estimation approach used is reml: ",
+                         round(object$model$logLik, 5))))
   invisible(object$model$logLik)
 }
 
@@ -171,10 +174,11 @@ logLik.ebp <- function(object, ...) {
 logLik.fh <- function(object, ...) {
   throw_class_error(object, "fh")
   if (!is.null(object$model$model_select$loglike)) {
-    message(
-      "Estimation approach used is ", object$method$method, ":",
-      round(object$model$model_select$loglike, 5)
-    )
+    message(strwrap(prefix = " ", initial = "",
+                    paste0("Estimation approach used is ",
+                           object$method$method, ":",
+                           round(object$model$model_select$loglike, 5)
+                           )))
     invisible(object$model$model_select$loglike)
   } else {
     message(paste0(
@@ -206,7 +210,7 @@ nobs.fh <- function(object, ...) {
   N_obs
 }
 
-#' Predictions from emdi objects
+#' Predictions from emdi Objects
 #'
 #' Method \code{predict.emdi} extracts the direct estimates, the empirical
 #' best linear unbiased or empirical best predictors for all domains from an

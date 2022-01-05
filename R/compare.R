@@ -1,4 +1,4 @@
-#' Compare function
+#' Compare Function
 #'
 #' Function \code{compare} is a generic function used to assess the quality of
 #' the model-based estimates by comparing them with the direct estimates.
@@ -13,7 +13,7 @@
 compare <- function(object, ...) UseMethod("compare")
 
 
-#' Compare function
+#' Compare Function
 #'
 #' Method \code{compare.fh} assesses the quality of the model-based estimates
 #' of the Fay-Herriot model by comparing them with the direct estimates based
@@ -44,8 +44,9 @@ compare.fh <- function(object, ...) {
 
   if (is.null(object$MSE$FH)) {
     testresults <- NULL
-    message("The fh object does not contain MSE estimates. The Brown test
-               statistic cannot be computed.", "\n")
+    message(strwrap(prefix = " ", initial = "",
+                    "The fh object does not contain MSE estimates. The Brown
+                    test statistic cannot be computed."))
   } else {
     W_BL <- sum((object$ind$Direct[object$ind$Out == 0] -
       object$ind$FH[object$ind$Out == 0])^2 /
@@ -88,13 +89,14 @@ compare.fh <- function(object, ...) {
   class(results) <- "compare.fh"
 
   if (object$framework$N_dom_unobs > 0) {
-    message("Please note that the computation of both test statistics is only
-           based on in-sample domains.", "\n")
+    message(strwrap(prefix = " ", initial = "",
+                    "Please note that the computation of both test statistics
+                    is only based on in-sample domains."))
   }
   return(results)
 }
 
-#' Prints compare.fh objects
+#' Prints compare.fh Objects
 #'
 #' compare.fh object is printed.
 #'
@@ -134,7 +136,7 @@ print.compare.fh <- function(x, ...) {
   }
 }
 
-#' Compare predictions of model objects
+#' Compare Predictions of Model Objects
 #'
 #' Function \code{compare_pred} is a generic function used to compare
 #' predictions of two model objects.
@@ -151,7 +153,7 @@ compare_pred <- function(object1, object2, MSE = FALSE, ...) {
   UseMethod("compare_pred")
 }
 
-#' Compare predictions of emdi objects
+#' Compare Predictions of emdi Objects
 #'
 #' Method \code{compare_pred.emdi} compares predictions of two emdi objects.
 #'
@@ -199,28 +201,33 @@ compare_pred.emdi <- function(object1, object2, MSE = FALSE, ...) {
   if ((length(object1$ind$Domain) == length(object2$ind$Domain)) &&
     (!all(as.character(object1$ind$Domain) %in%
       as.character(object2$ind$Domain)))) {
-    stop("It is only possible to compare emdi objects with the same domains.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "It is only possible to compare emdi objects with the same
+                 domains."))
   }
 
   if ((length(object1$ind$Domain) < length(object2$ind$Domain)) &&
     !all(as.character(object1$ind$Domain) %in%
       as.character(object2$ind$Domain))) {
-    stop("The first object contains domains that are
-         not contained in the second object. It is only possible to compare
-         emdi objects with the same domains.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The first object contains domains that are not contained in
+                 the second object. It is only possible to compare emdi objects
+                 with the same domains."))
   }
 
   if ((length(object2$ind$Domain) < length(object1$ind$Domain)) &&
     !all(as.character(object2$ind$Domain) %in%
       as.character(object1$ind$Domain))) {
-    stop("The second object contains domains that are
-         not contained in the first object. It is only possible to compare
-         emdi objects with the same domains.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "The second object contains domains that are not contained in
+                 the first object. It is only possible to compare emdi objects
+                 with the same domains."))
   }
 
   if ((MSE == TRUE) && (is.null(object1$MSE) || is.null(object2$MSE))) {
-    stop("If MSE is set to TRUE, both emdi objects need to contain MSE
-           estimates.")
+    stop(strwrap(prefix = " ", initial = "",
+                 "If MSE is set to TRUE, both emdi objects need to contain MSE
+                 estimates."))
   }
 
 

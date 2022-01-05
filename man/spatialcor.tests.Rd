@@ -2,7 +2,7 @@
 % Please edit documentation in R/spatialcor.R
 \name{spatialcor.tests}
 \alias{spatialcor.tests}
-\title{Spatial autocorrelation tests}
+\title{Spatial Autocorrelation Tests}
 \usage{
 spatialcor.tests(direct, corMatrix)
 }

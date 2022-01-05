@@ -2,7 +2,7 @@
 % Please edit documentation in R/FH.R
 \name{fh}
 \alias{fh}
-\title{Standard and extended Fay-Herriot models for disaggregated indicators}
+\title{Standard and Extended Fay-Herriot Models for Disaggregated Indicators}
 \usage{
 fh(
   fixed,

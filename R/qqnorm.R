@@ -1,4 +1,4 @@
-#' Quantile-quantile plots for an emdi object
+#' Quantile-quantile Plots for an emdi Object
 #'
 #' Normal quantile-quantile plots of the underlying model in the EBP (see also
 #' \code{\link{ebp}}) or Fay-Herriot (see also \code{\link{fh}}) approaches are
@@ -123,8 +123,9 @@ qqnorm.fh <- function(y, color = c("blue", "lightblue3"),
                       gg_theme = NULL, ...) {
   if (any(is.na(y$model$std_real_residuals))) {
     residuals <- y$model$std_real_residuals[!is.na(y$model$std_real_residuals)]
-    warning("At least one value in the standardized realized residuals is NA.
-             Only numerical values are plotted.")
+    warning(strwrap(prefix = " ", initial = "",
+                    "At least one value in the standardized realized residuals
+                    is NA. Only numerical values are plotted."))
   } else {
     residuals <- y$model$std_real_residuals
   }
@@ -142,6 +143,7 @@ qqnorm.fh <- function(y, color = c("blue", "lightblue3"),
 #' @rdname qqnorm.emdi
 #' @export
 qqnorm.direct <- function(y, ...) {
-  message("For emdi objects obtained by direct estimation diagnostic plots are
-          not reasonable.")
+  message(strwrap(prefix = " ", initial = "",
+                  "For emdi objects obtained by direct estimation diagnostic
+                  plots are not reasonable."))
 }
