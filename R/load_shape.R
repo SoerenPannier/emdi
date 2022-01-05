@@ -1,4 +1,4 @@
-#' Loading the Shape File for Astrian Districts
+#' Loading the Shape File for Austrian Districts
 #'
 #' The function simplifies to load the shape file for austrian districts.
 #'
