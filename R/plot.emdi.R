@@ -270,11 +270,11 @@ plot.emdi <- function(x,
     }
     if (any(is.na(likelihoods))) {
       warning(strwrap(prefix = " ", initial = "",
-                      paste0("For some lambda in the chosen range, the
-                             likelihood does not converge. For these lambdas,
-                             no likelihood is plotted. Choose a different range
-                             to avoid this behaviour"
-                             )))
+                      "For some lambda in the chosen range, the
+                      likelihood does not converge. For these lambdas,
+                      no likelihood is plotted. Choose a different range
+                      to avoid this behaviour"
+                      ))
     }
     print((plotList[[5]] <- ggplot(
       data.frame(
