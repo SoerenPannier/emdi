@@ -7,7 +7,7 @@
 \alias{random.effects.ebp}
 \alias{ranef.fh}
 \alias{random.effects.fh}
-\title{Extract random effects of emdi objects}
+\title{Extract Random Effects of emdi Objects}
 \usage{
 \method{ranef}{ebp}(object, ...)
 
@@ -18,36 +18,41 @@
 \method{random.effects}{fh}(object, ...)
 }
 \arguments{
-\item{object}{an object of type "emdi", depending on the used method either "ebp" or "fh".}
+\item{object}{an object of type "emdi", depending on the used method either
+"ebp" or "fh".}
 
 \item{...}{additional arguments that are not used in this method.}
 }
 \value{
-A vector containing the estimated random effects at domain level is returned.
+A vector containing the estimated random effects at domain level is
+returned.
 }
 \description{
-Methods \code{ranef.ebp} and \code{ranef.fh} extract the 
+Methods \code{ranef.ebp} and \code{ranef.fh} extract the
 fixed effects from an emdi object of class "ebp" or "fh".
 }
 \details{
-The alias \code{random.effects} can also be used instead of \code{ranef}. 
-The generic function \code{ranef} is imported from package nlme and 
-re-exported to make the S3-methods available, even though the nlme package 
-itself is not loaded or attached. For default documentation, 
+The alias \code{random.effects} can also be used instead of
+\code{ranef}. The generic function \code{ranef} is imported from package
+nlme and re-exported to make the S3-methods available, even though the nlme
+package itself is not loaded or attached. For default documentation,
 see \code{\link[nlme]{random.effects}}.
 }
 \examples{
 \donttest{
 # Example for class ebp
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-na.rm = TRUE)
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+  na.rm = TRUE
+)
 
 ranef(emdi_model)
 }
 }
 \seealso{
-\code{\link{ebp}}, \code{\link{fh}}, \code{\link[nlme]{random.effects}}
+\code{\link{ebp}}, \code{\link{fh}},
+\code{\link[nlme]{random.effects}}
 }

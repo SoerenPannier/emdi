@@ -2,7 +2,7 @@
 % Please edit documentation in R/transformation_functions.R
 \name{data_transformation}
 \alias{data_transformation}
-\title{Tranforms dependent variables}
+\title{Tranforms Dependent Variables}
 \usage{
 data_transformation(fixed, smp_data, transformation, lambda)
 }
@@ -19,33 +19,33 @@ linear regression model, \code{smp_data} also needs to comprise the variable
 named in \code{smp_domains} (see \code{\link{ebp}}).}
 
 \item{transformation}{a character string. Five different transformation
-methods for the dependent variable can be chosen (i) no transformation ("no");
-(ii) natural log transformation ("log"); (iii) Box-Cox transformation
+methods for the dependent variable can be chosen (i) no transformation
+("no"); (ii) natural log transformation ("log"); (iii) Box-Cox transformation
 ("box.cox"); (iv) Dual transformation ("dual"); (v) Log-Shift transformation
 ("log.shift")..}
 
-\item{lambda}{a scalar parameter that determines the transformations with 
-transformation parameter. In case of no and natural log transformation 
+\item{lambda}{a scalar parameter that determines the transformations with
+transformation parameter. In case of no and natural log transformation
 \code{lambda} can be set to NULL.}
 }
 \value{
 a named list with two elements, a data frame containing the data set
-with transformed dependent variable (\code{transformed_data}) and a shift 
-parameter \code{shift} if present. In case of no transformation, the original 
+with transformed dependent variable (\code{transformed_data}) and a shift
+parameter \code{shift} if present. In case of no transformation, the original
 data frame is returned and the shift parameter is NULL.
 }
 \description{
-Function \code{data_transformation} transforms the dependent variable from 
-the formula object \code{fixed} in the given sample data set. Thus, it 
-returns the original sample data set with transformed dependent variable. 
-For the transformation five types can be chosen, particularly no, natural 
+Function \code{data_transformation} transforms the dependent variable from
+the formula object \code{fixed} in the given sample data set. Thus, it
+returns the original sample data set with transformed dependent variable.
+For the transformation five types can be chosen, particularly no, natural
 log, Box-Cox, Dual and Log-Shift transformation.
 }
 \details{
-For the natural log, Box-Cox and Dual transformation, the dependent variable 
-is shifted such that all values are greater than zero since the transformations 
-are not applicable for values equal to or smaller than zero. The shift is 
-calculated as follows: 
+For the natural log, Box-Cox and Dual transformation, the dependent
+variable is shifted such that all values are greater than zero since the
+transformations are not applicable for values equal to or smaller than zero.
+The shift is calculated as follows:
   \deqn{shift = |min(y)| + 1 \qquad if \qquad min(y) <= 0}
 Function \code{data_transformation} works as a wrapper function. This means
 that the function manages the selection of the three different transformation
@@ -56,9 +56,9 @@ functions \code{no_transform}, \code{log_transform} and \code{box_cox}.
 data("eusilcA_smp")
 
 # Transform dependent variable in sample data with Box-Cox transformation
-transform_data <- data_transformation(eqIncome ~ gender + eqsize + cash + 
-self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
-fam_allow + house_allow + cap_inv + tax_adj, eusilcA_smp, "box.cox", 0.7)
+transform_data <- data_transformation(eqIncome ~ gender + eqsize + cash +
+  self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
+  fam_allow + house_allow + cap_inv + tax_adj, eusilcA_smp, "box.cox", 0.7)
 }
 \seealso{
 \code{\link[nlme]{lme}}

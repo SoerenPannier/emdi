@@ -4,7 +4,7 @@
 \alias{step}
 \alias{step.default}
 \alias{step.fh}
-\title{Step function}
+\title{Step Function}
 \usage{
 step(object, scope, criteria, direction, trace, steps, ...)
 
@@ -21,63 +21,64 @@ step(object, scope, criteria, direction, trace, steps, ...)
 )
 }
 \arguments{
-\item{object}{an object of type "fh" that contains the chosen 
+\item{object}{an object of type "fh" that contains the chosen
 information criterion or of type "lm" for the default method.}
 
-\item{scope}{formula or a list including two formulas (\code{lower} and 
-\code{upper}) specifying the models considered in the step function. 
+\item{scope}{formula or a list including two formulas (\code{lower} and
+\code{upper}) specifying the models considered in the step function.
 Defaults to \code{NULL}.}
 
-\item{criteria}{a character string describing the model selection criterion. 
-Criteria that can be chosen are "\code{AIC}", "\code{AICc}", "\code{AICb1}", 
-"\code{AICb2}", "\code{BIC}", "\code{KIC}", "\code{KICc}", "\code{KICb1}", 
+\item{criteria}{a character string describing the model selection criterion.
+Criteria that can be chosen are "\code{AIC}", "\code{AICc}", "\code{AICb1}",
+"\code{AICb2}", "\code{BIC}", "\code{KIC}", "\code{KICc}", "\code{KICb1}",
 or "\code{KICb2}". Defaults to "\code{AIC}".}
 
-\item{direction}{a character string describing the direction of stepwise 
-algorithm. Directions that can be chosen are "\code{both}", "\code{backward}" 
-or "\code{forward}". Defaults to "\code{both}". If no \code{scope} argument is 
-provided, the default is "\code{backward}".}
+\item{direction}{a character string describing the direction of stepwise
+algorithm. Directions that can be chosen are "\code{both}",
+"\code{backward}" or "\code{forward}". Defaults to "\code{both}". If no
+\code{scope} argument is provided, the default is "\code{backward}".}
 
-\item{trace}{if \code{TRUE}, information about the single steps is 
+\item{trace}{if \code{TRUE}, information about the single steps is
 provided during the stepwise procedure. Defaults to \code{TRUE}.}
 
-\item{steps}{a number determining the maximum number of steps. Defaults to 1000.}
+\item{steps}{a number determining the maximum number of steps. Defaults to
+1000.}
 
 \item{...}{additional arguments that are not used in this method.}
 }
 \value{
-The return of \code{step} depends on the class of its argument. Please 
-refer to the documentation of the \code{\link[stats]{step}} function of the stats package for 
-details of the default method.
+The return of \code{step} depends on the class of its argument.
+Please refer to the documentation of the \code{\link[stats]{step}} function
+of the stats package for details of the default method.
 
-For the fh method information about the resulting "best" model due to 
-the chosen information criterion is provided: 
+For the fh method information about the resulting "best" model due
+to the chosen information criterion is provided:
 \item{\code{call}}{the function call that produced the object.}
-\item{\code{coefficients}}{data frame containing the estimated regression 
-coefficients, the standard errors and the \code{t}- and \code{p}-values of 
+\item{\code{coefficients}}{data frame containing the estimated regression
+coefficients, the standard errors and the \code{t}- and \code{p}-values of
 the explanatory variables.}
 }
 \description{
-This generic function selects a model by different criteria in a stepwise 
+This generic function selects a model by different criteria in a stepwise
 algorithm.
 }
 \details{
-The default method of the generic function \code{step} 
-applies the \code{\link[stats]{step}} function for \code{lm} models of the stats package. 
-Please refer to the documentation of the \code{step} function of 
-the stats package for details.
+The default method of the generic function \code{step}
+applies the \code{\link[stats]{step}} function for \code{lm} models of the
+stats package. Please refer to the documentation of the \code{step} function
+of the stats package for details.
 
-The information criteria "\code{AICc}", "\code{AICb1}", 
-"\code{AICb2}", "\code{KIC}", "\code{KICc}", "\code{KICb1}" and 
-"\code{KICb2}" are especially developed for Fay-Herriot models by 
-\cite{Marhuenda et al. (2014)}. They are based on a bootstrap 
-algorithm. If one of the criteria is chosen, make sure that the 
-bootstrap iterations (\code{B}) of the "fh" object are set to a positive number. 
-For some model extensions of the Fay-Herriot model only the "\code{AIC}" and 
-the "\code{BIC}" information criteria are provided and for some none 
-of the information criteria are defined. Check the model_select 
-component of the "fh" object (objectname$model$model_select). If no 
-criteria are provided, it is not possible to apply the stepwise 
+The information criteria "\code{AICc}", "\code{AICb1}",
+"\code{AICb2}", "\code{KIC}", "\code{KICc}", "\code{KICb1}" and
+"\code{KICb2}" are especially developed for Fay-Herriot models by
+\cite{Marhuenda et al. (2014)}. They are based on a bootstrap
+algorithm. If one of the criteria is chosen, make sure that the
+bootstrap iterations (\code{B}) of the "fh" object are set to a positive
+number. For some model extensions of the Fay-Herriot model only the
+"\code{AIC}" and the "\code{BIC}" information criteria are provided and for
+some none of the information criteria are defined. Check the model_select
+component of the "fh" object (objectname$model$model_select). If no
+criteria are provided, it is not possible to apply the stepwise
 variable selection algorithm.
 }
 \examples{
@@ -87,13 +88,19 @@ data("eusilcA_popAgg")
 data("eusilcA_smpAgg")
 
 # Combine sample and population data
-combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
-                             smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+combined_data <- combine_data(
+  pop_data = eusilcA_popAgg,
+  pop_domains = "Domain",
+  smp_data = eusilcA_smpAgg,
+  smp_domains = "Domain"
+)
 
 # Estimate FH model that contains all variables that should be considered
-fh_std <- fh(fixed = Mean ~ cash + self_empl + unempl_ben, vardir = "Var_Mean",
-combined_data = combined_data, domains = "Domain", method = "ml", 
-B = c(0,50))
+fh_std <- fh(
+  fixed = Mean ~ cash + self_empl + unempl_ben,
+  vardir = "Var_Mean", combined_data = combined_data,
+  domains = "Domain", method = "ml", B = c(0, 50)
+)
 
 # Example 1: Use default settings
 step(fh_std)
@@ -103,8 +110,8 @@ step(fh_std, criteria = "KICb2")
 }
 }
 \references{
-Marhuenda, Y., Morales, D. and Pardo, M.C. (2014). Information criteria for 
-Fay-Herriot model selection. Computational Statistics and Data Analysis 70, 
+Marhuenda, Y., Morales, D. and Pardo, M.C. (2014). Information criteria for
+Fay-Herriot model selection. Computational Statistics and Data Analysis 70,
 268-280.
 }
 \seealso{

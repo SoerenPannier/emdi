@@ -1,26 +1,30 @@
-#' Extract fixed effects from an emdi object
+#' Extract Fixed Effects from an emdi Object
 #'
-#' Methods \code{fixef.ebp} and \code{fixef.fh} extract the 
+#' Methods \code{fixef.ebp} and \code{fixef.fh} extract the
 #' fixed effects from an emdi object of class "ebp" or "fh".
-#' 
-#' @param object an object of type "emdi", depending on the used method either "ebp" or "fh".
+#'
+#' @param object an object of type "emdi", depending on the used method either
+#' "ebp" or "fh".
 #' @param ... additional arguments that are not used in this method.
-#' @return For classes "ebp" and "fh" a vector containing the fixed effects is 
-#' returned. 
-#' @details The alias \code{fixed.effects} can also be used instead of \code{fixef}. 
-#' The generic function \code{fixef} is imported from package nlme and 
-#' re-exported to make the S3-methods available, even though the nlme package 
-#' itself is not loaded or attached. For default documentation, 
+#' @return For classes "ebp" and "fh" a vector containing the fixed effects is
+#' returned.
+#' @details The alias \code{fixed.effects} can also be used instead of
+#' \code{fixef}. The generic function \code{fixef} is imported from package
+#' nlme and re-exported to make the S3-methods available, even though the nlme
+#' package itself is not loaded or attached. For default documentation,
 #' see \code{\link[nlme]{fixed.effects}}.
-#' @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link[nlme]{fixed.effects}}
+#' @seealso \code{\link{ebp}}, \code{\link{fh}},
+#' \code{\link[nlme]{fixed.effects}}
 #' @examples
 #' \donttest{
 #' # Example for class ebp
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-#' na.rm = TRUE)
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+#'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#'   na.rm = TRUE
+#' )
 #'
 #' fixef(emdi_model)
 #' }
@@ -67,30 +71,33 @@ fixed.effects.fh <- function(object, ...) {
   fixed_effects
 }
 
-#' Extract emdi object data
+#' Extract emdi Object Data
 #'
-#' Methods \code{getData.direct}, \code{getData.ebp} and \code{getData.fh} extract 
-#' the data frame used to fit the model.
-#' 
-#' @param object an object of type "emdi", depending on the method either "direct", 
-#' "ebp" or "fh".
+#' Methods \code{getData.direct}, \code{getData.ebp} and \code{getData.fh}
+#' extract the data frame used to fit the model.
+#'
+#' @param object an object of type "emdi", depending on the method either
+#' "direct", "ebp" or "fh".
 #' @param ... additional arguments that are not used in this method.
-#' @return Data frame used to fit the model. For classes "direct" and "ebp" the 
-#' (untransformed) sample data is returned. For class "fh" the combined data set is returned.
-#' @details The generic function \code{getData} is imported from package nlme and 
-#' re-exported to make the S3-methods available, even though the nlme package 
-#' itself is not loaded or attached. For default documentation, 
+#' @return Data frame used to fit the model. For classes "direct" and "ebp" the
+#' (untransformed) sample data is returned. For class "fh" the combined data
+#' set is returned.
+#' @details The generic function \code{getData} is imported from package nlme
+#' and re-exported to make the S3-methods available, even though the nlme
+#' package itself is not loaded or attached. For default documentation,
 #' see \code{\link[nlme]{getData}}.
 #' @seealso \code{\link{direct}}, \code{\link{ebp}},
 #' \code{\link{fh}}, \code{\link[nlme]{getData}}
 #' @examples
 #' \donttest{
 #' # Example for class direct
-#' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
-#' smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
-#' boot_type = "naive", B = 50, seed = 123, X_calib = NULL, totals = NULL, 
-#' na.rm = TRUE)
-#' 
+#' emdi_direct <- direct(
+#'   y = "eqIncome", smp_data = eusilcA_smp,
+#'   smp_domains = "district", weights = "weight", threshold = 11064.82,
+#'   var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL,
+#'   totals = NULL, na.rm = TRUE
+#' )
+#'
 #' getData(emdi_direct)
 #' }
 #' @name getData
@@ -107,48 +114,54 @@ getData.direct <- function(object, ...) {
 }
 
 #' @export getData.ebp
-#' @export 
+#' @export
 #' @rdname getData
 getData.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
   if (object$transformation != "no") {
-    message('The untransformed sample data set of the ebp object is returned. \n \n')
+    message(strwrap(prefix = " ", initial = "",
+                    "The untransformed sample data set of the ebp object
+                    is returned."))
   }
   object$framework$smp_data
 }
 
 #' @export getData.fh
-#' @export 
+#' @export
 #' @rdname getData
 getData.fh <- function(object, ...) {
   throw_class_error(object, "fh")
-  message('The combined data set (combined_data) of the fh object is returned. \n \n')
+  message(strwrap(prefix = " ", initial = "",
+                  "The combined data set (combined_data) of the fh object
+                  is returned."))
   object$framework$combined_data
 }
 
-#' Extract grouping factors from an emdi object
+#' Extract Grouping Factors from an emdi Object
 #'
-#' Methods \code{getGroups.direct}, \code{getGroups.ebp} and \code{getGroups.fh} 
-#' extract grouping factors from an emdi object.
-#' 
-#' @param object an object of type "emdi", depending on the method either "direct", 
-#' "ebp" or "fh".
+#' Methods \code{getGroups.direct}, \code{getGroups.ebp} and
+#' \code{getGroups.fh} extract grouping factors from an emdi object.
+#'
+#' @param object an object of type "emdi", depending on the method either
+#' "direct", "ebp" or "fh".
 #' @param ... additional arguments that are not used in this method.
 #' @return A vector containing the grouping factors.
-#' @details The generic function \code{getGroups} is imported from package nlme and 
-#' re-exported to make the S3-methods available, even though the nlme package 
-#' itself is not loaded or attached. For default documentation, 
+#' @details The generic function \code{getGroups} is imported from package nlme
+#' and re-exported to make the S3-methods available, even though the nlme
+#' package itself is not loaded or attached. For default documentation,
 #' see \code{\link[nlme]{getGroups}}.
 #' @seealso \code{\link{direct}}, \code{\link{ebp}},
 #' \code{\link{fh}}, \code{\link[nlme]{getGroups}}
 #' @examples
 #' \donttest{
 #' # Example for class direct
-#' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
-#' smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
-#' boot_type = "naive", B = 50, seed = 123, X_calib = NULL, totals = NULL, 
-#' na.rm = TRUE)
-#' 
+#' emdi_direct <- direct(
+#'   y = "eqIncome", smp_data = eusilcA_smp,
+#'   smp_domains = "district", weights = "weight", threshold = 11064.82,
+#'   var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL,
+#'   totals = NULL, na.rm = TRUE
+#' )
+#'
 #' getGroups(emdi_direct)
 #' }
 #' @name getGroups
@@ -181,31 +194,33 @@ getGroups.fh <- function(object, ...) {
 }
 
 
-#' Extract grouping formula from an emdi object
+#' Extract Grouping Formula from an emdi Object
 #'
-#' Methods \code{getGroupsFormula.direct}, \code{getGroupsFormula.ebp} and 
-#' \code{getGroupsFormula.fh} extract the grouping formula from an 
+#' Methods \code{getGroupsFormula.direct}, \code{getGroupsFormula.ebp} and
+#' \code{getGroupsFormula.fh} extract the grouping formula from an
 #' emdi object.
-#' 
-#' @param object an object of type "emdi", depending on the method either "direct", 
-#' "ebp" or "fh".
+#'
+#' @param object an object of type "emdi", depending on the method either
+#' "direct", "ebp" or "fh".
 #' @param ... additional arguments that are not used in this method.
 #' @return A one-sided formula.
-#' @details The generic function \code{getGroupsFormula} is imported from package nlme and 
-#' re-exported to make the S3-methods available, even though the nlme package 
-#' itself is not loaded or attached. For default documentation, 
+#' @details The generic function \code{getGroupsFormula} is imported from
+#' package nlme and re-exported to make the S3-methods available, even though
+#' the nlme package itself is not loaded or attached. For default documentation,
 #' see \code{\link[nlme]{getGroupsFormula}}.
 #' @seealso \code{\link{direct}}, \code{\link{ebp}},
 #' \code{\link{fh}}, \code{\link[nlme]{getGroupsFormula}}
 #' @examples
 #' \donttest{
 #' # Example for class ebp
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-#' na.rm = TRUE)
-#' 
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+#'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#'   na.rm = TRUE
+#' )
+#'
 #' getGroupsFormula(emdi_model)
 #' }
 #' @name getGroupsFormula
@@ -237,29 +252,32 @@ getGroupsFormula.fh <- function(object, ...) {
   eval(parse(text = paste("~", object$framework$domains)))
 }
 
-#' Extract response variable from an emdi object
+#' Extract Response Variable from an emdi Object
 #'
-#' Methods \code{getResponse.direct}, \code{getResponse.ebp} and \code{getResponse.fh} 
-#' extract the response variable from an emdi object.
-#' 
-#' @param object an object of type "emdi", depending on the method either "direct", 
-#' "ebp" or "fh".
+#' Methods \code{getResponse.direct}, \code{getResponse.ebp} and
+#' \code{getResponse.fh} extract the response variable from an emdi object.
+#'
+#' @param object an object of type "emdi", depending on the method either
+#' "direct", "ebp" or "fh".
 #' @param ... additional arguments that are not used in this method.
 #' @return Vector containing the response variable.
-#' @details The generic function \code{getResponse} is imported from package nlme and 
-#' re-exported to make the S3-methods available, even though the nlme package 
-#' itself is not loaded or attached. For default documentation, 
-#' see \code{\link[nlme]{getResponse}}. 
-#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}, \code{\link[nlme]{getResponse}}
+#' @details The generic function \code{getResponse} is imported from package
+#' nlme and re-exported to make the S3-methods available, even though the nlme
+#' package itself is not loaded or attached. For default documentation,
+#' see \code{\link[nlme]{getResponse}}.
+#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}},
+#' \code{\link[nlme]{getResponse}}
 #' @examples
 #' \donttest{
 #' # Example for class ebp
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-#' na.rm = TRUE)
-#' 
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+#'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#'   na.rm = TRUE
+#' )
+#'
 #' getResponse(emdi_model)
 #' }
 #' @name getResponse
@@ -271,9 +289,8 @@ getResponse
 #' @export
 #' @rdname getResponse
 getResponse.direct <- function(object, ...) {
-  throw_class_error(object, "direct")  
+  throw_class_error(object, "direct")
   object$framework$smp_data[, object$call$y]
-  
 }
 
 #' @export getResponse.ebp
@@ -293,47 +310,53 @@ getResponse.fh <- function(object, ...) {
 }
 
 
-#' Extract variance-covariance matrix from an emdi object
+#' Extract Variance-covariance Matrix from an emdi Object
 #'
-#' Methods \code{getVarCov.ebp} and \code{getVarCov.fh} extract the 
+#' Methods \code{getVarCov.ebp} and \code{getVarCov.fh} extract the
 #' variance-covariance matrix from a fitted model of class "ebp" or "fh".
-# 
 #' @param obj an object of type "emdi", either "ebp" or "fh".
-#' @param individuals vector of levels of the in-sample domains can be specified 
-#' for the types "\code{conditional}" or "\code{marginal}".
-#' @param type a character that determines the type of variance-covariance matrix. 
-#' Types that can be chosen
+#' @param individuals vector of levels of the in-sample domains can be
+#' specified for the types "\code{conditional}" or "\code{marginal}".
+#' @param type a character that determines the type of variance-covariance
+#' matrix. Types that can be chosen
 #' (i) random-effects variance-covariance matrix ("\code{random.effects}"),
-#' (ii) conditional variance-covariance matrix ("\code{conditional}"), 
-#' (iii) marginal variance-covariance matrix ("\code{marginal}"). Defaults to 
+#' (ii) conditional variance-covariance matrix ("\code{conditional}"),
+#' (iii) marginal variance-covariance matrix ("\code{marginal}"). Defaults to
 #' "\code{random.effects}".
 #' @param ... additional arguments that are not used in this method.
-#' @return A variance-covariance matrix or a list of variance-covariance matrices, 
-#' if more than one individual is selected. For method \code{getVarCov.ebp}, the 
-#' dimensions of the matrices are 1 x 1 for type "\code{random.effects}" and 
-#' number of in-sample domains x number of in-sample domains for types 
-#' "\code{conditional}" and "\code{marginal}". For method \code{getVarCov.fh}, 
-#' for all types the dimensions of the matrices are 1 x 1. For type "\code{marginal}" 
-#' the diagonal elements of the variance covariances matrices are returned for the chosen 
-#' individual. Please note, if the correlation argument of the "fh" object is set to 
-#' spatial, the variance covariance matrix has non-zero off-diagonal elements, 
-#' because the assumption of independency of the error terms does not hold. For 
-#' the non-spatial models the off-diagonal elements are zero. 
-#' @details The generic function \code{getVarCov} is imported from package nlme and 
-#' re-exported to make the S3-methods available, even though the nlme package 
-#' itself is not loaded or attached. For default documentation, 
-#' see \code{\link[nlme]{getVarCov}}. 
+#' @return A variance-covariance matrix or a list of variance-covariance
+#' matrices, if more than one individual is selected. For method
+#' \code{getVarCov.ebp}, the dimensions of the matrices are 1 x 1 for type
+#' "\code{random.effects}" and number of in-sample domains x number of
+#' in-sample domains for types "\code{conditional}" and "\code{marginal}". For
+#' method \code{getVarCov.fh}, for all types the dimensions of the matrices are
+#' 1 x 1. For type "\code{marginal}" the diagonal elements of the variance
+#' covariances matrices are returned for the chosen individual. Please note, if
+#' the correlation argument of the "fh" object is set to spatial, the variance
+#' covariance matrix has non-zero off-diagonal elements, because the assumption
+#' of independence of the error terms does not hold. For the non-spatial models,
+#' the off-diagonal elements are zero.
+#' @details The generic function \code{getVarCov} is imported from package nlme
+#' and re-exported to make the S3-methods available, even though the nlme
+#' package itself is not loaded or attached. For default documentation,
+#' see \code{\link[nlme]{getVarCov}}.
 #' @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link[nlme]{getVarCov}}
 #' @examples
 #' \donttest{
 #' # Example for class fh
-#' combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
-#'                              smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+#' combined_data <- combine_data(
+#'   pop_data = eusilcA_popAgg,
+#'   pop_domains = "Domain",
+#'   smp_data = eusilcA_smpAgg,
+#'   smp_domains = "Domain"
+#' )
 #'
-#' fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-#'              combined_data = combined_data, domains = "Domain", method = "ml", 
-#'              MSE = TRUE)
-#' 
+#' fh_std <- fh(
+#'   fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+#'   combined_data = combined_data, domains = "Domain",
+#'   method = "ml", MSE = TRUE
+#' )
+#'
 #' getVarCov(fh_std)
 #' }
 #' @name getVarCov
@@ -347,16 +370,16 @@ getVarCov
 
 getVarCov.ebp <- function(obj, individuals = 1, type = "random.effects", ...) {
   throw_class_error(obj, "ebp")
-  
-  if (is.null(type) || !(type == "random.effects" 
-                         || type == "conditional" 
-                         || type == "marginal")) {
-    stop("The three options for type are ''random.effects'', ''conditional'' 
-         or ''marginal''.")
+
+  if (is.null(type) || !(type == "random.effects" ||
+    type == "conditional" ||
+    type == "marginal")) {
+    stop(strwrap(prefix = " ", initial = "",
+                 "The three options for type are ''random.effects'',
+                 ''conditional'' or ''marginal''."))
   }
-  
+
   getVarCov(obj$model, individuals = individuals, type = type)
-  
 }
 
 #' @export getVarCov.fh
@@ -365,191 +388,279 @@ getVarCov.ebp <- function(obj, individuals = 1, type = "random.effects", ...) {
 
 getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
   throw_class_error(obj, "fh")
-  
-  if (is.null(type) || !(type == "random.effects" 
-                         || type == "conditional" 
-                         || type == "marginal")) {
-    stop("The three options for type are ''random.effects'', ''conditional'' 
-         or ''marginal''.")
+
+  if (is.null(type) || !(type == "random.effects" ||
+    type == "conditional" ||
+    type == "marginal")) {
+    stop(strwrap(prefix = " ", initial = "",
+                 "The three options for type are ''random.effects'',
+                 ''conditional'' or ''marginal''."))
   }
-  
-  if (type == "random.effects"){
-    if (obj$model$correlation == "spatial"){
-      result <- list(varmat = matrix(obj$model$variance$variance, nrow = 1, ncol = 1, 
-                                     dimnames = list(c("(Intercept)"), c("(Intercept)"))),
-                     std.dev = sqrt(obj$model$variance$variance))
+
+  if (type == "random.effects") {
+    if (obj$model$correlation == "spatial") {
+      result <- list(
+        varmat = matrix(obj$model$variance$variance,
+          nrow = 1,
+          ncol = 1,
+          dimnames = list(
+            c("(Intercept)"),
+            c("(Intercept)")
+          )
+        ),
+        std.dev = sqrt(obj$model$variance$variance)
+      )
     } else {
-      result <- list(varmat = matrix(obj$model$variance, nrow = 1, ncol = 1, 
-                                     dimnames = list(c("(Intercept)"), c("(Intercept)"))),
-                     std.dev = sqrt(obj$model$variance))
+      result <- list(
+        varmat = matrix(obj$model$variance,
+          nrow = 1, ncol = 1,
+          dimnames = list(
+            c("(Intercept)"),
+            c("(Intercept)")
+          )
+        ),
+        std.dev = sqrt(obj$model$variance)
+      )
     }
-    
+
     class(result) <- c("getVarCov.fh", "VarCov_random")
   } else {
     result <- list()
-    
-    for(i in individuals){
-      
+
+    for (i in individuals) {
       if (!(is.numeric(i) || is.character(i))) {
-        stop("individuals must be numeric or a character specifying a level of a 
-         in-sample domain.")
+        stop("individuals must be numeric or a character specifying a level of
+             a in-sample domain.")
       }
       if (is.numeric(i)) {
         i <- as.character(obj$ind$Domain[obj$ind$Out == 0][i])
       }
       if (!(i %in% obj$ind$Domain[obj$ind$Out == 0])) {
-        stop(paste0("No variance-covariance matrix is available. Individual '",
-                    i, "' is not contained in the sample and therefore not used for the model fitting."))
+        stop(strwrap(prefix = " ", initial = "",
+                     paste0("No variance-covariance matrix is available.
+                            Individual '", i, "' is not contained in the sample
+                            and therefore not used for the model fitting."
+                            )))
       }
-      
-      if (type == "conditional"){
+
+      if (type == "conditional") {
         D <- diag(1, obj$framework$N_dom_smp)
-        
-        if (obj$method$method == "me"){
+
+        if (obj$method$method == "me") {
           Beta.hat.tCiBeta.hat <- NULL
-          for(j in seq_len(obj$framework$N_dom_smp)){
-            Beta.hat.tCiBeta.hat[j] <- 
-              t(obj$model$coefficients$coefficients)%*%obj$framework$Ci[,,j]%*%obj$model$coefficients$coefficients
+          for (j in seq_len(obj$framework$N_dom_smp)) {
+            Beta.hat.tCiBeta.hat[j] <-
+              t(obj$model$coefficients$coefficients) %*%
+              obj$framework$Ci[, , j] %*% obj$model$coefficients$coefficients
           }
-          V <- matrix(diag(obj$framework$vardir) + diag(as.numeric(Beta.hat.tCiBeta.hat)), 
-                      nrow = obj$framework$N_dom_smp, ncol = obj$framework$N_dom_smp,
-                      dimnames = list(obj$ind$Domain[obj$ind$Out== 0], 
-                                      obj$ind$Domain[obj$ind$Out== 0]))
-          result[[as.character(i)]] <- list(varmat = matrix(V[i, i], 
-                                                            nrow = 1, ncol = 1, dimnames = list(c("1"), c("1"))),
-                                            std.dev = sqrt(V[i, i]),
-                                            domain = i)
+          V <- matrix(diag(obj$framework$vardir) +
+            diag(as.numeric(Beta.hat.tCiBeta.hat)),
+          nrow = obj$framework$N_dom_smp,
+          ncol = obj$framework$N_dom_smp,
+          dimnames = list(
+            obj$ind$Domain[obj$ind$Out == 0],
+            obj$ind$Domain[obj$ind$Out == 0]
+          )
+          )
+          result[[as.character(i)]] <- list(
+            varmat = matrix(V[i, i],
+              nrow = 1,
+              ncol = 1,
+              dimnames =
+                list(
+                  c("1"),
+                  c("1")
+                )
+            ),
+            std.dev = sqrt(V[i, i]),
+            domain = i
+          )
         } else {
-          V <- matrix(diag(obj$framework$vardir), 
-                      nrow = obj$framework$N_dom_smp, ncol = obj$framework$N_dom_smp,
-                      dimnames = list(obj$ind$Domain[obj$ind$Out== 0], 
-                                      obj$ind$Domain[obj$ind$Out== 0]))
-          result[[as.character(i)]] <- list(varmat = matrix(V[i, i], 
-                                                            nrow = 1, ncol = 1, dimnames = list(c("1"), c("1"))),
-                                            std.dev = sqrt(V[i, i]),
-                                            domain = i)
+          V <- matrix(diag(obj$framework$vardir),
+            nrow = obj$framework$N_dom_smp,
+            ncol = obj$framework$N_dom_smp,
+            dimnames = list(
+              obj$ind$Domain[obj$ind$Out == 0],
+              obj$ind$Domain[obj$ind$Out == 0]
+            )
+          )
+          result[[as.character(i)]] <- list(
+            varmat = matrix(V[i, i],
+              nrow = 1,
+              ncol = 1,
+              dimnames =
+                list(
+                  c("1"),
+                  c("1")
+                )
+            ),
+            std.dev = sqrt(V[i, i]),
+            domain = i
+          )
         }
         class(result) <- c("getVarCov.fh", "VarCov_conditional")
-      } else if (type == "marginal"){
+      } else if (type == "marginal") {
         D <- diag(1, obj$framework$N_dom_smp)
-        
-        if (obj$model$correlation == "spatial"){
+
+        if (obj$model$correlation == "spatial") {
           Wt <- t(obj$framework$W)
-          A <- solve((D - obj$model$variance$correlation*Wt)%*%
-                       (D - obj$model$variance$correlation*obj$framework$W))
-          G <- obj$model$variance$variance*A
-          # Total variance-covariance matrix 
-          V <- matrix(G + D*obj$framework$vardir,
-                      nrow = obj$framework$N_dom_smp, ncol = obj$framework$N_dom_smp,
-                      dimnames = list(obj$ind$Domain[obj$ind$Out== 0], 
-                                      obj$ind$Domain[obj$ind$Out== 0]))
-          result[[as.character(i)]] <- list(varmat = matrix(V[i, i], 
-                                                            nrow = 1, ncol = 1, 
-                                                            dimnames = list(c("1"), c("1"))),
-                                            std.dev = sqrt(V[i, i]),
-                                            domain = i,
-                                            correlation = "spatial")
+          A <- solve((D - obj$model$variance$correlation * Wt) %*%
+            (D - obj$model$variance$correlation * obj$framework$W))
+          G <- obj$model$variance$variance * A
+          # Total variance-covariance matrix
+          V <- matrix(G + D * obj$framework$vardir,
+            nrow = obj$framework$N_dom_smp,
+            ncol = obj$framework$N_dom_smp,
+            dimnames = list(
+              obj$ind$Domain[obj$ind$Out == 0],
+              obj$ind$Domain[obj$ind$Out == 0]
+            )
+          )
+          result[[as.character(i)]] <- list(
+            varmat = matrix(V[i, i],
+              nrow = 1,
+              ncol = 1,
+              dimnames =
+                list(
+                  c("1"),
+                  c("1")
+                )
+            ),
+            std.dev = sqrt(V[i, i]),
+            domain = i,
+            correlation = "spatial"
+          )
         } else if (obj$method$method == "me") {
           Beta.hat.tCiBeta.hat <- NULL
-          for(j in seq_len(obj$framework$N_dom_smp)){
-            Beta.hat.tCiBeta.hat[j] <- 
-              t(obj$model$coefficients$coefficients)%*%obj$framework$Ci[,,j]%*%obj$model$coefficients$coefficients
+          for (j in seq_len(obj$framework$N_dom_smp)) {
+            Beta.hat.tCiBeta.hat[j] <-
+              t(obj$model$coefficients$coefficients) %*%
+              obj$framework$Ci[, , j] %*% obj$model$coefficients$coefficients
           }
-          # Total variance-covariance matrix - only values on the diagonal due to
-          # independence of error terms
-          V <- matrix(obj$model$variance * D%*%t(D) + diag(obj$framework$vardir) + 
-            diag(as.numeric(Beta.hat.tCiBeta.hat)), 
-            nrow = obj$framework$N_dom_smp, ncol = obj$framework$N_dom_smp,
-            dimnames = list(obj$ind$Domain[obj$ind$Out== 0], 
-                            obj$ind$Domain[obj$ind$Out== 0]))
-          result[[as.character(i)]] <- list(varmat = matrix(V[i, i], 
-                                                            nrow = 1, ncol = 1, 
-                                                            dimnames = list(c("1"), c("1"))),
-                                            std.dev = sqrt(V[i, i]),
-                                            domain = i,
-                                            correlation = "no")
+          # Total variance-covariance matrix - only values on the diagonal due
+          # to independence of error terms
+          V <- matrix(obj$model$variance * D %*% t(D) +
+            diag(obj$framework$vardir) +
+            diag(as.numeric(Beta.hat.tCiBeta.hat)),
+          nrow = obj$framework$N_dom_smp, ncol = obj$framework$N_dom_smp,
+          dimnames = list(
+            obj$ind$Domain[obj$ind$Out == 0],
+            obj$ind$Domain[obj$ind$Out == 0]
+          )
+          )
+          result[[as.character(i)]] <- list(
+            varmat = matrix(V[i, i],
+              nrow = 1,
+              ncol = 1,
+              dimnames =
+                list(
+                  c("1"),
+                  c("1")
+                )
+            ),
+            std.dev = sqrt(V[i, i]),
+            domain = i,
+            correlation = "no"
+          )
         } else {
-          # Total variance-covariance matrix - only values on the diagonal due to
-          # independence of error terms
-          V <- matrix(obj$model$variance * D%*%t(D) + diag(as.numeric(obj$framework$vardir)),
-                      nrow = obj$framework$N_dom_smp, ncol = obj$framework$N_dom_smp,
-                      dimnames = list(obj$ind$Domain[obj$ind$Out== 0], 
-                                      obj$ind$Domain[obj$ind$Out== 0]))
-          result[[as.character(i)]] <- list(varmat = matrix(V[i, i], 
-                                                            nrow = 1, ncol = 1, 
-                                                            dimnames = list(c("1"), c("1"))),
-                                            std.dev = sqrt(V[i, i]),
-                                            domain = i,
-                                            correlation = "no")
+          # Total variance-covariance matrix - only values on the diagonal due
+          # to independence of error terms
+          V <- matrix(obj$model$variance * D %*% t(D) +
+            diag(as.numeric(obj$framework$vardir)),
+          nrow = obj$framework$N_dom_smp,
+          ncol = obj$framework$N_dom_smp,
+          dimnames = list(
+            obj$ind$Domain[obj$ind$Out == 0],
+            obj$ind$Domain[obj$ind$Out == 0]
+          )
+          )
+          result[[as.character(i)]] <- list(
+            varmat = matrix(V[i, i],
+              nrow = 1, ncol = 1,
+              dimnames =
+                list(
+                  c("1"),
+                  c("1")
+                )
+            ),
+            std.dev = sqrt(V[i, i]),
+            domain = i,
+            correlation = "no"
+          )
         }
-        
+
         class(result) <- c("getVarCov.fh", "VarCov_marginal")
       }
-    } 
+    }
   }
   result
 }
 
 #' @export
 print.getVarCov.fh <- function(x, ...) {
-  
   if (inherits(x, "VarCov_random")) {
     cat("Random effects variance covariance matrix\n")
     print(x$varmat)
-    cat("  Standard Deviations:", round(x$std.dev, 2),"\n")
+    cat("  Standard Deviations:", round(x$std.dev, 2), "\n")
   } else if (inherits(x, "VarCov_conditional")) {
-    for (i in names(x)){
+    for (i in names(x)) {
       cat("domain", as.character(x[[i]]$domain), "\n")
       cat("Conditional variance covariance matrix\n")
       print(x[[i]]$varmat)
-      cat("  Standard Deviations:", round(x[[i]]$std.dev, 2),"\n")
+      cat("  Standard Deviations:", round(x[[i]]$std.dev, 2), "\n")
     }
-  } else if(inherits(x, "VarCov_marginal")){
-    for (i in names(x)){
+  } else if (inherits(x, "VarCov_marginal")) {
+    for (i in names(x)) {
       cat("domain", as.character(x[[i]]$domain), "\n")
       cat("Marginal variance covariance matrix\n")
       print(x[[i]]$varmat)
-      cat("  Standard Deviations:", round(x[[i]]$std.dev, 2),"\n")
+      cat("  Standard Deviations:", round(x[[i]]$std.dev, 2), "\n")
     }
-    if (x[[1]]$correlation == "spatial"){
+    if (x[[1]]$correlation == "spatial") {
       cat("\n")
-      cat('Please note, if the correlation argument of the fh object is set to 
-      spatial, the variance covariance matrix has non-zero off-diagonal elements, 
-      because the assumption of independency of the error terms does not hold. The diagonal 
-      elements are returned.')
+      cat(strwrap(prefix = " ", initial = "",
+                  "Please note, if the correlation argument of the fh object is
+                  set to spatial, the variance covariance matrix has non-zero
+                  off-diagonal elements, because the assumption of independence
+                  of the error terms does not hold. The diagonal elements are
+                  returned."))
     }
   }
 }
 
-#' Confidence intervals on coefficients of an emdi object
+#' Confidence Intervals on Coefficients of an emdi Object
 #'
-#' Methods \code{intervals.ebp} and \code{intervals.fh} provide the approximate 
+#' Methods \code{intervals.ebp} and \code{intervals.fh} provide the approximate
 #' confidence intervals on the coefficients (fixed effects) of an emdi object.
-#' 
-#' @param object an object of type "emdi", depending on the method either "ebp" 
+#'
+#' @param object an object of type "emdi", depending on the method either "ebp"
 #' or "fh".
-#' @param level an optional numeric value with the confidence level for the intervals. 
-#' Defaults to 0.95.
-#' @param parm vector of names to specify which parameters are to be given confidence 
-#' intervals. If \code{NULL}, all parameters are taken into account. Defaults to \code{NULL}.
+#' @param level an optional numeric value with the confidence level for the
+#' intervals. Defaults to 0.95.
+#' @param parm vector of names to specify which parameters are to be given
+#' confidence intervals. If \code{NULL}, all parameters are taken into account.
+#' Defaults to \code{NULL}.
 #' @param ... additional arguments that are not used in this method.
-#' @return A matrix with rows corresponding to the parameters and columns 
-#' containing the lower confidence limits (lower), the 
+#' @return A matrix with rows corresponding to the parameters and columns
+#' containing the lower confidence limits (lower), the
 #' estimated values (est.), and upper confidence limits (upper).
-#' @details The generic function \code{intervals} is imported from package nlme and 
-#' re-exported to make the S3-methods available, even though the nlme package 
-#' itself is not loaded or attached. For default documentation, 
-#' see \code{\link[nlme]{intervals}}. 
-#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}, \code{\link[nlme]{intervals}}
+#' @details The generic function \code{intervals} is imported from package nlme
+#' and re-exported to make the S3-methods available, even though the nlme
+#' package itself is not loaded or attached. For default documentation,
+#' see \code{\link[nlme]{intervals}}.
+#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}},
+#' \code{\link[nlme]{intervals}}
 #' @examples
 #' \donttest{
 #' # Example for class ebp
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-#' na.rm = TRUE)
-#' 
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+#'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#'   na.rm = TRUE
+#' )
+#'
 #' intervals(emdi_model)
 #' }
 #' @name intervals
@@ -559,7 +670,7 @@ intervals
 
 #' @export intervals.ebp
 #' @export
-#' @rdname intervals 
+#' @rdname intervals
 intervals.ebp <- function(object, level = 0.95, parm = NULL, ...) {
   throw_class_error(object, "ebp")
   if (!is.null(parm)) {
@@ -568,7 +679,6 @@ intervals.ebp <- function(object, level = 0.95, parm = NULL, ...) {
   } else {
     intervals(object$model, level = level)$fixed
   }
-  
 }
 
 #' @export intervals.fh
@@ -577,44 +687,51 @@ intervals.ebp <- function(object, level = 0.95, parm = NULL, ...) {
 intervals.fh <- function(object, level = 0.95, parm = NULL, ...) {
   throw_class_error(object, "fh")
   coefmat <- object$model$coefficients
-  
-  coefs <- coefmat[,1]
-  stds <- coefmat[,2]
+
+  coefs <- coefmat[, 1]
+  stds <- coefmat[, 2]
   dist <- qnorm(p = (1 - level) / 2, 0, stds)
-  ret_value <- data.frame(lower = coefs + dist,
-                          est. = coefs,         
-                          upper = coefs + abs(dist),
-                          row.names = row.names(coefmat))
+  ret_value <- data.frame(
+    lower = coefs + dist,
+    est. = coefs,
+    upper = coefs + abs(dist),
+    row.names = row.names(coefmat)
+  )
   if (is.null(parm)) {
-    as.matrix(ret_value)  
+    as.matrix(ret_value)
   } else {
     as.matrix(ret_value[parm, ])
   }
 }
 
-#' Extract random effects of emdi objects
+#' Extract Random Effects of emdi Objects
 #'
-#' Methods \code{ranef.ebp} and \code{ranef.fh} extract the 
+#' Methods \code{ranef.ebp} and \code{ranef.fh} extract the
 #' fixed effects from an emdi object of class "ebp" or "fh".
 #'
-#' @param object an object of type "emdi", depending on the used method either "ebp" or "fh".
+#' @param object an object of type "emdi", depending on the used method either
+#' "ebp" or "fh".
 #' @param ... additional arguments that are not used in this method.
-#' @return A vector containing the estimated random effects at domain level is returned.
-#' @details The alias \code{random.effects} can also be used instead of \code{ranef}. 
-#' The generic function \code{ranef} is imported from package nlme and 
-#' re-exported to make the S3-methods available, even though the nlme package 
-#' itself is not loaded or attached. For default documentation, 
+#' @return A vector containing the estimated random effects at domain level is
+#' returned.
+#' @details The alias \code{random.effects} can also be used instead of
+#' \code{ranef}. The generic function \code{ranef} is imported from package
+#' nlme and re-exported to make the S3-methods available, even though the nlme
+#' package itself is not loaded or attached. For default documentation,
 #' see \code{\link[nlme]{random.effects}}.
-#' @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link[nlme]{random.effects}}
+#' @seealso \code{\link{ebp}}, \code{\link{fh}},
+#' \code{\link[nlme]{random.effects}}
 #' @examples
 #' \donttest{
 #' # Example for class ebp
-#' emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-#' unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-#' house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-#' pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-#' na.rm = TRUE)
-#' 
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+#'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#'   na.rm = TRUE
+#' )
+#'
 #' ranef(emdi_model)
 #' }
 #' @name ranef
@@ -659,4 +776,3 @@ random.effects.fh <- function(object, ...) {
   row.names(random_effects) <- object$ind$Domain[object$ind$Out == 0]
   random_effects
 }
-

@@ -5,7 +5,7 @@
 \alias{getResponse.direct}
 \alias{getResponse.ebp}
 \alias{getResponse.fh}
-\title{Extract response variable from an emdi object}
+\title{Extract Response Variable from an emdi Object}
 \usage{
 \method{getResponse}{direct}(object, ...)
 
@@ -14,8 +14,8 @@
 \method{getResponse}{fh}(object, ...)
 }
 \arguments{
-\item{object}{an object of type "emdi", depending on the method either "direct", 
-"ebp" or "fh".}
+\item{object}{an object of type "emdi", depending on the method either
+"direct", "ebp" or "fh".}
 
 \item{...}{additional arguments that are not used in this method.}
 }
@@ -23,27 +23,30 @@
 Vector containing the response variable.
 }
 \description{
-Methods \code{getResponse.direct}, \code{getResponse.ebp} and \code{getResponse.fh} 
-extract the response variable from an emdi object.
+Methods \code{getResponse.direct}, \code{getResponse.ebp} and
+\code{getResponse.fh} extract the response variable from an emdi object.
 }
 \details{
-The generic function \code{getResponse} is imported from package nlme and 
-re-exported to make the S3-methods available, even though the nlme package 
-itself is not loaded or attached. For default documentation, 
+The generic function \code{getResponse} is imported from package
+nlme and re-exported to make the S3-methods available, even though the nlme
+package itself is not loaded or attached. For default documentation,
 see \code{\link[nlme]{getResponse}}.
 }
 \examples{
 \donttest{
 # Example for class ebp
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-na.rm = TRUE)
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+  na.rm = TRUE
+)
 
 getResponse(emdi_model)
 }
 }
 \seealso{
-\code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}, \code{\link[nlme]{getResponse}}
+\code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}},
+\code{\link[nlme]{getResponse}}
 }

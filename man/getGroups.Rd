@@ -5,7 +5,7 @@
 \alias{getGroups.direct}
 \alias{getGroups.ebp}
 \alias{getGroups.fh}
-\title{Extract grouping factors from an emdi object}
+\title{Extract Grouping Factors from an emdi Object}
 \usage{
 \method{getGroups}{direct}(object, ...)
 
@@ -14,8 +14,8 @@
 \method{getGroups}{fh}(object, ...)
 }
 \arguments{
-\item{object}{an object of type "emdi", depending on the method either "direct", 
-"ebp" or "fh".}
+\item{object}{an object of type "emdi", depending on the method either
+"direct", "ebp" or "fh".}
 
 \item{...}{additional arguments that are not used in this method.}
 }
@@ -23,22 +23,24 @@
 A vector containing the grouping factors.
 }
 \description{
-Methods \code{getGroups.direct}, \code{getGroups.ebp} and \code{getGroups.fh} 
-extract grouping factors from an emdi object.
+Methods \code{getGroups.direct}, \code{getGroups.ebp} and
+\code{getGroups.fh} extract grouping factors from an emdi object.
 }
 \details{
-The generic function \code{getGroups} is imported from package nlme and 
-re-exported to make the S3-methods available, even though the nlme package 
-itself is not loaded or attached. For default documentation, 
+The generic function \code{getGroups} is imported from package nlme
+and re-exported to make the S3-methods available, even though the nlme
+package itself is not loaded or attached. For default documentation,
 see \code{\link[nlme]{getGroups}}.
 }
 \examples{
 \donttest{
 # Example for class direct
-emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
-smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
-boot_type = "naive", B = 50, seed = 123, X_calib = NULL, totals = NULL, 
-na.rm = TRUE)
+emdi_direct <- direct(
+  y = "eqIncome", smp_data = eusilcA_smp,
+  smp_domains = "district", weights = "weight", threshold = 11064.82,
+  var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL,
+  totals = NULL, na.rm = TRUE
+)
 
 getGroups(emdi_direct)
 }

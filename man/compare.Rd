@@ -3,7 +3,7 @@
 \name{compare}
 \alias{compare}
 \alias{compare.fh}
-\title{Compare function}
+\title{Compare Function}
 \usage{
 compare(object, ...)
 
@@ -15,31 +15,31 @@ compare(object, ...)
 \item{...}{further arguments passed to or from other methods.}
 }
 \value{
-The return of \code{compare} depends on the class of its argument. The
-documentation of particular methods gives detailed information about the
+The return of \code{compare} depends on the class of its argument.
+The documentation of particular methods gives detailed information about the
 return of that method.
 
-For the method for class "fh", the null hypothesis, the value W of the test 
-statistic, the degrees of freedom and the p value of the Brown test; and the 
-correlation coefficient of the synthetic part and the direct estimator 
-\cite{(Chandra et al. 2015)} are returned.
+For the method for class "fh", the null hypothesis, the value W of
+the test statistic, the degrees of freedom and the p value of the Brown test;
+and the correlation coefficient of the synthetic part and the direct
+estimator \cite{(Chandra et al. 2015)} are returned.
 }
 \description{
-Function \code{compare} is a generic function used to assess the quality of 
+Function \code{compare} is a generic function used to assess the quality of
 the model-based estimates by comparing them with the direct estimates.
 
-Method \code{compare.fh} assesses the quality of the model-based estimates 
-of the Fay-Herriot model by comparing them with the direct estimates based on 
-a goodness-of-fit test proposed by \cite{Brown et al. (2001)} and by computing 
-the correlation between the regression-synthetic part of the Fay-Herriot model 
-and the direct estimates.
+Method \code{compare.fh} assesses the quality of the model-based estimates
+of the Fay-Herriot model by comparing them with the direct estimates based
+on a goodness-of-fit test proposed by \cite{Brown et al. (2001)} and by
+computing the correlation between the regression-synthetic part of the
+Fay-Herriot model and the direct estimates.
 }
 \references{
-Brown, G., R. Chambers, P. Heady, and D. Heasman (2001). Evaluation of small 
+Brown, G., R. Chambers, P. Heady, and D. Heasman (2001). Evaluation of small
 area estimation methods: An application to unemployment estimates from the UK
-LFS. Symposium 2001 - Achieving Data Quality in a Statistical Agency: A 
+LFS. Symposium 2001 - Achieving Data Quality in a Statistical Agency: A
 Methodological Perspective, Statistics Canada. \cr \cr
-Chandra, H., Salvati, N. and Chambers, R. (2015), A Spatially 
-Nonstationary Fay-Herriot Model for Small Area Estimation, Journal 
+Chandra, H., Salvati, N. and Chambers, R. (2015), A Spatially
+Nonstationary Fay-Herriot Model for Small Area Estimation, Journal
 of the Survey Statistics and Methodology, 3, 109-135.
 }

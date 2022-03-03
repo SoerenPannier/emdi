@@ -5,7 +5,7 @@
 \alias{getData.direct}
 \alias{getData.ebp}
 \alias{getData.fh}
-\title{Extract emdi object data}
+\title{Extract emdi Object Data}
 \usage{
 \method{getData}{direct}(object, ...)
 
@@ -14,32 +14,35 @@
 \method{getData}{fh}(object, ...)
 }
 \arguments{
-\item{object}{an object of type "emdi", depending on the method either "direct", 
-"ebp" or "fh".}
+\item{object}{an object of type "emdi", depending on the method either
+"direct", "ebp" or "fh".}
 
 \item{...}{additional arguments that are not used in this method.}
 }
 \value{
-Data frame used to fit the model. For classes "direct" and "ebp" the 
-(untransformed) sample data is returned. For class "fh" the combined data set is returned.
+Data frame used to fit the model. For classes "direct" and "ebp" the
+(untransformed) sample data is returned. For class "fh" the combined data
+set is returned.
 }
 \description{
-Methods \code{getData.direct}, \code{getData.ebp} and \code{getData.fh} extract 
-the data frame used to fit the model.
+Methods \code{getData.direct}, \code{getData.ebp} and \code{getData.fh}
+extract the data frame used to fit the model.
 }
 \details{
-The generic function \code{getData} is imported from package nlme and 
-re-exported to make the S3-methods available, even though the nlme package 
-itself is not loaded or attached. For default documentation, 
+The generic function \code{getData} is imported from package nlme
+and re-exported to make the S3-methods available, even though the nlme
+package itself is not loaded or attached. For default documentation,
 see \code{\link[nlme]{getData}}.
 }
 \examples{
 \donttest{
 # Example for class direct
-emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
-smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
-boot_type = "naive", B = 50, seed = 123, X_calib = NULL, totals = NULL, 
-na.rm = TRUE)
+emdi_direct <- direct(
+  y = "eqIncome", smp_data = eusilcA_smp,
+  smp_domains = "district", weights = "weight", threshold = 11064.82,
+  var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL,
+  totals = NULL, na.rm = TRUE
+)
 
 getData(emdi_direct)
 }

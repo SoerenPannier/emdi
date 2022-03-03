@@ -2,7 +2,7 @@
 % Please edit documentation in R/stats_methods.R
 \name{predict.emdi}
 \alias{predict.emdi}
-\title{Predictions from emdi objects}
+\title{Predictions from emdi Objects}
 \usage{
 \method{predict}{emdi}(object, ...)
 }
@@ -16,22 +16,24 @@ Data frame with domain predictors.
 }
 \description{
 Method \code{predict.emdi} extracts the direct estimates, the empirical
-best linear unbiased or empirical best predictors for all domains from an emdi 
-object.
+best linear unbiased or empirical best predictors for all domains from an
+emdi object.
 }
 \details{
-For a better selection of prediction results, it is referred to use 
-the generic function \code{\link{estimators}}. The methods for object of class 
-"emdi" allows to select among the indicators of interest.
+For a better selection of prediction results, it is referred to use
+the generic function \code{\link{estimators}}. The methods for object of
+class "emdi" allows to select among the indicators of interest.
 }
 \examples{
 \donttest{
 # Example for class ebp
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-na.rm = TRUE)
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+  na.rm = TRUE
+)
 
 predict(emdi_model)
 }

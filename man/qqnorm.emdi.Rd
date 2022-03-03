@@ -5,7 +5,7 @@
 \alias{qqnorm.ebp}
 \alias{qqnorm.fh}
 \alias{qqnorm.direct}
-\title{Quantile-quantile plots for an emdi object}
+\title{Quantile-quantile Plots for an emdi Object}
 \usage{
 \method{qqnorm}{emdi}(y, color = c("blue", "lightblue3"), gg_theme = NULL, ...)
 
@@ -16,9 +16,9 @@
 \method{qqnorm}{direct}(y, ...)
 }
 \arguments{
-\item{y}{a model object of type "emdi", either "ebp" or "fh", representing 
-point and, if chosen, MSE estimates obtained by the EBP or Fay-Herriot approach 
-(see also \code{\link{ebp}} and \code{\link{fh}}).}
+\item{y}{a model object of type "emdi", either "ebp" or "fh", representing
+point and, if chosen, MSE estimates obtained by the EBP or Fay-Herriot
+approach (see also \code{\link{ebp}} and \code{\link{fh}}).}
 
 \item{color}{a character vector with two elements. The first element defines
 the color for the line in the QQ-plots, for the Cook's Distance plot and for
@@ -35,7 +35,7 @@ Two Q-Q plots in one grid obtained by \code{\link[ggplot2]{ggplot}}.
 }
 \description{
 Normal quantile-quantile plots of the underlying model in the EBP (see also
-\code{\link{ebp}}) or Fay-Herriot (see also \code{\link{fh}}) approaches are 
+\code{\link{ebp}}) or Fay-Herriot (see also \code{\link{fh}}) approaches are
 obtained. The plots are obtained by \code{\link[ggplot2]{ggplot}}.
 }
 \examples{
@@ -46,11 +46,13 @@ data("eusilcA_pop")
 data("eusilcA_smp")
 
 # With default setting but na.rm = TRUE; with Box-Cox transformation
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
-house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-na.rm = TRUE)
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+  na.rm = TRUE
+)
 
 # Example 1: Creation of default diagnostic plots
 qqnorm(emdi_model)
@@ -62,17 +64,22 @@ data("eusilcA_popAgg")
 data("eusilcA_smpAgg")
 
 # Combine sample and population data
-combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
-                              smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+combined_data <- combine_data(
+  pop_data = eusilcA_popAgg,
+  pop_domains = "Domain",
+  smp_data = eusilcA_smpAgg,
+  smp_domains = "Domain"
+)
 
 # Generation of the emdi object
-fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-             combined_data = combined_data, domains = "Domain", method = "ml", 
-             MSE = TRUE)
+fh_std <- fh(
+  fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+  combined_data = combined_data, domains = "Domain",
+  method = "ml", MSE = TRUE
+)
 
 # Example 5: Creation of default diagnostic plots for Fay-Herriot model
 qqnorm(fh_std)
-
 }
 }
 \seealso{

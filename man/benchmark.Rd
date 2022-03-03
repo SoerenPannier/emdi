@@ -2,7 +2,7 @@
 % Please edit documentation in R/benchmark.R
 \name{benchmark}
 \alias{benchmark}
-\title{Benchmark function}
+\title{Benchmark Function}
 \usage{
 benchmark(object, benchmark, share, type = "raking", overwrite = FALSE)
 }
@@ -11,36 +11,35 @@ benchmark(object, benchmark, share, type = "raking", overwrite = FALSE)
 
 \item{benchmark}{a number determining the benchmark value.}
 
-\item{share}{a vector containing the shares of the population size per area and 
-the total population size (N_d/N).Values must be sorted like the domains in 
-the fh object.}
+\item{share}{a vector containing the shares of the population size per area
+and the total population size (N_d/N).Values must be sorted like the domains
+in the fh object.}
 
-\item{type}{Character indicating the type of benchmarking. Types that can be chosen
-(i) Raking ("\code{raking}"),
-(ii) Ratio adjustment ("\code{ratio}"),
+\item{type}{Character indicating the type of benchmarking. Types that can be
+chosen (i) Raking ("\code{raking}"), (ii) Ratio adjustment ("\code{ratio}"),
 (iii) MSE adjustment ("\code{MSE_adj}"). Defaults to "\code{raking}".}
 
-\item{overwrite}{if \code{TRUE}, the benchmarked FH estimates are added to 
-the ind object of the emdi object and the MSE estimates are set to 
+\item{overwrite}{if \code{TRUE}, the benchmarked FH estimates are added to
+the ind object of the emdi object and the MSE estimates are set to
 NULL since these are not benchmarked. Defaults to \code{FALSE}.}
 }
 \value{
-A data frame containing a domain indicator (Domain), direct estimates 
-(Direct), point predictions (FH), benchmarked point predictions (FH_Bench) and 
-a variable indicating out-of-sample domains Out (1 for out-of-sample, 0 for 
-in-sample) . If overwrite is set to TRUE, the fh object is returned, but the 
-point predictions of the ind data frame are complemented by the benchmarked 
-results.
+A data frame containing a domain indicator (Domain), direct estimates
+(Direct), point predictions (FH), benchmarked point predictions (FH_Bench)
+and a variable indicating out-of-sample domains Out (1 for out-of-sample, 0
+for in-sample) . If overwrite is set to TRUE, the fh object is returned, but
+the point predictions of the ind data frame are complemented by the
+benchmarked results.
 }
 \description{
 This function benchmarks the EBLUP estimates of an area-level model.
 }
 \details{
-The benchmarking algorithm only works, if FH estimates are available. 
-The type "\code{MSE_adj}" only works, if MSE estimates are available. 
-If overwrite is set to TRUE, the emdi object is returned, but the 
-benchmarked FH estimates are added to the ind object of the emdi 
-object and the MSE estimates are set to NULL since these are not 
+The benchmarking algorithm only works, if FH estimates are available.
+The type "\code{MSE_adj}" only works, if MSE estimates are available.
+If overwrite is set to TRUE, the emdi object is returned, but the
+benchmarked FH estimates are added to the ind object of the emdi
+object and the MSE estimates are set to NULL since these are not
 benchmarked.
 }
 \examples{
@@ -49,25 +48,36 @@ data("eusilcA_popAgg")
 data("eusilcA_smpAgg")
 
 # Combine sample and population data
-combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
-                             smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+combined_data <- combine_data(
+  pop_data = eusilcA_popAgg,
+  pop_domains = "Domain",
+  smp_data = eusilcA_smpAgg,
+  smp_domains = "Domain"
+)
 
 # Estimate Fay-Herriot model
-fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-combined_data = combined_data, domains = "Domain", method = "ml", 
-MSE = TRUE)  
+fh_std <- fh(
+  fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+  combined_data = combined_data, domains = "Domain", method = "ml",
+  MSE = TRUE
+)
 
 # Benchmark the point estimates
 
-# Example 1: Receive data frame with point estimates and their benchmarked results
-fh_bench <- benchmark(fh_std, benchmark = 20140.09, 
-share = eusilcA_popAgg$ratio_n, type = "ratio")
+# Example 1: Receive data frame with point estimates and their benchmarked
+# results
+fh_bench <- benchmark(fh_std,
+  benchmark = 20140.09,
+  share = eusilcA_popAgg$ratio_n, type = "ratio"
+)
 
 # Example 2: Add benchmarked results to fh object
-fh_bench <- benchmark(fh_std, benchmark = 20140.09, 
-share = eusilcA_popAgg$ratio_n, type = "ratio", overwrite = TRUE)
+fh_bench <- benchmark(fh_std,
+  benchmark = 20140.09,
+  share = eusilcA_popAgg$ratio_n, type = "ratio", overwrite = TRUE
+)
 }
 \references{
-Datta,G. S., Ghosh, M., Steorts, R. and Maples, J. (2010) Bayesian 
+Datta,G. S., Ghosh, M., Steorts, R. and Maples, J. (2010) Bayesian
 benchmarking with applications to small area estimation. Test, 20, 574–588.
 }

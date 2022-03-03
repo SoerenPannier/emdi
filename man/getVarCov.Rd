@@ -4,7 +4,7 @@
 \alias{getVarCov}
 \alias{getVarCov.ebp}
 \alias{getVarCov.fh}
-\title{Extract variance-covariance matrix from an emdi object}
+\title{Extract Variance-covariance Matrix from an emdi Object}
 \usage{
 \method{getVarCov}{ebp}(obj, individuals = 1, type = "random.effects", ...)
 
@@ -13,50 +13,57 @@
 \arguments{
 \item{obj}{an object of type "emdi", either "ebp" or "fh".}
 
-\item{individuals}{vector of levels of the in-sample domains can be specified 
-for the types "\code{conditional}" or "\code{marginal}".}
+\item{individuals}{vector of levels of the in-sample domains can be
+specified for the types "\code{conditional}" or "\code{marginal}".}
 
-\item{type}{a character that determines the type of variance-covariance matrix. 
-Types that can be chosen
+\item{type}{a character that determines the type of variance-covariance
+matrix. Types that can be chosen
 (i) random-effects variance-covariance matrix ("\code{random.effects}"),
-(ii) conditional variance-covariance matrix ("\code{conditional}"), 
-(iii) marginal variance-covariance matrix ("\code{marginal}"). Defaults to 
+(ii) conditional variance-covariance matrix ("\code{conditional}"),
+(iii) marginal variance-covariance matrix ("\code{marginal}"). Defaults to
 "\code{random.effects}".}
 
 \item{...}{additional arguments that are not used in this method.}
 }
 \value{
-A variance-covariance matrix or a list of variance-covariance matrices, 
-if more than one individual is selected. For method \code{getVarCov.ebp}, the 
-dimensions of the matrices are 1 x 1 for type "\code{random.effects}" and 
-number of in-sample domains x number of in-sample domains for types 
-"\code{conditional}" and "\code{marginal}". For method \code{getVarCov.fh}, 
-for all types the dimensions of the matrices are 1 x 1. For type "\code{marginal}" 
-the diagonal elements of the variance covariances matrices are returned for the chosen 
-individual. Please note, if the correlation argument of the "fh" object is set to 
-spatial, the variance covariance matrix has non-zero off-diagonal elements, 
-because the assumption of independency of the error terms does not hold. For 
-the non-spatial models the off-diagonal elements are zero.
+A variance-covariance matrix or a list of variance-covariance
+matrices, if more than one individual is selected. For method
+\code{getVarCov.ebp}, the dimensions of the matrices are 1 x 1 for type
+"\code{random.effects}" and number of in-sample domains x number of
+in-sample domains for types "\code{conditional}" and "\code{marginal}". For
+method \code{getVarCov.fh}, for all types the dimensions of the matrices are
+1 x 1. For type "\code{marginal}" the diagonal elements of the variance
+covariances matrices are returned for the chosen individual. Please note, if
+the correlation argument of the "fh" object is set to spatial, the variance
+covariance matrix has non-zero off-diagonal elements, because the assumption
+of independence of the error terms does not hold. For the non-spatial models,
+the off-diagonal elements are zero.
 }
 \description{
-Methods \code{getVarCov.ebp} and \code{getVarCov.fh} extract the 
+Methods \code{getVarCov.ebp} and \code{getVarCov.fh} extract the
 variance-covariance matrix from a fitted model of class "ebp" or "fh".
 }
 \details{
-The generic function \code{getVarCov} is imported from package nlme and 
-re-exported to make the S3-methods available, even though the nlme package 
-itself is not loaded or attached. For default documentation, 
+The generic function \code{getVarCov} is imported from package nlme
+and re-exported to make the S3-methods available, even though the nlme
+package itself is not loaded or attached. For default documentation,
 see \code{\link[nlme]{getVarCov}}.
 }
 \examples{
 \donttest{
 # Example for class fh
-combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
-                             smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+combined_data <- combine_data(
+  pop_data = eusilcA_popAgg,
+  pop_domains = "Domain",
+  smp_data = eusilcA_smpAgg,
+  smp_domains = "Domain"
+)
 
-fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-             combined_data = combined_data, domains = "Domain", method = "ml", 
-             MSE = TRUE)
+fh_std <- fh(
+  fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+  combined_data = combined_data, domains = "Domain",
+  method = "ml", MSE = TRUE
+)
 
 getVarCov(fh_std)
 }

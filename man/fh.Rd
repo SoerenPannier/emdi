@@ -2,7 +2,7 @@
 % Please edit documentation in R/FH.R
 \name{fh}
 \alias{fh}
-\title{Standard and extended Fay-Herriot models for disaggregated indicators}
+\title{Standard and Extended Fay-Herriot Models for Disaggregated Indicators}
 \usage{
 fh(
   fixed,
@@ -33,14 +33,14 @@ fixed-effects part of the linear mixed regression model with the
 dependent variable on the left of a ~ operator and the explanatory
 variables on the right, separated by + operators.}
 
-\item{vardir}{a character string indicating the name of the variable containing
-the domain-specific sampling variances of the direct estimates that are
-included in \cr \code{combined_data}.}
+\item{vardir}{a character string indicating the name of the variable
+containing the domain-specific sampling variances of the direct estimates
+that are included in \cr \code{combined_data}.}
 
-\item{combined_data}{a data set containing all the input variables that are 
+\item{combined_data}{a data set containing all the input variables that are
 needed for the estimation of the Fay-Herriot model: the direct estimates,
-the sampling variances, the explanatory variables and the domains. In addition, 
-the effective sample size needs to be included, if the arcsin 
+the sampling variances, the explanatory variables and the domains. In
+addition, the effective sample size needs to be included, if the arcsin
 transformation is chosen.}
 
 \item{domains}{a character string indicating the domain variable that is
@@ -53,170 +53,173 @@ the variance of the random effects. Methods that can be chosen
 (ii) maximum likelihood method ("\code{ml}"),
 (iii) adjusted REML following \cite{Li and Lahiri (2010)} ("\code{amrl}"),
 (iv) adjusted ML following \cite{Li and Lahiri (2010)} ("\code{ampl}"),
-(v) adjusted REML following \cite{Yoshimori and Lahiri (2014)} ("\code{amrl_yl}"),
-(vi) adjusted ML following \cite{Yoshimori and Lahiri (2014)} ("\code{ampl_yl}"),
-(vii) robustified maximum likelihood with robust EBLUP prediction following
-\cite{Warnholz (2017)} ("\code{reblup}"), 
-(viii) robustified maximum likelihood with robust and bias-corrected EBLUP 
-prediction following \cite{Warnholz (2017)} ("\code{reblupbc}"),
-(ix) estimation of the measurement error model of \cite{Ybarra and Lohr 
-(2008)} ("\code{me}"). Defaults to "\code{reml}".}
+(v) adjusted REML following \cite{Yoshimori and Lahiri (2014)}
+("\code{amrl_yl}"), (vi) adjusted ML following
+\cite{Yoshimori and Lahiri (2014)} ("\code{ampl_yl}"), (vii) robustified
+maximum likelihood with robust EBLUP prediction following
+\cite{Warnholz (2017)} ("\code{reblup}"), (viii) robustified maximum
+likelihood with robust and bias-corrected EBLUP prediction following
+\cite{Warnholz (2017)} ("\code{reblupbc}"), (ix) estimation of the
+measurement error model of \cite{Ybarra and Lohr (2008)} ("\code{me}").
+Defaults to "\code{reml}".}
 
 \item{interval}{optional argument, if method "\code{reml}" and
-"\code{ml}" in combination with \code{correlation} equals "\code{no}" 
-is chosen or for the adjusted variance estimation methods "\code{amrl}", 
-"\code{amrl_yl}", "\code{ampl}" and "\code{ampl_yl}". Is internally 
-set to \code{c(0, var(direct estimates))}. If a transformation is 
-applied, the interval is internally set to \code{c(0, var(transformed(direct estimates)))}.  
-If desired, \code{interval} can be specified to a numeric vector 
-containing a lower and upper limit for the estimation of the 
-variance of the random effects. Defaults to \code{NULL}.}
+"\code{ml}" in combination with \code{correlation} equals "\code{no}"
+is chosen or for the adjusted variance estimation methods "\code{amrl}",
+"\code{amrl_yl}", "\code{ampl}" and "\code{ampl_yl}". Is internally
+set to \code{c(0, var(direct estimates))}. If a transformation is
+applied, the interval is internally set to
+\code{c(0, var(transformed(direct estimates)))}. If desired, \code{interval}
+can be specified to a numeric vector containing a lower and upper limit for
+the estimation of the variance of the random effects. Defaults to
+\code{NULL}.}
 
-\item{k}{numeric tuning constant. Required argument when the robust version of 
-the standard or spatial Fay-Herriot model is chosen. Defaults to \code{1.345}. 
+\item{k}{numeric tuning constant. Required argument when the robust version
+of the standard or spatial Fay-Herriot model is chosen. Defaults to
+\code{1.345}. For detailed information, please refer to
+\cite{Warnholz (2016)}.}
+
+\item{mult_constant}{numeric multiplier constant used in the bias corrected
+version of the robust estimation methods. Required argument when the robust
+version of the standard or spatial Fay-Herriot model is chosen. Default is to
+make no correction for realizations of direct estimator within
+\code{mult_constant = 1} times the standard deviation of direct estimator.
 For detailed information, please refer to \cite{Warnholz (2016)}.}
 
-\item{mult_constant}{numeric multiplier constant used in the bias corrected version of the 
-robust estimation methods. Required argument when the robust version of 
-the standard or spatial Fay-Herriot model is chosen. Default is to make no 
-correction for realizations of direct estimator within \code{mult_constant = 1} 
-times the standard deviation of direct estimator. For detailed information, 
-please refer to \cite{Warnholz (2016)}.}
+\item{transformation}{a character that determines the type of transformation
+of the dependent variable and of the sampling variances. Methods that can be
+chosen (i) no transformation ("\code{no}"), (ii) log transformation
+("\code{log}") of the dependent variable and of the sampling variances,
+(iii) arcsin transformation ("\code{arcsin}") of the dependent variable and
+of the sampling variances following. Defaults to "\code{no}". For more
+information, how the direct estimate and its variance are transformed, please
+see the package vignette "A Framework for Producing Small Area Estimates
+Based on Area-Level Models in R".}
 
-\item{transformation}{a character that determines the type of transformation 
-of the dependent variable and of the sampling variances. Methods that can be chosen
-(i) no transformation ("\code{no}"),
-(ii) log transformation ("\code{log}") of the dependent variable and of 
-the sampling variances, 
-(iii) arcsin transformation ("\code{arcsin}") of the dependent variable and of 
-the sampling variances following. Defaults to "\code{no}". For more information, 
-how the direct estimate and its variance are transformed, please see the package 
-vignette "A Framework for Producing Small Area Estimates Based on Area-Level Models in R".}
+\item{backtransformation}{a character that determines the type of
+backtransformation of the EBLUPs and MSE estimates. Required argument when a
+transformation is chosen. Available methods are (i) crude bias-correction
+following \cite{Rao (2015)} when the log transformation is chosen
+("\code{bc_crude}"), (ii) bias-correction following
+\cite{Slud and Maiti (2006)} when the log transformations is chosen
+("\code{bc_sm}"), (iii) naive back transformation when the arcsin
+transformation is chosen ("\code{naive}"), (iii) bias-corrected back
+transformation following \cite{Hadam et al. (2020)} when the arcsin
+transformation is chosen ("\code{bc}"). Defaults to \code{NULL}.}
 
-\item{backtransformation}{a character that determines the type of backtransformation 
-of the EBLUPs and MSE estimates. Required argument when a transformation is chosen. 
-Available methods are 
-(i) crude bias-correction following \cite{Rao (2015)} when the log transformation 
-is chosen ("\code{bc_crude}"), (ii) bias-correction following \cite{Slud and Maiti (2006)} 
-when the log transformations is chosen ("\code{bc_sm}"),
-(iii) naive back transformation when the arcsin transformation 
-is chosen ("\code{naive}"),
-(iii) bias-corrected back transformation following \cite{Hadam et al. (2020)} 
-when the arcsin transformation is chosen ("\code{bc}"). 
-Defaults to \code{NULL}.}
+\item{eff_smpsize}{a character string indicating the name of the variable
+containing the effective sample sizes that are included in
+\code{combined_data}. Required argument when the arcsin transformation is
+chosen. Defaults to \code{NULL}.}
 
-\item{eff_smpsize}{a character string indicating the name of the variable containing
-the effective sample sizes that are included in \code{combined_data}. Required 
-argument when the arcsin transformation is chosen. Defaults to \code{NULL}.}
-
-\item{correlation}{a character determining the correlation structure of the 
+\item{correlation}{a character determining the correlation structure of the
 random effects. Possible correlations are
-(i) no correlation ("\code{no}"), 
-(ii) incorporation of a spatial correlation in the random effects 
+(i) no correlation ("\code{no}"),
+(ii) incorporation of a spatial correlation in the random effects
 ("\code{spatial}"). Defaults to "\code{no}".}
 
-\item{corMatrix}{matrix or data frame with dimensions number of areas times 
-number of areas containing the row-standardized proximities between the 
-domains. Values must lie between \code{0} and \code{1}. The columns and rows 
-must be sorted like the domains in \code{fixed}. For an example how to create 
-the proximity matrix, please refer to the vignette. Required argument when the 
-correlation is set to "\code{spatial}". Defaults to \code{NULL}.}
+\item{corMatrix}{matrix or data frame with dimensions number of areas times
+number of areas containing the row-standardized proximities between the
+domains. Values must lie between \code{0} and \code{1}. The columns and rows
+must be sorted like the domains in \code{fixed}. For an example how to
+create the proximity matrix, please refer to the vignette. Required argument
+when the correlation is set to "\code{spatial}". Defaults to \code{NULL}.}
 
-\item{Ci}{array with dimension number of estimated regression coefficients times 
-number of estimated regression coefficients times number of areas containing 
-the variance-covariance matrix of the explanatory variables for each area. 
-For an example of how to create the array, please refer to the vignette. 
-Required argument within the Ybarra-Lohr model (\code{method = me}). 
-Defaults to \code{NULL}.}
+\item{Ci}{array with dimension number of estimated regression coefficients
+times number of estimated regression coefficients times number of areas
+containing the variance-covariance matrix of the explanatory variables for
+each area. For an example of how to create the array, please refer to the
+vignette. Required argument within the Ybarra-Lohr model
+(\code{method = me}). Defaults to \code{NULL}.}
 
 \item{tol}{a number determining the tolerance value for the estimation of the
-variance of the random effects. Required argument when method "\code{reml}" and 
-"\code{ml}" in combination with \code{correlation =}"\code{spatial}" are chosen or 
-for the variance estimation methods "\code{reblup}", "\code{reblupbc}" and 
-"\code{me}". Defaults to 0.0001.}
+variance of the random effects. Required argument when method "\code{reml}"
+and "\code{ml}" in combination with \code{correlation =}"\code{spatial}" are
+chosen or for the variance estimation methods "\code{reblup}",
+"\code{reblupbc}" and "\code{me}". Defaults to 0.0001.}
 
-\item{maxit}{a number determining the maximum number of iterations for the 
-estimation of the variance of the random effects. Required argument when method 
-"\code{reml}" and  "\code{ml}" in combination with \code{correlation} equals 
-"\code{spatial}" is chosen or for the variance estimation methods "\code{reblup}", 
-"\code{reblupbc}" and "\code{me}". Defaults to 100.}
+\item{maxit}{a number determining the maximum number of iterations for the
+estimation of the variance of the random effects. Required argument when
+method "\code{reml}" and  "\code{ml}" in combination with \code{correlation}
+equals "\code{spatial}" is chosen or for the variance estimation methods
+"\code{reblup}", "\code{reblupbc}" and "\code{me}". Defaults to 100.}
 
 \item{MSE}{if \code{TRUE}, MSE estimates are calculated. Defaults
 to \code{FALSE}.}
 
-\item{mse_type}{a character string determining the estimation method of the MSE.
-Methods that can be chosen
+\item{mse_type}{a character string determining the estimation method of the
+MSE. Methods that can be chosen
 (i) analytical MSE depending on the estimation method of the variance of the
 random effect ("\code{analytical}"),
 (ii) a jackknife MSE ("\code{jackknife}"),
 (iii) a weighted jackknife MSE ("\code{weighted_jackknife}"),
-(iv) bootstrap ("\code{boot}"), 
-(v)  approximation of the MSE based on a pseudo linearisation 
+(iv) bootstrap ("\code{boot}"),
+(v)  approximation of the MSE based on a pseudo linearisation
 ("\code{pseudo}"),
-(vi) naive parametric bootstrap for the spatial Fay-Herriot model 
+(vi) naive parametric bootstrap for the spatial Fay-Herriot model
 ("\code{spatialparboot}"),
-(vii) bias corrected parametric bootstrap for the spatial Fay-Herriot model 
+(vii) bias corrected parametric bootstrap for the spatial Fay-Herriot model
 ("\code{spatialparbootbc}"),
-(viii) naive nonparametric bootstrap for the spatial Fay-Herriot model 
+(viii) naive nonparametric bootstrap for the spatial Fay-Herriot model
 ("\code{spatialnonparboot}"),
-(ix) bias corrected nonparametric bootstrap for the spatial Fay-Herriot model 
+(ix) bias corrected nonparametric bootstrap for the spatial Fay-Herriot model
 ("\code{spatialnonparbootbc}").
-Options (ii)-(iv) are of interest when the arcsin transformation is selected. 
-Option (ii) must be chosen when an Ybarra-Lohr model is selected 
-(\code{method = me}). Options (iv) and (v) are the MSE options for the 
-robust extensions of the Fay-Herriot model. For an extensive overview of the possible 
-MSE options, please refer to the vignette. Required argument when 
+Options (ii)-(iv) are of interest when the arcsin transformation is selected.
+Option (ii) must be chosen when an Ybarra-Lohr model is selected
+(\code{method = me}). Options (iv) and (v) are the MSE options for the
+robust extensions of the Fay-Herriot model. For an extensive overview of the
+possible MSE options, please refer to the vignette. Required argument when
 \code{MSE = TRUE}. Defaults to "\code{analytical}".}
 
-\item{B}{either a single number or a numeric vector with two elements. The 
-single number or the first element defines the number of bootstrap iterations 
-when a bootstrap MSE estimator is chosen. When the standard FH 
-model is applied and the information criteria by Marhuenda et al. (2014) 
-should be computed, the second element of \code{B} is needed and must be 
-greater than 1. Defaults to c(50,0). For practical applications, values larger 
-than 200 are recommended.}
+\item{B}{either a single number or a numeric vector with two elements. The
+single number or the first element defines the number of bootstrap iterations
+when a bootstrap MSE estimator is chosen. When the standard FH
+model is applied and the information criteria by Marhuenda et al. (2014)
+should be computed, the second element of \code{B} is needed and must be
+greater than 1. Defaults to c(50,0). For practical applications, values
+larger than 200 are recommended.}
 
-\item{seed}{an integer to set the seed for the random number generator. For 
-the usage of random number generation see details. If seed is set to 
+\item{seed}{an integer to set the seed for the random number generator. For
+the usage of random number generation see details. If seed is set to
 \code{NULL}, seed is chosen randomly. Defaults to \code{123}.}
 }
 \value{
-An object of class "fh", "emdi" that provides estimators 
-for regional disaggregated indicators like means and ratios and optionally 
-corresponding MSE estimates. Several generic functions have methods for the 
-returned object. For a full list and descriptions of the components of objects 
-of class "emdi", see \code{\link{emdiObject}}.
+An object of class "fh", "emdi" that provides estimators
+for regional disaggregated indicators like means and ratios and optionally
+corresponding MSE estimates. Several generic functions have methods for the
+returned object. For a full list and descriptions of the components of
+objects of class "emdi", see \code{\link{emdiObject}}.
 }
 \description{
 Function \code{fh} estimates indicators using the Fay-Herriot approach by
-\cite{Fay and Herriot (1979)}. Empirical best linear unbiased predictors 
-(EBLUPs) and mean squared error (MSE) estimates are provided. Additionally, 
-different extensions of the standard Fay-Herriot model are available: \cr 
-Adjusted estimation methods for the variance of the random effects (see \cite{Li 
-and Lahiri (2010)} and \cite{Yoshimori and Lahiri (2014)}) are offered. Log 
-and arcsin transformation for the dependent variable and two types of 
-backtransformation can be chosen - a crude version
-and the one introduced by \cite{Slud and Maiti (2006)} for log transformed 
-variables and a naive and bias-corrected version following 
-\cite{Hadam et al. (2020)} for arcsin transformed variables. A spatial extension 
-to the Fay-Herriot model following \cite{Petrucci and Salvati (2006)} is also 
-included. In addition, it is possible to estimate a robust version of the 
-standard and of the spatial model (see \cite{Warnholz (2016)}). Finally, 
-a Fay-Herriot model can be estimated when the auxiliary information is measured 
-with error following \cite{Ybarra and Lohr (2008)}.
+\cite{Fay and Herriot (1979)}. Empirical best linear unbiased predictors
+(EBLUPs) and mean squared error (MSE) estimates are provided. Additionally,
+different extensions of the standard Fay-Herriot model are available: \cr
+Adjusted estimation methods for the variance of the random effects (see
+\cite{Li and Lahiri (2010)} and \cite{Yoshimori and Lahiri (2014)}) are
+offered. Log and arcsin transformation for the dependent variable and two
+types of backtransformation can be chosen - a crude version and the one
+introduced by \cite{Slud and Maiti (2006)} for log transformed  variables
+and a naive and bias-corrected version following \cite{Hadam et al. (2020)}
+for arcsin transformed variables. A spatial extension to the Fay-Herriot
+model following \cite{Petrucci and Salvati (2006)} is also included. In
+addition, it is possible to estimate a robust version of the standard and of
+the spatial model (see \cite{Warnholz (2016)}). Finally, a Fay-Herriot model
+can be estimated when the auxiliary information is measured with error
+following \cite{Ybarra and Lohr (2008)}.
 }
 \details{
-In the bootstrap approaches, random number generation is used. Thus, a 
-seed is set by the argument \code{seed}. \cr \cr
-Out-of-sample EBLUPs are available for all area-level models except for the 
-\code{bc_sm} backtransformation and for the robust models. \cr 
-Out-of-sample MSEs are available for the analytical MSE estimator of the 
-standard Fay-Herriot model with reml and ml variance estimation, the crude 
-backtransformation in case of log transformation and the bootstrap MSE estimator 
-for the arcsin transformation. \cr \cr
-For a description of how to create the proximity matrix for the 
-spatial Fay-Herriot model, see the package vignette. If the presence 
-of out-of-sample domains, the proximity matrix needs to be 
+In the bootstrap approaches, random number generation is used. Thus,
+a seed is set by the argument \code{seed}. \cr \cr
+Out-of-sample EBLUPs are available for all area-level models except for the
+\code{bc_sm} backtransformation and for the robust models. \cr
+Out-of-sample MSEs are available for the analytical MSE estimator of the
+standard Fay-Herriot model with reml and ml variance estimation, the crude
+backtransformation in case of log transformation and the bootstrap MSE
+estimator for the arcsin transformation. \cr \cr
+For a description of how to create the proximity matrix for the
+spatial Fay-Herriot model, see the package vignette. If the presence
+of out-of-sample domains, the proximity matrix needs to be
 subsetted to the in-sample domains.
 }
 \examples{
@@ -226,92 +229,109 @@ data("eusilcA_popAgg")
 data("eusilcA_smpAgg")
 
 # Combine sample and population data
-combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
-                             smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+combined_data <- combine_data(
+  pop_data = eusilcA_popAgg,
+  pop_domains = "Domain",
+  smp_data = eusilcA_smpAgg,
+  smp_domains = "Domain"
+)
 
 # Example 1: Standard Fay-Herriot model and analytical MSE
-fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-combined_data = combined_data, domains = "Domain", method = "ml", 
-MSE = TRUE)
+fh_std <- fh(
+  fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+  combined_data = combined_data, domains = "Domain", method = "ml",
+  MSE = TRUE
+)
 
 # Example 2: arcsin transformation of the dependent variable
-fh_arcsin <- fh(fixed = MTMED ~ cash + age_ben + rent + house_allow,
-vardir = "Var_MTMED", combined_data = combined_data, domains = "Domain", 
-method = "ml", transformation = "arcsin", backtransformation = "bc", 
-eff_smpsize = "n", MSE = TRUE, mse_type = "boot", B = c(50,0))
+fh_arcsin <- fh(
+  fixed = MTMED ~ cash + age_ben + rent + house_allow,
+  vardir = "Var_MTMED", combined_data = combined_data, domains = "Domain",
+  method = "ml", transformation = "arcsin", backtransformation = "bc",
+  eff_smpsize = "n", MSE = TRUE, mse_type = "boot", B = c(50, 0)
+)
 
 # Example 3: Spatial Fay-Herriot model
 # Load proximity matrix
 data("eusilcA_prox")
-fh_spatial <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
-combined_data = combined_data, domains = "Domain", method = "reml", 
-correlation = "spatial", corMatrix = eusilcA_prox, MSE = TRUE, 
-mse_type = "analytical")
+fh_spatial <- fh(
+  fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+  combined_data = combined_data, domains = "Domain", method = "reml",
+  correlation = "spatial", corMatrix = eusilcA_prox, MSE = TRUE,
+  mse_type = "analytical"
+)
 
-# Example 4: Robust Fay-Herriot model 
-fh_robust <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean", 
-combined_data = combined_data, domains = "Domain", method = "reblupbc", 
-k = 1.345, mult_constant = 1, MSE = TRUE, mse_type = "pseudo")
+# Example 4: Robust Fay-Herriot model
+fh_robust <- fh(
+  fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+  combined_data = combined_data, domains = "Domain", method = "reblupbc",
+  k = 1.345, mult_constant = 1, MSE = TRUE, mse_type = "pseudo"
+)
 
 # Example 5: Ybarra-Lohr model
 # Create MSE array
 P <- 1
 M <- length(eusilcA_smpAgg$Mean)
-Ci_array <- array(data = 0, dim=c(P+1,P+1,M))
-for(i in 1:M){
- Ci_array[2,2,i] <- eusilcA_smpAgg$Var_Cash[i]
+Ci_array <- array(data = 0, dim = c(P + 1, P + 1, M))
+for (i in 1:M) {
+  Ci_array[2, 2, i] <- eusilcA_smpAgg$Var_Cash[i]
 }
-fh_yl <- fh(fixed = Mean ~ Cash, vardir= "Var_Mean",
-combined_data = eusilcA_smpAgg, domains ="Domain", method = "me", 
-Ci = Ci_array, MSE = TRUE, mse_type = "jackknife")
+fh_yl <- fh(
+  fixed = Mean ~ Cash, vardir = "Var_Mean",
+  combined_data = eusilcA_smpAgg, domains = "Domain", method = "me",
+  Ci = Ci_array, MSE = TRUE, mse_type = "jackknife"
+)
 }
 }
 \references{
-Chen S., Lahiri P. (2002), A weighted jackknife MSPE estimator in small-area 
-estimation, "Proceeding of the Section on Survey Research Methods", American 
+Chen S., Lahiri P. (2002), A weighted jackknife MSPE estimator in small-area
+estimation, "Proceeding of the Section on Survey Research Methods", American
 Statistical Association, 473 - 477. \cr \cr
-Datta, G. S. and Lahiri, P. (2000), A unified measure of uncertainty of 
+Datta, G. S. and Lahiri, P. (2000), A unified measure of uncertainty of
 Statistica Sinica 10(2), 613-627. \cr \cr
 Fay, R. E. and Herriot, R. A. (1979), Estimates of income for small places:
-An application of James-Stein procedures to census data, Journal of the 
+An application of James-Stein procedures to census data, Journal of the
 American Statistical Association 74(366), 269-277. \cr \cr
-González-Manteiga, W., Lombardía, M. J., Molina, I., Morales, D. and 
-Santamaría, L. (2008) Analytic and bootstrap approximations of prediction 
-errors under a multivariate Fay-Herriot model. Computational Statistics & 
+González-Manteiga, W., Lombardía, M. J., Molina, I., Morales, D. and
+Santamaría, L. (2008) Analytic and bootstrap approximations of prediction
+errors under a multivariate Fay-Herriot model. Computational Statistics &
 Data Analysis, 52, 5242–5252. \cr \cr
-Hadam, S., Wuerz, N. and Kreutzmann, A.-K. (2020), Estimating 
-regional unemployment with mobile network data for Functional Urban Areas in 
+Hadam, S., Wuerz, N. and Kreutzmann, A.-K. (2020), Estimating
+regional unemployment with mobile network data for Functional Urban Areas in
 Germany, Refubium - Freie Universitaet Berlin Repository, 1-28. \cr \cr
-Jiang, J., Lahiri, P., Wan, S.-M. and Wu, C.-H. (2001), Jackknifing in the 
-Fay–Herriot model with an example. In Proc. Sem. Funding Opportunity in 
+Jiang, J., Lahiri, P., Wan, S.-M. and Wu, C.-H. (2001), Jackknifing in the
+Fay–Herriot model with an example. In Proc. Sem. Funding Opportunity in
 Survey Research, Washington DC: Bureau of Labor Statistics, 75–97. \cr \cr
-Jiang, J., Lahiri, P.,Wan, S.-M. (2002), A unified jackknife theory for 
-empirical best prediction with M-estimation, Ann. Statist., 30, 1782-810. \cr \cr
-Li, H. and Lahiri, P. (2010), An adjusted maximum likelihood method for 
+Jiang, J., Lahiri, P.,Wan, S.-M. (2002), A unified jackknife theory for
+empirical best prediction with M-estimation, Ann. Statist., 30,
+1782-810. \cr \cr
+Li, H. and Lahiri, P. (2010), An adjusted maximum likelihood method for
 solving small area estimation problems, Journal of Multivariate Analyis 101,
 882-902. \cr \cr
-Marhuenda, Y., Morales, D. and Pardo, M.C. (2014). Information criteria for 
-Fay-Herriot model selection. Computational Statistics and Data Analysis 70, 
+Marhuenda, Y., Morales, D. and Pardo, M.C. (2014). Information criteria for
+Fay-Herriot model selection. Computational Statistics and Data Analysis 70,
 268-280. \cr \cr
 Neves, A., Silva, D. and Correa, S. (2013), Small domain estimation for the
 Brazilian service sector survey, ESTADISTICA 65(185), 13-37. \cr \cr
-Prasad, N. and Rao, J. (1990), The estimation of the mean squared error of 
-small-area estimation, Journal of the American Statistical Association 85(409),
-163-171. \cr \cr
-Petrucci, A., Salvati, N. (2006), Small Area Estimation for Spatial Correlation in Watershed
-Erosion Assessment, Journal of Agricultural, Biological and Environmental Statistics,
-11(2), 169–182. \cr \cr
+Prasad, N. and Rao, J. (1990), The estimation of the mean squared error of
+small-area estimation, Journal of the American Statistical
+Association 85(409), 163-171. \cr \cr
+Petrucci, A., Salvati, N. (2006), Small Area Estimation for Spatial
+Correlation in Watershed Erosion Assessment, Journal of Agricultural,
+Biological and Environmental Statistics, 11(2), 169–182. \cr \cr
 Rao, J. N. K. (2003), Small Area Estimation, New York: Wiley. \cr \cr
-Rao, J. N. K. and Molina, I. (2015), Small area estimation, New York: Wiley. \cr \cr
+Rao, J. N. K. and Molina, I. (2015), Small area estimation,
+New York: Wiley. \cr \cr
 Slud, E. and Maiti, T. (2006), Mean-squared error estimation in transformed
 Fay-Herriot models, Journal of the Royal Statistical Society:Series B 68(2),
 239-257.\cr \cr
-Warnholz, S. (2016), saeRobust: Robust small area estimation. R package. \cr \cr
-Warnholz, S. (2016b). Small area estimation using robust extensions to area 
+Warnholz, S. (2016), saeRobust: Robust small area estimation.
+R package. \cr \cr
+Warnholz, S. (2016b). Small area estimation using robust extensions to area
 level models. Ph.D. thesis, Freie Universitaet Berlin. \cr \cr
-Ybarra, L. and Lohr, S. (2008), Small area estimation when auxiliary 
+Ybarra, L. and Lohr, S. (2008), Small area estimation when auxiliary
 information is measured with error, Biometrika, 95(4), 919-931.\cr \cr
 Yoshimori, M. and Lahiri, P. (2014), A new adjusted maximum likelihood method
-for the Fay-Herriot small area model, Journal of Multivariate Analysis 124, 
+for the Fay-Herriot small area model, Journal of Multivariate Analysis 124,
 281-294.
 }

@@ -1,4 +1,4 @@
-#' Loading the shape file for austrian districts
+#' Loading the Shape File for Austrian Districts
 #'
 #' The function simplifies to load the shape file for austrian districts.
 #'
@@ -8,7 +8,8 @@
 #' districts.
 #' @export
 
-load_shapeaustria <- function(){
+load_shapeaustria <- function() {
   load(system.file("shapes/shape_austria_dis.rda", package = "emdi"),
-       envir = .GlobalEnv)
+    envir = .GlobalEnv
+  )
 }
