@@ -112,7 +112,7 @@ getData.direct <- function(object, ...) {
 getData.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
   if (object$transformation != "no") {
-    cat('The untransformed sample data set of the ebp object is returned. \n \n')
+    message('The untransformed sample data set of the ebp object is returned. \n \n')
   }
   object$framework$smp_data
 }
@@ -122,7 +122,7 @@ getData.ebp <- function(object, ...) {
 #' @rdname getData
 getData.fh <- function(object, ...) {
   throw_class_error(object, "fh")
-  cat('The combined data set (combined_data) of the fh object is returned. \n \n')
+  message('The combined data set (combined_data) of the fh object is returned. \n \n')
   object$framework$combined_data
 }
 
@@ -493,11 +493,11 @@ getVarCov.fh <- function(obj, individuals = 1, type = "random.effects", ...) {
 #' @export
 print.getVarCov.fh <- function(x, ...) {
   
-  if(inherits(x, "VarCov_random")){
+  if (inherits(x, "VarCov_random")) {
     cat("Random effects variance covariance matrix\n")
     print(x$varmat)
     cat("  Standard Deviations:", round(x$std.dev, 2),"\n")
-  } else if(inherits(x, "VarCov_conditional")){
+  } else if (inherits(x, "VarCov_conditional")) {
     for (i in names(x)){
       cat("domain", as.character(x[[i]]$domain), "\n")
       cat("Conditional variance covariance matrix\n")
@@ -514,9 +514,9 @@ print.getVarCov.fh <- function(x, ...) {
     if (x[[1]]$correlation == "spatial"){
       cat("\n")
       cat('Please note, if the correlation argument of the fh object is set to 
-spatial, the variance covariance matrix has non-zero off-diagonal elements, 
-because the assumption of independency of the error terms does not hold. The diagonal 
-elements are returned.')
+      spatial, the variance covariance matrix has non-zero off-diagonal elements, 
+      because the assumption of independency of the error terms does not hold. The diagonal 
+      elements are returned.')
     }
   }
 }

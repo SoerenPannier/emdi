@@ -16,7 +16,7 @@ parametric_bootstrap <- function(framework,
                                  boot_type,
                                  parallel_mode,
                                  cpus) {
-  cat('\r', "Bootstrap started                                                                        ")
+  message('\r', "Bootstrap started                                                                        ")
   if (boot_type == "wild") {
     res_s <- residuals(point_estim$model)
     fitted_s <- fitted(point_estim$model, level = 1)
@@ -78,7 +78,7 @@ parametric_bootstrap <- function(framework,
       )
   }
   
-  cat('\r', "Bootstrap completed", "\n")
+  message('\r', "Bootstrap completed", "\n")
   if (.Platform$OS.type == "windows") {
     flush.console()
   }
@@ -167,14 +167,14 @@ mse_estim <- function(framework,
   
   if (boot_type == "wild") {  
     bootstrap_sample <- bootstrap_par_wild(fixed          = fixed,
-                                      transformation = transformation,
-                                      framework      = framework,
-                                      model_par      = model_par,
-                                      lambda         = lambda,
-                                      shift          = shift,
-                                      vu_tmp         = superpop$vu_tmp,
-                                      res_s          = res_s,
-                                      fitted_s       = fitted_s
+                                           transformation = transformation,
+                                           framework      = framework,
+                                           model_par      = model_par,
+                                           lambda         = lambda,
+                                           shift          = shift,
+                                           vu_tmp         = superpop$vu_tmp,
+                                           res_s          = res_s,
+                                           fitted_s       = fitted_s
     )
   }else {
     bootstrap_sample <- bootstrap_par(fixed          = fixed,
@@ -253,6 +253,7 @@ superpopulation <-  function(framework, model_par, gen_model, lambda, shift,
   vu_pop <- rep(vu_tmp, framework$n_pop)
   #  superpopulation income vector
   Y_pop_b <- gen_model$mu_fixed + eps + vu_pop
+  
   Y_pop_b <- back_transformation(y             = Y_pop_b,
                                  transformation = transformation,
                                  lambda         = lambda,
@@ -381,7 +382,7 @@ mse_estim_wrapper <-  function(i,
                            remaining %% 3600 %/% 60,  # minutes
                            remaining %% 60 %/% 1) # seconds)
 
-      cat('\r', i, " of ", B, " Bootstrap iterations completed \t Approximately ",
+      message('\r', i, " of ", B, " Bootstrap iterations completed \t Approximately ",
           remaining, " remaining \n")
       if (.Platform$OS.type == "windows") flush.console()
     }

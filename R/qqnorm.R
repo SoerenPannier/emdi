@@ -134,5 +134,5 @@ qqnorm.fh <- function(y, color = c("blue", "lightblue3"),
 #' @rdname qqnorm.emdi
 #' @export
 qqnorm.direct <- function(y, ...) {
-  cat("For emdi objects obtained by direct estimation diagnostic plots are not reasonable.")
+  message("For emdi objects obtained by direct estimation diagnostic plots are not reasonable.")
 }

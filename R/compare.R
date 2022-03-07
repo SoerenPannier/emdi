@@ -45,27 +45,27 @@ compare.fh <- function(object, ...){
    
   if (is.null(object$MSE$FH)) {
      testresults <- NULL
-      cat('The fh object does not contain MSE estimates. The Brown test 
-          statistic cannot be computed.', "\n")
-   } else {
+     message('The fh object does not contain MSE estimates. The Brown test 
+               statistic cannot be computed.', "\n")
+  } else {
   W_BL <- sum((object$ind$Direct[object$ind$Out == 0] - 
-                 object$ind$FH[object$ind$Out == 0])^2 /
-              (object$MSE$Direct[object$MSE$Out == 0] + 
-                 object$MSE$FH[object$MSE$Out == 0]))
+                object$ind$FH[object$ind$Out == 0])^2 /
+             (object$MSE$Direct[object$MSE$Out == 0] + 
+                object$MSE$FH[object$MSE$Out == 0]))
   
- # Degress of freedom
- df_BL <- object$framework$N_dom_smp
- 
- # p Value
- p_value_BL <- 1 - pchisq(W_BL, df_BL)
- 
- testresults <- data.frame(W.value = W_BL,
+  # Degress of freedom
+  df_BL <- object$framework$N_dom_smp
+  
+  # p Value
+  p_value_BL <- 1 - pchisq(W_BL, df_BL)
+  
+  testresults <- data.frame(W.value = W_BL,
                            Df = df_BL,
                            p.value = p_value_BL)
-   }
+  }
  
- # Extraction of the regression part
- if (!is.null(object$model$gamma)) {
+  # Extraction of the regression part
+  if (!is.null(object$model$gamma)) {
     xb <- (object$ind$FH[object$ind$Out == 0] - 
              object$model$gamma$Gamma[object$ind$Out == 0] *
              object$ind$Direct[object$ind$Out == 0]) /
@@ -87,7 +87,7 @@ compare.fh <- function(object, ...){
  class(results) <- "compare.fh"
  
  if (object$framework$N_dom_unobs > 0) {
-   cat("Please note that the computation of both test statistics is only based 
+   message("Please note that the computation of both test statistics is only based 
        on in-sample domains.","\n")
  }
  return(results)
@@ -179,7 +179,7 @@ compare_pred <- function(object1, object2, MSE = FALSE, ...) UseMethod("compare_
 
 compare_pred.emdi <- function(object1, object2, MSE = FALSE, ...) {
    
-   if(!inherits(object1, "emdi") || !inherits(object2, "emdi")){
+   if (!inherits(object1, "emdi") || !inherits(object2, "emdi")) {
       stop('Both objects need to be of class emdi.')
    }
    
@@ -210,19 +210,19 @@ compare_pred.emdi <- function(object1, object2, MSE = FALSE, ...) {
    }
    
    
-   if(MSE == FALSE){
+   if (MSE == FALSE) {
       object1data <- get("ind", object1)
       object2data <- get("ind", object2)
-   } else if(MSE == TRUE){
+   } else if (MSE == TRUE) {
       object1data <- get("MSE", object1)
       object2data <- get("MSE", object2)
    }
    
-   if(inherits(object1, "fh")){
+   if (inherits(object1, "fh")) {
       object1data <- object1data[ , -4] # remove column Out
    }
    
-   if(inherits(object2, "fh")){
+   if (inherits(object2, "fh")) {
       object2data <- object2data[ , -4] # remove column Out
    }
    
@@ -233,17 +233,17 @@ compare_pred.emdi <- function(object1, object2, MSE = FALSE, ...) {
                          "Median_1", "Median_2", "Quantile_75_1", "Quantile_75_2",
                          "Quantile_90_1", "Quantile_90_2")
    
-   if( (inherits(object1, "ebp") && inherits(object2, "ebp")) ||
+   if ( (inherits(object1, "ebp") && inherits(object2, "ebp")) ||
        (inherits(object1, "direct") && inherits(object2, "direct")) ||
        (inherits(object1, "direct") && inherits(object2, "ebp")) ||
-       (inherits(object1, "ebp") && inherits(object2, "direct")) ){
+       (inherits(object1, "ebp") && inherits(object2, "direct")) ) {
       
-      if(dim(object1data)[2] > 11){
+      if (dim(object1data)[2] > 11) {
          colnames(object1data)[12:dim(object1data)[2]] <- 
             paste0(names(object1data[12:dim(object1data)[2]]), "_1")
       }
       
-      if(dim(object2data)[2] > 11){
+      if (dim(object2data)[2] > 11) {
          colnames(object2data)[12:dim(object2data)[2]] <- 
             paste0(names(object2data[12:dim(object2data)[2]]), "_2")
       }
@@ -251,23 +251,23 @@ compare_pred.emdi <- function(object1, object2, MSE = FALSE, ...) {
       data <- merge(object1data, object2data, by.x = "Domain", by.y = "Domain", 
                     suffixes = c("_1","_2"))
       
-      if(dim(data)[2] == 21){
+      if (dim(data)[2] == 21) {
          data <- data[, order_direct_ebp]
-      } else if(dim(data)[2] > 21){
+      } else if (dim(data)[2] > 21) {
          custom_indicators <- colnames(data)[(which(!colnames(data) %in% order_direct_ebp))]
          data <- data[, c(order_direct_ebp, custom_indicators)]
       }
       
-   } else if(inherits(object1, "fh") && inherits(object2, "fh")){
+   } else if (inherits(object1, "fh") && inherits(object2, "fh")) {
       data <- merge(object1data, object2data, by.x = "Domain", by.y = "Domain", 
                     suffixes = c("_1","_2"))
       data <- data[, c("Domain", "Direct_1", "Direct_2", "FH_1", "FH_2")]
-   } else if((inherits(object1, "direct") && inherits(object2, "fh")) ||
-             (inherits(object1, "fh") && inherits(object2, "direct"))){
+   } else if ((inherits(object1, "direct") && inherits(object2, "fh")) ||
+             (inherits(object1, "fh") && inherits(object2, "direct"))) {
       data <- merge(object1data, object2data, by.x = "Domain", by.y = "Domain", 
                     all = TRUE, suffixes = c("_1","_2"))
-   } else if((inherits(object1, "fh") && inherits(object2, "ebp")) ||
-             (inherits(object1, "ebp") && inherits(object2, "fh"))){
+   } else if ((inherits(object1, "fh") && inherits(object2, "ebp")) ||
+             (inherits(object1, "ebp") && inherits(object2, "fh"))) {
       data <- merge(object1data, object2data, by.x = "Domain", by.y = "Domain", 
                     all = TRUE, suffixes = c("_1","_2"))
    }

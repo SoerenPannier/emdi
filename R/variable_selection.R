@@ -116,7 +116,7 @@ model_select <- function(framework, sigmau2, method, interval,
   AdjR2 <- 1 - (hxbMSE/hxbMST)
   
   if (!all(framework$obs_dom == TRUE)) {
-    cat("Please note that the model selection criteria are only computed based on 
+    message("Please note that the model selection criteria are only computed based on 
        the in-sample domains. \n \n")
   }
   

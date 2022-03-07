@@ -49,7 +49,7 @@
 #' @seealso \code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}}, 
 #' \code{\link{fh}}
 #' @examples 
-#' \donttest{
+#' \dontrun{
 #' # Loading data - population and sample data
 #' data("eusilcA_pop")
 #' data("eusilcA_smp")

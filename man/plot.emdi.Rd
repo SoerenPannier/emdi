@@ -50,7 +50,7 @@ are three instant options to label the diagnostic plot: (i) original labels ("or
 labels nor title ("blank").
 (iv) individual labels by a list that needs to
 have below structure. Six elements can be defined called \code{qq_res, qq_ran,
-d_res, d_ran, cooks} and \code{box_cox} for the six different plots and these
+d_res, d_ran, cooks} and \code{opt_lambda} for the six different plots and these
 list elements need to have three elements each called \code{title, y_lab and
 x_lab}. Only the labels for the plots that should be different to the original
 need to be specified. Please see the details section for an example 
@@ -71,17 +71,18 @@ set to \code{FALSE}. It defaults to \code{TRUE}.}
 
 \item{range}{optional sequence determining the range of the x-axis for plots
 of the optimal transformation parameter that defaults to \code{NULL}. In that
-case a range of the optimal parameter +2/-1 is used for the plots of the
+case a range of the default interval is used for the plots of the
 optimal parameter. This leads in some cases to convergence problems such that
-it should be changed to e.g. the selected \code{interval}. This means for the
-default interval \code{seq(-1, 2, by = 0.05)}.}
+it should be changed to e.g. the selected \code{interval}. The default value 
+depends on the chosen data driven transformation and equals the default 
+interval for the estimation of the optimal parameter.}
 
 \item{...}{optional arguments passed to generic function.}
 }
 \value{
 Two Q-Q plots in one grid, two density plots, a Cook's distance plot
-and a likelihood plot for the optimal parameter of the Box-Cox transformation
-obtained by \code{\link[ggplot2]{ggplot}}. The latter two plots are only provided
+and a likelihood plot for the optimal parameter of transformations with transformation 
+parameter obtained by \code{\link[ggplot2]{ggplot}}. The latter two plots are only provided
 for ebp object.
 }
 \description{
@@ -93,12 +94,14 @@ the Fay-Herriot model, a Cook's distance plot for detecting outliers and the
 log-likelihood of the estimation of the optimal parameter in Box-Cox
 transformations (the latter two only for ebp). The return depends on the
 transformation such that a plot for the optimal parameter is
-only returned in case a Box-Cox transformation is chosen. The range of the
-x-axis is optional but necessary to change if there are convergence problems.
+only returned in case a transformation with transformation parameter is chosen. 
+The range of the x-axis is optional but necessary to change if there are convergence problems.
 All plots are obtained by \code{\link[ggplot2]{ggplot}}.
 }
 \details{
-The default settings of the \code{label} argument are as follows:\cr
+The default settings of the \code{label} argument are as follows (please
+note that the title for opt_lambda depends on the chosen transformation, for 
+the example Box-Cox is shown):\cr
 \describe{
 \item{list(}{}
 \item{qq_res =}{c(title="Error term", y_lab="Quantiles of pearson residuals",
@@ -115,7 +118,7 @@ The default settings of the \code{label} argument are as follows:\cr
 \item{cooks =}{c(title="Cook's Distance Plot",
                y_lab="Cook's Distance",
                x_lab="Index"),}
-\item{box_cox =}{c(title="Box-Cox - REML",
+\item{opt_lambda =}{c(title="Box-Cox - REML",
                y_lab="Log-Likelihood",
                x_lab="expression(lambda)"))}
 }

@@ -23,7 +23,8 @@ test_that("Does function optimal_parameter() return the benchmark lambda?", {
                         "provlab",
                         4282.081,
                         custom_indicator = NULL, 
-                        na.rm = TRUE)
+                        na.rm = TRUE,
+                        weights = NULL)
             
   optimal_lambda <- optimal_parameter(generic_opt    = generic_opt,
                                       fixed          = income~educ1,

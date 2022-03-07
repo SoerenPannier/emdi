@@ -18,13 +18,15 @@ to the argument \code{fixed} in function \code{\link[nlme]{lme}}.}
 linear regression model, \code{smp_data} also needs to comprise the variable
 named in \code{smp_domains} (see \code{\link{ebp}}).}
 
-\item{transformation}{a character string. Three different transformation
+\item{transformation}{a character string. Five different transformation
 methods for the dependent variable can be chosen (i) no transformation ("no");
 (ii) natural log transformation ("log"); (iii) Box-Cox transformation
-("box.cox").}
+("box.cox"); (iv) Dual transformation ("dual"); (v) Log-Shift transformation
+("log.shift")..}
 
-\item{lambda}{a scalar parameter that determines the Box-Cox transformation. 
-In case of no and natural log transformation \code{lambda} can be set to NULL.}
+\item{lambda}{a scalar parameter that determines the transformations with 
+transformation parameter. In case of no and natural log transformation 
+\code{lambda} can be set to NULL.}
 }
 \value{
 a named list with two elements, a data frame containing the data set
@@ -36,11 +38,11 @@ data frame is returned and the shift parameter is NULL.
 Function \code{data_transformation} transforms the dependent variable from 
 the formula object \code{fixed} in the given sample data set. Thus, it 
 returns the original sample data set with transformed dependent variable. 
-For the transformation three types can be chosen, particularly no, natural 
-log and Box-Cox transformation.
+For the transformation five types can be chosen, particularly no, natural 
+log, Box-Cox, Dual and Log-Shift transformation.
 }
 \details{
-For the natural log and Box-Cox transformation the dependent variable 
+For the natural log, Box-Cox and Dual transformation, the dependent variable 
 is shifted such that all values are greater than zero since the transformations 
 are not applicable for values equal to or smaller than zero. The shift is 
 calculated as follows: 

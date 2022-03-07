@@ -1,3 +1,14 @@
+# emdi 2.1.0
+* Extension of the ebp function to allow informative sampling
+* Additional data-driven transformations for the ebp 
+* New additional vignette
+* Example in write.ods fixed
+
+# emdi 2.0.3
+* Robustifying tests to comply with alternative implementations
+* Updated example for step
+
+
 # emdi 2.0.2
 * Many S3-methods in the style of stats and nlme are implemented for the classes direct, ebp and fh
 * Structure of S3-classes has been cleaned up

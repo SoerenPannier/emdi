@@ -5,9 +5,14 @@
 #' @method coef ebp
 #' @importFrom stats coef coefficients
 
-coef.ebp <- function(object, ...) {
+coef.ebp <- function(object, weights = FALSE, ...) {
   throw_class_error(object, "ebp")
-  coef(object$model)
+  if(isFALSE(weights)) {
+    coef(object$model) 
+  } else {
+      object$model$coefficients_weighted
+    }
+
 }
 
 
@@ -69,12 +74,13 @@ confint.fh <- function(object, parm = NULL, level = 0.95, ...) {
 
 extractAIC.fh <- function(fit, ...) {
   throw_class_error(fit, "fh")
-  if(!is.null(fit$model$model_select$AIC)) {
-    cat(paste0('Estimation approach used is ', fit$method$method, ': ', 
-               round(fit$model$model_select$AIC, 5))) 
-    }
+  if (!is.null(fit$model$model_select$AIC)) {
+    message(paste0('Estimation approach used is ', fit$method$method, ': ', 
+               round(fit$model$model_select$AIC, 5)))
+    invisible(fit$model$model_select$AIC)
+  }
   else {
-    cat(paste0('No AIC is returned for estimation approach ', 
+    message(paste0('No AIC is returned for estimation approach ', 
                fit$method$method, '.')) 
   }
 }
@@ -150,7 +156,7 @@ formula.fh <- function(x, ...) {
 
 logLik.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
-  cat('Estimation approach used is reml: ', round(object$model$logLik, 5))
+  message('Estimation approach used is reml: ', round(object$model$logLik, 5))
   invisible(object$model$logLik)
 }
 
@@ -162,11 +168,11 @@ logLik.ebp <- function(object, ...) {
 logLik.fh <- function(object, ...) {
   throw_class_error(object, "fh")
   if(!is.null(object$model$model_select$loglike)) {
-    cat('Estimation approach used is ', object$method$method, ':', round(object$model$model_select$loglike, 5)) 
+    message('Estimation approach used is ', object$method$method, ':', round(object$model$model_select$loglike, 5)) 
     invisible(object$model$model_select$loglike)
     }
   else {
-    cat(paste0('No likelihood is returned for estimation approach ', 
+    message(paste0('No likelihood is returned for estimation approach ', 
                object$method$method, '.')) 
   }
 }
