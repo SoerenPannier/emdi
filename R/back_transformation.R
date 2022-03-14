@@ -1,7 +1,7 @@
 backtransformed <- function(framework, sigmau2, eblup, transformation,
-                                backtransformation,
-                                combined_data, method, vardir,
-                                interval, B, MSE, mse_type) {
+                            backtransformation,
+                            combined_data, method, vardir,
+                            interval, B, MSE, mse_type) {
 
   # Conduct backtransformation
   backtransformed_estims <- if (transformation == "log") {
@@ -84,7 +84,7 @@ bc_crude <- function(framework, sigmau2, combined_data, eblup = eblup,
   # out-of-sample estimates. Following Rao 2003, Neves et al. 2013
 
   # Backtransformation point estimates
-  estim_MSE <- analytical_mse(
+  estim_mse <- analytical_mse(
     framework = framework, sigmau2 = sigmau2,
     combined_data = combined_data,
     method = method
@@ -92,14 +92,14 @@ bc_crude <- function(framework, sigmau2, combined_data, eblup = eblup,
 
   # Available for all domains - in- and out-of-sample
   point_backtransformed <- exp(eblup$eblup_data$FH + 0.5 *
-                                 estim_MSE$mse_data$FH)
+    estim_mse$mse_data$FH)
 
   # Selection if MSE is returned or not
   if (MSE == TRUE) {
     # The MSE is backtransformed following Rao 2003, p. 133
     mse_backtransformed <- exp(eblup$eblup_data$FH + 0.5 *
-      estim_MSE$mse_data$FH)^2 * estim_MSE$mse_data$FH
-    mse_method <- estim_MSE$MSE_method
+      estim_mse$mse_data$FH)^2 * estim_mse$mse_data$FH
+    mse_method <- estim_mse$MSE_method
   } else {
     mse_backtransformed <- NULL
     mse_method <- "no mse estimated"
@@ -122,7 +122,7 @@ bc_sm <- function(framework, sigmau2, combined_data, eblup = eblup,
   point_backtransformed <- rep(NA, framework$M)
   point_backtransformed[framework$obs_dom == TRUE] <-
     exp(eblup$eblup_data$FH[framework$obs_dom == TRUE] +
-          (0.5 * sigmau2 * (1 - eblup$gamma)))
+      (0.5 * sigmau2 * (1 - eblup$gamma)))
 
   if (MSE == TRUE) {
     mse_backtransformed <- slud_maiti(
