@@ -49,19 +49,14 @@ eblup_FH <- function(framework, sigmau2, combined_data) {
     eblup_data$Out[framework$obs_dom == TRUE] <- 0
   } else {
     # Prediction
-    pred_data_tmp <- combined_data[framework$obs_dom == FALSE, ]
 
-    pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1, 0, 1))
-    formula.tools::lhs(framework$formula) <- quote(helper)
-    pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
-
-    pred_X <- pred_data$x
-    pred_y <- pred_X %*% beta_hat
+    pred_X <- get_covariates(framework = framework)$X
+    #pred_y <- pred_X %*% beta_hat
 
     # Small area mean
     eblup_data$FH[framework$obs_dom == TRUE] <- framework$model_X %*% beta_hat +
       D %*% u_hat
-    eblup_data$FH[framework$obs_dom == FALSE] <- pred_y
+    eblup_data$FH[framework$obs_dom == FALSE] <- pred_X %*% beta_hat
     eblup_data$Out[framework$obs_dom == TRUE] <- 0
     eblup_data$Out[framework$obs_dom == FALSE] <- 1
   }
@@ -78,6 +73,22 @@ eblup_FH <- function(framework, sigmau2, combined_data) {
   )
 
   return(eblup_out)
+}
+
+# Get covariates for all domains
+get_covariates <- function(framework, only_out = TRUE) {
+
+  if (only_out == TRUE) {
+    pred_data_tmp <- framework$combined_data[framework$obs_dom == FALSE, ]
+  } else {
+    pred_data_tmp <- framework$combined_data
+  }
+
+  pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1,0,1))
+  formula.tools::lhs(framework$formula) <- quote(helper)
+  pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
+
+  return(list(y = pred_data$y, X = pred_data$x))
 }
 
 eblup_SFH <- function(framework, sigmau2, combined_data) {
