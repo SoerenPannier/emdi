@@ -1,59 +1,25 @@
 prasad_rao <- function(framework, sigmau2, combined_data) {
-  g1 <- rep(0, framework$m)
-  g2 <- rep(0, framework$m)
-  g3 <- rep(0, framework$m)
-  mse <- rep(0, framework$m)
-  # Inverse of total variance
-  Vi <- 1 / (sigmau2 + framework$vardir)
-  # Shrinkage factor
-  Bd <- framework$vardir / (sigmau2 + framework$vardir)
-  # Squared inverse of total variance
-  SumAD2 <- sum(Vi^2)
-  # X'Vi
-  XtVi <- t(Vi * framework$model_X)
-  # (X'ViX)^-1
-  Q <- solve(XtVi %*% framework$model_X)
 
-  # 2 divided by squared inverse of total variance
-  VarA <- 2 / SumAD2
+  g1 <- g1_function(sigmau2 = sigmau2, sigmae2 = framework$vardir,
+                    n_smp = rep(1, length(framework$vardir)))
 
-  for (d in seq_len(framework$m)) {
-    # Variance due to random effects: vardir * gamma
-    g1[d] <- framework$vardir[d] * (1 - Bd[d])
-    # Covariate for single domain
-    xd <- matrix(framework$model_X[d, ], nrow = 1, ncol = framework$p)
-    # Variance due to the estimation of beta
-    g2[d] <- (Bd[d]^2) * xd %*% Q %*% t(xd)
-    # Variance due to the estimation of the variance of the random effects
-    g3[d] <- (Bd[d]^2) * VarA / (sigmau2 + framework$vardir[d])
-    # Prasad-Rao estimator
-    mse[d] <- g1[d] + g2[d] + 2 * g3[d]
-  }
+  g2 <- g2_function(framework = framework, sigmau2 = sigmau2)
+  g3 <- g3_function(framework, sigmau2)
+  mse <- g1 + g2$g2 + 2 * g3
 
   mse_data <- data.frame(Domain = framework$combined_data[[framework$domains]])
   mse_data$Direct <- NA
-  mse_data$Direct[framework$obs_dom == TRUE] <- framework$vardir
+  mse_data$Direct[framework$obs_dom] <- framework$vardir
 
   # Small area MSE
-  mse_data$FH[framework$obs_dom == TRUE] <- mse
-  mse_data$Out[framework$obs_dom == TRUE] <- 0
+  mse_data$FH[framework$obs_dom] <- mse
+  mse_data$Out[framework$obs_dom] <- 0
 
 
   if (!all(framework$obs_dom == TRUE)) {
-    h <- rep(0, framework$M - framework$m)
-    mse_out <- rep(0, framework$M - framework$m)
-    # Covariates for out-of-sample domains
-    pred_data_tmp <- combined_data[framework$obs_dom == FALSE, ]
-    pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1, 0, 1))
-    formula.tools::lhs(framework$formula) <- quote(helper)
-    pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
-    pred_X <- pred_data$x
 
-    for (d_out in seq_len((framework$M - framework$m))) {
-      xd_out <- matrix(pred_X[d_out, ], nrow = 1, ncol = framework$p)
-      h[d_out] <- xd_out %*% Q %*% t(xd_out)
-      mse_out[d_out] <- sigmau2 + h[d_out]
-    }
+    mse_out <- mse_out(framework = framework, sigmau2 = sigmau2,
+                       q_tmp = g2$q_tmp)
 
     mse_data$FH[framework$obs_dom == FALSE] <- mse_out
     mse_data$Out[framework$obs_dom == FALSE] <- 1
@@ -64,57 +30,104 @@ prasad_rao <- function(framework, sigmau2, combined_data) {
 }
 
 
-datta_lahiri <- function(framework, sigmau2, combined_data) {
-  g1 <- rep(0, framework$m)
-  g2 <- rep(0, framework$m)
-  g3 <- rep(0, framework$m)
-  mse <- rep(0, framework$m)
-  Vi <- 1 / (sigmau2 + framework$vardir)
-  Bd <- framework$vardir / (sigmau2 + framework$vardir)
-  SumAD2 <- sum(Vi^2)
-  XtVi <- t(Vi * framework$model_X)
-  Q <- solve(XtVi %*% framework$model_X)
+g1_function <- function(sigmau2,
+                        sigmae2,
+                        n_smp) {
+  tmp <- ((sigmau2) / (sigmau2 + sigmae2 / n_smp)) * (sigmae2 / n_smp)
+  tmp[is.nan(tmp)] <- 0
+  return(tmp)
+}
 
-  VarA <- 2 / SumAD2
-  b <- (-1) * sum(diag(Q %*% (t((Vi^2) * framework$model_X) %*%
-    framework$model_X))) / SumAD2
+g2_function <- function(framework, sigmau2) {
+
+  g2 <- rep(0, framework$m)
+  Bd <- framework$vardir/(sigmau2 + framework$vardir)
+  Vi <- 1/(sigmau2 + framework$vardir)
+  XtVi <- t(Vi * framework$model_X)
+  # (X'ViX)^-1
+  q_tmp <- solve(XtVi %*% framework$model_X)
+
   for (d in seq_len(framework$m)) {
-    g1[d] <- framework$vardir[d] * (1 - Bd[d])
+    # Covariate for single domain
     xd <- matrix(framework$model_X[d, ], nrow = 1, ncol = framework$p)
-    g2[d] <- (Bd[d]^2) * xd %*% Q %*% t(xd)
-    g3[d] <- (Bd[d]^2) * VarA / (sigmau2 + framework$vardir[d])
-    mse[d] <- g1[d] + g2[d] + 2 * g3[d] - b * (Bd[d]^2)
+    # Variance due to the estimation of beta
+    g2[d] <- (Bd[d]^2) * xd %*% q_tmp %*% t(xd)
   }
+
+  return(list(g2 = g2, q_tmp = q_tmp))
+}
+
+
+g3_function <- function(framework, sigmau2) {
+  # Inverse of total variance
+  Bd <- framework$vardir/(sigmau2 + framework$vardir)
+  Vi <- 1/(sigmau2 + framework$vardir)
+  SumAD2 <- sum(Vi^2)
+  VarA <- 2/SumAD2
+  g3 <- (Bd^2) * VarA/(sigmau2 + framework$vardir)
+
+  return(g3)
+}
+
+
+mse_out <- function(framework, sigmau2, q_tmp, b = 0) {
+
+  mse_out <- rep(0, framework$M - framework$m)
+  pred_X <- get_covariates(framework = framework)$X
+
+  for (d_out in seq_len((framework$M - framework$m))) {
+    xd_out <- matrix(pred_X[d_out, ], nrow = 1, ncol = framework$p)
+    h <- xd_out %*% q_tmp %*% t(xd_out)
+    mse_out[d_out] <- sigmau2 + h + b
+  }
+
+  return(mse_out)
+
+}
+
+datta_lahiri <- function(framework, sigmau2, combined_data) {
+
+
+  g1 <- g1_function(sigmau2 = sigmau2, sigmae2 = framework$vardir,
+                    n_smp = rep(1, length(framework$vardir)))
+
+  g2 <- g2_function(framework = framework, sigmau2 = sigmau2)
+  g3 <- g3_function(framework, sigmau2)
+  b <- datta_lahiri_bias(framework = framework, sigmau2 = sigmau2)
+  Bd <- framework$vardir/(sigmau2 + framework$vardir)
+  mse <- g1 + g2$g2 + 2 * g3 - b * (Bd^2)
 
   mse_data <- data.frame(Domain = framework$combined_data[[framework$domains]])
   mse_data$Direct <- NA
-  mse_data$Direct[framework$obs_dom == TRUE] <- framework$vardir
+  mse_data$Direct[framework$obs_dom] <- framework$vardir
 
   # Small area MSE
-  mse_data$FH[framework$obs_dom == TRUE] <- mse
-  mse_data$Out[framework$obs_dom == TRUE] <- 0
+  mse_data$FH[framework$obs_dom] <- mse
+  mse_data$Out[framework$obs_dom] <- 0
 
   if (!all(framework$obs_dom == TRUE)) {
-    h <- rep(0, framework$M - framework$m)
-    mse_out <- rep(0, framework$M - framework$m)
-    # Covariates for out-of-sample domains
-    pred_data_tmp <- combined_data[framework$obs_dom == FALSE, ]
-    pred_data_tmp <- data.frame(pred_data_tmp, helper = rnorm(1, 0, 1))
-    formula.tools::lhs(framework$formula) <- quote(helper)
-    pred_data <- makeXY(formula = framework$formula, data = pred_data_tmp)
-    pred_X <- pred_data$x
 
-    for (d_out in seq_len((framework$M - framework$m))) {
-      xd_out <- matrix(pred_X[d_out, ], nrow = 1, ncol = framework$p)
-      h[d_out] <- xd_out %*% Q %*% t(xd_out)
-      mse_out[d_out] <- sigmau2 + b + h[d_out]
-    }
+    mse_out <- mse_out(framework = framework, sigmau2 = sigmau2,
+                       q_tmp = g2$q_tmp, b = b)
 
     mse_data$FH[framework$obs_dom == FALSE] <- mse_out
     mse_data$Out[framework$obs_dom == FALSE] <- 1
   }
 
   return(mse_data)
+}
+
+
+datta_lahiri_bias <- function(framework, sigmau2) {
+
+  Vi <- 1/(sigmau2 + framework$vardir)
+  SumAD2 <- sum(Vi^2)
+  XtVi <- t(Vi * framework$model_X)
+  Q <- solve(XtVi %*% framework$model_X)
+
+  b <- (-1) * sum(diag(Q %*% (t((Vi^2) * framework$model_X) %*% framework$model_X)))/SumAD2
+  return(b)
+
 }
 
 
