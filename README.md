@@ -1,3 +1,7 @@
+  <!-- badges: start -->
+  [![R-CMD-check](https://github.com/SoerenPannier/emdi/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SoerenPannier/emdi/actions/workflows/R-CMD-check.yaml)
+  <!-- badges: end -->
+
 # emdi: Estimating and Mapping Disaggregated Indicators
 
 Functions that support estimating, assessing and mapping regional disaggregated indicators. So far, estimation methods comprise direct estimation, the model-based unit-level approach Empirical Best Prediction (see "Small area estimation of poverty indicators" by Molina and Rao (2010) 
