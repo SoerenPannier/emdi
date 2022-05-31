@@ -30,9 +30,9 @@ version of eusilcP, is included in the package. eusilc and eusilcP are public-us
 files (under GPL-2) published in the Journal of Statistical Software,
 Vol 54 (2013), Issue 15, and Vol 37 (2010), Issue 3.
 
-The file step.R is based on stepfun.R of the R stats package. Part of the R
-package, https://www.R-project.org Copyright (C) 1995-2014 The R Core Team
-under the terms of the GNU General Public License as published by the Free
-Software Foundation; either version 2 of the License, or (at your option) any
-later version. A copy of the GNU General Public License is available at
-https://www.R-project.org/Licenses/
+The files step.R and drop1.add1.fh.R are based on stepfun.R and respectively add.R
+of the R stats package. Part of the R package, https://www.R-project.org
+Copyright (C) 1995-2014 The R Core Team under the terms of the GNU General Public
+License as published by the Free Software Foundation; either version 2 of the
+License, or (at your option) any later version. A copy of the GNU General
+Public License is available at https://www.R-project.org/Licenses/
