@@ -12,3 +12,4 @@ revdep
 ^\.Rprofile$
 ^CRAN-RELEASE$
 
+^\.github$
