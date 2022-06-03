@@ -2,7 +2,7 @@
 % Please edit documentation in R/load_shape.R
 \name{load_shapeaustria}
 \alias{load_shapeaustria}
-\title{Loading the Shape File for Astrian Districts}
+\title{Loading the Shape File for Austrian Districts}
 \usage{
 load_shapeaustria()
 }
