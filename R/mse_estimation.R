@@ -81,6 +81,8 @@ parametric_bootstrap <- function(framework,
   if (.Platform$OS.type == "windows") {
     flush.console()
   }
+
+
   mses <- apply(mses, c(1, 2), mean)
   mses <- data.frame(Domain = unique(framework$pop_domains_vec), mses)
 
