@@ -91,6 +91,22 @@ direct_all_cali <-  direct(y="eqIncome",
                            seed=123,
                            na.rm=TRUE)
 
+direct_all_cali <-  direct(y="eqIncome",
+                           smp_data=eusilc,
+                           smp_domains="db040",
+                           weights="rb050",
+                           # without weights
+                           #threshold = 10848.8,
+                           # with weights
+                           threshold=10859.24,
+                           var=TRUE,
+                           boot_type = "calibrate",
+                           X_calib = as.matrix(eusilc$age),
+                           totals = NULL,
+                           B=50,
+                           seed=123,
+                           na.rm=TRUE)
+
 
 # laeken indicators that fit to above setting
 arpr_all_cali <- variance("eqIncome",
@@ -106,8 +122,10 @@ arpr_all_cali <- variance("eqIncome",
 # Check correspondence: difference in variance can occur due to different poverty
 # lines
 all.equal(arpr_all$valueByStratum, direct_all_cali$ind[, c("Domain","Head_Count")])
+all.equal(arpr_all$valueByStratum$value/100, direct_all_cali$ind$Head_Count)
 all.equal(arpr_all_cali$varByStratum, direct_all_cali$MSE[, c("Domain","Head_Count")])
-
+all.equal(arpr_all_cali$varByStratum$var/10000,
+          direct_all_cali$MSE$Head_Count)
 
 
 gini_all_cali <- variance("eqIncome",

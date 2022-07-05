@@ -171,7 +171,8 @@ model_par <- function(framework,
     den <- matrix(0, nrow = length(betas), ncol = length(betas))
 
     for (d in 1:framework$N_dom_smp) {
-      domain <- as.character(unique(framework$smp_domains_vec)[d])
+      #domain <- as.character(unique(framework$smp_domains_vec)[d])
+      domain <- names(table(framework$smp_domains_vec)[d])
 
       # Domain means of of the dependent variable
       dep_smp <- transformation_par$transformed_data[[
@@ -209,6 +210,8 @@ model_par <- function(framework,
       nrow = framework$n_smp[d],
       byrow = TRUE
       )
+
+
 
       num <- num + (indep_weight %*% dep_var_ast)
       den <- den + (indep_weight %*% indep_var_ast)
