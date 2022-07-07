@@ -21,7 +21,7 @@ direct_variance <- function(direct_estimator,
 
   # Specification for y, is different to the calculation of value
   y <- smp_data[, y]
-  y <- as.numeric(as.integer(y))
+  y <- as.numeric(y)
   n <- length(y)
 
   # needs to be specified here again due to the different specification of y and
