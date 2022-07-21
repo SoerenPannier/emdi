@@ -3,7 +3,7 @@
 \name{write.excel}
 \alias{write.excel}
 \alias{write.ods}
-\title{Exports an emdiObject to an Excel file or OpenDocument Spreadsheet}
+\title{Exports an emdiObject to an Excel File or OpenDocument Spreadsheet}
 \usage{
 write.excel(
   object,
@@ -27,28 +27,29 @@ write.ods(
 \item{object}{an object of type "emdi", representing point and
 MSE estimates.}
 
-\item{file}{path and filename of the spreadsheet to create. It should end on .xlsx or .ods respectively.}
+\item{file}{path and filename of the spreadsheet to create. It should end on
+.xlsx or .ods respectively.}
 
 \item{indicator}{optional character vector that selects which indicators
 shall be returned: (i) all calculated indicators ("all");
 (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
-"Quantile_75", "Quantile_90", "Head_Count", 
-"Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of 
-"custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty" or 
-"Inequality". Note, additional custom indicators can be 
-defined as argument for model-based approaches (see also \code{\link{ebp}}) 
-and do not appear in groups of indicators even though these might belong to 
-one of the groups. If the \code{model} argument is of type "fh", 
-indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi 
+"Quantile_75", "Quantile_90", "Head_Count",
+"Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
+"custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty" or
+"Inequality". Note, additional custom indicators can be
+defined as argument for model-based approaches (see also \code{\link{ebp}})
+and do not appear in groups of indicators even though these might belong to
+one of the groups. If the \code{model} argument is of type "fh",
+indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi
 object is overwritten by function benchmark). Defaults to "all".}
 
-\item{MSE}{logical. If \code{TRUE}, the MSE of the emdiObject is exported. 
+\item{MSE}{logical. If \code{TRUE}, the MSE of the emdiObject is exported.
 Defaults to \code{FALSE}.}
 
-\item{CV}{logical. If \code{TRUE}, the CV of the emdiObject is exported. 
+\item{CV}{logical. If \code{TRUE}, the CV of the emdiObject is exported.
 Defaults to \code{FALSE}.}
 
-\item{split}{logical. If \code{TRUE}, point estimates, MSE and CV are written 
+\item{split}{logical. If \code{TRUE}, point estimates, MSE and CV are written
 to different sheets in the Excel file. In \code{write.ods} \code{TRUE} will
 result in different files for point estimates and their precisions.
 Defaults to \code{FALSE}.}
@@ -58,28 +59,29 @@ An Excel file is created in your working directory, or at the given
 path. Alternatively multiple ODS files are created at the given path.
 }
 \description{
-Function \code{write.excel} enables the user to export point and MSE 
-estimates as well as diagnostics from the \code{summary} to an Excel file. 
-The user can choose if the results should be reported in one or several Excel 
-sheets. Furthermore, a selection of indicators can be specified. 
+Function \code{write.excel} enables the user to export point and MSE
+estimates as well as diagnostics from the \code{summary} to an Excel file.
+The user can choose if the results should be reported in one or several Excel
+sheets. Furthermore, a selection of indicators can be specified.
 Respectively the function \code{write.ods} enables the export to OpenDocument
-Spreadsheets. Note that while \code{write.exel} will create a single document 
+Spreadsheets. Note that while \code{write.exel} will create a single document
 \code{write.ods} will create a group of files.
 }
 \details{
 These functions create an Excel file via the package
-\pkg{\link{openxlsx}} and ODS files via the package 
+\pkg{\link{openxlsx}} and ODS files via the package
 \pkg{readODS}.
-Both packages require a zip application to be available to \R. If this is not 
-the case the authors of \pkg{\link{openxlsx}} suggest the first of the following two ways. 
+Both packages require a zip application to be available to \R. If this is not
+the case the authors of \pkg{\link{openxlsx}} suggest the first of the
+following two ways.
 \itemize{
 \item Install Rtools from: http://cran.r-project.org/bin/windows/Rtools/ and
 modify the system PATH during installation.
-\item If Rtools is installed, but no system path variable is set. One can 
-set such a variable temporarily to \R by a command like: 
+\item If Rtools is installed, but no system path variable is set. One can
+set such a variable temporarily to \R by a command like:
 \code{Sys.setenv("R_ZIPCMD" = "PathToTheRToolsFolder/bin/zip.exe")}.
 }
-To check if a zip application is available they recommend the command 
+To check if a zip application is available they recommend the command
 \code{shell("zip")}.
 }
 \examples{
@@ -88,31 +90,48 @@ To check if a zip application is available they recommend the command
 data("eusilcA_pop")
 data("eusilcA_smp")
 
-# Generate emdi object with two additional indicators; here via function ebp() 
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
-self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
-fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-threshold = function(y){0.6 * median(y)}, L = 50, MSE = TRUE, B = 50, 
-custom_indicator = list( my_max = function(y, threshold){max(y)},
-my_min = function(y, threshold){min(y)}), na.rm = TRUE, cpus = 1)
+# Generate emdi object with two additional indicators; here via function
+# ebp()
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash +
+    self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
+    fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+  threshold = function(y) {
+    0.6 * median(y)
+  }, L = 50, MSE = TRUE, B = 50,
+  custom_indicator = list(
+    my_max = function(y, threshold) {
+      max(y)
+    },
+    my_min = function(y, threshold) {
+      min(y)
+    }
+  ), na.rm = TRUE, cpus = 1
+)
 
-# Example 1: Export estimates for all indicators and uncertainty measures and 
-# diagnostics to Excel
-write.excel(emdi_model, file = "excel_output_all.xlsx", indicator = "all", 
-MSE = TRUE, CV = TRUE)
+# Example 1: Export estimates for all indicators and uncertainty measures
+# and diagnostics to Excel
+write.excel(emdi_model,
+  file = "excel_output_all.xlsx", indicator = "all",
+  MSE = TRUE, CV = TRUE
+)
 
 # Example 2: Single Excel sheets for point, MSE and CV estimates
-write.excel(emdi_model, file = "excel_output_all_split.xlsx", indicator = "all", 
-MSE = TRUE, CV = TRUE, split = TRUE)
+write.excel(emdi_model,
+  file = "excel_output_all_split.xlsx",
+  indicator = "all", MSE = TRUE, CV = TRUE, split = TRUE
+)
 
 # Example 3: Same as example 1 but for an ODS output
-write.ods(emdi_model, file = "ods_output_all.ods", indicator = "all", 
-MSE = TRUE, CV = TRUE)
+write.ods(emdi_model,
+  file = "ods_output_all.ods", indicator = "all",
+  MSE = TRUE, CV = TRUE
+)
 }
 
 }
 \seealso{
-\code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}}, 
+\code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}},
 \code{\link{fh}}
 }

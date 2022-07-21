@@ -2,7 +2,7 @@
 % Please edit documentation in R/combine_data.R
 \name{combine_data}
 \alias{combine_data}
-\title{Combines sample and population data}
+\title{Combines Sample and Population Data}
 \usage{
 combine_data(pop_data, pop_domains, smp_data, smp_domains)
 }
@@ -14,14 +14,14 @@ included in \code{pop_data}.}
 
 \item{smp_data}{a data frame with sample data.}
 
-\item{smp_domains}{a character string indicating the domain variable that is 
+\item{smp_domains}{a character string indicating the domain variable that is
 included in \code{smp_data}.}
 }
 \value{
 a combined data set.
 }
 \description{
-This function combines the aggregated population information with the 
-aggregated sample data. The merge is based on the domains. Out-of-sample 
+This function combines the aggregated population information with the
+aggregated sample data. The merge is based on the domains. Out-of-sample
 domains will have NA values for the variables from the sample data.
 }

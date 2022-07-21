@@ -1,31 +1,38 @@
-The package tests make use of the "incomedata", "Xoutsamp", "milk", 
-"grapes" and "grapesprox" data sets provided by the sae package under 
+The package tests make use of the "incomedata", "Xoutsamp", "milk",
+"grapes" and "grapesprox" data sets provided by the sae package under
 a GPL-2 license.
 
-Molina I and Marhuenda Y (2015). "sae: An R Package for Small Area Estimation." 
+Molina I and Marhuenda Y (2015). "sae: An R Package for Small Area Estimation."
 The R Journal, 7(1), pp. 81-98. <URL:
 http://journal.r-project.org/archive/2015-1/molina-marhuenda.pdf>
 
-Please note that the data sets in tests/testthat/EBP are modified for our 
-purposes. This means for the data set incomedata.RData that we only use the 
-provinces that are also contained in the data set Xoutsamp. Furthermore, we 
-created a data set called incomedata_woTeruel.RData that does not contain the 
-province Teruel. Also the data set Xoutsamp is changed in the sense that 
-unnecessary explanatory variables are deleted and a variable with the province 
-names is added. The new data set with population data is called 
+Please note that the data sets in tests/testthat/EBP are modified for our
+purposes. This means for the data set incomedata.RData that we only use the
+provinces that are also contained in the data set Xoutsamp. Furthermore, we
+created a data set called incomedata_woTeruel.RData that does not contain the
+province Teruel. Also the data set Xoutsamp is changed in the sense that
+unnecessary explanatory variables are deleted and a variable with the province
+names is added. The new data set with population data is called
 Xoutsamp_AuxVar.RData.
 
 The Austrian shape file provided by this package was obtained under a CC
 BY-SA 2.0 license from:
 
-Bundesamt fuer Eich- und Vermessungswesen, Verwaltungsgrenzen (VGD) - 1:250.000, 
-Bezirksgrenzen, Data from 1.04.2017, 
-http://data-synergis.opendata.arcgis.com/datasets/bb4acc011100469185d2e59fa4cae5fc_0, 
-by SynerGIS, CC BY-SA 2.0 (https://creativecommons.org/licenses/by-sa/2.0/), 
+Bundesamt fuer Eich- und Vermessungswesen, Verwaltungsgrenzen (VGD) - 1:250.000,
+Bezirksgrenzen, Data from 1.04.2017,
+http://data-synergis.opendata.arcgis.com/datasets/bb4acc011100469185d2e59fa4cae5fc_0,
+by SynerGIS, CC BY-SA 2.0 (https://creativecommons.org/licenses/by-sa/2.0/),
 accessed the 07.02.2018.
 
-Several versions of synthetic EU-SILC data are used (eusilc from package laeken 
-and eusilcP from package simFrame) and the data set eusilcA_pop, a modified 
-version of eusilcP, is included in the package. eusilc and eusilcP are public-use 
-files (under GPL-2) published in the Journal of Statistical Software, 
+Several versions of synthetic EU-SILC data are used (eusilc from package laeken
+and eusilcP from package simFrame) and the data set eusilcA_pop, a modified
+version of eusilcP, is included in the package. eusilc and eusilcP are public-use
+files (under GPL-2) published in the Journal of Statistical Software,
 Vol 54 (2013), Issue 15, and Vol 37 (2010), Issue 3.
+
+The files step.R and drop1.add1.fh.R are based on the step and drop functions respectively the add.R file
+of the R stats package. Part of the R package, https://www.R-project.org
+Copyright (C) 1995-2014 The R Core Team under the terms of the GNU General Public
+License as published by the Free Software Foundation; either version 2 of the
+License, or (at your option) any later version. A copy of the GNU General
+Public License is available at https://www.R-project.org/Licenses/

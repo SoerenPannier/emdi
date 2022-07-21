@@ -2,7 +2,7 @@
 % Please edit documentation in R/direct_estimation.R
 \name{direct}
 \alias{direct}
-\title{Direct estimation of disaggregated indicators}
+\title{Direct Estimation of Disaggregated Indicators}
 \usage{
 direct(
   y,
@@ -22,7 +22,7 @@ direct(
 )
 }
 \arguments{
-\item{y}{a character string indicating the variable that is used for 
+\item{y}{a character string indicating the variable that is used for
 estimating the indicators. The variable must be contained in the sample data.}
 
 \item{smp_data}{survey data containing variable y as well as sampling
@@ -32,72 +32,73 @@ domains, and weights if selected.}
 that indicates domains in the sample data. The variable must be numeric or a
 factor.}
 
-\item{weights}{a character string containing the name of a variable for 
-the sampling weights in the sample data. This argument is optional and defaults
-to \code{NULL}.}
+\item{weights}{a character string containing the name of a variable for
+the sampling weights in the sample data. This argument is optional and
+defaults to \code{NULL}.}
 
-\item{design}{a character string containing the name of a variable for different 
-strata for stratified sampling designs. This argument is optional and defaults
-to \code{NULL}.}
+\item{design}{a character string containing the name of a variable for
+different strata for stratified sampling designs. This argument is optional
+and defaults to \code{NULL}.}
 
-\item{threshold}{a number defining a threshold. Alternatively, a threshold may 
-be defined as a \code{function} of \code{y} and \code{weights} returning a 
-numeric value. Such a function will be evaluated once for the point 
-estimation and in each iteration of the parametric bootstrap. See Example 2 
-for using a function as threshold.  A threshold is needed for calculation e.g. 
-of head count ratios and poverty gaps. The argument defaults to \code{NULL}. 
-In this case, the threshold is set to 60\% of the median of the variable that 
-is selected as \code{y} similarly to the at-risk-of-poverty rate used in the 
-EU (see also \cite{Social Protection Committee 2001}). However, any desired 
-threshold can be chosen.}
+\item{threshold}{a number defining a threshold. Alternatively, a threshold
+may be defined as a \code{function} of \code{y} and \code{weights} returning
+a numeric value. Such a function will be evaluated once for the point
+estimation and in each iteration of the parametric bootstrap. See Example 2
+for using a function as threshold.  A threshold is needed for calculation
+e.g. of head count ratios and poverty gaps. The argument defaults to
+\code{NULL}. In this case, the threshold is set to 60\% of the median of the
+variable that is selected as \code{y} similarly to the at-risk-of-poverty
+rate used in the EU (see also \cite{Social Protection Committee 2001}).
+However, any desired threshold can be chosen.}
 
-\item{var}{if \code{TRUE}, estimates for the variance are calculated using a 
+\item{var}{if \code{TRUE}, estimates for the variance are calculated using a
 naive or calibrated bootstrap. Defaults to \code{FALSE}.}
 
-\item{boot_type}{a character string containing the name of the bootstrap 
-specification. Either a \code{"naive"} or a \code{"calibrate"} bootstrap can 
+\item{boot_type}{a character string containing the name of the bootstrap
+specification. Either a \code{"naive"} or a \code{"calibrate"} bootstrap can
 be used. See also \code{\link[laeken]{bootVar}}. Defaults to \code{naive}.}
 
-\item{B}{a number determining the number of bootstrap populations for the 
+\item{B}{a number determining the number of bootstrap populations for the
 bootstrap variance. Defaults to \code{50}.}
 
-\item{seed}{an integer to set the seed for the random number generator. Random 
-number generation is used in the bootstrap approach. If seed is set to 
+\item{seed}{an integer to set the seed for the random number generator.
+Random number generation is used in the bootstrap approach. If seed is set to
 \code{NULL}, seed is chosen randomly. Defaults to \code{123}.}
 
-\item{X_calib}{a numeric matrix including calibration variables if the calibrated 
-bootstrap is chosen. Defaults to NULL.}
+\item{X_calib}{a numeric matrix including calibration variables if the
+calibrated bootstrap is chosen. Defaults to NULL.}
 
-\item{totals}{a numeric vector providing the population totals if the calibrated 
-bootstrap is chosen. If a vector is chosen, the length of the vector needs to 
-equal the number of columns in X_calib. Defaults to \code{NULL}. In this case, 
-the sampling weights are used to calculate the totals.}
+\item{totals}{a numeric vector providing the population totals if the
+calibrated bootstrap is chosen. If a vector is chosen, the length of the
+vector needs to equal the number of columns in X_calib. Defaults to
+\code{NULL}. In this case, the sampling weights are used to calculate the
+totals.}
 
 \item{custom_indicator}{a list of functions containing the indicators to be
 calculated additionally. Such functions must and must only depend on the
-target variable \code{y}, the \code{weights} and the 
-\code{threshold} (numeric value) (see Example 3) even though some arguments 
+target variable \code{y}, the \code{weights} and the
+\code{threshold} (numeric value) (see Example 3) even though some arguments
 might not be used in the additional function. Defaults to \code{NULL}.}
 
-\item{na.rm}{if \code{TRUE}, observations with \code{NA} values are deleted 
+\item{na.rm}{if \code{TRUE}, observations with \code{NA} values are deleted
 from the sample data. Defaults to \code{FALSE}.}
 }
 \value{
-An object of class "direct", "emdi" that provides direct estimators 
-for regional disaggregated indicators and optionally corresponding variance 
-estimates. Several generic functions have methods for the 
-returned object. For a full list and descriptions of the components of objects 
-of class "emdi", see \code{\link{emdiObject}}.
+An object of class "direct", "emdi" that provides direct estimators
+for regional disaggregated indicators and optionally corresponding variance
+estimates. Several generic functions have methods for the
+returned object. For a full list and descriptions of the components of
+objects of class "emdi", see \code{\link{emdiObject}}.
 }
 \description{
-Function \code{direct} estimates indicators only based on sample information. 
+Function \code{direct} estimates indicators only based on sample information.
 The variance is estimated via a naive or calibrated bootstrap. The estimation
-is adapted from the estimation of direct indicators in package 
+is adapted from the estimation of direct indicators in package
 \pkg{laeken}.
 }
 \details{
-The set of predefined indicators includes the mean, median, four 
-further quantiles (10\%, 25\%, 75\% and 90\%), head count ratio, poverty gap, 
+The set of predefined indicators includes the mean, median, four
+further quantiles (10\%, 25\%, 75\% and 90\%), head count ratio, poverty gap,
 Gini coefficient and the quintile share ratio.
 }
 \examples{
@@ -106,28 +107,40 @@ Gini coefficient and the quintile share ratio.
 data("eusilcA_smp")
 
 # Example 1: With weights and naive bootstrap
-emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
-smp_domains = "district", weights = "weight", threshold = 11064.82, var = TRUE, 
-boot_type = "naive", B = 50, seed = 123, X_calib = NULL, totals = NULL, 
-na.rm = TRUE)
+emdi_direct <- direct(
+  y = "eqIncome", smp_data = eusilcA_smp,
+  smp_domains = "district", weights = "weight", threshold = 11064.82,
+  var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL,
+  totals = NULL, na.rm = TRUE
+)
 
 # Example 2: With function as threshold
-emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
-smp_domains = "district", weights = "weight", threshold = 
-function(y, weights){0.6 * laeken::weightedMedian(y, weights)}, na.rm = TRUE)
+emdi_direct <- direct(
+  y = "eqIncome", smp_data = eusilcA_smp,
+  smp_domains = "district", weights = "weight", threshold =
+    function(y, weights) {
+      0.6 * laeken::weightedMedian(y, weights)
+    }, na.rm = TRUE
+)
 
 # Example 3: With custom indicators
-emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp, 
-smp_domains = "district", weights = "weight", threshold = 10859.24, 
-var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL, 
-totals = NULL, custom_indicator = list(my_max = function(y, weights, 
-threshold){max(y)}, my_min = function(y, weights, threshold){min(y)}), 
-na.rm = TRUE)
+emdi_direct <- direct(
+  y = "eqIncome", smp_data = eusilcA_smp,
+  smp_domains = "district", weights = "weight", threshold = 10859.24,
+  var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL,
+  totals = NULL, custom_indicator = list(my_max = function(y, weights,
+                                                           threshold) {
+    max(y)
+  }, my_min = function(y, weights, threshold) {
+    min(y)
+  }),
+  na.rm = TRUE
+)
 }
 }
 \references{
 Alfons, A. and Templ, M. (2013). Estimation of Social Exclusion Indicators
-from Complex Surveys: The \R Package \pkg{laeken}. Journal of 
+from Complex Surveys: The \R Package \pkg{laeken}. Journal of
 Statistical Software, 54(15), 1-25.  \cr \cr
 Social Protection Committee (2001). Report on Indicators in the Field of
 Poverty and Social Exclusions, Technical Report, European Union.

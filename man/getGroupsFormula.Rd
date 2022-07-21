@@ -5,7 +5,7 @@
 \alias{getGroupsFormula.direct}
 \alias{getGroupsFormula.ebp}
 \alias{getGroupsFormula.fh}
-\title{Extract grouping formula from an emdi object}
+\title{Extract Grouping Formula from an emdi Object}
 \usage{
 \method{getGroupsFormula}{direct}(object, ...)
 
@@ -14,8 +14,8 @@
 \method{getGroupsFormula}{fh}(object, ...)
 }
 \arguments{
-\item{object}{an object of type "emdi", depending on the method either "direct", 
-"ebp" or "fh".}
+\item{object}{an object of type "emdi", depending on the method either
+"direct", "ebp" or "fh".}
 
 \item{...}{additional arguments that are not used in this method.}
 }
@@ -23,24 +23,26 @@
 A one-sided formula.
 }
 \description{
-Methods \code{getGroupsFormula.direct}, \code{getGroupsFormula.ebp} and 
-\code{getGroupsFormula.fh} extract the grouping formula from an 
+Methods \code{getGroupsFormula.direct}, \code{getGroupsFormula.ebp} and
+\code{getGroupsFormula.fh} extract the grouping formula from an
 emdi object.
 }
 \details{
-The generic function \code{getGroupsFormula} is imported from package nlme and 
-re-exported to make the S3-methods available, even though the nlme package 
-itself is not loaded or attached. For default documentation, 
+The generic function \code{getGroupsFormula} is imported from
+package nlme and re-exported to make the S3-methods available, even though
+the nlme package itself is not loaded or attached. For default documentation,
 see \code{\link[nlme]{getGroupsFormula}}.
 }
 \examples{
 \donttest{
 # Example for class ebp
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + self_empl + 
-unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + 
-house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop, 
-pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district", 
-na.rm = TRUE)
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+  na.rm = TRUE
+)
 
 getGroupsFormula(emdi_model)
 }

@@ -7,7 +7,7 @@
 \alias{compare_plot.direct}
 \alias{compare_plot.ebp}
 \alias{compare_plot.fh}
-\title{Shows plots for the comparison of estimates}
+\title{Shows Plots for the Comparison of Estimates}
 \usage{
 compare_plot(
   model,
@@ -66,13 +66,13 @@ compare_plot(
 )
 }
 \arguments{
-\item{model}{a model object of type "emdi", either "ebp" or "fh", representing 
-point and MSE estimates.}
+\item{model}{a model object of type "emdi", either "ebp" or "fh",
+representing point and MSE estimates.}
 
 \item{direct}{an object of type "direct","emdi", representing point
 and MSE estimates. If the input argument \code{model} is of type "ebp",
-\code{direct} is required. If the input argument \code{model} is of type 
-"fh", the \code{direct} component is already included in the input 
+\code{direct} is required. If the input argument \code{model} is of type
+"fh", the \code{direct} component is already included in the input
 argument \code{model}.}
 
 \item{indicator}{optional character vector that selects which indicators
@@ -82,77 +82,78 @@ shall be returned: (i) all calculated indicators ("all");
 "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
 "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
 "Inequality" or "Custom". If two of these groups are selected, only the first
-one is returned. Note, additional custom indicators can be
-defined as argument for the EBP approaches (see also \code{\link{ebp}})
-and do not appear in groups of indicators even though these might belong to
-one of the groups. If the \code{model} argument is of type "fh", 
-indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi 
-object is overwritten by function \code{\link{benchmark}}). Defaults to "all".}
+one is returned. Note, additional custom indicators can be defined as
+argument for the EBP approaches (see also \code{\link{ebp}}) and do not
+appear in groups of indicators even though these might belong to one of the
+groups. If the \code{model} argument is of type "fh", indicator can be set
+to "all", "Direct", FH", or "FH_Bench" (if emdi object is overwritten by
+function \code{\link{benchmark}}). Defaults to "all".}
 
-\item{MSE}{optional logical. If \code{TRUE}, the MSE estimates of the direct 
+\item{MSE}{optional logical. If \code{TRUE}, the MSE estimates of the direct
 and model-based estimates are compared via boxplots and scatter plots.}
 
-\item{CV}{optional logical. If \code{TRUE}, the coefficient of variation 
-estimates of the direct and model-based estimates are compared via boxplots 
+\item{CV}{optional logical. If \code{TRUE}, the coefficient of variation
+estimates of the direct and model-based estimates are compared via boxplots
 and scatter plots.}
 
-\item{label}{argument that enables to customize title and axis labels. There 
-are three options to label the evaluation plots: (i) original labels ("orig"), 
-(ii) axis labels but no title ("no_title"), (iii) neither axis 
+\item{label}{argument that enables to customize title and axis labels. There
+are three options to label the evaluation plots: (i) original labels
+("orig"), (ii) axis labels but no title ("no_title"), (iii) neither axis
 labels nor title ("blank").}
 
 \item{color}{a vector with two elements. The first color determines
-the color for the regression line in the scatter plot and the color for 
-the direct estimates in the remaining plots. The second color specifies the 
-color of the intersection line in the scatter plot and the color for the 
-model-based estimates in the remaining plots. Defaults to c("blue", "lightblue3").}
+the color for the regression line in the scatter plot and the color for
+the direct estimates in the remaining plots. The second color specifies the
+color of the intersection line in the scatter plot and the color for the
+model-based estimates in the remaining plots. Defaults to
+c("blue", "lightblue3").}
 
 \item{shape}{a numeric vector with two elements. The first shape determines
-the shape of the points in the scatterplot and the shape of the points for the 
-direct estimates in the remaining plots. The second shape determines 
-the shape for the points for the model-based estimates. The options 
+the shape of the points in the scatterplot and the shape of the points for
+the direct estimates in the remaining plots. The second shape determines
+the shape for the points for the model-based estimates. The options
 are numbered from 0 to 25. Defaults to c(16, 16).}
 
-\item{line_type}{a character vector with two elements. The first line type 
-determines the line type for the regression line in the scatter plot and the 
-line type for the direct estimates in the remaining plots. The second line type 
-specifies the line type of the intersection line in the scatter plot and the 
-line type for the model-based estimates in the remaining plots. The options 
-are: "twodash", "solid", "longdash", "dotted", "dotdash", "dashed" and "blank".
-Defaults to  c("solid", "solid").}
+\item{line_type}{a character vector with two elements. The first line type
+determines the line type for the regression line in the scatter plot and the
+line type for the direct estimates in the remaining plots. The second line
+type specifies the line type of the intersection line in the scatter plot and
+the line type for the model-based estimates in the remaining plots. The
+options are: "twodash", "solid", "longdash", "dotted", "dotdash", "dashed"
+and "blank". Defaults to  c("solid", "solid").}
 
 \item{gg_theme}{\code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
-For using this argument, package \pkg{ggplot2} must be loaded via 
+For using this argument, package \pkg{ggplot2} must be loaded via
 \code{library(ggplot2)}. See also Example 2.}
 
 \item{...}{further arguments passed to or from other methods.}
 }
 \value{
-Plots comparing direct and model-based estimators for each selected 
+Plots comparing direct and model-based estimators for each selected
 indicator obtained by \code{\link[ggplot2]{ggplot}}.
 
 A scatter plot and a line plot comparing direct and model-based
-estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
-If the input arguments MSE and CV are set to TRUE two extra plots are created, 
-respectively: the MSE/CV estimates of the direct and model-based estimates are 
-compared by boxplots and scatter plots.
+estimators for each selected indicator obtained by
+\code{\link[ggplot2]{ggplot}}. If the input arguments MSE and CV are set to
+TRUE two extra plots are created, respectively: the MSE/CV estimates of the
+direct and model-based estimates are compared by boxplots and scatter plots.
 }
 \description{
-Function \code{compare_plot} is a generic function used to produce plots 
+Function \code{compare_plot} is a generic function used to produce plots
 comparing point and existing MSE/CV estimates of direct and model-based
 estimation for all indicators or a selection of indicators.
 
-Methods \code{compare_plot.direct}, \code{compare_plot.ebp} and 
-\code{compare_plot.fh} produce plots comparing point and existing 
-MSE/CV estimates of direct and model-based estimation for all indicators or a 
-selection of indicators for objects of type "emdi". The direct and model-based 
-point estimates are compared by a scatter plot and a line plot for each selected 
-indicator. If the input arguments MSE and CV are set to TRUE, two extra plots 
-are created, respectively: the MSE/CV estimates of the direct and model-based 
-estimates are compared by boxplots and scatter plots.
+Methods \code{compare_plot.direct}, \code{compare_plot.ebp} and
+\code{compare_plot.fh} produce plots comparing point and existing
+MSE/CV estimates of direct and model-based estimation for all indicators or a
+selection of indicators for objects of type "emdi". The direct and
+model-based point estimates are compared by a scatter plot and a line plot
+for each selected indicator. If the input arguments MSE and CV are set to
+TRUE, two extra plots are created, respectively: the MSE/CV estimates of the
+direct and model-based estimates are compared by boxplots and scatter plots.
 }
 \details{
-Since all of the comparisons need a direct estimator, the plots are 
+Since all of the comparisons need a direct estimator, the plots are
 only created for in-sample domains.
 }
 \examples{
@@ -162,28 +163,38 @@ only created for in-sample domains.
 # Loading data - population and sample data
 data("eusilcA_pop")
 data("eusilcA_smp")
-  
-# Generation of two emdi objects
-emdi_model <- ebp(fixed = eqIncome ~ gender + eqsize + cash + 
-self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + 
-fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-threshold = function(y){0.6 * median(y)}, L = 50, MSE = TRUE,
-na.rm = TRUE, cpus = 1)
 
-emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
-smp_domains = "district", weights = "weight", threshold = 11161.44,
-var = TRUE, boot_type = "naive", B = 50, seed = 123, na.rm = TRUE)
+# Generation of two emdi objects
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash +
+    self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
+    fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+  threshold = function(y) {
+    0.6 * median(y)
+  }, L = 50, MSE = TRUE,
+  na.rm = TRUE, cpus = 1
+)
+
+emdi_direct <- direct(
+  y = "eqIncome", smp_data = eusilcA_smp,
+  smp_domains = "district", weights = "weight", threshold = 11161.44,
+  var = TRUE, boot_type = "naive", B = 50, seed = 123, na.rm = TRUE
+)
 
 # Example 1: Receive first overview
 compare_plot(model = emdi_model, direct = emdi_direct)
 
 # Example 2: Change plot theme
 library(ggplot2)
-compare_plot(emdi_model, emdi_direct, indicator = "Median",
-gg_theme = theme(axis.line = element_line(size = 3, colour = "grey80"),
-plot.background = element_rect(fill = "lightblue3"),
-legend.position = "none"))
+compare_plot(emdi_model, emdi_direct,
+  indicator = "Median",
+  gg_theme = theme(
+    axis.line = element_line(size = 3, colour = "grey80"),
+    plot.background = element_rect(fill = "lightblue3"),
+    legend.position = "none"
+  )
+)
 
 # Example for comparison of direct estimates and models of type fh
 
@@ -192,21 +203,27 @@ data("eusilcA_popAgg")
 data("eusilcA_smpAgg")
 
 # Combine sample and population data
-combined_data <- combine_data(pop_data = eusilcA_popAgg, pop_domains = "Domain",
-                              smp_data = eusilcA_smpAgg, smp_domains = "Domain")
+combined_data <- combine_data(
+  pop_data = eusilcA_popAgg,
+  pop_domains = "Domain",
+  smp_data = eusilcA_smpAgg,
+  smp_domains = "Domain"
+)
 
 # Generation of the emdi object
-fh_std <- fh(fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
-             combined_data = combined_data, domains = "Domain", method = "ml", 
-             MSE = TRUE)
+fh_std <- fh(
+  fixed = Mean ~ cash + self_empl, vardir = "Var_Mean",
+  combined_data = combined_data, domains = "Domain",
+  method = "ml", MSE = TRUE
+)
 # Example 3: Receive first overview
-compare_plot(fh_std) 
+compare_plot(fh_std)
 
-# Example 4: Compare also MSE and CV estimates 
-compare_plot(fh_std, MSE = TRUE, CV = TRUE)                       
+# Example 4: Compare also MSE and CV estimates
+compare_plot(fh_std, MSE = TRUE, CV = TRUE)
 }
 }
 \seealso{
-\code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}}, 
+\code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}},
 \code{\link{fh}}
 }
