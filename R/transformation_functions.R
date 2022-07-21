@@ -63,7 +63,7 @@ data_transformation <- function(fixed,
                                 smp_data,
                                 transformation,
                                 lambda) {
-  
+
   y_vector <- as.matrix(smp_data[paste(fixed[2])])
 
   transformed <- if (transformation == "no") {
