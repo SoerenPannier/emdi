@@ -20,6 +20,7 @@ Did you notice a bug while using emdi? Please let us know so we can fix it and i
 -   The steps necessary to reproduce the bug (if possible, in form of a minium working example)
 
 #### Suggesting an enhancement
+
 Please, first study the documentation and the accompanying vignettes to see if
 the suggested feature is not already included. If you are sure your feature is not 
 already there please provide us with a
@@ -38,7 +39,7 @@ done in branches starting with `feature\`  while `bug\` signals us a bugfix.
 
 If you contribute to code and documentation please also add a bullet point at the 
 `news.md` file, and tell people what has changed. Please, prepare your pull request 
-thoroughly. Work on a up-to-date version of `dev`. If there are merge conflicts 
+thoroughly. Work on an up-to-date version of `dev`. If there are merge conflicts 
 due to a very out-of-date version of `dev` we will ask you to prepare an updated
 version before considering merging it. Also `devtools::check()` should yield no 
 errors, no warnings and no notes. New code also needs to be covered with tests. 
@@ -58,8 +59,9 @@ to add your documentation directly in the R file! All changes in the markdown fi
 in the `man` folder are overwritten when building the package.
 
 ### On enhancing the code
+
 Still here? Amazing! 
-Just some notes regarding our style we use snake_case for practically everything,
+Just some notes regarding our style we (try to) use snake_case for practically everything,
 and try to stay within the 80 characters per line boundary! Make sure a new function
 is documented (see above) and contains both tests, and an example. 
 
@@ -70,11 +72,13 @@ If your enhancement of bug fix corresponds to a github issue, make sure to link
 it in the merge request.
 
 ### But I really want to add something big! 
+
 Contact us (Soeren.Pannier@fu-berlin.de or Ann-Kristin.Kreutzmann@fu-berlin.de) 
 and we will figure it out. It will probably include you forking our repo for development purposes. 
 
 
 ## Anything else I need to know?
+
 Yes! If you think about implementing a whole new statistical method, please note
 we ONLY include methods into emdi that have previously been published in an peer
 reviewed journal.
