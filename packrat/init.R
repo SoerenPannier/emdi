@@ -70,8 +70,8 @@ local({
 
     needsRestore <- "--bootstrap-packrat" %in% commandArgs(TRUE)
 
-    message("Packrat is not installed in the local library --
-            attempting to bootstrap an installation...")
+    message("Packrat is not installed in the local library -- ",
+            "attempting to bootstrap an installation...")
 
     ## We need utils for the following to succeed -- there are calls to functions
     ## in 'restore' that are contained within utils. utils gets loaded at the
@@ -86,8 +86,7 @@ local({
     ## No packrat tarballs available locally -- try some other means of installation
     if (!length(packratSrcPath)) {
 
-      message(strwrap(prefix = " ", initial = "",
-                      "> No source tarball of packrat available locally"))
+      message("> No source tarball of packrat available locally")
 
       ## There are no packrat sources available -- try using a version of
       ## packrat installed in the user library to bootstrap
@@ -107,7 +106,7 @@ local({
       }
 
       ## Try downloading packrat from CRAN if available
-      else if ("packrat" %in% rownames(available.packages())) {
+      else if ("packrat" %in% available.packages()[, "Package"]) {
         message("> Installing packrat from CRAN")
         install.packages("packrat")
       }
@@ -175,7 +174,7 @@ local({
     fullCmd <- paste(
       surround(file.path(R.home("bin"), "R"), with = "\""),
       "--vanilla",
-      "--slave",
+      "-s",
       "-f",
       surround(installFile, with = "\"")
     )
@@ -187,7 +186,7 @@ local({
     ## an 'installed from source' version
 
     ## -- InstallAgent -- ##
-    installAgent <- "InstallAgent: packrat 0.5.0"
+    installAgent <- "InstallAgent: packrat 0.8.1"
 
     ## -- InstallSource -- ##
     installSource <- "InstallSource: source"
