@@ -55,10 +55,9 @@ in both objects differ.}
 \item{color}{a \code{vector} of length 2 defining the lowest and highest
 color in the plots.}
 
-\item{scale_points}{a structure defining the lowest, the mid and the highest
+\item{scale_points}{a structure defining the lowest and the highest
 value of the colorscale. If a numeric vector of length two is given, this
-scale will be used for every plot. Alternatively, a list defining colors for
-each plot separately may be given.}
+scale will be used for every plot.}
 
 \item{guide}{character passed to
 \code{scale_colour_gradient} from \pkg{ggplot2}.

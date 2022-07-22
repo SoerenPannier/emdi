@@ -39,15 +39,19 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
 
   # Order of domains
   pop_data <- pop_data[order(pop_data[[pop_domains]]), ]
+
+  levels_tmp <- unique(pop_data[[pop_domains]])
   pop_data[[pop_domains]] <- factor(pop_data[[pop_domains]],
-    levels = unique(pop_data[[pop_domains]])
-  )
+                                    levels = levels_tmp)
   pop_domains_vec <- pop_data[[pop_domains]]
 
-  smp_data <- smp_data[order(smp_data[[smp_domains]]), ]
+
   smp_data[[smp_domains]] <- factor(smp_data[[smp_domains]],
-    levels = unique(pop_data[[pop_domains]])
-  )
+                                    levels = levels_tmp)
+  rm(levels_tmp)
+  smp_data <- smp_data[order(smp_data[[smp_domains]]), ]
+
+
   smp_domains_vec <- smp_data[[smp_domains]]
   smp_domains_vec <- droplevels(smp_domains_vec)
 
