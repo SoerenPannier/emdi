@@ -1,3 +1,10 @@
+# emdi 2.1.2
+* Improved messages
+* Copyrights updated
+* Bug fix in direct variance estimation (direct)
+* Bug fix in level orderings (ebp)
+* Changed last name in description
+
 # emdi 2.1.1
 * Fix to account for the changed behavior of as.vector() on data frames
 
