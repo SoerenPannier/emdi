@@ -181,6 +181,7 @@ model_par <- function(framework,
       weight_smp <- transformation_par$transformed_data[[
       as.character(framework$weights)]][framework$smp_domains_vec == domain]
       weight_sum[d] <- sum(weight_smp)
+
       indep_smp <- if(length(weight_smp) == 1) {
         matrix(model.matrix(fixed, framework$smp_data)[framework$smp_domains_vec == domain,]
                , ncol = length(betas), nrow = 1)

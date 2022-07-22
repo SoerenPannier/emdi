@@ -70,8 +70,8 @@ local({
 
     needsRestore <- "--bootstrap-packrat" %in% commandArgs(TRUE)
 
-    message("Packrat is not installed in the local library -- ",
-            "attempting to bootstrap an installation...")
+    message("Packrat is not installed in the local library --
+            attempting to bootstrap an installation...")
 
     ## We need utils for the following to succeed -- there are calls to functions
     ## in 'restore' that are contained within utils. utils gets loaded at the
@@ -86,7 +86,8 @@ local({
     ## No packrat tarballs available locally -- try some other means of installation
     if (!length(packratSrcPath)) {
 
-      message("> No source tarball of packrat available locally")
+      message(strwrap(prefix = " ", initial = "",
+                      "> No source tarball of packrat available locally"))
 
       ## There are no packrat sources available -- try using a version of
       ## packrat installed in the user library to bootstrap
