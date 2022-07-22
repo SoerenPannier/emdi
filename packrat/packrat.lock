@@ -18,9 +18,9 @@ Package: HLMdiag
 Source: CRAN
 Version: 0.5.0
 Hash: be5c9b5ce95fdd330f1ea076f1178502
-Requires: Rcpp, RcppArmadillo, diagonals, dplyr, ggplot2, ggrepel,
-    janitor, magrittr, plyr, purrr, reshape2, rlang, stringr, tibble,
-    tidyselect
+Requires: MASS, Rcpp, diagonals, dplyr, ggplot2, ggrepel, magrittr,
+    purrr, rlang, stringr, tibble, tidyselect, RcppArmadillo, janitor,
+    plyr, reshape2
 
 Package: MASS
 Source: CRAN
@@ -31,6 +31,7 @@ Package: MuMIn
 Source: CRAN
 Version: 1.46.0
 Hash: 6e4a35ee7457611de148455c0b516a8b
+Requires: nlme
 
 Package: R.cache
 Source: CRAN
@@ -140,7 +141,7 @@ Package: cellranger
 Source: CRAN
 Version: 1.1.0
 Hash: be9d203e7849f73818b36f93e9273c2c
-Requires: tibble, rematch
+Requires: rematch, tibble
 
 Package: checkmate
 Source: CRAN
@@ -221,8 +222,8 @@ Package: dplyr
 Source: CRAN
 Version: 1.0.9
 Hash: b6405c4458dabead1cde470877bddbb7
-Requires: R6, generics, glue, lifecycle, magrittr, pillar, rlang,
-    tibble, tidyselect, vctrs
+Requires: R6, glue, lifecycle, magrittr, pillar, rlang, tibble, vctrs,
+    generics, tidyselect
 
 Package: e1071
 Source: CRAN
@@ -276,13 +277,14 @@ Package: ggplot2
 Source: CRAN
 Version: 3.3.6
 Hash: 74a26a3a6d317be101b0c2574479ad4f
-Requires: glue, rlang, tibble, digest, gtable, isoband, scales, withr
+Requires: digest, glue, rlang, tibble, withr, MASS, gtable, isoband,
+    scales
 
 Package: ggrepel
 Source: CRAN
 Version: 0.9.1
 Hash: 10238e1c03f85f0d94e0518531c0f809
-Requires: Rcpp, ggplot2, rlang, scales
+Requires: ggplot2, rlang, scales, Rcpp
 
 Package: glue
 Source: CRAN
@@ -321,8 +323,8 @@ Package: janitor
 Source: CRAN
 Version: 2.1.0
 Hash: a0c23d64db9c815f69ed441749c7758e
-Requires: dplyr, lifecycle, magrittr, purrr, rlang, tidyselect,
-    lubridate, snakecase, stringi, stringr, tidyr
+Requires: dplyr, lifecycle, magrittr, purrr, rlang, stringi, stringr,
+    tidyselect, lubridate, snakecase, tidyr
 
 Package: jsonlite
 Source: CRAN
@@ -333,7 +335,7 @@ Package: knitr
 Source: CRAN
 Version: 1.39
 Hash: 52b0266c29290f0f7511ecf93744bc07
-Requires: stringr, evaluate, highr, xfun, yaml
+Requires: evaluate, highr, stringr, xfun, yaml
 
 Package: labeling
 Source: CRAN
@@ -344,6 +346,7 @@ Package: laeken
 Source: CRAN
 Version: 0.5.2
 Hash: 445e107103453a37ff5ef174d533484a
+Requires: MASS, boot
 
 Package: lifecycle
 Source: CRAN
@@ -355,7 +358,7 @@ Package: lubridate
 Source: CRAN
 Version: 1.8.0
 Hash: 3b484acb2e8bc9371b56a4e15b44570d
-Requires: generics, cpp11
+Requires: cpp11, generics
 
 Package: magrittr
 Source: CRAN
@@ -426,7 +429,7 @@ Package: pillar
 Source: CRAN
 Version: 1.8.0
 Hash: 81c4e13092c25997e99483b25632c902
-Requires: glue, lifecycle, rlang, cli, fansi, utf8, vctrs
+Requires: cli, fansi, glue, lifecycle, rlang, utf8, vctrs
 
 Package: pkgconfig
 Source: CRAN
@@ -437,7 +440,7 @@ Package: pkgload
 Source: CRAN
 Version: 1.3.0
 Hash: 4df3b677ec6337592f9afc8429ce44da
-Requires: cli, desc, glue, rlang, rprojroot, withr, crayon, fs
+Requires: cli, desc, glue, rprojroot, crayon, fs, rlang, withr
 
 Package: plyr
 Source: CRAN
@@ -534,8 +537,8 @@ Package: roxygen2
 Source: CRAN
 Version: 7.2.1
 Hash: c3a8bc170b632c7a99a33f7b1ca44c28
-Requires: R6, cli, cpp11, digest, purrr, rlang, stringi, stringr,
-    withr, brew, commonmark, desc, knitr, pkgload, xml2
+Requires: R6, brew, cli, commonmark, cpp11, desc, digest, knitr,
+    pkgload, purrr, rlang, stringi, stringr, withr, xml2
 
 Package: rprojroot
 Source: CRAN
@@ -552,14 +555,14 @@ Package: saeRobust
 Source: CRAN
 Version: 0.3.0
 Hash: afe4cfc9b19db34f75b8e07ef4ec7b5a
-Requires: Rcpp, RcppArmadillo, aoos, assertthat, ggplot2, magrittr,
-    memoise, modules, pbapply, spdep
+Requires: MASS, Rcpp, RcppArmadillo, aoos, assertthat, ggplot2,
+    magrittr, memoise, modules, pbapply, spdep
 
 Package: scales
 Source: CRAN
 Version: 1.2.0
 Hash: 3acd17505a1c6087b1f1052859edfa4f
-Requires: R6, lifecycle, rlang, RColorBrewer, farver, labeling,
+Requires: R6, farver, lifecycle, rlang, RColorBrewer, labeling,
     munsell, viridisLite
 
 Package: sf
@@ -595,7 +598,7 @@ Package: spdep
 Source: CRAN
 Version: 1.2-4
 Hash: f523acadae9f07e4800113e8776ab330
-Requires: deldir, e1071, s2, sp, sf, spData, units
+Requires: boot, deldir, e1071, s2, sp, sf, spData, units
 
 Package: stringi
 Source: CRAN
@@ -626,7 +629,7 @@ Package: tibble
 Source: CRAN
 Version: 3.1.8
 Hash: 09424424f61003d93b7554d8575949cb
-Requires: fansi, lifecycle, magrittr, pillar, rlang, vctrs, pkgconfig
+Requires: magrittr, rlang, fansi, lifecycle, pillar, pkgconfig, vctrs
 
 Package: tidyr
 Source: CRAN
@@ -639,7 +642,7 @@ Package: tidyselect
 Source: CRAN
 Version: 1.1.2
 Hash: a768f645cc7af6a67089c666e143b7ac
-Requires: glue, rlang, vctrs, ellipsis, purrr
+Requires: glue, purrr, rlang, vctrs, ellipsis
 
 Package: tzdb
 Source: CRAN
