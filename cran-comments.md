@@ -6,7 +6,7 @@
   * ubuntu-latest,   R: devel
   * ubuntu-latest,   R: release
   * ubuntu-latest,   R: oldrel-1
-
+* Winbuilder: Oldrelease, release, devel.
 
 ## R CMD check results
 
