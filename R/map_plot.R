@@ -119,7 +119,7 @@ map_plot <- function(object,
       object = object, indicator = indicator, panelplot = FALSE,
       MSE = MSE, CV = CV
     )
-  } else if (class(map_obj) != "SpatialPolygonsDataFrame" ||
+  } else if (!inherits(x = map_obj, what = "SpatialPolygonsDataFrame") ||
     attr(class(map_obj), "package") != "sp") {
     stop(strwrap(prefix = " ", initial = "",
                  "map_obj is not of class SpatialPolygonsDataFrame from the
@@ -309,7 +309,7 @@ get_polygone <- function(values) {
 get_scale_points <- function(y, ind, scale_points) {
   result <- NULL
   if (!is.null(scale_points)) {
-    if (class(scale_points) == "numeric" && length(scale_points) == 2) {
+    if (is.numeric(scale_points) && length(scale_points) == 2) {
       result <- scale_points
     } else {
       splt <- strsplit(ind, "_\\s*(?=[^_]+$)", perl = TRUE)[[1]]
