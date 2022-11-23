@@ -138,7 +138,7 @@ model_select <- function(framework, sigmau2, method, interval,
   Dw <- sum((1 - hii) * framework$vardir) / (m - p)
   hxbMSE <- (2 * MSE) / (1 + exp((2 * Dw) / MSE))
   hxbMST <- (2 * MST) / (1 + exp((2 * barD) / MST))
-  AdjR2 <- 1 - (hxbMSE / hxbMST)
+  FH_R2 <- 1 - (hxbMSE / hxbMST)
 
   if (!all(framework$obs_dom == TRUE)) {
     message(strwrap(prefix = " ", initial = "",
@@ -151,8 +151,8 @@ model_select <- function(framework, sigmau2, method, interval,
       loglike = loglike,
       AIC = AIC,
       BIC = BIC,
-      R2 = R2_regular,
-      AdjR2 = AdjR2
+      AdjR2 = R2_regular,
+      FH_R2 = FH_R2
     )
   } else if (framework$correlation == "no" & transformation == "no" &
     !(B > 1) & method != "me") {
@@ -161,8 +161,8 @@ model_select <- function(framework, sigmau2, method, interval,
       AIC = AIC,
       BIC = BIC,
       KIC = KIC,
-      R2 = R2_regular,
-      AdjR2 = AdjR2
+      AdjR2 = R2_regular,
+      FH_R2 = FH_R2
     )
   } else if (framework$correlation == "no" & transformation == "no" &
     (B > 1) & method != "me") {
@@ -173,13 +173,13 @@ model_select <- function(framework, sigmau2, method, interval,
       BIC = BIC,
       KIC = KIC, KICc = KICc,
       KICb1 = KICb1, KICb2 = KICb2,
-      R2 = R2_regular,
-      AdjR2 = AdjR2
+      AdjR2 = R2_regular,
+      FH_R2 = FH_R2
     )
   } else if (method == "me") {
     criteria <- data.frame(
-      R2 = R2_regular,
-      AdjR2 = AdjR2
+      AdjR2 = R2_regular,
+      FH_R2 = FH_R2
     )
   }
   return(criteria)
