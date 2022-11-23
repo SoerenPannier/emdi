@@ -22,12 +22,12 @@ compare_plot.ebp <- function(model = NULL, direct = NULL, indicator = "all",
                         )))
   }
 
-  if ((inherits(model, "ebp") & is.null(direct)) |
-    (inherits(direct, "ebp") & is.null(model))) {
+  if ((inherits(model, "ebp") && is.null(direct)) |
+    (inherits(direct, "ebp") && is.null(model))) {
     stop(strwrap(prefix = " ", initial = "",
                  paste0("If the model is of type 'ebp', the input argument
                         direct is required.")))
-  } else if (inherits(model, "ebp") & inherits(direct, "direct")) {
+  } else if (inherits(model, "ebp") && inherits(direct, "direct")) {
     compare_plot_ebp(
       model = model, direct = direct, indicator = indicator,
       MSE = MSE, CV = CV,

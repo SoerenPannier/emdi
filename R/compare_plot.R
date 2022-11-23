@@ -205,7 +205,7 @@ compare_plots <- function(object, type, selected_indicators, MSE, CV, label,
   area <- NULL
 
 
-  if (MSE == FALSE & CV == FALSE) {
+  if (MSE == FALSE && CV == FALSE) {
     plotList <- vector(mode = "list", length = length(selected_indicators) * 2)
     names(plotList) <- paste(rep(
       c("scatter", "line"),
@@ -214,7 +214,7 @@ compare_plots <- function(object, type, selected_indicators, MSE, CV, label,
     rep(selected_indicators, each = 2),
     sep = "_"
     )
-  } else if ((MSE == TRUE | CV == TRUE) & !(MSE == TRUE & CV == TRUE)) {
+  } else if ((MSE == TRUE || CV == TRUE) && !(MSE == TRUE && CV == TRUE)) {
     plotList <- vector(mode = "list", length = length(selected_indicators) * 4)
     names(plotList) <- paste(rep(
       c("scatter", "line"),
@@ -223,7 +223,7 @@ compare_plots <- function(object, type, selected_indicators, MSE, CV, label,
     rep(selected_indicators, each = 4),
     sep = "_"
     )
-  } else if (MSE == TRUE & CV == TRUE) {
+  } else if (MSE == TRUE && CV == TRUE) {
     plotList <- vector(mode = "list", length = length(selected_indicators) * 6)
     names(plotList) <- paste(rep(
       c("scatter", "line"),

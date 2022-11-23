@@ -616,7 +616,7 @@ ybarralohr <- function(direct, x, vardir, Ci, areanumber, p, tol, maxit) {
 #' @noRd
 
 wrapper_estsigmau2 <- function(framework, method, interval) {
-  sigmau2 <- if (method == "reml" & framework$correlation == "no") {
+  sigmau2 <- if (method == "reml" && framework$correlation == "no") {
     Reml(
       interval = interval, vardir = framework$vardir, x = framework$model_X,
       direct = framework$direct, areanumber = framework$m
@@ -644,19 +644,19 @@ wrapper_estsigmau2 <- function(framework, method, interval) {
       x = framework$model_X, direct = framework$direct,
       areanumber = framework$m
     )
-  } else if (method == "ml" & framework$correlation == "no") {
+  } else if (method == "ml" && framework$correlation == "no") {
     MPL(
       interval = interval, vardir = framework$vardir,
       x = framework$model_X, direct = framework$direct,
       areanumber = framework$m
     )
-  } else if (method == "ml" & framework$correlation == "spatial") {
+  } else if (method == "ml" && framework$correlation == "spatial") {
     SML(
       direct = framework$direct, X = framework$model_X,
       vardir = framework$vardir, areanumber = framework$m, W = framework$W,
       tol = framework$tol, maxit = framework$maxit
     )
-  } else if (method == "reml" & framework$correlation == "spatial") {
+  } else if (method == "reml" && framework$correlation == "spatial") {
     SREML(
       direct = framework$direct, X = framework$model_X,
       vardir = framework$vardir, areanumber = framework$m, W = framework$W,

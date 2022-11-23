@@ -143,7 +143,7 @@ write.excel <- function(object,
     )
   }
 
-  if (!split & (MSE | CV)) {
+  if (!split && (MSE || CV)) {
     wb <- add_estims(
       object = object,
       indicator = indicator,
@@ -446,7 +446,7 @@ add_summary_fh <- function(object, wb, headlines_cs) {
   )
   starting_row <- starting_row + 2 + nrow(su$normality)
 
-  if (su$model$correlation == "no" & !(su$method$method %in%
+  if (su$model$correlation == "no" && !(su$method$method %in%
     c("reblup", "reblupbc") |
     su$method$method == "me")) {
     writeDataTable(

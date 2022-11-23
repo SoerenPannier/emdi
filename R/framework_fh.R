@@ -22,13 +22,12 @@ framework_FH <- function(combined_data, fixed, vardir, domains,
                         variances must not have NAs.")))
   }
 
-  if (transformation == "log" | transformation == "log" |
-    transformation == "log") {
+  if (transformation == "log") {
     direct_orig <- direct
     vardir_orig <- vardir
     vardir <- (1 / direct)^2 * vardir
     direct <- log(direct)
-  } else if (transformation == "arcsin" | transformation == "arcsin") {
+  } else if (transformation == "arcsin") {
     direct_orig <- direct
     vardir_orig <- vardir
     direct <- asin(sqrt(direct))

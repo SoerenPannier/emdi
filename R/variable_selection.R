@@ -24,8 +24,8 @@ model_select <- function(framework, sigmau2, method, interval,
       KIC <- (-2) * loglike + 3 * (p + 1)
     }
 
-    if ((framework$correlation == "no" &
-      transformation == "no") & !is.null(B)) {
+    if ((framework$correlation == "no" &&
+      transformation == "no") && !is.null(B)) {
       # Criteria following Marhuenda et al. (2014)
       # bootstrap components
       B1 <- vector(length = B)
@@ -146,7 +146,7 @@ model_select <- function(framework, sigmau2, method, interval,
                     computed based on the in-sample domains."))
   }
 
-  if (framework$correlation == "spatial" | transformation != "no") {
+  if (framework$correlation == "spatial" || transformation != "no") {
     criteria <- data.frame(
       loglike = loglike,
       AIC = AIC,
@@ -154,8 +154,8 @@ model_select <- function(framework, sigmau2, method, interval,
       AdjR2 = R2_regular,
       FH_R2 = FH_R2
     )
-  } else if (framework$correlation == "no" & transformation == "no" &
-    !(B > 1) & method != "me") {
+  } else if (framework$correlation == "no" && transformation == "no" &&
+    !(B > 1) && method != "me") {
     criteria <- data.frame(
       loglike = loglike,
       AIC = AIC,
@@ -164,8 +164,8 @@ model_select <- function(framework, sigmau2, method, interval,
       AdjR2 = R2_regular,
       FH_R2 = FH_R2
     )
-  } else if (framework$correlation == "no" & transformation == "no" &
-    (B > 1) & method != "me") {
+  } else if (framework$correlation == "no" && transformation == "no" &&
+    (B > 1) && method != "me") {
     criteria <- data.frame(
       loglike = loglike,
       AIC = AIC, AICc = AICc,
