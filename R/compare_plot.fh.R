@@ -21,7 +21,7 @@ compare_plot.fh <- function(model = NULL, direct = NULL, indicator = "all",
                         estimates of an 'ebp' object.")))
   }
 
-  if (inherits(model, "fh") & inherits(direct, "direct")) {
+  if (inherits(model, "fh") && inherits(direct, "direct")) {
     warning(strwrap(prefix = " ", initial = "",
                     paste0("fh models are only compared to their own inherrent
                            direct estimates. Hence, the argument direct is
@@ -113,7 +113,7 @@ compare_plot_fh <- function(model, direct, indicator = "all", MSE = FALSE,
   if ("FH_Bench" %in% selected_indicators) {
     Data$FH_Bench_Direct <- Data$FH_Direct
   }
-  if ("FH_Bench" %in% indicator & !("FH_Bench" %in% selected_indicators)) {
+  if ("FH_Bench" %in% indicator && !("FH_Bench" %in% selected_indicators)) {
     message(strwrap(prefix = " ", initial = "",
                    "emdi object does not contain benchmarked fh estimates.
                    Only FH estimates are compared with direct. See also

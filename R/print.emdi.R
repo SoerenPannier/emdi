@@ -77,7 +77,7 @@ print.fh <- function(x, ...) {
   cat("Empirical Best Linear Unbiased Prediction (Fay-Herriot)\n")
   cat("\n")
   cat("Out-of-sample domains: ", x$framework$N_dom_unobs, "\n")
-  if (x$model$correlation == "temporal" |
+  if (x$model$correlation == "temporal" ||
     x$model$correlation == "spatio-temporal") {
     cat("In-sample domains: ", x$framework$N_dom_smp / x$model$n_time, "\n")
     cat("Number of time periods: ", x$model$n_time, "\n")
@@ -87,7 +87,7 @@ print.fh <- function(x, ...) {
     cat("\n")
   }
   cat("Variance and MSE estimation:\n")
-  if (x$method$method == "reblup" | x$method$method == "reblupbc") {
+  if (x$method$method == "reblup" || x$method$method == "reblupbc") {
     cat("Variance estimation method: robustified ml,", x$method$method, "\n")
 
     if (x$method$method == "reblup") {

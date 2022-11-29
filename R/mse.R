@@ -454,7 +454,7 @@ analytical_mse <- function(framework, sigmau2, combined_data,
       combined_data = combined_data
     )
     MSE_method <- "prasad-rao"
-  } else if (method == "amrl" | method == "ampl") {
+  } else if (method == "amrl" || method == "ampl") {
     mse_data <- li_lahiri(
       framework = framework, sigmau2, combined_data,
       method = method
@@ -793,8 +793,8 @@ nonparametricboot_spatial <- function(sigmau2, combined_data, framework,
 
     eblupSFH.boot$eblup_data$FH[eblupSFH.boot$eblup_data$Out == 1] <- NA
     # New sample if estimated parameters are not acceptable
-    if (sigmau2.boot$convergence == FALSE | sigmau2.boot$sigmau2 < 0 |
-      sigmau2.boot$rho < (-1) | sigmau2.boot$rho > 1) {
+    if (sigmau2.boot$convergence == FALSE || sigmau2.boot$sigmau2 < 0 ||
+      sigmau2.boot$rho < (-1) || sigmau2.boot$rho > 1) {
       notSuc[b, ] <- 1
       next
     }
@@ -1008,8 +1008,8 @@ parametricboot_spatial <- function(sigmau2, combined_data, framework, vardir,
     eblupSFH.boot$eblup_data$FH[eblupSFH.boot$eblup_data$Out == 1] <- NA
 
     # New sample if estimated parameters are not acceptable
-    if (sigmau2.boot$convergence == FALSE | sigmau2.boot$sigmau2 < 0 |
-      sigmau2.boot$rho < (-1) | sigmau2.boot$rho > 1) {
+    if (sigmau2.boot$convergence == FALSE || sigmau2.boot$sigmau2 < 0 |
+      sigmau2.boot$rho < (-1) || sigmau2.boot$rho > 1) {
       notSuc[b, ] <- 1
       next
     }

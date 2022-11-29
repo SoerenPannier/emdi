@@ -42,7 +42,7 @@ plot.ebp <- function(x,
     }
   }
 
-  if (x$transformation == "box.cox" | x$transformation == "dual" |
+  if (x$transformation == "box.cox" || x$transformation == "dual" ||
     x$transformation == "log.shift") {
     opt_lambda <- TRUE
 

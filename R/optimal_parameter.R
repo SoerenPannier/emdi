@@ -8,11 +8,11 @@ optimal_parameter <- function(generic_opt,
     transformation != "log") {
     # no lambda -> no estimation -> no optmimization
 
-    if (transformation == "box.cox" & any(interval == "default")) {
+    if (transformation == "box.cox" && any(interval == "default")) {
       interval <- c(-1, 2)
-    } else if (transformation == "dual" & any(interval == "default")) {
+    } else if (transformation == "dual" && any(interval == "default")) {
       interval <- c(0, 2)
-    } else if (transformation == "log.shift" & any(interval == "default")) {
+    } else if (transformation == "log.shift" && any(interval == "default")) {
       # interval = c(min(smp_data[paste(fixed[2])]),
       # max(smp_data[paste(fixed[2])]))
       span <- range(smp_data[paste(fixed[2])])
