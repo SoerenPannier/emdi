@@ -1,3 +1,9 @@
+# emdi 2.1.3
+* Improved summary with clearer notation of R2
+* Updated Area Level (FH) vignette
+* Minor improvements in checking T/F in if clauses
+* Increased dependency to R (>= 4.2.0) corresponding to the imported package MuMin
+
 # emdi 2.1.2
 * Improved messages
 * Copyrights updated
