@@ -10,6 +10,7 @@ ebp(
   pop_domains,
   smp_data,
   smp_domains,
+  aggregate_to = NULL,
   L = 50,
   threshold = NULL,
   transformation = "box.cox",
@@ -48,6 +49,10 @@ a factor but needs to be of the same class as the variable named in
 that indicates domains in the sample data. The variable can be numeric or a
 factor but needs to be of the same class as the variable named in
 \code{pop_domains}.}
+
+\item{aggregate_to}{a character string containing the name of a variable from
+population data that indicates the target area level for which the
+results are to be displayed. The variable can be numeric or a factor.}
 
 \item{L}{a number determining the number of Monte-Carlo simulations that
 must be at least 1. Defaults to 50. For practical applications, values
@@ -205,6 +210,16 @@ emdi_model <- ebp(
     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
   weights = "weight", transformation = "log", na.rm = TRUE
+)
+
+# Example 4: With default setting and random effect on the district level
+# while the output is at state level
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+  aggregate_to = "state", transformation = "log", na.rm = TRUE
 )
 }
 }

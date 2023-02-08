@@ -32,6 +32,9 @@
 #' that indicates domains in the sample data. The variable can be numeric or a
 #' factor but needs to be of the same class as the variable named in
 #' \code{pop_domains}.
+#' @param aggregate_to a character string containing the name of a variable from
+#' population data that indicates the target area level for which the
+#' results are to be displayed. The variable can be numeric or a factor.
 #' @param threshold a number defining a threshold. Alternatively, a threshold
 #' may be defined as a \code{function} of \code{y} returning a numeric value.
 #' Such a function will be evaluated once for the point estimation and in each
@@ -186,6 +189,16 @@
 #'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
 #'   weights = "weight", transformation = "log", na.rm = TRUE
 #' )
+#'
+#' # Example 4: With default setting and random effect on the district level
+#' # while the output is at state level
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+#'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+#'   aggregate_to = "state", transformation = "log", na.rm = TRUE
+#' )
 #' }
 #' @export
 #' @importFrom nlme fixed.effects VarCorr lme random.effects
@@ -201,6 +214,7 @@ ebp <- function(fixed,
                 pop_domains,
                 smp_data,
                 smp_domains,
+                aggregate_to = NULL,
                 L = 50,
                 threshold = NULL,
                 transformation = "box.cox",
@@ -250,6 +264,7 @@ ebp <- function(fixed,
     pop_domains = pop_domains,
     smp_data = smp_data,
     smp_domains = smp_domains,
+    aggregate_to = aggregate_to,
     custom_indicator = custom_indicator,
     fixed = fixed,
     threshold = threshold,

@@ -170,7 +170,7 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
 
 # Functions called in notation
 fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data,
-                      fixed, smp_domains, threshold, weights) {
+                      fixed, smp_domains, aggregate_to, threshold, weights) {
   if (!all(mod_vars %in% colnames(pop_data))) {
     stop(strwrap(prefix = " ", initial = "",
                  paste0("Variable ",
@@ -235,6 +235,14 @@ fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data,
     }
   }
 
+  if(is.null(aggregate_to) != TRUE){
+    if (!(aggregate_to %in% colnames(pop_data))) {
+      stop(paste0("The domain variable ", aggregate_to, " is not contained in
+                  pop_data. Please provide valid variable name for the
+                  area-level for aggregation."))
+    }
+  }
+
   if (dim(pop_data)[1] < dim(smp_data)[1]) {
     stop(strwrap(prefix = " ", initial = "",
                  "The population data set cannot have less observations than
@@ -254,7 +262,7 @@ fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data,
 
 
 fw_check2 <- function(pop_domains, pop_domains_vec, smp_domains,
-                      smp_domains_vec) {
+                      smp_domains_vec, aggregate_to, aggregate_to_vec) {
   if (!(is.numeric(pop_domains_vec) ||
     any(inherits(pop_domains_vec, "factor")))) {
     stop(strwrap(prefix = " ", initial = "",
@@ -266,6 +274,13 @@ fw_check2 <- function(pop_domains, pop_domains_vec, smp_domains,
     stop(strwrap(prefix = " ", initial = "",
                  paste0(smp_domains, " needs to be the name of a variable that
                         is numeric or a (ordered) factor.")))
+  }
+  if(is.null(aggregate_to) != TRUE){
+    if (!(is.numeric(aggregate_to_vec) ||
+          any(inherits(aggregate_to_vec, "factor")))) {
+      stop(paste0(aggregate_to, " needs to be the name of a variable that is
+                  numeric or a (ordered) factor."))
+    }
   }
   if ((is.numeric(pop_domains_vec) &&
     any(inherits(smp_domains_vec, "factor"))) ||
