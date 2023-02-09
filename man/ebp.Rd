@@ -23,7 +23,8 @@ ebp(
   cpus = 1,
   custom_indicator = NULL,
   na.rm = FALSE,
-  weights = NULL
+  weights = NULL,
+  pop_weights = NULL
 )
 }
 \arguments{
@@ -52,7 +53,8 @@ factor but needs to be of the same class as the variable named in
 
 \item{aggregate_to}{a character string containing the name of a variable from
 population data that indicates the target area level for which the
-results are to be displayed. The variable can be numeric or a factor.}
+results are to be displayed. The variable can be numeric or a factor.
+Defaults to \code{NULL}.}
 
 \item{L}{a number determining the number of Monte-Carlo simulations that
 must be at least 1. Defaults to 50. For practical applications, values
@@ -116,7 +118,7 @@ parallelization. Defaults to 1. For details, see
 
 \item{custom_indicator}{a list of functions containing the indicators to be
 calculated additionally. Such functions must and must only depend on the
-target variable \code{y} and the \code{threshold}.
+target variable \code{y}, \code{weights} and the \code{threshold}.
 Defaults to \code{NULL}.}
 
 \item{na.rm}{if \code{TRUE}, observations with \code{NA} values are deleted
@@ -125,8 +127,14 @@ observations are required. Defaults to \code{FALSE}.}
 
 \item{weights}{a character string containing the name of a variable that
 indicates weights in the sample data. If a character string is provided
-a weighted version of the ebp will be used.The variable has to be numeric.
+a weighted version of the ebp will be used. The variable has to be numeric.
 Defaults to \code{NULL}.}
+
+\item{pop_weights}{a character string containing the name of a variable that
+indicates population weights in the populatation data. If a character string
+is provided for each bootstrap population weighted indicators are estimated
+using population weights. The variable has to be numeric. Defaults to
+\code{NULL}.}
 }
 \value{
 An object of class "ebp", "emdi" that provides estimators for
@@ -194,10 +202,10 @@ emdi_model <- ebp(
   }, transformation = "log",
   L = 50, MSE = TRUE, boot_type = "wild", B = 50, custom_indicator =
     list(
-      my_max = function(y, threshold) {
+      my_max = function(y, weights, threshold) {
         max(y)
       },
-      my_min = function(y, threshold) {
+      my_min = function(y, weights, threshold) {
         min(y)
       }
     ), na.rm = TRUE, cpus = 1

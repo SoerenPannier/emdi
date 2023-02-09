@@ -332,6 +332,13 @@ monte_carlo <- function(transformation,
       framework = framework
     )
 
+    if(is.null(framework$pop_weights) != TRUE){
+      pop_weights_vec <- framework$pop_data[[framework$pop_weights]]
+    }else{
+      pop_weights_vec <- rep(1, nrow(framework$pop_data))
+    }
+
+
     # Calculation of indicators for each Monte Carlo population
     ests_mcmc[, l, ] <-
       matrix(
@@ -340,12 +347,11 @@ monte_carlo <- function(transformation,
           function(f, threshold) {
             matrix(
               nrow = N_dom_pop_tmp,
-              data = unlist(tapply(
-                population_vector,
-                pop_domains_vec_tmp,
+              data = unlist(mapply(
+                y = split(population_vector, pop_domains_vec_tmp),
+                w = split(pop_weights_vec, pop_domains_vec_tmp),
                 f,
-                threshold = framework$threshold,
-                simplify = TRUE
+                threshold = framework$threshold
               )), byrow = TRUE
             )
           },
