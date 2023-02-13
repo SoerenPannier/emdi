@@ -61,7 +61,7 @@ framework_dir <- function(y, smp_data, smp_domains, weights,
                       set to 60% of the median of the dependent variable and
                       equals ", threshold)))
     } else if (!is.null(weights)) {
-      threshold <- 0.6 * wtd.quantile(
+      threshold <- 0.6 * Hmisc::wtd.quantile(
         x = y_vec,
         weights = weights_vec,
         probs = .5
@@ -145,7 +145,7 @@ getIndicatorList_fixed <- function() {
     qsr_wrap = function(y,
                         weights,
                         threshold) {
-      quant14 <- wtd.quantile(
+      quant14 <- Hmisc::wtd.quantile(
         x = y, weights = weights,
         probs = c(.2, .8)
       )
@@ -157,7 +157,7 @@ getIndicatorList_fixed <- function() {
     quant10_wrap = function(y,
                             weights,
                             threshold) {
-      wtd.quantile(
+      Hmisc::wtd.quantile(
         x = y, weights = weights,
         probs = .10
       )
@@ -165,7 +165,7 @@ getIndicatorList_fixed <- function() {
     quant25_wrap = function(y,
                             weights,
                             threshold) {
-      wtd.quantile(
+      Hmisc::wtd.quantile(
         x = y, weights = weights,
         probs = .25
       )
@@ -173,7 +173,7 @@ getIndicatorList_fixed <- function() {
     quant50_wrap = function(y,
                             weights,
                             threshold) {
-      wtd.quantile(
+      Hmisc::wtd.quantile(
         x = y, weights = weights,
         probs = .50
       )
@@ -181,7 +181,7 @@ getIndicatorList_fixed <- function() {
     quant75_wrap = function(y,
                             weights,
                             threshold) {
-      wtd.quantile(
+      Hmisc::wtd.quantile(
         x = y, weights = weights,
         probs = .75
       )
@@ -189,36 +189,10 @@ getIndicatorList_fixed <- function() {
     quant90_wrap = function(y,
                             weights,
                             threshold) {
-      wtd.quantile(
+      Hmisc::wtd.quantile(
         x = y, weights = weights,
         probs = .9
       )
     }
   )
-}
-
-wtd.quantile <- function(x, weights = NULL, probs = NULL) {
-  n <- length(x)
-  order <- order(x)
-  x <- x[order]
-  weights <- weights[order]
-  if (is.null(weights)) {
-    rw <- seq_len(n) / n
-  } else {
-    rw <- cumsum(weights) / sum(weights)
-  }
-  q <- vapply(probs, function(p) {
-    if (p == 0) {
-      return(x[1])
-    } else if (p == 1) {
-      return(x[n])
-    }
-    select <- min(which(rw >= p))
-    if (rw[select] == p) {
-      mean(x[select:(select + 1)])
-    } else {
-      x[select]
-    }
-  }, numeric(1))
-  return(unname(q))
 }

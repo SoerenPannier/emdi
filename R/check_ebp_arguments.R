@@ -47,7 +47,8 @@ ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L) {
 }
 
 ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
-                       custom_indicator, cpus, seed, na.rm, weights) {
+                       custom_indicator, cpus, seed, na.rm, weights,
+                       pop_weights) {
   if (!is.null(threshold) && !(is.numeric(threshold) &&
     length(threshold) == 1) && !inherits(threshold, "function")) {
     stop(strwrap(prefix = " ", initial = "",
@@ -165,12 +166,21 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
                  "The weighted version of ebp is only available with the
                  ''parametric'' bootstrap."))
   }
+  if (is.character(pop_weights) && length(pop_weights) != 1 ||
+      !is.character(pop_weights) && !is.null(pop_weights)) {
+    stop(strwrap(prefix = " ", initial = "",
+                 "Pop_weights must be a vector of length 1 and of class
+                 character specifying the variable name of a numeric variable
+                 indicating weights in the population data. See also
+                 help(ebp)."))
+  }
 }
 
 
 # Functions called in notation
-fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data,
-                      fixed, smp_domains, aggregate_to, threshold, weights) {
+fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data, fixed,
+                      smp_domains, aggregate_to, threshold, weights,
+                      pop_weights) {
   if (!all(mod_vars %in% colnames(pop_data))) {
     stop(strwrap(prefix = " ", initial = "",
                  paste0("Variable ",
@@ -240,6 +250,21 @@ fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data,
       stop(paste0("The domain variable ", aggregate_to, " is not contained in
                   pop_data. Please provide valid variable name for the
                   area-level for aggregation."))
+    }
+  }
+  if (is.character(pop_weights)) {
+    if (!is.numeric(smp_data[[pop_weights]])) {
+      stop(strwrap(prefix = " ", initial = "",
+                   paste0("The variable ", pop_weights, " must be the name of a
+                          variable that is a numeric vector.")))
+    }
+  }
+  if (is.character(pop_weights)) {
+    if (!all(smp_data[[pop_weights]] >= 1)) {
+      stop(strwrap(prefix = " ", initial = "",
+                   paste0("Negativ or zero weights are included in ",
+                          pop_weights, " Please remove obersvations with weight
+                          values smaller than 1.")))
     }
   }
 

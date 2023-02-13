@@ -16,7 +16,7 @@ test_that("Does the direct estimation in emdi return the point and variance
                              smp_domains = 'state',
                              var = TRUE,
                              threshold = function(y, weights){
-                               0.6 * wtd.quantile(x = y, weights = weights,
+                               0.6 * Hmisc::wtd.quantile(x = y, weights = weights,
                                                   probs = 0.5)},
                              boot_type = "naive",
                              X_calib = NULL,

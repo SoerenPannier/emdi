@@ -53,7 +53,8 @@ Imports:
     readODS,
     formula.tools,
     saeRobust,
-    spdep
+    spdep, 
+    Hmisc
 Suggests:
     testthat,
     R.rsp,
