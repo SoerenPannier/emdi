@@ -42,10 +42,10 @@
 #'     0.6 * median(y)
 #'   }, L = 50, MSE = TRUE, B = 50,
 #'   custom_indicator = list(
-#'     my_max = function(y, threshold) {
+#'     my_max = function(y, weights, threshold) {
 #'       max(y)
 #'     },
-#'     my_min = function(y, threshold) {
+#'     my_min = function(y, weights, threshold) {
 #'       min(y)
 #'     }
 #'   ), na.rm = TRUE, cpus = 1

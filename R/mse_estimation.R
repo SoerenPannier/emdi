@@ -147,19 +147,30 @@ mse_estim <- function(framework,
     framework$threshold <-
       framework$threshold(y = pop_income_vector)
   }
+
+  if(is.null(framework$aggregate_to_vec) != TRUE){
+    N_dom_pop_tmp <- framework$N_dom_pop_agg
+    pop_domains_vec_tmp <- framework$aggregate_to_vec
+    pop_weights_vec <- framework$pop_data[[framework$pop_weights]]
+  } else {
+    N_dom_pop_tmp <- framework$N_dom_pop
+    pop_domains_vec_tmp <- framework$pop_domains_vec
+    pop_weights_vec <- rep(1, nrow(framework$pop_data))
+  }
+
   # True indicator values
   true_indicators <- matrix(
-    nrow = framework$N_dom_pop,
+    nrow = N_dom_pop_tmp,
     data = unlist(lapply(framework$indicator_list,
       function(f, threshold) {
         matrix(
-          nrow = framework$N_dom_pop,
+          nrow = N_dom_pop_tmp,
           data =
-            unlist(tapply(
-              pop_income_vector,
-              framework$pop_domains_vec, f,
-              threshold = framework$threshold,
-              simplify = TRUE
+            unlist(mapply(
+              y = split(pop_income_vector, pop_domains_vec_tmp),
+              w = split(pop_weights_vec, pop_domains_vec_tmp),
+              f,
+              threshold = framework$threshold
             )),
           byrow = TRUE
         )
