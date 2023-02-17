@@ -108,7 +108,6 @@
 #' @importFrom boot boot
 #' @importFrom MASS ginv
 #' @importFrom stats aggregate runif weighted.mean
-#' @importFrom Hmisc wtd.quantile
 
 
 direct <- function(y,

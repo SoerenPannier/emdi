@@ -32,6 +32,10 @@
 #' that indicates domains in the sample data. The variable can be numeric or a
 #' factor but needs to be of the same class as the variable named in
 #' \code{pop_domains}.
+#' @param aggregate_to a character string containing the name of a variable from
+#' population data that indicates the target area level for which the
+#' results are to be displayed. The variable can be numeric or a factor.
+#' Defaults to \code{NULL}.
 #' @param threshold a number defining a threshold. Alternatively, a threshold
 #' may be defined as a \code{function} of \code{y} returning a numeric value.
 #' Such a function will be evaluated once for the point estimation and in each
@@ -89,10 +93,6 @@
 #' @param na.rm if \code{TRUE}, observations with \code{NA} values are deleted
 #' from the population and sample data. For the EBP procedure complete
 #' observations are required. Defaults to \code{FALSE}.
-#' @param aggregate_to a character string containing the name of a variable from
-#' population data that indicates the target area level for which the
-#' results are to be displayed. The variable can be numeric or a factor.
-#' Defaults to \code{NULL}.
 #' @param weights a character string containing the name of a variable that
 #' indicates weights in the sample data. If a character string is provided
 #' a weighted version of the ebp will be used. The variable has to be numeric.
@@ -203,17 +203,7 @@
 #'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
 #'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
 #'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#'   transformation = "log", na.rm = TRUE, aggregate_to = "state"
-#' )
-#'
-#' # Example 5: With default setting using pop_weights to get weighted
-#' # indicators according to equivalized household size
-#' emdi_model <- ebp(
-#'   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-#'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
-#'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-#'   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-#'   transformation = "log", na.rm = TRUE, pop_weight = "eqsize"
+#'   aggregate_to = "state", transformation = "log", na.rm = TRUE
 #' )
 #' }
 #' @export
@@ -224,13 +214,13 @@
 #' qnorm quantile residuals rnorm sd
 #' @importFrom utils flush.console
 #' @importFrom stats fitted
-#' @importFrom Hmisc wtd.quantile
 
 ebp <- function(fixed,
                 pop_data,
                 pop_domains,
                 smp_data,
                 smp_domains,
+                aggregate_to = NULL,
                 L = 50,
                 threshold = NULL,
                 transformation = "box.cox",
@@ -245,7 +235,6 @@ ebp <- function(fixed,
                 cpus = 1,
                 custom_indicator = NULL,
                 na.rm = FALSE,
-                aggregate_to = NULL,
                 weights = NULL,
                 pop_weights = NULL) {
   ebp_check1(
@@ -257,7 +246,7 @@ ebp <- function(fixed,
     threshold = threshold, transformation = transformation,
     interval = interval, MSE = MSE, boot_type = boot_type, B = B,
     custom_indicator = custom_indicator, cpus = cpus, seed = seed,
-    na.rm = na.rm, weights = weights, pop_weights = pop_weights
+    na.rm = na.rm, weights = weights
   )
 
   # Save function call ---------------------------------------------------------
