@@ -125,19 +125,22 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
         return(G)
     },
     qsr = function(y, w, threshold) {
-       quant14 <- wtd.quantile(
-         x = y,
-         weights = w,
-         probs = c(0.2, 0.8)
-       )
-
-       iq1 <- y <= quant14[1]
-       iq4 <- y > quant14[2]
-       t((sum(w[iq4] * y[iq4]) / sum(w[iq4])) /
+      if(length(unique(w)) == 1 & 1 %in% unique(w)){
+        quant14 <- quantile(x = y, probs = c(0.2, 0.8))
+      }else{
+        quant14 <- wtd.quantile(x = y, weights = w, probs = c(0.2, 0.8))
+      }
+      iq1 <- y <= quant14[1]
+      iq4 <- y > quant14[2]
+      t((sum(w[iq4] * y[iq4]) / sum(w[iq4])) /
            (sum(w[iq1] * y[iq1]) / sum(w[iq1])))
     },
     quants = function(y, w, threshold) {
-      t(wtd.quantile(x = y, weights = w, probs = c(.10, .25, .5, .75, .9)))
+      if(length(unique(w)) == 1 & 1 %in% unique(w)){
+        t(quantile(x = y, probs = c(.10, .25, .5, .75, .9)))
+      }else{
+        t(wtd.quantile(x = y, weights = w, probs = c(.10, .25, .5, .75, .9)))
+      }
     }
   )
 
