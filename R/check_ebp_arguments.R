@@ -253,14 +253,14 @@ fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data, fixed,
   }
 
   if (is.character(pop_weights)) {
-    if (!is.numeric(smp_data[[pop_weights]])) {
+    if (!is.numeric(pop_data[[pop_weights]])) {
       stop(strwrap(prefix = " ", initial = "",
                    paste0("The variable ", pop_weights, " must be the name of a
                           variable that is a numeric vector.")))
     }
   }
   if (is.character(pop_weights)) {
-    if (!all(smp_data[[pop_weights]] >= 1)) {
+    if (!all(pop_data[[pop_weights]] >= 1)) {
       stop(strwrap(prefix = " ", initial = "",
                    paste0("Negativ or zero weights are included in ",
                           pop_weights, " Please remove obersvations with weight
