@@ -248,7 +248,7 @@ fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data, fixed,
     if (!(aggregate_to %in% colnames(pop_data))) {
       stop(paste0("The domain variable ", aggregate_to, " is not contained in
                   pop_data. Please provide valid variable name for the
-                  area-level for aggregation."))
+                  aggregation."))
     }
   }
 
@@ -262,7 +262,7 @@ fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data, fixed,
   if (is.character(pop_weights)) {
     if (!all(pop_data[[pop_weights]] >= 1)) {
       stop(strwrap(prefix = " ", initial = "",
-                   paste0("Negativ or zero weights are included in ",
+                   paste0("Negative or zero weights are included in ",
                           pop_weights, " Please remove obersvations with weight
                           values smaller than 1.")))
     }

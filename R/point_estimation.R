@@ -297,7 +297,7 @@ monte_carlo <- function(transformation,
 
   # Preparing matrices for indicators for the Monte-Carlo simulation
 
-  if(is.null(framework$aggregate_to_vec) != TRUE){
+  if(!is.null(framework$aggregate_to_vec)){
     N_dom_pop_tmp <- framework$N_dom_pop_agg
     pop_domains_vec_tmp <- framework$aggregate_to_vec
   } else {
@@ -337,7 +337,6 @@ monte_carlo <- function(transformation,
     }else{
       pop_weights_vec <- rep(1, nrow(framework$pop_data))
     }
-
 
     # Calculation of indicators for each Monte Carlo population
     ests_mcmc[, l, ] <-

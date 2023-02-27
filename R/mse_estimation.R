@@ -83,10 +83,10 @@ parametric_bootstrap <- function(framework,
   }
 
   mses <- apply(mses, c(1, 2), mean)
-  if(is.null(framework$aggregate_to_vec) != TRUE){
-    mses <- data.frame(Domain = unique(framework$aggregate_to_vec), mses)
-  }else{
+  if(is.null(framework$aggregate_to_vec)){
     mses <- data.frame(Domain = unique(framework$pop_domains_vec), mses)
+  }else{
+    mses <- data.frame(Domain = unique(framework$aggregate_to_vec), mses)
   }
 
   return(mses)

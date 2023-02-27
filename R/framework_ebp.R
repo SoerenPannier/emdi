@@ -51,15 +51,15 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
   smp_data[[smp_domains]] <- factor(smp_data[[smp_domains]],
                                     levels = levels_tmp)
 
-  if(is.null(aggregate_to) != TRUE){
+
+  if(is.null(aggregate_to)){
+    aggregate_to_vec <- NULL
+  }else{
     levels_tmp <- unique(pop_data[[aggregate_to]])
     pop_data[[aggregate_to]] <- factor(pop_data[[aggregate_to]],
                                        levels = levels_tmp)
     aggregate_to_vec <- pop_data[[aggregate_to]]
-  }else{
-    aggregate_to_vec <- NULL
   }
-
 
   rm(levels_tmp)
   smp_data <- smp_data[order(smp_data[[smp_domains]]), ]
@@ -125,11 +125,8 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
         return(G)
     },
     qsr = function(y, w, threshold) {
-      if(length(unique(w)) == 1 & 1 %in% unique(w)){
-        quant14 <- quantile(x = y, probs = c(0.2, 0.8))
-      }else{
-        quant14 <- wtd.quantile(x = y, weights = w, probs = c(0.2, 0.8))
-      }
+      quant14 <- wtd.quantile(x = y, weights = w, probs = c(0.2, 0.8))
+
       iq1 <- y <= quant14[1]
       iq4 <- y > quant14[2]
       t((sum(w[iq4] * y[iq4]) / sum(w[iq4])) /
