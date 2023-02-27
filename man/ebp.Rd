@@ -22,9 +22,9 @@ ebp(
   cpus = 1,
   custom_indicator = NULL,
   na.rm = FALSE,
-  aggregate_to = NULL,
   weights = NULL,
-  pop_weights = NULL
+  pop_weights = NULL,
+  aggregate_to = NULL
 )
 }
 \arguments{
@@ -113,17 +113,13 @@ parallelization. Defaults to 1. For details, see
 
 \item{custom_indicator}{a list of functions containing the indicators to be
 calculated additionally. Such functions must and must only depend on the
-target variable \code{y}, \code{weights} and the \code{threshold}.
+target variable \code{y}, \code{weights} and the \code{threshold} even if the
+custom indicator does not use the weights and threshold argument.
 Defaults to \code{NULL}.}
 
 \item{na.rm}{if \code{TRUE}, observations with \code{NA} values are deleted
 from the population and sample data. For the EBP procedure complete
 observations are required. Defaults to \code{FALSE}.}
-
-\item{aggregate_to}{a character string containing the name of a variable from
-population data that indicates the target area level for which the
-results are to be displayed. The variable can be numeric or a factor.
-Defaults to \code{NULL}.}
 
 \item{weights}{a character string containing the name of a variable that
 indicates weights in the sample data. If a character string is provided
@@ -132,9 +128,13 @@ Defaults to \code{NULL}.}
 
 \item{pop_weights}{a character string containing the name of a variable that
 indicates population weights in the populatation data. If a character string
-is provided for each bootstrap population weighted indicators are estimated
-using population weights. The variable has to be numeric. Defaults to
-\code{NULL}.}
+is provided weighted indicators are estimated using population weights.
+The variable has to be numeric. Defaults to \code{NULL}.}
+
+\item{aggregate_to}{a character string containing the name of a variable from
+population data that indicates the target domain level for which the
+results are to be displayed. The variable can be numeric or a factor.
+Defaults to \code{NULL}.}
 }
 \value{
 An object of class "ebp", "emdi" that provides estimators for
@@ -227,7 +227,7 @@ emdi_model <- ebp(
     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-  transformation = "log", na.rm = TRUE, aggregate_to = "state"
+  na.rm = TRUE, aggregate_to = "state"
 )
 
 # Example 5: With default setting using pop_weights to get weighted
@@ -237,7 +237,7 @@ emdi_model <- ebp(
     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-  transformation = "log", na.rm = TRUE, pop_weight = "eqsize"
+  na.rm = TRUE, pop_weight = "eqsize"
 )
 }
 }
