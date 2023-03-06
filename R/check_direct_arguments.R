@@ -164,7 +164,7 @@ direct_check <- function(y,
                      not be included in the indicator. For help, see Example 3
                      in help(direct)."))
       } else if (inherits(custom_indicator[[i]], "function") &&
-        !all(names(formals(custom_indicator[[i]])) ==
+        !all(names(formals(custom_indicator[[i]])) %in%
           c("y", "weights", "threshold"))) {
         stop(strwrap(prefix = " ", initial = "",
                      "Functions for custom indicators need to have exactly the

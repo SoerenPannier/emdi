@@ -80,7 +80,12 @@ framework_dir <- function(y, smp_data, smp_domains, weights,
     "Quantile_75",
     "Quantile_90"
   )
+
   if (!is.null(custom_indicator) && length(custom_indicator) > 0) {
+    for(i in 1:length(custom_indicator)) {
+      formals(custom_indicator[[i]]) <- alist(y=, weights=, threshold=)
+    }
+
     indicator_list <- c(indicator_list, custom_indicator)
     indicator_names <- c(indicator_names, names(custom_indicator))
   }

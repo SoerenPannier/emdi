@@ -348,7 +348,7 @@ monte_carlo <- function(transformation,
               nrow = N_dom_pop_tmp,
               data = unlist(mapply(
                 y = split(population_vector, pop_domains_vec_tmp),
-                w = split(pop_weights_vec, pop_domains_vec_tmp),
+                pop_weight = split(pop_weights_vec, pop_domains_vec_tmp),
                 f,
                 threshold = framework$threshold
               )), byrow = TRUE

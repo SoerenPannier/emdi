@@ -113,8 +113,7 @@ parallelization. Defaults to 1. For details, see
 
 \item{custom_indicator}{a list of functions containing the indicators to be
 calculated additionally. Such functions must and must only depend on the
-target variable \code{y}, \code{weights} and the \code{threshold} even if the
-custom indicator does not use the weights and threshold argument.
+target variable \code{y}, \code{pop_weight} and the \code{threshold}.
 Defaults to \code{NULL}.}
 
 \item{na.rm}{if \code{TRUE}, observations with \code{NA} values are deleted
@@ -202,10 +201,10 @@ emdi_model <- ebp(
   }, transformation = "log",
   L = 50, MSE = TRUE, boot_type = "wild", B = 50, custom_indicator =
     list(
-      my_max = function(y, weights, threshold) {
+      my_max = function(y) {
         max(y)
       },
-      my_min = function(y, weights, threshold) {
+      my_min = function(y) {
         min(y)
       }
     ), na.rm = TRUE, cpus = 1
