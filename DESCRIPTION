@@ -1,6 +1,6 @@
 Package: emdi
 Title: Estimating and Mapping Disaggregated Indicators
-Version: 2.1.3
+Version: 2.2.0
 Date: 2022-11-30
 Authors@R: c(person("Sylvia", "Harmening", role="aut", email = "sylvia.harmening@fu-berlin.de"), 
     person("Ann-Kristin", "Kreutzmann", role="aut", email="ann-kristin.kreutzmann@fu-berlin.de"),

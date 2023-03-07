@@ -1,3 +1,9 @@
+# emdi 2.2.0
+* new feature for ebp function: aggregate_to which spezifies the level of aggregation
+* new feature for ebp function: population_weights 
+* Update additional vignette with explantions on the new features
+* improve custom_indicator
+
 # emdi 2.1.3
 * Improved summary with clearer notation of R2
 * Updated Area Level (FH) vignette
