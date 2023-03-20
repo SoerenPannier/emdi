@@ -112,9 +112,9 @@ parallelization. Defaults to 1. For details, see
 \code{\link[parallelMap]{parallelStart}}.}
 
 \item{custom_indicator}{a list of functions containing the indicators to be
-calculated additionally. Such functions must and must only depend on the
-target variable \code{y}, \code{pop_weight} and the \code{threshold}.
-Defaults to \code{NULL}.}
+calculated additionally. Such functions must depend on the target variable
+\code{y}, and optional can depend on \code{pop_weights} and the
+\code{threshold}. Defaults to \code{NULL}.}
 
 \item{na.rm}{if \code{TRUE}, observations with \code{NA} values are deleted
 from the population and sample data. For the EBP procedure complete

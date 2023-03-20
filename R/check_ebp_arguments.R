@@ -137,18 +137,17 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
       if (!inherits(custom_indicator[[i]], "function")) {
         stop(strwrap(prefix = " ", initial = "",
                      "The elements of the list need to be functions. These
-                     functions for custom indicators need to have exactly the
-                     following two arguments: y, threshold; even though a
-                     threshold might not included in the indicator. For help
-                     see Example 2 in help(ebp)."))
+                     functions for custom indicators need to have the
+                     argument y and optional the agruments pop_weights and
+                     threshold. For help see Example 2 in help(ebp)."))
       } else if (inherits(custom_indicator[[i]], "function") &&
         !all(names(formals(custom_indicator[[i]])) %in%
           c("y", "pop_weights", "threshold"))) {
         stop(strwrap(prefix = " ", initial = "",
                      "Functions for custom indicators need to have exactly the
-                     following two arguments: y, weights, threshold; even though
-                     a threshold and weights might not included in the
-                     indicator. For help see Example 2 in help(ebp)."))
+                     following argument y and optional the arguments
+                     pop_weights, threshold. For help see Example 2 in
+                     help(ebp)."))
       }
     }
   }

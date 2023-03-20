@@ -1,6 +1,6 @@
 # emdi 2.2.0
-* new feature for ebp function: aggregate_to which spezifies the level of aggregation
-* new feature for ebp function: population_weights 
+* new feature for ebp function: aggregate_to which specifies the level of aggregation
+* new feature for ebp function: pop_weights 
 * Update additional vignette with explantions on the new features
 * improve custom_indicator
 

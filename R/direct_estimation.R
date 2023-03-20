@@ -47,7 +47,7 @@
 #' totals.
 #' @param custom_indicator a list of functions containing the indicators to be
 #' calculated additionally. Such functions must and must only depend on the
-#' target variable \code{y}, the \code{weights} and the
+#' target variable \code{y} and optional can depend on \code{weights} and the
 #' \code{threshold} (numeric value) (see Example 3). Defaults to \code{NULL}.
 #' @param na.rm if \code{TRUE}, observations with \code{NA} values are deleted
 #' from the sample data. Defaults to \code{FALSE}.
