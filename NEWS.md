@@ -1,9 +1,3 @@
-# emdi 2.2.0
-* new feature for ebp function: aggregate_to which specifies the level of aggregation
-* new feature for ebp function: pop_weights 
-* Update additional vignette with explantions on the new features
-* improve custom_indicator
-
 # emdi 2.1.3
 * Improved summary with clearer notation of R2
 * Updated Area Level (FH) vignette
@@ -56,21 +50,21 @@
 * Updated R version dependency
 
 # emdi 1.1.7
- 
+
 * Minor typos corrected
 * Unit-Tests adjusted to the forthcoming R-Version 4.0
 
 # emdi 1.1.6
- 
+
 * New and updated references.
 
 # emdi 1.1.5
- 
+
 * Tests updated to deal with new random number generation in R
 * Some spelling improved
 
 # emdi 1.1.4
- 
+
 * Fixed Bug in summary: R2 calculation with MuMIn is now fully working
 * Added feature: formula used in fixed is now preserved, even if passed to ebp as a variable
 
@@ -99,7 +93,7 @@ reproducibility even when the function is run in parallel mode.
 * Updated Vignette
 
 # emdi 1.1.0
-  
+
 * A new function `direct` is made available, which provides direct estimation for small areas.
 * The function `ebp` now allows for a user-defined threshold.
 * The function `ebp` is now able to perform a semi-parametric wild bootstrap for MSE estimation.
