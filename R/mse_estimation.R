@@ -168,7 +168,7 @@ mse_estim <- function(framework,
           data =
             unlist(mapply(
               y = split(pop_income_vector, pop_domains_vec_tmp),
-              pop_weight = split(pop_weights_vec, pop_domains_vec_tmp),
+              pop_weights = split(pop_weights_vec, pop_domains_vec_tmp),
               f,
               threshold = framework$threshold
             )),

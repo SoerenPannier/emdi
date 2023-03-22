@@ -230,13 +230,18 @@ emdi_model <- ebp(
 )
 
 # Example 5: With default setting using pop_weights to get weighted
-# indicators according to equivalized household size
+# indicators according to equivalized household size and an using an
+# custom_indicator using pop_weights
 emdi_model <- ebp(
   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-  na.rm = TRUE, pop_weight = "eqsize"
+  custom_indicator =
+    list(HCR_singleHH = function(y, pop_weights, threshold) {
+                              mean(y[pop_weights == 1] < threshold)
+                        }
+    ), na.rm = TRUE, pop_weights = "eqsize"
 )
 }
 }
