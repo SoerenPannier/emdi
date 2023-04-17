@@ -148,13 +148,17 @@ mse_estim <- function(framework,
       framework$threshold(y = pop_income_vector)
   }
 
-  if(!is.null(framework$aggregate_to_vec)){
+  if(!is.null(framework$aggregate_to_vec)) {
     N_dom_pop_tmp <- framework$N_dom_pop_agg
     pop_domains_vec_tmp <- framework$aggregate_to_vec
-    pop_weights_vec <- framework$pop_data[[framework$pop_weights]]
   } else {
     N_dom_pop_tmp <- framework$N_dom_pop
     pop_domains_vec_tmp <- framework$pop_domains_vec
+  }
+
+  if(!is.null(framework$pop_weights)) {
+    pop_weights_vec <- framework$pop_data[[framework$pop_weights]]
+  }else{
     pop_weights_vec <- rep(1, nrow(framework$pop_data))
   }
 
