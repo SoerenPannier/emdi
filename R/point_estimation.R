@@ -297,8 +297,16 @@ monte_carlo <- function(transformation,
 
   # Preparing matrices for indicators for the Monte-Carlo simulation
 
+  if(!is.null(framework$aggregate_to_vec)){
+    N_dom_pop_tmp <- framework$N_dom_pop_agg
+    pop_domains_vec_tmp <- framework$aggregate_to_vec
+  } else {
+    N_dom_pop_tmp <- framework$N_dom_pop
+    pop_domains_vec_tmp <- framework$pop_domains_vec
+  }
+
   ests_mcmc <- array(dim = c(
-    framework$N_dom_pop,
+    N_dom_pop_tmp,
     L,
     length(framework$indicator_names)
   ))
@@ -324,20 +332,25 @@ monte_carlo <- function(transformation,
       framework = framework
     )
 
+    if(!is.null(framework$pop_weights)){
+      pop_weights_vec <- framework$pop_data[[framework$pop_weights]]
+    }else{
+      pop_weights_vec <- rep(1, nrow(framework$pop_data))
+    }
+
     # Calculation of indicators for each Monte Carlo population
     ests_mcmc[, l, ] <-
       matrix(
-        nrow = framework$N_dom_pop,
+        nrow = N_dom_pop_tmp,
         data = unlist(lapply(framework$indicator_list,
           function(f, threshold) {
             matrix(
-              nrow = framework$N_dom_pop,
-              data = unlist(tapply(
-                population_vector,
-                framework$pop_domains_vec,
+              nrow = N_dom_pop_tmp,
+              data = unlist(mapply(
+                y = split(population_vector, pop_domains_vec_tmp),
+                pop_weights = split(pop_weights_vec, pop_domains_vec_tmp),
                 f,
-                threshold = framework$threshold,
-                simplify = TRUE
+                threshold = framework$threshold
               )), byrow = TRUE
             )
           },
@@ -350,7 +363,7 @@ monte_carlo <- function(transformation,
   # Point estimations of indicators by taking the mean
 
   point_estimates <- data.frame(
-    Domain = unique(framework$pop_domains_vec),
+    Domain = unique(pop_domains_vec_tmp),
     apply(ests_mcmc, c(3), rowMeans)
   )
   colnames(point_estimates) <- c("Domain", framework$indicator_names)

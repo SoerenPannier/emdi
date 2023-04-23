@@ -20,7 +20,6 @@ framework_dir <- function(y, smp_data, smp_domains, weights,
                     set FALSE. Therefore, only quantiles are estimated"))
   }
 
-
   # two versions of y, one vector version and one character version (original)
   # for variance estimation
   # we force sample data, in laeken data can be NULL
@@ -28,14 +27,11 @@ framework_dir <- function(y, smp_data, smp_domains, weights,
   # Number of households in sample
   N_smp <- length(y_vec)
 
-
-
   if (!is.null(weights)) {
     weights_vec <- smp_data[, weights]
   } else if (is.null(weights)) {
     weights_vec <- rep.int(1, N_smp)
   }
-
 
   byDomain <- !is.null(smp_domains)
   if (byDomain) {
@@ -48,10 +44,6 @@ framework_dir <- function(y, smp_data, smp_domains, weights,
     smp_domains_vec_tmp <- as.numeric(smp_domains_vec)
     n_smp <- as.vector(table(smp_domains_vec_tmp))
   }
-
-
-
-
 
   if (is.null(threshold)) {
     if (is.null(weights)) {
@@ -88,7 +80,12 @@ framework_dir <- function(y, smp_data, smp_domains, weights,
     "Quantile_75",
     "Quantile_90"
   )
+
   if (!is.null(custom_indicator) && length(custom_indicator) > 0) {
+    for(i in 1:length(custom_indicator)) {
+      formals(custom_indicator[[i]]) <- alist(y=, weights=, threshold=)
+    }
+
     indicator_list <- c(indicator_list, custom_indicator)
     indicator_names <- c(indicator_names, names(custom_indicator))
   }

@@ -83,7 +83,11 @@ parametric_bootstrap <- function(framework,
   }
 
   mses <- apply(mses, c(1, 2), mean)
-  mses <- data.frame(Domain = unique(framework$pop_domains_vec), mses)
+  if(is.null(framework$aggregate_to_vec)){
+    mses <- data.frame(Domain = unique(framework$pop_domains_vec), mses)
+  }else{
+    mses <- data.frame(Domain = unique(framework$aggregate_to_vec), mses)
+  }
 
   return(mses)
 }
@@ -143,19 +147,34 @@ mse_estim <- function(framework,
     framework$threshold <-
       framework$threshold(y = pop_income_vector)
   }
+
+  if(!is.null(framework$aggregate_to_vec)) {
+    N_dom_pop_tmp <- framework$N_dom_pop_agg
+    pop_domains_vec_tmp <- framework$aggregate_to_vec
+  } else {
+    N_dom_pop_tmp <- framework$N_dom_pop
+    pop_domains_vec_tmp <- framework$pop_domains_vec
+  }
+
+  if(!is.null(framework$pop_weights)) {
+    pop_weights_vec <- framework$pop_data[[framework$pop_weights]]
+  }else{
+    pop_weights_vec <- rep(1, nrow(framework$pop_data))
+  }
+
   # True indicator values
   true_indicators <- matrix(
-    nrow = framework$N_dom_pop,
+    nrow = N_dom_pop_tmp,
     data = unlist(lapply(framework$indicator_list,
       function(f, threshold) {
         matrix(
-          nrow = framework$N_dom_pop,
+          nrow = N_dom_pop_tmp,
           data =
-            unlist(tapply(
-              pop_income_vector,
-              framework$pop_domains_vec, f,
-              threshold = framework$threshold,
-              simplify = TRUE
+            unlist(mapply(
+              y = split(pop_income_vector, pop_domains_vec_tmp),
+              pop_weights = split(pop_weights_vec, pop_domains_vec_tmp),
+              f,
+              threshold = framework$threshold
             )),
           byrow = TRUE
         )
