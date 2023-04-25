@@ -1,3 +1,6 @@
+# emdi 2.2.0
+
+
 # emdi 2.1.3
 * Improved summary with clearer notation of R2
 * Updated Area Level (FH) vignette
