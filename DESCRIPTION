@@ -52,14 +52,12 @@ Imports:
     MASS,
     readODS,
     formula.tools,
-    saeRobust,
-    spdep
+    saeRobust
 Suggests:
     testthat,
     R.rsp,
     simFrame,
     laeken,
-    rgeos,
-    maptools,
+    sf,
     graphics
 VignetteBuilder: R.rsp
