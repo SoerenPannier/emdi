@@ -52,7 +52,9 @@ Imports:
     MASS,
     readODS,
     formula.tools,
-    saeRobust
+    saeRobust,
+    rlang, 
+    spdep
 Suggests:
     testthat,
     R.rsp,
