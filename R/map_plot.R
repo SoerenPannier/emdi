@@ -3,8 +3,8 @@
 #' Function \code{map_plot} creates spatial visualizations of the estimates
 #' obtained by small area estimation methods.
 #'
-#' @param object an object of type \code{saeTrafo}, containing the estimates to
-#' be visualized.
+#' @param object an object of type emdi, containing the estimates to be
+#' visualized.
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
 #' (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
@@ -21,8 +21,8 @@
 #' Defaults to \code{FALSE}.
 #' @param CV optional logical. If \code{TRUE}, the CV is also visualized.
 #' Defaults to \code{FALSE}.
-#' @param map_obj an \code{SpatialPolygonsDataFrame} object as defined by the
-#' \pkg{sp} package on which the data should be visualized.
+#' @param map_obj an \code{"sf", "data.frame"} object as defined by the
+#' \pkg{sf} package on which the data should be visualized.
 #' @param map_dom_id a character string containing the name of a variable in
 #' \code{map_obj} that indicates the domains.
 #' @param map_tab a \code{data.frame} object with two columns that match the
@@ -31,19 +31,20 @@
 #' in both objects differ.
 #' @param color a \code{vector} of length 2 defining the lowest and highest
 #' color in the plots.
-#' @param scale_points a numeric vector of length two. This
+#' @param scale_points a structure defining the lowest and the highest
+#' value of the colorscale. If a numeric vector of length two is given, this
 #' scale will be used for every plot.
-#' @param guide character passed to \code{scale_fill_gradient} from
-#' \pkg{ggplot2}. Possible values are "none", "colourbar", and "legend".
-#' Defaults to "colourbar".
+#' @param guide character passed to
+#' \code{scale_colour_gradient} from \pkg{ggplot2}.
+#' Possible values are "none", "colourbar", and "legend".
 #' @param return_data if set to \code{TRUE}, a fortified data frame including
 #' the map data as well as the chosen indicators is returned. Customized maps
 #' can easily be obtained from this data frame via the package \pkg{ggplot2}.
 #' Defaults to \code{FALSE}.
-#' @return Creates the plots demanded and, if selected, a fortified data.frame
+#' @return Creates the plots demanded, and, if selected, a fortified data.frame
 #' containing the mapdata and chosen indicators.
-#' @seealso \code{\link[sf]{sf}}, \code{\link{NER_Trafo}},
-#' \code{\link{saeTrafoObject}}
+#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}},
+#' \code{\link{emdiObject}}, \code{\link[sf]{sf}}
 #' @examples
 #' \donttest{
 #' data("eusilcA_pop")
@@ -228,10 +229,10 @@ plot_real <- function(object,
 
     if (any(is.na(matcher))) {
       if (all(is.na(matcher))) {
-        stop(paste("Domain of saeTrafo object and Map object do not match.",
+        stop(paste("Domain of emdi object and Map object do not match.",
                    "Try using map_tab"))
       } else {
-        warnings(paste("Not all Domains of saeTrafo object and Map object",
+        warnings(paste("Not all Domains of emdi object and Map object",
                        "could be matched. Try using map_tab"))
       }
     }
