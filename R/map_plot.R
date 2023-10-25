@@ -248,7 +248,7 @@ plot_real <- function(object,
   map_obj.merged <- merge(map_obj, map_data, by.x = map_dom_id, by.y = "Domain")
 
   indicator <- colnames(map_data)
-  indicator <- indicator[!(indicator %in% "Domain")]
+  indicator <- indicator[!(indicator %in% c("Domain", "shape_id"))]
 
   for (ind in indicator) {
 
