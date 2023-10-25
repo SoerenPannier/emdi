@@ -92,7 +92,7 @@
 #' }
 #' @export
 #' @importFrom reshape2 melt
-#' @importFrom ggplot2 aes geom_sf facet_wrap coord_equal labs
+#' @importFrom ggplot2 aes geom_polygon geom_sf facet_wrap coord_equal labs
 #' @importFrom ggplot2 theme element_blank scale_fill_gradient ggplot ggtitle
 #' @importFrom rlang .data
 
@@ -162,15 +162,21 @@ map_pseudo <- function(object, indicator, panelplot, MSE, CV) {
 
   if (panelplot) {
     ggplot(tplot, aes(x = x, y = y)) +
-      geom_sf(aes(group = id, fill = value)) +
-      facet_wrap(facets = ~ variable,
-                 ncol   = ceiling(sqrt(length(unique(tplot$variable))))
+      geom_polygon(aes(
+        group = id,
+        fill = value
+      )) +
+      facet_wrap(~variable,
+                 ncol = ceiling(sqrt(length(unique(tplot$variable))))
       )
   } else {
     for (ind in indicator) {
-      print(ggplot(tplot[tplot$variable == ind, ], aes(x = x, y = y)) +
-              ggtitle(paste0(ind)) +
-              geom_sf(aes(group = id, fill = value)))
+      print(print(ggplot(tplot[tplot$variable == ind, ], aes(x = x, y = y)) +
+        ggtitle(paste0(ind)) +
+        geom_polygon(aes(
+          group = id,
+          fill = value
+        ))))
       cat("Press [enter] to continue")
       line <- readline()
     }
