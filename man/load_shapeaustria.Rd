@@ -7,10 +7,10 @@
 load_shapeaustria()
 }
 \value{
-A shape file of class \code{SpatialPolygonsDataFrame}.
+A shape file of class \code{"sf", "data.frame"}.
 }
 \description{
-The function simplifies to load the shape file for austrian districts.
+The function simplifies to load the shape file for Austrian districts.
 }
 \details{
 The shape file contains the borders of Austrian districts. Thus, it

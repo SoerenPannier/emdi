@@ -53,13 +53,13 @@ Imports:
     readODS,
     formula.tools,
     saeRobust,
+    rlang, 
     spdep
 Suggests:
     testthat,
     R.rsp,
     simFrame,
     laeken,
-    rgeos,
-    maptools,
+    sf,
     graphics
 VignetteBuilder: R.rsp
