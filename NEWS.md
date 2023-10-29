@@ -1,3 +1,7 @@
+# emdi 2.2.1
+* Substitution of maptools and rgeos by sf due to depreciation of the former
+* Substitution of ggplot2::fortify by ggplot2::geom_sf due to depreciation of the former
+
 # emdi 2.2.0
 * Extension of the ebp function to allow for population weights
 * Extension of the ebp function to allow the aggregation of the estimates to different levels  
