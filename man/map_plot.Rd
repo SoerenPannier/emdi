@@ -2,7 +2,7 @@
 % Please edit documentation in R/map_plot.R
 \name{map_plot}
 \alias{map_plot}
-\title{Visualizes Regional Disaggregated Estimates on a Map}
+\title{Visualizes regional disaggregated estimates on a map}
 \usage{
 map_plot(
   object,
@@ -41,8 +41,8 @@ Defaults to \code{FALSE}.}
 \item{CV}{optional logical. If \code{TRUE}, the CV is also visualized.
 Defaults to \code{FALSE}.}
 
-\item{map_obj}{an \code{SpatialPolygonsDataFrame} object as defined by the
-\pkg{sp} package on which the data should be visualized.}
+\item{map_obj}{an \code{"sf", "data.frame"} object as defined by the
+\pkg{sf} package on which the data should be visualized.}
 
 \item{map_dom_id}{a character string containing the name of a variable in
 \code{map_obj} that indicates the domains.}
@@ -74,7 +74,7 @@ containing the mapdata and chosen indicators.
 }
 \description{
 Function \code{map_plot} creates spatial visualizations of the estimates
-obtained by small area estimation methods or direct estimation.
+obtained by small area estimation methods.
 }
 \examples{
 \donttest{
@@ -106,13 +106,11 @@ map_plot(
 # file
 
 # First find the right order
-dom_ord <- match(shape_austria_dis@data$PB, emdi_model$ind$Domain)
+dom_ord <- match(shape_austria_dis$PB, emdi_model$ind$Domain)
 
-# Create the mapping table based on the order obtained above
-map_tab <- data.frame(
-  pop_data_id = emdi_model$ind$Domain[dom_ord],
-  shape_id = shape_austria_dis@data$BKZ
-)
+#Create the mapping table based on the order obtained above
+map_tab <- data.frame(pop_data_id = emdi_model$ind$Domain[dom_ord],
+                      shape_id = shape_austria_dis$BKZ)
 
 # Create map plot for mean indicator - point and CV estimates but no MSE
 # using the numerical domain identifiers of the shape file
@@ -126,5 +124,5 @@ map_plot(
 }
 \seealso{
 \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}},
-\code{\link{emdiObject}}, \code{\link[maptools]{readShapePoly}}
+\code{\link{emdiObject}}, \code{\link[sf]{sf}}
 }

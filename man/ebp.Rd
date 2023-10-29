@@ -22,7 +22,9 @@ ebp(
   cpus = 1,
   custom_indicator = NULL,
   na.rm = FALSE,
-  weights = NULL
+  weights = NULL,
+  pop_weights = NULL,
+  aggregate_to = NULL
 )
 }
 \arguments{
@@ -110,9 +112,9 @@ parallelization. Defaults to 1. For details, see
 \code{\link[parallelMap]{parallelStart}}.}
 
 \item{custom_indicator}{a list of functions containing the indicators to be
-calculated additionally. Such functions must and must only depend on the
-target variable \code{y} and the \code{threshold}.
-Defaults to \code{NULL}.}
+calculated additionally. Such functions must depend on the target variable
+\code{y}, and optional can depend on \code{pop_weights} and the
+\code{threshold}. Defaults to \code{NULL}.}
 
 \item{na.rm}{if \code{TRUE}, observations with \code{NA} values are deleted
 from the population and sample data. For the EBP procedure complete
@@ -120,7 +122,17 @@ observations are required. Defaults to \code{FALSE}.}
 
 \item{weights}{a character string containing the name of a variable that
 indicates weights in the sample data. If a character string is provided
-a weighted version of the ebp will be used.The variable has to be numeric.
+a weighted version of the ebp will be used. The variable has to be numeric.
+Defaults to \code{NULL}.}
+
+\item{pop_weights}{a character string containing the name of a variable that
+indicates population weights in the populatation data. If a character string
+is provided weighted indicators are estimated using population weights.
+The variable has to be numeric. Defaults to \code{NULL}.}
+
+\item{aggregate_to}{a character string containing the name of a variable from
+population data that indicates the target domain level for which the
+results are to be displayed. The variable can be numeric or a factor.
 Defaults to \code{NULL}.}
 }
 \value{
@@ -189,10 +201,10 @@ emdi_model <- ebp(
   }, transformation = "log",
   L = 50, MSE = TRUE, boot_type = "wild", B = 50, custom_indicator =
     list(
-      my_max = function(y, threshold) {
+      my_max = function(y) {
         max(y)
       },
-      my_min = function(y, threshold) {
+      my_min = function(y) {
         min(y)
       }
     ), na.rm = TRUE, cpus = 1
@@ -205,6 +217,31 @@ emdi_model <- ebp(
     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
   pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
   weights = "weight", transformation = "log", na.rm = TRUE
+)
+
+# Example 4: With default setting and random effect on the district level
+# while the output is at state level
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+  na.rm = TRUE, aggregate_to = "state"
+)
+
+# Example 5: With default setting using pop_weights to get weighted
+# indicators according to equivalized household size and an using an
+# custom_indicator using pop_weights
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
+  custom_indicator =
+    list(HCR_singleHH = function(y, pop_weights, threshold) {
+                              mean(y[pop_weights == 1] < threshold)
+                        }
+    ), na.rm = TRUE, pop_weights = "eqsize"
 )
 }
 }

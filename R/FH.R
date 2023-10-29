@@ -354,7 +354,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
     B <- c(B, 0)
   }
 
-  if (!(method == "reblup" | method == "reblupbc")) {
+  if (!(method == "reblup" || method == "reblupbc")) {
     # Estimate sigma u ---------------------------------------------------------
     sigmau2 <- wrapper_estsigmau2(
       framework = framework, method = method,
@@ -385,7 +385,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
           combined_data = framework$combined_data
         )
       }
-      if ((method == "ml" | method == "reml") & correlation == "spatial") {
+      if ((method == "ml" || method == "reml") && correlation == "spatial") {
         # Spatial EBLUP --------------------------------------------------------
         eblup <- eblup_SFH(
           framework = framework, sigmau2 = sigmau2,
@@ -436,9 +436,9 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
         )
         MSE <- mse_data$mse_data
         MSE_method <- mse_data$MSE_method
-        if (mse_type == "spatialnonparboot" |
-          mse_type == "spatialnonparbootbc" |
-          mse_type == "spatialparboot" |
+        if (mse_type == "spatialnonparboot" ||
+          mse_type == "spatialnonparbootbc" ||
+          mse_type == "spatialparboot" ||
           mse_type == "spatialparbootbc") {
           successful_bootstraps <- mse_data$successful_bootstraps
         }
@@ -685,7 +685,7 @@ fh <- function(fixed, vardir, combined_data, domains = NULL, method = "reml",
         successful_bootstraps = NULL
       )
     }
-  } else if (method == "reblup" | method == "reblupbc") {
+  } else if (method == "reblup" || method == "reblupbc") {
 
     # Standard EBLUP -----------------------------------------------------------
     eblup <- eblup_robust(

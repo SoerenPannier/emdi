@@ -198,7 +198,7 @@ arcsin_mse <- function(sigmau2 = sigmau2, combined_data = combined_data,
     )
     mse_backtransformed <- mse_backtransformed[[2]]$MSE
     mse_method <- "bootstrap"
-  } else if (mse_type == "jackknife" | mse_type == "weighted_jackknife") {
+  } else if (mse_type == "jackknife" || mse_type == "weighted_jackknife") {
     transformation <- "arcsin"
     jack_mse <- wrapper_MSE(
       framework = framework, combined_data = combined_data,

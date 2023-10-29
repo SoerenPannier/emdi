@@ -27,7 +27,7 @@ summary.ebp <- function(object, ...) {
     Population_domains = pop_size_dom
   )
 
-  if (object$transformation == "box.cox" | object$transformation == "dual") {
+  if (object$transformation == "box.cox" || object$transformation == "dual") {
     transform_method <- data.frame(
       Transformation = object$transformation,
       Method = object$method,
@@ -68,7 +68,7 @@ summary.ebp <- function(object, ...) {
   skewness_ran <- skewness(ranef(object$model)$"(Intercept)")
   kurtosis_ran <- kurtosis(ranef(object$model)$"(Intercept)")
 
-  if (length(residuals(object$model, level = 0, type = "pearson")) > 3 &
+  if (length(residuals(object$model, level = 0, type = "pearson")) > 3 &&
     length(residuals(object$model, level = 0, type = "pearson")) < 5000) {
     shapiro_p_res <-
       shapiro.test(residuals(object$model, level = 0, type = "pearson"))[[2]]
@@ -83,7 +83,7 @@ summary.ebp <- function(object, ...) {
     shapiro_W_res <- NA
   }
 
-  if (length(ranef(object$model)$"(Intercept)") > 3 &
+  if (length(ranef(object$model)$"(Intercept)") > 3 &&
     length(ranef(object$model)$"(Intercept)") < 5000) {
     shapiro_p_ran <- shapiro.test(ranef(object$model)$"(Intercept)")[[2]]
     shapiro_W_ran <- shapiro.test(ranef(object$model)$"(Intercept)")[[1]]

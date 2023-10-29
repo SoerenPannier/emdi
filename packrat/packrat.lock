@@ -365,12 +365,6 @@ Source: CRAN
 Version: 2.0.3
 Hash: b323532bfd2fe948d0eb19afa866cb12
 
-Package: maptools
-Source: CRAN
-Version: 1.1-4
-Hash: a645bede230e2384acf227d55b270b77
-Requires: sp
-
 Package: memoise
 Source: CRAN
 Version: 2.0.1
