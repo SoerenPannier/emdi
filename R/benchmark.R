@@ -63,6 +63,7 @@
 #'   benchmark = 20140.09,
 #'   share = eusilcA_popAgg$ratio_n, type = "ratio", overwrite = TRUE
 #' )
+#' @rdname benchmark_emdi
 #' @export
 
 
