@@ -10,7 +10,7 @@
 #' types of backtransformation can be chosen - a crude version and the one
 #' introduced by \cite{Slud and Maiti (2006)} for log transformed  variables
 #' and a naive and bias-corrected version following \cite{Hadam et al. (2020)}
-#' for arcsin transformed variables. A spatial extension to the Fay-Herriot
+#' for arcsin transformed variables and \cite{Runge (2023)} for logit transformed variables. A spatial extension to the Fay-Herriot
 #' model following \cite{Petrucci and Salvati (2006)} is also included. In
 #' addition, it is possible to estimate a robust version of the standard and of
 #' the spatial model (see \cite{Warnholz (2016)}). Finally, a Fay-Herriot model
@@ -86,7 +86,8 @@
 #' \cite{Slud and Maiti (2006)} when the log transformations is chosen
 #' ("\code{bc_sm}"), (iii) naive back transformation when the arcsin or logit
 #' transformation is chosen ("\code{naive}"), (iii) bias-corrected back
-#' transformation following \cite{Hadam et al. (2020)} and .. when the arcsin or
+#' transformation following \cite{Sugasawa and Kubokawa (2017)},
+#' \cite{Hadam et al. (2020)} and \cite{Runge (2023)} when the arcsin or
 #' logit transformation is chosen ("\code{bc}"). Defaults to \code{NULL}.
 #' @param eff_smpsize a character string indicating the name of the variable
 #' containing the effective sample sizes that are included in
@@ -211,9 +212,14 @@
 #' Rao, J. N. K. (2003), Small Area Estimation, New York: Wiley. \cr \cr
 #' Rao, J. N. K. and Molina, I. (2015), Small area estimation,
 #' New York: Wiley. \cr \cr
+#' Runge, M. (2023), Estimating Intra-Regional Inequality with an Application
+#' to German Spatial Planning Regions, Journal of Official Statistics 39(2),
+#' pp. 203–228.\cr \cr
 #' Slud, E. and Maiti, T. (2006), Mean-squared error estimation in transformed
 #' Fay-Herriot models, Journal of the Royal Statistical Society:Series B 68(2),
 #' 239-257.\cr \cr
+#' Sugasawa, S., and Kubokawa, T. (2017), Transforming response values in small
+#' area prediction, Computational Statistics and Data Analysis 114, 47–60.\cr \cr
 #' Warnholz, S. (2016), saeRobust: Robust small area estimation.
 #' R package. \cr \cr
 #' Warnholz, S. (2016b). Small area estimation using robust extensions to area
