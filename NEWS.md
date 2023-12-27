@@ -1,3 +1,18 @@
+# emdi 2.2.1
+* Substitution of maptools and rgeos by sf due to depreciation of the former
+* Substitution of ggplot2::fortify by ggplot2::geom_sf due to depreciation of the former
+
+# emdi 2.2.0
+* Extension of the ebp function to allow for population weights
+* Extension of the ebp function to allow the aggregation of the estimates to different levels  
+* a more flexible use of the custom_indicator agrument within the ebp function
+
+# emdi 2.1.3
+* Improved summary with clearer notation of R2
+* Updated Area Level (FH) vignette
+* Minor improvements in checking T/F in if clauses
+* Increased dependency to R (>= 4.2.0) corresponding to the imported package MuMin
+
 # emdi 2.1.2
 * Improved messages
 * Copyrights updated
@@ -44,21 +59,21 @@
 * Updated R version dependency
 
 # emdi 1.1.7
- 
+
 * Minor typos corrected
 * Unit-Tests adjusted to the forthcoming R-Version 4.0
 
 # emdi 1.1.6
- 
+
 * New and updated references.
 
 # emdi 1.1.5
- 
+
 * Tests updated to deal with new random number generation in R
 * Some spelling improved
 
 # emdi 1.1.4
- 
+
 * Fixed Bug in summary: R2 calculation with MuMIn is now fully working
 * Added feature: formula used in fixed is now preserved, even if passed to ebp as a variable
 
@@ -87,7 +102,7 @@ reproducibility even when the function is run in parallel mode.
 * Updated Vignette
 
 # emdi 1.1.0
-  
+
 * A new function `direct` is made available, which provides direct estimation for small areas.
 * The function `ebp` now allows for a user-defined threshold.
 * The function `ebp` is now able to perform a semi-parametric wild bootstrap for MSE estimation.

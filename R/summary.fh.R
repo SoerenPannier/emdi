@@ -11,7 +11,7 @@ summary.fh <- function(object, ...) {
   # Normaly checks for standardized realized residuals
   skewness_stdres <- skewness(object$model$std_real_residuals, na.rm = TRUE)
   kurtosis_stdres <- kurtosis(object$model$std_real_residuals, na.rm = TRUE)
-  if (length(object$model$std_real_residuals) >= 3 &
+  if (length(object$model$std_real_residuals) >= 3 &&
     length(object$model$std_real_residuals) < 5000) {
     shapiro_stdres_W <- shapiro.test(object$model$std_real_residuals)[[1]]
     shapiro_stdres_p <- shapiro.test(object$model$std_real_residuals)[[2]]
@@ -26,7 +26,7 @@ summary.fh <- function(object, ...) {
   # Normality checks for random effects
   skewness_random <- skewness(object$model$random_effects, na.rm = TRUE)
   kurtosis_random <- kurtosis(object$model$random_effects, na.rm = TRUE)
-  if (length(object$model$random_effects) >= 3 &
+  if (length(object$model$random_effects) >= 3 &&
     length(object$model$random_effects) < 5000) {
     shapiro_random_W <- shapiro.test(object$model$random_effects)[[1]]
     shapiro_random_p <- shapiro.test(object$model$random_effects)[[2]]
@@ -100,7 +100,7 @@ print.summary.fh <- function(x, ...) {
   cat("In-sample domains: ", x$in_smp, "\n")
   cat("\n")
   cat("Variance and MSE estimation:\n")
-  if (x$method$method == "reblup" | x$method$method == "reblupbc") {
+  if (x$method$method == "reblup" || x$method$method == "reblupbc") {
     cat("Variance estimation method: robustified ml,", x$method$method, "\n")
 
     if (x$method$method == "reblup") {

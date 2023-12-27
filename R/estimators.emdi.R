@@ -81,10 +81,10 @@ estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
 #'   threshold = 11064.82, transformation = "box.cox",
 #'   L = 50, MSE = TRUE, B = 50, custom_indicator =
 #'     list(
-#'       my_max = function(y, threshold) {
+#'       my_max = function(y) {
 #'         max(y)
 #'       },
-#'       my_min = function(y, threshold) {
+#'       my_min = function(y) {
 #'         min(y)
 #'       }
 #'     ), na.rm = TRUE, cpus = 1

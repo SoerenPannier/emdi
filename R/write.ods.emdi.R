@@ -27,7 +27,7 @@ write.ods <- function(object,
     add_summary_ods_fh(object = object, wb = wb)
   }
 
-  if (!split & (MSE | CV)) {
+  if (!split && (MSE || CV)) {
     add_estims_ods(
       object = object,
       indicator = indicator,
@@ -171,7 +171,7 @@ add_summary_ods_fh <- function(object, wb, headlines_cs) {
   su$normality <- cbind.data.frame(rownames(su$normality), su$normality)
   readODS::write_ods(x = su$normality, path = paste0(wb, "_sumNorm", ".ods"))
 
-  if (su$model$correlation == "no" & !(su$method$method %in% c(
+  if (su$model$correlation == "no" && !(su$method$method %in% c(
     "reblup",
     "reblupbc"
   ) |

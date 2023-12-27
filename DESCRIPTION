@@ -1,7 +1,7 @@
 Package: emdi
 Title: Estimating and Mapping Disaggregated Indicators
-Version: 2.1.2
-Date: 2022-08-19
+Version: 2.2.1
+Date: 2023-10-29
 Authors@R: c(person("Sylvia", "Harmening", role="aut", email = "sylvia.harmening@fu-berlin.de"), 
     person("Ann-Kristin", "Kreutzmann", role="aut", email="ann-kristin.kreutzmann@fu-berlin.de"),
     person("Soeren", "Pannier", role=c("aut", "cre"), email="soeren.pannier@fu-berlin.de"),
@@ -28,13 +28,13 @@ Description: Functions that support estimating, assessing and mapping regional
     by Kreutzmann et al. (2019) <doi:10.18637/jss.v091.i07> and the second package vignette 
     "A Framework for Producing Small Area Estimates Based on Area-Level Models in R".
 Depends:
-    R (>= 3.5.0)
+    R (>= 4.2.0)
 License: GPL-2
 URL: https://github.com/SoerenPannier/emdi
 LazyData: true
 Encoding: UTF-8
 Copyright: inst/COPYRIGHTS
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Imports:
     nlme,
     moments,
@@ -53,13 +53,13 @@ Imports:
     readODS,
     formula.tools,
     saeRobust,
+    rlang, 
     spdep
 Suggests:
     testthat,
     R.rsp,
     simFrame,
     laeken,
-    rgeos,
-    maptools,
+    sf,
     graphics
 VignetteBuilder: R.rsp

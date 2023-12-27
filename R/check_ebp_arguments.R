@@ -47,7 +47,8 @@ ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L) {
 }
 
 ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
-                       custom_indicator, cpus, seed, na.rm, weights) {
+                       custom_indicator, cpus, seed, na.rm, weights,
+                       pop_weights) {
   if (!is.null(threshold) && !(is.numeric(threshold) &&
     length(threshold) == 1) && !inherits(threshold, "function")) {
     stop(strwrap(prefix = " ", initial = "",
@@ -124,21 +125,29 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
 
     N_custom <- length(custom_indicator)
     for (i in seq_len(N_custom)) {
+      if(!is.null(pop_weights)) {
+        if(!all(c("y", "pop_weights") %in%
+                names(formals(custom_indicator[[i]])))) {
+          stop(strwrap(prefix = " ", initial = "",
+                     "Please provide the argument pop_weights to the your
+                     custom_indicator. All other indicators will be
+                     calculated using population weights."))
+        }
+      }
       if (!inherits(custom_indicator[[i]], "function")) {
         stop(strwrap(prefix = " ", initial = "",
                      "The elements of the list need to be functions. These
-                     functions for custom indicators need to have exactly the
-                     following two arguments: y, threshold; even though a
-                     threshold might not included in the indicator. For help
-                     see Example 2 in help(ebp)."))
+                     functions for custom indicators need to have the
+                     argument y and optional the agruments pop_weights and
+                     threshold. For help see Example 2 in help(ebp)."))
       } else if (inherits(custom_indicator[[i]], "function") &&
-        !all(names(formals(custom_indicator[[i]])) ==
-          c("y", "threshold"))) {
+        !all(names(formals(custom_indicator[[i]])) %in%
+          c("y", "pop_weights", "threshold"))) {
         stop(strwrap(prefix = " ", initial = "",
                      "Functions for custom indicators need to have exactly the
-                     following two arguments: y, threshold; even though a
-                     threshold might not included in the indicator. For help
-                     see Example 2 in help(ebp)."))
+                     following argument y and optional the arguments
+                     pop_weights, threshold. For help see Example 2 in
+                     help(ebp)."))
       }
     }
   }
@@ -165,12 +174,21 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
                  "The weighted version of ebp is only available with the
                  ''parametric'' bootstrap."))
   }
+  if (is.character(pop_weights) && length(pop_weights) != 1 ||
+      !is.character(pop_weights) && !is.null(pop_weights)) {
+    stop(strwrap(prefix = " ", initial = "",
+                 "Pop_weights must be a vector of length 1 and of class
+                 character specifying the variable name of a numeric variable
+                 indicating weights in the population data. See also
+                 help(ebp)."))
+  }
 }
 
 
 # Functions called in notation
-fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data,
-                      fixed, smp_domains, threshold, weights) {
+fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data, fixed,
+                      smp_domains, aggregate_to, threshold, weights,
+                      pop_weights) {
   if (!all(mod_vars %in% colnames(pop_data))) {
     stop(strwrap(prefix = " ", initial = "",
                  paste0("Variable ",
@@ -235,11 +253,38 @@ fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data,
     }
   }
 
-  if (dim(pop_data)[1] < dim(smp_data)[1]) {
-    stop(strwrap(prefix = " ", initial = "",
+  if(is.null(aggregate_to) != TRUE){
+    if (!(aggregate_to %in% colnames(pop_data))) {
+      stop(paste0("The domain variable ", aggregate_to, " is not contained in
+                  pop_data. Please provide valid variable name for the
+                  aggregation."))
+    }
+  }
+
+  if (is.character(pop_weights)) {
+    if (!is.numeric(pop_data[[pop_weights]])) {
+      stop(strwrap(prefix = " ", initial = "",
+                   paste0("The variable ", pop_weights, " must be the name of a
+                          variable that is a numeric vector.")))
+    }
+  }
+  if (is.character(pop_weights)) {
+    if (!all(pop_data[[pop_weights]] >= 1)) {
+      stop(strwrap(prefix = " ", initial = "",
+                   paste0("Negative or zero weights are included in ",
+                          pop_weights, " Please remove obersvations with weight
+                          values smaller than 1.")))
+    }
+  }
+
+  if (is.null(pop_weights)) {
+    if (dim(pop_data)[1] < dim(smp_data)[1]) {
+      stop(strwrap(prefix = " ", initial = "",
                  "The population data set cannot have less observations than
                  the sample data set."))
+    }
   }
+
 
   if (inherits(threshold, "function") &&
     (!is.numeric(threshold(smp_data[[paste(fixed[2])]])) ||
@@ -254,7 +299,7 @@ fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data,
 
 
 fw_check2 <- function(pop_domains, pop_domains_vec, smp_domains,
-                      smp_domains_vec) {
+                      smp_domains_vec, aggregate_to, aggregate_to_vec) {
   if (!(is.numeric(pop_domains_vec) ||
     any(inherits(pop_domains_vec, "factor")))) {
     stop(strwrap(prefix = " ", initial = "",
@@ -266,6 +311,13 @@ fw_check2 <- function(pop_domains, pop_domains_vec, smp_domains,
     stop(strwrap(prefix = " ", initial = "",
                  paste0(smp_domains, " needs to be the name of a variable that
                         is numeric or a (ordered) factor.")))
+  }
+  if(is.null(aggregate_to) != TRUE){
+    if (!(is.numeric(aggregate_to_vec) ||
+          any(inherits(aggregate_to_vec, "factor")))) {
+      stop(paste0(aggregate_to, " needs to be the name of a variable that is
+                  numeric or a (ordered) factor."))
+    }
   }
   if ((is.numeric(pop_domains_vec) &&
     any(inherits(smp_domains_vec, "factor"))) ||

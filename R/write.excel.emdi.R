@@ -67,10 +67,10 @@
 #'     0.6 * median(y)
 #'   }, L = 50, MSE = TRUE, B = 50,
 #'   custom_indicator = list(
-#'     my_max = function(y, threshold) {
+#'     my_max = function(y) {
 #'       max(y)
 #'     },
-#'     my_min = function(y, threshold) {
+#'     my_min = function(y) {
 #'       min(y)
 #'     }
 #'   ), na.rm = TRUE, cpus = 1
@@ -143,7 +143,7 @@ write.excel <- function(object,
     )
   }
 
-  if (!split & (MSE | CV)) {
+  if (!split && (MSE || CV)) {
     wb <- add_estims(
       object = object,
       indicator = indicator,
@@ -446,7 +446,7 @@ add_summary_fh <- function(object, wb, headlines_cs) {
   )
   starting_row <- starting_row + 2 + nrow(su$normality)
 
-  if (su$model$correlation == "no" & !(su$method$method %in%
+  if (su$model$correlation == "no" && !(su$method$method %in%
     c("reblup", "reblupbc") |
     su$method$method == "me")) {
     writeDataTable(

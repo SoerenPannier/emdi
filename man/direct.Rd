@@ -76,9 +76,8 @@ totals.}
 
 \item{custom_indicator}{a list of functions containing the indicators to be
 calculated additionally. Such functions must and must only depend on the
-target variable \code{y}, the \code{weights} and the
-\code{threshold} (numeric value) (see Example 3) even though some arguments
-might not be used in the additional function. Defaults to \code{NULL}.}
+target variable \code{y} and optional can depend on \code{weights} and the
+\code{threshold} (numeric value) (see Example 3). Defaults to \code{NULL}.}
 
 \item{na.rm}{if \code{TRUE}, observations with \code{NA} values are deleted
 from the sample data. Defaults to \code{FALSE}.}
@@ -128,10 +127,9 @@ emdi_direct <- direct(
   y = "eqIncome", smp_data = eusilcA_smp,
   smp_domains = "district", weights = "weight", threshold = 10859.24,
   var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL,
-  totals = NULL, custom_indicator = list(my_max = function(y, weights,
-                                                           threshold) {
+  totals = NULL, custom_indicator = list(my_max = function(y) {
     max(y)
-  }, my_min = function(y, weights, threshold) {
+  }, my_min = function(y) {
     min(y)
   }),
   na.rm = TRUE

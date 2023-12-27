@@ -164,15 +164,19 @@ direct_check <- function(y,
                      not be included in the indicator. For help, see Example 3
                      in help(direct)."))
       } else if (inherits(custom_indicator[[i]], "function") &&
-        !all(names(formals(custom_indicator[[i]])) ==
+        !all(names(formals(custom_indicator[[i]])) %in%
           c("y", "weights", "threshold"))) {
         stop(strwrap(prefix = " ", initial = "",
-                     "Functions for custom indicators need to have exactly the
-                     following three arguments: y, weights threshold; even
-                     though weights might not be needed and a threshold might
-                     not be included in the indicator. For help, see Example 3
-                     in help(direct)."))
-      }
+                     "Functions for custom indicators need to have the argument
+                     y and optional the argument weights and threshold. For
+                     help, see Example 3 in help(direct)."))
+      } else if (inherits(custom_indicator[[i]], "function") &&
+        !("y" %in% names(formals(custom_indicator[[i]])))) {
+        stop(strwrap(prefix = " ", initial = "",
+                     "Functions for custom indicators need to have the argument
+                     y and optional the argument weights and threshold. For
+                     help, see Example 3 in help(direct)."))
+     }
     }
   }
 }
