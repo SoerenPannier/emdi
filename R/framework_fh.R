@@ -22,17 +22,21 @@ framework_FH <- function(combined_data, fixed, vardir, domains,
                         variances must not have NAs.")))
   }
 
-  if (transformation == "log" | transformation == "log" |
-    transformation == "log") {
+  if (transformation == "log") {
     direct_orig <- direct
     vardir_orig <- vardir
     vardir <- (1 / direct)^2 * vardir
     direct <- log(direct)
-  } else if (transformation == "arcsin" | transformation == "arcsin") {
+  } else if (transformation == "arcsin") {
     direct_orig <- direct
     vardir_orig <- vardir
     direct <- asin(sqrt(direct))
     vardir <- 1 / (4 * data[, eff_smpsize])
+  } else if (transformation == "logit") {
+    direct_orig <- direct
+    vardir_orig <- vardir
+    direct <- logit(direct)
+    vardir <- logit_variance(direct_orig, vardir_orig)
   }
 
   if (is.null(domains)) {
