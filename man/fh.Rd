@@ -91,7 +91,9 @@ of the dependent variable and of the sampling variances. Methods that can be
 chosen (i) no transformation ("\code{no}"), (ii) log transformation
 ("\code{log}") of the dependent variable and of the sampling variances,
 (iii) arcsin transformation ("\code{arcsin}") of the dependent variable and
-of the sampling variances following. Defaults to "\code{no}". For more
+of the sampling variances following. (iv) logit transformation
+("\code{logit}") of the dependent variable and of the sampling variances
+following. Defaults to "\code{no}". For more
 information, how the direct estimate and its variance are transformed, please
 see the package vignette "A Framework for Producing Small Area Estimates
 Based on Area-Level Models in R".}
@@ -102,10 +104,11 @@ transformation is chosen. Available methods are (i) crude bias-correction
 following \cite{Rao (2015)} when the log transformation is chosen
 ("\code{bc_crude}"), (ii) bias-correction following
 \cite{Slud and Maiti (2006)} when the log transformations is chosen
-("\code{bc_sm}"), (iii) naive back transformation when the arcsin
+("\code{bc_sm}"), (iii) naive back transformation when the arcsin or logit
 transformation is chosen ("\code{naive}"), (iii) bias-corrected back
-transformation following \cite{Hadam et al. (2020)} when the arcsin
-transformation is chosen ("\code{bc}"). Defaults to \code{NULL}.}
+transformation following \cite{Sugasawa and Kubokawa (2017)},
+\cite{Hadam et al. (2020)} and \cite{Runge (2023)} when the arcsin or
+logit transformation is chosen ("\code{bc}"). Defaults to \code{NULL}.}
 
 \item{eff_smpsize}{a character string indicating the name of the variable
 containing the effective sample sizes that are included in
@@ -165,6 +168,7 @@ random effect ("\code{analytical}"),
 (ix) bias corrected nonparametric bootstrap for the spatial Fay-Herriot model
 ("\code{spatialnonparbootbc}").
 Options (ii)-(iv) are of interest when the arcsin transformation is selected.
+Option (iv) is of interest when the logit transformation is selected.
 Option (ii) must be chosen when an Ybarra-Lohr model is selected
 (\code{method = me}). Options (iv) and (v) are the MSE options for the
 robust extensions of the Fay-Herriot model. For an extensive overview of the
@@ -201,7 +205,7 @@ offered. Log and arcsin transformation for the dependent variable and two
 types of backtransformation can be chosen - a crude version and the one
 introduced by \cite{Slud and Maiti (2006)} for log transformed  variables
 and a naive and bias-corrected version following \cite{Hadam et al. (2020)}
-for arcsin transformed variables. A spatial extension to the Fay-Herriot
+for arcsin transformed variables and \cite{Runge (2023)} for logit transformed variables. A spatial extension to the Fay-Herriot
 model following \cite{Petrucci and Salvati (2006)} is also included. In
 addition, it is possible to estimate a robust version of the standard and of
 the spatial model (see \cite{Warnholz (2016)}). Finally, a Fay-Herriot model
@@ -216,7 +220,7 @@ Out-of-sample EBLUPs are available for all area-level models except for the
 Out-of-sample MSEs are available for the analytical MSE estimator of the
 standard Fay-Herriot model with reml and ml variance estimation, the crude
 backtransformation in case of log transformation and the bootstrap MSE
-estimator for the arcsin transformation. \cr \cr
+estimator for the arcsin and logit transformation. \cr \cr
 For a description of how to create the proximity matrix for the
 spatial Fay-Herriot model, see the package vignette. If the presence
 of out-of-sample domains, the proximity matrix needs to be
@@ -281,6 +285,28 @@ fh_yl <- fh(
   combined_data = eusilcA_smpAgg, domains = "Domain", method = "me",
   Ci = Ci_array, MSE = TRUE, mse_type = "jackknife"
 )
+
+# Example 6: logit transformation of the dependent variable
+data("eusilcA_smp")
+emdi_direct <- direct(
+  y = "eqIncome", smp_data = eusilcA_smp,
+  smp_domains = "district", weights = "weight", threshold = 11064.82,
+  var = TRUE, boot_type = "naive", B = 50, seed = 123, X_calib = NULL,
+  totals = NULL, na.rm = TRUE
+)
+combined_data <- combine_data(
+  pop_data = eusilcA_popAgg,
+  pop_domains = "Domain",
+  smp_data = data.frame(emdi_direct$ind[ , c("Domain", "Gini")],
+                        Var_Gini = emdi_direct$MSE[ , c("Gini")]),
+  smp_domains = "Domain"
+)
+fh_logit <- fh(
+  fixed = Gini ~ cash + age_ben + rent + house_allow + self_empl,
+  vardir = "Var_Gini", combined_data = combined_data, domains = "Domain",
+  method = "ml", transformation = "logit", backtransformation = "bc",
+  MSE = TRUE, mse_type = "boot", B = c(50, 0)
+)
 }
 }
 \references{
@@ -322,9 +348,14 @@ Biological and Environmental Statistics, 11(2), 169–182. \cr \cr
 Rao, J. N. K. (2003), Small Area Estimation, New York: Wiley. \cr \cr
 Rao, J. N. K. and Molina, I. (2015), Small area estimation,
 New York: Wiley. \cr \cr
+Runge, M. (2023), Estimating Intra-Regional Inequality with an Application
+to German Spatial Planning Regions, Journal of Official Statistics 39(2),
+pp. 203–228.\cr \cr
 Slud, E. and Maiti, T. (2006), Mean-squared error estimation in transformed
 Fay-Herriot models, Journal of the Royal Statistical Society:Series B 68(2),
 239-257.\cr \cr
+Sugasawa, S., and Kubokawa, T. (2017), Transforming response values in small
+area prediction, Computational Statistics and Data Analysis 114, 47–60.\cr \cr
 Warnholz, S. (2016), saeRobust: Robust small area estimation.
 R package. \cr \cr
 Warnholz, S. (2016b). Small area estimation using robust extensions to area

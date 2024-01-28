@@ -18,3 +18,16 @@ throw_class_error <- function(object, subclass) {
     stop(error_string)
   }
 }
+
+logit <- function(p) {
+  p[p == 0] <- 0.001
+  p[p == 1] <- 1 - 0.001
+  log(p / (1 - p))
+}
+
+logit_variance <- function(p, v){
+  p[p == 0] <- 0.001
+  p[p == 1] <- 1 - 0.001
+  deriv <- 1 / (p * (1 - p))
+  deriv^2 * v
+}
