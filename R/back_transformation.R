@@ -17,6 +17,14 @@ backtransformed <- function(framework, sigmau2, eblup, transformation,
       method = method, interval = interval, MSE = MSE,
       B = B, backtransformation = backtransformation
     )
+  } else if (transformation == "logit") {
+    logit_bt(
+      sigmau2 = sigmau2, combined_data = combined_data,
+      framework = framework, eblup = eblup, vardir = vardir,
+      mse_type = mse_type,
+      method = method, interval = interval, MSE = MSE,
+      B = B, backtransformation = backtransformation
+    )
   }
 
   # Create return data frame
@@ -282,4 +290,126 @@ arcsin_bc <- function(framework, mu, var) {
 
 integrand <- function(x, mean, sd) {
   sin(x)^2 * dnorm(x, mean = mean, sd = sd)
+}
+
+
+# Backtransformation for logit transformation
+logit_bt <- function(sigmau2 = sigmau2, combined_data = combined_data,
+                      framework = framework, eblup = eblup, vardir = vardir,
+                      mse_type = mse_type,
+                      method = method, interval = interval, MSE = MSE,
+                      B = B, backtransformation = backtransformation) {
+  point_backtransformed <- logit_point(
+    framework, sigmau2, eblup,
+    backtransformation
+  )
+
+  if (MSE == TRUE) {
+    mse_backtransformed <- logit_mse(
+      sigmau2 = sigmau2,
+      combined_data = combined_data,
+      framework = framework, eblup = eblup,
+      vardir = vardir,
+      eblup_corr = point_backtransformed,
+      mse_type = mse_type,
+      method = method, interval = interval,
+      B = B,
+      backtransformation = backtransformation
+    )
+    mse_method <- mse_backtransformed$mse_method
+  } else {
+    mse_backtransformed <- NULL
+    mse_method <- "no mse estimated"
+  }
+
+  logit_bt_out <- list(
+    point_backtransformed = point_backtransformed,
+    mse_backtransformed = mse_backtransformed$mse_backtransformed,
+    mse_method = mse_method
+  )
+
+  return(logit_bt_out)
+}
+
+logit_mse <- function(sigmau2 = sigmau2, combined_data = combined_data,
+                       framework = framework, eblup = eblup, vardir = vardir,
+                       eblup_corr = eblup_corr, mse_type = mse_type,
+                       method = method, interval = interval,
+                       B = B, backtransformation = backtransformation) {
+
+    mse_backtransformed <- boot_logit(
+      sigmau2 = sigmau2, combined_data = combined_data,
+      framework = framework, eblup = eblup,
+      eblup_corr = eblup_corr,
+      method = method, interval = interval,
+      B = B, backtransformation = backtransformation
+    )
+    mse_backtransformed <- mse_backtransformed[[2]]$MSE
+    mse_method <- "bootstrap"
+
+  logit_mse_out <- list(
+    mse_backtransformed = mse_backtransformed,
+    mse_method = mse_method
+  )
+
+  return(logit_mse_out)
+}
+
+logit_point <- function(framework, sigmau2, eblup, backtransformation) {
+  point_backtransformed <- if (backtransformation == "naive") {
+    logit_naive(eblup)
+  } else if (backtransformation == "bc") {
+    var <- rep(NA, framework$M)
+    var[framework$obs_dom] <- sigmau2 * (1 - eblup$gamma)
+    mu <- eblup$eblup_data$FH
+
+    logit_bc(framework$M, mu, var, framework$obs_dom)
+  }
+
+  return(point_backtransformed)
+}
+
+logit_naive <- function(eblup) {
+  point_backtransformed <- eblup$eblup_data$FH
+  # Naively backtransform with the inverse of the transformation
+  point_backtransformed <- logit_inverse(point_backtransformed)
+
+  return(point_backtransformed)
+}
+
+logit_inverse <- function(l) exp(l) / (1 + exp(l))
+
+logit_bc <- function(M, mu, var, obs_dom) {
+
+  # Use integral to solve the formula in Slud and Maiti
+  int_value <- NULL
+
+  # Can this be vectorized?
+  for (i in seq_len(M)) {
+    if (obs_dom[i] == TRUE) {
+
+      # Parameters for integration
+      mu_dri <- mu[i]
+      var_dri <- as.numeric(var[i])
+
+      integrand_logit <- function(x, mean, sd){
+        logit_inverse(x) * dnorm(x, mean = mean, sd = sd)
+      }
+
+      upper_bound <- mu_dri + 50 * sqrt(var_dri)
+      lower_bound <- mu_dri - 50 * sqrt(var_dri)
+
+      int_value <- c(int_value, integrate(integrand_logit,
+                                          lower = lower_bound,
+                                          upper = upper_bound,
+                                          mu_dri,
+                                          sqrt(var_dri)
+      )$value)
+    } else {
+      # Naive backtransformation for out-of-sample domains
+      int_value <- c(int_value, logit_inverse(mu[i]))
+    }
+  }
+
+  return(int_value)
 }

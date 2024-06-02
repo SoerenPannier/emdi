@@ -1,6 +1,5 @@
 ## This is a resubmission
-* All issues (out of date, date field) have been fixed
-
+* All issues have been fixed
 
 ## Test environments
 * Windows10 R 4.3.0 local development environment
