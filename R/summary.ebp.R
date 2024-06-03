@@ -104,7 +104,6 @@ summary.ebp <- function(object, ...) {
   )
   tempMod <- object$model
   tempMod$call$fixed <- object$fixed
-  #r_squared <- suppressWarnings(r.squaredGLMM(tempMod))
   r_squared <-lme_rsquared(tempMod)
   if (is.matrix(r_squared)) {
     r_marginal <- r_squared[1, 1]
