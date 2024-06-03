@@ -1,3 +1,8 @@
+# emdi 2.2.2
+* Addition of logit transformation in FH model 
+* Removal of MuMIn dependency
+
+
 # emdi 2.2.1
 * Substitution of maptools and rgeos by sf due to depreciation of the former
 * Substitution of ggplot2::fortify by ggplot2::geom_sf due to depreciation of the former
