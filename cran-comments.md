@@ -1,8 +1,5 @@
-## This is a resubmission
-* All issues have been fixed
-
 ## Test environments
-* Windows10 R 4.3.0 local development environment
+* Windows10 R 4.4.0 local development environment
 * Windows10 R 4.2.2 local development environment
 * GitHub Actions:
   * macOS-latest,    R: release
