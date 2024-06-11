@@ -21,8 +21,7 @@
 #' R2 from generalized linear mixed-effects models. Methods in Ecology and
 #' Evolution, 4(2), 133-142.
 #' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}},
-#' \code{\link{fh}}, \code{\link[MuMIn]{r.squaredGLMM}},
-#' \code{\link[moments]{skewness}},
+#' \code{\link{fh}}, \code{\link[moments]{skewness}},
 #' \code{\link[moments]{kurtosis}}, \code{\link[stats]{shapiro.test}}
 #' @examples
 #' \donttest{

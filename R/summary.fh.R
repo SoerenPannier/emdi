@@ -2,7 +2,6 @@
 
 #' @export
 #' @importFrom moments skewness kurtosis
-#' @importFrom MuMIn r.squaredGLMM
 #' @rdname emdi_summaries
 
 summary.fh <- function(object, ...) {
