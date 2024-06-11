@@ -189,6 +189,7 @@ icc <- function(model) {
 }
 
 # Conditional and marginal R square
+# Code for conditional and marginal R square is an adapted copy from the MuMIn R Package Version: 1.47.5 under the GPL-2 License
 
 lme_rsquared <- function(x) {
 
