@@ -19,6 +19,9 @@
 #' dependent variable on the left of a ~ operator and the explanatory
 #' variables on the right, separated by + operators. The argument corresponds
 #' to the argument \code{fixed} in function \code{\link[nlme]{lme}}.
+#' @param TF The twofold ebp is activated when set to \code{TRUE} and the
+#'\code{smp_subdomains} and \code{pop_subdomains} must be specified.
+#'Defaults to \code{FALSE}. 'RaelK updated - 19.09.24'
 #' @param pop_data a data frame that needs to comprise the variables
 #' named on the right of the ~ operator in \code{fixed}, i.e. the explanatory
 #' variables, and \code{pop_domains}.
@@ -26,12 +29,20 @@
 #' indicates domains in the population data. The variable can be numeric or
 #' a factor but needs to be of the same class as the variable named in
 #' \code{smp_domains}.
+#' #' @param pop_subdomains a character string containing the name of a variable that
+#' indicates sub-domains in the population data. The variable can be numeric or
+#' a factor but needs to be of the same class as the variable named in
+#' \code{smp_subdomains}. - 'RaelK updated -19.09.24'
 #' @param smp_data a data frame that needs to comprise all variables named in
 #' \code{fixed} and \code{smp_domains}.
 #' @param smp_domains a character string containing the name of a variable
 #' that indicates domains in the sample data. The variable can be numeric or a
 #' factor but needs to be of the same class as the variable named in
 #' \code{pop_domains}.
+#' #' @param smp_subdomains a character string containing the name of a variable
+#' that indicates sub-domains in the sample data. The variable can be numeric or a
+#' factor but needs to be of the same class as the variable named in
+#' \code{pop_subdomains}. 'RaelK updated -19.09.24'
 #' @param threshold a number defining a threshold. Alternatively, a threshold
 #' may be defined as a \code{function} of \code{y} returning a numeric value.
 #' Such a function will be evaluated once for the point estimation and in each
@@ -229,11 +240,15 @@
 #' @importFrom utils flush.console
 #' @importFrom stats fitted
 
+
 ebp <- function(fixed,
+                TF = FALSE,
                 pop_data,
                 pop_domains,
+                pop_subdomains,
                 smp_data,
                 smp_domains,
+                smp_subdomains,
                 L = 50,
                 threshold = NULL,
                 transformation = "box.cox",
