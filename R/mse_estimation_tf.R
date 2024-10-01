@@ -2,11 +2,11 @@
 
 # MSE estimation - parametric bootstrap procedure
 
-# Function parametric_bootstrap conducts the MSE estimation defined in function
+# Function parametric_bootstrap_tf conducts the MSE estimation defined in function
 # mse_estim (see below)
 # The parametric boostrap approach can be find in Molina and Rao (2010) p. 376
 
-parametric_bootstrap <- function(framework,
+parametric_bootstrap_tf <- function(framework,
                                  point_estim_tf,
                                  fixed,
                                  transformation,
@@ -293,8 +293,8 @@ superpopulation <- function(framework, model_par, gen_model, lambda, shift,
   # superpopulation random effect
   vu_tmp1 <- rnorm(framework$N_dom_pop, 0, sqrt(model_par$sigmau2_1est))
   vu_tmp2 <- rnorm(framework$N_subdom_pop, 0, sqrt(model_par$sigmau2_2est))
-  vu_pop1 <- rep(vu_tmp1, framework$Nd)
-  vu_pop2 <- rep(vu_tmp2, framework$Ndt)
+  vu_pop1 <- rep(vu_tmp1, framework$n_pop)
+  vu_pop2 <- rep(vu_tmp2, framework$ndt_pop)
 
   #  superpopulation income vector
   Y_pop_b <- gen_model$mu_fixed + eps + vu_pop1 + vu_pop2
@@ -323,8 +323,8 @@ bootstrap_par <- function(fixed,
   # Bootstrap sample individual error term
   eps <- rnorm(framework$N_smp, 0, sqrt(model_par$sigmae2est))
   # Bootstrap sample random effect
-  vu_smp1 <- rep(vu_tmp1[framework$dist_obs_dom], framework$nd)
-  vu_smp2 <- rep(vu_tmp2[framework$dist_obs_subdom], framework$ndt)
+  vu_smp1 <- rep(vu_tmp1[framework$dist_obs_dom], framework$n_smp)
+  vu_smp2 <- rep(vu_tmp2[framework$dist_obs_subdom], framework$ndt_smp)
   # Extraction of design matrix
   X_smp <- model.matrix(fixed, framework$smp_data)
   # Constant part of income vector for bootstrap sample

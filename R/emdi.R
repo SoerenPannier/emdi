@@ -16,8 +16,8 @@
 #' function, benchmarking options and spatial correlation tests are provided.
 #'
 #' @details
-#' The three estimation functions are called \code{\link{direct}},
-#' \code{\link{ebp}} and \code{\link{fh}}. For all functions, several methods
+#' The four estimation functions are called \code{\link{direct}},
+#' \code{\link{ebp}}, \code{\link{ebp_tf}} and \code{\link{fh}}. For all functions, several methods
 #' are available as \code{\link{estimators.emdi}} and
 #' \code{\link{emdi_summaries}}. For a full list, please see
 #' \code{\link{emdiObject}}. Furthermore, functions \code{\link{map_plot}} and

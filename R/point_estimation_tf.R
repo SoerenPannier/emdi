@@ -1,12 +1,12 @@
 # Internal documentation -------------------------------------------------------
 
-# Point estimation function
+# Point estimation function - twofold
 
-# This function implements the transformation of data, estimation of the nested
-# error linear regression model and the monte-carlo approximation to predict
-# the desired indicators. If the weighted version of the approach is used, then
-# additional estimation steps are taken in order to calculate weighted
-# regression coefficients before the monte-carlo approximation. See
+# This function implements the transformation of data, estimation of the twofold
+# nested error linear regression model and the monte-carlo approximation to
+# predict the desired indicators. If the weighted version of the approach is
+# used, then additional estimation steps are taken in order to calculate
+# weighted regression coefficients before the monte-carlo approximation. See
 # corresponding functions below.
 
 
@@ -256,8 +256,8 @@ gen_model <- function(fixed,
          ##model_par$sigmae2est / framework$n_smp)
     #____________________________19.08.2024____________________________________________
     gamma_dt <- model_par$sigmau2_2est / (model_par$sigmau2_2est +
-                                            (model_par$sigmae2est / framework$ndt))
-    gamma_dl <- (1-gamma_dt)*framework$ndt
+                                            (model_par$sigmae2est / framework$ndt_smp))
+    gamma_dl <- (1-gamma_dt)*framework$ndt_smp
     #unique_dom <- unique(smp_domains_vec) #defined in framework
     gamma_d <- numeric(framework$N_dom_smp)
 
@@ -299,8 +299,8 @@ gen_model <- function(fixed,
     sigmav2est_nonsampled_dt <- model_par$sigmae2est * phi_d +
       model_par$sigmau2_2est
     # Random effect in constant part of y for in-sample households
-    rand_eff1_pop <- rep(model_par$rand_eff1, framework$Nd)
-    rand_eff2_pop <- rep(model_par$rand_eff2, framework$Ndt)
+    rand_eff1_pop <- rep(model_par$rand_eff1, framework$n_pop)
+    rand_eff2_pop <- rep(model_par$rand_eff2, framework$ndt_pop)
     # Model matrix for population covariate information
     framework$pop_data[[paste0(fixed[2])]] <- seq_len(nrow(framework$pop_data))
     X_pop <- model.matrix(fixed, framework$pop_data)
@@ -438,7 +438,7 @@ errors_gen <- function(framework, model_par, gen_model) {
       0,
       sqrt((model_par$sigmau2_1est + model_par$sigmau2_2est))
     ),
-    framework$Nd[!framework$dist_obs_dom]
+    framework$n_pop[!framework$dist_obs_dom]
   )
   # new random effect for out-sample-subdomains
   vu[!framework$obs_subdom] <- rep(
@@ -447,7 +447,7 @@ errors_gen <- function(framework, model_par, gen_model) {
       0,
       sqrt(gen_model$sigmav2est_nonsampled_dt)
     ),
-    framework$Ndt[!framework$dist_obs_subdom]
+    framework$ndt_pop[!framework$dist_obs_subdom]
   )
   # new random effect for in-sample-subdomains
   vu[framework$obs_subdom] <- rep(
@@ -456,7 +456,7 @@ errors_gen <- function(framework, model_par, gen_model) {
       0,
       sqrt(gen_model$sigmav2est_sampled_dt)
     ),
-    framework$Ndt[framework$dist_obs_subdom]
+    framework$ndt_pop[framework$dist_obs_subdom]
   )
 
   return(list(epsilon = epsilon, vu = vu))
