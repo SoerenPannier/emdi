@@ -136,7 +136,12 @@ write.excel <- function(object,
       object = object, wb = wb,
       headlines_cs = headlines_cs
     )
-  } else if (inherits(object, "fh")) {
+  }else if (inherits(object, "ebp_tf")) {
+    wb <- add_summary_ebp(
+      object = object, wb = wb,
+      headlines_cs = headlines_cs
+    )
+  }else if (inherits(object, "fh")) {
     wb <- add_summary_fh(
       object = object, wb = wb,
       headlines_cs = headlines_cs
