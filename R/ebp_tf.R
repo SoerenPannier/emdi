@@ -271,7 +271,7 @@ ebp_tf <- function(fixed,
     smp_domains = smp_domains, smp_subdomains = smp_subdomains, L = L
   )
 
-  ebp_check2(
+  ebp_tf_check2(
     threshold = threshold, transformation = transformation,
     interval = interval, MSE = MSE, boot_type = boot_type, B = B,
     custom_indicator = custom_indicator, cpus = cpus, seed = seed,
@@ -295,7 +295,7 @@ ebp_tf <- function(fixed,
   }
 
   # The function framework_ebp can be found in script framework_ebp.R
-  framework <- framework_ebp(
+  framework <- framework_ebp_tf(
     pop_data = pop_data,
     pop_domains = pop_domains,
     pop_subdomains = pop_subdomains,
