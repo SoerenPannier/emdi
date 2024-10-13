@@ -294,7 +294,8 @@ ebp_tf <- function(fixed,
     }
   }
 
-  # The function framework_ebp can be found in script framework_ebp.R
+  #browser()
+  # The function framework_ebp_tf can be found in script framework_ebp_tf.R
   framework <- framework_ebp_tf(
     pop_data = pop_data,
     pop_domains = pop_domains,
@@ -315,7 +316,7 @@ ebp_tf <- function(fixed,
 
   # Point Estimation twofold -----------------------------------------------------------
   # The function point_estim_tf can be found in script point_estimation_tf.R
-  point_estim_tf <- point_estim_tf(
+  point_estim <- point_estim_tf(
     framework = framework,
     fixed = fixed,
     transformation = transformation,
@@ -331,9 +332,9 @@ ebp_tf <- function(fixed,
   if (MSE == TRUE) {
 
     # The function parametric_bootstrap_tf can be found in script mse_estimation_tf.R
-    mse_estimates_tf <- parametric_bootstrap_tf(
+    mse_estimates <- parametric_bootstrap_tf(
       framework = framework,
-      point_estim_tf = point_estim_tf,
+      point_estim = point_estim,
       fixed = fixed,
       transformation = transformation,
       interval = interval,
@@ -347,34 +348,9 @@ ebp_tf <- function(fixed,
 
 
     ebp_out <- list(
-      ind = point_estim_tf$ind,
-      MSE = mse_estimates_tf,
-      transform_param = point_estim_tf[c(
-        "optimal_lambda",
-        "shift_par"
-      )],
-      model = point_estim_tf$model,
-      framework = framework[c(
-        "N_subdom_unobs",
-        "N_subdom_smp",
-        "N_smp",
-        "N_pop",
-        "smp_subdomains",
-        "smp_data",
-        "smp_subdomains_vec",
-        "pop_subdomains_vec"
-      )],
-      transformation = transformation,
-      method = "reml",
-      fixed = fixed,
-      call = call,
-      successful_bootstraps = NULL
-    )
-  } else {
-    ebp_out <- list(
-      ind = point_estim_tf$ind,
-      MSE = NULL,
-      transform_param = point_estim_tf[c(
+      ind = point_estim$ind,
+      MSE = mse_estimates,
+      transform_param = point_estim[c(
         "optimal_lambda",
         "shift_par"
       )],
@@ -388,6 +364,41 @@ ebp_tf <- function(fixed,
         "smp_data",
         "smp_subdomains_vec",
         "pop_subdomains_vec",
+        "N_dom_unobs",
+        "N_dom_smp",
+        "smp_domains",
+        "smp_domains_vec",
+        "pop_domains_vec"
+      )],
+      transformation = transformation,
+      method = "reml",
+      fixed = fixed,
+      call = call,
+      successful_bootstraps = NULL
+    )
+  } else {
+    ebp_out <- list(
+      ind = point_estim$ind,
+      MSE = NULL,
+      transform_param = point_estim[c(
+        "optimal_lambda",
+        "shift_par"
+      )],
+      model = point_estim$model,
+      framework = framework[c(
+        "N_subdom_unobs",
+        "N_subdom_smp",
+        "N_dom_unobs",
+        "N_dom_smp",
+        "N_smp",
+        "N_pop",
+        "smp_subdomains",
+        "smp_domains",
+        "smp_data",
+        "smp_subdomains_vec",
+        "pop_subdomains_vec",
+        "smp_domains_vec",
+        "pop_domains_vec",
         "response"
       )],
       transformation = transformation,

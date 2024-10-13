@@ -208,7 +208,7 @@ ebp_tf_check2 <- function(threshold, transformation, interval, MSE, boot_type, B
 
 
 # Functions called in notation
-fw_check1 <- function(pop_data, mod_vars, pop_domains, pop_subdomains, smp_data,
+fw_tf_check1 <- function(pop_data, mod_vars, pop_domains, pop_subdomains, smp_data,
                       fixed,  smp_domains, smp_subdomains, aggregate_to,
                       threshold, weights, pop_weights) {
   if (!all(mod_vars %in% colnames(pop_data))) {
@@ -229,7 +229,7 @@ fw_check1 <- function(pop_data, mod_vars, pop_domains, pop_subdomains, smp_data,
     stop(strwrap(prefix = " ", initial = "",
                  paste0("The subdomain variable ", pop_subdomains, " is not contained
                         in pop_data. Please provide valid variable name for
-                        pop_domains.")))
+                        pop_subdomains.")))
   }
   if (!all(mod_vars %in% colnames(smp_data))) {
     stop(strwrap(prefix = " ", initial = "",
@@ -245,12 +245,12 @@ fw_check1 <- function(pop_data, mod_vars, pop_domains, pop_subdomains, smp_data,
                         in smp_data. Please provide valid variable name for
                         smp_domains.")))
   }
-  if (!(smp_subdomains %in% colnames(smp_data))) {
-    stop(strwrap(prefix = " ", initial = "",
-                 paste0("The subdomain variable ", smp_domains, " is not contained
-                        in smp_data. Please provide valid variable name for
-                        smp_subdomains.")))
-  }
+ # if (!(smp_subdomains %in% colnames(smp_data))) {
+   # stop(strwrap(prefix = " ", initial = "",
+           #      paste0("The subdomain variable ", smp_subdomains, " is not contained
+               #        in smp_data. Please provide valid variable name for
+                  #      smp_subdomains.")))
+ # }
   if (!((as.character(fixed[2])) %in% colnames(smp_data))) {
     stop(strwrap(prefix = " ", initial = "",
                  paste0("Variable ", as.character(fixed[2]), " is not contained
@@ -297,7 +297,7 @@ fw_check1 <- function(pop_data, mod_vars, pop_domains, pop_subdomains, smp_data,
 
 
 
-fw_check2 <- function(pop_domains, pop_subdomains, pop_domains_vec,
+fw_tf_check2 <- function(pop_domains, pop_subdomains, pop_domains_vec,
                       pop_subdomains_vec, smp_domains, smp_subdomains,
                       smp_domains_vec, smp_subdomains_vec, aggregate_to,
                       aggregate_to_vec) {
@@ -355,21 +355,22 @@ fw_check2 <- function(pop_domains, pop_subdomains, pop_domains_vec,
 }
 
 
+#______________commented out for dry-run - 10.10.24______________________
 
-fw_check3 <- function(obs_dom, obs_subdom, dist_obs_dom, dist_obs_subdom,
-                      pop_domains, pop_subdomains, smp_domains, smp_subdomains) {
-  if (sum(obs_dom) == 0 || sum(dist_obs_dom) == 0) {
-    stop(strwrap(prefix = " ", initial = "",
-                 paste0(pop_domains, " and ", smp_domains, " do not have any
-                        value in common. Do both variables really indicate the
-                        same domains in population data and sample data,
-                        respectively?")))
-  }
-  if (sum(obs_subdom) == 0 || sum(dist_obs_subdom) == 0) {
-    stop(strwrap(prefix = " ", initial = "",
-                 paste0(pop_subdomains, " and ", smp_subdomains, " do not have any
-                        value in common. Do both variables really indicate the
-                        same subdomains in population data and sample data,
-                        respectively?")))
-  }
-}
+#fw_tf_check3 <- function(obs_dom, obs_subdom, dist_obs_dom, dist_obs_subdom,
+ #                     pop_domains, pop_subdomains, smp_domains, smp_subdomains) {
+ # if (sum(obs_dom) == 0 || sum(dist_obs_dom) == 0) {
+  #  stop(strwrap(prefix = " ", initial = "",
+       #          paste0(pop_domains, " and ", smp_domains, " do not have any
+          #              value in common. Do both variables really indicate the
+           #             same domains in population data and sample data,
+             #           respectively?")))
+ # }
+  #if (sum(obs_subdom) == 0 || sum(dist_obs_subdom) == 0) {
+   # stop(strwrap(prefix = " ", initial = "",
+        #         paste0(pop_subdomains, " and ", smp_subdomains, " do not have any
+             #           value in common. Do both variables really indicate the
+              #          same subdomains in population data and sample data,
+              #          respectively?")))
+ # }
+#}
