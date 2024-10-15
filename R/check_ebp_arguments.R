@@ -14,7 +14,7 @@ ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L) {
   }
   if (!is.character(pop_domains) || length(pop_domains) != 1) {
     stop(strwrap(prefix = " ", initial = "",
-                 "Pop_domains must be a vector of length 1 and of class
+                 "Pop_domains must be a vector of lenght 1 and of class
                  character specifying the variable name of a numeric or factor
                  variable indicating domains in the population data. See also
                  help(ebp)."))
@@ -26,7 +26,7 @@ ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L) {
   }
   if (!is.character(smp_domains) || length(smp_domains) != 1) {
     stop(strwrap(prefix = " ", initial = "",
-                 "Smp_domains must be a vector of length 1 and of class
+                 "Smp_domains must be a vector of lenght 1 and of class
                  character specifying the variable (name)  of a numeric or
                  factor variable indicating domains in the sample data. See
                  also help(ebp)."))

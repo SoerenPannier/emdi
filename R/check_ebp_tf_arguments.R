@@ -67,8 +67,8 @@ ebp_tf_check1 <- function(fixed, pop_data, pop_domains,pop_subdomains, smp_data,
   }
 }
 
-ebp_tf_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
-                       custom_indicator, cpus, seed, na.rm, weights,
+ebp_tf_check2 <- function(threshold, transformation, interval, MSE, B,
+                       custom_indicator, cpus, seed, na.rm,
                        pop_weights) {
   if (!is.null(threshold) && !(is.numeric(threshold) &&
     length(threshold) == 1) && !inherits(threshold, "function")) {
@@ -114,11 +114,11 @@ ebp_tf_check2 <- function(threshold, transformation, interval, MSE, boot_type, B
                  "MSE must be a logical value. Set MSE to TRUE or FALSE. See
                  also help(ebp)."))
   }
-  if (is.null(boot_type) || !(length(boot_type) == 1 &&
-    (boot_type == "parametric" ||
-      boot_type == "wild"))) {
-    stop("The two bootstrap procedures are ''parametric'' or ''wild''.")
-  }
+  #if (is.null(boot_type) || !(length(boot_type) == 1 &&
+    #(boot_type == "parametric" ||
+   #   #boot_type == "wild"))) {
+    #stop("The two bootstrap procedures are ''parametric'' or ''wild''.")
+  #}
   if (MSE == TRUE && !(is.numeric(B) && length(B) == 1 && B > 1)) {
     stop(strwrap(prefix = " ", initial = "",
                  "If MSE is set to TRUE, a single numeric value for the number
@@ -180,11 +180,11 @@ ebp_tf_check2 <- function(threshold, transformation, interval, MSE, boot_type, B
                  "na.rm needs to be a logical value. Set na.rm to TRUE or FALSE.
                  See also help(ebp)."))
   }
-  if (!is.null(weights)) {
-    stop(strwrap(prefix = " ", initial = "",
-                 "EBP twofold implementation with weights is not available.
-                  Maybe try setting weights to NULL. See also help(ebp_tf)."))
-  }
+ # if (!is.null(weights)) {
+   # stop(strwrap(prefix = " ", initial = "",
+             #    "EBP twofold implementation with weights is not available.
+                #  Maybe try setting weights to NULL. See also help(ebp_tf)."))
+ # }
  # if (!is.null(weights) && !(transformation == "log" ||
   #  transformation == "no")) {
    # stop(strwrap(prefix = " ", initial = "",
@@ -196,21 +196,21 @@ ebp_tf_check2 <- function(threshold, transformation, interval, MSE, boot_type, B
           #       "The weighted version of ebp is only available with the
              #    ''parametric'' bootstrap."))
  # }
- # if (is.character(pop_weights) && length(pop_weights) != 1 ||
- #     !is.character(pop_weights) && !is.null(pop_weights)) {
-   # stop(strwrap(prefix = " ", initial = "",
-    #             "Pop_weights must be a vector of length 1 and of class
-    #             character specifying the variable name of a numeric variable
-    #             indicating weights in the population data. See also
-    #             help(ebp)."))
-  #}
-}
+  if (is.character(pop_weights) && length(pop_weights) != 1 ||
+      !is.character(pop_weights) && !is.null(pop_weights)) {
+    stop(strwrap(prefix = " ", initial = "",
+                 "Pop_weights must be a vector of length 1 and of class
+                 character specifying the variable name of a numeric variable
+                 indicating weights in the population data. See also
+                 help(ebp)."))
+  }
+} #end check2
 
 
 # Functions called in notation
 fw_tf_check1 <- function(pop_data, mod_vars, pop_domains, pop_subdomains, smp_data,
                       fixed,  smp_domains, smp_subdomains, aggregate_to,
-                      threshold, weights, pop_weights) {
+                      threshold, pop_weights) {
   if (!all(mod_vars %in% colnames(pop_data))) {
     stop(strwrap(prefix = " ", initial = "",
                  paste0("Variable ",
@@ -263,12 +263,12 @@ fw_tf_check1 <- function(pop_data, mod_vars, pop_domains, pop_subdomains, smp_da
                  paste0(as.character(fixed[2]), " must be the name of a
                         variable that is a numeric vector.")))
   }
-  if (!is.null(weights)) {
-    stop(strwrap(prefix = " ", initial = "",
-                 " The weighted version on EBP twofold is not available.
-                 Try setting weights to NuLL"))
+  #if (!is.null(weights)) {
+   # stop(strwrap(prefix = " ", initial = "",
+             #    " The weighted version on EBP twofold is not available.
+                # Try setting weights to NuLL"))
 
-  }
+ # }
   if (!is.null(pop_weights)) {
     stop(strwrap(prefix = " ", initial = "",
                  " The weighted version on EBP twofold is not available.
@@ -357,20 +357,20 @@ fw_tf_check2 <- function(pop_domains, pop_subdomains, pop_domains_vec,
 
 #______________commented out for dry-run - 10.10.24______________________
 
-#fw_tf_check3 <- function(obs_dom, obs_subdom, dist_obs_dom, dist_obs_subdom,
- #                     pop_domains, pop_subdomains, smp_domains, smp_subdomains) {
- # if (sum(obs_dom) == 0 || sum(dist_obs_dom) == 0) {
-  #  stop(strwrap(prefix = " ", initial = "",
-       #          paste0(pop_domains, " and ", smp_domains, " do not have any
-          #              value in common. Do both variables really indicate the
-           #             same domains in population data and sample data,
-             #           respectively?")))
- # }
-  #if (sum(obs_subdom) == 0 || sum(dist_obs_subdom) == 0) {
-   # stop(strwrap(prefix = " ", initial = "",
-        #         paste0(pop_subdomains, " and ", smp_subdomains, " do not have any
-             #           value in common. Do both variables really indicate the
-              #          same subdomains in population data and sample data,
-              #          respectively?")))
- # }
-#}
+fw_tf_check3 <- function(obs_dom, obs_subdom, dist_obs_dom, dist_obs_subdom,
+                      pop_domains, pop_subdomains, smp_domains, smp_subdomains) {
+  if (sum(obs_dom) == 0 || sum(dist_obs_dom) == 0) {
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0(pop_domains, " and ", smp_domains, " do not have any
+                        value in common. Do both variables really indicate the
+                        same domains in population data and sample data,
+                        respectively?")))
+  }
+  if (sum(obs_subdom) == 0 || sum(dist_obs_subdom) == 0) {
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0(pop_subdomains, " and ", smp_subdomains, " do not have any
+                        value in common. Do both variables really indicate the
+                        same subdomains in population data and sample data,
+                        respectively?")))
+  }
+}

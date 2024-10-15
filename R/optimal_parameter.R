@@ -5,7 +5,7 @@ optimal_parameter <- function(generic_opt,
                               transformation,
                               interval) {
   if (transformation != "no" &&
-    transformation != "log") {
+      transformation != "log") {
     # no lambda -> no estimation -> no optmimization
 
     if (transformation == "box.cox" && any(interval == "default")) {
@@ -29,12 +29,12 @@ optimal_parameter <- function(generic_opt,
 
     # Estimation of optimal lambda parameters
     optimal_parameter <- optimize(generic_opt,
-      fixed          = fixed,
-      smp_data       = smp_data,
-      smp_domains    = smp_domains,
-      transformation = transformation,
-      interval       = interval,
-      maximum        = FALSE
+                                  fixed          = fixed,
+                                  smp_data       = smp_data,
+                                  smp_domains    = smp_domains,
+                                  transformation = transformation,
+                                  interval       = interval,
+                                  maximum        = FALSE
     )$minimum
   } else {
     optimal_parameter <- NULL
@@ -91,29 +91,27 @@ reml <- function(fixed = fixed,
 
 
   model_REML <- NULL
-  try(model_REML <- lme(
-    fixed = fixed,
-    data = sd_transformed_data,
-    random =
-      as.formula(paste0(
-        "~ 1 | as.factor(",
-        smp_domains, ")"
-      )),
-    method = "REML",
-    keep.data = FALSE
-  ), silent = TRUE)
-  if (is.null(model_REML)) {
-    stop(strwrap(prefix = " ", initial = "",
-                 "The likelihood does not converge. One reason could be that
-                 the interval for the estimation of an optimal transformation
-                 parameter is not appropriate. Try another interval. See also
-                 help(ebp)."))
-  } else {
-    model_REML <- model_REML
+  try(model_REML <- nlme::lme(fixed     = fixed,
+                              data      = sd_transformed_data,
+                              random    = as.formula(paste0("~ 1 | as.factor(", smp_domains, ")")),
+                              method    = "REML",
+                              keep.data = FALSE), silent = TRUE)
+  if(is.null(model_REML)) {
+    try(model_REML <- nlme::lme(fixed     = fixed,
+                                data      = sd_transformed_data,
+                                random    = as.formula(paste0("~ 1 | as.factor(", smp_domains, ")")),
+                                method    = "REML",
+                                control = nlme::lmeControl(opt = "optim"),
+                                keep.data = FALSE), silent = TRUE)
+    if(is.null(model_REML)) {
+      stop("The likelihood does not converge. One reason could be that the
+         interval for the estimation of an optimal transformation parameter is
+         not appropriate. Try another interval. See also help(ebp).")
+    } else {
+      model_REML <- model_REML
+    }
   }
 
-
   log_likelihood <- -logLik(model_REML)
-
   return(log_likelihood)
 }

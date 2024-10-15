@@ -100,28 +100,6 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
   obs_dom <- pop_domains_vec %in% unique(smp_domains_vec)
   dist_obs_dom <- unique(pop_domains_vec) %in% unique(smp_domains_vec)
 
-  #_____________________Newly added - 19.08.2024 - Rael_________________
-  #Row-names of sampled domains and subdomains
-  unique_dom_smp <- unique(smp_dom_vec)
-  unique_subdom_smp <- unique(smp_subdom_vec)
-
-  # Number of subdomains in the population
-  N_subdom_pop <- length(unique(pop_subdomains_vec))
-  # Number of subdomains in the sample
-  N_subdom_smp <- length(unique(smp_subdomains_vec))
-  # Number of out-of-sample subdomains
-  N_subdom_unobs <- N_subdom_pop - N_subdom_smp
-  # Number of households in population per subdomain
-  ndt_pop <- as.vector(table(pop_subdomains_vec))
-  # Number of households in sample per domain
-  smp_subdomains_vec_tmp <- as.numeric(smp_subdomains_vec)
-  ndt_smp <- as.vector(table(smp_subdomains_vec_tmp))
-
-  # Indicator variables that indicate if subdomain is in- or out-of-sample
-  obs_subdom <- pop_subdomains_vec %in% unique(smp_subdomains_vec)
-  dist_obs_subdom <- unique(pop_subdomains_vec) %in% unique(smp_subdomains_vec)
-  #______________________________________________________________
-
   fw_check3(
     obs_dom = obs_dom, dist_obs_dom = dist_obs_dom, pop_domains = pop_domains,
     smp_domains = smp_domains

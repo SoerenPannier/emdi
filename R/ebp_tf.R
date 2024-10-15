@@ -1,6 +1,6 @@
 #' Empirical Best Prediction for Disaggregated Indicators
 #'
-#' Function \code{ebp} estimates indicators using the Empirical Best Prediction
+#' Function \code{ebp_tf} estimates indicators using the Empirical Best Prediction
 #' approach by \cite{Molina and Rao (2010)}. Point predictions of indicators
 #' are obtained by Monte-Carlo approximations. Additionally, mean squared error
 #' (MSE) estimation can be conducted by using a parametric bootstrap approach
@@ -238,7 +238,7 @@
 #' qnorm quantile residuals rnorm sd
 #' @importFrom utils flush.console
 #' @importFrom stats fitted
-
+ebp_tf_env <- new.env()
 
 ebp_tf <- function(fixed,
                 pop_data,
@@ -254,14 +254,12 @@ ebp_tf <- function(fixed,
                 MSE = FALSE,
                 B = 50,
                 seed = 123,
-                boot_type = "parametric",
                 parallel_mode = ifelse(grepl("windows", .Platform$OS.type),
                   "socket", "multicore"
                 ),
                 cpus = 1,
                 custom_indicator = NULL,
                 na.rm = FALSE,
-                weights = NULL,
                 pop_weights = NULL,
                 aggregate_to = NULL
                 ) {
@@ -273,9 +271,9 @@ ebp_tf <- function(fixed,
 
   ebp_tf_check2(
     threshold = threshold, transformation = transformation,
-    interval = interval, MSE = MSE, boot_type = boot_type, B = B,
+    interval = interval, MSE = MSE, B = B,
     custom_indicator = custom_indicator, cpus = cpus, seed = seed,
-    na.rm = na.rm, weights = weights, pop_weights = pop_weights
+    na.rm = na.rm, pop_weights = pop_weights
   )
 
   # Save function call ---------------------------------------------------------
@@ -308,15 +306,14 @@ ebp_tf <- function(fixed,
     fixed = fixed,
     threshold = threshold,
     na.rm = na.rm,
-    weights = weights,
     pop_weights = pop_weights
   )
 
 
 
   # Point Estimation twofold -----------------------------------------------------------
-  # The function point_estim_tf can be found in script point_estimation_tf.R
-  point_estim <- point_estim_tf(
+  # The function point_ebp_tf can be found in script point_estimation_tf.R
+  point_ebp_tf <- point_ebp_tf(
     framework = framework,
     fixed = fixed,
     transformation = transformation,
@@ -334,13 +331,12 @@ ebp_tf <- function(fixed,
     # The function parametric_bootstrap_tf can be found in script mse_estimation_tf.R
     mse_estimates <- parametric_bootstrap_tf(
       framework = framework,
-      point_estim = point_estim,
+      point_ebp_tf = point_ebp_tf,
       fixed = fixed,
       transformation = transformation,
       interval = interval,
       L = L,
       B = B,
-      boot_type = boot_type,
       parallel_mode = parallel_mode,
       cpus = cpus
     )
@@ -348,13 +344,13 @@ ebp_tf <- function(fixed,
 
 
     ebp_out <- list(
-      ind = point_estim$ind,
+      ind = point_ebp_tf$ind,
       MSE = mse_estimates,
-      transform_param = point_estim[c(
+      transform_param = point_ebp_tf[c(
         "optimal_lambda",
         "shift_par"
       )],
-      model = point_estim$model,
+      model = point_ebp_tf$model,
       framework = framework[c(
         "N_subdom_unobs",
         "N_subdom_smp",
@@ -378,13 +374,13 @@ ebp_tf <- function(fixed,
     )
   } else {
     ebp_out <- list(
-      ind = point_estim$ind,
+      ind = point_ebp_tf$ind,
       MSE = NULL,
-      transform_param = point_estim[c(
+      transform_param = point_ebp_tf[c(
         "optimal_lambda",
         "shift_par"
       )],
-      model = point_estim$model,
+      model = point_ebp_tf$model,
       framework = framework[c(
         "N_subdom_unobs",
         "N_subdom_smp",
@@ -415,3 +411,4 @@ ebp_tf <- function(fixed,
   class(ebp_out) <- c("ebp_tf", "emdi")
   return(ebp_out)
 }
+environment(ebp_tf) <- ebp_tf_env
