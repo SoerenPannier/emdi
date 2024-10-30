@@ -229,7 +229,6 @@
 #' @importFrom utils flush.console
 #' @importFrom stats fitted
 
-ebp_env <- new.env()
 ebp <- function(fixed,
                 pop_data,
                 pop_domains,
@@ -389,4 +388,3 @@ ebp <- function(fixed,
   class(ebp_out) <- c("ebp", "emdi")
   return(ebp_out)
 }
-environment(ebp) <- ebp_env

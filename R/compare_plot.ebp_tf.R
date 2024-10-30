@@ -28,7 +28,7 @@ compare_plot.ebp_tf <- function(model = NULL, direct = NULL, indicator = "all",
                  paste0("If the model is of type 'ebp_tf', the input argument
                         direct is required.")))
   } else if (inherits(model, "ebp_tf") && inherits(direct, "direct")) {
-    compare_plot_ebp(
+    compare_plot_ebp_tf(
       model = model, direct = direct, indicator = indicator,
       MSE = MSE, CV = CV,
       label = label, color = color, shape = shape,

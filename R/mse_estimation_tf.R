@@ -6,7 +6,7 @@
 # mse_estim_tf (see below)
 # The parametric boostrap approach can be find in Molina and Rao (2010) p. 376
 
-
+#browser()
 parametric_bootstrap_tf <- function(framework,
                                  point_ebp_tf,
                                  fixed,
@@ -36,7 +36,24 @@ parametric_bootstrap_tf <- function(framework,
     parallelMap::parallelLibrary("nlme")
     mses <- simplify2array(parallelMap::parallelLapply(
       xs              = seq_len(B),
-      fun             = mse_estim_tf_wrapper,
+      fun             = mse_estim_tf_wrapper_dom,
+      B               = B,
+      framework       = framework,
+      lambda          = point_ebp_tf$optimal_lambda,
+      shift           = point_ebp_tf$shift_par,
+      model_par       = point_ebp_tf$model_par,
+      gen_model       = point_ebp_tf$gen_model,
+      fixed           = fixed,
+      transformation  = transformation,
+      interval        = interval,
+      L               = L,
+      res_s           = res_s,
+      fitted_s        = fitted_s,
+      start_time      = start_time
+    ))
+    mses_subdom <- simplify2array(parallelMap::parallelLapply(
+      xs              = seq_len(B),
+      fun             = mse_estim_tf_wrapper_subdom,
       B               = B,
       framework       = framework,
       lambda          = point_ebp_tf$optimal_lambda,
@@ -55,7 +72,7 @@ parametric_bootstrap_tf <- function(framework,
   } else {
     mses <- simplify2array(lapply(
       X = seq_len(B),
-      FUN = mse_estim_tf_wrapper,
+      FUN = mse_estim_tf_wrapper_dom,
       B = B,
       framework = framework,
       lambda = point_ebp_tf$optimal_lambda,
@@ -70,6 +87,24 @@ parametric_bootstrap_tf <- function(framework,
       fitted_s = fitted_s,
       start_time = start_time
     ))
+    mses_subdom <- simplify2array(lapply(
+      X = seq_len(B),
+      FUN = mse_estim_tf_wrapper_subdom,
+      B = B,
+      framework = framework,
+      lambda = point_ebp_tf$optimal_lambda,
+      shift = point_ebp_tf$shift_par,
+      model_par = point_ebp_tf$model_par,
+      gen_model = point_ebp_tf$gen_model,
+      fixed = fixed,
+      transformation = transformation,
+      interval = interval,
+      L = L,
+      res_s = res_s,
+      fitted_s = fitted_s,
+      start_time = start_time
+    ))
+
   }
 
   message("\r", "Bootstrap completed", "\n")
@@ -78,13 +113,16 @@ parametric_bootstrap_tf <- function(framework,
   }
 
   mses <- apply(mses, c(1, 2), mean)
+  mses_subdom <- apply(mses_subdom, c(1,2), mean)
   if(is.null(framework$aggregate_to_vec)){
     mses <- data.frame(Domain = unique(framework$pop_domains_vec), mses)
+    mses_subdom <- data.frame(Subdomain = unique(framework$pop_subdomains_vec),
+                              mses_subdom)
   }else{
     mses <- data.frame(Domain = unique(framework$aggregate_to_vec), mses)
   }
 
-  return(mses)
+  return(list(mses=mses, mses_subdom=mses_subdom))
 }
 
 
@@ -95,7 +133,7 @@ parametric_bootstrap_tf <- function(framework,
 # The mse_estim_tf function defines all parameters and estimations which have to
 # be replicated B times for the Parametric Bootstrap Approach.
 # See Molina and Rao (2010) p. 376
-
+#browser()
 mse_estim_tf <- function(framework,
                       lambda,
                       shift,
@@ -110,12 +148,12 @@ mse_estim_tf <- function(framework,
 
 
 
-  # The function superpopulation returns an income vector and a temporary
+  # The function superpopulation_tf returns an income vector and a temporary
   # variable that passes the random effect to generating bootstrap populations
-  # in bootstrap_par.
+  # in bootstrap_par_tf.
 
 
-    superpop <- superpopulation(
+    superpop <- superpopulation_tf(
       framework = framework,
       model_par = model_par,
       gen_model = gen_model,
@@ -135,6 +173,8 @@ mse_estim_tf <- function(framework,
     N_dom_pop_tmp <- framework$N_dom_pop_agg
     pop_domains_vec_tmp <- framework$aggregate_to_vec
   } else {
+    N_subdom_pop_tmp <- framework$N_subdom_pop
+    pop_subdomains_vec_tmp <- framework$pop_subdomains_vec
     N_dom_pop_tmp <- framework$N_dom_pop
     pop_domains_vec_tmp <- framework$pop_domains_vec
   }
@@ -146,16 +186,16 @@ mse_estim_tf <- function(framework,
   }
 
   # True indicator values
-  true_indicators <- matrix(
-    nrow = N_dom_pop_tmp,
+  true_indicators_subdom <- matrix(
+    nrow = N_subdom_pop_tmp,
     data = unlist(lapply(framework$indicator_list,
       function(f, threshold) {
         matrix(
-          nrow = N_dom_pop_tmp,
+          nrow = N_subdom_pop_tmp,
           data =
             unlist(mapply(
-              y = split(pop_income_vector, pop_domains_vec_tmp),
-              pop_weights = split(pop_weights_vec, pop_domains_vec_tmp),
+              y = split(pop_income_vector, pop_subdomains_vec_tmp),
+              pop_weights = split(pop_weights_vec, pop_subdomains_vec_tmp),
               f,
               threshold = framework$threshold
             )),
@@ -166,13 +206,36 @@ mse_estim_tf <- function(framework,
     ))
   )
 
-  colnames(true_indicators) <- framework$indicator_names
+  colnames(true_indicators_subdom) <- framework$indicator_names
 
-  # The function bootstrap_par returns a sample that can be given into the
+  # True indicator values
+  true_indicators_dom <- matrix(
+    nrow = N_dom_pop_tmp,
+    data = unlist(lapply(framework$indicator_list,
+                         function(f, threshold) {
+                           matrix(
+                             nrow = N_dom_pop_tmp,
+                             data =
+                               unlist(mapply(
+                                 y = split(pop_income_vector, pop_domains_vec_tmp),
+                                 pop_weights = split(pop_weights_vec, pop_domains_vec_tmp),
+                                 f,
+                                 threshold = framework$threshold
+                               )),
+                             byrow = TRUE
+                           )
+                         },
+                         threshold = framework$threshold
+    ))
+  )
+
+  colnames(true_indicators_dom) <- framework$indicator_names
+
+  # The function bootstrap_par_tf returns a sample that can be given into the
   # point estimation to get predictors of the indicators that can be compared
   # to the "truth".
 
-    bootstrap_sample <- bootstrap_par(
+    bootstrap_sample <- bootstrap_par_tf(
       fixed = fixed,
       transformation = transformation,
       framework = framework,
@@ -187,7 +250,7 @@ mse_estim_tf <- function(framework,
   framework$smp_data <- bootstrap_sample
 
  # browser()
-  # Prediction of indicators with bootstap sample.
+  # Prediction of indicators with bootstrap sample.
   bootstrap_point_ebp_tf <- as.matrix(point_ebp_tf(
     fixed = fixed,
     transformation =
@@ -197,17 +260,30 @@ mse_estim_tf <- function(framework,
     framework = framework
   )[[1]][, -1])
 
-  return((bootstrap_point_ebp_tf - true_indicators)^2)
+  bootstrap_point_ebp_tf_subdom <- as.matrix(point_ebp_tf(
+    fixed = fixed,
+    transformation =
+      transformation,
+    interval = interval,
+    L = L,
+    framework = framework
+  )[[2]][, -1])
+
+  mse_dom <- (bootstrap_point_ebp_tf - true_indicators_dom)^2
+  mse_subdom <- (bootstrap_point_ebp_tf_subdom - true_indicators_subdom)^2
+
+  #return(list(mse_dom = mse_dom, mse_subdom = mse_subdom))
+  return(list(mse_dom = mse_dom, mse_subdom = mse_subdom))
 } # End mse_estim_tf
 
 
-# Superpopulation function -----------------------------------------------------
+# Superpopulation_tf function -----------------------------------------------------
 
 # The model parameter from the nested error linear regression model are
-# used to construct a superpopulation model.
+# used to construct a superpopulation_tf model.
 
 
-superpopulation <- function(framework, model_par, gen_model, lambda, shift,
+superpopulation_tf <- function(framework, model_par, gen_model, lambda, shift,
                             transformation) {
   # superpopulation individual errors
   eps <- vector(length = framework$N_pop)
@@ -247,7 +323,7 @@ superpopulation <- function(framework, model_par, gen_model, lambda, shift,
 
 # Bootstrap function -----------------------------------------------------------
 
-bootstrap_par <- function(fixed,
+bootstrap_par_tf <- function(fixed,
                           transformation,
                           framework,
                           model_par,
@@ -286,7 +362,7 @@ bootstrap_par <- function(fixed,
 
 # progress for mse_estim_tf (only internal) ----------
 
-mse_estim_tf_wrapper <- function(i,
+mse_estim_tf_wrapper_dom <- function(i,
                               B,
                               framework,
                               lambda,
@@ -333,5 +409,55 @@ mse_estim_tf_wrapper <- function(i,
       if (.Platform$OS.type == "windows") flush.console()
     }
   }
-  return(tmp)
+  return(tmp$mse_dom)
+}
+
+mse_estim_tf_wrapper_subdom <- function(i,
+                                 B,
+                                 framework,
+                                 lambda,
+                                 shift,
+                                 model_par,
+                                 gen_model,
+                                 fixed,
+                                 transformation,
+                                 interval,
+                                 L,
+                                 res_s,
+                                 fitted_s,
+                                 start_time,
+                                 seedvec) {
+  tmp <- mse_estim_tf(
+    framework = framework,
+    lambda = lambda,
+    shift = shift,
+    model_par = model_par,
+    gen_model = gen_model,
+    res_s = res_s,
+    fitted_s = fitted_s,
+    fixed = fixed,
+    transformation = transformation,
+    interval = interval,
+    L = L
+  )
+
+  if (i %% 10 == 0) {
+    if (i != B) {
+      delta <- difftime(Sys.time(), start_time, units = "secs")
+      remaining <- (delta / i) * (B - i)
+      remaining <- unclass(remaining)
+      remaining <- sprintf(
+        "%02d:%02d:%02d:%02d",
+        remaining %/% 86400, # days
+        remaining %% 86400 %/% 3600, # hours
+        remaining %% 3600 %/% 60, # minutes
+        remaining %% 60 %/% 1
+      ) # seconds)
+
+      message("\r", i, " of ", B, " Bootstrap iterations completed \t
+              Approximately ", remaining, " remaining \n")
+      if (.Platform$OS.type == "windows") flush.console()
+    }
+  }
+  return(tmp$mse_subdom)
 }

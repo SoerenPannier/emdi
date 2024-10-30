@@ -2,6 +2,12 @@ estimators_check <- function(object,
                              indicator,
                              MSE,
                              CV) {
+  if (inherits(object, "ebp_tf")) {
+    object$MSE <- object$MSE_Subdomain
+    object$ind <- object$ind_Subdomain
+    colnames(object$MSE)[1] <- "Domain"
+    colnames(object$ind)[1] <- "Domain"
+  }
   if (is.null(object$MSE) && (MSE == TRUE || CV == TRUE)) {
     stop(strwrap(prefix = " ", initial = "",
                  "No MSE estimates in emdi object: arguments MSE and CV have to

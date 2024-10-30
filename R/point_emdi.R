@@ -1,4 +1,8 @@
 point_emdi <- function(object, indicator = "all") {
+  if (inherits(object, "ebp_tf")) {
+    object$ind <- object$ind_Subdomain
+    colnames(object$ind)[1] <- "Domain"
+  }
   if (is.null(object$ind)) {
     stop(strwrap(prefix = " ", initial = "",
                  "No estimates in object: method point not applicable"))
@@ -48,7 +52,11 @@ point_emdi <- function(object, indicator = "all") {
   if (any(indicator == "all") || any(indicator == "All")) {
     ind <- object$ind
     ind_name <- "All indicators"
-  } else if (any(indicator == "fh") || any(indicator == "FH")) {
+  #} else if (any(indicator == "ebp_tf") || any(indicator == "ebp_tf")) {
+   # ind <- object$ind_Domain
+   # colnames(ind)[1] <- "Domain"
+    #ind_name <- "ebp twofold estimates"
+  }else if (any(indicator == "fh") || any(indicator == "FH")) {
     ind <- object$ind[, c("Domain", "FH")]
     ind_name <- "Fay-Herriot estimates"
   } else if (any(indicator == "fh_bench") || any(indicator == "FH_Bench")) {

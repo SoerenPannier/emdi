@@ -27,6 +27,18 @@ ebp_tf_check1 <- function(fixed, pop_data, pop_domains,pop_subdomains, smp_data,
                  variable indicating subdomains in the population data. See also
                  help(ebp_tf)."))
   }
+  if (!is.character(pop_data[[pop_subdomains]])){
+    stop(strwrap(prefix = " ", initial = "",
+                 "Pop_subdomains must be of class character variable indicating
+                 subdomains in the population data. See also  help(ebp_tf)."))
+  }
+
+  if (!is.character(pop_data[[pop_domains]])){
+    stop(strwrap(prefix = " ", initial = "",
+                 "Pop_domains must be of class character variable indicating
+                 domains in the population data. See also  help(ebp_tf)."))
+  }
+
   if (!is.data.frame(smp_data)) {
     stop(strwrap(prefix = " ", initial = "",
                  "Smp_data must be a data frame containing sample data.
@@ -45,6 +57,18 @@ ebp_tf_check1 <- function(fixed, pop_data, pop_domains,pop_subdomains, smp_data,
                  character specifying the variable (name)  of a numeric or
                  factor variable indicating subdomains in the sample data. See
                  also help(ebp_tf)."))
+  }
+
+  if (!is.character(smp_data[[smp_subdomains]])){
+    stop(strwrap(prefix = " ", initial = "",
+                 "Smp_subdomains must be of class character variable indicating
+                 subdomains in the sample data. See also  help(ebp_tf)."))
+  }
+
+  if (!is.character(smp_data[[smp_domains]])){
+    stop(strwrap(prefix = " ", initial = "",
+                 "Smp_domains must be of class character variable indicating
+                 domains in the sample data. See also  help(ebp_tf)."))
   }
 
   if (!is.numeric(L) || length(L) != 1 || L < 1) {
@@ -245,12 +269,12 @@ fw_tf_check1 <- function(pop_data, mod_vars, pop_domains, pop_subdomains, smp_da
                         in smp_data. Please provide valid variable name for
                         smp_domains.")))
   }
- # if (!(smp_subdomains %in% colnames(smp_data))) {
-   # stop(strwrap(prefix = " ", initial = "",
-           #      paste0("The subdomain variable ", smp_subdomains, " is not contained
-               #        in smp_data. Please provide valid variable name for
-                  #      smp_subdomains.")))
- # }
+  if (!(smp_subdomains %in% colnames(smp_data))) {
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0("The subdomain variable ", smp_subdomains, " is not contained
+                       in smp_data. Please provide valid variable name for
+                        smp_subdomains.")))
+  }
   if (!((as.character(fixed[2])) %in% colnames(smp_data))) {
     stop(strwrap(prefix = " ", initial = "",
                  paste0("Variable ", as.character(fixed[2]), " is not contained

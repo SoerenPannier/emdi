@@ -1,4 +1,10 @@
 mse_emdi <- function(object, indicator = "all", CV = FALSE) {
+  if (inherits(object, "ebp_tf")) {
+    object$MSE <- object$MSE_Subdomain
+    object$ind <- object$ind_Subdomain
+    colnames(object$MSE)[1] <- "Domain"
+    colnames(object$ind)[1] <- "Domain"
+  }
   if (is.null(object$MSE) && CV == TRUE) {
     stop(strwrap(prefix = " ", initial = "",
                  "No MSE estimates in emdi object: arguments MSE and CV have to
@@ -18,6 +24,7 @@ mse_emdi <- function(object, indicator = "all", CV = FALSE) {
     object$MSE <- object$MSE[, c("Domain", "Direct", "FH")]
     object$ind <- object$ind[, c("Domain", "Direct", "FH")]
   }
+
   all_cv <- sqrt(object$MSE[, -1]) / object$ind[, -1]
 
   if (any(indicator == "Quantiles") || any(indicator == "quantiles")) {

@@ -238,7 +238,7 @@
 #' qnorm quantile residuals rnorm sd
 #' @importFrom utils flush.console
 #' @importFrom stats fitted
-ebp_tf_env <- new.env()
+
 
 ebp_tf <- function(fixed,
                 pop_data,
@@ -344,8 +344,11 @@ ebp_tf <- function(fixed,
 
 
     ebp_out <- list(
-      ind = point_ebp_tf$ind,
-      MSE = mse_estimates,
+      ind_Domain = point_ebp_tf$ind_Domain,
+      ind_Subdomain = point_ebp_tf$ind_Subdomain,
+      MSE_Domain = mse_estimates$mses,
+      MSE_Subdomain = mse_estimates$mses_subdom,
+      #MSE = mse_estimates,
       transform_param = point_ebp_tf[c(
         "optimal_lambda",
         "shift_par"
@@ -374,7 +377,8 @@ ebp_tf <- function(fixed,
     )
   } else {
     ebp_out <- list(
-      ind = point_ebp_tf$ind,
+      ind_Domain = point_ebp_tf$ind_Domain,
+      ind_Subdomain = point_ebp_tf$ind_Subdomain,
       MSE = NULL,
       transform_param = point_ebp_tf[c(
         "optimal_lambda",
@@ -411,4 +415,3 @@ ebp_tf <- function(fixed,
   class(ebp_out) <- c("ebp_tf", "emdi")
   return(ebp_out)
 }
-environment(ebp_tf) <- ebp_tf_env

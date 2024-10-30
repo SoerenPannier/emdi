@@ -8,7 +8,7 @@
 # additional estimation steps are taken in order to calculate weighted
 # regression coefficients before the monte-carlo approximation. See
 # corresponding functions below.
-
+#' @export
 
 point_estim <- function(framework,
                         fixed,
@@ -48,7 +48,7 @@ point_estim <- function(framework,
   # See Molina and Rao (2010) p. 374
   # lme function is included in the nlme package which is imported.
 
- # browser()
+  #browser()
   mixed_model <- nlme::lme(
     fixed = fixed,
     data = transformation_par$transformed_data,

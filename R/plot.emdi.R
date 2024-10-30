@@ -174,13 +174,24 @@ plot.emdi <- function(x,
   )
   extra_args <- list(...)
   residuals <- extra_args[["residuals"]]
-  srand.eff <- extra_args[["srand.eff"]]
-  tmp <- extra_args[["tmp"]]
+  #srand.eff <- extra_args[["srand.eff"]]
+  #tmp <- extra_args[["tmp"]]
   cook_df <- extra_args[["cook_df"]]
   indexer <- extra_args[["indexer"]]
   likelihoods <- extra_args[["likelihoods"]]
   opt_lambda <- extra_args[["opt_lambda"]]
 
+  #___________________Rachael added_____________________________________________
+  if (any(inherits(x, which = TRUE, c("fh", "ebp_tf")))) {
+    srand.eff_dom <- extra_args[["srand.eff_dom"]]
+    srand.eff_subdom <- extra_args[["srand.eff_subdom"]]
+    tmp_dom <- extra_args[["tmp_dom"]]
+    tmp_subdom <- extra_args[["tmp_subdom"]]
+  }else{
+    srand.eff <- extra_args[["srand.eff"]]
+    tmp <- extra_args[["tmp"]]
+    }
+  #_____________________________________________________________________________
 
   label <- define_label(x = x, label = label)
 
@@ -203,40 +214,131 @@ plot.emdi <- function(x,
     xlab(label$qq_ran["x_lab"]) +
     gg_theme
 
-  plotList[[1]] <- arrangeGrob(res, ran, ncol = 2)
-  grid.arrange(plotList[[1]])
+  #_____________________________Rachael added___________________________________
+  if(any(inherits(x, which = TRUE, c("fh", "ebp_tf")))){
+    ran_dom <- ggplot(data.frame(tmp_dom), aes(sample = tmp_dom)) +
+      stat_qq(distribution = qnorm, dparams = list(
+        mean = mean(tmp_dom),
+        sd = sd(tmp_dom)
+      )) +
+      geom_abline(intercept = 0, slope = 1, na.rm = TRUE, col = color[1]) +
+      ggtitle(label$qq_ran_dom["title"]) +
+      ylab(label$qq_ran_dom["y_lab"]) +
+      xlab(label$qq_ran_dom["x_lab"]) +
+      gg_theme
+
+    ran_subdom <- ggplot(data.frame(tmp_subdom), aes(sample = tmp_subdom)) +
+      stat_qq(distribution = qnorm, dparams = list(
+        mean = mean(tmp_subdom),
+        sd = sd(tmp_subdom)
+      )) +
+      geom_abline(intercept = 0, slope = 1, na.rm = TRUE, col = color[1]) +
+      ggtitle(label$qq_ran_subdom["title"]) +
+      ylab(label$qq_ran_subdom["y_lab"]) +
+      xlab(label$qq_ran_subdom["x_lab"]) +
+      gg_theme
+
+    plotList[[1]] <- arrangeGrob(res, ran_dom, ran_subdom, ncol = 3)
+    grid.arrange(plotList[[1]])
+  }else{
+    plotList[[1]] <- arrangeGrob(res, ran, ncol = 2)
+    grid.arrange(plotList[[1]])
+  }
+  #_____________________________________________________________________________
+
+  #plotList[[1]] <- arrangeGrob(res, ran, ncol = 2)
+  #grid.arrange(plotList[[1]])
   cat("Press [enter] to continue")
   line <- readline()
 
-  print((plotList[[2]] <- ggplot(data.frame(Residuals = residuals),
-    aes(x = Residuals),
-    fill = color[2], color = color[2]
-  ) +
-    geom_density(
-      fill = color[2], color = color[2],
-      alpha = 0.4
-    ) +
-    stat_function(fun = dnorm) +
-    ylab(label$d_res["y_lab"]) +
-    xlab(label$d_res["x_lab"]) +
-    ggtitle(label$d_res["title"]) +
-    gg_theme))
-  cat("Press [enter] to continue")
-  line <- readline()
-  print((plotList[[3]] <- ggplot(data.frame(Random = srand.eff),
-    aes(x = Random),
-    fill = color[2], color = color[2]
-  ) +
-    geom_density(
-      fill = color[2], color = color[2],
-      alpha = 0.4
-    ) +
-    stat_function(fun = dnorm) +
-    ylab(label$d_ran["y_lab"]) +
-    xlab(label$d_ran["x_lab"]) +
-    ggtitle(label$d_ran["title"]) +
-    gg_theme))
+  #_________________________________________Rachael added________________________
+  if(any(inherits(x, which = TRUE, c("fh", "ebp_tf")))){
+    #plotList[[1]] <- arrangeGrob(res, ran_dom, ran_subdom, ncol = 3)
+    #grid.arrange(plotList[[1]])
+    #cat("Press [enter] to continue")
+    #line <- readline()
 
+    print((plotList[[2]] <- ggplot(data.frame(Residuals = residuals),
+                                   aes(x = Residuals),
+                                   fill = color[2], color = color[2]
+    ) +
+      geom_density(
+        fill = color[2], color = color[2],
+        alpha = 0.4
+      ) +
+      stat_function(fun = dnorm) +
+      ylab(label$d_res["y_lab"]) +
+      xlab(label$d_res["x_lab"]) +
+      ggtitle(label$d_res["title"]) +
+      gg_theme))
+    cat("Press [enter] to continue")
+    line <- readline()
+    #print((plotList[[3]]))
+
+    ran_dom_density <- ggplot(data.frame(Random = srand.eff_dom),
+                              aes(x = Random),
+                              fill = color[2], color = color[2]
+    ) +
+      geom_density(
+        fill = color[2], color = color[2],
+        alpha = 0.4
+      ) +
+      stat_function(fun = dnorm) +
+      ylab(label$d_ran_dom["y_lab"]) +
+      xlab(label$d_ran_dom["x_lab"]) +
+      ggtitle(label$d_ran_dom["title"]) +
+      gg_theme
+
+    ran_subdom_density <- ggplot(data.frame(Random = srand.eff_subdom),
+                                 aes(x = Random),
+                                 fill = color[2], color = color[2]
+    ) +
+      geom_density(
+        fill = color[2], color = color[2],
+        alpha = 0.4
+      ) +
+      stat_function(fun = dnorm) +
+      ylab(label$d_ran_subdom["y_lab"]) +
+      xlab(label$d_ran_subdom["x_lab"]) +
+      ggtitle(label$d_ran_subdom["title"]) +
+      gg_theme
+
+    plotList[[3]] <- arrangeGrob(ran_dom_density, ran_subdom_density, ncol = 2)
+    grid.arrange(plotList[[3]])
+  }else {
+    print((plotList[[2]] <- ggplot(data.frame(Residuals = residuals),
+                                   aes(x = Residuals),
+                                   fill = color[2], color = color[2]
+    ) +
+      geom_density(
+        fill = color[2], color = color[2],
+        alpha = 0.4
+      ) +
+      stat_function(fun = dnorm) +
+      ylab(label$d_res["y_lab"]) +
+      xlab(label$d_res["x_lab"]) +
+      ggtitle(label$d_res["title"]) +
+      gg_theme))
+    cat("Press [enter] to continue")
+    line <- readline()
+    print((plotList[[3]] <- ggplot(data.frame(Random = srand.eff),
+                                   aes(x = Random),
+                                   fill = color[2], color = color[2]
+    ) +
+      geom_density(
+        fill = color[2], color = color[2],
+        alpha = 0.4
+      ) +
+      stat_function(fun = dnorm) +
+      ylab(label$d_ran["y_lab"]) +
+      xlab(label$d_ran["x_lab"]) +
+      ggtitle(label$d_ran["title"]) +
+      gg_theme))
+  }
+
+
+
+  #_____________________________________________________________________________
   if (cooks == TRUE) {
     cat("Press [enter] to continue")
     line <- readline()
@@ -355,7 +457,58 @@ define_label <- function(x, label) {
             x_lab = "expression(lambda)"
           )
         )
-      } else if (inherits(x, "fh")) {
+      }else if (inherits(x, "ebp_tf")) {
+        label <- list(
+          qq_res = c(
+            title = "Error term",
+            y_lab = "Quantiles of pearson residuals",
+            x_lab = "Theoretical quantiles"
+          ),
+          qq_ran_dom = c(
+            title = "Random effect - domain level",
+            y_lab = "Quantiles of random effects - domain level",
+            x_lab = "Theoretical quantiles"
+          ),
+          qq_ran_subdom = c(
+            title = "Random effect - subdomain level",
+            y_lab = "Quantiles of random effects - subdomain level",
+            x_lab = "Theoretical quantiles"
+          ),
+          d_res = c(
+            title = "Density - Pearson residuals",
+            y_lab = "Density",
+            x_lab = "Pearson residuals"
+          ),
+          d_ran_dom = c(
+            title = "Density - Standardized random effects",
+            y_lab = "Density",
+            x_lab = "Standardized random effects - domain level"
+          ),
+          d_ran_subdom = c(
+            title = "Density - Standardized random effects",
+            y_lab = "Density",
+            x_lab = "Standardized random effects - subdomain level"
+          ),
+          cooks = c(
+            title = "Cook's Distance Plot",
+            y_lab = "Cook's Distance",
+            x_lab = "Index"
+          ),
+          opt_lambda = c(
+            title =
+              paste0(
+                str_to_title(
+                  gsub(
+                    "\\.", "-",
+                    x$transformation
+                  )
+                ), " - REML"
+              ),
+            y_lab = "Log-Likelihood",
+            x_lab = "expression(lambda)"
+          )
+        )
+      }else if (inherits(x, "fh")) {
         label <- list(
           qq_res = c(
             title = "Realized residuals",
@@ -456,6 +609,49 @@ define_label <- function(x, label) {
             x_lab = "expression(lambda)"
           )
         )
+      }else if (inherits(x, "ebp_tf")) {
+        label <- list(
+          qq_res = c(
+            title = "",
+            y_lab = "Quantiles of pearson residuals",
+            x_lab = "Theoretical quantiles"
+          ),
+          qq_ran_dom = c(
+            title = "",
+            y_lab = "Quantiles of random effects - domain level",
+            x_lab = "Theoretical quantiles"
+          ),
+          qq_ran_subdom = c(
+            title = "",
+            y_lab = "Quantiles of random effects - subdomain level",
+            x_lab = "Theoretical quantiles"
+          ),
+          d_res = c(
+            title = "",
+            y_lab = "Density",
+            x_lab = "Pearson residuals"
+          ),
+          d_ran_dom = c(
+            title = "",
+            y_lab = "Density",
+            x_lab = "Standardized random effects - domain level"
+          ),
+          d_ran_subdom = c(
+            title = "",
+            y_lab = "Density",
+            x_lab = "Standardized random effects - subdomain level"
+          ),
+          cooks = c(
+            title = "",
+            y_lab = "Cook's Distance",
+            x_lab = "Index"
+          ),
+          opt_lambda = c(
+            title = "",
+            y_lab = "Log-Likelihood",
+            x_lab = "expression(lambda)"
+          )
+        )
       } else if (inherits(x, "fh")) {
         label <-
           list(
@@ -500,18 +696,19 @@ define_label <- function(x, label) {
     }
 
     if (!any(names(label) %in% c(
-      "qq_res", "qq_ran",
-      "d_res", "d_ran",
+      "qq_res", "qq_ran", "qq_ran_dom", "qq_ran_subdom",
+      "d_res", "d_ran", "d_ran_dom", "d_ran_subdom",
       "cooks", "opt_lambda"
     )) ||
       !any(names(label) %in% c(
-        "qq_res", "qq_ran",
-        "d_res", "d_ran",
+        "qq_res", "qq_ran", "qq_ran_dom", "qq_ran_subdom",
+        "d_res", "d_ran", "d_ran_dom", "d_ran_subdom",
         "cooks", "box_cox"
       ))) {
       stop(strwrap(prefix = " ", initial = "",
                    "List elements must have following names even though not
-                   all must be included: qq_res, qq_ran, d_res, d_ran, cooks,
+                   all must be included: qq_res, qq_ran, qq_ran_dom,
+                   qq_ran_subdom, d_res, d_ran, d_ran_dom, d_ran_subdom, cooks,
                    opt_lambda. Every list element must have the elements title,
                    y_lab and x_lab. See also help(plot.emdi)."))
     }
@@ -534,6 +731,16 @@ define_label <- function(x, label) {
         y_lab = "Quantiles of random effects",
         x_lab = "Theoretical quantiles"
       ),
+      qq_ran_dom = c(
+        title = "Random effect - domain",
+        y_lab = "Quantiles of random effects - domain",
+        x_lab = "Theoretical quantiles"
+      ),
+      qq_ran_dom = c(
+        title = "Random effect - subdomain",
+        y_lab = "Quantiles of random effects - subdomain",
+        x_lab = "Theoretical quantiles"
+      ),
       d_res = c(
         title = "Density - Pearson residuals",
         y_lab = "Density",
@@ -543,6 +750,16 @@ define_label <- function(x, label) {
         title = "Density - Standardized random effects",
         y_lab = "Density",
         x_lab = "Standardized random effects"
+      ),
+      d_ran_dom = c(
+        title = "Density - Standardized random effects",
+        y_lab = "Density",
+        x_lab = "Standardized random effects - domain"
+      ),
+      d_ran_subdom = c(
+        title = "Density - Standardized random effects",
+        y_lab = "Density",
+        x_lab = "Standardized random effects - subdom"
       ),
       cooks = c(
         title = "Cook's Distance Plot",
@@ -568,8 +785,18 @@ define_label <- function(x, label) {
     }
     if (any(names(label) == "qq_ran")) {
       label$qq_ran <- label$qq_ran
-    } else {
+    }else {
       label$qq_ran <- orig_label$qq_ran
+    }
+    if (any(names(label) == "qq_ran_dom")) {
+      label$qq_ran_dom <- label$qq_ran_dom
+    }else {
+      label$qq_ran_dom <- orig_label$qq_ran_dom
+    }
+    if (any(names(label) == "qq_ran_subdom")) {
+      label$qq_ran_subdom <- label$qq_ran_subdom
+    }else {
+      label$qq_ran_subdom <- orig_label$qq_ran_subdom
     }
     if (any(names(label) == "d_res")) {
       label$d_res <- label$d_res
@@ -580,6 +807,16 @@ define_label <- function(x, label) {
       label$d_ran <- label$d_ran
     } else {
       label$d_ran <- orig_label$d_ran
+    }
+    if (any(names(label) == "d_ran_dom")) {
+      label$d_ran_dom <- label$d_ran_dom
+    } else {
+      label$d_ran_dom <- orig_label$d_ran_dom
+    }
+    if (any(names(label) == "d_ran_subdom")) {
+      label$d_ran_subdom <- label$d_ran_subdom
+    } else {
+      label$d_ran_subdom <- orig_label$d_ran_subdom
     }
     if (any(names(label) == "cooks")) {
       label$cooks <- label$cooks
@@ -598,13 +835,14 @@ define_label <- function(x, label) {
   }
 
   if (any(!(names(label) %in% c(
-    "qq_res", "qq_ran",
-    "d_res", "d_ran",
+    "qq_res", "qq_ran", "qq_ran_dom", "qq_ran_subdom",
+    "d_res", "d_ran", "d_ran_dom", "d_ran_subdom",
     "cooks", "opt_lambda", "box_cox"
   )))) {
     warning(strwrap(prefix = " ", initial = "",
                     "One or more list elements are not called qq_res, qq_ran,
-                    d_res, d_ran, cooks or opt_lambda. The changes are for
+                    qq_ran_dom, qq_ran_subdom,d_res, d_ran, d_ran_dom,
+                    d_ran_subdom, cooks or opt_lambda. The changes are for
                     this/these element(s) is/are not done. Instead the original
                     labels are used."))
   }
