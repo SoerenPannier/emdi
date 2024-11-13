@@ -182,7 +182,7 @@ plot.emdi <- function(x,
   opt_lambda <- extra_args[["opt_lambda"]]
 
   #___________________Rachael added_____________________________________________
-  if (any(inherits(x, which = TRUE, c("fh", "ebp_tf")))) {
+  if (any(inherits(x, which = TRUE, c("fh_tf", "ebp_tf")))) {
     srand.eff_dom <- extra_args[["srand.eff_dom"]]
     srand.eff_subdom <- extra_args[["srand.eff_subdom"]]
     tmp_dom <- extra_args[["tmp_dom"]]
@@ -203,7 +203,7 @@ plot.emdi <- function(x,
     xlab(label$qq_res["x_lab"]) + gg_theme
 
   #_____________________________Rachael added___________________________________
-  if(any(inherits(x, which = TRUE, c("fh", "ebp_tf")))){
+  if(any(inherits(x, which = TRUE, c("fh_tf", "ebp_tf")))){
     ran_dom <- ggplot(data.frame(tmp_dom), aes(sample = tmp_dom)) +
       stat_qq(distribution = qnorm, dparams = list(
         mean = mean(tmp_dom),
@@ -251,7 +251,7 @@ plot.emdi <- function(x,
   line <- readline()
 
   #_________________________________________Rachael added________________________
-  if(any(inherits(x, which = TRUE, c("fh", "ebp_tf")))){
+  if(any(inherits(x, which = TRUE, c("fh_tf", "ebp_tf")))){
     #plotList[[1]] <- arrangeGrob(res, ran_dom, ran_subdom, ncol = 3)
     #grid.arrange(plotList[[1]])
     #cat("Press [enter] to continue")
@@ -540,6 +540,49 @@ define_label <- function(x, label) {
             x_lab = ""
           )
         )
+      } else if (inherits(x, "fh_tf")) {
+        label <- list(
+          qq_res = c(
+            title = "Realized residuals",
+            y_lab = "Quantiles of std. residuals/sqrt(direct var.)",
+            x_lab = "Theoretical quantiles"
+          ),
+          qq_ran_dom = c(
+            title = "Random effect at domain level",
+            y_lab = "Quantiles of std. random effects",
+            x_lab = "Theoretical quantiles"
+          ),
+          qq_ran_subdom = c(
+            title = "Random effect at subdomain level",
+            y_lab = "Quantiles of std. random effects",
+            x_lab = "Theoretical quantiles"
+          ),
+          d_res = c(
+            title = "Density - Std. residuals/sqrt(direct var.)",
+            y_lab = "Density",
+            x_lab = "Std. real. residuals"
+          ),
+          d_ran_dom = c(
+            title = "Density - Random effects at domain level",
+            y_lab = "Density",
+            x_lab = "Std. random effects"
+          ),
+          d_ran_subdom = c(
+            title = "Density - Random effects at subdomain level",
+            y_lab = "Density",
+            x_lab = "Std. random effects"
+          ),
+          cooks = c(
+            title = "",
+            y_lab = "",
+            x_lab = ""
+          ),
+          opt_lambda = c(
+            title = "",
+            y_lab = "",
+            x_lab = ""
+          )
+        )
       }
     } else if (label == "blank") {
       label <- list(
@@ -553,12 +596,32 @@ define_label <- function(x, label) {
           y_lab = "",
           x_lab = ""
         ),
+        qq_ran_dom = c(
+          title = "",
+          y_lab = "",
+          x_lab = ""
+        ),
+        qq_ran_subdom = c(
+          title = "",
+          y_lab = "",
+          x_lab = ""
+        ),
         d_res = c(
           title = "",
           y_lab = "",
           x_lab = ""
         ),
         d_ran = c(
+          title = "",
+          y_lab = "",
+          x_lab = ""
+        ),
+        d_ran_dom = c(
+          title = "",
+          y_lab = "",
+          x_lab = ""
+        ),
+        d_ran_subdom = c(
           title = "",
           y_lab = "",
           x_lab = ""
@@ -685,7 +748,51 @@ define_label <- function(x, label) {
               x_lab = ""
             )
           )
+      }     else if (inherits(x, "fh_tf")) {
+        label <- list(
+          qq_res = c(
+            title = "",
+            y_lab = "Quantiles of std. residuals/sqrt(direct var.)",
+            x_lab = "Theoretical quantiles"
+          ),
+          qq_ran_dom = c(
+            title = "",
+            y_lab = "Quantiles of std. random effects",
+            x_lab = "Theoretical quantiles"
+          ),
+          qq_ran_subdom = c(
+            title = "",
+            y_lab = "Quantiles of std. random effects",
+            x_lab = "Theoretical quantiles"
+          ),
+          d_res = c(
+            title = "",
+            y_lab = "Density",
+            x_lab = "Std. real. residuals"
+          ),
+          d_ran_dom = c(
+            title = "",
+            y_lab = "Density",
+            x_lab = "Std. random effects"
+          ),
+          d_ran_subdom = c(
+            title = "",
+            y_lab = "Density",
+            x_lab = "Std. random effects"
+          ),
+          cooks = c(
+            title = "",
+            y_lab = "",
+            x_lab = ""
+          ),
+          opt_lambda = c(
+            title = "",
+            y_lab = "",
+            x_lab = ""
+          )
+        )
       }
+
     }
   } else if (inherits(label, "list")) {
     if (any(names(label) == "box_cox")) {

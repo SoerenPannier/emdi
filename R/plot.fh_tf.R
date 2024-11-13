@@ -31,7 +31,7 @@ plot.fh_tf <- function(x,
     cooks = FALSE, boxcox = FALSE,
     cook_df = NULL, indexer = NULL, likelihoods = NULL,
     opt_lambda = FALSE, residuals = residuals,
-    srand.eff_domain = srand.eff_domain, srand.eff_subdomain = srand.eff_subdomain,
-    tmp_domain = tmp_domain, tmp_subdomain = tmp_subdomain
+    srand.eff_dom = srand.eff_domain, srand.eff_subdom = srand.eff_subdomain,
+    tmp_dom = tmp_domain, tmp_subdom = tmp_subdomain
   )
 }

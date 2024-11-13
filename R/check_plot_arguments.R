@@ -1,5 +1,5 @@
 plot_check <- function(x, label, color, cooks, range) {
-  if (!any(inherits(x, which = TRUE, c("ebp", "fh", "ebp_tf")))) {
+  if (!any(inherits(x, which = TRUE, c("ebp", "fh", "ebp_tf", "fh_tf")))) {
     stop(strwrap(prefix = " ", initial = "",
                  "First object needs to be of class emdi, model. For emdi
                  objects obtained by direct estimation diagnostic plots are not
