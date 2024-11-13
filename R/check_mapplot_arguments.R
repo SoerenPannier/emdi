@@ -3,11 +3,23 @@ mapplot_check <- function(object,
                           map_dom_id,
                           map_tab,
                           col,
-                          return_data) {
+                          return_data,
+                          level) {
   if (!inherits(object, "emdi")) {
     stop("First object needs to be of class emdi.")
   }
-
+  #______________________________-Rachael added_________________________________
+  if (inherits(object, "ebp_tf")) {
+    if (is.null(level)) {
+      stop("For 'ebp_tf' or 'fh_tf' models, please specify the 'level' argument.
+           'level' can take either 'domain' or 'subdomain' arguments")
+    }else if (!level %in% c("domain", "subdomain")) {
+      stop("'level' can take either 'domain' or 'subdomain' arguments.")
+    }
+  } else {
+    level <- NULL
+  }
+  #_____________________________________________________________________________
   if (!is.null(map_obj) && !(inherits(map_dom_id, "character") &&
     length(map_dom_id) == 1)) {
     stop(strwrap(prefix = " ", initial = "",

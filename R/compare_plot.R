@@ -38,7 +38,7 @@
 #' @name compare_plot
 
 compare_plot <- function(model, direct, indicator = "all", MSE = FALSE,
-                         CV = FALSE, label = "orig",
+                         CV = FALSE, label = "orig", level=NULL,
                          color = c("blue", "lightblue3"),
                          shape = c(16, 16), line_type = c("solid", "solid"),
                          gg_theme = NULL, ...) {
@@ -193,7 +193,7 @@ NULL
 
 
 
-compare_plots <- function(object, type, selected_indicators, MSE, CV, label,
+compare_plots <- function(object, type, selected_indicators, MSE, CV, level, label,
                           color, shape, line_type, gg_theme, ...) {
   Model_based <- NULL
   Direct <- NULL

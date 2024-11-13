@@ -5,9 +5,16 @@
 \alias{estimators.emdi}
 \title{Presents Point, MSE and CV Estimates}
 \usage{
-estimators(object, indicator, MSE, CV, ...)
+estimators(object, indicator, MSE, CV, level, ...)
 
-\method{estimators}{emdi}(object, indicator = "all", MSE = FALSE, CV = FALSE, ...)
+\method{estimators}{emdi}(
+  object,
+  indicator = "all",
+  MSE = FALSE,
+  level = NULL,
+  CV = FALSE,
+  ...
+)
 }
 \arguments{
 \item{object}{an object of type "emdi", representing point and,

@@ -20,7 +20,7 @@
 #' return of that method.
 #' @export
 
-estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
+estimators <- function(object, indicator, MSE, CV,level, ...) UseMethod("estimators")
 
 
 #' Presents Point, MSE and/or CV Estimates of an emdiObject
@@ -104,43 +104,99 @@ estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
 #' @rdname estimators
 #' @export
 
-estimators.emdi <- function(object, indicator = "all", MSE = FALSE,
+estimators.emdi <- function(object, indicator = "all", MSE = FALSE,level=NULL,
                             CV = FALSE, ...) {
   estimators_check(
     object = object, indicator = indicator,
-    MSE = MSE, CV = CV
-  )
-
-  # Only point estimates
-  all_ind <- point_emdi(object = object, indicator = indicator)
-  selected <- colnames(all_ind$ind)[-1]
-
-  if (MSE == TRUE || CV == TRUE) {
-    all_precisions <- mse_emdi(
-      object = object, indicator = indicator,
-      CV = TRUE
+    MSE = MSE, CV = CV, level = level
     )
-    colnames(all_precisions$ind) <- paste0(colnames(all_precisions$ind), "_MSE")
-    colnames(all_precisions$ind_cv) <- paste0(
-      colnames(all_precisions$ind_cv),
-      "_CV"
-    )
-    combined <- data.frame(
-      all_ind$ind, all_precisions$ind,
-      all_precisions$ind_cv
-    )
-    endings <- c("", "_MSE", "_CV")[c(TRUE, MSE, CV)]
+  if (any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
+    tf <- TRUE
+    all_ind <- point_emdi(object = object, indicator = indicator)
+    if (!is.null(level) && level == "domain") {
+      # Only point estimates
+      all_ind$ind <- all_ind$ind_Domain
+      selected <- colnames(all_ind$ind)[-1]
+    }else if (!is.null(level) && level == "subdomain")  {
+      # Only point estimates
+      all_ind$ind <- all_ind$ind_Subdomain
+      #colnames(object$ind)[1] <- "Domain"
+      selected <- colnames(all_ind$ind)[-1]
+    }
 
-    combined <- combined[, c("Domain", paste0(rep(selected,
-      each =
-        length(endings)
-    ), endings))]
-  } else {
-    combined <- all_ind$ind
+    if (MSE == TRUE || CV == TRUE) {
+      all_precisions <- mse_emdi(object = object, indicator = indicator,CV = TRUE)
+      colnames(all_precisions$ind_Domain) <-
+        paste0(colnames(all_precisions$ind_Domain), "_MSE")
+      colnames(all_precisions$ind_cv_Domain) <-
+        paste0(colnames(all_precisions$ind_cv_Domain), "_CV")
+      colnames(all_precisions$ind_Subdomain) <-
+        paste0(colnames(all_precisions$ind_Subdomain), "_MSE")
+      colnames(all_precisions$ind_cv_Subdomain) <-
+        paste0(colnames(all_precisions$ind_cv_Subdomain), "_CV")
+
+      if (!is.null(level) && level == "domain") {
+        all_precisions$ind <- all_precisions$ind_Domain
+        all_precisions$ind_cv <- all_precisions$ind_cv_Domain
+        combined <- data.frame(
+          all_ind$ind, all_precisions$ind, all_precisions$ind_cv)
+        endings <- c("", "_MSE", "_CV")[c(TRUE, MSE, CV)]
+
+        combined <- combined[, c("Domain", paste0(rep(selected,
+                                                      each =
+                                                        length(endings)), endings))]
+      }else if (!is.null(level) && level == "subdomain")  {
+        all_precisions$ind <- all_precisions$ind_Subdomain
+        all_precisions$ind_cv <- all_precisions$ind_cv_Subdomain
+        combined <- data.frame(
+          all_ind$ind, all_precisions$ind, all_precisions$ind_cv)
+        endings <- c("", "_MSE", "_CV")[c(TRUE, MSE, CV)]
+
+        combined <- combined[, c("Subdomain", paste0(rep(selected,
+                                                         each =
+                                                           length(endings)), endings))]
+      }
+
+
+    } else {
+      combined <- all_ind$ind
+    }
+  }else{
+    tf <- FALSE
+    # Only point estimates
+    all_ind <- point_emdi(object = object, indicator = indicator)
+    selected <- colnames(all_ind$ind)[-1]
+
+    if (MSE == TRUE || CV == TRUE) {
+      all_precisions <- mse_emdi(
+        object = object, indicator = indicator,
+        CV = TRUE
+      )
+      colnames(all_precisions$ind) <- paste0(colnames(all_precisions$ind), "_MSE")
+      colnames(all_precisions$ind_cv) <- paste0(
+        colnames(all_precisions$ind_cv),
+        "_CV"
+      )
+      combined <- data.frame(
+        all_ind$ind, all_precisions$ind,
+        all_precisions$ind_cv
+      )
+      endings <- c("", "_MSE", "_CV")[c(TRUE, MSE, CV)]
+
+      combined <- combined[, c("Domain", paste0(rep(selected,
+                                                    each =
+                                                      length(endings)
+      ), endings))]
+    } else {
+      combined <- all_ind$ind
+    }
+
   }
 
-  estimators_emdi <- list(ind = combined, ind_name = all_ind$ind_name)
+################################################################################
 
+  estimators_emdi <- list(ind = combined, ind_name = all_ind$ind_name,
+                          level = level, tf = tf)
   class(estimators_emdi) <- "estimators.emdi"
 
   return(estimators_emdi)
@@ -150,49 +206,61 @@ estimators.emdi <- function(object, indicator = "all", MSE = FALSE,
 #' @export
 
 print.estimators.emdi <- function(x, ...) {
-  cat(paste0("Indicator/s: ", x$ind_name, "\n"))
-  print(x$ind)
+  if(x$tf == T){
+    if(x$level == "domain"){
+      cat(paste0("Indicator/s at domain level: ", x$ind_name, "\n"))
+      print(x$ind)
+      cat("\n")
+    } else if(x$level == "subdomain"){
+      cat(paste0("Indicator/s at subdomain level: ", x$ind_name, "\n"))
+      print(x$ind)
+    }
+  } else if(x$tf == F){
+    cat(paste0("Indicator/s: ", x$ind_name, "\n"))
+    print(x$ind)
+  }
 }
 
-
-# Tail/head functions ----------------------------------------------------------
-
-
-#' @importFrom utils head
-#' @export
-# CV estimators
-
-head.estimators.emdi <- function(x, n = 6L, addrownums = NULL, ...) {
-  head(x$ind, n = n, addrownums = addrownums, ...)
-}
-
-#' @importFrom utils tail
-#' @export
-
-tail.estimators.emdi <- function(x, n = 6L, keepnums = TRUE,
-                                 addrownums = NULL, ...) {
-  tail(x$ind, n = n, keepnums = keepnums, ...)
-}
+  # Tail/head functions ----------------------------------------------------------
 
 
-# Transforms estimators.emdi objects into a matrix object
-#' @export
+  #' @importFrom utils head
+  #' @export
+  # CV estimators
 
-as.matrix.estimators.emdi <- function(x, ...) {
-  as.matrix(x$ind[, -1])
-}
+  head.estimators.emdi <- function(x, n = 6L, addrownums = NULL, ...) {
+    head(x$ind, n = n, addrownums = addrownums, ...)
+  }
 
-# Transforms estimators.emdi objects into a dataframe object
-#' @export
+  #' @importFrom utils tail
+  #' @export
 
-as.data.frame.estimators.emdi <- function(x, ...) {
-  as.data.frame(x$ind, ...)
-}
+  tail.estimators.emdi <- function(x, n = 6L, keepnums = TRUE,
+                                   addrownums = NULL, ...) {
+    tail(x$ind, n = n, keepnums = keepnums, ...)
+  }
 
-# Subsets an estimators.emdi object
-#' @export
 
-subset.estimators.emdi <- function(x, ...) {
-  x <- as.data.frame(x)
-  subset(x = x, ...)
-}
+  # Transforms estimators.emdi objects into a matrix object
+  #' @export
+
+  as.matrix.estimators.emdi <- function(x, ...) {
+    as.matrix(x$ind[, -1])
+  }
+
+  # Transforms estimators.emdi objects into a dataframe object
+  #' @export
+
+  as.data.frame.estimators.emdi <- function(x, ...) {
+    as.data.frame(x$ind, ...)
+  }
+
+  # Subsets an estimators.emdi object
+  #' @export
+
+  subset.estimators.emdi <- function(x, ...) {
+    x <- as.data.frame(x)
+    subset(x = x, ...)
+  }
+
+

@@ -17,6 +17,7 @@ compare_plot(
   MSE = FALSE,
   CV = FALSE,
   label = "orig",
+  level = NULL,
   color = c("blue", "lightblue3"),
   shape = c(16, 16),
   line_type = c("solid", "solid"),
@@ -55,6 +56,7 @@ compare_plot(
 \method{compare_plot}{ebp_tf}(
   model = NULL,
   direct = NULL,
+  level = NULL,
   indicator = "all",
   MSE = FALSE,
   CV = FALSE,

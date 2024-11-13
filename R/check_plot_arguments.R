@@ -5,8 +5,8 @@ plot_check <- function(x, label, color, cooks, range) {
                  objects obtained by direct estimation diagnostic plots are not
                  reasonable."))
   }
-  if (is.null(label) || (!(label == "orig" || label == "no_title" ||
-    label == "blank") && !inherits(label, "list"))) {
+  if (is.null(label) || (!(all(label == "orig") || all(label == "no_title") ||
+    all(label == "blank")) && !inherits(label, "list"))) {
     stop(strwrap(prefix = " ", initial = "",
                  "label can be either one of the following characters 'orig',
                  'no_title' or 'blank' or a list as specified in help(plot.emdi)."))

@@ -106,7 +106,8 @@ map_plot <- function(object,
                      color = c("white", "red4"),
                      scale_points = NULL,
                      guide = "colourbar",
-                     return_data = FALSE
+                     return_data = FALSE,
+                     level = NULL
 ) {
 
   if (is.null(map_obj)) {
@@ -118,7 +119,8 @@ map_plot <- function(object,
                indicator = indicator,
                panelplot = FALSE,
                MSE       = MSE,
-               CV        = CV
+               CV        = CV,
+               level      =level
     )
   } else if (!inherits(map_obj, "sf")) {
 
@@ -141,19 +143,21 @@ map_plot <- function(object,
               col          = color,
               scale_points = scale_points,
               return_data  = return_data,
-              guide        = guide
+              guide        = guide,
+              level        = level
     )
   }
 }
 
-map_pseudo <- function(object, indicator, panelplot, MSE, CV) {
+map_pseudo <- function(object, indicator, panelplot, MSE, CV, level) {
 
   x <- y <- id <- value <- NULL
 
   values <-  estimators(object    = object,
                         indicator = indicator,
                         MSE       = MSE,
-                        CV        = CV
+                        CV        = CV,
+                        level     =level
   )$ind
 
   indicator <- colnames(values)[-1]
@@ -193,7 +197,8 @@ plot_real <- function(object,
                       col = col,
                       scale_points = NULL,
                       return_data = FALSE,
-                      guide = NULL) {
+                      guide = NULL,
+                      level = NULL) {
 
 
   if (!is.null(map_obj) && is.null(map_dom_id)) {
@@ -202,53 +207,151 @@ plot_real <- function(object,
 
   long <- lat <- group <- NULL
 
-  map_data <- estimators(object    = object,
-                         indicator = indicator,
-                         MSE       = MSE,
-                         CV        = CV
-  )$ind
+  if (inherits(object, "ebp_tf")) {
+    map_data <- estimators(object    = object,
+                           indicator = indicator,
+                           MSE       = MSE,
+                           CV        = CV,
+                           level     = level
+    )$ind
+    if (!is.null(level) && level =="domain"){
+      if (!is.null(map_tab)) {
+        map_data <- merge(x    = map_data,
+                          y    = map_tab,
+                          by.x = "Domain",
+                          by.y = names(map_tab)[1]
+        )
+        matcher <- match(map_obj[[map_dom_id]],
+                         map_data[, names(map_tab)[2]])
 
-  if (!is.null(map_tab)) {
-    map_data <- merge(x    = map_data,
-                      y    = map_tab,
-                      by.x = "Domain",
-                      by.y = names(map_tab)[1]
-    )
-    matcher <- match(map_obj[[map_dom_id]],
-                     map_data[, names(map_tab)[2]])
+        if (any(is.na(matcher))) {
+          if (all(is.na(matcher))) {
+            stop("Domains of map_tab and Map object do not match. Check map_tab")
+          } else {
+            warnings(paste("Not all Domains of map_tab and Map object could be",
+                           "matched. Check map_tab"))
+          }
+        }
 
-    if (any(is.na(matcher))) {
-      if (all(is.na(matcher))) {
-        stop("Domains of map_tab and Map object do not match. Check map_tab")
+        map_data <- map_data[matcher, ]
+        map_data <- map_data[, !colnames(map_data) %in%
+                               c("Domain", map_dom_id), drop = F]
+        map_data$Domain <- map_data[, colnames(map_data) %in% names(map_tab)]
       } else {
-        warnings(paste("Not all Domains of map_tab and Map object could be",
-                       "matched. Check map_tab"))
+        matcher <- match(map_obj[[map_dom_id]], map_data[, "Domain"])
+
+        if (any(is.na(matcher))) {
+          if (all(is.na(matcher))) {
+            stop(paste("Domain of emdi object and Map object do not match.",
+                       "Try using map_tab"))
+          } else {
+            warnings(paste("Not all Domains of emdi object and Map object",
+                           "could be matched. Try using map_tab"))
+          }
+        }
+        map_data <- map_data[matcher, ]
+      }
+    }else if (!is.null(level) && level == "subdomain"){
+      if (!is.null(map_tab)) {
+        map_data <- merge(x    = map_data,
+                          y    = map_tab,
+                          by.x = "Subdomain",
+                          by.y = names(map_tab)[1]
+        )
+        matcher <- match(map_obj[[map_dom_id]],
+                         map_data[, names(map_tab)[2]])
+
+        if (any(is.na(matcher))) {
+          if (all(is.na(matcher))) {
+            stop("Domains of map_tab and Map object do not match. Check map_tab")
+          } else {
+            warnings(paste("Not all Domains of map_tab and Map object could be",
+                           "matched. Check map_tab"))
+          }
+        }
+
+        map_data <- map_data[matcher, ]
+        map_data <- map_data[, !colnames(map_data) %in%
+                               c("Subdomain", map_dom_id), drop = F]
+        map_data$Domain <- map_data[, colnames(map_data) %in% names(map_tab)]
+      } else {
+        matcher <- match(map_obj[[map_dom_id]], map_data[, "Subdomain"])
+
+        if (any(is.na(matcher))) {
+          if (all(is.na(matcher))) {
+            stop(paste("Domain of emdi object and Map object do not match.",
+                       "Try using map_tab"))
+          } else {
+            warnings(paste("Not all Domains of emdi object and Map object",
+                           "could be matched. Try using map_tab"))
+          }
+        }
+        map_data <- map_data[matcher, ]
       }
     }
 
-    map_data <- map_data[matcher, ]
-    map_data <- map_data[, !colnames(map_data) %in%
-                           c("Domain", map_dom_id), drop = F]
-    map_data$Domain <- map_data[, colnames(map_data) %in% names(map_tab)]
-  } else {
-    matcher <- match(map_obj[[map_dom_id]], map_data[, "Domain"])
+  }else{
+    map_data <- estimators(object    = object,
+                           indicator = indicator,
+                           MSE       = MSE,
+                           CV        = CV
+    )$ind
 
-    if (any(is.na(matcher))) {
-      if (all(is.na(matcher))) {
-        stop(paste("Domain of emdi object and Map object do not match.",
-                   "Try using map_tab"))
-      } else {
-        warnings(paste("Not all Domains of emdi object and Map object",
-                       "could be matched. Try using map_tab"))
+    if (!is.null(map_tab)) {
+      map_data <- merge(x    = map_data,
+                        y    = map_tab,
+                        by.x = "Domain",
+                        by.y = names(map_tab)[1]
+      )
+      matcher <- match(map_obj[[map_dom_id]],
+                       map_data[, names(map_tab)[2]])
+
+      if (any(is.na(matcher))) {
+        if (all(is.na(matcher))) {
+          stop("Domains of map_tab and Map object do not match. Check map_tab")
+        } else {
+          warnings(paste("Not all Domains of map_tab and Map object could be",
+                         "matched. Check map_tab"))
+        }
       }
+
+      map_data <- map_data[matcher, ]
+      map_data <- map_data[, !colnames(map_data) %in%
+                             c("Domain", map_dom_id), drop = F]
+      map_data$Domain <- map_data[, colnames(map_data) %in% names(map_tab)]
+    } else {
+      matcher <- match(map_obj[[map_dom_id]], map_data[, "Domain"])
+
+      if (any(is.na(matcher))) {
+        if (all(is.na(matcher))) {
+          stop(paste("Domain of emdi object and Map object do not match.",
+                     "Try using map_tab"))
+        } else {
+          warnings(paste("Not all Domains of emdi object and Map object",
+                         "could be matched. Try using map_tab"))
+        }
+      }
+      map_data <- map_data[matcher, ]
     }
-    map_data <- map_data[matcher, ]
   }
 
-  map_obj.merged <- merge(map_obj, map_data, by.x = map_dom_id, by.y = "Domain")
+  if (inherits(object, "ebp_tf")){
+    if(!is.null(level) && level=="domain") {
+      map_obj.merged <- merge(map_obj, map_data, by.x = map_dom_id, by.y = "Domain")
+      indicator <- colnames(map_data)
+      indicator <- indicator[!(indicator %in% c("Domain", "shape_id"))]
+    }else if (!is.null(level) && level == "subdomain"){
+      map_obj.merged <- merge(map_obj, map_data, by.x = map_dom_id, by.y = "Subdomain")
+      indicator <- colnames(map_data)
+      indicator <- indicator[!(indicator %in% c("Subdomain", "shape_id"))]
+    }
+  }else{
+    map_obj.merged <- merge(map_obj, map_data, by.x = map_dom_id, by.y = "Domain")
+    indicator <- colnames(map_data)
+    indicator <- indicator[!(indicator %in% c("Domain", "shape_id"))]
+    }
 
-  indicator <- colnames(map_data)
-  indicator <- indicator[!(indicator %in% c("Domain", "shape_id"))]
+
 
   for (ind in indicator) {
 

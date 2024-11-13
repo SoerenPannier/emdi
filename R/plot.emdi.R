@@ -202,18 +202,6 @@ plot.emdi <- function(x,
     ggtitle(label$qq_res["title"]) + ylab(label$qq_res["y_lab"]) +
     xlab(label$qq_res["x_lab"]) + gg_theme
 
-  # Random effects
-  ran <- ggplot(data.frame(tmp), aes(sample = tmp)) +
-    stat_qq(distribution = qnorm, dparams = list(
-      mean = mean(tmp),
-      sd = sd(tmp)
-    )) +
-    geom_abline(intercept = 0, slope = 1, na.rm = TRUE, col = color[1]) +
-    ggtitle(label$qq_ran["title"]) +
-    ylab(label$qq_ran["y_lab"]) +
-    xlab(label$qq_ran["x_lab"]) +
-    gg_theme
-
   #_____________________________Rachael added___________________________________
   if(any(inherits(x, which = TRUE, c("fh", "ebp_tf")))){
     ran_dom <- ggplot(data.frame(tmp_dom), aes(sample = tmp_dom)) +
@@ -241,6 +229,17 @@ plot.emdi <- function(x,
     plotList[[1]] <- arrangeGrob(res, ran_dom, ran_subdom, ncol = 3)
     grid.arrange(plotList[[1]])
   }else{
+    # Random effects
+    ran <- ggplot(data.frame(tmp), aes(sample = tmp)) +
+      stat_qq(distribution = qnorm, dparams = list(
+        mean = mean(tmp),
+        sd = sd(tmp)
+      )) +
+      geom_abline(intercept = 0, slope = 1, na.rm = TRUE, col = color[1]) +
+      ggtitle(label$qq_ran["title"]) +
+      ylab(label$qq_ran["y_lab"]) +
+      xlab(label$qq_ran["x_lab"]) +
+      gg_theme
     plotList[[1]] <- arrangeGrob(res, ran, ncol = 2)
     grid.arrange(plotList[[1]])
   }

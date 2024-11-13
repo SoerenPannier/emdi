@@ -1,6 +1,6 @@
 #' @rdname compare_plot
 #' @export
-compare_plot.ebp_tf <- function(model = NULL, direct = NULL, indicator = "all",
+compare_plot.ebp_tf <- function(model = NULL, direct = NULL, level=NULL, indicator = "all",
                              MSE = FALSE, CV = FALSE, label = "orig",
                              color = c("blue", "lightblue3"),
                              shape = c(16, 16), line_type = c(
@@ -9,7 +9,7 @@ compare_plot.ebp_tf <- function(model = NULL, direct = NULL, indicator = "all",
                              ),
                              gg_theme = NULL, ...) {
   compare_plot_check(
-    model = model, indicator = indicator,
+    model = model, indicator = indicator, level=level,
     label = label, color = color, shape = shape,
     line_type = line_type, gg_theme = gg_theme
   )
@@ -22,6 +22,20 @@ compare_plot.ebp_tf <- function(model = NULL, direct = NULL, indicator = "all",
                         )))
   }
 
+  if ((inherits(model, "ebp") && is.null(direct)) |
+      (inherits(direct, "ebp") && is.null(model))) {
+    stop(strwrap(prefix = " ", initial = "",
+                 paste0("If the model is of type 'ebp', the input argument
+                        direct is required.")))
+  } else if (inherits(model, "ebp") && inherits(direct, "direct")) {
+    compare_plot_ebp(
+      model = model, direct = direct, indicator = indicator,
+      MSE = MSE, CV = CV,
+      label = label, color = color, shape = shape,
+      line_type = line_type, gg_theme = gg_theme
+    )
+  }
+
   if ((inherits(model, "ebp_tf") && is.null(direct)) |
     (inherits(direct, "ebp_tf") && is.null(model))) {
     stop(strwrap(prefix = " ", initial = "",
@@ -30,7 +44,7 @@ compare_plot.ebp_tf <- function(model = NULL, direct = NULL, indicator = "all",
   } else if (inherits(model, "ebp_tf") && inherits(direct, "direct")) {
     compare_plot_ebp_tf(
       model = model, direct = direct, indicator = indicator,
-      MSE = MSE, CV = CV,
+      MSE = MSE, CV = CV,level = level,
       label = label, color = color, shape = shape,
       line_type = line_type, gg_theme = gg_theme
     )
@@ -89,7 +103,7 @@ compare_plot.ebp_tf <- function(model = NULL, direct = NULL, indicator = "all",
 #' @noRd
 
 compare_plot_ebp_tf <- function(model, direct, indicator = "all", MSE = FALSE,
-                             CV = FALSE, label = "orig",
+                             CV = FALSE, level=NULL, label = "orig",
                              color = c("blue", "lightblue3"),
                              shape = c(16, 16), line_type = c("solid", "solid"),
                              gg_theme = NULL) {
@@ -106,7 +120,18 @@ compare_plot_ebp_tf <- function(model, direct, indicator = "all", MSE = FALSE,
     paste0(colnames(ind_direct)[-1], "_Direct")
   )
 
-  ind_model <- point_emdi(object = model, indicator = indicator)$ind
+  #__________________________Rachael____________________________________________
+  if (inherits(model, "ebp_tf")) {
+    if (!is.null(level) && level == "domain") {
+      ind_model <- point_emdi(object = model, indicator = indicator)$ind_Domain
+    }else if (!is.null(level) && level == "subdomain") {
+      ind_model <- point_emdi(object = model, indicator = indicator)$ind_Subdomain
+      #colnames(ind_model$ind)[1] <- "Domain"
+    }
+  }else{
+    ind_model <- point_emdi(object = model, indicator = indicator)$ind
+  }
+  #_____________________________________________________________________________
   selected_model <- colnames(ind_model)[-1]
   colnames(ind_model) <- c("Domain", paste0(colnames(ind_model)[-1], "_Model"))
   smp_size <- (table(direct$framework$smp_domains_vec))
@@ -118,36 +143,79 @@ compare_plot_ebp_tf <- function(model, direct, indicator = "all", MSE = FALSE,
   matcher <- match(Data$Domain, names(smp_size))
   Data$smp_size <- as.numeric(smp_size)[matcher]
 
-  if (MSE == TRUE || CV == TRUE) {
-    precisions_direct <-
-      mse_emdi(object = direct, indicator = indicator, CV = TRUE)
-    colnames(precisions_direct$ind) <-
-      c("Domain", paste0(colnames(precisions_direct$ind)[-1], "_Direct_MSE"))
-    colnames(precisions_direct$ind_cv) <-
-      c("Domain", paste0(colnames(precisions_direct$ind_cv)[-1], "_Direct_CV"))
+  if (inherits(model, "ebp_tf")) {
+    if (MSE == TRUE || CV == TRUE) {
+      precisions_direct <-
+        mse_emdi(object = direct, indicator = indicator, CV = TRUE)
+      colnames(precisions_direct$ind) <-
+        c("Domain", paste0(colnames(precisions_direct$ind)[-1], "_Direct_MSE"))
+      colnames(precisions_direct$ind_cv) <-
+        c("Domain", paste0(colnames(precisions_direct$ind_cv)[-1], "_Direct_CV"))
 
-    precisions_model <-
-      mse_emdi(object = model, indicator = indicator, CV = TRUE)
-    colnames(precisions_model$ind) <-
-      c("Domain", paste0(colnames(precisions_model$ind)[-1], "_Model_MSE"))
-    colnames(precisions_model$ind_cv) <-
-      c("Domain", paste0(colnames(precisions_model$ind_cv)[-1], "_Model_CV"))
+      precisions_model <-
+        mse_emdi(object = model, indicator = indicator, CV = TRUE)
+      colnames(precisions_model$ind_Domain) <-
+        c("Domain", paste0(colnames(precisions_model$ind_Domain)[-1], "_Model_MSE"))
+      colnames(precisions_model$ind_cv_Domain) <-
+        c("Domain", paste0(colnames(precisions_model$ind_cv_Domain)[-1], "_Model_CV"))
+      colnames(precisions_model$ind_Subdomain) <-
+        c("Domain", paste0(colnames(precisions_model$ind_Subdomain)[-1], "_Model_MSE"))
+      colnames(precisions_model$ind_cv_Subdomain) <-
+        c("Domain", paste0(colnames(precisions_model$ind_cv_Subdomain)[-1], "_Model_CV"))
 
-    if (MSE == TRUE) {
-      Data <- merge(Data, precisions_direct$ind, id = "Domain")
-      Data <- merge(Data, precisions_model$ind, id = "Domain")
+      if (MSE == TRUE) {
+        if (!is.null(level) && level == "domain") {
+          Data <- merge(Data, precisions_direct$ind, id = "Domain")
+          Data <- merge(Data, precisions_model$ind_Domain, id = "Domain")
+        }else if (!is.null(level) && level == "subdomain") {
+          Data <- merge(Data, precisions_direct$ind, id = "Domain")
+          Data <- merge(Data, precisions_model$ind_Subdomain, id = "Domain")
+        }
+      }
+      if (CV == TRUE) {
+        if (!is.null(level) && level == "domain") {
+          Data <- merge(Data, precisions_direct$ind_cv, id = "Domain")
+          Data <- merge(Data, precisions_model$ind_cv_Domain, id = "Domain")
+          Data$smp_size2 <- Data$smp_size
+        }else if (!is.null(level) && level == "subdomain") {
+          Data <- merge(Data, precisions_direct$ind_cv, id = "Domain")
+          Data <- merge(Data, precisions_model$ind_cv_Subdomain, id = "Domain")
+          Data$smp_size2 <- Data$smp_size
+        }
+      }
     }
-    if (CV == TRUE) {
-      Data <- merge(Data, precisions_direct$ind_cv, id = "Domain")
-      Data <- merge(Data, precisions_model$ind_cv, id = "Domain")
-      Data$smp_size2 <- Data$smp_size
+  } else {
+    if (MSE == TRUE || CV == TRUE) {
+      precisions_direct <-
+        mse_emdi(object = direct, indicator = indicator, CV = TRUE)
+      colnames(precisions_direct$ind) <-
+        c("Domain", paste0(colnames(precisions_direct$ind)[-1], "_Direct_MSE"))
+      colnames(precisions_direct$ind_cv) <-
+        c("Domain", paste0(colnames(precisions_direct$ind_cv)[-1], "_Direct_CV"))
+
+      precisions_model <-
+        mse_emdi(object = model, indicator = indicator, CV = TRUE)
+      colnames(precisions_model$ind) <-
+        c("Domain", paste0(colnames(precisions_model$ind)[-1], "_Model_MSE"))
+      colnames(precisions_model$ind_cv) <-
+        c("Domain", paste0(colnames(precisions_model$ind_cv)[-1], "_Model_CV"))
+
+      if (MSE == TRUE) {
+        Data <- merge(Data, precisions_direct$ind, id = "Domain")
+        Data <- merge(Data, precisions_model$ind, id = "Domain")
+      }
+      if (CV == TRUE) {
+        Data <- merge(Data, precisions_direct$ind_cv, id = "Domain")
+        Data <- merge(Data, precisions_model$ind_cv, id = "Domain")
+        Data$smp_size2 <- Data$smp_size
+      }
     }
   }
 
   selected_indicators <- selected_model[selected_model %in% selected_direct]
 
   compare_plots(
-    object = Data, type = "unit",
+    object = Data, type = "unit", level=level,
     selected_indicators = selected_indicators,
     MSE = MSE, CV = CV, label = label, color = color,
     shape = shape, line_type = line_type, gg_theme = gg_theme

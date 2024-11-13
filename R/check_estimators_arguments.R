@@ -1,19 +1,39 @@
 estimators_check <- function(object,
                              indicator,
                              MSE,
-                             CV) {
+                             CV,
+                             level) {
+
+  #____________________________Rachael__________________________________________
   if (inherits(object, "ebp_tf")) {
-    object$MSE <- object$MSE_Subdomain
-    object$ind <- object$ind_Subdomain
-    colnames(object$MSE)[1] <- "Domain"
-    colnames(object$ind)[1] <- "Domain"
+    if (is.null(level)) {
+      stop("For 'ebp_tf' or 'fh_tf' models, please specify the 'level' argument.
+           'level' can take either 'domain' or 'subdomain' arguments")
+    }else if (!level %in% c("domain", "subdomain")) {
+      stop("'level' can take either 'domain' or 'subdomain' arguments.")
+    }
+  } else {
+    level <- NULL
   }
-  if (is.null(object$MSE) && (MSE == TRUE || CV == TRUE)) {
-    stop(strwrap(prefix = " ", initial = "",
-                 "No MSE estimates in emdi object: arguments MSE and CV have to
+#_______________________________________________________________________________
+ #_________________________Rachael added________________________________________
+  if (inherits(object, "ebp_tf")) {
+    if (is.null(object$MSE_Domain) || is.null(object$MSE_Subdomain) &&
+        (MSE == TRUE || CV == TRUE)) {
+      stop(strwrap(prefix = " ", initial = "",
+                   "No MSE estimates in emdi object: arguments MSE and CV have to
                  be FALSE or a new emdi object with variance/MSE needs to be
                  generated."))
+    }
+  }else {
+    if (is.null(object$MSE) && (MSE == TRUE || CV == TRUE)) {
+      stop(strwrap(prefix = " ", initial = "",
+                   "No MSE estimates in emdi object: arguments MSE and CV have to
+                 be FALSE or a new emdi object with variance/MSE needs to be
+                 generated."))
+    }
   }
+#_________________________Rachael Added_________________________________________
   if (!(inherits(MSE, "logical") && length(MSE) == 1)) {
     stop("MSE must be a logical value. Set MSE to TRUE or FALSE.")
   }
@@ -30,17 +50,35 @@ estimators_check <- function(object,
                    The argument only allows to be set to all, FH, Direct or
                    FH_Bench (if benchmark function is used before).")))
     }
-  } else {
+  } else if (inherits(object, "ebp_tf")) {
     if (is.null(indicator) || !all(indicator == "all" | indicator == "All" |
-      indicator == "Quantiles" |
-      indicator == "quantiles" |
-      indicator == "Poverty" |
-      indicator == "poverty" |
-      indicator == "Inequality" |
-      indicator == "inequality" |
-      indicator == "Custom" |
-      indicator == "custom" |
-      indicator %in% names(object$ind[-1]))) {
+                                   indicator == "Quantiles" |
+                                   indicator == "quantiles" |
+                                   indicator == "Poverty" |
+                                   indicator == "poverty" |
+                                   indicator == "Inequality" |
+                                   indicator == "inequality" |
+                                   indicator == "Custom" |
+                                   indicator == "custom" |
+                                   indicator %in% names(object$ind_Subdomain[-1])|
+                                   indicator %in% names(object$ind_Domain[-1]))) {
+      stop(strwrap(prefix = " ", initial = "",
+                   paste0("The argument indicator is set to ", indicator, ".
+                          The argument only allows to be set to all, a name of
+                          estimated indicators or indicator groups as described
+                          in help(estimators.emdi).")))
+    }
+  }else {
+    if (is.null(indicator) || !all(indicator == "all" | indicator == "All" |
+                                   indicator == "Quantiles" |
+                                   indicator == "quantiles" |
+                                   indicator == "Poverty" |
+                                   indicator == "poverty" |
+                                   indicator == "Inequality" |
+                                   indicator == "inequality" |
+                                   indicator == "Custom" |
+                                   indicator == "custom" |
+                                   indicator %in% names(object$ind[-1]))) {
       stop(strwrap(prefix = " ", initial = "",
                    paste0("The argument indicator is set to ", indicator, ".
                           The argument only allows to be set to all, a name of

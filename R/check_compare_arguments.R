@@ -1,19 +1,51 @@
 compare_plot_check <- function(model, indicator, label, color, shape,
-                               line_type, gg_theme) {
-  if (is.null(indicator) || !all(indicator == "all" | indicator == "Quantiles" |
-    indicator == "quantiles" |
-    indicator == "Poverty" |
-    indicator == "poverty" |
-    indicator == "Inequality" |
-    indicator == "inequality" |
-    indicator == "Custom" | indicator == "custom" |
-    indicator %in% names(model$ind[-1]))) {
-    stop(strwrap(prefix = " ", initial = "",
-                 paste0("The argument indicator is set to ", indicator, ". The
+                               line_type, gg_theme, level) {
+  if (inherits(model, "ebp_tf")) {
+    if (is.null(indicator) || !all(indicator == "all" | indicator == "Quantiles" |
+                                   indicator == "quantiles" |
+                                   indicator == "Poverty" |
+                                   indicator == "poverty" |
+                                   indicator == "Inequality" |
+                                   indicator == "inequality" |
+                                   indicator == "Custom" | indicator == "custom" |
+                                   indicator %in% names(model$ind_Domain[-1]) |
+                                   indicator %in% names(model$ind_Subdomain[-1]) )) {
+      stop(strwrap(prefix = " ", initial = "",
+                   paste0("The argument indicator is set to ", indicator, ". The
                         argument only allows to be set to all, a name of
                         estimated indicators or indicator groups as described
                         in help(estimators.emdi).")))
+    }
+  } else{
+    if (is.null(indicator) || !all(indicator == "all" | indicator == "Quantiles" |
+                                   indicator == "quantiles" |
+                                   indicator == "Poverty" |
+                                   indicator == "poverty" |
+                                   indicator == "Inequality" |
+                                   indicator == "inequality" |
+                                   indicator == "Custom" | indicator == "custom" |
+                                   indicator %in% names(model$ind[-1]))) {
+      stop(strwrap(prefix = " ", initial = "",
+                   paste0("The argument indicator is set to ", indicator, ". The
+                        argument only allows to be set to all, a name of
+                        estimated indicators or indicator groups as described
+                        in help(estimators.emdi).")))
+    }
   }
+
+
+  #____________________________Rachael__________________________________________
+  if (inherits(model, "ebp_tf")) {
+    if (is.null(level)) {
+      stop("For 'ebp_tf' or 'fh_tf' models, please specify the 'level' argument.
+           'level' can take either 'domain' or 'subdomain' arguments")
+    }else if (!level %in% c("domain", "subdomain")) {
+      stop("'level' can take either 'domain' or 'subdomain' arguments.")
+    }
+  } else {
+    level <- NULL
+  }
+  #_______________________________________________________________________________
 
   if (is.null(label) || (!(label == "orig" || label == "no_title" ||
     label == "blank"))) {
