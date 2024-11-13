@@ -15,7 +15,8 @@ map_plot(
   color = c("white", "red4"),
   scale_points = NULL,
   guide = "colourbar",
-  return_data = FALSE
+  return_data = FALSE,
+  level = NULL
 )
 }
 \arguments{

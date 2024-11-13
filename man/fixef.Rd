@@ -7,6 +7,8 @@
 \alias{fixed.effects.ebp}
 \alias{fixef.fh}
 \alias{fixed.effects.fh}
+\alias{fixef.fh_tf}
+\alias{fixed.effects.fh_tf}
 \alias{fixef.ebp_tf}
 \alias{fixed.effects.ebp_tf}
 \title{Extract Fixed Effects from an emdi Object}
@@ -18,6 +20,10 @@
 \method{fixef}{fh}(object, ...)
 
 \method{fixed.effects}{fh}(object, ...)
+
+\method{fixef}{fh_tf}(object, ...)
+
+\method{fixed.effects}{fh_tf}(object, ...)
 
 \method{fixef}{ebp_tf}(object, ...)
 

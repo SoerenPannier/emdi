@@ -7,6 +7,8 @@
 \alias{random.effects.ebp}
 \alias{ranef.fh}
 \alias{random.effects.fh}
+\alias{ranef.fh_tf}
+\alias{random.effects.fh_tf}
 \alias{ranef.ebp_tf}
 \alias{random.effects.ebp_tf}
 \title{Extract Random Effects of emdi Objects}
@@ -18,6 +20,10 @@
 \method{ranef}{fh}(object, ...)
 
 \method{random.effects}{fh}(object, ...)
+
+\method{ranef}{fh_tf}(object, ...)
+
+\method{random.effects}{fh_tf}(object, ...)
 
 \method{ranef}{ebp_tf}(object, ...)
 

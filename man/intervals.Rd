@@ -4,12 +4,15 @@
 \alias{intervals}
 \alias{intervals.ebp}
 \alias{intervals.fh}
+\alias{intervals.fh_tf}
 \alias{intervals.ebp_tf}
 \title{Confidence Intervals on Coefficients of an emdi Object}
 \usage{
 \method{intervals}{ebp}(object, level = 0.95, parm = NULL, ...)
 
 \method{intervals}{fh}(object, level = 0.95, parm = NULL, ...)
+
+\method{intervals}{fh_tf}(object, level = 0.95, parm = NULL, ...)
 
 \method{intervals}{ebp_tf}(object, level = 0.95, parm = NULL, ...)
 

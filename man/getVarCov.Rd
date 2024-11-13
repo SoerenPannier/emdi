@@ -4,12 +4,15 @@
 \alias{getVarCov}
 \alias{getVarCov.ebp}
 \alias{getVarCov.fh}
+\alias{getVarCov.fh_tf}
 \alias{getVarCov.ebp_tf}
 \title{Extract Variance-covariance Matrix from an emdi Object}
 \usage{
 \method{getVarCov}{ebp}(obj, individuals = 1, type = "random.effects", ...)
 
 \method{getVarCov}{fh}(obj, individuals = 1, type = "random.effects", ...)
+
+\method{getVarCov}{fh_tf}(obj, individuals = 1, type = "random.effects", ...)
 
 \method{getVarCov}{ebp_tf}(obj, individuals = 1, type = "random.effects", ...)
 
