@@ -137,7 +137,7 @@ write.excel <- function(object,
       headlines_cs = headlines_cs
     )
   }else if (inherits(object, "ebp_tf")) {
-    wb <- add_summary_ebp(
+    wb <- add_summary_ebp_tf(
       object = object, wb = wb,
       headlines_cs = headlines_cs
     )
@@ -188,18 +188,17 @@ add_summary_ebp <- function(object, wb, headlines_cs) {
     borderStyle = "thick",
     textDecoration = "bold"
   )
-
   df_nobs <- data.frame(Count = c(
-    su$out_of_smp,
-    su$in_smp, su$size_pop,
-    su$size_smp
-  ))
+     su$out_of_smp,
+     su$in_smp, su$size_pop,
+     su$size_smp
+     ))
   rownames(df_nobs) <- c(
-    "out of sample domains",
-    "in sample domains",
-    "out of sample observations",
-    "in sample observations"
-  )
+     "out of sample domains",
+     "in sample domains",
+     "out of sample observations",
+     "in sample observations"
+     )
   df_size_dom <- as.data.frame(su$size_dom)
 
   addWorksheet(wb, sheetName = "summary", gridLines = FALSE)
@@ -297,6 +296,131 @@ add_summary_ebp <- function(object, wb, headlines_cs) {
   )
   return(wb)
 }
+
+#_________________________________Rachael_______________________________________
+add_summary_ebp_tf <- function(object, wb, headlines_cs) {
+  su <- summary(object)
+
+  title_cs <- createStyle(
+    fontSize = 14,
+    border = "Bottom",
+    halign = "left",
+    borderStyle = "thick",
+    textDecoration = "bold"
+  )
+  df_nobs <- data.frame(Count = c(
+      su$out_of_smp_dom,
+      su$in_smp_dom, su$out_of_smp_subdom,
+      su$in_smp_subdom, su$size_pop,
+      su$size_smp
+    ))
+  rownames(df_nobs) <- c(
+      "Out of sample domains",
+      "In sample domains",
+      "Out of sample subdomains",
+      "In sample subdomains",
+      "Total observations in the population",
+      "Tn sample observations"
+      )
+  df_size_dom <- as.data.frame(su$size_dom)
+  df_size_subdom <- as.data.frame(su$size_subdom)
+
+  addWorksheet(wb, sheetName = "summary", gridLines = FALSE)
+
+  writeData(
+    wb = wb, sheet = "summary",
+    x = "Twofold Empirical Best Prediction", colNames = FALSE
+  )
+  addStyle(
+    wb = wb, sheet = "summary", cols = 1, rows = 1,
+    style = title_cs, stack = TRUE
+  )
+
+  starting_row <- 5
+  writeDataTable(
+    x = df_nobs,
+    withFilter = FALSE,
+    wb = wb,
+    sheet = "summary",
+    startRow = starting_row,
+    startCol = 3,
+    rowNames = TRUE,
+    headerStyle = headlines_cs,
+    colNames = TRUE,
+    tableStyle = "TableStyleMedium2"
+  )
+
+  starting_row <- starting_row + 2 + nrow(df_nobs)
+
+  writeDataTable(
+    x = df_size_dom,
+    wb = wb,
+    withFilter = FALSE,
+    sheet = "summary",
+    startRow = starting_row,
+    startCol = 3,
+    rowNames = TRUE,
+    headerStyle = headlines_cs,
+    colNames = TRUE,
+    tableStyle = "TableStyleMedium2"
+  )
+
+  starting_row <- starting_row + 2 + nrow(df_size_dom)
+
+
+  if (!is.null(su$transform)) {
+    writeDataTable(
+      x = su$transform,
+      wb = wb,
+      withFilter = FALSE,
+      sheet = "summary",
+      startRow = starting_row,
+      startCol = 3,
+      rowNames = FALSE,
+      headerStyle = headlines_cs,
+      colNames = TRUE,
+      tableStyle = "TableStyleMedium2"
+    )
+
+    starting_row <- starting_row + 2 + nrow(su$transform)
+  }
+
+
+  writeDataTable(
+    x = su$normality,
+    wb = wb,
+    withFilter = FALSE,
+    sheet = "summary",
+    startRow = starting_row,
+    startCol = 3,
+    rowNames = TRUE,
+    headerStyle = headlines_cs,
+    colNames = TRUE,
+    tableStyle = "TableStyleMedium2"
+  )
+  starting_row <- starting_row + 2 + nrow(su$normality)
+  writeDataTable(
+    x = su$coeff_determ,
+    wb = wb,
+    withFilter = FALSE,
+    sheet = "summary",
+    startRow = starting_row,
+    startCol = 4,
+    rowNames = FALSE,
+    headerStyle = headlines_cs,
+    colNames = TRUE,
+    tableStyle = "TableStyleMedium2"
+  )
+
+  setColWidths(
+    wb = wb,
+    sheet = "summary",
+    cols = 3:9,
+    widths = "auto"
+  )
+  return(wb)
+}
+#_______________________________________________________________________________
 
 add_summary_fh <- function(object, wb, headlines_cs) {
   su <- summary(object)
