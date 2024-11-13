@@ -17,7 +17,7 @@ estimators_check <- function(object,
   }
 #_______________________________________________________________________________
  #_________________________Rachael added________________________________________
-  if (inherits(object, "ebp_tf")) {
+  if (any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
     if (is.null(object$MSE_Domain) || is.null(object$MSE_Subdomain) &&
         (MSE == TRUE || CV == TRUE)) {
       stop(strwrap(prefix = " ", initial = "",
