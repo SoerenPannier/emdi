@@ -7,31 +7,31 @@ compare_plot.fh_tf <- function(model = NULL, direct = NULL, indicator = "all",
                               "solid",
                               "solid"
                             ),
-                            gg_theme = NULL, ...) {
+                            gg_theme = NULL, level = NULL, ...) {
   compare_plot_check(
     model = model, indicator = indicator,
     label = label, color = color, shape = shape,
-    line_type = line_type, gg_theme = gg_theme
+    line_type = line_type, gg_theme = gg_theme, level = level
   )
 
-  if (inherits(direct, "ebp")) {
+  if (any(inherits(direct, c("ebp", "ebp_tf", "fh")))) {
     stop(strwrap(prefix = " ", initial = "",
                  paste0("It is not possible to compare the point and MSE
-                        estimates of a model of type 'fh', to the point and MSE
-                        estimates of an 'ebp' object.")))
+                        estimates of a model of type 'fh_tf', to the point and MSE
+                        estimates of other model based emdi object such as 'ebp', 'ebp_tf', and 'fh'.")))
   }
 
-  if (inherits(model, "fh_tf") && inherits(direct, "direct")) {
+  if (inherits(model, "fh_tf") && inherits(direct, "direct") && level == "subdomain") {
     warning(strwrap(prefix = " ", initial = "",
-                    paste0("fh_tf models are only compared to their own inherrent
+                    paste0("At subdomain level, fh_tf models are only compared to their own inherrent
                            direct estimates. Hence, the argument direct is
                            ignored."
                            )))
   }
 
   compare_plot_fh_tf(
-    model = model, direct = model, indicator = indicator,
-    MSE = MSE, CV = CV,
+    model = model, direct = direct, indicator = indicator,
+    MSE = MSE, CV = CV, level = level,
     label = label, color = color, shape = shape,
     line_type = line_type, gg_theme = gg_theme
   )
@@ -86,7 +86,7 @@ compare_plot.fh_tf <- function(model = NULL, direct = NULL, indicator = "all",
 #' @noRd
 
 compare_plot_fh_tf <- function(model, direct, indicator = "all", MSE = FALSE,
-                            CV = FALSE, label = "orig",
+                            CV = FALSE, label = "orig", level = NULL,
                             color = c("blue", "lightblue3"),
                             shape = c(16, 16), line_type = c("solid", "solid"),
                             gg_theme = NULL) {
@@ -96,61 +96,115 @@ compare_plot_fh_tf <- function(model, direct, indicator = "all", MSE = FALSE,
   value <- NULL
   Method <- NULL
 
-  Data <- point_emdi(object = model, indicator = "all")$ind_Subdomain
-  Data <- Data[!is.na(Data$Direct), ]
-  selected_indicators <- colnames(Data)[!(colnames(Data) %in% c(
-    "Subdomain",
-    "Direct"
-  ))]
-  colnames(Data) <- c(
-    "Subdomain", "FH_TF_Direct",
-    paste0(
-      colnames(Data)[!(colnames(Data) %in%
-        c("Subdomain", "Direct"))],
-      "_Model"
+  if(level == "domain"){
+    Data <- point_emdi(object = model, indicator = "all")$ind_Domain
+    Data <- merge(direct$ind[, c("Domain", indicator)], Data,
+                  id = "Domain", all.x = T, all.y = F)
+    colnames(Data)[2] <- "Direct"
+    selected_indicators <- colnames(Data)[!(colnames(Data) %in% c(
+      "Domain",
+      "Direct"
+    ))]
+    colnames(Data) <- c("Domain", "FH_TF_Direct",
+                        paste0(colnames(Data)[!(colnames(Data) %in%
+                                                  c("Domain", "Direct"))], "_Model"))
+    if (is.null(model$MSE_Domain)) {
+      Data$smp_size <- NULL
+    }
+  }else if(level == "subdomain"){
+    Data <- point_emdi(object = model, indicator = "all")$ind_Subdomain
+    Data <- Data[!is.na(Data$Direct), ]
+    selected_indicators <- colnames(Data)[!(colnames(Data) %in% c(
+      "Subdomain",
+      "Direct"
+    ))]
+    colnames(Data) <- c(
+      "Subdomain", "FH_TF_Direct",
+      paste0(
+        colnames(Data)[!(colnames(Data) %in%
+                           c("Subdomain", "Direct"))],
+        "_Model"
+      )
     )
-  )
 
-  if (!(any(indicator == "all") || any(indicator == "direct") ||
-    any(indicator == "Direct"))) {
-    selected_indicators <- selected_indicators[selected_indicators %in%
-      indicator]
+    if (!(any(indicator == "all") || any(indicator == "direct") ||
+          any(indicator == "Direct"))) {
+      selected_indicators <- selected_indicators[selected_indicators %in%
+                                                   indicator]
+
+      if (is.null(model$MSE_Subdomain)) {
+        Data$smp_size <- NULL
+      }
+    }
   }
 
-  if (is.null(model$MSE_Subdomain)) {
-    Data$smp_size <- NULL
-  }
 
   if (MSE == TRUE || CV == TRUE) {
     all_precisions <- mse_emdi(object = model, indicator = "all", CV = TRUE)
-    colnames(all_precisions$ind_Subdomain) <- c("Subdomain", paste0(c(
-      "FH_TF_Direct",
-      "FH_TF_Model"
-    ), "_MSE"))
-    colnames(all_precisions$ind_cv_Subdomain) <- c("Subdomain", paste0(c(
-      "FH_TF_Direct",
-      "FH_TF_Model"
-    ), "_CV"))
-    combined <- merge(all_precisions$ind_Subdomain,
-                      all_precisions$ind_cv_Subdomain, id = "Subdomain")
-    combined <- combined[!is.na(combined$FH_TF_Direct_MSE), ]
+    if(level == "subdomain"){
+      colnames(all_precisions$ind_Subdomain) <- c("Subdomain", paste0(c(
+        "FH_TF_Direct",
+        "FH_TF_Model"
+      ), "_MSE"))
+      colnames(all_precisions$ind_cv_Subdomain) <- c("Subdomain", paste0(c(
+        "FH_TF_Direct",
+        "FH_TF_Model"
+      ), "_CV"))
+      combined <- merge(all_precisions$ind_Subdomain,
+                        all_precisions$ind_cv_Subdomain, id = "Subdomain")
+      combined <- combined[!is.na(combined$FH_TF_Direct_MSE), ]
 
-    Data <- merge(Data, combined, id = "Subdomain")
-    Data$smp_size <- -Data$FH_TF_Direct_MSE
-    Data$smp_size2 <- -Data$FH_TF_Direct_CV
+      Data <- merge(Data, combined, id = "Subdomain")
+      colnames(Data)[1] <- "Domain"
+      Data$smp_size <- -Data$FH_TF_Direct_MSE
+      Data$smp_size2 <- -Data$FH_TF_Direct_CV
+    } else if(level == "domain"){
+      colnames(all_precisions$ind_Domain) <- c("Domain", paste0(c(
+        "FH_TF_Model"
+      ), "_MSE"))
+      colnames(all_precisions$ind_cv_Domain) <- c("Domain", paste0(c(
+        "FH_TF_Model"
+      ), "_CV"))
+      combined <- merge(all_precisions$ind_Domain,
+                        all_precisions$ind_cv_Domain, id = "Domain")
+
+      dir_precision <- merge(direct$MSE[, c("Domain", indicator)],
+                             direct$ind[, c("Domain", indicator)],
+                             by = "Domain")
+      colnames(dir_precision) <- c("Domain", "MSE", "Direct")
+      dir_precision$CV <- sqrt(dir_precision$MSE)/dir_precision$Direct
+
+      combined <- merge(dir_precision[, c("Domain", "MSE", "CV")], combined,
+                        id = "Domain", all.x = T, all.y = F)
+      colnames(combined)[2:3] <- c("FH_TF_Direct_MSE", "FH_TF_Direct_CV")
+
+      Data <- merge(Data, combined, id = "Domain")
+      Data$smp_size <- -Data$FH_TF_Direct_MSE
+      Data$smp_size2 <- -Data$FH_TF_Direct_CV
+    }
+
   }
 
   if (model$framework$N_out_sub > 0) {
     message(strwrap(prefix = " ", initial = "",
                    "Please note that since all of the comparisons need a direct
-                   estimator, the plots are only created for in-sample
-                   subdomains."))
+                   estimator, the plots are only created for in-sample domains or subdomains"))
+  }
+  if(level == "subdomain"){
+    compare_plots(
+      object = Data, type = "tf_sub",
+      selected_indicators = selected_indicators, level = level,
+      MSE = MSE, CV = CV, label = label, color = color,
+      shape = shape, line_type = line_type, gg_theme = gg_theme
+    )
+  } else if(level == "domain"){
+    compare_plots(
+      object = Data, type = "area",
+      selected_indicators = selected_indicators, level = level,
+      MSE = MSE, CV = CV, label = label, color = color,
+      shape = shape, line_type = line_type, gg_theme = gg_theme
+    )
   }
 
-  compare_plots(
-    object = Data, type = "area_sub",
-    selected_indicators = selected_indicators,
-    MSE = MSE, CV = CV, label = label, color = color,
-    shape = shape, line_type = line_type, gg_theme = gg_theme
-  )
+
 }

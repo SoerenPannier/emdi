@@ -213,11 +213,20 @@ compare_plot_ebp_tf <- function(model, direct, indicator = "all", MSE = FALSE,
   }
 
   selected_indicators <- selected_model[selected_model %in% selected_direct]
+  if(level == "subdomain"){
+    compare_plots(
+      object = Data, type = "tf_sub", level=level,
+      selected_indicators = selected_indicators,
+      MSE = MSE, CV = CV, label = label, color = color,
+      shape = shape, line_type = line_type, gg_theme = gg_theme
+    )
+  }else if(level == "domain"){
+    compare_plots(
+      object = Data, type = "unit", level=level,
+      selected_indicators = selected_indicators,
+      MSE = MSE, CV = CV, label = label, color = color,
+      shape = shape, line_type = line_type, gg_theme = gg_theme
+    )
+  }
 
-  compare_plots(
-    object = Data, type = "unit", level=level,
-    selected_indicators = selected_indicators,
-    MSE = MSE, CV = CV, label = label, color = color,
-    shape = shape, line_type = line_type, gg_theme = gg_theme
-  )
 }

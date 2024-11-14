@@ -457,8 +457,7 @@ define_evallabel <- function(type, label, indi) {
           ordered_MSE = c(
             title = indi,
             y_lab = "MSE",
-            x_lab = "Domain (ordered by
-                                      sample size)"
+            x_lab = "Domain (ordered by sample size)"
           ),
           boxplot_CV = c(
             title = indi,
@@ -481,8 +480,7 @@ define_evallabel <- function(type, label, indi) {
           line = c(
             title = indi,
             y_lab = "Value",
-            x_lab = "Domain (ordered by decreasing MSE
-                               of Direct)"
+            x_lab = "Domain (ordered by decreasing MSE of Direct)"
           ),
           boxplot_MSE = c(
             title = indi,
@@ -492,8 +490,7 @@ define_evallabel <- function(type, label, indi) {
           ordered_MSE = c(
             title = indi,
             y_lab = "MSE",
-            x_lab = "Domain (ordered by increasing
-                                      MSE of Direct)"
+            x_lab = "Domain (ordered by increasing MSE of Direct)"
           ),
           boxplot_CV = c(
             title = indi,
@@ -503,8 +500,40 @@ define_evallabel <- function(type, label, indi) {
           ordered_CV = c(
             title = indi,
             y_lab = "CV",
-            x_lab = "Domain (ordered by increasing CV
-                                     of Direct)"
+            x_lab = "Domain (ordered by increasing CV of Direct)"
+          )
+        )
+      }   else if (type == "tf_sub") {
+        label <- list(
+          scatter = c(
+            title = indi,
+            y_lab = "Model-based",
+            x_lab = "Direct"
+          ),
+          line = c(
+            title = indi,
+            y_lab = "Value",
+            x_lab = "Subdomain (ordered by decreasing MSE of Direct)"
+          ),
+          boxplot_MSE = c(
+            title = indi,
+            y_lab = "",
+            x_lab = "MSE"
+          ),
+          ordered_MSE = c(
+            title = indi,
+            y_lab = "MSE",
+            x_lab = "Subdomain (ordered by increasing MSE of Direct)"
+          ),
+          boxplot_CV = c(
+            title = indi,
+            y_lab = "CV",
+            x_lab = ""
+          ),
+          ordered_CV = c(
+            title = indi,
+            y_lab = "CV",
+            x_lab = "Subdomain (ordered by increasing CV of Direct)"
           )
         )
       }
@@ -562,8 +591,7 @@ define_evallabel <- function(type, label, indi) {
           ordered_MSE = c(
             title = "",
             y_lab = "MSE",
-            x_lab = "Domain (ordered by sample
-                                      size)"
+            x_lab = "Domain (ordered by sample size)"
           ),
           boxplot_CV = c(
             title = "",
@@ -586,8 +614,7 @@ define_evallabel <- function(type, label, indi) {
           line = c(
             title = "",
             y_lab = "Value",
-            x_lab = "Domain (ordered by decreasing MSE of
-                               Direct)"
+            x_lab = "Domain (ordered by decreasing MSE of Direct)"
           ),
           boxplot_MSE = c(
             title = "",
@@ -597,8 +624,7 @@ define_evallabel <- function(type, label, indi) {
           ordered_MSE = c(
             title = "",
             y_lab = "MSE",
-            x_lab = "Domain (ordered by increasing MSE
-                                      of Direct)"
+            x_lab = "Domain (ordered by increasing MSE of Direct)"
           ),
           boxplot_CV = c(
             title = "",
@@ -608,8 +634,40 @@ define_evallabel <- function(type, label, indi) {
           ordered_CV = c(
             title = "",
             y_lab = "CV",
-            x_lab = "Domain (ordered by increasing CV
-                                     of Direct)"
+            x_lab = "Domain (ordered by increasing CV of Direct)"
+          )
+        )
+      }  else if (type == "tf_sub") {
+        label <- list(
+          scatter = c(
+            title = indi,
+            y_lab = "Model-based",
+            x_lab = "Direct"
+          ),
+          line = c(
+            title = indi,
+            y_lab = "Value",
+            x_lab = "Subdomain (ordered by decreasing MSE of Direct)"
+          ),
+          boxplot_MSE = c(
+            title = indi,
+            y_lab = "",
+            x_lab = "MSE"
+          ),
+          ordered_MSE = c(
+            title = indi,
+            y_lab = "MSE",
+            x_lab = "Subdomain (ordered by increasing MSE of Direct)"
+          ),
+          boxplot_CV = c(
+            title = indi,
+            y_lab = "CV",
+            x_lab = ""
+          ),
+          ordered_CV = c(
+            title = indi,
+            y_lab = "CV",
+            x_lab = "Subdomain (ordered by increasing CV of Direct)"
           )
         )
       }

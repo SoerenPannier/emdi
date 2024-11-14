@@ -16,6 +16,16 @@ compare_plot_check <- function(model, indicator, label, color, shape,
                         estimated indicators or indicator groups as described
                         in help(estimators.emdi).")))
     }
+  } else if (inherits(model, "fh_tf") && level == "domain"){
+    if(!(indicator %in% c("Mean", "Head_Count", "Poverty_Gap", "Gini",
+                          "Quintile_Share", "Quantile_10", "Quantile_25",
+                          "Median", "Quantile_75", "Quantile_90"))){
+      stop(strwrap(prefix = " ", initial = "",
+                   paste0("The argument indicator is set to ", indicator, ". The
+                        argument only allows to be set to a name of indicators
+                        in the direct object for the comparison with the 'fh_tf'
+                        model at domain level. ")))
+    }
   } else{
     if (is.null(indicator) || !all(indicator == "all" | indicator == "Quantiles" |
                                    indicator == "quantiles" |
@@ -35,7 +45,7 @@ compare_plot_check <- function(model, indicator, label, color, shape,
 
 
   #____________________________Rachael__________________________________________
-  if (inherits(model, "ebp_tf")) {
+  if (any(inherits(model, which = TRUE, c("ebp_tf", "fh_tf")))) {
     if (is.null(level)) {
       stop("For 'ebp_tf' or 'fh_tf' models, please specify the 'level' argument.
            'level' can take either 'domain' or 'subdomain' arguments")
