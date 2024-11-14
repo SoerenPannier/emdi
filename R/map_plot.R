@@ -207,7 +207,7 @@ plot_real <- function(object,
 
   long <- lat <- group <- NULL
 
-  if (inherits(object, "ebp_tf")) {
+  if (any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
     map_data <- estimators(object    = object,
                            indicator = indicator,
                            MSE       = MSE,
@@ -335,11 +335,11 @@ plot_real <- function(object,
     }
   }
 
-  if (inherits(object, "ebp_tf")){
+  if (any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
     if(!is.null(level) && level=="domain") {
       map_obj.merged <- merge(map_obj, map_data, by.x = map_dom_id, by.y = "Domain")
       indicator <- colnames(map_data)
-      indicator <- indicator[!(indicator %in% c("Domain", "shape_id"))]
+      indicator <- indicator[!(indicator %in% c("Domain", "shape_id", colnames(map_tab)))]
     }else if (!is.null(level) && level == "subdomain"){
       map_obj.merged <- merge(map_obj, map_data, by.x = map_dom_id, by.y = "Subdomain")
       indicator <- colnames(map_data)
@@ -348,7 +348,7 @@ plot_real <- function(object,
   }else{
     map_obj.merged <- merge(map_obj, map_data, by.x = map_dom_id, by.y = "Domain")
     indicator <- colnames(map_data)
-    indicator <- indicator[!(indicator %in% c("Domain", "shape_id"))]
+    indicator <- indicator[!(indicator %in% c("Domain", "shape_id", colnames(map_tab)))]
     }
 
 

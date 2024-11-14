@@ -1,6 +1,6 @@
 mse_emdi <- function(object, indicator = "all", CV = FALSE) {
   #___________________________________Rachael___________________________________
-  if (inherits(object, "ebp_tf")) {
+  if (any(inherits(object, which = T, c("ebp_tf", "fh_tf")))) {
     if (is.null(object$MSE_Domain) || is.null(object$MSE_Subdomain) && CV == TRUE) {
       stop(strwrap(prefix = " ", initial = "",
                    "No MSE estimates in emdi object: arguments MSE and CV have to
@@ -16,7 +16,7 @@ mse_emdi <- function(object, indicator = "all", CV = FALSE) {
                  indicators or define custom indicators and generate a new emdi
                  object. See also help(ebp)."))
     }
-    all_cv_Domain <- sqrt(object$MSE_Domain[, -1]) / object$ind_Domain[, -1]
+    all_cv_Domain <- sqrt(object$MSE_Domain[, -1, drop = FALSE]) / object$ind_Domain[, -1, drop = FALSE]
     all_cv_Subdomain <- sqrt(object$MSE_Subdomain[, -1]) / object$ind_Subdomain[, -1]
 
   }else{
@@ -86,7 +86,44 @@ mse_emdi <- function(object, indicator = "all", CV = FALSE) {
     }
   }
 
-  if (inherits(object, "ebp_tf")){
+  if(inherits(object, "fh_tf")){
+    if (any(indicator == "all") || any(indicator == "All")) {
+      ind_sub <- object$MSE_Subdomain
+      ind_cv_sub <- cbind(Subomain = object$MSE_Subdomain[, 1], all_cv_Subdomain)
+      ind_name_sub <- "All indicators"
+
+      ind <- object$MSE_Domain
+      ind_cv <- cbind(Domain = object$MSE_Domain[, 1], all_cv_Domain)
+      ind_name <- "All indicators"
+    } else if (any(indicator == "fh_tf") || any(indicator == "FH_tf") ||
+               any(indicator == "FH_TF") || any(indicator == "fh_TF")) {
+      ind_sub <- object$MSE_Subdomain[, c("Subdomain", "FH_TF")]
+      ind_cv_sub <- cbind(Subdomain = object$MSE_Subdomain[, 1], all_cv_Subdomain)
+      ind_name_sub <- "FH-TF estimates"
+
+      ind <- object$MSE_Domain[, c("Domain", "FH_TF")]
+      ind_cv <- cbind(Domain = object$MSE_Domain[, 1], all_cv_Domain)
+      ind_name <- "FH-TF estimates"
+    } else if (any(indicator == "Direct") || any(indicator == "direct")) {
+      ind_sub <- object$MSE_Subdomain[, c("Subdomain", "Direct")]
+      ind_cv_sub <- cbind(Subdomain = object$MSE_Subdomain[, 1], all_cv_Subdomain)
+      ind_name_sub <- "Direct estimates used in FH-TF model"
+
+      ind <- NULL
+      ind_cv <- NULL
+      ind_name <- NULL
+    }
+    if (CV == FALSE) {
+      mse_emdi <- list(ind_Domain = ind, ind_Subdomain = ind_sub, ind_name = ind_name,
+                       ind_name_sub = ind_name_sub)
+    } else {
+      mse_emdi <- list(ind_Domain = ind, ind_Subdomain = ind_sub,
+                       ind_cv_Domain = ind_cv,
+                       ind_cv_Subdomain = ind_cv_sub,ind_name = ind_name,
+                       ind_name_sub = ind_name_sub)
+    }
+  }
+  else if (inherits(object, "ebp_tf")){
     if (any(indicator == "all") || any(indicator == "All")) {
       ind_Domain <- object$MSE_Domain
       ind_cv_Domain <- cbind(Domain = object$MSE_Domain[, 1], all_cv_Domain)
@@ -114,7 +151,7 @@ mse_emdi <- function(object, indicator = "all", CV = FALSE) {
                        ind_cv_Domain = ind_cv_Domain,
                        ind_cv_Subdomain = ind_cv_Subdomain,ind_name = ind_name)
     }
-  }else{
+  } else{
     if (any(indicator == "all") || any(indicator == "All")) {
       ind <- object$MSE
       ind_cv <- cbind(Domain = object$MSE[, 1], all_cv)

@@ -1,6 +1,6 @@
 point_emdi <- function(object, indicator = "all") {
   #___________________________________Rachael___________________________________
-  if (inherits(object, "ebp_tf")) {
+  if (any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
     if (is.null(object$ind_Domain) || is.null(object$ind_Subdomain)) {
       stop(strwrap(prefix = " ", initial = "",
                    "No estimates in object: method point not applicable"))
@@ -72,9 +72,31 @@ point_emdi <- function(object, indicator = "all") {
   if (inherits(object, "fh")) {
     object$ind["Out"] <- NULL
   }
-
+  if (inherits(object, "fh_tf")){
+    object$ind <- object$ind_Domain
+    object$ind_sub <- object$ind_Subdomain
+    if (any(indicator == "all") || any(indicator == "All")) {
+      ind_sub <- object$ind_sub
+      ind_name_sub <- "All indicators"
+      ind <- object$ind
+      ind_name <- "All indicators"
+    }else if (any(indicator == "fh_tf") || any(indicator == "FH_tf") ||
+              any(indicator == "FH_TF") || any(indicator == "fh_TF")) {
+      ind_sub <- object$ind_sub[, c("Subdomain", "FH_TF")]
+      ind_name_sub <- "FH-TF estimates"
+      ind <- object$ind[, c("Domain", "FH_TF")]
+      ind_name <- "FH-TF estimates"
+    } else if (any(indicator == "Direct") || any(indicator == "direct")) {
+      ind_sub <- object$ind_sub[, c("Subomain", "Direct")]
+      ind_name_sub <- "Direct estimates used in FH-TF model"
+      ind <- NULL
+      ind_name <- NULL
+    }
+    point_emdi <- list(ind_Domain = ind, ind_Subdomain = ind_sub,
+                       ind_name = ind_name, ind_name_sub = ind_name_sub)
+  }
   #_________________________________Rachael_____________________________________
-  if (inherits(object, "ebp_tf")){
+  else if (inherits(object, "ebp_tf")){
     if (any(indicator == "all") || any(indicator == "All")) {
       ind_Domain <- object$ind_Domain
       ind_Subdomain <- object$ind_Subdomain
