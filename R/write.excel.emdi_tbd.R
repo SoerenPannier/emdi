@@ -136,29 +136,18 @@ write.excel <- function(object,
       object = object, wb = wb,
       headlines_cs = headlines_cs
     )
-  }
-  #_________________________________________Rachael_____________________________
-  else if (inherits(object, "ebp_tf")) {
+  }else if (inherits(object, "ebp_tf")) {
     wb <- add_summary_ebp_tf(
       object = object, wb = wb,
       headlines_cs = headlines_cs
     )
-  }
-  #_____________________________________________________________________________
-  else if (inherits(object, "fh")) {
+  }else if (inherits(object, "fh")) {
     wb <- add_summary_fh(
       object = object, wb = wb,
       headlines_cs = headlines_cs
     )
   }
-################################################################################
-  else if (inherits(object, "fh_tf")) {
-    wb <- add_summary_fh_tf(
-      object = object, wb = wb,
-      headlines_cs = headlines_cs
-    )
-  }
-################################################################################
+
   if (!split && (MSE || CV)) {
     wb <- add_estims(
       object = object,
@@ -199,18 +188,17 @@ add_summary_ebp <- function(object, wb, headlines_cs) {
     borderStyle = "thick",
     textDecoration = "bold"
   )
-
   df_nobs <- data.frame(Count = c(
-    su$out_of_smp,
-    su$in_smp, su$size_pop,
-    su$size_smp
-  ))
+     su$out_of_smp,
+     su$in_smp, su$size_pop,
+     su$size_smp
+     ))
   rownames(df_nobs) <- c(
-    "out of sample domains",
-    "in sample domains",
-    "out of sample observations",
-    "in sample observations"
-  )
+     "out of sample domains",
+     "in sample domains",
+     "out of sample observations",
+     "in sample observations"
+     )
   df_size_dom <- as.data.frame(su$size_dom)
 
   addWorksheet(wb, sheetName = "summary", gridLines = FALSE)
@@ -309,7 +297,7 @@ add_summary_ebp <- function(object, wb, headlines_cs) {
   return(wb)
 }
 
-#______________________________Rachael__________________________________________
+#_________________________________Rachael_______________________________________
 add_summary_ebp_tf <- function(object, wb, headlines_cs) {
   su <- summary(object)
 
@@ -321,19 +309,19 @@ add_summary_ebp_tf <- function(object, wb, headlines_cs) {
     textDecoration = "bold"
   )
   df_nobs <- data.frame(Count = c(
-    su$out_of_smp_dom,
-    su$in_smp_dom, su$out_of_smp_subdom,
-    su$in_smp_subdom, su$size_pop,
-    su$size_smp
-  ))
+      su$out_of_smp_dom,
+      su$in_smp_dom, su$out_of_smp_subdom,
+      su$in_smp_subdom, su$size_pop,
+      su$size_smp
+    ))
   rownames(df_nobs) <- c(
-    "Out of sample domains",
-    "In sample domains",
-    "Out of sample subdomains",
-    "In sample subdomains",
-    "Total observations in the population",
-    "Tn sample observations"
-  )
+      "Out of sample domains",
+      "In sample domains",
+      "Out of sample subdomains",
+      "In sample subdomains",
+      "Total observations in the population",
+      "Tn sample observations"
+      )
   df_size_dom <- as.data.frame(su$size_dom)
   df_size_subdom <- as.data.frame(su$size_subdom)
 
@@ -614,138 +602,6 @@ add_summary_fh <- function(object, wb, headlines_cs) {
   return(wb)
 }
 
-################################################################################
-add_summary_fh_tf <- function(object, wb, headlines_cs) {
-  su <- summary(object)
-
-  title_cs <- createStyle(
-    fontSize = 14,
-    border = "Bottom",
-    halign = "left",
-    borderStyle = "thick",
-    textDecoration = "bold"
-  )
-
-  df_nobs <- data.frame(" " = c("out of sample domains",
-                                "in sample domains",
-                                "out of sample subdomains",
-                                "in sample subdomains"),
-                        Count = c(su$out_of_smp_domain, su$in_smp_domain,
-                                  su$out_of_smp_subdomain, su$in_smp_subdomain))
-  colnames(df_nobs) <- c(" ", "Count")
-
-  addWorksheet(wb, sheetName = "summary", gridLines = FALSE)
-
-  writeData(
-    wb = wb, sheet = "summary", x = "Two-Fold Fay-Herriot Approach",
-    colNames = FALSE
-  )
-  addStyle(
-    wb = wb, sheet = "summary", cols = 1, rows = 1,
-    style = title_cs, stack = TRUE
-  )
-
-  starting_row <- 5
-  writeDataTable(
-    x = df_nobs,
-    withFilter = FALSE,
-    wb = wb,
-    sheet = "summary",
-    startRow = starting_row,
-    startCol = 3,
-    rowNames = FALSE,
-    headerStyle = headlines_cs,
-    colNames = TRUE,
-    tableStyle = "TableStyleMedium2"
-  )
-
-  starting_row <- starting_row + 2 + nrow(df_nobs)
-
-
-    estimMethods <- data.frame("Parametric bootstrap",
-                               su$model$variances[["Domain"]],
-                              su$model$variances[["Subdomain"]])
-   colnames(estimMethods) <- c("Variance estimation", "Domain level", "Subdomain level")
-
-
-  writeDataTable(
-    x = estimMethods,
-    wb = wb,
-    withFilter = FALSE,
-    sheet = "summary",
-    startRow = starting_row,
-    startCol = 3,
-    rowNames = FALSE,
-    headerStyle = headlines_cs,
-    colNames = TRUE,
-    tableStyle = "TableStyleMedium2"
-  )
-
-  starting_row <- starting_row + 2 + nrow(estimMethods)
-
-
-  if (!is.null(su$transformation)) {
-    writeDataTable(
-      x = data.frame(Transformation = su$transformation),
-      wb = wb,
-      withFilter = FALSE,
-      sheet = "summary",
-      startRow = starting_row,
-      startCol = 3,
-      rowNames = FALSE,
-      headerStyle = headlines_cs,
-      colNames = TRUE,
-      tableStyle = "TableStyleMedium2"
-    )
-
-    starting_row <- starting_row + 2 + 1
-  }
-
-
-  dat_normality <- data.frame(X = rownames(su$normality), su$normality)
-  rownames(dat_normality) <- NULL
-  colnames(dat_normality) <- c(" ", colnames(dat_normality)[2:5])
-
-  writeDataTable(
-    x = dat_normality,
-    wb = wb,
-    withFilter = FALSE,
-    sheet = "summary",
-    startRow = starting_row,
-    startCol = 3,
-    rowNames = FALSE,
-    headerStyle = headlines_cs,
-    colNames = TRUE,
-    tableStyle = "TableStyleMedium2"
-  )
-  starting_row <- starting_row + 2 + nrow(su$normality)
-
-  dat_R2 <- data.frame(su$R2[["Marginal_R2"]],
-                       su$R2[["Conditional_R2"]])
-  colnames(dat_R2) <- c("Marginal_R2", "Conditional_R2")
-  writeDataTable(
-    x = dat_R2,
-    wb = wb,
-    withFilter = FALSE,
-    sheet = "summary",
-    startRow = starting_row,
-    startCol = 3,
-    rowNames = FALSE,
-    headerStyle = headlines_cs,
-    colNames = TRUE,
-    tableStyle = "TableStyleMedium2"
-  )
-  starting_row <- starting_row + 2 + nrow(su$R2)
-
-  setColWidths(
-    wb = wb,
-    sheet = "summary",
-    cols = 3:9,
-    widths = "auto"
-  )
-  return(wb)
-}
-################################################################################
 add_summary_direct <- function(object, wb, headlines_cs) {
   su <- summary(object)
 
@@ -832,118 +688,52 @@ add_summary_direct <- function(object, wb, headlines_cs) {
 
 
 add_pointests <- function(object, indicator, wb, headlines_cs) {
+  addWorksheet(wb, sheetName = "Point Estimators", gridLines = FALSE)
 
   if (is.null(indicator) || !all(indicator == "all" |
-                                 indicator == "Quantiles" |
-                                 indicator == "quantiles" |
-                                 indicator == "Poverty" |
-                                 indicator == "poverty" |
-                                 indicator == "Inequality" |
-                                 indicator == "inequality" |
-                                 indicator == "Custom" |
-                                 indicator == "custom" |
-                                 indicator %in% names(object$ind[-1]))) {
+    indicator == "Quantiles" |
+    indicator == "quantiles" |
+    indicator == "Poverty" |
+    indicator == "poverty" |
+    indicator == "Inequality" |
+    indicator == "inequality" |
+    indicator == "Custom" |
+    indicator == "custom" |
+    indicator %in% names(object$ind[-1]))) {
     stop(strwrap(prefix = " ", initial = "",
                  paste0("The argument indicator is set to ", indicator, ". The
                         argument only allows to be set to all, a name of
                         estimated indicators or indicator groups as described
                         in help(estimators.emdi).")))
   }
-################################################################################
-  if (any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
-    addWorksheet(wb, sheetName = "Point Estimators - Domain", gridLines = FALSE)
 
-    data <- point_emdi(object = object, indicator = indicator)$ind_Domain
+  data <- point_emdi(object = object, indicator = indicator)$ind
 
-    writeDataTable(
-      x = data,
-      sheet = "Point Estimators - Domain",
-      wb = wb,
-      startRow = 1,
-      startCol = 1,
-      rowNames = FALSE,
-      headerStyle = headlines_cs,
-      tableStyle = "TableStyleMedium2",
-      withFilter = FALSE
-    )
+  writeDataTable(
+    x = data,
+    sheet = "Point Estimators",
+    wb = wb,
+    startRow = 1,
+    startCol = 1,
+    rowNames = FALSE,
+    headerStyle = headlines_cs,
+    tableStyle = "TableStyleMedium2",
+    withFilter = FALSE
+  )
 
-    setColWidths(
-      wb = wb,
-      sheet = "Point Estimators - Domain",
-      cols = seq_len(ncol(data)),
-      widths = "auto"
-    )
+  setColWidths(
+    wb = wb,
+    sheet = "Point Estimators",
+    cols = seq_len(ncol(data)),
+    widths = "auto"
+  )
 
-    freezePane(
-      wb = wb,
-      sheet = "Point Estimators - Domain",
-      firstRow = TRUE,
-      firstCol = TRUE
-    )
-
-    addWorksheet(wb, sheetName = "Point Estimators - Subdomain", gridLines = FALSE)
-
-    data <- point_emdi(object = object, indicator = indicator)$ind_Subdomain
-
-    writeDataTable(
-      x = data,
-      sheet = "Point Estimators - Subdomain",
-      wb = wb,
-      startRow = 1,
-      startCol = 1,
-      rowNames = FALSE,
-      headerStyle = headlines_cs,
-      tableStyle = "TableStyleMedium2",
-      withFilter = FALSE
-    )
-
-    setColWidths(
-      wb = wb,
-      sheet = "Point Estimators - Subdomain",
-      cols = seq_len(ncol(data)),
-      widths = "auto"
-    )
-
-    freezePane(
-      wb = wb,
-      sheet = "Point Estimators - Subdomain",
-      firstRow = TRUE,
-      firstCol = TRUE
-    )
-  }
-################################################################################
-  else if (!any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
-    addWorksheet(wb, sheetName = "Point Estimators", gridLines = FALSE)
-
-    data <- point_emdi(object = object, indicator = indicator)$ind
-
-    writeDataTable(
-      x = data,
-      sheet = "Point Estimators",
-      wb = wb,
-      startRow = 1,
-      startCol = 1,
-      rowNames = FALSE,
-      headerStyle = headlines_cs,
-      tableStyle = "TableStyleMedium2",
-      withFilter = FALSE
-    )
-
-    setColWidths(
-      wb = wb,
-      sheet = "Point Estimators",
-      cols = seq_len(ncol(data)),
-      widths = "auto"
-    )
-
-    freezePane(
-      wb = wb,
-      sheet = "Point Estimators",
-      firstRow = TRUE,
-      firstCol = TRUE
-    )
-
-  }
+  freezePane(
+    wb = wb,
+    sheet = "Point Estimators",
+    firstRow = TRUE,
+    firstCol = TRUE
+  )
   return(wb)
 }
 
@@ -951,277 +741,94 @@ add_precisions <- function(object, indicator, MSE, wb, headlines_cs, CV) {
   precisions <- mse_emdi(object = object, indicator = indicator, CV = TRUE)
 
   if (MSE) {
-################################################################################
-    if(any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
-      addWorksheet(wb, sheetName = "MSE Estimators - Domain", gridLines = FALSE)
+    addWorksheet(wb, sheetName = "MSE Estimators", gridLines = FALSE)
 
-      writeDataTable(
-        x = precisions$ind_Domain,
-        sheet = "MSE Estimators - Domain",
-        wb = wb,
-        startRow = 1,
-        startCol = 1,
-        rowNames = FALSE,
-        headerStyle = headlines_cs,
-        tableStyle = "TableStyleMedium2",
-        withFilter = FALSE
-      )
-      setColWidths(
-        wb = wb,
-        sheet = "MSE Estimators - Domain",
-        cols = seq_len(ncol(precisions$ind_Domain)),
-        widths = "auto"
-      )
-      freezePane(
-        wb = wb,
-        sheet = "MSE Estimators - Domain",
-        firstRow = TRUE,
-        firstCol = TRUE
-      )
-
-      addWorksheet(wb, sheetName = "MSE Estimators - Subdomain", gridLines = FALSE)
-
-      writeDataTable(
-        x = precisions$ind_Subdomain,
-        sheet = "MSE Estimators - Subdomain",
-        wb = wb,
-        startRow = 1,
-        startCol = 1,
-        rowNames = FALSE,
-        headerStyle = headlines_cs,
-        tableStyle = "TableStyleMedium2",
-        withFilter = FALSE
-      )
-      setColWidths(
-        wb = wb,
-        sheet = "MSE Estimators - Subdomain",
-        cols = seq_len(ncol(precisions$ind_Subdomain)),
-        widths = "auto"
-      )
-      freezePane(
-        wb = wb,
-        sheet = "MSE Estimators - Subdomain",
-        firstRow = TRUE,
-        firstCol = TRUE
-      )
-    }
-################################################################################
-    else if(!any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
-      addWorksheet(wb, sheetName = "MSE Estimators", gridLines = FALSE)
-
-      writeDataTable(
-        x = precisions$ind,
-        sheet = "MSE Estimators",
-        wb = wb,
-        startRow = 1,
-        startCol = 1,
-        rowNames = FALSE,
-        headerStyle = headlines_cs,
-        tableStyle = "TableStyleMedium2",
-        withFilter = FALSE
-      )
-      setColWidths(
-        wb = wb,
-        sheet = "MSE Estimators",
-        cols = seq_len(ncol(precisions$ind)),
-        widths = "auto"
-      )
-      freezePane(
-        wb = wb,
-        sheet = "MSE Estimators",
-        firstRow = TRUE,
-        firstCol = TRUE
-      )
-    }
+    writeDataTable(
+      x = precisions$ind,
+      sheet = "MSE Estimators",
+      wb = wb,
+      startRow = 1,
+      startCol = 1,
+      rowNames = FALSE,
+      headerStyle = headlines_cs,
+      tableStyle = "TableStyleMedium2",
+      withFilter = FALSE
+    )
+    setColWidths(
+      wb = wb,
+      sheet = "MSE Estimators",
+      cols = seq_len(ncol(precisions$ind)),
+      widths = "auto"
+    )
+    freezePane(
+      wb = wb,
+      sheet = "MSE Estimators",
+      firstRow = TRUE,
+      firstCol = TRUE
+    )
   }
   if (CV) {
-################################################################################
-    if(any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
-      addWorksheet(wb, sheetName = "CV Estimators - Domain", gridLines = FALSE)
+    addWorksheet(wb, sheetName = "CV Estimators", gridLines = FALSE)
 
-      writeDataTable(precisions$ind_cv_Domain,
-                     wb          = wb,
-                     sheet       = "CV Estimators - Domain",
-                     startRow    = 1,
-                     startCol    = 1,
-                     rowNames    = FALSE,
-                     headerStyle = headlines_cs,
-                     tableStyle  = "TableStyleMedium2",
-                     withFilter  = FALSE
-      )
+    writeDataTable(precisions$ind_cv,
+      wb          = wb,
+      sheet       = "CV Estimators",
+      startRow    = 1,
+      startCol    = 1,
+      rowNames    = FALSE,
+      headerStyle = headlines_cs,
+      tableStyle  = "TableStyleMedium2",
+      withFilter  = FALSE
+    )
 
-      setColWidths(
-        wb = wb,
-        sheet = "CV Estimators - Domain",
-        cols = seq_len(ncol(precisions$ind_cv_Domain)),
-        widths = "auto"
-      )
+    setColWidths(
+      wb = wb,
+      sheet = "CV Estimators",
+      cols = seq_len(ncol(precisions$ind_cv)),
+      widths = "auto"
+    )
 
-      freezePane(
-        wb = wb,
-        sheet = "CV Estimators - Domain",
-        firstRow = TRUE,
-        firstCol = TRUE
-      )
-
-      addWorksheet(wb, sheetName = "CV Estimators - Subdomain", gridLines = FALSE)
-
-      writeDataTable(precisions$ind_cv_Subdomain,
-                     wb          = wb,
-                     sheet       = "CV Estimators - Subdomain",
-                     startRow    = 1,
-                     startCol    = 1,
-                     rowNames    = FALSE,
-                     headerStyle = headlines_cs,
-                     tableStyle  = "TableStyleMedium2",
-                     withFilter  = FALSE
-      )
-
-      setColWidths(
-        wb = wb,
-        sheet = "CV Estimators - Subdomain",
-        cols = seq_len(ncol(precisions$ind_cv_Subdomain)),
-        widths = "auto"
-      )
-
-      freezePane(
-        wb = wb,
-        sheet = "CV Estimators - Subdomain",
-        firstRow = TRUE,
-        firstCol = TRUE
-      )
-    }
-################################################################################
-    else if(!any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
-      addWorksheet(wb, sheetName = "CV Estimators", gridLines = FALSE)
-
-      writeDataTable(precisions$ind_cv,
-                     wb          = wb,
-                     sheet       = "CV Estimators",
-                     startRow    = 1,
-                     startCol    = 1,
-                     rowNames    = FALSE,
-                     headerStyle = headlines_cs,
-                     tableStyle  = "TableStyleMedium2",
-                     withFilter  = FALSE
-      )
-
-      setColWidths(
-        wb = wb,
-        sheet = "CV Estimators",
-        cols = seq_len(ncol(precisions$ind_cv)),
-        widths = "auto"
-      )
-
-      freezePane(
-        wb = wb,
-        sheet = "CV Estimators",
-        firstRow = TRUE,
-        firstCol = TRUE
-      )
-    }
+    freezePane(
+      wb = wb,
+      sheet = "CV Estimators",
+      firstRow = TRUE,
+      firstCol = TRUE
+    )
   }
   return(wb)
 }
 
 add_estims <- function(object, indicator, wb, headlines_cs, MSE, CV) {
-################################################################################
-  if (any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
-    addWorksheet(wb, sheetName = "Estimates - Domain", gridLines = FALSE)
-    data <- estimators(
-      object = object, indicator = indicator,
-      MSE = MSE, CV = CV, level = "domain")$ind
+  addWorksheet(wb, sheetName = "Estimates", gridLines = FALSE)
+  data <- estimators(
+    object = object, indicator = indicator,
+    MSE = MSE, CV = CV
+  )$ind
 
-    writeDataTable(
-      x = data,
-      sheet = "Estimates - Domain",
-      wb = wb,
-      startRow = 1,
-      startCol = 1,
-      rowNames = FALSE,
-      headerStyle = headlines_cs,
-      tableStyle = "TableStyleMedium2",
-      withFilter = FALSE
-    )
+  writeDataTable(
+    x = data,
+    sheet = "Estimates",
+    wb = wb,
+    startRow = 1,
+    startCol = 1,
+    rowNames = FALSE,
+    headerStyle = headlines_cs,
+    tableStyle = "TableStyleMedium2",
+    withFilter = FALSE
+  )
 
-    setColWidths(
-      wb = wb,
-      sheet = "Estimates - Domain",
-      cols = seq_len(ncol(data)),
-      widths = "auto"
-    )
+  setColWidths(
+    wb = wb,
+    sheet = "Estimates",
+    cols = seq_len(ncol(data)),
+    widths = "auto"
+  )
 
-    freezePane(
-      wb = wb,
-      sheet = "Estimates - Domain",
-      firstRow = TRUE,
-      firstCol = TRUE
-    )
-
-    addWorksheet(wb, sheetName = "Estimates - Subdomain", gridLines = FALSE)
-    data <- estimators(
-      object = object, indicator = indicator,
-      MSE = MSE, CV = CV, level = "subdomain")$ind
-
-    writeDataTable(
-      x = data,
-      sheet = "Estimates - Subdomain",
-      wb = wb,
-      startRow = 1,
-      startCol = 1,
-      rowNames = FALSE,
-      headerStyle = headlines_cs,
-      tableStyle = "TableStyleMedium2",
-      withFilter = FALSE
-    )
-
-    setColWidths(
-      wb = wb,
-      sheet = "Estimates - Subdomain",
-      cols = seq_len(ncol(data)),
-      widths = "auto"
-    )
-
-    freezePane(
-      wb = wb,
-      sheet = "Estimates - Subdomain",
-      firstRow = TRUE,
-      firstCol = TRUE
-    )
-  }
-################################################################################
-  else if(!any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
-    addWorksheet(wb, sheetName = "Estimates", gridLines = FALSE)
-    data <- estimators(
-      object = object, indicator = indicator,
-      MSE = MSE, CV = CV
-    )$ind
-
-    writeDataTable(
-      x = data,
-      sheet = "Estimates",
-      wb = wb,
-      startRow = 1,
-      startCol = 1,
-      rowNames = FALSE,
-      headerStyle = headlines_cs,
-      tableStyle = "TableStyleMedium2",
-      withFilter = FALSE
-    )
-
-    setColWidths(
-      wb = wb,
-      sheet = "Estimates",
-      cols = seq_len(ncol(data)),
-      widths = "auto"
-    )
-
-    freezePane(
-      wb = wb,
-      sheet = "Estimates",
-      firstRow = TRUE,
-      firstCol = TRUE
-    )
-  }
+  freezePane(
+    wb = wb,
+    sheet = "Estimates",
+    firstRow = TRUE,
+    firstCol = TRUE
+  )
   return(wb)
 }

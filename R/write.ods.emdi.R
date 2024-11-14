@@ -23,7 +23,9 @@ write.ods <- function(object,
     )
   } else if (inherits(object, "ebp")) {
     add_summary_ods_ebp(object = object, wb = wb)
-  } else if (inherits(object, "fh")) {
+  } else if (inherits(object, "ebp_tf")) {
+    add_summary_ods_ebp_tf(object = object, wb = wb)
+  }else if (inherits(object, "fh")) {
     add_summary_ods_fh(object = object, wb = wb)
   } else if (inherits(object, "fh_tf")) {
     add_summary_ods_fh_tf(object = object, wb = wb)
@@ -96,6 +98,58 @@ add_summary_ods_ebp <- function(object, wb, headlines_cs) {
 
   return(NULL)
 }
+
+#__________________________________________Rachael______________________________
+add_summary_ods_ebp_tf <- function(object, wb, headlines_cs) {
+  su <- summary(object)
+
+  df_nobs <- data.frame(Count = c(
+    su$out_of_smp_dom,
+    su$in_smp_dom, su$out_of_smp_subdom,
+    su$in_smp_subdom, su$size_pop,
+    su$size_smp
+  ))
+  rownames(df_nobs) <- c(
+    "Out of sample domains",
+    "In sample domains",
+    "Out of sample subdomains",
+    "In sample subdomains",
+    "Total observations in the population",
+    "Tn sample observations"
+  )
+
+  df_nobs <- cbind.data.frame(rownames(df_nobs), df_nobs)
+  readODS::write_ods(x = df_nobs, path = paste0(wb, "_sumObs", ".ods"))
+
+  df_size_dom <- as.data.frame(su$size_dom)
+  df_size_dom <- cbind.data.frame(rownames(df_size_dom), df_size_dom)
+  readODS::write_ods(x = df_size_dom, path = paste0(wb, "_sumDom", ".ods"))
+
+  df_size_subdom <- as.data.frame(su$size_subdom)
+  df_size_subdom <- cbind.data.frame(rownames(df_size_subdom), df_size_subdom)
+  readODS::write_ods(x = df_size_subdom, path = paste0(wb, "_sumSubDom", ".ods"))
+
+  if (!is.null(su$transform)) {
+    readODS::write_ods(
+      x = su$transform,
+      path = paste0(wb, "_sumTrafo", ".ods")
+    )
+  }
+  su$normality <- cbind.data.frame(rownames(su$normality), su$normality)
+  readODS::write_ods(x = su$normality, path = paste0(wb, "_sumNorm", ".ods"))
+
+  su$coeff_determ <- cbind.data.frame(
+    "Coefficients of determination",
+    su$coeff_determ
+  )
+  readODS::write_ods(x = su$coeff_determ, path = paste0(
+    wb, "_sumCoefDet",
+    ".ods"
+  ))
+
+  return(NULL)
+}
+#_______________________________________________________________________________
 
 add_summary_ods_fh <- function(object, wb, headlines_cs) {
   su <- summary(object)
@@ -270,7 +324,7 @@ add_pointests_ods <- function(object, indicator, wb, headlines_cs) {
                         in help(estimators.emdi).")))
   }
 ################################################################################
-  if(inherits(object, "fh_tf")){
+  if (any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
     data <- point_emdi(object = object, indicator = indicator)$ind_Domain
     data[, 1] <- iconv(x = data[, 1], from = "", to = "UTF-8")
     readODS::write_ods(x = data, path = paste0(wb, "_pointEstimDomain", ".ods"))
@@ -280,7 +334,7 @@ add_pointests_ods <- function(object, indicator, wb, headlines_cs) {
     readODS::write_ods(x = data, path = paste0(wb, "_pointEstimSubdomain", ".ods"))
   }
 ################################################################################
-  else if(!inherits(object, "fh_tf")){
+  else if (!any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
     data <- point_emdi(object = object, indicator = indicator)$ind
     data[, 1] <- iconv(x = data[, 1], from = "", to = "UTF-8")
     readODS::write_ods(x = data, path = paste0(wb, "_pointEstim", ".ods"))
@@ -293,7 +347,7 @@ add_precisions_ods <- function(object, indicator, MSE, wb, headlines_cs, CV) {
   precisions <- mse_emdi(object = object, indicator = indicator, CV = TRUE)
   if (MSE) {
 ################################################################################
-    if(inherits(object, "fh_tf")){
+    if (any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
       precisions$ind_Domain[, 1] <- iconv(x <- precisions$ind_Domain[, 1],
                                           from = "", to = "UTF-8")
       readODS::write_ods(x = precisions$ind_Domain,
@@ -304,7 +358,7 @@ add_precisions_ods <- function(object, indicator, MSE, wb, headlines_cs, CV) {
       readODS::write_ods(x = precisions$ind_Subdomain, path = paste0(wb, "_precMSESubdomain", ".ods"))
     }
 ################################################################################
-    else if(!inherits(object, "fh_tf")){
+    else {
       precisions$ind[, 1] <-
         iconv(x <- precisions$ind[, 1], from = "", to = "UTF-8")
       readODS::write_ods(
@@ -316,7 +370,7 @@ add_precisions_ods <- function(object, indicator, MSE, wb, headlines_cs, CV) {
   }
   if (CV) {
 ################################################################################
-    if(inherits(object, "fh_tf")){
+    if (any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
       precisions$ind_cv_Domain[, 1] <- iconv(x <- precisions$ind_cv_Domain[, 1],
                                       from = "", to = "UTF-8")
       readODS::write_ods(x = precisions$ind_cv_Domain,
@@ -328,7 +382,7 @@ add_precisions_ods <- function(object, indicator, MSE, wb, headlines_cs, CV) {
                          path = paste0(wb, "_precCVSubdomain", ".ods"))
     }
 ################################################################################
-else if(!inherits(object, "fh_tf")){
+else if (!any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
   precisions$ind_cv[, 1] <-
     iconv(x <- precisions$ind_cv[, 1], from = "", to = "UTF-8")
   readODS::write_ods(
@@ -343,7 +397,7 @@ else if(!inherits(object, "fh_tf")){
 
 add_estims_ods <- function(object, indicator, wb, headlines_cs, MSE, CV) {
 ################################################################################
-  if(inherits(object, "fh_tf")){
+  if (any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
     data <- estimators(
       object = object, indicator = indicator,
       MSE = MSE, CV = CV, level = "domain")$ind
@@ -361,7 +415,7 @@ add_estims_ods <- function(object, indicator, wb, headlines_cs, MSE, CV) {
     readODS::write_ods(x = data, path = paste0(wb, "_estimSubdomain", ".ods"))
   }
 ################################################################################
-  else if(!inherits(object, "fh_tf")){
+  else if (!any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
     data <- estimators(
       object = object, indicator = indicator,
       MSE = MSE, CV = CV
