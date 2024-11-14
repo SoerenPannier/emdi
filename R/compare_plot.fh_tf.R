@@ -29,6 +29,13 @@ compare_plot.fh_tf <- function(model = NULL, direct = NULL, indicator = "all",
                            )))
   }
 
+  if (inherits(model, "fh_tf") && is.null(direct) && level == "domain") {
+    stop(strwrap(prefix = " ", initial = "",
+                    paste0("If the model is of type 'fh_tf' and the level is set at domain level,
+                    the input argument direct is required."
+                    )))
+  }
+
   compare_plot_fh_tf(
     model = model, direct = direct, indicator = indicator,
     MSE = MSE, CV = CV, level = level,
