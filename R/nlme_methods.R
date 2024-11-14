@@ -71,6 +71,26 @@ fixed.effects.fh <- function(object, ...) {
   fixed_effects
 }
 
+#' @export fixef.fh_tf
+#' @export
+#' @rdname fixef
+fixef.fh_tf <- function(object, ...) {
+  throw_class_error(object, "fh_tf")
+  fixed_effects <- object$model$coefficients$coefficients
+  names(fixed_effects) <- row.names(object$model$coefficients)
+  fixed_effects
+}
+
+#' @export fixed.effects.fh_tf
+#' @export
+#' @rdname fixef
+fixed.effects.fh_tf <- function(object, ...) {
+  throw_class_error(object, "fh_tf")
+  fixed_effects <- object$model$coefficients$coefficients
+  names(fixed_effects) <- row.names(object$model$coefficients)
+  fixed_effects
+}
+
 #' Extract emdi Object Data
 #'
 #' Methods \code{getData.direct}, \code{getData.ebp} and \code{getData.fh}
@@ -137,6 +157,16 @@ getData.fh <- function(object, ...) {
   object$framework$combined_data
 }
 
+#' @export getData.fh_tf
+#' @export
+#' @rdname getData
+getData.fh_tf <- function(object, ...) {
+  throw_class_error(object, "fh_tf")
+  message(strwrap(prefix = " ", initial = "",
+                  "The combined data set (combined_data) of the fh_tf object
+                  is returned."))
+  object$framework$orig_data
+}
 #' Extract Grouping Factors from an emdi Object
 #'
 #' Methods \code{getGroups.direct}, \code{getGroups.ebp} and
@@ -193,6 +223,23 @@ getGroups.fh <- function(object, ...) {
   object$ind$Domain
 }
 
+#' @export getGroups.fh_tf
+#' @export
+#' @rdname getGroups
+getGroups.fh_tf <- function(object, ...) {
+  throw_class_error(object, "fh_tf")
+  cat("Domains: \n")
+  if(is.factor(object$ind_Domain$Domain)){
+    print(object$ind_Domain$Domain)
+  } else (print(as.factor(object$ind_Domain$Domain)))
+
+  cat("\n")
+  cat("SubDomains: \n")
+  if(is.factor(object$ind_Subdomain$Subdomain)){
+    print(object$ind_Domain$Domain)
+  } else (print(as.factor(object$ind_Subdomain$Subdomain)))
+  cat("\n")
+}
 
 #' Extract Grouping Formula from an emdi Object
 #'
@@ -252,6 +299,14 @@ getGroupsFormula.fh <- function(object, ...) {
   eval(parse(text = paste("~", object$framework$domains)))
 }
 
+#' @export getGroupsFormula.fh_tf
+#' @export
+#' @rdname getGroupsFormula
+getGroupsFormula.fh_tf <- function(object, ...) {
+  throw_class_error(object, "fh_tf")
+  eval(parse(text = paste("~", object$call$domains, "+", object$call$subdomains)))
+}
+
 #' Extract Response Variable from an emdi Object
 #'
 #' Methods \code{getResponse.direct}, \code{getResponse.ebp} and
@@ -309,6 +364,13 @@ getResponse.fh <- function(object, ...) {
   object$framework$direct
 }
 
+#' @export getResponse.fh_tf
+#' @export
+#' @rdname getResponse
+getResponse.fh_tf <- function(object, ...) {
+  throw_class_error(object, "fh_tf")
+  object$framework$y_ij # If transformation is used, it is given in transformed scale
+}
 
 #' Extract Variance-covariance Matrix from an emdi Object
 #'
@@ -628,6 +690,93 @@ print.getVarCov.fh <- function(x, ...) {
   }
 }
 
+#' @export getVarCov.fh_tf
+#' @export
+#' @rdname getVarCov
+
+getVarCov.fh_tf <- function(obj, individuals = 1, type = "random.effects", ...) {
+  throw_class_error(obj, "fh_tf")
+
+  if (is.null(type) || !(type == "random.effects" ||
+                         type == "conditional" ||
+                         type == "marginal")) {
+    stop(strwrap(prefix = " ", initial = "",
+                 "The three options for type are ''random.effects'',
+                 ''conditional'' or ''marginal''."))
+  }
+
+  result <- list()
+  for (i in individuals) {
+    if (!(is.numeric(i) || is.character(i))) {
+      stop("individuals must be numeric or a character specifying a level of
+             a in-sample subdomain.")
+    }
+    if (is.numeric(i)) {
+      in_dom <- unique(obj$framework$data[obj$framework$data$ObsSub == "yes",
+                                          obj$call$domains])
+
+      if (!is.element(obj$ind_Domain$Domain[i], in_dom)) {
+        stop(strwrap(prefix = " ", initial = "",
+                     paste0("No variance-covariance matrix is available.
+                            Individual '", i, "' is not contained in the sample
+                            and therefore not used for the model fitting.")))
+      } else if(is.element(obj$ind_Domain$Domain[i], in_dom)){
+        i <- as.character(obj$ind_Domain$Domain[i])
+      }
+
+      N_i <- table(obj$framework$orig_data[[obj$call$domains]])[[i]]
+      subdom_i <- unique(obj$framework$orig_data[obj$framework$orig_data[[obj$call$domains]] == i,
+                                                 obj$call$subdomains])
+      con_V_i <- diag(obj$framework$vare[subdom_i])
+      dimnames(con_V_i) <- list(subdom_i, subdom_i)
+
+      ran_V_i <- obj$model$variances[["Domain"]] + diag(rep(obj$model$variances[["Subdomain"]], N_i))
+
+      mar_V_i <- con_V_i + ran_V_i
+      dimnames(mar_V_i) <- list(subdom_i, subdom_i)
+    }
+    if(type == "random.effects"){
+      # For fh_tf random effects differs between domains
+      result[[i]] <- list(V = ran_V_i, i = i,
+                          v_dom = obj$model$variances[["Domain"]],
+                          v_sub = obj$model$variances[["Subdomain"]])
+      class(result) <- c("getVarCov.fh_tf", "VarCov_random")
+    } else if(type == "marginal"){
+      result[[i]] <- list(V = mar_V_i, i = i)
+      class(result) <- c("getVarCov.fh_tf", "VarCov_marginal")
+    } else if (type == "conditional"){
+      result[[i]] <- list(V = con_V_i, i = i)
+      class(result) <- c("getVarCov.fh_tf", "VarCov_conditional")
+    }
+  }
+
+  result
+}
+
+#' @export
+print.getVarCov.fh_tf <- function(x, ...) {
+  if (inherits(x, "VarCov_random")) {
+    for (i in names(x)) {
+      cat("domain", as.character(x[[i]]$i), "\n")
+      cat("Random effects variance covariance\n")
+      print(x[[i]]$V)
+      cat("Domain level:", round(x[[i]]$v_dom, 4), "\t",
+          "Subdomain level:", round(x[[i]]$v_sub, 4), "\n")
+    }
+  } else if (inherits(x, "VarCov_conditional")) {
+    for (i in names(x)) {
+      cat("domain", as.character(x[[i]]$i), "\n")
+      cat("Conditional variance covariance matrix\n")
+      print(x[[i]]$V)
+    }
+  } else if (inherits(x, "VarCov_marginal")) {
+    for (i in names(x)) {
+      cat("domain", as.character(x[[i]]$i), "\n")
+      cat("Marginal variance covariance matrix\n")
+      print(x[[i]]$V)
+    }
+  }
+}
 #' Confidence Intervals on Coefficients of an emdi Object
 #'
 #' Methods \code{intervals.ebp} and \code{intervals.fh} provide the approximate
@@ -686,6 +835,29 @@ intervals.ebp <- function(object, level = 0.95, parm = NULL, ...) {
 #' @rdname intervals
 intervals.fh <- function(object, level = 0.95, parm = NULL, ...) {
   throw_class_error(object, "fh")
+  coefmat <- object$model$coefficients
+
+  coefs <- coefmat[, 1]
+  stds <- coefmat[, 2]
+  dist <- qnorm(p = (1 - level) / 2, 0, stds)
+  ret_value <- data.frame(
+    lower = coefs + dist,
+    est. = coefs,
+    upper = coefs + abs(dist),
+    row.names = row.names(coefmat)
+  )
+  if (is.null(parm)) {
+    as.matrix(ret_value)
+  } else {
+    as.matrix(ret_value[parm, ])
+  }
+}
+
+#' @export intervals.fh_tf
+#' @export
+#' @rdname intervals
+intervals.fh_tf <- function(object, level = 0.95, parm = NULL, ...) {
+  throw_class_error(object, "fh_tf")
   coefmat <- object$model$coefficients
 
   coefs <- coefmat[, 1]
@@ -775,4 +947,30 @@ random.effects.fh <- function(object, ...) {
   random_effects <- object$model$random_effects
   row.names(random_effects) <- object$ind$Domain[object$ind$Out == 0]
   random_effects
+}
+
+#' @export ranef.fh_tf
+#' @export
+#' @rdname ranef
+ranef.fh_tf <- function(object, ...) {
+  throw_class_error(object, "fh_tf")
+  cat("Random effects at domain level\n")
+  print(object$model$random_effects_Domain)
+  cat("\n")
+  cat("Random effects at subdomain level\n")
+  print(object$model$random_effects_Subdomain)
+  cat("\n")
+}
+
+#' @export random.effects.fh_tf
+#' @export
+#' @rdname ranef
+random.effects.fh_tf <- function(object, ...) {
+  throw_class_error(object, "fh_tf")
+  cat("Random effects at domain level:\n")
+  print(object$model$random_effects_Domain)
+  cat("\n")
+  cat("Random effects at subdomain level:\n")
+  print(object$model$random_effects_Subdomain)
+  cat("\n")
 }

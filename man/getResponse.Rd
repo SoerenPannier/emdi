@@ -5,6 +5,7 @@
 \alias{getResponse.direct}
 \alias{getResponse.ebp}
 \alias{getResponse.fh}
+\alias{getResponse.fh_tf}
 \alias{getResponse.ebp_tf}
 \title{Extract Response Variable from an emdi Object}
 \usage{
@@ -13,6 +14,8 @@
 \method{getResponse}{ebp}(object, ...)
 
 \method{getResponse}{fh}(object, ...)
+
+\method{getResponse}{fh_tf}(object, ...)
 
 \method{getResponse}{direct}(object, ...)
 

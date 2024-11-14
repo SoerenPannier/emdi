@@ -5,6 +5,7 @@
 \alias{getData.direct}
 \alias{getData.ebp}
 \alias{getData.fh}
+\alias{getData.fh_tf}
 \alias{getData.ebp_tf}
 \title{Extract emdi Object Data}
 \usage{
@@ -13,6 +14,8 @@
 \method{getData}{ebp}(object, ...)
 
 \method{getData}{fh}(object, ...)
+
+\method{getData}{fh_tf}(object, ...)
 
 \method{getData}{direct}(object, ...)
 
