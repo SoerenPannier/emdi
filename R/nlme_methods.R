@@ -1071,10 +1071,10 @@ random.effects.fh <- function(object, ...) {
 #' @rdname ranef
 ranef.fh_tf <- function(object, ...) {
   throw_class_error(object, "fh_tf")
-  cat("Random effects at domain level\n")
+  cat(paste0("Level: ", object$call$domains), "\n")
   print(object$model$random_effects_Domain)
   cat("\n")
-  cat("Random effects at subdomain level\n")
+  cat(paste0("Level: ", object$call$subdomains), "\n")
   print(object$model$random_effects_Subdomain)
   cat("\n")
 }
@@ -1084,10 +1084,10 @@ ranef.fh_tf <- function(object, ...) {
 #' @rdname ranef
 random.effects.fh_tf <- function(object, ...) {
   throw_class_error(object, "fh_tf")
-  cat("Random effects at domain level:\n")
+  cat(paste0("Level: ", object$call$domains), "\n")
   print(object$model$random_effects_Domain)
   cat("\n")
-  cat("Random effects at subdomain level:\n")
+  cat(paste0("Level: ", object$call$subdomains), "\n")
   print(object$model$random_effects_Subdomain)
   cat("\n")
 }

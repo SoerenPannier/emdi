@@ -513,7 +513,7 @@ define_evallabel <- function(type, label, indi) {
           line = c(
             title = indi,
             y_lab = "Value",
-            x_lab = "Subdomain (ordered by decreasing MSE of Direct)"
+            x_lab = "Subdomain"
           ),
           boxplot_MSE = c(
             title = indi,
@@ -523,7 +523,7 @@ define_evallabel <- function(type, label, indi) {
           ordered_MSE = c(
             title = indi,
             y_lab = "MSE",
-            x_lab = "Subdomain (ordered by increasing MSE of Direct)"
+            x_lab = "Subdomain "
           ),
           boxplot_CV = c(
             title = indi,
@@ -533,7 +533,7 @@ define_evallabel <- function(type, label, indi) {
           ordered_CV = c(
             title = indi,
             y_lab = "CV",
-            x_lab = "Subdomain (ordered by increasing CV of Direct)"
+            x_lab = "Subdomain"
           )
         )
       }
@@ -647,7 +647,7 @@ define_evallabel <- function(type, label, indi) {
           line = c(
             title = indi,
             y_lab = "Value",
-            x_lab = "Subdomain (ordered by decreasing MSE of Direct)"
+            x_lab = "Subdomain"
           ),
           boxplot_MSE = c(
             title = indi,
@@ -657,7 +657,7 @@ define_evallabel <- function(type, label, indi) {
           ordered_MSE = c(
             title = indi,
             y_lab = "MSE",
-            x_lab = "Subdomain (ordered by increasing MSE of Direct)"
+            x_lab = "Subdomain"
           ),
           boxplot_CV = c(
             title = indi,
@@ -667,7 +667,7 @@ define_evallabel <- function(type, label, indi) {
           ordered_CV = c(
             title = indi,
             y_lab = "CV",
-            x_lab = "Subdomain (ordered by increasing CV of Direct)"
+            x_lab = "Subdomain"
           )
         )
       }
