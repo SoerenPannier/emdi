@@ -98,6 +98,9 @@ compare_plot_fh_tf <- function(model, direct, indicator = "all", MSE = FALSE,
 
   if(level == "domain"){
     Data <- point_emdi(object = model, indicator = "all")$ind_Domain
+
+    compare_plot_check2(Data, direct$ind)
+
     Data <- merge(direct$ind[, c("Domain", indicator)], Data,
                   id = "Domain", all.x = T, all.y = F)
     colnames(Data)[2] <- "Direct"
@@ -108,6 +111,8 @@ compare_plot_fh_tf <- function(model, direct, indicator = "all", MSE = FALSE,
     colnames(Data) <- c("Domain", "FH_TF_Direct",
                         paste0(colnames(Data)[!(colnames(Data) %in%
                                                   c("Domain", "Direct"))], "_Model"))
+
+
     if (is.null(model$MSE_Domain)) {
       Data$smp_size <- NULL
     }
