@@ -51,6 +51,24 @@ fixed.effects.ebp <- function(object, ...) {
   object$model$coefficients$fixed
 }
 
+#____________________________ ebp_tf____________________________________________
+#' @export fixef.ebp_tf
+#' @export
+#' @rdname fixef
+fixef.ebp_tf <- function(object, ...) {
+  throw_class_error(object, "ebp_tf")
+  object$model$coefficients$fixed
+}
+
+#' @export fixed.effects.ebp_tf
+#' @export
+#' @rdname fixef
+fixed.effects.ebp_tf <- function(object, ...) {
+  throw_class_error(object, "ebp_tf")
+  object$model$coefficients$fixed
+}
+#_______________________________________________________________________________
+
 #' @export fixef.fh
 #' @export
 #' @rdname fixef
@@ -145,7 +163,20 @@ getData.ebp <- function(object, ...) {
   }
   object$framework$smp_data
 }
-
+#__________________________________ebp_tf_______________________________________
+#' @export getData.ebp_tf
+#' @export
+#' @rdname getData
+getData.ebp_tf <- function(object, ...) {
+  throw_class_error(object, "ebp_tf")
+  if (object$transformation != "no") {
+    message(strwrap(prefix = " ", initial = "",
+                    "The untransformed sample data set of the ebp_tf object
+                    is returned."))
+  }
+  object$framework$smp_data
+}
+#_______________________________________________________________________________
 #' @export getData.fh
 #' @export
 #' @rdname getData
@@ -215,6 +246,15 @@ getGroups.ebp <- function(object, ...) {
   object$framework$smp_domains_vec
 }
 
+#__________________________ebp_tf_______________________________________________
+#' @export getGroups.ebp
+#' @export
+#' @rdname getGroups
+getGroups.ebp_tf <- function(object, ...) {
+  throw_class_error(object, "ebp_tf")
+  object$framework$smp_domains_vec
+}
+#_______________________________________________________________________________
 #' @export getGroups.fh
 #' @export
 #' @rdname getGroups
@@ -290,7 +330,15 @@ getGroupsFormula.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
   eval(parse(text = paste("~", object$framework$smp_domains)))
 }
-
+#_____________________________ebp_tf____________________________________________
+#' @export getGroupsFormula.ebp_tf
+#' @export
+#' @rdname getGroupsFormula
+getGroupsFormula.ebp_tf <- function(object, ...) {
+  throw_class_error(object, "ebp_tf")
+  eval(parse(text = paste("~", object$framework$smp_domains)))
+}
+#_______________________________________________________________________________
 #' @export getGroupsFormula.fh
 #' @export
 #' @rdname getGroupsFormula
@@ -356,6 +404,15 @@ getResponse.ebp <- function(object, ...) {
   makeXY(object$fixed, object$framework$smp_data)$y
 }
 
+#____________________________ebp_tf_____________________________________________
+#' @export getResponse.ebp_tf
+#' @export
+#' @rdname getResponse
+getResponse.ebp_tf <- function(object, ...) {
+  throw_class_error(object, "ebp_tf")
+  makeXY(object$fixed, object$framework$smp_data)$y
+}
+#_______________________________________________________________________________
 #' @export getResponse.fh
 #' @export
 #' @rdname getResponse
@@ -443,7 +500,26 @@ getVarCov.ebp <- function(obj, individuals = 1, type = "random.effects", ...) {
 
   getVarCov(obj$model, individuals = individuals, type = type)
 }
+#___________________________ebp_tf______________________________________________
+#' @export getVarCov.ebp_tf
+#' @export
+#' @rdname getVarCov
 
+getVarCov.ebp_tf <- function(obj, individuals = 1, type = "random.effects", ...) {
+  throw_class_error(obj, "ebp_tf")
+
+  if (is.null(type) || !(type == "random.effects" ||
+                         type == "conditional" ||
+                         type == "marginal")) {
+    stop(strwrap(prefix = " ", initial = "",
+                 "The three options for type are ''random.effects'',
+                 ''conditional'' or ''marginal''."))
+  }
+
+  getVarCov(obj$model, individuals = individuals, type = type)
+}
+
+#_______________________________________________________________________________
 #' @export getVarCov.fh
 #' @export
 #' @rdname getVarCov
@@ -829,7 +905,20 @@ intervals.ebp <- function(object, level = 0.95, parm = NULL, ...) {
     intervals(object$model, level = level)$fixed
   }
 }
-
+#____________________________________ebp_tf_____________________________________
+#' @export intervals.ebp_tf
+#' @export
+#' @rdname intervals
+intervals.ebp_tf <- function(object, level = 0.95, parm = NULL, ...) {
+  throw_class_error(object, "ebp_tf")
+  if (!is.null(parm)) {
+    confidence_intervals <- intervals(object$model, level = level)$fixed
+    subset(confidence_intervals, rownames(confidence_intervals) %in% parm)
+  } else {
+    intervals(object$model, level = level)$fixed
+  }
+}
+#_______________________________________________________________________________
 #' @export intervals.fh
 #' @export
 #' @rdname intervals
@@ -928,7 +1017,23 @@ random.effects.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
   ranef(object$model)
 }
+#_________________________________ebp_tf________________________________________
+#' @export ranef.ebp_tf
+#' @export
+#' @rdname ranef
+ranef.ebp_tf <- function(object, ...) {
+  throw_class_error(object, "ebp_tf")
+  ranef(object$model)
+}
 
+#' @export random.effects.ebp_tf
+#' @export
+#' @rdname ranef
+random.effects.ebp_tf <- function(object, ...) {
+  throw_class_error(object, "ebp_tf")
+  ranef(object$model)
+}
+#_______________________________________________________________________________
 #' @export ranef.fh
 #' @export
 #' @rdname ranef
