@@ -29,6 +29,13 @@ compare_plot.fh_tf <- function(model = NULL, direct = NULL, indicator = "all",
                            )))
   }
 
+  if (inherits(model, "fh_tf") && is.null(direct) && level == "domain") {
+    stop(strwrap(prefix = " ", initial = "",
+                    paste0("If the model is of type 'fh_tf' and the level is set at domain level,
+                    the input argument direct is required."
+                    )))
+  }
+
   compare_plot_fh_tf(
     model = model, direct = direct, indicator = indicator,
     MSE = MSE, CV = CV, level = level,
@@ -98,6 +105,9 @@ compare_plot_fh_tf <- function(model, direct, indicator = "all", MSE = FALSE,
 
   if(level == "domain"){
     Data <- point_emdi(object = model, indicator = "all")$ind_Domain
+
+    compare_plot_check2(Data, direct$ind)
+
     Data <- merge(direct$ind[, c("Domain", indicator)], Data,
                   id = "Domain", all.x = T, all.y = F)
     colnames(Data)[2] <- "Direct"
@@ -108,6 +118,8 @@ compare_plot_fh_tf <- function(model, direct, indicator = "all", MSE = FALSE,
     colnames(Data) <- c("Domain", "FH_TF_Direct",
                         paste0(colnames(Data)[!(colnames(Data) %in%
                                                   c("Domain", "Direct"))], "_Model"))
+
+
     if (is.null(model$MSE_Domain)) {
       Data$smp_size <- NULL
     }
