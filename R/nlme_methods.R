@@ -252,7 +252,17 @@ getGroups.ebp <- function(object, ...) {
 #' @rdname getGroups
 getGroups.ebp_tf <- function(object, ...) {
   throw_class_error(object, "ebp_tf")
-  object$framework$smp_domains_vec
+  cat("Domains: \n")
+  if(is.factor(object$ind_Domain$Domain)){
+    print(object$ind_Domain$Domain)
+  } else (print(as.factor(object$ind_Domain$Domain)))
+
+  cat("\n")
+  cat("SubDomains: \n")
+  if(is.factor(object$ind_Subdomain$Subdomain)){
+    print(object$ind_Domain$Domain)
+  } else (print(as.factor(object$ind_Subdomain$Subdomain)))
+  cat("\n")
 }
 #_______________________________________________________________________________
 #' @export getGroups.fh
@@ -336,8 +346,10 @@ getGroupsFormula.ebp <- function(object, ...) {
 #' @rdname getGroupsFormula
 getGroupsFormula.ebp_tf <- function(object, ...) {
   throw_class_error(object, "ebp_tf")
-  eval(parse(text = paste("~", object$framework$smp_domains)))
+  #eval(parse(text = paste("~", object$framework$smp_domains)))
+  eval(parse(text = paste("~", object$call$smp_domains, "+", object$call$smp_subdomains)))
 }
+
 #_______________________________________________________________________________
 #' @export getGroupsFormula.fh
 #' @export
