@@ -95,6 +95,7 @@ compare_plot(
   shape = c(16, 16),
   line_type = c("solid", "solid"),
   gg_theme = NULL,
+  level = NULL,
   ...
 )
 }
