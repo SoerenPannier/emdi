@@ -13,6 +13,9 @@
 #' @param CV optional logical. If \code{TRUE}, coefficients of variation for
 #' selected indicators per domain are added to the data frame of point
 #' estimates. Defaults to \code{FALSE}.
+#' @param level argument is required for "ebp_tf" and "fh_tf". There are two
+#' options on which level the results are returned: (i) at domain level
+#' ("domain") or (ii) at subdomain level ("subdomain").
 #' @param ... arguments to be passed to or from other methods.
 #' @return
 #' The return of \code{estimators} depends on the class of its argument. The
@@ -20,7 +23,7 @@
 #' return of that method.
 #' @export
 
-estimators <- function(object, indicator, MSE, CV,level, ...) UseMethod("estimators")
+estimators <- function(object, indicator, MSE, CV, level, ...) UseMethod("estimators")
 
 
 #' Presents Point, MSE and/or CV Estimates of an emdiObject
@@ -40,17 +43,24 @@ estimators <- function(object, indicator, MSE, CV,level, ...) UseMethod("estimat
 #' "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
 #' "Inequality" or "Custom". If two of these groups are selected, only the first
 #' one is returned. Note, additional custom indicators can be
-#' defined as argument for model-based approaches (see also \code{\link{ebp}})
-#' and do not appear in groups of indicators even though these might belong to
-#' one of the groups. If the \code{model} argument is of type "fh",
-#' indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi
-#' object is overwritten by function benchmark). Defaults to "all".
+#' defined as argument for model-based approaches (see also \code{\link{ebp}} or
+#' \code{\line{ebp_tf}}) and do not appear in groups of indicators even though
+#' these might belong to one of the groups. If the \code{model} argument is of
+#' type "fh", indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi
+#' object is overwritten by function benchmark). Defaults to "all". If the
+#' \code{model} argument is of type "fh_tf" and the \code{level} is "subdomain",
+#' indicator can be set to "all", "Direct" or "FH_TF". If the \code{model}
+#' argument is of type "fh_tf" and the \code{level} is "domain", indicator can
+#' be set to "all" or "FH_TF".
 #' @param MSE optional logical. If \code{TRUE}, MSE estimates for selected
 #' indicators per domain are added to the data frame of point estimates.
 #' Defaults to \code{FALSE}.
 #' @param CV optional logical. If \code{TRUE}, coefficients of variation for
 #' selected indicators per domain are added to the data frame of point
 #' estimates. Defaults to \code{FALSE}.
+#' @param level argument is required for "ebp_tf" and "fh_tf". There are two
+#' options on which level the results are returned: (i) at domain level
+#' ("domain") or (ii) at subdomain level ("subdomain").
 #' @param ... other parameters that can be passed to function \code{estimators}.
 #' @return
 #' The return of \code{estimators.emdi} is an object of type "estimators.emdi"
@@ -65,7 +75,7 @@ estimators <- function(object, indicator, MSE, CV,level, ...) UseMethod("estimat
 #' documentation, see \code{\link[base]{as.data.frame}}), \code{subset} (for
 #' default documentation, see \code{\link[base]{subset}}).
 #' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}},
-#' \code{\link{fh}}
+#' \code{\link{ebp_tf}}, \code{\link{fh}}, \code{\link{fh_tf}}
 #' @examples
 #' \donttest{
 #' # Loading data - population and sample data
@@ -104,8 +114,8 @@ estimators <- function(object, indicator, MSE, CV,level, ...) UseMethod("estimat
 #' @rdname estimators
 #' @export
 
-estimators.emdi <- function(object, indicator = "all", MSE = FALSE,level=NULL,
-                            CV = FALSE, ...) {
+estimators.emdi <- function(object, indicator = "all", MSE = FALSE, CV = FALSE,
+                            level = NULL, ...) {
   estimators_check(
     object = object, indicator = indicator,
     MSE = MSE, CV = CV, level = level
