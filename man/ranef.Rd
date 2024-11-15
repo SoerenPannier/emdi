@@ -30,8 +30,8 @@
 \method{random.effects}{fh_tf}(object, ...)
 }
 \arguments{
-\item{object}{an object of type "emdi", depending on the used method either
-"ebp" or "fh".}
+\item{object}{an object of type "emdi", depending on any of the used method:
+"ebp", "ebp_tf", "fh" or "fh_tf".}
 
 \item{...}{additional arguments that are not used in this method.}
 }
@@ -40,8 +40,9 @@ A vector containing the estimated random effects at domain level is
 returned.
 }
 \description{
-Methods \code{ranef.ebp} and \code{ranef.fh} extract the
-fixed effects from an emdi object of class "ebp" or "fh".
+Methods \code{ranef.ebp}, \code{ranef.ebp_tf},  \code{ranef.fh} and
+\code{ranef.fh_tf} extract the fixed effects from an emdi object of class
+"ebp", "ebp_tf", "fh" or "fh_tf".
 }
 \details{
 The alias \code{random.effects} can also be used instead of
@@ -65,6 +66,6 @@ ranef(emdi_model)
 }
 }
 \seealso{
-\code{\link{ebp}}, \code{\link{fh}},
-\code{\link[nlme]{random.effects}}
+\code{\link{ebp}}, \code{\link{ebp_tf}}, \code{\link{fh}},
+\code{\link{fh_tf}}, \code{\link[nlme]{random.effects}}
 }

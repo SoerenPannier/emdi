@@ -17,7 +17,8 @@
 \method{getVarCov}{fh_tf}(obj, individuals = 1, type = "random.effects", ...)
 }
 \arguments{
-\item{obj}{an object of type "emdi", either "ebp" or "fh".}
+\item{obj}{an object of type "emdi", depending on any of the used method:
+"ebp", "ebp_tf", "fh" or "fh_tf".}
 
 \item{individuals}{vector of levels of the in-sample domains can be
 specified for the types "\code{conditional}" or "\code{marginal}".}
@@ -36,18 +37,25 @@ A variance-covariance matrix or a list of variance-covariance
 matrices, if more than one individual is selected. For method
 \code{getVarCov.ebp}, the dimensions of the matrices are 1 x 1 for type
 "\code{random.effects}" and number of in-sample domains x number of
-in-sample domains for types "\code{conditional}" and "\code{marginal}". For
-method \code{getVarCov.fh}, for all types the dimensions of the matrices are
+in-sample domains for types "\code{conditional}" and "\code{marginal}".
+For method \code{getVarCov.ebp_tf}, the dimensions of the matrices are
+number of observations x number of observations in in-sample domains for all
+types: "\code{random.effects}", "\code{conditional}" and "\code{marginal}".
+For method \code{getVarCov.fh}, for all types the dimensions of the matrices are
 1 x 1. For type "\code{marginal}" the diagonal elements of the variance
 covariances matrices are returned for the chosen individual. Please note, if
 the correlation argument of the "fh" object is set to spatial, the variance
 covariance matrix has non-zero off-diagonal elements, because the assumption
 of independence of the error terms does not hold. For the non-spatial models,
-the off-diagonal elements are zero.
+the off-diagonal elements are zero. For method \code{getVarCov.fh_tf},
+the dimensions of the matrices are number of in-sample subdomains x number
+of in-sample subdomains for all types: "\code{random.effects}",
+"\code{conditional}" and "\code{marginal}".
 }
 \description{
-Methods \code{getVarCov.ebp} and \code{getVarCov.fh} extract the
-variance-covariance matrix from a fitted model of class "ebp" or "fh".
+Methods \code{getVarCov.ebp}, \code{getVarCov.ebp_tf}, \code{getVarCov.fh}
+and \code{getVarCov.fh_tf} extract the variance-covariance matrix from a
+fitted model of class "ebp", "ebp_tf", "fh" or "fh_tf".
 }
 \details{
 The generic function \code{getVarCov} is imported from package nlme
@@ -75,5 +83,6 @@ getVarCov(fh_std)
 }
 }
 \seealso{
-\code{\link{ebp}}, \code{\link{fh}}, \code{\link[nlme]{getVarCov}}
+\code{\link{ebp}}, \code{\link{ebp_tf}},
+\code{\link{fh}}, \code{\link{fh_tf}}, \code{\link[nlme]{getVarCov}}
 }

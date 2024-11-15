@@ -20,8 +20,8 @@
 \method{getResponse}{fh_tf}(object, ...)
 }
 \arguments{
-\item{object}{an object of type "emdi", depending on the method either
-"direct", "ebp" or "fh".}
+\item{object}{an object of type "emdi", depending on any of the used method:
+"ebp", "ebp_tf", "fh" or "fh_tf".}
 
 \item{...}{additional arguments that are not used in this method.}
 }
@@ -29,8 +29,9 @@
 Vector containing the response variable.
 }
 \description{
-Methods \code{getResponse.direct}, \code{getResponse.ebp} and
-\code{getResponse.fh} extract the response variable from an emdi object.
+Methods \code{getResponse.direct}, \code{getResponse.ebp},
+\code{getResponse.ebp_tf}, \code{getResponse.fh} and
+\code{getResponse.fh_tf} extract the response variable from an emdi object.
 }
 \details{
 The generic function \code{getResponse} is imported from package
@@ -53,6 +54,6 @@ getResponse(emdi_model)
 }
 }
 \seealso{
-\code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}},
-\code{\link[nlme]{getResponse}}
+\code{\link{direct}}, \code{\link{ebp}}, \code{\link{ebp_tf}},
+\code{\link{fh}}, \code{\link{fh_tf}}, \code{\link[nlme]{getResponse}}
 }

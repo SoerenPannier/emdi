@@ -20,8 +20,8 @@
 \method{getGroupsFormula}{fh_tf}(object, ...)
 }
 \arguments{
-\item{object}{an object of type "emdi", depending on the method either
-"direct", "ebp" or "fh".}
+\item{object}{an object of type "emdi", depending on any of the used method:
+"ebp", "ebp_tf", "fh" or "fh_tf".}
 
 \item{...}{additional arguments that are not used in this method.}
 }
@@ -29,8 +29,9 @@
 A one-sided formula.
 }
 \description{
-Methods \code{getGroupsFormula.direct}, \code{getGroupsFormula.ebp} and
-\code{getGroupsFormula.fh} extract the grouping formula from an
+Methods \code{getGroupsFormula.direct}, \code{getGroupsFormula.ebp},
+\code{getGroupsFormula.ebp_tf}, \code{getGroupsFormula.fh} and
+\code{getGroupsFormula.fh_tf} extract the grouping formula from an
 emdi object.
 }
 \details{
@@ -54,6 +55,6 @@ getGroupsFormula(emdi_model)
 }
 }
 \seealso{
-\code{\link{direct}}, \code{\link{ebp}},
-\code{\link{fh}}, \code{\link[nlme]{getGroupsFormula}}
+\code{\link{direct}}, \code{\link{ebp}}, \code{\link{ebp_tf}},
+\code{\link{fh}}, \code{\link{fh_tf}}, \code{\link[nlme]{getGroupsFormula}}
 }

@@ -20,8 +20,8 @@
 \method{getGroups}{fh_tf}(object, ...)
 }
 \arguments{
-\item{object}{an object of type "emdi", depending on the method either
-"direct", "ebp" or "fh".}
+\item{object}{an object of type "emdi", depending on any of the used method:
+"ebp", "ebp_tf", "fh" or "fh_tf".}
 
 \item{...}{additional arguments that are not used in this method.}
 }
@@ -29,8 +29,9 @@
 A vector containing the grouping factors.
 }
 \description{
-Methods \code{getGroups.direct}, \code{getGroups.ebp} and
-\code{getGroups.fh} extract grouping factors from an emdi object.
+Methods \code{getGroups.direct}, \code{getGroups.ebp}, \code{getGroups.ebp_tf},
+\code{getGroups.fh} and \code{getGroups.fh_tf} extract grouping factors from
+an emdi object.
 }
 \details{
 The generic function \code{getGroups} is imported from package nlme
@@ -52,6 +53,6 @@ getGroups(emdi_direct)
 }
 }
 \seealso{
-\code{\link{direct}}, \code{\link{ebp}},
-\code{\link{fh}}, \code{\link[nlme]{getGroups}}
+\code{\link{direct}}, \code{\link{ebp}}, \code{\link{ebp_tf}},
+\code{\link{fh}}, \code{\link{fh_tf}}, \code{\link[nlme]{getGroups}}
 }

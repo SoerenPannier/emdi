@@ -17,8 +17,8 @@
 \method{intervals}{fh_tf}(object, level = 0.95, parm = NULL, ...)
 }
 \arguments{
-\item{object}{an object of type "emdi", depending on the method either "ebp"
-or "fh".}
+\item{object}{an object of type "emdi", depending on any of the used method:
+"ebp", "ebp_tf", "fh" or "fh_tf".}
 
 \item{level}{an optional numeric value with the confidence level for the
 intervals. Defaults to 0.95.}
@@ -35,8 +35,9 @@ containing the lower confidence limits (lower), the
 estimated values (est.), and upper confidence limits (upper).
 }
 \description{
-Methods \code{intervals.ebp} and \code{intervals.fh} provide the approximate
-confidence intervals on the coefficients (fixed effects) of an emdi object.
+Methods \code{intervals.ebp}, \code{intervals.ebp_tf}, \code{intervals.fh}
+and \code{intervals.fh_tf} provide the approximate confidence intervals on
+the coefficients (fixed effects) of an emdi object.
 }
 \details{
 The generic function \code{intervals} is imported from package nlme
@@ -59,6 +60,6 @@ intervals(emdi_model)
 }
 }
 \seealso{
-\code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}},
-\code{\link[nlme]{intervals}}
+\code{\link{direct}}, \code{\link{ebp}}, \code{\link{ebp_tf}},
+\code{\link{fh}}, \code{\link{fh_tf}}, \code{\link[nlme]{intervals}}
 }

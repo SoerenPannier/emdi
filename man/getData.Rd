@@ -20,19 +20,20 @@
 \method{getData}{fh_tf}(object, ...)
 }
 \arguments{
-\item{object}{an object of type "emdi", depending on the method either
-"direct", "ebp" or "fh".}
+\item{object}{an object of type "emdi", depending on any of the used method:
+"ebp", "ebp_tf", "fh" or "fh_tf".}
 
 \item{...}{additional arguments that are not used in this method.}
 }
 \value{
-Data frame used to fit the model. For classes "direct" and "ebp" the
-(untransformed) sample data is returned. For class "fh" the combined data
-set is returned.
+Data frame used to fit the model. For classes "direct", "ebp" and
+"ebp_tf" the (untransformed) sample data is returned. For class "fh" and
+"fh_tf" the combined data set is returned.
 }
 \description{
-Methods \code{getData.direct}, \code{getData.ebp} and \code{getData.fh}
-extract the data frame used to fit the model.
+Methods \code{getData.direct}, \code{getData.ebp}, \code{getData.ebp_tf},
+\code{getData.fh} and \code{getData.fh_tf} extract the data frame
+used to fit the model.
 }
 \details{
 The generic function \code{getData} is imported from package nlme
@@ -54,6 +55,6 @@ getData(emdi_direct)
 }
 }
 \seealso{
-\code{\link{direct}}, \code{\link{ebp}},
-\code{\link{fh}}, \code{\link[nlme]{getData}}
+\code{\link{direct}}, \code{\link{ebp}}, \code{\link{ebp_tf}},
+\code{\link{fh}}, \code{\link{fh_tf}}, \code{\link[nlme]{getData}}
 }

@@ -1,40 +1,43 @@
 #' Plots for an emdi Object
 #'
 #' Diagnostic plots of the underlying model in the EBP (see also
-#' \code{\link{ebp}}) or Fay-Herriot (see also \code{\link{fh}}) approaches are
-#' obtained. These include Q-Q plots and density plots of residuals and random
-#' effects from the nested error linear regression model/
-#' the Fay-Herriot model, a Cook's distance plot for detecting outliers and the
-#' log-likelihood of the estimation of the optimal parameter in Box-Cox
-#' transformations (the latter two only for ebp). The return depends on the
-#' transformation such that a plot for the optimal parameter is
-#' only returned in case a transformation with transformation parameter is
-#' chosen. The range of the x-axis is optional but necessary to change if there
-#' are convergence problems. All plots are obtained by
-#' \code{\link[ggplot2]{ggplot}}.
-#' @param x an object of type "emdi", either "ebp" or "fh", representing point
-#' and, if chosen, MSE estimates obtained by the EBP or Fay-Herriot approach
-#' (see also \code{\link{ebp}} and \code{\link{fh}}).
+#' \code{\link{ebp}}; \code{\link{ebp_tf}}) or Fay-Herriot (see also
+#' \code{\link{fh}}; \code{\link{fh_tf}}) approaches are obtained. These include
+#' Q-Q plots and density plots of residuals and random effects from the nested
+#' error linear regression model/the Fay-Herriot model, a Cook's distance plot
+#' for detecting outliers and the log-likelihood of the estimation of the
+#' optimal parameter in the data-driven transformations (Box-Cox and log-shift
+#' transformations) - the latter two only for ebp and ebp_tf. The return depends
+#' on the transformation such that a plot for the optimal parameter is only
+#' returned in case a transformation with transformation parameter is chosen.
+#' The range of the x-axis is optional but necessary to change if there are
+#' convergence problems. All plots are obtained by \code{\link[ggplot2]{ggplot}}.
+#' @param x an object of type "emdi", either "ebp", "ebp_tf", "fh" or "fh_tf",
+#' representing point and, if chosen, MSE estimates obtained by the EBP or
+#' Fay-Herriot approach (see also \code{\link{ebp}}, \code{\link{ebp_tf}},
+#' \code{\link{fh}} and \code{\link{fh_tf}}).
 #' @param label argument that enables to customize title and axis labels. There
 #' are three instant options to label the diagnostic plot: (i) original labels
 #' ("orig"), (ii) axis labels but no title ("no_title"), (iii) neither axis
 #' labels nor title ("blank").
 #' (iv) individual labels by a list that needs to
 #' have below structure. Six elements can be defined called
-#' \code{qq_res, qq_ran, d_res, d_ran, cooks} and \code{opt_lambda} for the six
-#' different plots and these list elements need to have three elements each
-#' called \code{title, y_lab and x_lab}. Only the labels for the plots that
-#' should be different to the original need to be specified. Please see the
-#' details section for an example with the default labels.
+#' \code{qq_res, qq_ran, qq_ran_dom, qq_ran_subdom, d_res, d_ran, d_ran_dom,
+#' d_ran_subdom, cooks} and \code{opt_lambda} for the ten different plots and
+#' these list elements need to have three elements each called \code{title,
+#' y_lab and x_lab}. Only the labels for the plots that should be different to
+#' the original need to be specified. Please see the details section for an
+#' example with the default labels.
 #' @param color a character vector with two elements. The first element defines
 #' the color for the line in the QQ-plots, for the Cook's Distance plot and for
-#' the Box-Cox plot. The second element defines the color for the densities.
+#' the transformation parameter plot. The second element defines the color for
+#' the densities.
 #' @param gg_theme \code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
 #' For using this argument, package \pkg{ggplot2} must be loaded via
 #' \code{library(ggplot2)}. See also Example 4.
 #' @param cooks if \code{TRUE}, a Cook's distance plot is returned when the ebp
-#' function is used. The used method \code{mdffits.default} from the package
-#' \pkg{HLMdiag} struggles when data sets get large. In these cases,
+#' or ebp_tf function is used. The used method \code{mdffits.default} from the
+#' package \pkg{HLMdiag} struggles when data sets get large. In these cases,
 #' \code{cooks} should be set to \code{FALSE}. It defaults to \code{TRUE}.
 #' @param range optional sequence determining the range of the x-axis for plots
 #' of the optimal transformation parameter that defaults to \code{NULL}. In
@@ -48,8 +51,8 @@
 #' and a likelihood plot for the optimal parameter of transformations with
 #' transformation parameter obtained by \code{\link[ggplot2]{ggplot}}. The
 #' latter two plots are only provided for ebp object.
-#' @details The default settings of the \code{label} argument are as follows
-#' (please note that the title for opt_lambda depends on the chosen
+#' @details The default settings of the \code{label} argument for EBP approaches
+#' are as follows (please note that the title for opt_lambda depends on the chosen
 #' transformation, for the example Box-Cox is shown):\cr
 ##' \describe{
 ##' \item{list(}{}
@@ -59,12 +62,24 @@
 ##' \item{qq_ran =}{c(title="Random effect",
 ##'                 y_lab="Quantiles of random effects",
 ##'                 x_lab="Theoretical quantiles"),}
+##' \item{qq_ran_dom =}{c(title="Random effect - domain level",
+##'                     y_lab="Quantiles of random effects - domain level",
+##'                     x_lab="Theoretical quantiles"),}
+##' \item{qq_ran_subdom =}{c(title="Random effect - subdomain level",
+##'                     y_lab="Quantiles of random effects - subdomain level",
+##'                     x_lab="Theoretical quantiles"),}
 ##' \item{d_res =}{c(title="Density - Pearson residuals",
 ##'                y_lab="Density",
 ##'                x_lab="Pearson residuals"),}
 ##' \item{d_ran =}{c(title="Density - Standardized random effects",
 ##'                y_lab="Density",
 ##'                x_lab="Standardized random effects"),}
+##' \item{d_ran_dom =}{c(title="Density - Standardized random effects",
+##'                y_lab="Density",
+##'                x_lab="Standardized random effects - domain level"),}
+##' \item{d_ran_subdom =}{c(title="Density - Standardized random effects",
+##'                y_lab="Density",
+##'                x_lab="Standardized random effects - subdomain level"),}
 ##' \item{cooks =}{c(title="Cook's Distance Plot",
 ##'                y_lab="Cook's Distance",
 ##'                x_lab="Index"),}
@@ -72,7 +87,44 @@
 ##'                y_lab="Log-Likelihood",
 ##'                x_lab="expression(lambda)"))}
 ##' }
-#' @seealso \code{\link{emdiObject}}, \code{\link{ebp}}, \code{\link{fh}}
+##' The default settings of the \code{label} argument for FH approaches are as
+##' follows (please note that the cook's distance plot and transformation
+##' parameter plot are not provided for FH approaches):\cr
+##' \describe{
+##' \item{list(}{}
+##' \item{qq_res =}{c(title = "Realized residuals",
+##'                 y_lab = "Quantiles of std. residuals/sqrt(direct var.)",
+##'                 x_lab = "Theoretical quantiles"),}
+##' \item{qq_ran =}{c(title = "Random effect",
+##'                 y_lab = "Quantiles of std. random effects",
+##'                 x_lab = "Theoretical quantiles"),}
+##' \item{qq_ran_dom =}{c(title = "Random effect at domain level",
+##'                     y_lab = "Quantiles of std. random effects",
+##'                     x_lab = "Theoretical quantiles"),}
+##' \item{qq_ran_subdom =}{c(title = "Random effect at subdomain level",
+##'                          y_lab = "Quantiles of std. random effects",
+##'                          x_lab = "Theoretical quantiles"),}
+##' \item{d_res =}{c(title = "Density - Std. residuals/sqrt(direct var.)",
+##'                  y_lab = "Density",
+##'                  x_lab = "Std. real. residuals"),}
+##' \item{d_ran =}{c(title = "Density - Random effects",
+##'                  y_lab = "Density",
+##'                  x_lab = "Std. random effects"),}
+##' \item{d_ran_dom =}{c(title = "Density - Random effects at domain level",
+##'                      y_lab = "Density",
+##'                      x_lab = "Std. random effects"),}
+##' \item{d_ran_subdom =}{c(title = "Density - Random effects at subdomain level",
+##'                         y_lab = "Density",
+##'                         x_lab = "Std. random effects"),}
+##' \item{cooks =}{c(title="",
+##'                y_lab="",
+##'                x_lab=""),}
+##' \item{opt_lambda =}{c(title="",
+##'                y_lab="",
+##'                x_lab=""))}
+##' }
+#' @seealso \code{\link{emdiObject}}, \code{\link{ebp}}, \code{\link{ebp_tf}},
+#' \code{\link{fh}}, \code{\link{fh_tf}}
 #' @examples
 #' \donttest{
 #' # Examples for models of type ebp

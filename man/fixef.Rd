@@ -30,18 +30,19 @@
 \method{fixed.effects}{fh_tf}(object, ...)
 }
 \arguments{
-\item{object}{an object of type "emdi", depending on the used method either
-"ebp" or "fh".}
+\item{object}{an object of type "emdi", depending on any of the used method:
+"ebp", "ebp_tf", "fh" or "fh_tf".}
 
 \item{...}{additional arguments that are not used in this method.}
 }
 \value{
-For classes "ebp" and "fh" a vector containing the fixed effects is
-returned.
+For classes "ebp", "ebp_tf", "fh" and "fh_tf" a vector containing
+the fixed effects is returned.
 }
 \description{
-Methods \code{fixef.ebp} and \code{fixef.fh} extract the
-fixed effects from an emdi object of class "ebp" or "fh".
+Methods \code{fixef.ebp}, \code{fixef.ebp_tf}, \code{fixef.fh} and
+\code{fixef.fh_tf} extract the fixed effects from an emdi object of class
+"ebp", "ebp_tf", "fh" or "fh_tf".
 }
 \details{
 The alias \code{fixed.effects} can also be used instead of
@@ -65,6 +66,6 @@ fixef(emdi_model)
 }
 }
 \seealso{
-\code{\link{ebp}}, \code{\link{fh}},
-\code{\link[nlme]{fixed.effects}}
+\code{\link{ebp}}, \code{\link{ebp_tf}}, \code{\link{fh}},
+\code{\link{fh_tf}}, \code{\link[nlme]{fixed.effects}}
 }
