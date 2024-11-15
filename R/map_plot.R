@@ -12,23 +12,31 @@
 #' "Quintile_Share" or the function name/s of "custom_indicator/s";
 #' (iii) groups of indicators: "Quantiles", "Poverty" or
 #' "Inequality". Note, additional custom indicators can be
-#' defined as argument for model-based approaches (see also \code{\link{ebp}})
-#' and do not appear in groups of indicators even though these might belong to
-#' one of the groups. If the \code{model} argument is of type "fh",
-#' indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi
-#' object is overwritten by function benchmark). Defaults to "all".
+#' defined as argument for model-based approaches (see also \code{\link{ebp}} or
+#' \code{\link{ebp_tf}}) and do not appear in groups of indicators even though
+#' these might belong to one of the groups. If the \code{model} argument is of
+#' type "fh", indicator can be set to "all", "Direct", FH", or "FH_Bench"
+#' (if emdi object is overwritten by function benchmark). Defaults to "all".
+#' If the \code{model} argument is of type "fh_tf" and the \code{level} is
+#' "subdomain", indicator can be set to "all", "Direct" or "FH_TF". If the
+#' \code{model} argument is of type "fh_tf" and the \code{level} is "domain",
+#' indicator can be set to "all" or "FH_TF".
 #' @param MSE optional logical. If \code{TRUE}, the MSE is also visualized.
 #' Defaults to \code{FALSE}.
 #' @param CV optional logical. If \code{TRUE}, the CV is also visualized.
 #' Defaults to \code{FALSE}.
+#' @param level argument is required for "ebp_tf" and "fh_tf". There are two
+#' options on which level the results are to be plotted: (i) at domain level
+#' ("domain") or (ii) at subdomain level ("subdomain"). \code{map_obj} object
+#' must be specified at the corresponding level.
 #' @param map_obj an \code{"sf", "data.frame"} object as defined by the
 #' \pkg{sf} package on which the data should be visualized.
 #' @param map_dom_id a character string containing the name of a variable in
-#' \code{map_obj} that indicates the domains.
+#' \code{map_obj} that indicates the domains/subdomains.
 #' @param map_tab a \code{data.frame} object with two columns that match the
-#' domain variable from the census data set (first column) with the domain
-#' variable in the map_obj (second column). This should only be used if the IDs
-#' in both objects differ.
+#' domain/subdomain variable from the census data set (first column) with the
+#' domain/subdomain variable in the map_obj (second column). This should only be
+#' used if the IDs in both objects differ.
 #' @param color a \code{vector} of length 2 defining the lowest and highest
 #' color in the plots.
 #' @param scale_points a structure defining the lowest and the highest
@@ -43,7 +51,8 @@
 #' Defaults to \code{FALSE}.
 #' @return Creates the plots demanded, and, if selected, a fortified data.frame
 #' containing the mapdata and chosen indicators.
-#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}},
+#' @seealso \code{\link{direct}}, \code{\link{ebp}},
+#' \code{\link{ebp_tf}}, \code{\link{fh}}, \code{\link{fh_tf}},
 #' \code{\link{emdiObject}}, \code{\link[sf]{sf}}
 #' @examples
 #' \donttest{
@@ -100,14 +109,14 @@ map_plot <- function(object,
                      indicator = "all",
                      MSE = FALSE,
                      CV = FALSE,
+                     level = NULL,
                      map_obj = NULL,
                      map_dom_id = NULL,
                      map_tab = NULL,
                      color = c("white", "red4"),
                      scale_points = NULL,
                      guide = "colourbar",
-                     return_data = FALSE,
-                     level = NULL
+                     return_data = FALSE
 ) {
 
   if (is.null(map_obj)) {
