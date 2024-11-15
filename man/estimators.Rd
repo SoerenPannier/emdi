@@ -11,8 +11,8 @@ estimators(object, indicator, MSE, CV, level, ...)
   object,
   indicator = "all",
   MSE = FALSE,
-  level = NULL,
   CV = FALSE,
+  level = NULL,
   ...
 )
 }
@@ -28,11 +28,15 @@ shall be returned: (i) all calculated indicators ("all");
 "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
 "Inequality" or "Custom". If two of these groups are selected, only the first
 one is returned. Note, additional custom indicators can be
-defined as argument for model-based approaches (see also \code{\link{ebp}})
-and do not appear in groups of indicators even though these might belong to
-one of the groups. If the \code{model} argument is of type "fh",
-indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi
-object is overwritten by function benchmark). Defaults to "all".}
+defined as argument for model-based approaches (see also \code{\link{ebp}} or
+\code{\line{ebp_tf}}) and do not appear in groups of indicators even though
+these might belong to one of the groups. If the \code{model} argument is of
+type "fh", indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi
+object is overwritten by function benchmark). Defaults to "all". If the
+\code{model} argument is of type "fh_tf" and the \code{level} is "subdomain",
+indicator can be set to "all", "Direct" or "FH_TF". If the \code{model}
+argument is of type "fh_tf" and the \code{level} is "domain", indicator can
+be set to "all" or "FH_TF".}
 
 \item{MSE}{optional logical. If \code{TRUE}, MSE estimates for selected
 indicators per domain are added to the data frame of point estimates.
@@ -41,6 +45,10 @@ Defaults to \code{FALSE}.}
 \item{CV}{optional logical. If \code{TRUE}, coefficients of variation for
 selected indicators per domain are added to the data frame of point
 estimates. Defaults to \code{FALSE}.}
+
+\item{level}{argument is required for "ebp_tf" and "fh_tf". There are two
+options on which level the results are returned: (i) at domain level
+("domain") or (ii) at subdomain level ("subdomain").}
 
 \item{...}{other parameters that can be passed to function \code{estimators}.}
 }
@@ -112,5 +120,5 @@ estimators(emdi_model, indicator = "Custom")
 }
 \seealso{
 \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}},
-\code{\link{fh}}
+\code{\link{ebp_tf}}, \code{\link{fh}}, \code{\link{fh_tf}}
 }

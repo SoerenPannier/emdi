@@ -13,7 +13,9 @@ write.ods <- function(object,
     file = file,
     split = split
   )
-
+  if(inherits(object, "fh_tf") && indicator != "all"){
+    stop("For the fh_tf object, indicator must be specified to all.")
+  }
   wb <- gsub(".ods", "", file)
 
   if (inherits(object, "direct")) {

@@ -18,11 +18,12 @@
 #' "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
 #' "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty" or
 #' "Inequality". Note, additional custom indicators can be
-#' defined as argument for model-based approaches (see also \code{\link{ebp}})
-#' and do not appear in groups of indicators even though these might belong to
-#' one of the groups. If the \code{model} argument is of type "fh",
-#' indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi
-#' object is overwritten by function benchmark). Defaults to "all".
+#' defined as argument for model-based approaches (see also \code{\link{ebp}} or
+#' \code{\link{ebp_tf}}) and do not appear in groups of indicators even though
+#' these might belong to one of the groups. If the \code{model} argument is of
+#' type "fh", indicator can be set to "all", "Direct", FH", or "FH_Bench" (if
+#' emdi object is overwritten by function benchmark). Defaults to "all". If the
+#' \code{model} argument is of type "fh_tf", indicator is set to "all".
 #' @param MSE logical. If \code{TRUE}, the MSE of the emdiObject is exported.
 #' Defaults to \code{FALSE}.
 #' @param CV logical. If \code{TRUE}, the CV of the emdiObject is exported.
@@ -49,7 +50,7 @@
 #' To check if a zip application is available they recommend the command
 #' \code{shell("zip")}.
 #' @seealso \code{\link{direct}}, \code{\link{emdiObject}}, \code{\link{ebp}},
-#' \code{\link{fh}}
+#' \code{\link{ebp_tf}}, \code{\link{fh}}, \code{\link{fh_tf}}
 #' @examples
 #' \dontrun{
 #' # Loading data - population and sample data
@@ -112,6 +113,9 @@ write.excel <- function(object,
     file = file,
     split = split
   )
+  if(inherits(object, "fh_tf") && indicator != "all"){
+    stop("For the fh_tf object, indicator must be specified to all.")
+  }
 
   wb <- createWorkbook()
 
