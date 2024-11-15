@@ -541,8 +541,86 @@ getVarCov.ebp_tf <- function(obj, individuals = 1, type = "random.effects", ...)
                  "The three options for type are ''random.effects'',
                  ''conditional'' or ''marginal''."))
   }
+  # Estimated error variance
+  sigmae2est <- obj$model$sigma^2
+  # VarCorr(fit2) is the estimated random error variance
+  sigmau2_1est <- as.numeric(nlme::VarCorr(obj$model)[2, 1])
+  sigmau2_2est <- as.numeric(nlme::VarCorr(obj$model)[4, 1])
 
-  getVarCov(obj$model, individuals = individuals, type = type)
+  result <- list()
+  for (i in individuals) {
+    if (!(is.numeric(i) || is.character(i))) {
+      stop("individuals must be numeric or a character specifying a level of
+             a in-sample subdomain.")
+    }
+    if (is.numeric(i)) {
+      in_dom <- unique(obj$framework$smp_data[, obj$framework$smp_domains])
+
+      if (!is.element(obj$ind_Domain$Domain[i], in_dom)) {
+        stop(strwrap(prefix = " ", initial = "",
+                     paste0("No variance-covariance matrix is available.
+                            Individual '", i, "' is not contained in the sample
+                            and therefore not used for the model fitting.")))
+      } else if(is.element(obj$ind_Domain$Domain[i], in_dom)){
+        i <- as.character(obj$ind_Domain$Domain[i])
+      }
+
+
+      subdoms_i <- unique(obj$framework$smp_data[obj$framework$smp_data[[obj$call$smp_domains]] == i,
+                                                   obj$framework$smp_subdomains])
+      n_ik <- table(obj$framework$smp_data[[obj$call$smp_subdomains]])
+
+      con_i <- diag(sigmae2est, n_ik[[subdoms_i[1]]])
+      mar_i <- sigmau2_2est + con_i
+
+      for(k in subdoms_i[2:length(subdoms_i)]){
+        con_inext <- diag(sigmae2est, n_ik[[k]])
+        mar_inext <- sigmau2_2est + con_inext
+        con_i <- adiag(con_i, con_inext)
+        mar_i <- adiag(mar_i, mar_inext)
+      }
+      mar_i <- mar_i + sigmau2_1est
+      rand_i <- mar_i - con_i
+    }
+
+    if(type == "random.effects"){
+      result[[i]] <- list(V = rand_i, i = i, v_dom = sigmau2_1est,
+                          v_sub = sigmau2_2est)
+      class(result) <- c("getVarCov.ebp_tf", "VarCov_random")
+    } else if(type == "marginal"){
+      result[[i]] <- list(V = mar_i, i = i)
+      class(result) <- c("getVarCov.ebp_tf", "VarCov_marginal")
+    } else if (type == "conditional"){
+      result[[i]] <- list(V = con_i, i = i)
+      class(result) <- c("getVarCov.ebp_tf", "VarCov_conditional")
+    }
+  }
+  result
+}
+
+#' @export
+print.getVarCov.ebp_tf <- function(x, ...) {
+  if (inherits(x, "VarCov_random")) {
+    for (i in names(x)) {
+      cat("domain", as.character(x[[i]]$i), "\n")
+      cat("Random effects variance covariance\n")
+      print(x[[i]]$V)
+      cat("Domain level:", round(x[[i]]$v_dom, 4), "\t",
+          "Subdomain level:", round(x[[i]]$v_sub, 4), "\n")
+    }
+  } else if (inherits(x, "VarCov_conditional")) {
+    for (i in names(x)) {
+      cat("domain", as.character(x[[i]]$i), "\n")
+      cat("Conditional variance covariance matrix\n")
+      print(x[[i]]$V)
+    }
+  } else if (inherits(x, "VarCov_marginal")) {
+    for (i in names(x)) {
+      cat("domain", as.character(x[[i]]$i), "\n")
+      cat("Marginal variance covariance matrix\n")
+      print(x[[i]]$V)
+    }
+  }
 }
 
 #_______________________________________________________________________________
