@@ -87,7 +87,7 @@ point_emdi <- function(object, indicator = "all") {
       ind <- object$ind[, c("Domain", "FH_TF")]
       ind_name <- "FH-TF estimates"
     } else if (any(indicator == "Direct") || any(indicator == "direct")) {
-      ind_sub <- object$ind_sub[, c("Subomain", "Direct")]
+      ind_sub <- object$ind_sub[, c("Subdomain", "Direct")]
       ind_name_sub <- "Direct estimates used in FH-TF model"
       ind <- NULL
       ind_name <- NULL

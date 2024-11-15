@@ -100,14 +100,19 @@ compare_plot(
 )
 }
 \arguments{
-\item{model}{a model object of type "emdi", either "ebp" or "fh",
-representing point and MSE estimates.}
+\item{model}{a model object of type "emdi", either "ebp", "ebp_tf", "fh" or
+"fh_tf", representing point and MSE estimates.}
 
-\item{direct}{an object of type "direct","emdi", representing point
-and MSE estimates. If the input argument \code{model} is of type "ebp",
-\code{direct} is required. If the input argument \code{model} is of type
-"fh", the \code{direct} component is already included in the input
-argument \code{model}.}
+\item{direct}{an object of type "direct", "emdi", representing point
+and MSE estimates. If the input argument \code{model} is of type "ebp" or
+"ebp_tf", \code{direct} is required. If the input argument \code{model} is
+of type "fh", the \code{direct} component is already included in the input
+argument \code{model}. If the input argument \code{model} is
+of type "fh_tf" and  the input argument \code{level} is "domain",
+\code{direct} is required. If the input argument \code{model} is
+of type "fh_tf" and  the input argument \code{level} is "subdomain",
+the \code{direct} component is already included in the input argument
+\code{model}.}
 
 \item{indicator}{optional character vector that selects which indicators
 shall be returned: (i) all calculated indicators ("all");
@@ -117,11 +122,17 @@ shall be returned: (i) all calculated indicators ("all");
 "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
 "Inequality" or "Custom". If two of these groups are selected, only the first
 one is returned. Note, additional custom indicators can be defined as
-argument for the EBP approaches (see also \code{\link{ebp}}) and do not
-appear in groups of indicators even though these might belong to one of the
-groups. If the \code{model} argument is of type "fh", indicator can be set
-to "all", "Direct", FH", or "FH_Bench" (if emdi object is overwritten by
-function \code{\link{benchmark}}). Defaults to "all".}
+argument for the EBP approaches (see also \code{\link{ebp}} or
+\code{\line{ebp_tf}}) and do not appear in groups of indicators even though
+these might belong to one of the groups. If the \code{model} argument is of
+type "fh", indicator can be set to "all", "Direct", FH", or "FH_Bench"
+(if emdi object is overwritten by function \code{\link{benchmark}}). Defaults
+to "all". If the \code{model} argument is of type "fh_tf" and if the
+\code{level} argument if "subdomain", indicator can be set to "all", "Direct"
+or FH_TF". If the \code{model} argument is of type "fh_tf" and if the
+\code{level} argument if "domain", indicator must be one of the indicator
+names given in indicator description (ii) above - which corresponds the
+indicator estimated by the "fh_tf" model.}
 
 \item{MSE}{optional logical. If \code{TRUE}, the MSE estimates of the direct
 and model-based estimates are compared via boxplots and scatter plots.}
@@ -134,6 +145,11 @@ and scatter plots.}
 are three options to label the evaluation plots: (i) original labels
 ("orig"), (ii) axis labels but no title ("no_title"), (iii) neither axis
 labels nor title ("blank").}
+
+\item{level}{argument is required for "ebp_tf" and "fh_tf". There are two
+options on which level the results are to be compared: (i) at domain level
+("domain") or (ii) at subdomain level ("subdomain"). \code{direct} object
+must be defined at the corresponding level.}
 
 \item{color}{a vector with two elements. The first color determines
 the color for the regression line in the scatter plot and the color for
@@ -177,14 +193,15 @@ Function \code{compare_plot} is a generic function used to produce plots
 comparing point and existing MSE/CV estimates of direct and model-based
 estimation for all indicators or a selection of indicators.
 
-Methods \code{compare_plot.direct}, \code{compare_plot.ebp} and
-\code{compare_plot.fh} produce plots comparing point and existing
-MSE/CV estimates of direct and model-based estimation for all indicators or a
-selection of indicators for objects of type "emdi". The direct and
-model-based point estimates are compared by a scatter plot and a line plot
-for each selected indicator. If the input arguments MSE and CV are set to
-TRUE, two extra plots are created, respectively: the MSE/CV estimates of the
-direct and model-based estimates are compared by boxplots and scatter plots.
+Methods \code{compare_plot.direct}, \code{compare_plot.ebp},
+\code{compare_plot.ebp_tf}, \code{compare_plot.fh} and \code{compare_plot.fh_tf}
+produce plots comparing point and existing MSE/CV estimates of direct and
+model-based estimation for all indicators or a selection of indicators for
+objects of type "emdi". The direct and model-based point estimates are
+compared by a scatter plot and a line plot for each selected indicator. If
+the input arguments MSE and CV are set to TRUE, two extra plots are created,
+respectively: the MSE/CV estimates of the direct and model-based estimates
+are compared by boxplots and scatter plots.
 }
 \details{
 Since all of the comparisons need a direct estimator, the plots are
@@ -259,5 +276,5 @@ compare_plot(fh_std, MSE = TRUE, CV = TRUE)
 }
 \seealso{
 \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}},
-\code{\link{fh}}
+\code{\link{ebp_tf}}, \code{\link{fh}}, \code{\link{fh_tf}}
 }

@@ -26,7 +26,15 @@ compare_plot_check <- function(model, indicator, label, color, shape,
                         in the direct object for the comparison with the 'fh_tf'
                         model at domain level. ")))
     }
-  } else{
+  } else if (inherits(model, "fh_tf") && level == "subdomain"){
+    if(!(indicator %in% c("Direct", "all", "FH_TF"))){
+      stop(strwrap(prefix = " ", initial = "",
+                   paste0("The argument indicator is set to ", indicator, ". The
+                        argument only allows to be set either all, Direct or
+                          FH_TF for the fh_tf model at subdomain level.")))
+    }
+  }
+    else{
     if (is.null(indicator) || !all(indicator == "all" | indicator == "Quantiles" |
                                    indicator == "quantiles" |
                                    indicator == "Poverty" |
