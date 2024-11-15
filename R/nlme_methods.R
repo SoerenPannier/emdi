@@ -1,20 +1,21 @@
 #' Extract Fixed Effects from an emdi Object
 #'
-#' Methods \code{fixef.ebp} and \code{fixef.fh} extract the
-#' fixed effects from an emdi object of class "ebp" or "fh".
+#' Methods \code{fixef.ebp}, \code{fixef.ebp_tf}, \code{fixef.fh} and
+#' \code{fixef.fh_tf} extract the fixed effects from an emdi object of class
+#' "ebp", "ebp_tf", "fh" or "fh_tf".
 #'
-#' @param object an object of type "emdi", depending on the used method either
-#' "ebp" or "fh".
+#' @param object an object of type "emdi", depending on any of the used method:
+#' "ebp", "ebp_tf", "fh" or "fh_tf".
 #' @param ... additional arguments that are not used in this method.
-#' @return For classes "ebp" and "fh" a vector containing the fixed effects is
-#' returned.
+#' @return For classes "ebp", "ebp_tf", "fh" and "fh_tf" a vector containing
+#' the fixed effects is returned.
 #' @details The alias \code{fixed.effects} can also be used instead of
 #' \code{fixef}. The generic function \code{fixef} is imported from package
 #' nlme and re-exported to make the S3-methods available, even though the nlme
 #' package itself is not loaded or attached. For default documentation,
 #' see \code{\link[nlme]{fixed.effects}}.
-#' @seealso \code{\link{ebp}}, \code{\link{fh}},
-#' \code{\link[nlme]{fixed.effects}}
+#' @seealso \code{\link{ebp}}, \code{\link{ebp_tf}}, \code{\link{fh}},
+#' \code{\link{fh_tf}}, \code{\link[nlme]{fixed.effects}}
 #' @examples
 #' \donttest{
 #' # Example for class ebp
@@ -111,21 +112,22 @@ fixed.effects.fh_tf <- function(object, ...) {
 
 #' Extract emdi Object Data
 #'
-#' Methods \code{getData.direct}, \code{getData.ebp} and \code{getData.fh}
-#' extract the data frame used to fit the model.
+#' Methods \code{getData.direct}, \code{getData.ebp}, \code{getData.ebp_tf},
+#' \code{getData.fh} and \code{getData.fh_tf} extract the data frame
+#' used to fit the model.
 #'
-#' @param object an object of type "emdi", depending on the method either
-#' "direct", "ebp" or "fh".
+#' @param object an object of type "emdi", depending on any of the used method:
+#' "ebp", "ebp_tf", "fh" or "fh_tf".
 #' @param ... additional arguments that are not used in this method.
-#' @return Data frame used to fit the model. For classes "direct" and "ebp" the
-#' (untransformed) sample data is returned. For class "fh" the combined data
-#' set is returned.
+#' @return Data frame used to fit the model. For classes "direct", "ebp" and
+#' "ebp_tf" the (untransformed) sample data is returned. For class "fh" and
+#' "fh_tf" the combined data set is returned.
 #' @details The generic function \code{getData} is imported from package nlme
 #' and re-exported to make the S3-methods available, even though the nlme
 #' package itself is not loaded or attached. For default documentation,
 #' see \code{\link[nlme]{getData}}.
-#' @seealso \code{\link{direct}}, \code{\link{ebp}},
-#' \code{\link{fh}}, \code{\link[nlme]{getData}}
+#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{ebp_tf}},
+#' \code{\link{fh}}, \code{\link{fh_tf}}, \code{\link[nlme]{getData}}
 #' @examples
 #' \donttest{
 #' # Example for class direct
@@ -200,19 +202,20 @@ getData.fh_tf <- function(object, ...) {
 }
 #' Extract Grouping Factors from an emdi Object
 #'
-#' Methods \code{getGroups.direct}, \code{getGroups.ebp} and
-#' \code{getGroups.fh} extract grouping factors from an emdi object.
+#' Methods \code{getGroups.direct}, \code{getGroups.ebp}, \code{getGroups.ebp_tf},
+#' \code{getGroups.fh} and \code{getGroups.fh_tf} extract grouping factors from
+#' an emdi object.
 #'
-#' @param object an object of type "emdi", depending on the method either
-#' "direct", "ebp" or "fh".
+#' @param object an object of type "emdi", depending on any of the used method:
+#' "ebp", "ebp_tf", "fh" or "fh_tf".
 #' @param ... additional arguments that are not used in this method.
 #' @return A vector containing the grouping factors.
 #' @details The generic function \code{getGroups} is imported from package nlme
 #' and re-exported to make the S3-methods available, even though the nlme
 #' package itself is not loaded or attached. For default documentation,
 #' see \code{\link[nlme]{getGroups}}.
-#' @seealso \code{\link{direct}}, \code{\link{ebp}},
-#' \code{\link{fh}}, \code{\link[nlme]{getGroups}}
+#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{ebp_tf}},
+#' \code{\link{fh}}, \code{\link{fh_tf}}, \code{\link[nlme]{getGroups}}
 #' @examples
 #' \donttest{
 #' # Example for class direct
@@ -293,20 +296,21 @@ getGroups.fh_tf <- function(object, ...) {
 
 #' Extract Grouping Formula from an emdi Object
 #'
-#' Methods \code{getGroupsFormula.direct}, \code{getGroupsFormula.ebp} and
-#' \code{getGroupsFormula.fh} extract the grouping formula from an
+#' Methods \code{getGroupsFormula.direct}, \code{getGroupsFormula.ebp},
+#' \code{getGroupsFormula.ebp_tf}, \code{getGroupsFormula.fh} and
+#' \code{getGroupsFormula.fh_tf} extract the grouping formula from an
 #' emdi object.
 #'
-#' @param object an object of type "emdi", depending on the method either
-#' "direct", "ebp" or "fh".
+#' @param object an object of type "emdi", depending on any of the used method:
+#' "ebp", "ebp_tf", "fh" or "fh_tf".
 #' @param ... additional arguments that are not used in this method.
 #' @return A one-sided formula.
 #' @details The generic function \code{getGroupsFormula} is imported from
 #' package nlme and re-exported to make the S3-methods available, even though
 #' the nlme package itself is not loaded or attached. For default documentation,
 #' see \code{\link[nlme]{getGroupsFormula}}.
-#' @seealso \code{\link{direct}}, \code{\link{ebp}},
-#' \code{\link{fh}}, \code{\link[nlme]{getGroupsFormula}}
+#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{ebp_tf}},
+#' \code{\link{fh}}, \code{\link{fh_tf}}, \code{\link[nlme]{getGroupsFormula}}
 #' @examples
 #' \donttest{
 #' # Example for class ebp
@@ -369,19 +373,20 @@ getGroupsFormula.fh_tf <- function(object, ...) {
 
 #' Extract Response Variable from an emdi Object
 #'
-#' Methods \code{getResponse.direct}, \code{getResponse.ebp} and
-#' \code{getResponse.fh} extract the response variable from an emdi object.
+#' Methods \code{getResponse.direct}, \code{getResponse.ebp},
+#' \code{getResponse.ebp_tf}, \code{getResponse.fh} and
+#' \code{getResponse.fh_tf} extract the response variable from an emdi object.
 #'
-#' @param object an object of type "emdi", depending on the method either
-#' "direct", "ebp" or "fh".
+#' @param object an object of type "emdi", depending on any of the used method:
+#' "ebp", "ebp_tf", "fh" or "fh_tf".
 #' @param ... additional arguments that are not used in this method.
 #' @return Vector containing the response variable.
 #' @details The generic function \code{getResponse} is imported from package
 #' nlme and re-exported to make the S3-methods available, even though the nlme
 #' package itself is not loaded or attached. For default documentation,
 #' see \code{\link[nlme]{getResponse}}.
-#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}},
-#' \code{\link[nlme]{getResponse}}
+#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{ebp_tf}},
+#' \code{\link{fh}}, \code{\link{fh_tf}}, \code{\link[nlme]{getResponse}}
 #' @examples
 #' \donttest{
 #' # Example for class ebp
@@ -443,9 +448,11 @@ getResponse.fh_tf <- function(object, ...) {
 
 #' Extract Variance-covariance Matrix from an emdi Object
 #'
-#' Methods \code{getVarCov.ebp} and \code{getVarCov.fh} extract the
-#' variance-covariance matrix from a fitted model of class "ebp" or "fh".
-#' @param obj an object of type "emdi", either "ebp" or "fh".
+#' Methods \code{getVarCov.ebp}, \code{getVarCov.ebp_tf}, \code{getVarCov.fh}
+#' and \code{getVarCov.fh_tf} extract the variance-covariance matrix from a
+#' fitted model of class "ebp", "ebp_tf", "fh" or "fh_tf".
+#' @param obj an object of type "emdi", depending on any of the used method:
+#' "ebp", "ebp_tf", "fh" or "fh_tf".
 #' @param individuals vector of levels of the in-sample domains can be
 #' specified for the types "\code{conditional}" or "\code{marginal}".
 #' @param type a character that determines the type of variance-covariance
@@ -459,19 +466,26 @@ getResponse.fh_tf <- function(object, ...) {
 #' matrices, if more than one individual is selected. For method
 #' \code{getVarCov.ebp}, the dimensions of the matrices are 1 x 1 for type
 #' "\code{random.effects}" and number of in-sample domains x number of
-#' in-sample domains for types "\code{conditional}" and "\code{marginal}". For
-#' method \code{getVarCov.fh}, for all types the dimensions of the matrices are
+#' in-sample domains for types "\code{conditional}" and "\code{marginal}".
+#' For method \code{getVarCov.ebp_tf}, the dimensions of the matrices are
+#' number of observations x number of observations in in-sample domains for all
+#' types: "\code{random.effects}", "\code{conditional}" and "\code{marginal}".
+#' For method \code{getVarCov.fh}, for all types the dimensions of the matrices are
 #' 1 x 1. For type "\code{marginal}" the diagonal elements of the variance
 #' covariances matrices are returned for the chosen individual. Please note, if
 #' the correlation argument of the "fh" object is set to spatial, the variance
 #' covariance matrix has non-zero off-diagonal elements, because the assumption
 #' of independence of the error terms does not hold. For the non-spatial models,
-#' the off-diagonal elements are zero.
+#' the off-diagonal elements are zero. For method \code{getVarCov.fh_tf},
+#' the dimensions of the matrices are number of in-sample subdomains x number
+#' of in-sample subdomains for all types: "\code{random.effects}",
+#' "\code{conditional}" and "\code{marginal}".
 #' @details The generic function \code{getVarCov} is imported from package nlme
 #' and re-exported to make the S3-methods available, even though the nlme
 #' package itself is not loaded or attached. For default documentation,
 #' see \code{\link[nlme]{getVarCov}}.
-#' @seealso \code{\link{ebp}}, \code{\link{fh}}, \code{\link[nlme]{getVarCov}}
+#' @seealso \code{\link{ebp}}, \code{\link{ebp_tf}},
+#' \code{\link{fh}}, \code{\link{fh_tf}}, \code{\link[nlme]{getVarCov}}
 #' @examples
 #' \donttest{
 #' # Example for class fh
@@ -867,11 +881,12 @@ print.getVarCov.fh_tf <- function(x, ...) {
 }
 #' Confidence Intervals on Coefficients of an emdi Object
 #'
-#' Methods \code{intervals.ebp} and \code{intervals.fh} provide the approximate
-#' confidence intervals on the coefficients (fixed effects) of an emdi object.
+#' Methods \code{intervals.ebp}, \code{intervals.ebp_tf}, \code{intervals.fh}
+#' and \code{intervals.fh_tf} provide the approximate confidence intervals on
+#' the coefficients (fixed effects) of an emdi object.
 #'
-#' @param object an object of type "emdi", depending on the method either "ebp"
-#' or "fh".
+#' @param object an object of type "emdi", depending on any of the used method:
+#' "ebp", "ebp_tf", "fh" or "fh_tf".
 #' @param level an optional numeric value with the confidence level for the
 #' intervals. Defaults to 0.95.
 #' @param parm vector of names to specify which parameters are to be given
@@ -885,8 +900,8 @@ print.getVarCov.fh_tf <- function(x, ...) {
 #' and re-exported to make the S3-methods available, even though the nlme
 #' package itself is not loaded or attached. For default documentation,
 #' see \code{\link[nlme]{intervals}}.
-#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}},
-#' \code{\link[nlme]{intervals}}
+#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{ebp_tf}},
+#' \code{\link{fh}}, \code{\link{fh_tf}}, \code{\link[nlme]{intervals}}
 #' @examples
 #' \donttest{
 #' # Example for class ebp
@@ -979,11 +994,12 @@ intervals.fh_tf <- function(object, level = 0.95, parm = NULL, ...) {
 
 #' Extract Random Effects of emdi Objects
 #'
-#' Methods \code{ranef.ebp} and \code{ranef.fh} extract the
-#' fixed effects from an emdi object of class "ebp" or "fh".
+#' Methods \code{ranef.ebp}, \code{ranef.ebp_tf},  \code{ranef.fh} and
+#' \code{ranef.fh_tf} extract the fixed effects from an emdi object of class
+#' "ebp", "ebp_tf", "fh" or "fh_tf".
 #'
-#' @param object an object of type "emdi", depending on the used method either
-#' "ebp" or "fh".
+#' @param object an object of type "emdi", depending on any of the used method:
+#' "ebp", "ebp_tf", "fh" or "fh_tf".
 #' @param ... additional arguments that are not used in this method.
 #' @return A vector containing the estimated random effects at domain level is
 #' returned.
@@ -992,8 +1008,8 @@ intervals.fh_tf <- function(object, level = 0.95, parm = NULL, ...) {
 #' nlme and re-exported to make the S3-methods available, even though the nlme
 #' package itself is not loaded or attached. For default documentation,
 #' see \code{\link[nlme]{random.effects}}.
-#' @seealso \code{\link{ebp}}, \code{\link{fh}},
-#' \code{\link[nlme]{random.effects}}
+#' @seealso \code{\link{ebp}}, \code{\link{ebp_tf}}, \code{\link{fh}},
+#' \code{\link{fh_tf}}, \code{\link[nlme]{random.effects}}
 #' @examples
 #' \donttest{
 #' # Example for class ebp
