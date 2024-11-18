@@ -2,7 +2,7 @@
 % Please edit documentation in R/fh_tf.R
 \name{fh_tf}
 \alias{fh_tf}
-\title{Two-fold Fay-Herriot Models for Indicators at a disaggregated regional level}
+\title{Two-fold Fay-Herriot approach for estimating indicators at disaggregated regional levels}
 \usage{
 fh_tf(
   fixed,
@@ -63,16 +63,47 @@ chosen. Defaults to \code{NULL}.}
 bootstrap method. Defaults to \code{FALSE}.}
 
 \item{B}{a single number which defines the number of bootstrap iterations
-for the MSE estimation.}
+for the MSE estimation. Defaults to \code{50}.}
 
 \item{seed}{an integer to set the seed for the random number generator. For
 the usage of random number generation see details. Defaults to \code{123}.}
 }
 \value{
 An object of class "fh_tf", "emdi" that provides estimators
-for regional indicators at a disaggregated level like means and ratios and optionally
-corresponding MSE estimates.
+for regional indicators at the domain and subdomain levels like means and
+ratios and optionally MSE estimates.
 }
 \description{
-Two-fold Fay-Herriot Models for Indicators at a disaggregated regional level
+Function \code{fh_tf} estimates indicators at two different levels
+(domain and subdomain) using the two-fold Fay-Herriot approach by
+\cite{Torabi and Rao (2014)}. The two-fold Fay-Herriot model is an extension
+of the standard Fay-Herriot model by \cite{Fay and Herriot (1979)}. The
+two-fold model is defined at the subdomain level with two random effects:
+at domain level and at subdomain level. Based on the model empirical best
+linear unbiased predictors (EBLUPs) and mean squared error (MSE) estimates
+are provided not only at the domain level but also at the subdomain level.
+The MSE estimates are obtained by the parametric bootstrap method based on
+\cite{González-Manteiga et al. (2008)}. Additionally, the two-fold
+Fay-Herriot approach is extended with transformations. The function allows
+to apply two different transformations to the dependent variable:
+(i) logarithmic transformation and (ii) arcsin square root transformation.
+For unbiased estimation of indicators at the original scale, a bias corrected
+backtransformation based on \cite{Sugasawa and Kubokawa (2017)} and \cite{
+Hadam et al. (2023)} is implemented.
+}
+\references{
+Fay, R. E. and Herriot, R. A. (1979), Estimates of income for small places:
+An application of James-Stein procedures to census data, Journal of the
+American Statistical Association 74(366), 269-277. \cr \cr
+González-Manteiga, W., Lombardía, M. J., Molina, I., Morales, D. and
+Santamaría, L. (2008) Analytic and bootstrap approximations of prediction
+errors under a multivariate Fay-Herriot model. Computational Statistics &
+Data Analysis, 52, 5242–5252. \cr \cr
+Hadam, S., Wuerz, N., Kreutzmann, A.-K., and Schmid, T. (2023), Estimating
+regional unemployment with mobile network data for Functional Urban Areas in
+Germany. Statistical Methods & Applications, 33, 205-233. \cr \cr
+Sugasawa, S and Kubokawa, T. (2017) Transforming response values in small
+area prediction. Computational Statistics & Data Analysis, 114, 47-60. \cr \cr
+Torabi, M. and Rao J. N. K. (2014), On small area estimation under a sub-area
+level model. Journal of Multivariate Analysis, 127, 36-55. \cr \cr
 }
