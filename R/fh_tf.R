@@ -116,6 +116,11 @@ fh_tf <- function(fixed, vardir, combined_data, domains, subdomains,
                            smp_hat_varv = smp_hat_varu,
                            smp_hat_vare = smp_hat_vare, smp_beta = smp_beta,
                            framework = fh_tf_fw)
+    mse_subdomain <- fh_tf_fw$data[, c(subdomains, vardir)]
+    mse_subdomain <- merge(mse_subdomain, mse_estim$MSE_SubArea,
+                           by.x = subdomains, by.y = "Subdomain")
+    colnames(mse_subdomain) <- c("Subdomain", "Direct", "FH_TF")
+    colnames(mse_estim$MSE_Area) <- c("Domain", "FH_TF")
   }
 
   ind_subdomain<- fh_tf_fw$data[, c(subdomains, as.character(fixed[[2]]))]
@@ -123,12 +128,6 @@ fh_tf <- function(fixed, vardir, combined_data, domains, subdomains,
                          by.x = subdomains, by.y = "Subdomain")
   colnames(ind_subdomain) <- c("Subdomain", "Direct", "FH_TF")
   colnames(point_estim$EBLUP_Area) <- c("Domain", "FH_TF")
-
-  mse_subdomain <- fh_tf_fw$data[, c(subdomains, vardir)]
-  mse_subdomain <- merge(mse_subdomain, mse_estim$MSE_SubArea,
-                         by.x = subdomains, by.y = "Subdomain")
-  colnames(mse_subdomain) <- c("Subdomain", "Direct", "FH_TF")
-  colnames(mse_estim$MSE_Area) <- c("Domain", "FH_TF")
 
   model <- list(coefficients = point_estim$beta,
                 variances = c(Subdomain = point_estim$varu, Domain = point_estim$varv),
