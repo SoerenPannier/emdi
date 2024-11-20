@@ -563,7 +563,7 @@ getVarCov.ebp_tf <- function(obj, individuals = 1, type = "random.effects", ...)
                             and therefore not used for the model fitting.")))
       } else if(is.element(obj$ind_Domain$Domain[i], in_dom)){
         i <- as.character(obj$ind_Domain$Domain[i])
-      }
+      }}
 
 
       subdoms_i <- unique(obj$framework$smp_data[obj$framework$smp_data[[obj$call$smp_domains]] == i,
@@ -581,7 +581,7 @@ getVarCov.ebp_tf <- function(obj, individuals = 1, type = "random.effects", ...)
       }
       mar_i <- mar_i + sigmau2_1est
       rand_i <- mar_i - con_i
-    }
+
 
     if(type == "random.effects"){
       result[[i]] <- list(V = rand_i, i = i, v_dom = sigmau2_1est,
@@ -902,19 +902,19 @@ getVarCov.fh_tf <- function(obj, individuals = 1, type = "random.effects", ...) 
                             and therefore not used for the model fitting.")))
       } else if(is.element(obj$ind_Domain$Domain[i], in_dom)){
         i <- as.character(obj$ind_Domain$Domain[i])
-      }
+      }}
 
-      N_i <- table(obj$framework$orig_data[[obj$call$domains]])[[i]]
-      subdom_i <- unique(obj$framework$orig_data[obj$framework$orig_data[[obj$call$domains]] == i,
+      n_i <- table(obj$framework$smp_data[[obj$call$domains]])[[i]]
+      subdom_i <- unique(obj$framework$smp_data[obj$framework$smp_data[[obj$call$domains]] == i,
                                                  obj$call$subdomains])
       con_V_i <- diag(obj$framework$vare[subdom_i])
       dimnames(con_V_i) <- list(subdom_i, subdom_i)
 
-      ran_V_i <- obj$model$variances[["Domain"]] + diag(rep(obj$model$variances[["Subdomain"]], N_i))
+      ran_V_i <- obj$model$variances[["Domain"]] + diag(rep(obj$model$variances[["Subdomain"]], n_i))
 
       mar_V_i <- con_V_i + ran_V_i
       dimnames(mar_V_i) <- list(subdom_i, subdom_i)
-    }
+
     if(type == "random.effects"){
       # For fh_tf random effects differs between domains
       result[[i]] <- list(V = ran_V_i, i = i,
