@@ -340,8 +340,9 @@ Var_y <- function(varv, varu, vare, no, m) {
 beta_tilde <- function(varv, varu, vare, yranr, no, m, X){
   V <- Var_y(varv = varv, varu = varu, vare = vare, no = no, m = m)
   inv_V <- solve(V)
-  beta <- solve(t(X) %*% inv_V %*% X) %*% (t(X) %*% inv_V %*% yranr)
-  beta_std <- sqrt(diag(t(X) %*% inv_V %*% X))
+  Q <- solve(t(X) %*% inv_V %*% X)
+  beta <- Q %*% (t(X) %*% inv_V %*% yranr)
+  beta_std <- sqrt(diag(Q))
   return(list(beta = beta,
               beta_std = beta_std,
               V = V,

@@ -24,6 +24,10 @@ framework_FH_tf <- function(data, fixed, vardir, domains, subdomains,
   # data of sampled sub-areas
   smp_data <- data[data$ObsSub == "yes", ]
 
+
+  X <- model.matrix(object = fixed, data = smp_data)
+  rownames(X) <- smp_data[[subdomains]]
+
   # Number of sub-areas in each area
   if(is.factor(smp_data[[domains]])){no <- as.vector(table(as.character(smp_data[[domains]])))}
   else {no <- as.vector(table(smp_data[[domains]]))}
@@ -36,8 +40,6 @@ framework_FH_tf <- function(data, fixed, vardir, domains, subdomains,
   # Number of x variables
   p <- ncol(X)
 
-  X <- model.matrix(object = fixed, data = smp_data)
-  rownames(X) <- smp_data[[subdomains]]
 
   # In or Out of sample domains & subdomains
   N_in_sub <- length(which(data$ObsSub == "yes"))
