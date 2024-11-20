@@ -130,7 +130,7 @@ fh_tf <- function(fixed, vardir, combined_data, domains, subdomains,
   colnames(point_estim$EBLUP_Area) <- c("Domain", "FH_TF")
 
   model <- list(coefficients = point_estim$beta,
-                variances = c(Subdomain = point_estim$varu, Domain = point_estim$varv),
+                variances = c(Domain = point_estim$varv, Subdomain = point_estim$varu),
                 random_effects_Domain = point_estim$v_tilde,
                 random_effects_Subdomain = point_estim$u_tilde,
                 fitted = point_estim$fitted,
