@@ -261,9 +261,9 @@ getGroups.ebp_tf <- function(object, ...) {
   } else (print(as.factor(object$ind_Domain$Domain)))
 
   cat("\n")
-  cat("SubDomains: \n")
+  cat("Subdomains: \n")
   if(is.factor(object$ind_Subdomain$Subdomain)){
-    print(object$ind_Domain$Domain)
+    print(object$ind_Subdomain$Subdomain)
   } else (print(as.factor(object$ind_Subdomain$Subdomain)))
   cat("\n")
 }
@@ -287,7 +287,7 @@ getGroups.fh_tf <- function(object, ...) {
   } else (print(as.factor(object$ind_Domain$Domain)))
 
   cat("\n")
-  cat("SubDomains: \n")
+  cat("Subdomains: \n")
   if(is.factor(object$ind_Subdomain$Subdomain)){
     print(object$ind_Domain$Domain)
   } else (print(as.factor(object$ind_Subdomain$Subdomain)))
