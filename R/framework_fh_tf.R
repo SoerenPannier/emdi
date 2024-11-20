@@ -24,14 +24,28 @@ framework_FH_tf <- function(data, fixed, vardir, domains, subdomains,
   # data of sampled sub-areas
   smp_data <- data[data$ObsSub == "yes", ]
 
+
   X <- model.matrix(object = fixed, data = smp_data)
   rownames(X) <- smp_data[[subdomains]]
+
+  # Number of sub-areas in each area
+  if(is.factor(smp_data[[domains]])){no <- as.vector(table(as.character(smp_data[[domains]])))}
+  else {no <- as.vector(table(smp_data[[domains]]))}
+  # Total number of areas in the sample
+  m <- length(unique(smp_data[[domains]]))
+  # Total number of areas in pop
+  M <- length(unique(data[[domains]]))
+  # Total number of subareas in the sample
+  n <- length(smp_data[[subdomains]])
+  # Number of x variables
+  p <- ncol(X)
+
 
   # In or Out of sample domains & subdomains
   N_in_sub <- length(which(data$ObsSub == "yes"))
   N_out_sub <- length(which(data$ObsSub == "no"))
-  N_in_dom <- length(unique(data[[domains]][data$ObsSub == "yes"]))
-  N_out_dom <- length(unique(data[[domains]][data$ObsSub == "no"]))
+  N_out_dom <- sum(table(data[[domains]], data$ObsSub)[, "yes"] == 0)
+  N_in_dom <- M - N_out_dom
 
   # Dir_y and vare at subarea level-----------------------------------------------
   # With arcsin trafo
@@ -59,17 +73,7 @@ framework_FH_tf <- function(data, fixed, vardir, domains, subdomains,
 
   names(vare) <- smp_data[[subdomains]]
   names(y_ij) <- smp_data[[subdomains]]
-  # Number of sub-areas in each area
-  if(is.factor(smp_data[[domains]])){no <- as.vector(table(as.character(smp_data[[domains]])))}
-  else {no <- as.vector(table(smp_data[[domains]]))}
-  # Total number of areas in the sample
-  m <- length(unique(smp_data[[domains]]))
-  # Total number of areas in pop
-  M <- length(unique(data[[domains]]))
-  # Total number of subareas in the sample
-  n <- length(smp_data[[subdomains]])
-  # Number of x variables
-  p <- ncol(X)
+
 
   return(list(orig_data = orig_data,
               smp_data = smp_data,

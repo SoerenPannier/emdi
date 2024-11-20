@@ -135,11 +135,13 @@ estimators.emdi <- function(object, indicator = "all", MSE = FALSE, CV = FALSE,
     }
 
     if (MSE == TRUE || CV == TRUE) {
-      all_precisions <- mse_emdi(object = object, indicator = indicator,CV = TRUE)
-      colnames(all_precisions$ind_Domain) <-
-        paste0(colnames(all_precisions$ind_Domain), "_MSE")
-      colnames(all_precisions$ind_cv_Domain) <-
-        paste0(colnames(all_precisions$ind_cv_Domain), "_CV")
+      all_precisions <- mse_emdi(object = object, indicator = indicator, CV = TRUE)
+      if(!is.null(all_precisions$ind_Domain) && !is.null(all_precisions$ind_cv_Domain)){
+        colnames(all_precisions$ind_Domain) <-
+          paste0(colnames(all_precisions$ind_Domain), "_MSE")
+        colnames(all_precisions$ind_cv_Domain) <-
+          paste0(colnames(all_precisions$ind_cv_Domain), "_CV")
+      }
       colnames(all_precisions$ind_Subdomain) <-
         paste0(colnames(all_precisions$ind_Subdomain), "_MSE")
       colnames(all_precisions$ind_cv_Subdomain) <-

@@ -5,7 +5,7 @@ estimators_check <- function(object,
                              level) {
 
   #____________________________Rachael__________________________________________
-  if (inherits(object, "ebp_tf")) {
+  if (any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
     if (is.null(level)) {
       stop("For 'ebp_tf' or 'fh_tf' models, please specify the 'level' argument.
            'level' can take either 'domain' or 'subdomain' arguments")
@@ -68,7 +68,23 @@ estimators_check <- function(object,
                           estimated indicators or indicator groups as described
                           in help(estimators.emdi).")))
     }
-  }else {
+  } else if (inherits(object, "fh_tf") && level == "domain") {
+      if (is.null(indicator) || !all(indicator == "all" | indicator == "All" |
+                                     indicator == "FH_TF")) {
+        stop(strwrap(prefix = " ", initial = "",
+                     paste0("The argument indicator is set to ", indicator, ".
+                   The argument only allows to be set to all or FH_TF for
+                            the fh_tf object at domain level.")))
+      }} else if(inherits(object, "fh_tf") && level == "subdomain"){
+        if (is.null(indicator) || !all(indicator == "all" | indicator == "All" |
+                                       indicator == "FH_TF" |
+                                       indicator == "Direct")) {
+          stop(strwrap(prefix = " ", initial = "",
+                       paste0("The argument indicator is set to ", indicator, ".
+                   The argument only allows to be set to all, FH_TF or Direct
+                              for the fh_tf object at subdomain level.")))
+    }
+  } else {
     if (is.null(indicator) || !all(indicator == "all" | indicator == "All" |
                                    indicator == "Quantiles" |
                                    indicator == "quantiles" |
