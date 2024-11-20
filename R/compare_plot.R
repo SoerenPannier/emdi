@@ -665,32 +665,32 @@ define_evallabel <- function(type, label, indi) {
       }  else if (type == "tf_sub") {
         label <- list(
           scatter = c(
-            title = indi,
+            title = "",
             y_lab = "Model-based",
             x_lab = "Direct"
           ),
           line = c(
-            title = indi,
+            title = "",
             y_lab = "Value",
             x_lab = "Subdomain"
           ),
           boxplot_MSE = c(
-            title = indi,
+            title = "",
             y_lab = "",
             x_lab = "MSE"
           ),
           ordered_MSE = c(
-            title = indi,
+            title = "",
             y_lab = "MSE",
             x_lab = "Subdomain"
           ),
           boxplot_CV = c(
-            title = indi,
+            title = "",
             y_lab = "CV",
             x_lab = ""
           ),
           ordered_CV = c(
-            title = indi,
+            title = "",
             y_lab = "CV",
             x_lab = "Subdomain"
           )
