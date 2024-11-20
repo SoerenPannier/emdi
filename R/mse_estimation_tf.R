@@ -8,19 +8,18 @@
 
 #browser()
 parametric_bootstrap_tf <- function(framework,
-                                 point_ebp_tf,
-                                 fixed,
-                                 transformation,
-                                 interval = c(-1, 2),
-                                 L,
-                                 B,
-                                 parallel_mode,
-                                 cpus) {
+                                    point_ebp_tf,
+                                    fixed,
+                                    transformation,
+                                    interval = c(-1, 2),
+                                    L,
+                                    B,
+                                    parallel_mode,
+                                    cpus) {
   message("\r", "Bootstrap started                                            ")
 
-    res_s <- NULL
-    fitted_s <- NULL
-
+  res_s <- NULL
+  fitted_s <- NULL
 
   start_time <- Sys.time()
   if (cpus > 1) {
@@ -34,26 +33,9 @@ parametric_bootstrap_tf <- function(framework,
       parallel::clusterSetRNGStream()
     }
     parallelMap::parallelLibrary("nlme")
-    mses <- simplify2array(parallelMap::parallelLapply(
+    mse_results <- simplify2array(parallelMap::parallelLapply(
       xs              = seq_len(B),
-      fun             = mse_estim_tf_wrapper_dom,
-      B               = B,
-      framework       = framework,
-      lambda          = point_ebp_tf$optimal_lambda,
-      shift           = point_ebp_tf$shift_par,
-      model_par       = point_ebp_tf$model_par,
-      gen_model       = point_ebp_tf$gen_model,
-      fixed           = fixed,
-      transformation  = transformation,
-      interval        = interval,
-      L               = L,
-      res_s           = res_s,
-      fitted_s        = fitted_s,
-      start_time      = start_time
-    ))
-    mses_subdom <- simplify2array(parallelMap::parallelLapply(
-      xs              = seq_len(B),
-      fun             = mse_estim_tf_wrapper_subdom,
+      fun             = mse_estim_tf_wrapper,
       B               = B,
       framework       = framework,
       lambda          = point_ebp_tf$optimal_lambda,
@@ -70,9 +52,9 @@ parametric_bootstrap_tf <- function(framework,
     ))
     parallelMap::parallelStop()
   } else {
-    mses <- simplify2array(lapply(
+    mse_results <- simplify2array(lapply(
       X = seq_len(B),
-      FUN = mse_estim_tf_wrapper_dom,
+      FUN = mse_estim_tf_wrapper,
       B = B,
       framework = framework,
       lambda = point_ebp_tf$optimal_lambda,
@@ -87,24 +69,6 @@ parametric_bootstrap_tf <- function(framework,
       fitted_s = fitted_s,
       start_time = start_time
     ))
-    mses_subdom <- simplify2array(lapply(
-      X = seq_len(B),
-      FUN = mse_estim_tf_wrapper_subdom,
-      B = B,
-      framework = framework,
-      lambda = point_ebp_tf$optimal_lambda,
-      shift = point_ebp_tf$shift_par,
-      model_par = point_ebp_tf$model_par,
-      gen_model = point_ebp_tf$gen_model,
-      fixed = fixed,
-      transformation = transformation,
-      interval = interval,
-      L = L,
-      res_s = res_s,
-      fitted_s = fitted_s,
-      start_time = start_time
-    ))
-
   }
 
   message("\r", "Bootstrap completed", "\n")
@@ -112,18 +76,18 @@ parametric_bootstrap_tf <- function(framework,
     flush.console()
   }
 
-  mses <- apply(mses, c(1, 2), mean)
-  mses_subdom <- apply(mses_subdom, c(1,2), mean)
-  if(is.null(framework$aggregate_to_vec)){
+  mses <- apply(mse_results[[1]], c(1, 2), mean)
+  mses_subdom <- apply(mse_results[[2]], c(1,2), mean)
+  if (is.null(framework$aggregate_to_vec)) {
     mses <- data.frame(Domain = unique(framework$pop_domains_vec), mses)
-    mses_subdom <- data.frame(Subdomain = unique(framework$pop_subdomains_vec),
-                              mses_subdom)
-  }else{
-    mses <- data.frame(Domain = unique(framework$aggregate_to_vec), mses)
+    mses_subdom <- data.frame(Subdomain = unique(framework$pop_subdomains_vec), mses_subdom)
+  } else {
+    mse_dom <- data.frame(Domain = unique(framework$aggregate_to_vec), mses)
   }
 
   return(list(mses=mses, mses_subdom=mses_subdom))
 }
+
 
 
 
@@ -362,57 +326,7 @@ bootstrap_par_tf <- function(fixed,
 
 # progress for mse_estim_tf (only internal) ----------
 
-mse_estim_tf_wrapper_dom <- function(i,
-                              B,
-                              framework,
-                              lambda,
-                              shift,
-                              model_par,
-                              gen_model,
-                              fixed,
-                              transformation,
-                              interval,
-                              L,
-                              res_s,
-                              fitted_s,
-                              start_time,
-                              seedvec) {
-  tmp <- mse_estim_tf(
-    framework = framework,
-    lambda = lambda,
-    shift = shift,
-    model_par = model_par,
-    gen_model = gen_model,
-    res_s = res_s,
-    fitted_s = fitted_s,
-    fixed = fixed,
-    transformation = transformation,
-    interval = interval,
-    L = L
-  )
-
-  if (i %% 10 == 0) {
-    if (i != B) {
-      delta <- difftime(Sys.time(), start_time, units = "secs")
-      remaining <- (delta / i) * (B - i)
-      remaining <- unclass(remaining)
-      remaining <- sprintf(
-        "%02d:%02d:%02d:%02d",
-        remaining %/% 86400, # days
-        remaining %% 86400 %/% 3600, # hours
-        remaining %% 3600 %/% 60, # minutes
-        remaining %% 60 %/% 1
-      ) # seconds)
-
-      message("\r", i, " of ", B, " Bootstrap iterations completed \t
-              Approximately ", remaining, " remaining \n")
-      if (.Platform$OS.type == "windows") flush.console()
-    }
-  }
-  return(tmp$mse_dom)
-}
-
-mse_estim_tf_wrapper_subdom <- function(i,
+mse_estim_tf_wrapper <- function(i,
                                  B,
                                  framework,
                                  lambda,
@@ -425,8 +339,7 @@ mse_estim_tf_wrapper_subdom <- function(i,
                                  L,
                                  res_s,
                                  fitted_s,
-                                 start_time,
-                                 seedvec) {
+                                 start_time) {
   tmp <- mse_estim_tf(
     framework = framework,
     lambda = lambda,
@@ -441,23 +354,23 @@ mse_estim_tf_wrapper_subdom <- function(i,
     L = L
   )
 
-  if (i %% 10 == 0) {
-    if (i != B) {
-      delta <- difftime(Sys.time(), start_time, units = "secs")
-      remaining <- (delta / i) * (B - i)
-      remaining <- unclass(remaining)
-      remaining <- sprintf(
-        "%02d:%02d:%02d:%02d",
-        remaining %/% 86400, # days
-        remaining %% 86400 %/% 3600, # hours
-        remaining %% 3600 %/% 60, # minutes
-        remaining %% 60 %/% 1
-      ) # seconds)
+  if (i %% 10 == 0 && i != B) {
+    delta <- difftime(Sys.time(), start_time, units = "secs")
+    remaining <- (delta / i) * (B - i)
+    remaining <- unclass(remaining)
+    remaining <- sprintf(
+      "%02d:%02d:%02d:%02d",
+      remaining %/% 86400, # days
+      remaining %% 86400 %/% 3600, # hours
+      remaining %% 3600 %/% 60, # minutes
+      remaining %% 60 %/% 1
+    )
 
-      message("\r", i, " of ", B, " Bootstrap iterations completed \t
-              Approximately ", remaining, " remaining \n")
-      if (.Platform$OS.type == "windows") flush.console()
-    }
+    message("\r", i, " of ", B, " Bootstrap iterations completed \t
+            Approximately ", remaining, " remaining \n")
+    if (.Platform$OS.type == "windows") flush.console()
   }
-  return(tmp$mse_subdom)
+  return(tmp)
 }
+
+
