@@ -206,7 +206,7 @@ ebp_tf_check2 <- function(threshold, transformation, interval, MSE, B,
 
 # Functions called in notation
 fw_tf_check1 <- function(pop_data, mod_vars, pop_domains, pop_subdomains, smp_data,
-                         fixed,  smp_domains, smp_subdomains, aggregate_to,
+                         fixed,  smp_domains, smp_subdomains,
                          threshold, pop_weights) {
   if (!all(mod_vars %in% colnames(pop_data))) {
     stop(strwrap(prefix = " ", initial = "",
@@ -291,8 +291,7 @@ fw_tf_check1 <- function(pop_data, mod_vars, pop_domains, pop_subdomains, smp_da
 
 fw_tf_check2 <- function(pop_domains, pop_subdomains, pop_domains_vec,
                          pop_subdomains_vec, smp_domains, smp_subdomains,
-                         smp_domains_vec, smp_subdomains_vec, aggregate_to,
-                         aggregate_to_vec) {
+                         smp_domains_vec, smp_subdomains_vec) {
   if (!(is.numeric(pop_domains_vec) ||
         any(inherits(pop_domains_vec, "factor")))) {
     stop(strwrap(prefix = " ", initial = "",
@@ -317,13 +316,13 @@ fw_tf_check2 <- function(pop_domains, pop_subdomains, pop_domains_vec,
                  paste0(smp_subdomains, " needs to be the name of a variable that
                         is numeric or a (ordered) factor.")))
   }
-  if(is.null(aggregate_to) != TRUE){
-    if (!(is.numeric(aggregate_to_vec) ||
-          any(inherits(aggregate_to_vec, "factor")))) {
-      stop(paste0(aggregate_to, " needs to be the name of a variable that is
-                  numeric or a (ordered) factor."))
-    }
-  }
+  #if(is.null(aggregate_to) != TRUE){
+    #if (!(is.numeric(aggregate_to_vec) ||
+         # any(inherits(aggregate_to_vec, "factor")))) {
+      #stop(paste0(aggregate_to, " needs to be the name of a variable that is
+                #  numeric or a (ordered) factor."))
+   # }
+  #}
   if ((is.numeric(pop_domains_vec) &&
        any(inherits(smp_domains_vec, "factor"))) ||
       (is.numeric(smp_domains_vec) &&

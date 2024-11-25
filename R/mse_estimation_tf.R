@@ -125,15 +125,11 @@ mse_estim_tf <- function(framework,
       framework$threshold(y = pop_income_vector)
   }
 
-  if(!is.null(framework$aggregate_to_vec)) {
-    N_dom_pop_tmp <- framework$N_dom_pop_agg
-    pop_domains_vec_tmp <- framework$aggregate_to_vec
-  } else {
-    N_subdom_pop_tmp <- framework$N_subdom_pop
-    pop_subdomains_vec_tmp <- framework$pop_subdomains_vec
-    N_dom_pop_tmp <- framework$N_dom_pop
-    pop_domains_vec_tmp <- framework$pop_domains_vec
-  }
+  N_subdom_pop_tmp <- framework$N_subdom_pop
+  pop_subdomains_vec_tmp <- framework$pop_subdomains_vec
+  N_dom_pop_tmp <- framework$N_dom_pop
+  pop_domains_vec_tmp <- framework$pop_domains_vec
+
 
   if(!is.null(framework$pop_weights)) {
     pop_weights_vec <- framework$pop_data[[framework$pop_weights]]
