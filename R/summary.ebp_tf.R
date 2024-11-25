@@ -30,9 +30,6 @@ summary.ebp_tf <- function(object, ...) {
   N_subdom_unobs <- object$framework$N_subdom_unobs
   N_subdom_smp <- object$framework$N_subdom_smp
 
-  #smp_size <- object$framework$Ndt_smp
-  #pop_size <- object$framework$Ndt_pop
-
   smp_size_subdom <- summary(as.data.frame(
     table(object$framework$smp_subdomains_vec)
   )[, "Freq"])

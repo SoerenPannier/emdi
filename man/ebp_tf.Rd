@@ -23,8 +23,7 @@ ebp_tf(
   cpus = 1,
   custom_indicator = NULL,
   na.rm = FALSE,
-  pop_weights = NULL,
-  aggregate_to = NULL
+  pop_weights = NULL
 )
 }
 \arguments{
@@ -41,11 +40,12 @@ variables, and \code{pop_domains}.}
 \item{pop_domains}{a character string containing the name of a variable that
 indicates domains in the population data. The variable can be numeric or
 a factor but needs to be of the same class as the variable named in
-\code{smp_domains}.
-#' @param pop_subdomains a character string containing the name of a variable that
-indicates sub-domains in the population data. The variable can be numeric or
-a factor but needs to be of the same class as the variable named in
-\code{smp_subdomains}. - 'RaelK updated -19.09.24'}
+\code{smp_domains}.}
+
+\item{pop_subdomains}{a character string containing the name of a variable
+that indicates sub-domains in the population data. The variable can be numeric
+or a factor but needs to be of the same class as the variable named in
+\code{smp_subdomains}.}
 
 \item{smp_data}{a data frame that needs to comprise all variables named in
 \code{fixed} and \code{smp_domains}.}
@@ -53,11 +53,12 @@ a factor but needs to be of the same class as the variable named in
 \item{smp_domains}{a character string containing the name of a variable
 that indicates domains in the sample data. The variable can be numeric or a
 factor but needs to be of the same class as the variable named in
-\code{pop_domains}.
-#' @param smp_subdomains a character string containing the name of a variable
+\code{pop_domains}.}
+
+\item{smp_subdomains}{a character string containing the name of a variable
 that indicates sub-domains in the sample data. The variable can be numeric or a
 factor but needs to be of the same class as the variable named in
-\code{pop_subdomains}. 'RaelK updated -19.09.24'}
+\code{pop_subdomains}.}
 
 \item{L}{a number determining the number of Monte-Carlo simulations that
 must be at least 1. Defaults to 50. For practical applications, values
@@ -125,26 +126,16 @@ from the population and sample data. For the EBP procedure complete
 observations are required. Defaults to \code{FALSE}.}
 
 \item{pop_weights}{a character string containing the name of a variable that
-indicates population weights in the populatation data. If a character string
+indicates population weights in the population data. If a character string
 is provided weighted indicators are estimated using population weights.
 The variable has to be numeric. Defaults to \code{NULL}.}
-
-\item{aggregate_to}{a character string containing the name of a variable from
-population data that indicates the target domain level for which the
-results are to be displayed. The variable can be numeric or a factor.
-Defaults to \code{NULL}.}
 
 \item{boot_type}{character string to choose between different MSE estimation
 procedures,currently a \code{"parametric"} and a semi-parametric
 \code{"wild"} bootstrap are possible. Defaults to \code{"parametric"}.}
-
-\item{weights}{a character string containing the name of a variable that
-indicates weights in the sample data. If a character string is provided
-a weighted version of the ebp will be used. The variable has to be numeric.
-Defaults to \code{NULL}.}
 }
 \value{
-An object of class "ebp", "emdi" that provides estimators for
+An object of class "ebp_tf", "emdi" that provides estimators for
 regional disaggregated indicators and optionally corresponding MSE estimates.
 Several generic functions have methods for the returned object. For a full
 list and descriptions of the components of objects of class "emdi",
@@ -191,8 +182,8 @@ emdi_model <- ebp_tf(
   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-  pop_domains = "district", pop_subdomains = "state", smp_data = eusilcA_smp,
-  smp_domains = "district", smp_subdomains = "state",
+  pop_subdomains = "district", pop_domains = "state", smp_data = eusilcA_smp,
+  smp_subdomains = "district", smp_domains = "state",
   na.rm = TRUE
 )
 
@@ -204,12 +195,12 @@ emdi_model <- ebp_tf(
   fixed = eqIncome ~ gender + eqsize + cash +
     self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
     fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-  pop_domains = "district", pop_subdomains = "state", smp_data = eusilcA_smp,
-   smp_domains = "district", smp_subdomains = "state"
+  pop_subdomains = "district", pop_domains = "state", smp_data = eusilcA_smp,
+   smp_subdomains = "district", smp_domains = "state",
   threshold = function(y) {
     0.6 * median(y)
-  }, transformation = "log",
-  L = 50, MSE = TRUE, boot_type = "wild", B = 50, custom_indicator =
+  }, transformation = "box.cox",
+  L = 50, MSE = TRUE, B = 50, custom_indicator =
     list(
       my_max = function(y) {
         max(y)
@@ -220,38 +211,20 @@ emdi_model <- ebp_tf(
     ), na.rm = TRUE, cpus = 1
 )
 
-# Example 3: With default setting but na.rm=TRUE under informative sampling.
-emdi_model <- ebp(
-  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
-    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-  weights = "weight", transformation = "log", na.rm = TRUE
-)
 
-# Example 4: With default setting and the output is at district (domain/area) level
+# Example 3: With default setting using pop_weights to get weighted
+# indicators according to equivalized household size and using a
+# custom_indicator with pop_weights
 emdi_model <- ebp_tf(
   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-  pop_domains = "district", pop_subdomains = "state", smp_data = eusilcA_smp,
-  smp_domains = "district", smp_subdomains = "state",
-  na.rm = TRUE, aggregate_to = "district"
-)
-
-# Example 5: With default setting using pop_weights to get weighted
-# indicators according to equivalized household size and an using an
-# custom_indicator using pop_weights
-emdi_model <- ebp(
-  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
-    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-  custom_indicator =
-    list(HCR_singleHH = function(y, pop_weights, threshold) {
-                              mean(y[pop_weights == 1] < threshold)
-                        }
-    ), na.rm = TRUE, pop_weights = "eqsize"
+    pop_subdomains ="district", pop_domains = "state", smp_data = eusilcA_smp,
+    smp_subdomains = "district", smp_domains ="state",
+  custom_indicator = list(Customized_Head_Count = function(y, threshold)
+  { mean(y < 5995) },
+  Customized_Poverty_Gap = function(y, threshold)
+  {mean(pmax(0, (5995 - y) / 5995))}), na.rm = TRUE
 )
 }
 }

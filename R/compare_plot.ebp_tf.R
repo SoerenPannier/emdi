@@ -57,13 +57,18 @@ compare_plot.ebp_tf <- function(model = NULL, direct = NULL, level=NULL, indicat
 #' For all indicators or a selection of indicators two plots are returned. The
 #' first plot is a scatter plot of estimates to compare and the second is a line
 #' plot with these estimates.
-#' @param model an object of type "emdi", either "ebp" or "fh", representing
-#' point and MSE estimates
-#' @param direct an object of type "direct","emdi", representing point
-#' and MSE estimates. If the input argument \code{model} is of type "ebp",
-#' \code{direct} is required. If the input argument \code{model} is of type
-#' "fh", the \code{direct} component is already included in the input
-#' argument \code{model}.
+#' @param model an object of type "emdi", either "ebp", "ebp_tf", "fh" or "fh_tf",
+#' representing point and MSE estimates.
+#' @param direct an object of type "direct", "emdi", representing point
+#' and MSE estimates. If the input argument \code{model} is of type "ebp" or
+#' "ebp_tf", \code{direct} is required. If the input argument \code{model} is
+#' of type "fh", the \code{direct} component is already included in the input
+#' argument \code{model}. If the input argument \code{model} is
+#' of type "fh_tf" and  the input argument \code{level} is "domain",
+#' \code{direct} is required. If the input argument \code{model} is
+#' of type "fh_tf" and  the input argument \code{level} is "subdomain",
+#' the \code{direct} component is already included in the input argument
+#' \code{model}.
 #' @param indicator optional character vector that selects which indicators
 #' shall be returned: (i) all calculated indicators ("all");
 #' (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
@@ -72,15 +77,19 @@ compare_plot.ebp_tf <- function(model = NULL, direct = NULL, level=NULL, indicat
 #' "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
 #' "Inequality" or "Custom". If two of these groups are selected, only the first
 #' one is returned. Defaults to "all". Note, additional custom indicators can be
-#' defined as argument for model-based approaches (see also \code{\link{ebp}})
-#' and do not appear in groups of indicators even though these might belong to
-#' one of the groups.
+#' defined as argument for model-based approaches (see also \code{\link{ebp}},
+#' \code{\link{ebp_tf}}) and do not appear in groups of indicators even though
+#' these might belong to one of the groups.
 #' @param MSE optional logical. If \code{TRUE}, the MSE estimates of the direct
 #' and model-based estimates are compared via suitable plots. Defaults to
 #' \code{FALSE}.
 #' @param CV optional logical. If \code{TRUE}, the coefficient of variation
 #' estimates of the direct and model-based estimates are compared via suitable
 #' plots. Defaults to \code{FALSE}.
+#' @param level argument is required for "ebp_tf" and "fh_tf". There are two
+#' options on which level the results are to be compared: (i) at domain level
+#' ("domain") or (ii) at subdomain level ("subdomain"). \code{direct} object
+#' must be defined at the corresponding level.
 #' @param label argument that enables to customize title and axis labels. There
 #' are three options to label the evaluation plots: (i) original labels
 #' ("orig"), (ii) axis labels but no title ("no_title"), (iii) neither axis

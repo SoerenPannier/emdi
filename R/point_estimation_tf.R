@@ -4,10 +4,8 @@
 
 # This function implements the transformation of data, estimation of the twofold
 # nested error linear regression model and the monte-carlo approximation to
-# predict the desired indicators. If the weighted version of the approach is
-# used, then additional estimation steps are taken in order to calculate
-# weighted regression coefficients before the monte-carlo approximation. See
-# corresponding functions below.
+# predict the desired indicators. For twofold ebp, a weighted approach is
+# not yet implemented. See corresponding functions below.
 
 
 point_ebp_tf <- function(framework,
@@ -31,7 +29,7 @@ point_ebp_tf <- function(framework,
     transformation = transformation,
     interval = interval
   )
- # browser()
+
   # Data_transformation function returns transformed data and shift parameter.
   # The function can be found in the script transformation_functions.R
   transformation_par <- data_transformation(
@@ -42,11 +40,6 @@ point_ebp_tf <- function(framework,
   )
   shift_par <- transformation_par$shift
 
-  #print(dim(transformation_par$transformed_data))
-  #print(head(transformation_par$transformed_data))
-
-  #random_effects_formula <- as.formula(paste("~ 1 |", framework$smp_domains, "/", framework$smp_subdomains))
-  #print(random_effects_formula)
 
   # Model estimation, model parameter and parameter of generating model --------
 
@@ -54,14 +47,12 @@ point_ebp_tf <- function(framework,
   # See Molina and Rao (2010) p. 374
   # lme function is included in the nlme package which is imported.
 
-  #browser()
   mixed_model_tf <- nlme::lme(
     fixed = fixed,
     data = transformation_par$transformed_data,
     random =
       as.formula(paste0(
         "~ 1 | " , framework$smp_domains, "/", framework$smp_subdomains)),
-   #random = random_effects_formula,
     method = "REML",
     keep.data = keep_data
   )
@@ -69,7 +60,7 @@ point_ebp_tf <- function(framework,
 
   # Function model_par_tf extracts the needed parameters theta from the nested
   # error linear regression model. It returns the beta coefficients (betas),
-  # sigmae2est, sigmau2est and the random effect (rand_eff).
+  # sigmae2est, sigmau2est and the random effects (rand_eff1, rand_eff2).
 
   est_par_tf <- model_par_tf(
     mixed_model_tf = mixed_model_tf,
@@ -107,16 +98,6 @@ point_ebp_tf <- function(framework,
     gen_model_tf = gen_par_tf
   )
 
-  #mixed_model_tf$coefficients_weighted <- if (!is.null(framework$weights)) {
-   # as.numeric(est_par_tf$betas)
- # } else {
-  #  NULL
-  #}
-  #names(mixed_model_tf$coefficients_weighted) <- if (!is.null(framework$weights)) {
-    #rownames(est_par_tf$betas)
-  #} else {
-   # NULL
-  #}
   return(list(
     ind_Domain = indicator_prediction$point_estimates,
     ind_Subdomain = indicator_prediction$point_estimates_subdom,
@@ -154,7 +135,7 @@ model_par_tf <- function(framework,
     rand_eff1 <- rep(0, length(unique(framework$pop_domains_vec)))
     # random effect for in-sample domains (dist_obs_dom)
     rand_eff1[framework$dist_obs_dom] <- (random.effects(mixed_model_tf)[[1]][[1]])
-    rand_eff2<- rep(0, length(unique(framework$pop_subdomains_vec)))
+    rand_eff2 <- rep(0, length(unique(framework$pop_subdomains_vec)))
     # random effect for in-sample sub-domains (dist_obs_subdom)
     rand_eff2[framework$dist_obs_subdom] <- (random.effects(mixed_model_tf)[[2]][[1]])
     #_________________________________________________________________________________________
@@ -171,16 +152,12 @@ model_par_tf <- function(framework,
 } # End model_par_tf
 
 
-#browser()
 # Function gen_model_tf calculates the parameters in the generating model.
 # See Molina and Rao (2010) p. 375 (20)
 gen_model_tf <- function(fixed,
                       framework,
                       model_par_tf) {
-    # Parameter for calculating variance of new random effect
-         ##gamma <- model_par_tf$sigmau2est / (model_par_tf$sigmau2est +
-         ##model_par_tf$sigmae2est / framework$n_smp)
-    #____________________________19.08.2024____________________________________________
+
     gamma_dt <- model_par_tf$sigmau2_2est / (model_par_tf$sigmau2_2est +
                                             (model_par_tf$sigmae2est / framework$ndt_smp))
     gamma_dl <- (1-gamma_dt)*framework$ndt_smp
@@ -207,7 +184,7 @@ gen_model_tf <- function(fixed,
 
     coef_var <-  1+gamma_dt*(gamma_dt-2)
     names(coef_var) <- framework$subdom_names #defined in framework
-    # Initialize result vector
+
     coef_var_prod <- numeric(framework$N_subdom_smp)
 
     # Loop through each domain in phi_d
@@ -221,7 +198,6 @@ gen_model_tf <- function(fixed,
 
     }
 
-    #____________________Edited 19.08.2024____________________________________________________
     # Variance of new random effect
     sigmav2est_sampled_dt <- model_par_tf$sigmae2est * coef_var_prod +
       model_par_tf$sigmau2_2est * (1 - gamma_dt)
@@ -273,14 +249,12 @@ monte_carlo_tf <- function(transformation,
   }
 
   ests_mcmc <- array(dim = c(
-    #N_subdom_pop_tmp,
     N_dom_pop_tmp,
     L,
     length(framework$indicator_names)
   ))
   ests_mcmc_subdom <- array(dim = c(
     N_subdom_pop_tmp,
-    #N_dom_pop_tmp,
     L,
     length(framework$indicator_names)
   ))
@@ -399,15 +373,15 @@ errors_gen_tf <- function(framework, model_par_tf, gen_model_tf) {
     ),
     framework$ndt_pop[framework$dist_obs_subdom]
   )
-  # new random effect for out-sample-subdomains
- # vu[!framework$obs_subdom] <- rep(
-  #  rnorm(
-   #   framework$N_subdom_unobs,
-    #  0,
-     # sqrt(gen_model_tf$sigmav2est_nonsampled_dt)
-    #),
-    #framework$ndt_pop[!framework$dist_obs_subdom]
-  #)
+  # new random effect for out-sample-subdomains in in-sample domains
+  vu[framework$unobs_subdom_in_obs_dom] <- rep(
+    rnorm(
+      framework$N_subdom_unobs,
+      0,
+      sqrt(gen_model_tf$sigmav2est_nonsampled_dt)
+    ),
+    framework$ndt_pop[!framework$dist_obs_subdom]
+  )
   return(list(epsilon = epsilon, vu = vu))
 } # End errors_gen_tf
 

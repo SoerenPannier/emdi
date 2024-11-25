@@ -4,9 +4,8 @@
 
 # Function parametric_bootstrap_tf conducts the MSE estimation defined in function
 # mse_estim_tf (see below)
-# The parametric boostrap approach can be find in Molina and Rao (2010) p. 376
+# The parametric boostrap approach can be found in Molina and Rao (2010) p. 376
 
-#browser()
 parametric_bootstrap_tf <- function(framework,
                                     point_ebp_tf,
                                     fixed,
@@ -78,12 +77,9 @@ parametric_bootstrap_tf <- function(framework,
 
   mses <- apply(mse_results[[1]], c(1, 2), mean)
   mses_subdom <- apply(mse_results[[2]], c(1,2), mean)
-  if (is.null(framework$aggregate_to_vec)) {
-    mses <- data.frame(Domain = unique(framework$pop_domains_vec), mses)
-    mses_subdom <- data.frame(Subdomain = unique(framework$pop_subdomains_vec), mses_subdom)
-  } else {
-    mse_dom <- data.frame(Domain = unique(framework$aggregate_to_vec), mses)
-  }
+
+  mses <- data.frame(Domain = unique(framework$pop_domains_vec), mses)
+  mses_subdom <- data.frame(Subdomain = unique(framework$pop_subdomains_vec), mses_subdom)
 
   return(list(mses=mses, mses_subdom=mses_subdom))
 }
@@ -97,7 +93,6 @@ parametric_bootstrap_tf <- function(framework,
 # The mse_estim_tf function defines all parameters and estimations which have to
 # be replicated B times for the Parametric Bootstrap Approach.
 # See Molina and Rao (2010) p. 376
-#browser()
 mse_estim_tf <- function(framework,
                       lambda,
                       shift,
@@ -110,12 +105,9 @@ mse_estim_tf <- function(framework,
                       interval,
                       L) {
 
-
-
   # The function superpopulation_tf returns an income vector and a temporary
   # variable that passes the random effect to generating bootstrap populations
   # in bootstrap_par_tf.
-
 
     superpop <- superpopulation_tf(
       framework = framework,
@@ -213,7 +205,6 @@ mse_estim_tf <- function(framework,
 
   framework$smp_data <- bootstrap_sample
 
- # browser()
   # Prediction of indicators with bootstrap sample.
   bootstrap_point_ebp_tf <- as.matrix(point_ebp_tf(
     fixed = fixed,

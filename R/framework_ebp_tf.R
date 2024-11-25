@@ -1,15 +1,15 @@
 # Internal documentation -------------------------------------------------------
 
-# The function notation defines the notational framework for the EBP approach
-# e.g. number of households in population or sample (per domain), distinction
-# between in-sample and out-of-sample
+# The function notation defines the notational framework for the EBP twofold
+# approach  e.g. number of households in population or sample (per domain),
+# distinction between in-sample and out-of-sample
 # see Molina and Rao (2003) p.370-371
 
 
 framework_ebp_tf <- function(fixed, pop_data, pop_domains, pop_subdomains,
                              smp_data, smp_domains, smp_subdomains,
                              threshold, custom_indicator = NULL, na.rm,
-                             aggregate_to = NULL, pop_weights) {
+                             pop_weights) {
 
   # Reduction of number of variables
   mod_vars <- all.vars(fixed)
@@ -55,19 +55,8 @@ framework_ebp_tf <- function(fixed, pop_data, pop_domains, pop_subdomains,
   smp_data[[smp_domains]] <- factor(smp_data[[smp_domains]],
                                     levels = levels_tmp)
 
-  if(is.null(aggregate_to)){
-    aggregate_to_vec <- NULL
-  }else{
-    levels_tmp <- unique(pop_data[[aggregate_to]])
-    pop_data[[aggregate_to]] <- factor(pop_data[[aggregate_to]],
-                                       levels = levels_tmp)
-    aggregate_to_vec <- pop_data[[aggregate_to]]
-  }
-
-
   rm(levels_tmp)
 
-  #smp_data <- smp_data[order(smp_data[[smp_subdomains]]),]
   smp_data <- smp_data[order(interaction(smp_data[[smp_domains]]),
                              smp_data[[smp_subdomains]]),]
 
@@ -125,10 +114,6 @@ framework_ebp_tf <- function(fixed, pop_data, pop_domains, pop_subdomains,
   obs_dom <- pop_domains_vec %in% unique(smp_domains_vec)
   dist_obs_dom <- unique(pop_domains_vec) %in% unique(smp_domains_vec)
 
-  #_____________________Newly added - 19.08.2024 - Rael_________________
-  #Row-names of sampled domains and subdomains
-  ##unique_dom_smp <- unique(smp_domains_vec)
-  ##unique_subdom_smp <- unique(smp_subdomains_vec)
   #------------------------16.10.24---------------------------------------------
   subdom_names <- names(table(smp_subdomains_vec))
   dom_names <- names(table(smp_domains_vec))
@@ -148,6 +133,9 @@ framework_ebp_tf <- function(fixed, pop_data, pop_domains, pop_subdomains,
   # Indicator variables that indicate if subdomain is in- or out-of-sample
   obs_subdom <- pop_subdomains_vec %in% unique(smp_subdomains_vec)
   dist_obs_subdom <- unique(pop_subdomains_vec) %in% unique(smp_subdomains_vec)
+
+  #Indicator variable that indicate if subdomain is out of sample in a sampled domain
+  unobs_subdom_in_obs_dom <- obs_dom & !obs_subdom
   #______________________________________________________________
 
 
@@ -238,8 +226,6 @@ framework_ebp_tf <- function(fixed, pop_data, pop_domains, pop_subdomains,
     smp_subdomains_vec = smp_subdomains_vec,
     smp_domains = smp_domains,
     smp_subdomains = smp_subdomains,
-    aggregate_to = aggregate_to,
-    aggregate_to_vec = aggregate_to_vec,
     N_pop = N_pop,
     N_smp = N_smp,
     N_unobs = N_unobs,
@@ -256,9 +242,7 @@ framework_ebp_tf <- function(fixed, pop_data, pop_domains, pop_subdomains,
     obs_subdom = obs_subdom,
     dist_obs_dom = dist_obs_dom,
     dist_obs_subdom = dist_obs_subdom,
-    #_____________09-10-24________________
-    #unique_dom_smp = unique_dom_smp,
-    #unique_subdom_smp = unique_subdom_smp,
+    unobs_subdom_in_obs_dom = unobs_subdom_in_obs_dom,
     subdom_names = subdom_names,
     dom_names = dom_names,
     ndt_pop = ndt_pop,
