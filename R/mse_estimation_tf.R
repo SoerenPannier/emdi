@@ -31,7 +31,9 @@ parametric_bootstrap_tf <- function(framework,
     if (parallel_mode == "socket") {
       parallel::clusterSetRNGStream()
     }
+    # Load necessary libraries on worker processes
     parallelMap::parallelLibrary("nlme")
+
     mse_results <- simplify2array(parallelMap::parallelLapply(
       xs              = seq_len(B),
       fun             = mse_estim_tf_wrapper,
@@ -242,8 +244,8 @@ superpopulation_tf <- function(framework, model_par, gen_model, lambda, shift,
     sum(framework$obs_subdom), 0,
     sqrt(model_par$sigmae2est)
   )
-  eps[!framework$obs_subdom] <- rnorm(
-    sum(!framework$obs_subdom), 0,
+  eps[!framework$obs_subdom & framework$obs_dom] <- rnorm(
+    sum(!framework$obs_subdom & framework$obs_dom), 0,
     sqrt(model_par$sigmae2est + model_par$sigmau2_2est)
   )
   eps[!framework$obs_dom] <- rnorm(
