@@ -46,7 +46,7 @@ point_ebp_tf <- function(framework,
   # Estimation of the nested error linear regression model
   # See Molina and Rao (2010) p. 374
   # lme function is included in the nlme package which is imported.
-
+#browser()
   mixed_model_tf <- nlme::lme(
     fixed = fixed,
     data = transformation_par$transformed_data,
@@ -370,13 +370,13 @@ errors_gen_tf <- function(framework, model_par_tf, gen_model_tf) {
     framework$ndt_pop[framework$dist_obs_subdom]
   )
   # new random effect for out-sample-subdomains in in-sample domains
-  vu[framework$unobs_subdom_in_obs_dom] <- rep(
+  vu[framework$unobs_subdom_obs_dom] <- rep(
     rnorm(
-      framework$N_subdom_unobs,
+      rep(1,framework$N_dom_smp),
       0,
       sqrt(gen_model_tf$sigmav2est_nonsampled_dt)
     ),
-    framework$ndt_pop[!framework$dist_obs_subdom]
+    framework$n_pop_unsampled_subdoms[framework$dist_obs_dom]
   )
   return(list(epsilon = epsilon, vu = vu))
 } # End errors_gen_tf

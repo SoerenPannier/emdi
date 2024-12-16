@@ -517,12 +517,12 @@ define_label <- function(x, label) {
           ),
           qq_ran_dom = c(
             title = "Random effect - domain level",
-            y_lab = "Quantiles of random effects - domain level",
+            y_lab = "Quantiles of random effects",
             x_lab = "Theoretical quantiles"
           ),
           qq_ran_subdom = c(
             title = "Random effect - subdomain level",
-            y_lab = "Quantiles of random effects - subdomain level",
+            y_lab = "Quantiles of random effects",
             x_lab = "Theoretical quantiles"
           ),
           d_res = c(
@@ -533,12 +533,12 @@ define_label <- function(x, label) {
           d_ran_dom = c(
             title = "Density - Standardized random effects",
             y_lab = "Density",
-            x_lab = "Standardized random effects - domain level"
+            x_lab = "Standardized random effects - domain"
           ),
           d_ran_subdom = c(
             title = "Density - Standardized random effects",
             y_lab = "Density",
-            x_lab = "Standardized random effects - subdomain level"
+            x_lab = "Standardized random effects -subdomain"
           ),
           cooks = c(
             title = "Cook's Distance Plot",
@@ -732,12 +732,12 @@ define_label <- function(x, label) {
           ),
           qq_ran_dom = c(
             title = "",
-            y_lab = "Quantiles of random effects - domain level",
+            y_lab = "Quantiles of random effects",
             x_lab = "Theoretical quantiles"
           ),
           qq_ran_subdom = c(
             title = "",
-            y_lab = "Quantiles of random effects - subdomain level",
+            y_lab = "Quantiles of random effects",
             x_lab = "Theoretical quantiles"
           ),
           d_res = c(

@@ -17,9 +17,6 @@ parametric_bootstrap_tf <- function(framework,
                                     cpus) {
   message("\r", "Bootstrap started                                            ")
 
-  res_s <- NULL
-  fitted_s <- NULL
-
   start_time <- Sys.time()
   if (cpus > 1) {
     cpus <- min(cpus, parallel::detectCores())
@@ -41,14 +38,12 @@ parametric_bootstrap_tf <- function(framework,
       framework       = framework,
       lambda          = point_ebp_tf$optimal_lambda,
       shift           = point_ebp_tf$shift_par,
-      model_par       = point_ebp_tf$model_par,
-      gen_model       = point_ebp_tf$gen_model,
+      model_par_tf    = point_ebp_tf$model_par_tf,
+      gen_model_tf    = point_ebp_tf$gen_model_tf,
       fixed           = fixed,
       transformation  = transformation,
       interval        = interval,
       L               = L,
-      res_s           = res_s,
-      fitted_s        = fitted_s,
       start_time      = start_time
     ))
     parallelMap::parallelStop()
@@ -60,14 +55,12 @@ parametric_bootstrap_tf <- function(framework,
       framework = framework,
       lambda = point_ebp_tf$optimal_lambda,
       shift = point_ebp_tf$shift_par,
-      model_par = point_ebp_tf$model_par,
-      gen_model = point_ebp_tf$gen_model,
+      model_par_tf = point_ebp_tf$model_par_tf,
+      gen_model_tf = point_ebp_tf$gen_model_tf,
       fixed = fixed,
       transformation = transformation,
       interval = interval,
       L = L,
-      res_s = res_s,
-      fitted_s = fitted_s,
       start_time = start_time
     ))
   }
@@ -98,10 +91,8 @@ parametric_bootstrap_tf <- function(framework,
 mse_estim_tf <- function(framework,
                       lambda,
                       shift,
-                      model_par,
-                      gen_model,
-                      res_s,
-                      fitted_s,
+                      model_par_tf,
+                      gen_model_tf,
                       fixed,
                       transformation,
                       interval,
@@ -113,8 +104,8 @@ mse_estim_tf <- function(framework,
 
     superpop <- superpopulation_tf(
       framework = framework,
-      model_par = model_par,
-      gen_model = gen_model,
+      model_par_tf = model_par_tf,
+      gen_model_tf = gen_model_tf,
       lambda = lambda,
       shift = shift,
       transformation = transformation
@@ -193,7 +184,7 @@ mse_estim_tf <- function(framework,
       fixed = fixed,
       transformation = transformation,
       framework = framework,
-      model_par = model_par,
+      model_par_tf = model_par_tf,
       lambda = lambda,
       shift = shift,
       vu_tmp1 = superpop$vu_tmp1,
@@ -236,32 +227,32 @@ mse_estim_tf <- function(framework,
 # used to construct a superpopulation_tf model.
 
 
-superpopulation_tf <- function(framework, model_par, gen_model, lambda, shift,
+superpopulation_tf <- function(framework, model_par_tf, gen_model_tf, lambda, shift,
                             transformation) {
   # superpopulation individual errors
   eps <- vector(length = framework$N_pop)
   eps[framework$obs_subdom] <- rnorm(
     sum(framework$obs_subdom), 0,
-    sqrt(model_par$sigmae2est)
+    sqrt(model_par_tf$sigmae2est)
   )
   eps[!framework$obs_subdom & framework$obs_dom] <- rnorm(
     sum(!framework$obs_subdom & framework$obs_dom), 0,
-    sqrt(model_par$sigmae2est + model_par$sigmau2_2est)
+    sqrt(model_par_tf$sigmae2est + model_par_tf$sigmau2_2est)
   )
   eps[!framework$obs_dom] <- rnorm(
     sum(!framework$obs_dom), 0,
-    sqrt(model_par$sigmae2est + model_par$sigmau2_1est +
-           model_par$sigmau2_2est)
+    sqrt(model_par_tf$sigmae2est + model_par_tf$sigmau2_1est +
+           model_par_tf$sigmau2_2est)
   )
 
   # superpopulation random effect
-  vu_tmp1 <- rnorm(framework$N_dom_pop, 0, sqrt(model_par$sigmau2_1est))
-  vu_tmp2 <- rnorm(framework$N_subdom_pop, 0, sqrt(model_par$sigmau2_2est))
+  vu_tmp1 <- rnorm(framework$N_dom_pop, 0, sqrt(model_par_tf$sigmau2_1est))
+  vu_tmp2 <- rnorm(framework$N_subdom_pop, 0, sqrt(model_par_tf$sigmau2_2est))
   vu_pop1 <- rep(vu_tmp1, framework$n_pop)
   vu_pop2 <- rep(vu_tmp2, framework$ndt_pop)
 
   #  superpopulation income vector
-  Y_pop_b <- gen_model$mu_fixed + eps + vu_pop1 + vu_pop2
+  Y_pop_b <- gen_model_tf$mu_fixed + eps + vu_pop1 + vu_pop2
 
   Y_pop_b <- back_transformation(
     y = Y_pop_b,
@@ -279,20 +270,20 @@ superpopulation_tf <- function(framework, model_par, gen_model, lambda, shift,
 bootstrap_par_tf <- function(fixed,
                           transformation,
                           framework,
-                          model_par,
+                          model_par_tf,
                           lambda,
                           shift,
                           vu_tmp1,
                           vu_tmp2) {
   # Bootstrap sample individual error term
-  eps <- rnorm(framework$N_smp, 0, sqrt(model_par$sigmae2est))
+  eps <- rnorm(framework$N_smp, 0, sqrt(model_par_tf$sigmae2est))
   # Bootstrap sample random effect
   vu_smp1 <- rep(vu_tmp1[framework$dist_obs_dom], framework$n_smp)
   vu_smp2 <- rep(vu_tmp2[framework$dist_obs_subdom], framework$ndt_smp)
   # Extraction of design matrix
   X_smp <- model.matrix(fixed, framework$smp_data)
   # Constant part of income vector for bootstrap sample
-  mu_smp <- X_smp %*% model_par$betas
+  mu_smp <- X_smp %*% model_par_tf$betas
   # Transformed bootstrap income vector
   Y_smp_b <- mu_smp + eps + vu_smp1 + vu_smp2
   # Back transformation of bootstrap income vector
@@ -320,23 +311,19 @@ mse_estim_tf_wrapper <- function(i,
                                  framework,
                                  lambda,
                                  shift,
-                                 model_par,
-                                 gen_model,
+                                 model_par_tf,
+                                 gen_model_tf,
                                  fixed,
                                  transformation,
                                  interval,
                                  L,
-                                 res_s,
-                                 fitted_s,
                                  start_time) {
   tmp <- mse_estim_tf(
     framework = framework,
     lambda = lambda,
     shift = shift,
-    model_par = model_par,
-    gen_model = gen_model,
-    res_s = res_s,
-    fitted_s = fitted_s,
+    model_par_tf = model_par_tf,
+    gen_model_tf = gen_model_tf,
     fixed = fixed,
     transformation = transformation,
     interval = interval,

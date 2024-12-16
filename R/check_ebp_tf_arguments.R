@@ -2,41 +2,57 @@
 # ebp_tf function.
 
 
-# Function called in ebp
+# Function called in ebp_tf
 ebp_tf_check1 <- function(fixed, pop_data, pop_domains,pop_subdomains, smp_data,
                           smp_domains, smp_subdomains, L) {
   if (is.null(fixed) || !inherits(fixed, "formula")) {
-    stop("Fixed must be a formula object. See also help(ebp).")
+    stop("Fixed must be a formula object. See also help(ebp_tf).")
   }
   if (!is.data.frame(pop_data)) {
     stop(strwrap(prefix = " ", initial = "",
                  "Pop_data must be a data frame containing population data.
-                 See also help(ebp)."))
+                 See also help(ebp_tf)."))
   }
+  if (!is.character(smp_data[[smp_domains]])) {
+    smp_data[[smp_domains]] <- as.character(smp_data[[smp_domains]])
+  }
+
+  if (!is.character(smp_data[[smp_subdomains]])) {
+    smp_data[[smp_subdomains]] <- as.character(smp_data[[smp_subdomains]])
+  }
+
+  if (!is.character(pop_data[[pop_domains]])) {
+    pop_data[[pop_domains]] <- as.character(pop_data[[pop_domains]])
+  }
+
+  if (!is.character(pop_data[[pop_subdomains]])) {
+    pop_data[[pop_subdomains]] <- as.character(pop_data[[pop_subdomains]])
+  }
+
   if (!is.character(pop_domains) || length(pop_domains) != 1) {
     stop(strwrap(prefix = " ", initial = "",
-                 "Pop_domains must be a vector of length 1 and of class
+                 "pop_domains must be a vector of length 1 and of class
                  character specifying the variable name of a numeric or factor
                  variable indicating domains in the population data. See also
                  help(ebp_tf)."))
   }
   if (!is.character(pop_subdomains) || length(pop_subdomains) != 1) {
     stop(strwrap(prefix = " ", initial = "",
-                 "Pop_subdomains must be a vector of length 1 and of class
+                 "pop_subdomains must be a vector of length 1 and of class
                  character specifying the variable name of a numeric or factor
                  variable indicating subdomains in the population data. See also
                  help(ebp_tf)."))
   }
-  if (!is.character(pop_data[[pop_subdomains]])){
+  if (!is.character(smp_data[[smp_subdomains]])){
     stop(strwrap(prefix = " ", initial = "",
-                 "Pop_subdomains must be of class character variable indicating
-                 subdomains in the population data. See also  help(ebp_tf)."))
+                 "smp_subdomains must be of class character variable indicating
+                 subdomains in the sample data. See also  help(ebp_tf)."))
   }
 
-  if (!is.character(pop_data[[pop_domains]])){
+  if (!is.character(smp_data[[smp_domains]])){
     stop(strwrap(prefix = " ", initial = "",
-                 "Pop_domains must be of class character variable indicating
-                 domains in the population data. See also  help(ebp_tf)."))
+                 "smp_domains must be of class character variable indicating
+                 domains in the sample data. See also  help(ebp_tf)."))
   }
 
   if (!is.data.frame(smp_data)) {
@@ -125,24 +141,24 @@ ebp_tf_check2 <- function(threshold, transformation, interval, MSE, B,
                  lower and upper limit for the estimation of the optimal
                  transformation parameter. The value of the lower limit needs
                  to be smaller than the upper limit. You can also choose
-                 'default'. See also help(ebp)."))
+                 'default'. See also help(ebp_tf)."))
   }
   if (transformation == "dual" & any(interval < 0)) {
     stop(strwrap(prefix = " ", initial = "",
                  "For the dual transformation, lambda needs to be positive, so
                  the lower limit of the interval cannot be negative. See also
-                 help(ebp)."))
+                 help(ebp_tf)."))
   }
   if (!is.logical(MSE) || length(MSE) != 1) {
     stop(strwrap(prefix = " ", initial = "",
                  "MSE must be a logical value. Set MSE to TRUE or FALSE. See
-                 also help(ebp)."))
+                 also help(ebp_tf)."))
   }
   if (MSE == TRUE && !(is.numeric(B) && length(B) == 1 && B > 1)) {
     stop(strwrap(prefix = " ", initial = "",
                  "If MSE is set to TRUE, a single numeric value for the number
                  of bootstrap sample needs to be chosen that is greater than 1.
-                 See also help(ebp)."))
+                 See also help(ebp_tf)."))
   }
   if (!is.numeric(cpus) || !(is.numeric(cpus) && length(cpus) == 1)) {
     stop(strwrap(prefix = " ", initial = "",
@@ -153,7 +169,7 @@ ebp_tf_check2 <- function(threshold, transformation, interval, MSE, B,
                          !(is.numeric(seed) && length(seed) == 1))) {
     stop(strwrap(prefix = " ", initial = "",
                  "The seed must be a single value, interpreted as an integer,
-                 or NULL See also help(ebp)."))
+                 or NULL See also help(ebp_tf)."))
   }
   if (!is.null(custom_indicator)) {
     if (!inherits(custom_indicator, "list")) {
@@ -190,7 +206,7 @@ ebp_tf_check2 <- function(threshold, transformation, interval, MSE, B,
   if (!(inherits(na.rm, "logical") && length(na.rm) == 1)) {
     stop(strwrap(prefix = " ", initial = "",
                  "na.rm needs to be a logical value. Set na.rm to TRUE or FALSE.
-                 See also help(ebp)."))
+                 See also help(ebp_tf)."))
   }
 
   if (is.character(pop_weights) && length(pop_weights) != 1 ||
@@ -199,7 +215,7 @@ ebp_tf_check2 <- function(threshold, transformation, interval, MSE, B,
                  "Pop_weights must be a vector of length 1 and of class
                  character specifying the variable name of a numeric variable
                  indicating weights in the population data. See also
-                 help(ebp)."))
+                 help(ebp_tf)."))
   }
 } #end check2
 
@@ -331,7 +347,7 @@ fw_tf_check2 <- function(pop_domains, pop_subdomains, pop_domains_vec,
                  paste0(pop_domains, " and ", smp_domains, " need to be names
                         of variables that are of the same class (factor and
                         ordered factor are considered to be the same class).
-                        See also help(ebp).")))
+                        See also help(ebp_tf).")))
   }
   if ((is.numeric(pop_subdomains_vec) &&
        any(inherits(smp_subdomains_vec, "factor"))) ||

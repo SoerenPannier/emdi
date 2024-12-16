@@ -26,9 +26,7 @@ framework_ebp_tf <- function(fixed, pop_data, pop_domains, pop_subdomains,
     threshold = threshold, pop_weights = pop_weights
   )
 
-
   pop_data <- pop_data[, pop_vars]
-
 
   # Deletion of NA
   if (na.rm == TRUE) {
@@ -114,7 +112,6 @@ framework_ebp_tf <- function(fixed, pop_data, pop_domains, pop_subdomains,
   obs_dom <- pop_domains_vec %in% unique(smp_domains_vec)
   dist_obs_dom <- unique(pop_domains_vec) %in% unique(smp_domains_vec)
 
-  #------------------------16.10.24---------------------------------------------
   subdom_names <- names(table(smp_subdomains_vec))
   dom_names <- names(table(smp_domains_vec))
 
@@ -135,9 +132,22 @@ framework_ebp_tf <- function(fixed, pop_data, pop_domains, pop_subdomains,
   dist_obs_subdom <- unique(pop_subdomains_vec) %in% unique(smp_subdomains_vec)
 
   #Indicator variable that indicate if subdomain is out of sample in a sampled domain
-  unobs_subdom_in_obs_dom <- obs_dom & !obs_subdom
-  #______________________________________________________________
+  unobs_subdom_obs_dom <- obs_dom & !obs_subdom
 
+  unsampled_subdoms_smpdoms <- pop_data
+  unsampled_subdoms_smpdoms$dom_sampled <- obs_dom
+  unsampled_subdoms_smpdoms$subdom_sampled <- obs_subdom
+  # Filter for sampled subdomains only
+  unsampled_subdoms_smpdoms <- unsampled_subdoms_smpdoms %>%
+    filter(dom_sampled == TRUE & subdom_sampled == FALSE)
+  # Convert the column to a factor with all levels from pop_domains
+  lvls_unsampled_subdoms_smpdoms <- levels(unsampled_subdoms_smpdoms[[pop_domains]])
+  lvls_unsampled_subdoms_smpdoms <- factor(unsampled_subdoms_smpdoms[[pop_domains]],
+                               levels = lvls_unsampled_subdoms_smpdoms)
+  n_pop_unsampled_subdoms <- as.numeric(table(lvls_unsampled_subdoms_smpdoms))
+  rm(unsampled_subdoms_smpdoms)
+  rm(lvls_unsampled_subdoms_smpdoms)
+#_________________________________________________________________
 
 
   fw_tf_check3(
@@ -231,7 +241,6 @@ framework_ebp_tf <- function(fixed, pop_data, pop_domains, pop_subdomains,
     N_unobs = N_unobs,
     N_dom_pop = N_dom_pop,
     N_subdom_pop = N_subdom_pop,
-    #N_dom_pop_agg = N_dom_pop_agg,
     N_dom_smp = N_dom_smp,
     N_subdom_smp = N_subdom_smp,
     N_dom_unobs = N_dom_unobs,
@@ -242,7 +251,8 @@ framework_ebp_tf <- function(fixed, pop_data, pop_domains, pop_subdomains,
     obs_subdom = obs_subdom,
     dist_obs_dom = dist_obs_dom,
     dist_obs_subdom = dist_obs_subdom,
-    unobs_subdom_in_obs_dom = unobs_subdom_in_obs_dom,
+    unobs_subdom_obs_dom = unobs_subdom_obs_dom,
+    n_pop_unsampled_subdoms = n_pop_unsampled_subdoms,
     subdom_names = subdom_names,
     dom_names = dom_names,
     ndt_pop = ndt_pop,
