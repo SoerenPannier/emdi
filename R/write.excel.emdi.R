@@ -382,7 +382,20 @@ add_summary_ebp_tf <- function(object, wb, headlines_cs) {
   )
 
   starting_row <- starting_row + 2 + nrow(df_size_dom)
+  writeDataTable(
+    x = df_size_subdom,
+    wb = wb,
+    withFilter = FALSE,
+    sheet = "summary",
+    startRow = starting_row,
+    startCol = 3,
+    rowNames = TRUE,
+    headerStyle = headlines_cs,
+    colNames = TRUE,
+    tableStyle = "TableStyleMedium2"
+  )
 
+  starting_row <- starting_row + 2 + nrow(df_size_dom)
 
   if (!is.null(su$transform)) {
     writeDataTable(
