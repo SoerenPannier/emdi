@@ -15,6 +15,23 @@ load_shapeaustria <- function() {
   )
 }
 
+#' Loading the Shape File for Austrian States
+#'
+#' The function simplifies to load the shape file for Austrian states.
+#'
+#' @return A shape file of class \code{"sf", "data.frame"}.
+#' @details The shape file contains the borders of Austrian states.
+#' Thus, it can be used for the visualization of estimation results for Austrian
+#' states.
+#' @export
+#'
+load_shapeaustria_states <- function() {
+  load(file  = system.file("shapes/shape_austria_states.rda",
+                           package = "emdi"),
+       envir = .GlobalEnv
+  )
+}
+
 #' Loading the Shape File for Austrian Municipalities
 #'
 #' The function simplifies to load the shape file for Austrian municipalities.
