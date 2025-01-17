@@ -18,7 +18,7 @@ estimators_check <- function(object,
 #_______________________________________________________________________________
  #_________________________Rachael added________________________________________
   if (any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
-    if (is.null(object$MSE_Domain) || is.null(object$MSE_Subdomain) &&
+    if ((is.null(object$MSE_Domain) || is.null(object$MSE_Subdomain)) &&
         (MSE == TRUE || CV == TRUE)) {
       stop(strwrap(prefix = " ", initial = "",
                    "No MSE estimates in emdi object: arguments MSE and CV have to
