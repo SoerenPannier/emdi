@@ -10,12 +10,13 @@
 #' are provided not only at the domain level but also at the subdomain level.
 #' The MSE estimates are obtained by the parametric bootstrap method based on
 #' \cite{González-Manteiga et al. (2008)}. Additionally, the two-fold
-#' Fay-Herriot approach is extended with transformations. The function allows
-#' to apply two different transformations to the dependent variable:
-#' (i) logarithmic transformation and (ii) arcsin square root transformation.
-#' For unbiased estimation of indicators at the original scale, a bias corrected
-#' backtransformation based on \cite{Sugasawa and Kubokawa (2017)} and \cite{
-#' Hadam et al. (2023)} is implemented.
+#' Fay-Herriot approach is extended with transformations based on
+#' \cite{Lee et al. (2024)}. The function allows to apply two different
+#' transformations to the dependent variable: (i) logarithmic transformation
+#' and (ii) arcsin square root transformation. For unbiased estimation of
+#' indicators at the original scale, a bias corrected backtransformation
+#' based on \cite{Sugasawa and Kubokawa (2017)}, \cite{Hadam et al. (2023)}, and
+#' \cite{Lee et al. (2024)} is implemented.
 #'
 #' @param fixed a two-sided linear formula object describing the
 #' fixed-effects part of the linear mixed regression model with the
@@ -68,11 +69,39 @@
 #' Hadam, S., Wuerz, N., Kreutzmann, A.-K., and Schmid, T. (2023), Estimating
 #' regional unemployment with mobile network data for Functional Urban Areas in
 #' Germany. Statistical Methods & Applications, 33, 205-233. \cr \cr
+#' Lee, Y., Schmid, T. and Würz, N. (2024), Small area estimation using
+#' geospatial data based on transformed two-fold nested error regression models.
+#' Unpublished manuscript. \cr \cr
 #' Sugasawa, S and Kubokawa, T. (2017) Transforming response values in small
 #' area prediction. Computational Statistics & Data Analysis, 114, 47-60. \cr \cr
 #' Torabi, M. and Rao J. N. K. (2014), On small area estimation under a sub-area
 #' level model. Journal of Multivariate Analysis, 127, 36-55. \cr \cr
+#' @examples
+#' \donttest{
+#' # Loading the data
+#' data("eusilcA_Agg_mun")
 #'
+#' # Example 1: Twofold Fay-Herriot model without transformation
+#' fit_fh_tf <- fh_tf(fixed = Dir_Mean ~ eqsize + cash + self_empl + unempl_ben,
+#'                    vardir = "Var_Mean", combined_data = eusilcA_Agg_mun,
+#'                    domains = "ID_district", subdomains = "ID_municipality",
+#'                    subdomsize = "N_ik", transformation = "no", MSE = T)
+#'
+#' # Example 2: Twofold Fay-Herriot model with log-transformation
+#' fit_fh_tf_log <- fh_tf(fixed = Dir_Mean ~ eqsize + cash + self_empl +
+#'                                unempl_ben,
+#'                        vardir = "Var_Mean", combined_data = eusilcA_Agg_mun,
+#'                        domains = "ID_district", subdomains = "ID_municipality",
+#'                        subdomsize = "N_ik", transformation = "log", MSE = T)
+#'
+#' # Example 3: Twofold Fay-Herriot model with arcsine transformation
+#' fit_fh_tf_arc <- fh_tf(fixed = Dir_HCR ~ eqsize + cash + self_empl +
+#'                                unempl_ben,
+#'                        vardir = "Var_HCR", combined_data = eusilcA_Agg_mun,
+#'                        domains = "ID_district", subdomains = "ID_municipality",
+#'                        subdomsize = "N_ik", transformation = "arcsin",
+#'                        eff_smpsize = "eff_n", MSE = T)
+#' }
 #' @export
 #' @importFrom magic adiag
 #' @importFrom formula.tools get.vars
