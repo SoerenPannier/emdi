@@ -216,7 +216,6 @@ mse_estim_tf <- function(framework,
   mse_dom <- (bootstrap_point_ebp_tf - true_indicators_dom)^2
   mse_subdom <- (bootstrap_point_ebp_tf_subdom - true_indicators_subdom)^2
 
-  #return(list(mse_dom = mse_dom, mse_subdom = mse_subdom))
   return(list(mse_dom = mse_dom, mse_subdom = mse_subdom))
 } # End mse_estim_tf
 

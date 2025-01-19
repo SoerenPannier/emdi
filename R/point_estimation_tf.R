@@ -351,6 +351,15 @@ errors_gen_tf <- function(framework, model_par_tf, gen_model_tf) {
 
   # empty vector for new random effect in generating model
   vu <- vector(length = framework$N_pop)
+  # new random effect for out-sample-subdomains in in-sample domains
+  vu[framework$unobs_subdom_obs_dom] <- rep(
+    rnorm(
+      rep(1,framework$N_dom_smp),
+      0,
+      sqrt(gen_model_tf$sigmav2est_nonsampled_dt)
+    ),
+    framework$n_pop_unsampled_subdoms[framework$dist_obs_dom]
+  )
   # new random effect for out-of-sample domains
   vu[!framework$obs_dom] <- rep(
     rnorm(
@@ -368,15 +377,6 @@ errors_gen_tf <- function(framework, model_par_tf, gen_model_tf) {
       sqrt(gen_model_tf$sigmav2est_sampled_dt)
     ),
     framework$ndt_pop[framework$dist_obs_subdom]
-  )
-  # new random effect for out-sample-subdomains in in-sample domains
-  vu[framework$unobs_subdom_obs_dom] <- rep(
-    rnorm(
-      rep(1,framework$N_dom_smp),
-      0,
-      sqrt(gen_model_tf$sigmav2est_nonsampled_dt)
-    ),
-    framework$n_pop_unsampled_subdoms[framework$dist_obs_dom]
   )
   return(list(epsilon = epsilon, vu = vu))
 } # End errors_gen_tf
