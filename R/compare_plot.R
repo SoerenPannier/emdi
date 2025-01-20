@@ -88,7 +88,7 @@ compare_plot <- function(model, direct, indicator = "all", MSE = FALSE,
 #' "Inequality" or "Custom". If two of these groups are selected, only the first
 #' one is returned. Note, additional custom indicators can be defined as
 #' argument for the EBP approaches (see also \code{\link{ebp}} or
-#' \code{\line{ebp_tf}}) and do not appear in groups of indicators even though
+#' \code{\link{ebp_tf}}) and do not appear in groups of indicators even though
 #' these might belong to one of the groups. If the \code{model} argument is of
 #' type "fh", indicator can be set to "all", "Direct", FH", or "FH_Bench"
 #' (if emdi object is overwritten by function \code{\link{benchmark}}). Defaults
@@ -182,6 +182,45 @@ compare_plot <- function(model, direct, indicator = "all", MSE = FALSE,
 #'   )
 #' )
 #'
+#' # Examples for comparisons of direct estimates and models of type ebp_tf
+#'
+#' # Loading data - population and sample data
+#' data("eusilcA_pop")
+#' data("eusilcA_smp")
+#'
+#' # Generation of emdi objects
+#' emdi_model_tf <- ebp_tf(
+#'   fixed = eqIncome ~ gender + eqsize + cash +
+#'     self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
+#'     fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "state", pop_subdomains = "district", smp_data = eusilcA_smp,
+#'   smp_domains = "state", smp_subdomains = "district",
+#'   threshold = function(y) {
+#'     0.6 * median(y)
+#'   }, L = 50, MSE = TRUE,
+#'   na.rm = TRUE, cpus = 1
+#' )
+#'
+#' emdi_direct_dom <- direct(
+#'   y = "eqIncome", smp_data = eusilcA_smp,
+#'   smp_domains = "state", weights = "weight", threshold = 11161.44,
+#'   var = TRUE, boot_type = "naive", B = 50, seed = 123, na.rm = TRUE
+#' )
+#'
+#' emdi_direct_subdom <- direct(
+#'   y = "eqIncome", smp_data = eusilcA_smp,
+#'   smp_domains = "district", weights = "weight", threshold = 11161.44,
+#'   var = TRUE, boot_type = "naive", B = 50, seed = 123, na.rm = TRUE
+#' )
+#'
+#' # Example 3: Receive first overview - domain level
+#' compare_plot(model = emdi_model_tf, direct = emdi_direct_dom,
+#'              level = "domain")
+#'
+#' # Example 4: Receive first overview - subdomain level
+#' compare_plot(model = emdi_model_tf, direct = emdi_direct_subdom,
+#'              level = "subdomain")
+#'
 #' # Example for comparison of direct estimates and models of type fh
 #'
 #' # Loading data - population and sample data
@@ -202,11 +241,34 @@ compare_plot <- function(model, direct, indicator = "all", MSE = FALSE,
 #'   combined_data = combined_data, domains = "Domain",
 #'   method = "ml", MSE = TRUE
 #' )
-#' # Example 3: Receive first overview
+#' # Example 5: Receive first overview
 #' compare_plot(fh_std)
 #'
-#' # Example 4: Compare also MSE and CV estimates
+#' # Example 6: Compare also MSE and CV estimates
 #' compare_plot(fh_std, MSE = TRUE, CV = TRUE)
+#'
+#' # Example for comparison of direct estimates and models of type fh_tf
+#'
+#' # Loading data - combined population and sample data
+#' data(eusilcA_Agg_mun)
+#'
+#' # Generation of the emdi object
+#' fh_std_tf <- fh_tf(fixed = Dir_Mean ~ eqsize + cash + self_empl + unempl_ben,
+#'                    vardir = "Var_Mean",
+#'                    domains = "ID_district",
+#'                    subdomains = "ID_municipality",
+#'                    transformation = "no",
+#'                    subdomsize = "N_ik",
+#'                    MSE = TRUE,
+#'                    B = 50,
+#'                    combined_data = eusilcA_Agg_mun)
+#'
+#' # Example 7: Receive first overview - domain level
+#' compare_plot(fh_std_tf, level = "domain")
+#'
+#' # Example 8: Receive first overview - subdomain level
+#' compare_plot(fh_std_tf, level = "subdomain")
+#'
 #' }
 #' @importFrom reshape2 melt
 #' @importFrom ggplot2 geom_point geom_smooth geom_line geom_boxplot
