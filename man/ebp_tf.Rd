@@ -93,12 +93,12 @@ distributions, the negative values may be excluded, also values larger than
 1 are seldom observed.}
 
 \item{MSE}{if \code{TRUE}, MSE estimates using a parametric bootstrap
-approach are calculated (see also \cite{Gonzalez-Manteiga et al. (2008)}).
+approach are calculated (see also \cite{Kyalo et al. (2024)}).
 Defaults to \code{FALSE}.}
 
 \item{B}{a number determining the number of bootstrap populations in the
 parametric bootstrap approach (see also
-\cite{Gonzalez-Manteiga et al. (2008)}) used in the MSE estimation. The
+\cite{Kyalo et al. (2024)}) used in the MSE estimation. The
 number must be greater than 1. Defaults to 50. For practical applications,
 values larger than 200 are recommended (see also
 \cite{Molina, I. and Rao, J.N.K. (2010)}).}
@@ -142,19 +142,16 @@ list and descriptions of the components of objects of class "emdi",
 see \code{\link{emdiObject}}.
 }
 \description{
-Function \code{ebp_tf} estimates indicators using the Empirical Best Prediction
-approach by \cite{Molina and Rao (2010)}. Point predictions of indicators
-are obtained by Monte-Carlo approximations. Additionally, mean squared error
-(MSE) estimation can be conducted by using a parametric bootstrap approach
-(see also \cite{Gonzalez-Manteiga et al. (2008)}). The unit-level model of
-\cite{Battese, Harter and Fuller (1988)} is fitted by the restricted maximum
-likelihood (REML) method and one of
-five different transformation types for the dependent variable can be chosen.
-This approach can be extended to data under informative sampling using
-weights and is based on \cite{Guadarrama et al. (2018)}. Model  estimation
-combines the uni-level model of \cite{Battese, Harter and Fuller (1988)} and
-the approach of \cite{You and Rao (2002)} using survey weights. At the
-moment, only the log-transformation is supported for this method.
+Function \code{ebp_tf} estimates indicators using the Twofold Empirical Best
+Prediction approach by \cite{Molina and Rao (2017)}. Point predictions of
+indicators are obtained by Monte-Carlo approximations. Additionally, mean
+squared error (MSE) estimation can be conducted by using a parametric
+bootstrap approach  (see also \cite{Kyalo et al. (2024)}). The unit-level
+model of \cite{Battese, Harter and Fuller (1988)} is fitted by the restricted maximum
+likelihood (REML) method. \cite{Kyalo et al. (2024)} extends the twofold
+model by \cite{Marhuenda et al. (2017)} to include data-driven
+transformations. Users can choose from five different transformation types
+for the dependent variable.
 }
 \details{
 For Monte-Carlo approximations and in the parametric bootstrap
@@ -233,19 +230,18 @@ Battese, G.E., Harter, R.M. and Fuller, W.A. (1988). An Error-Components
 Model for Predictions of County Crop Areas Using Survey and Satellite Data.
 Journal of the American Statistical Association, Vol.83, No. 401,
 28-36.\cr \cr
-Gonzalez-Manteiga, W. et al. (2008). Bootstrap mean squared error of
-a small-area EBLUP. Journal of Statistical Computation and Simulation,
-78:5, 443-462. \cr \cr
 Guadarrama, M., Molina, I. and Rao, J.N.K. (2016). A comparison of small area
 estimation methods for poverty mapping. Joint Issue: Statistics in Transition
 New Series Survey Methodology, Vol.17, No. 1, 41–66. \cr \cr
-Guadarrama, M., Molina, I. and Rao, J.N.K. (2018). Small area estimation of
-general parameters under complex sampling designs. Computational Statistics &
-Data Analysis, Vol. 121, 20-40. \cr \cr
 Kreutzmann, A., Pannier, S., Rojas-Perilla, N., Schmid, T., Templ, M.
 and Tzavidis, N. (2019). The R Package emdi for Estimating and
 Mapping Regionally Disaggregated Indicators, Journal of Statistical Software,
 Vol. 91, No. 7, 1--33, <doi:10.18637/jss.v091.i07> \cr \cr
+Kyalo, R. K., T. Schmid, and N. Würz (2024). Twofold nested error regression
+models with data-driven transformations. Unpublished manuscript. \cr \cr
+Marhuenda, Y., I. Molina, D. Morales, and J. Rao (2017). Poverty mapping in
+small areas under a twofold nested error regression model. Journal of the
+Royal Statistical Society. Series A (Statistics in Society), 1111–1136. \cr \cr
 Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
 indicators. The Canadian Journal of Statistics, Vol. 38, No.3,
 369-385. \cr \cr
