@@ -24,6 +24,19 @@ http://data-synergis.opendata.arcgis.com/datasets/bb4acc011100469185d2e59fa4cae5
 by SynerGIS, CC BY-SA 2.0 (https://creativecommons.org/licenses/by-sa/2.0/),
 accessed the 07.02.2018.
 
+The Austrian states and municipalities shapefiles provided by this package was obtained under a Creative Commons Attribution 4.0 International (CC BY 4.0) license from:
+Statistics Austria
+Dataset: NUTS units
+URL: https://data.statistik.gv.at/web/meta.jsp?dataset=OGDEXT_NUTS_1
+
+Dataset: Municipalities
+URL: https://data.statistik.gv.at/web/meta.jsp?dataset=OGDEXT_GEM_1
+
+Accessed: 15.12.2024.
+
+Attribution:
+Data source: Statistics Austria — data.statistik.gv.at
+
 Several versions of synthetic EU-SILC data are used (eusilc from package laeken
 and eusilcP from package simFrame) and the data set eusilcA_pop, a modified
 version of eusilcP, is included in the package. eusilc and eusilcP are public-use
