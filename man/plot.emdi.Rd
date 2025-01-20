@@ -244,6 +244,24 @@ plot(emdi_model, gg_theme = theme(
   title = element_text(color = "navy")
 ))
 
+# Examples for models of type ebp_tf
+# Loading data - population and sample data
+data("eusilcA_pop")
+data("eusilcA_smp")
+
+# With default setting but na.rm = TRUE; with Box-Cox transformation
+emdi_model_tf <- ebp_tf(
+  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_subdomains = "district", pop_domains = "state", smp_data = eusilcA_smp,
+  smp_subdomains = "district", smp_domains = "state",
+  na.rm = TRUE
+)
+
+# Example 5: Creation of default diagnostic plots for ebp_tf
+plot(emdi_model_tf)
+
 # Example for models of type fh
 
 # Loading data - population and sample data
@@ -265,8 +283,25 @@ fh_std <- fh(
   method = "ml", MSE = TRUE
 )
 
-# Example 5: Creation of default diagnostic plots for Fay-Herriot model
+# Example 6: Creation of default diagnostic plots for Fay-Herriot model
 plot(fh_std)
+
+# Loading data - combined population and sample data
+data(eusilcA_Agg_mun)
+
+# Generation of the emdi object
+fh_std_tf <- fh_tf(fixed = Dir_Mean ~ eqsize + cash + self_empl + unempl_ben,
+                   vardir = "Var_Mean",
+                   domains = "ID_district",
+                   subdomains = "ID_municipality",
+                   transformation = "no",
+                   subdomsize = "N_ik",
+                   MSE = TRUE,
+                   B = 50,
+                   combined_data = eusilcA_Agg_mun)
+
+# Example 6: Creation of default diagnostic plots for twofold FH model
+plot(fh_std_tf)
 }
 }
 \seealso{

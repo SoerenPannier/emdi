@@ -3,7 +3,9 @@
 \name{qqnorm.emdi}
 \alias{qqnorm.emdi}
 \alias{qqnorm.ebp}
+\alias{qqnorm.ebp_tf}
 \alias{qqnorm.fh}
+\alias{qqnorm.fh_tf}
 \alias{qqnorm.direct}
 \title{Quantile-quantile Plots for an emdi Object}
 \usage{
@@ -11,22 +13,25 @@
 
 \method{qqnorm}{ebp}(y, color = c("blue", "lightblue3"), gg_theme = NULL, ...)
 
+\method{qqnorm}{ebp_tf}(y, color = c("blue", "lightblue3"), gg_theme = NULL, ...)
+
 \method{qqnorm}{fh}(y, color = c("blue", "lightblue3"), gg_theme = NULL, ...)
+
+\method{qqnorm}{fh_tf}(y, color = c("blue", "lightblue3"), gg_theme = NULL, ...)
 
 \method{qqnorm}{direct}(y, ...)
 }
 \arguments{
 \item{y}{a model object of type "emdi", either "ebp" or "fh", representing
 point and, if chosen, MSE estimates obtained by the EBP or Fay-Herriot
-approach (see also \code{\link{ebp}} and \code{\link{fh}}).}
+approach (see also \code{\link{ebp}}, \code{\link{ebp_tf}}, \code{\link{fh}})
+and \code{\link{fh_tf}}.}
 
 \item{color}{a character vector with two elements. The first element defines
 the color for the line in the QQ-plots, for the Cook's Distance plot and for
 the Box-Cox plot. The second element defines the color for the densities.}
 
-\item{gg_theme}{\code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
-For using this argument, package \pkg{ggplot2} must be loaded via
-\code{library(ggplot2)}. See also Example 4.}
+\item{gg_theme}{\code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.}
 
 \item{...}{optional arguments passed to generic function.}
 }
@@ -35,7 +40,8 @@ Two Q-Q plots in one grid obtained by \code{\link[ggplot2]{ggplot}}.
 }
 \description{
 Normal quantile-quantile plots of the underlying model in the EBP (see also
-\code{\link{ebp}}) or Fay-Herriot (see also \code{\link{fh}}) approaches are
+\code{\link{ebp}}, \code{\link{ebp_tf}}) or Fay-Herriot (see also
+\code{\link{fh}}, \code{\link{fh_tf}}) approaches are
 obtained. The plots are obtained by \code{\link[ggplot2]{ggplot}}.
 }
 \examples{
@@ -54,8 +60,26 @@ emdi_model <- ebp(
   na.rm = TRUE
 )
 
-# Example 1: Creation of default diagnostic plots
+#' # Example 1: Creation of default diagnostic plots
 qqnorm(emdi_model)
+
+' # Examples for models of type ebp_tf
+# Loading data - population and sample data
+data("eusilcA_pop")
+data("eusilcA_smp")
+
+# With default setting but na.rm = TRUE; with Box-Cox transformation
+emdi_model_tf <- ebp_tf(
+  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "state", pop_subdomains = "district", smp_data = eusilcA_smp,
+  smp_domains = "state", smp_subdomains = "district",
+  na.rm = TRUE
+)
+
+# Example 2: Creation of default diagnostic plots
+qqnorm(emdi_model_tf)
 
 # Example for models of type fh
 
@@ -78,10 +102,30 @@ fh_std <- fh(
   method = "ml", MSE = TRUE
 )
 
-# Example 5: Creation of default diagnostic plots for Fay-Herriot model
+# Example 3: Creation of default diagnostic plots for Fay-Herriot model
 qqnorm(fh_std)
+
+# Example for models of type fh_tf
+
+# Loading data - combined population and sample data
+data(eusilcA_Agg_mun)
+
+#' # Generation of the emdi object
+fh_std_tf <- fh_tf(fixed = Dir_Mean ~ eqsize + cash + self_empl + unempl_ben,
+                   vardir = "Var_Mean",
+                   domains = "ID_district",
+                   subdomains = "ID_municipality",
+                   transformation = "no",
+                   subdomsize = "N_ik",
+                   MSE = TRUE,
+                   B = 50,
+                   combined_data = eusilcA_Agg_mun)
+
+# Example 4: Creation of default diagnostic plots for Fay-Herriot model
+qqnorm(fh_std_tf)
 }
 }
 \seealso{
-\code{\link{emdiObject}}, \code{\link{ebp}}, \code{\link{fh}}
+\code{\link{emdiObject}}, \code{\link{ebp}}, \code{\link{ebp_tf}},
+\code{\link{fh}}, \code{\link{fh_tf}}
 }
