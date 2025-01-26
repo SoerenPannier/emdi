@@ -27,6 +27,18 @@ coef.fh <- function(object, ...) {
   fixed_effects
 }
 
+#' @aliases coefficients
+#' @export
+#' @method coef fh_tf
+#' @importFrom stats coef coefficients
+
+coef.fh_tf <- function(object, ...) {
+  throw_class_error(object, "fh_tf")
+  fixed_effects <- object$model$coefficients$coefficients
+  names(fixed_effects) <- row.names(object$model$coefficients)
+  fixed_effects
+}
+
 # Confidence Intervals of an emdi Object ---------------------------------------
 
 #' @export
@@ -49,6 +61,29 @@ confint.ebp <- function(object, parm = NULL, level = 0.95, ...) {
 #' @importFrom stats confint
 confint.fh <- function(object, parm = NULL, level = 0.95, ...) {
   throw_class_error(object, "fh")
+  coefmat <- object$model$coefficients
+
+  coefs <- coefmat[, 1]
+  stds <- coefmat[, 2]
+  dist <- qnorm(p = (1 - level) / 2, 0, stds)
+  ret_value <- data.frame(
+    lower = coefs + dist,
+    est. = coefs,
+    upper = coefs + abs(dist),
+    row.names = row.names(coefmat)
+  )
+  if (is.null(parm)) {
+    as.matrix(ret_value)
+  } else {
+    as.matrix(ret_value[parm, ])
+  }
+}
+
+#' @export
+#' @method confint fh_tf
+#' @importFrom stats confint
+confint.fh_tf <- function(object, parm = NULL, level = 0.95, ...) {
+  throw_class_error(object, "fh_tf")
   coefmat <- object$model$coefficients
 
   coefs <- coefmat[, 1]
@@ -109,6 +144,15 @@ family.fh <- function(object, ...) {
   gaussian(link = "identity")
 }
 
+#' @export
+#' @method family fh_tf
+#' @importFrom stats family gaussian
+
+family.fh_tf <- function(object, ...) {
+  throw_class_error(object, "fh_tf")
+  gaussian(link = "identity")
+}
+
 # Extract fitted values of emdi objects ----------------------------------------
 
 #' @aliases fitted.values
@@ -132,6 +176,16 @@ fitted.fh <- function(object, ...) {
   object$model$fitted
 }
 
+#' @aliases fitted.values
+#' @export
+#' @method fitted fh_tf
+#' @importFrom stats fitted fitted.values
+
+fitted.fh_tf <- function(object, ...) {
+  throw_class_error(object, "fh_tf")
+  object$model$fitted
+}
+
 # Extract the model formula of an emdi object ----------------------------------
 
 #' @export
@@ -152,6 +206,17 @@ formula.fh <- function(x, ...) {
   throw_class_error(x, "fh")
   x$fixed
 }
+
+
+#' @export
+#' @method formula fh_tf
+#' @importFrom stats formula
+
+formula.fh_tf <- function(x, ...) {
+  throw_class_error(x, "fh_tf")
+  x$fixed
+}
+
 
 # Extract log-Likelihood of emdi objects ---------------------------------------
 #' @export
@@ -188,6 +253,15 @@ logLik.fh <- function(object, ...) {
   }
 }
 
+#' @export
+#' @method logLik fh_tf
+#' @importFrom stats logLik
+
+logLik.fh_tf <- function(object, ...) {
+  throw_class_error(object, "fh_tf")
+  object$model$loglike
+}
+
 # Extract the number of `observations´ from a fit of an emdi object -----------
 #' @export
 #' @method nobs ebp
@@ -207,6 +281,16 @@ nobs.ebp <- function(object, ...) {
 nobs.fh <- function(object, ...) {
   throw_class_error(object, "fh")
   N_obs <- object$framework$N_dom_smp
+  N_obs
+}
+
+#' @export
+#' @method nobs fh_tf
+#' @importFrom stats nobs
+
+nobs.fh_tf <- function(object, ...) {
+  throw_class_error(object, "fh_tf")
+  N_obs <- object$framework$N_in_sub
   N_obs
 }
 
@@ -241,7 +325,14 @@ nobs.fh <- function(object, ...) {
 #' @importFrom stats predict
 
 predict.emdi <- function(object, ...) {
-  object$ind
+  if(any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))){
+    object$ind_Domain
+    object$ind_Subdomain
+  }else{
+#-------------------------------------------------------------------------------
+    object$ind # Originally, only object$ind was in the function
+#-------------------------------------------------------------------------------
+  }
 }
 
 
@@ -265,6 +356,22 @@ residuals.ebp <- function(object, ...) {
 
 residuals.fh <- function(object, ...) {
   throw_class_error(object, "fh")
+  type <- ""
+  try(type <- list(...)[[1]], silent = TRUE)
+  if (type == "standardized") {
+    object$model$std_real_residuals
+  } else {
+    object$model$real_residuals
+  }
+}
+
+#' @aliases resid
+#' @export
+#' @method residuals fh_tf
+#' @importFrom stats residuals resid
+
+residuals.fh_tf <- function(object, ...) {
+  throw_class_error(object, "fh_tf")
   type <- ""
   try(type <- list(...)[[1]], silent = TRUE)
   if (type == "standardized") {
@@ -305,6 +412,15 @@ terms.fh <- function(x, ...) {
   terms(aov(x$fixed, x$framework$combined_data))
 }
 
+#' @export
+#' @method terms fh_tf
+#' @importFrom stats aov terms
+
+terms.fh_tf <- function(x, ...) {
+  throw_class_error(x, "fh_tf")
+  terms(aov(x$fixed, x$framework$orig_data))
+}
+
 # Extract variance-covariance matrix of the main parameters of emdi objects ----
 
 #' @export
@@ -325,5 +441,14 @@ vcov.ebp <- function(object, ...) {
 
 vcov.fh <- function(object, ...) {
   throw_class_error(object, "fh")
+  object$model$beta_vcov
+}
+
+#' @export
+#' @method vcov fh_tf
+#' @importFrom stats vcov
+
+vcov.fh_tf <- function(object, ...) {
+  throw_class_error(object, "fh_tf")
   object$model$beta_vcov
 }
