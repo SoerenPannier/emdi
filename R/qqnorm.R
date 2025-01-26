@@ -88,7 +88,7 @@ qqnorm.emdi <- function(y, color = c("blue", "lightblue3"),
     geom_abline(colour = color[1]) +
     ggtitle("Error term") + ylab("Quantiles of pearson residuals") +
     xlab("Theoretical quantiles") + gg_theme
-
+#Yeonjoo------------------------------------------------------------------------
   if(any(inherits(y, which = TRUE, c("ebp_tf", "fh_tf")))){
     # Random effects at domain level
     ran_dom <- ggplot(data.frame(tmp_dom), aes(sample = tmp_dom)) +
@@ -116,6 +116,7 @@ qqnorm.emdi <- function(y, color = c("blue", "lightblue3"),
 
     invisible(grid.arrange(arrangeGrob(res, ran_dom, ran_subdom, ncol = 3)))
   } else{
+#-------------------------------------------------------------------------------
     # Random effects
     ran <- ggplot(data.frame(tmp), aes(sample = tmp)) +
       stat_qq(distribution = qnorm, dparams = list(
@@ -175,6 +176,7 @@ qqnorm.fh <- function(y, color = c("blue", "lightblue3"),
   )
 }
 
+#-------------------------------------------------------------------------------
 #' @rdname qqnorm.emdi
 #' @export
 qqnorm.fh_tf <- function(y, color = c("blue", "lightblue3"),
@@ -203,6 +205,7 @@ qqnorm.fh_tf <- function(y, color = c("blue", "lightblue3"),
              tmp_dom = tmp_domain, tmp_subdom = tmp_subdomain
   )
 }
+#-------------------------------------------------------------------------------
 
 #' @rdname qqnorm.emdi
 #' @export
