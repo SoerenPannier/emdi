@@ -74,8 +74,14 @@ qqnorm.emdi <- function(y, color = c("blue", "lightblue3"),
                         gg_theme = NULL, ...) {
   extra_args <- list(...)
   residuals <- extra_args[["residuals"]]
-  tmp <- extra_args[["tmp"]]
-
+  #-----------------------------------------------------------------------------
+  if(any(inherits(y, which = TRUE, c("ebp_tf", "fh_tf")))){
+    tmp_dom <- extra_args[["tmp_dom"]]
+    tmp_subdom <- extra_args[["tmp_subdom"]]
+  } else{
+    tmp <- extra_args[["tmp"]] # Yeonjoo: originally, the line 77-83 was only tmp <- extras_args[["tmp"]]
+  }
+  #-----------------------------------------------------------------------------
   ## QQ Plots
   # Residuals
   res <- qplot(sample = residuals) +
@@ -83,19 +89,48 @@ qqnorm.emdi <- function(y, color = c("blue", "lightblue3"),
     ggtitle("Error term") + ylab("Quantiles of pearson residuals") +
     xlab("Theoretical quantiles") + gg_theme
 
-  # Random effects
-  ran <- ggplot(data.frame(tmp), aes(sample = tmp)) +
-    stat_qq(distribution = qnorm, dparams = list(
-      mean = mean(tmp),
-      sd = sd(tmp)
-    )) +
-    geom_abline(intercept = 0, slope = 1, na.rm = TRUE, col = color[1]) +
-    ggtitle("Random effect") +
-    ylab("Quantiles of random effects") +
-    xlab("Theoretical quantiles") +
-    gg_theme
+  if(any(inherits(y, which = TRUE, c("ebp_tf", "fh_tf")))){
+    # Random effects at domain level
+    ran_dom <- ggplot(data.frame(tmp_dom), aes(sample = tmp_dom)) +
+      stat_qq(distribution = qnorm, dparams = list(
+        mean = mean(tmp_dom),
+        sd = sd(tmp_dom)
+      )) +
+      geom_abline(intercept = 0, slope = 1, na.rm = TRUE, col = color[1]) +
+      ggtitle("Random effect at domain level") +
+      ylab("Quantiles of random effects") +
+      xlab("Theoretical quantiles") +
+      gg_theme
 
-  invisible(grid.arrange(arrangeGrob(res, ran, ncol = 2)))
+    # Random effects at subdomain level
+    ran_subdom <- ggplot(data.frame(tmp_subdom), aes(sample = tmp_subdom)) +
+      stat_qq(distribution = qnorm, dparams = list(
+        mean = mean(tmp_subdom),
+        sd = sd(tmp_subdom)
+      )) +
+      geom_abline(intercept = 0, slope = 1, na.rm = TRUE, col = color[1]) +
+      ggtitle("Random effect at subdomain level") +
+      ylab("Quantiles of random effects") +
+      xlab("Theoretical quantiles") +
+      gg_theme
+
+    invisible(grid.arrange(arrangeGrob(res, ran_dom, ran_subdom, ncol = 3)))
+  } else{
+    # Random effects
+    ran <- ggplot(data.frame(tmp), aes(sample = tmp)) +
+      stat_qq(distribution = qnorm, dparams = list(
+        mean = mean(tmp),
+        sd = sd(tmp)
+      )) +
+      geom_abline(intercept = 0, slope = 1, na.rm = TRUE, col = color[1]) +
+      ggtitle("Random effect") +
+      ylab("Quantiles of random effects") +
+      xlab("Theoretical quantiles") +
+      gg_theme
+
+    invisible(grid.arrange(arrangeGrob(res, ran, ncol = 2)))
+  }
+
 }
 
 
@@ -137,6 +172,35 @@ qqnorm.fh <- function(y, color = c("blue", "lightblue3"),
   NextMethod("qqnorm",
     residuals = residuals,
     tmp = tmp
+  )
+}
+
+#' @rdname qqnorm.emdi
+#' @export
+qqnorm.fh_tf <- function(y, color = c("blue", "lightblue3"),
+                      gg_theme = NULL, ...) {
+
+  if (any(is.na(y$model$std_real_residuals))) {
+    residuals <- y$model$std_real_residuals[!is.na(y$model$std_real_residuals)]
+    warning(strwrap(prefix = " ", initial = "",
+                    "At least one value in the standardized realized residuals
+                    is NA. Only numerical values are plotted."))
+  } else {
+    residuals <- y$model$std_real_residuals
+  }
+  residuals <- (residuals - mean(residuals)) / sd(residuals)
+  rand.eff_domain <- y$model$random_effects_Domain
+  srand.eff_domain <- (rand.eff_domain - mean(rand.eff_domain)) / sd(rand.eff_domain)
+  tmp_domain <- srand.eff_domain
+
+  rand.eff_subdomain <- y$model$random_effects_Subdomain
+  srand.eff_subdomain <- (rand.eff_subdomain - mean(rand.eff_subdomain)) /
+    sd(rand.eff_subdomain)
+  tmp_subdomain <- srand.eff_subdomain
+
+  NextMethod("qqnorm",
+             residuals = residuals,
+             tmp_dom = tmp_domain, tmp_subdom = tmp_subdomain
   )
 }
 

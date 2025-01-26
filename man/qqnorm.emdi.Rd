@@ -4,6 +4,7 @@
 \alias{qqnorm.emdi}
 \alias{qqnorm.ebp}
 \alias{qqnorm.fh}
+\alias{qqnorm.fh_tf}
 \alias{qqnorm.direct}
 \title{Quantile-quantile Plots for an emdi Object}
 \usage{
@@ -12,6 +13,8 @@
 \method{qqnorm}{ebp}(y, color = c("blue", "lightblue3"), gg_theme = NULL, ...)
 
 \method{qqnorm}{fh}(y, color = c("blue", "lightblue3"), gg_theme = NULL, ...)
+
+\method{qqnorm}{fh_tf}(y, color = c("blue", "lightblue3"), gg_theme = NULL, ...)
 
 \method{qqnorm}{direct}(y, ...)
 }
