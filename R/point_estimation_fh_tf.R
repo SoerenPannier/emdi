@@ -245,6 +245,9 @@ point_fh_tf <- function(fixed, vardir, domains, subdomains, nunits, trafo,
     t.value = tvalue,
     p.value = pvalue
   )
+
+  loglike <- (-0.5) * (sum(log(2 * pi * (varv + varu + framework$vare)) +
+                             ((residuals$y_ij - residuals$xbeta)^2) / (varv + varu + framework$vare)))
   ##############################################################################
 
   return(list(EBLUP_Area = EBLUP_i,
@@ -253,6 +256,8 @@ point_fh_tf <- function(fixed, vardir, domains, subdomains, nunits, trafo,
               varv = varv,
               vare = framework$vare,
               beta = beta_coef,
+              beta_vcov = beta$Q,
+              loglike = loglike,
               fitted = mar_y_hat,
               v_tilde = v_tilde_i,
               u_tilde = u_tilde_ij,
@@ -346,5 +351,6 @@ beta_tilde <- function(varv, varu, vare, yranr, no, m, X){
   return(list(beta = beta,
               beta_std = beta_std,
               V = V,
-              inv_V = inv_V))
+              inv_V = inv_V,
+              Q = Q))
 }

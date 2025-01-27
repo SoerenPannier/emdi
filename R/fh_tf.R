@@ -165,7 +165,9 @@ fh_tf <- function(fixed, vardir, combined_data, domains, subdomains,
                 fitted = point_estim$fitted,
                 real_residuals = point_estim$resid,
                 std_real_residuals = point_estim$std_resid,
-                gammas = point_estim$gammas
+                gammas = point_estim$gammas,
+                beta_vcov = point_estim$beta_vcov,
+                loglike = point_estim$loglike
                 )
 
   if (MSE == FALSE){
