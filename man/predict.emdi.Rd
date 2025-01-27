@@ -4,7 +4,7 @@
 \alias{predict.emdi}
 \title{Predictions from emdi Objects}
 \usage{
-\method{predict}{emdi}(object, ...)
+\method{predict}{emdi}(object, level = NULL, ...)
 }
 \arguments{
 \item{object}{an object of type "emdi".}
@@ -12,7 +12,7 @@
 \item{...}{additional arguments that are not used in this method.}
 }
 \value{
-Data frame with domain predictors.
+Data frame with domain/subdomain predictors.
 }
 \description{
 Method \code{predict.emdi} extracts the direct estimates, the empirical
@@ -35,9 +35,21 @@ emdi_model <- ebp(
   na.rm = TRUE
 )
 
-predict(emdi_model)
+#' # Example for class ebp_tf
+emdi_model_tf <- ebp_tf(
+  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_domains = "state", pop_subdomains = "district", smp_data = eusilcA_smp,
+  smp_domains = "state", smp_subdomains = "district",
+  na.rm = TRUE
+)
+
+predict(emdi_model_tf, level = "domain")
+predict(emdi_model_tf, level = "subdomain")
 }
 }
 \seealso{
-\code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}
+\code{\link{direct}}, \code{\link{ebp}}, \code{\link{ebp_tf}},
+\code{\link{fh}}, \code{\link{fh_tf}}
 }

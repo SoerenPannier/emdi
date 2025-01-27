@@ -14,6 +14,15 @@ coef.ebp <- function(object, weights = FALSE, ...) {
   }
 }
 
+#' @aliases coefficients
+#' @export
+#' @method coef ebp_tf
+#' @importFrom stats coef coefficients
+
+coef.ebp_tf <- function(object, ...) {
+  throw_class_error(object, "ebp_tf")
+  coef(object$model)
+}
 
 #' @aliases coefficients
 #' @export
@@ -48,6 +57,21 @@ coef.fh_tf <- function(object, ...) {
 
 confint.ebp <- function(object, parm = NULL, level = 0.95, ...) {
   throw_class_error(object, "ebp")
+  if (!is.null(parm)) {
+    confidence_intervals <- intervals(object$model, level = level)$fixed
+    subset(confidence_intervals, rownames(confidence_intervals) %in% parm)
+  } else {
+    intervals(object$model, level = level)$fixed
+  }
+}
+
+#' @export
+#' @method confint ebp_tf
+#' @importFrom nlme intervals
+#' @importFrom stats confint
+
+confint.ebp_tf <- function(object, parm = NULL, level = 0.95, ...) {
+  throw_class_error(object, "ebp_tf")
   if (!is.null(parm)) {
     confidence_intervals <- intervals(object$model, level = level)$fixed
     subset(confidence_intervals, rownames(confidence_intervals) %in% parm)
@@ -134,6 +158,14 @@ family.ebp <- function(object, ...) {
   gaussian(link = "identity")
 }
 
+#' @export
+#' @method family ebp_tf
+#' @importFrom stats family gaussian
+
+family.ebp_tf <- function(object, ...) {
+  throw_class_error(object, "ebp_tf")
+  gaussian(link = "identity")
+}
 
 #' @export
 #' @method family fh
@@ -162,6 +194,16 @@ family.fh_tf <- function(object, ...) {
 
 fitted.ebp <- function(object, ...) {
   throw_class_error(object, "ebp")
+  fitted(object$model, ...)
+}
+
+#' @aliases fitted.values
+#' @export
+#' @method fitted ebp_tf
+#' @importFrom stats fitted fitted.values
+
+fitted.ebp_tf <- function(object, ...) {
+  throw_class_error(object, "ebp_tf")
   fitted(object$model, ...)
 }
 
@@ -197,6 +239,14 @@ formula.ebp <- function(x, ...) {
   x$fixed
 }
 
+#' @export
+#' @method formula ebp_tf
+#' @importFrom stats formula
+
+formula.ebp_tf <- function(x, ...) {
+  throw_class_error(x, "ebp_tf")
+  x$fixed
+}
 
 #' @export
 #' @method formula fh
@@ -231,6 +281,17 @@ logLik.ebp <- function(object, ...) {
   invisible(object$model$logLik)
 }
 
+#' @export
+#' @method logLik ebp_tf
+#' @importFrom stats logLik
+
+logLik.ebp_tf <- function(object, ...) {
+  throw_class_error(object, "ebp_tf")
+  message(strwrap(prefix = " ", initial = "",
+                  paste0("Estimation approach used is reml: ",
+                         round(object$model$logLik, 5))))
+  invisible(object$model$logLik)
+}
 
 #' @export
 #' @method logLik fh
@@ -273,6 +334,16 @@ nobs.ebp <- function(object, ...) {
   N_obs
 }
 
+#' @export
+#' @method nobs ebp_tf
+#' @importFrom stats nobs
+
+nobs.ebp_tf <- function(object, ...) {
+  throw_class_error(object, "ebp_tf")
+  N_obs <- object$framework$N_smp
+  N_obs
+}
+
 # Extract the number of `observations´ from a fit of an emdi object
 #' @export
 #' @method nobs fh
@@ -302,11 +373,12 @@ nobs.fh_tf <- function(object, ...) {
 #'
 #' @param object an object of type "emdi".
 #' @param ... additional arguments that are not used in this method.
-#' @return Data frame with domain predictors.
+#' @return Data frame with domain/subdomain predictors.
 #' @details For a better selection of prediction results, it is referred to use
 #' the generic function \code{\link{estimators}}. The methods for object of
 #' class "emdi" allows to select among the indicators of interest.
-#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}
+#' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{ebp_tf}},
+#' \code{\link{fh}}, \code{\link{fh_tf}}
 #' @examples
 #' \donttest{
 #' # Example for class ebp
@@ -318,16 +390,40 @@ nobs.fh_tf <- function(object, ...) {
 #'   na.rm = TRUE
 #' )
 #'
-#' predict(emdi_model)
+#' #' # Example for class ebp_tf
+#' emdi_model_tf <- ebp_tf(
+#'   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+#'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_domains = "state", pop_subdomains = "district", smp_data = eusilcA_smp,
+#'   smp_domains = "state", smp_subdomains = "district",
+#'   na.rm = TRUE
+#' )
+#'
+#' predict(emdi_model_tf, level = "domain")
+#' predict(emdi_model_tf, level = "subdomain")
 #' }
 #' @export
 #' @method predict emdi
 #' @importFrom stats predict
 
-predict.emdi <- function(object, ...) {
+predict.emdi <- function(object, level = NULL, ...) {
+  if (any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))) {
+    if (is.null(level)) {
+      stop("For 'ebp_tf' or 'fh_tf' models, please specify the 'level' argument.
+           'level' can take either 'domain' or 'subdomain' arguments")
+    }else if (!level %in% c("domain", "subdomain")) {
+      stop("'level' can take either 'domain' or 'subdomain' arguments.")
+    }
+  } else {
+    level <- NULL
+  }
   if(any(inherits(object, which = TRUE, c("ebp_tf", "fh_tf")))){
-    object$ind_Domain
-    object$ind_Subdomain
+    if (!is.null(level) && level == "domain") {
+      object$ind_Domain
+    }else if (!is.null(level) && level == "subdomain")  {
+      object$ind_Subdomain
+    }
   }else{
 #-------------------------------------------------------------------------------
     object$ind # Originally, only object$ind was in the function
@@ -348,6 +444,15 @@ residuals.ebp <- function(object, ...) {
   residuals(object$model, ...)
 }
 
+#' @aliases resid
+#' @export
+#' @method residuals ebp_tf
+#' @importFrom stats residuals resid
+
+residuals.ebp_tf <- function(object, ...) {
+  throw_class_error(object, "ebp_tf")
+  residuals(object$model, ...)
+}
 
 #' @aliases resid
 #' @export
@@ -391,6 +496,13 @@ sigma.ebp <- function(object, ...) {
   object$model$sigma
 }
 
+#' @export
+#' @importFrom stats sigma
+
+sigma.ebp_tf <- function(object, ...) {
+  throw_class_error(object, "ebp_tf")
+  object$model$sigma
+}
 
 # Constructs a terms object from an emdi object --------------------------------
 
@@ -400,6 +512,15 @@ sigma.ebp <- function(object, ...) {
 
 terms.ebp <- function(x, ...) {
   throw_class_error(x, "ebp")
+  terms(aov(x$fixed, x$framework$smp_data))
+}
+
+#' @export
+#' @method terms ebp_tf
+#' @importFrom stats aov terms
+
+terms.ebp_tf <- function(x, ...) {
+  throw_class_error(x, "ebp_tf")
   terms(aov(x$fixed, x$framework$smp_data))
 }
 
@@ -432,6 +553,14 @@ vcov.ebp <- function(object, ...) {
   vcov(object$model, ...)
 }
 
+#' @export
+#' @method vcov ebp_tf
+#' @importFrom stats vcov
+
+vcov.ebp_tf <- function(object, ...) {
+  throw_class_error(object, "ebp_tf")
+  vcov(object$model, ...)
+}
 
 # Extract variance-covariance matrix of the main parameters of emdi objects ----
 

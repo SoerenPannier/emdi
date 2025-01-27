@@ -13,7 +13,8 @@ plot.ebp_tf <- function(x,
   rand.eff_dom <- nlme::ranef(x$model)[[1]]$"(Intercept)"
   rand.eff_subdom <- nlme::ranef(x$model)[[2]]$"(Intercept)"
   srand.eff_dom <- (rand.eff_dom - mean(rand.eff_dom)) / sd(rand.eff_dom)
-  srand.eff_subdom <- (rand.eff_subdom - mean(rand.eff_subdom)) / sd(rand.eff_subdom)
+  srand.eff_subdom <-
+    (rand.eff_subdom - mean(rand.eff_subdom)) / sd(rand.eff_subdom)
   tmp_dom <- as.matrix((random.effects(x$model))[[1]])[, 1]
   tmp_subdom <- as.matrix((random.effects(x$model))[[2]])[, 1]
   model <- x$model
