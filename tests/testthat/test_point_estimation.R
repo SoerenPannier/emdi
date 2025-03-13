@@ -11,7 +11,7 @@ load("EBP/Xoutsamp_AuxVar.RData")
 test_that("Does monte_carlo function give benchmark results?", {
   suppressWarnings(RNGversion("3.5.0"))
   # Single elements needed in monte_carlo()
-  framework <- framework_ebp_tf(income ~ educ1,
+  framework <- framework_ebp(income ~ educ1,
                         Xoutsamp_AuxVar,
                         "provlab",
                         incomedata,
@@ -105,7 +105,7 @@ test_that("Does monte_carlo function give benchmark results? Using weights
   Xoutsamp_AuxVar$domain[Xoutsamp_AuxVar$domain == 5 | Xoutsamp_AuxVar$domain == 34] <- 1
 
   # Single elements needed in monte_carlo()
-  framework <- framework_ebp_tf(fixed = income ~ educ1,
+  framework <- framework_ebp(fixed = income ~ educ1,
                              pop_data = Xoutsamp_AuxVar, pop_domains = "provlab",
                              smp_data = incomedata, smp_domains = "provlab",
                              threshold = 4282.081,
