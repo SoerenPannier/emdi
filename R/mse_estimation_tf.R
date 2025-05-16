@@ -194,26 +194,20 @@ mse_estim_tf <- function(framework,
 
   framework$smp_data <- bootstrap_sample
 
-  # Prediction of indicators with bootstrap sample.
-  bootstrap_point_ebp_tf <- as.matrix(point_ebp_tf(
+  bootstrap_point_ebp_tf <- point_ebp_tf(
     fixed = fixed,
-    transformation =
-      transformation,
+    transformation = transformation,
     interval = interval,
     L = L,
     framework = framework
-  )[[1]][, -1])
+  )
 
-  bootstrap_point_ebp_tf_subdom <- as.matrix(point_ebp_tf(
-    fixed = fixed,
-    transformation =
-      transformation,
-    interval = interval,
-    L = L,
-    framework = framework
-  )[[2]][, -1])
+  bootstrap_point_ebp_tf_dom <- as.matrix(bootstrap_point_ebp_tf[[1]][, -1])
+  bootstrap_point_ebp_tf_subdom <- as.matrix(bootstrap_point_ebp_tf[[2]][, -1])
 
-  mse_dom <- (bootstrap_point_ebp_tf - true_indicators_dom)^2
+
+
+  mse_dom <- (bootstrap_point_ebp_tf_dom - true_indicators_dom)^2
   mse_subdom <- (bootstrap_point_ebp_tf_subdom - true_indicators_subdom)^2
 
   return(list(mse_dom = mse_dom, mse_subdom = mse_subdom))
