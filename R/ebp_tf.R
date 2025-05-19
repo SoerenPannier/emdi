@@ -263,7 +263,7 @@ ebp_tf <- function(fixed,
 
   #browser()
   # The function framework_ebp_tf can be found in script framework_ebp_tf.R
-  framework <- framework_ebp_tf(
+  framework_ebp_tf <- framework_ebp_tf(
     pop_data = pop_data,
     pop_domains = pop_domains,
     pop_subdomains = pop_subdomains,
@@ -282,7 +282,7 @@ ebp_tf <- function(fixed,
   # Point Estimation twofold -----------------------------------------------------------
   # The function point_ebp_tf can be found in script point_estimation_tf.R
   point_ebp_tf <- point_ebp_tf(
-    framework = framework,
+    framework_ebp_tf = framework_ebp_tf,
     fixed = fixed,
     transformation = transformation,
     interval = interval,
@@ -297,8 +297,8 @@ ebp_tf <- function(fixed,
   if (MSE == TRUE) {
 
     # The function parametric_bootstrap_tf can be found in script mse_estimation_tf.R
-    mse_estimates <- parametric_bootstrap_tf(
-      framework = framework,
+    mse_estimates_tf <- parametric_bootstrap_tf(
+      framework_ebp_tf = framework_ebp_tf,
       point_ebp_tf = point_ebp_tf,
       fixed = fixed,
       transformation = transformation,
@@ -311,18 +311,18 @@ ebp_tf <- function(fixed,
 
 
 
-    ebp_out <- list(
+    ebp_tf_out <- list(
       ind_Domain = point_ebp_tf$ind_Domain,
       ind_Subdomain = point_ebp_tf$ind_Subdomain,
-      MSE_Domain = mse_estimates$mses,
-      MSE_Subdomain = mse_estimates$mses_subdom,
+      MSE_Domain = mse_estimates_tf$mses,
+      MSE_Subdomain = mse_estimates_tf$mses_subdom,
       #MSE = mse_estimates,
       transform_param = point_ebp_tf[c(
         "optimal_lambda",
         "shift_par"
       )],
       model = point_ebp_tf$model,
-      framework = framework[c(
+      framework_ebp_tf = framework_ebp_tf[c(
         "N_subdom_unobs",
         "N_subdom_smp",
         "N_smp",
@@ -344,7 +344,7 @@ ebp_tf <- function(fixed,
       successful_bootstraps = NULL
     )
   } else {
-    ebp_out <- list(
+    ebp_tf_out <- list(
       ind_Domain = point_ebp_tf$ind_Domain,
       ind_Subdomain = point_ebp_tf$ind_Subdomain,
       MSE = NULL,
@@ -353,7 +353,7 @@ ebp_tf <- function(fixed,
         "shift_par"
       )],
       model = point_ebp_tf$model,
-      framework = framework[c(
+      framework_ebp_tf = framework_ebp_tf[c(
         "N_subdom_unobs",
         "N_subdom_smp",
         "N_dom_unobs",
@@ -380,6 +380,6 @@ ebp_tf <- function(fixed,
   if (cpus > 1 && parallel_mode != "socket") {
     RNGkind(RNG_kind[1]) # restoring RNG type
   }
-  class(ebp_out) <- c("ebp_tf", "emdi")
-  return(ebp_out)
+  class(ebp_tf_out) <- c("ebp_tf", "emdi")
+  return(ebp_tf_out)
 }

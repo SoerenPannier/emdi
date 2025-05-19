@@ -6,7 +6,7 @@
 # mse_estim_tf (see below)
 # The parametric boostrap approach can be found in Molina and Rao (2010) p. 376
 
-parametric_bootstrap_tf <- function(framework,
+parametric_bootstrap_tf <- function(framework_ebp_tf,
                                     point_ebp_tf,
                                     fixed,
                                     transformation,
@@ -35,7 +35,7 @@ parametric_bootstrap_tf <- function(framework,
       xs              = seq_len(B),
       fun             = mse_estim_tf_wrapper,
       B               = B,
-      framework       = framework,
+      framework_ebp_tf       = framework_ebp_tf,
       lambda          = point_ebp_tf$optimal_lambda,
       shift           = point_ebp_tf$shift_par,
       model_par_tf    = point_ebp_tf$model_par_tf,
@@ -52,7 +52,7 @@ parametric_bootstrap_tf <- function(framework,
       X = seq_len(B),
       FUN = mse_estim_tf_wrapper,
       B = B,
-      framework = framework,
+      framework_ebp_tf = framework_ebp_tf,
       lambda = point_ebp_tf$optimal_lambda,
       shift = point_ebp_tf$shift_par,
       model_par_tf = point_ebp_tf$model_par_tf,
@@ -73,8 +73,8 @@ parametric_bootstrap_tf <- function(framework,
   mses <- apply(mse_results[[1]], c(1, 2), mean)
   mses_subdom <- apply(mse_results[[2]], c(1,2), mean)
 
-  mses <- data.frame(Domain = unique(framework$pop_domains_vec), mses)
-  mses_subdom <- data.frame(Subdomain = unique(framework$pop_subdomains_vec), mses_subdom)
+  mses <- data.frame(Domain = unique(framework_ebp_tf$pop_domains_vec), mses)
+  mses_subdom <- data.frame(Subdomain = unique(framework_ebp_tf$pop_subdomains_vec), mses_subdom)
 
   return(list(mses=mses, mses_subdom=mses_subdom))
 }
@@ -88,7 +88,7 @@ parametric_bootstrap_tf <- function(framework,
 # The mse_estim_tf function defines all parameters and estimations which have to
 # be replicated B times for the Parametric Bootstrap Approach.
 # See Molina and Rao (2010) p. 376
-mse_estim_tf <- function(framework,
+mse_estim_tf <- function(framework_ebp_tf,
                       lambda,
                       shift,
                       model_par_tf,
@@ -103,7 +103,7 @@ mse_estim_tf <- function(framework,
   # in bootstrap_par_tf.
 
     superpop <- superpopulation_tf(
-      framework = framework,
+      framework_ebp_tf = framework_ebp_tf,
       model_par_tf = model_par_tf,
       gen_model_tf = gen_model_tf,
       lambda = lambda,
@@ -113,27 +113,27 @@ mse_estim_tf <- function(framework,
 
   pop_income_vector <- superpop$pop_income_vector
 
-  if (inherits(framework$threshold, "function")) {
-    framework$threshold <-
-      framework$threshold(y = pop_income_vector)
+  if (inherits(framework_ebp_tf$threshold, "function")) {
+    framework_ebp_tf$threshold <-
+      framework_ebp_tf$threshold(y = pop_income_vector)
   }
 
-  N_subdom_pop_tmp <- framework$N_subdom_pop
-  pop_subdomains_vec_tmp <- framework$pop_subdomains_vec
-  N_dom_pop_tmp <- framework$N_dom_pop
-  pop_domains_vec_tmp <- framework$pop_domains_vec
+  N_subdom_pop_tmp <- framework_ebp_tf$N_subdom_pop
+  pop_subdomains_vec_tmp <- framework_ebp_tf$pop_subdomains_vec
+  N_dom_pop_tmp <- framework_ebp_tf$N_dom_pop
+  pop_domains_vec_tmp <- framework_ebp_tf$pop_domains_vec
 
 
-  if(!is.null(framework$pop_weights)) {
-    pop_weights_vec <- framework$pop_data[[framework$pop_weights]]
+  if(!is.null(framework_ebp_tf$pop_weights)) {
+    pop_weights_vec <- framework_ebp_tf$pop_data[[framework_ebp_tf$pop_weights]]
   }else{
-    pop_weights_vec <- rep(1, nrow(framework$pop_data))
+    pop_weights_vec <- rep(1, nrow(framework_ebp_tf$pop_data))
   }
 
   # True indicator values
   true_indicators_subdom <- matrix(
     nrow = N_subdom_pop_tmp,
-    data = unlist(lapply(framework$indicator_list,
+    data = unlist(lapply(framework_ebp_tf$indicator_list,
       function(f, threshold) {
         matrix(
           nrow = N_subdom_pop_tmp,
@@ -142,21 +142,21 @@ mse_estim_tf <- function(framework,
               y = split(pop_income_vector, pop_subdomains_vec_tmp),
               pop_weights = split(pop_weights_vec, pop_subdomains_vec_tmp),
               f,
-              threshold = framework$threshold
+              threshold = framework_ebp_tf$threshold
             )),
           byrow = TRUE
         )
       },
-      threshold = framework$threshold
+      threshold = framework_ebp_tf$threshold
     ))
   )
 
-  colnames(true_indicators_subdom) <- framework$indicator_names
+  colnames(true_indicators_subdom) <- framework_ebp_tf$indicator_names
 
   # True indicator values
   true_indicators_dom <- matrix(
     nrow = N_dom_pop_tmp,
-    data = unlist(lapply(framework$indicator_list,
+    data = unlist(lapply(framework_ebp_tf$indicator_list,
                          function(f, threshold) {
                            matrix(
                              nrow = N_dom_pop_tmp,
@@ -165,16 +165,16 @@ mse_estim_tf <- function(framework,
                                  y = split(pop_income_vector, pop_domains_vec_tmp),
                                  pop_weights = split(pop_weights_vec, pop_domains_vec_tmp),
                                  f,
-                                 threshold = framework$threshold
+                                 threshold = framework_ebp_tf$threshold
                                )),
                              byrow = TRUE
                            )
                          },
-                         threshold = framework$threshold
+                         threshold = framework_ebp_tf$threshold
     ))
   )
 
-  colnames(true_indicators_dom) <- framework$indicator_names
+  colnames(true_indicators_dom) <- framework_ebp_tf$indicator_names
 
   # The function bootstrap_par_tf returns a sample that can be given into the
   # point estimation to get predictors of the indicators that can be compared
@@ -183,7 +183,7 @@ mse_estim_tf <- function(framework,
     bootstrap_sample <- bootstrap_par_tf(
       fixed = fixed,
       transformation = transformation,
-      framework = framework,
+      framework_ebp_tf = framework_ebp_tf,
       model_par_tf = model_par_tf,
       lambda = lambda,
       shift = shift,
@@ -192,14 +192,14 @@ mse_estim_tf <- function(framework,
     )
 
 
-  framework$smp_data <- bootstrap_sample
+  framework_ebp_tf$smp_data <- bootstrap_sample
 
   bootstrap_point_ebp_tf <- point_ebp_tf(
     fixed = fixed,
     transformation = transformation,
     interval = interval,
     L = L,
-    framework = framework
+    framework_ebp_tf = framework_ebp_tf
   )
 
   bootstrap_point_ebp_tf_dom <- as.matrix(bootstrap_point_ebp_tf[[1]][, -1])
@@ -220,29 +220,29 @@ mse_estim_tf <- function(framework,
 # used to construct a superpopulation_tf model.
 
 
-superpopulation_tf <- function(framework, model_par_tf, gen_model_tf, lambda, shift,
+superpopulation_tf <- function(framework_ebp_tf, model_par_tf, gen_model_tf, lambda, shift,
                             transformation) {
   # superpopulation individual errors
-  eps <- vector(length = framework$N_pop)
-  eps[framework$obs_subdom] <- rnorm(
-    sum(framework$obs_subdom), 0,
+  eps <- vector(length = framework_ebp_tf$N_pop)
+  eps[framework_ebp_tf$obs_subdom] <- rnorm(
+    sum(framework_ebp_tf$obs_subdom), 0,
     sqrt(model_par_tf$sigmae2est)
   )
-  eps[!framework$obs_subdom & framework$obs_dom] <- rnorm(
-    sum(!framework$obs_subdom & framework$obs_dom), 0,
+  eps[!framework_ebp_tf$obs_subdom & framework_ebp_tf$obs_dom] <- rnorm(
+    sum(!framework_ebp_tf$obs_subdom & framework_ebp_tf$obs_dom), 0,
     sqrt(model_par_tf$sigmae2est + model_par_tf$sigmau2_2est)
   )
-  eps[!framework$obs_dom] <- rnorm(
-    sum(!framework$obs_dom), 0,
+  eps[!framework_ebp_tf$obs_dom] <- rnorm(
+    sum(!framework_ebp_tf$obs_dom), 0,
     sqrt(model_par_tf$sigmae2est + model_par_tf$sigmau2_1est +
            model_par_tf$sigmau2_2est)
   )
 
   # superpopulation random effect
-  vu_tmp1 <- rnorm(framework$N_dom_pop, 0, sqrt(model_par_tf$sigmau2_1est))
-  vu_tmp2 <- rnorm(framework$N_subdom_pop, 0, sqrt(model_par_tf$sigmau2_2est))
-  vu_pop1 <- rep(vu_tmp1, framework$n_pop)
-  vu_pop2 <- rep(vu_tmp2, framework$ndt_pop)
+  vu_tmp1 <- rnorm(framework_ebp_tf$N_dom_pop, 0, sqrt(model_par_tf$sigmau2_1est))
+  vu_tmp2 <- rnorm(framework_ebp_tf$N_subdom_pop, 0, sqrt(model_par_tf$sigmau2_2est))
+  vu_pop1 <- rep(vu_tmp1, framework_ebp_tf$n_pop)
+  vu_pop2 <- rep(vu_tmp2, framework_ebp_tf$ndt_pop)
 
   #  superpopulation income vector
   Y_pop_b <- gen_model_tf$mu_fixed + eps + vu_pop1 + vu_pop2
@@ -262,19 +262,19 @@ superpopulation_tf <- function(framework, model_par_tf, gen_model_tf, lambda, sh
 
 bootstrap_par_tf <- function(fixed,
                           transformation,
-                          framework,
+                          framework_ebp_tf,
                           model_par_tf,
                           lambda,
                           shift,
                           vu_tmp1,
                           vu_tmp2) {
   # Bootstrap sample individual error term
-  eps <- rnorm(framework$N_smp, 0, sqrt(model_par_tf$sigmae2est))
+  eps <- rnorm(framework_ebp_tf$N_smp, 0, sqrt(model_par_tf$sigmae2est))
   # Bootstrap sample random effect
-  vu_smp1 <- rep(vu_tmp1[framework$dist_obs_dom], framework$n_smp)
-  vu_smp2 <- rep(vu_tmp2[framework$dist_obs_subdom], framework$ndt_smp)
+  vu_smp1 <- rep(vu_tmp1[framework_ebp_tf$dist_obs_dom], framework_ebp_tf$n_smp)
+  vu_smp2 <- rep(vu_tmp2[framework_ebp_tf$dist_obs_subdom], framework_ebp_tf$ndt_smp)
   # Extraction of design matrix
-  X_smp <- model.matrix(fixed, framework$smp_data)
+  X_smp <- model.matrix(fixed, framework_ebp_tf$smp_data)
   # Constant part of income vector for bootstrap sample
   mu_smp <- X_smp %*% model_par_tf$betas
   # Transformed bootstrap income vector
@@ -289,7 +289,7 @@ bootstrap_par_tf <- function(fixed,
   Y_smp_b[!is.finite(Y_smp_b)] <- 0
 
   # Inclusion of bootstrap income vector into sample data
-  bootstrap_smp <- framework$smp_data
+  bootstrap_smp <- framework_ebp_tf$smp_data
   bootstrap_smp[paste(fixed[2])] <- Y_smp_b
 
   return(bootstrap_sample = bootstrap_smp)
@@ -301,7 +301,7 @@ bootstrap_par_tf <- function(fixed,
 
 mse_estim_tf_wrapper <- function(i,
                                  B,
-                                 framework,
+                                 framework_ebp_tf,
                                  lambda,
                                  shift,
                                  model_par_tf,
@@ -312,7 +312,7 @@ mse_estim_tf_wrapper <- function(i,
                                  L,
                                  start_time) {
   tmp <- mse_estim_tf(
-    framework = framework,
+    framework_ebp_tf = framework_ebp_tf,
     lambda = lambda,
     shift = shift,
     model_par_tf = model_par_tf,
