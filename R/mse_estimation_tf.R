@@ -31,7 +31,7 @@ parametric_bootstrap_tf <- function(framework_ebp_tf,
     # Load necessary libraries on worker processes
     parallelMap::parallelLibrary("nlme")
 
-    mse_results <- simplify2array(parallelMap::parallelLapply(
+    mse_results <- parallelMap::parallelLapply(
       xs              = seq_len(B),
       fun             = mse_estim_tf_wrapper,
       B               = B,
@@ -45,10 +45,10 @@ parametric_bootstrap_tf <- function(framework_ebp_tf,
       interval        = interval,
       L               = L,
       start_time      = start_time
-    ))
+    )
     parallelMap::parallelStop()
   } else {
-    mse_results <- simplify2array(lapply(
+    mse_results <- lapply(
       X = seq_len(B),
       FUN = mse_estim_tf_wrapper,
       B = B,
@@ -62,7 +62,7 @@ parametric_bootstrap_tf <- function(framework_ebp_tf,
       interval = interval,
       L = L,
       start_time = start_time
-    ))
+    )
   }
 
   message("\r", "Bootstrap completed", "\n")
@@ -70,13 +70,31 @@ parametric_bootstrap_tf <- function(framework_ebp_tf,
     flush.console()
   }
 
-  mses <- apply(mse_results[[1]], c(1, 2), mean)
-  mses_subdom <- apply(mse_results[[2]], c(1,2), mean)
 
-  mses <- data.frame(Domain = unique(framework_ebp_tf$pop_domains_vec), mses)
-  mses_subdom <- data.frame(Subdomain = unique(framework_ebp_tf$pop_subdomains_vec), mses_subdom)
+  # Extract bootstrap results for domain and subdomain separately
+  mse_dom_list <- lapply(mse_results, `[[`, "mse_dom")
+  mse_subdom_list <- lapply(mse_results, `[[`, "mse_subdom")
 
-  return(list(mses=mses, mses_subdom=mses_subdom))
+  # Convert to 3D arrays (dom/subdom x indicators x B)
+  mse_dom_array <- simplify2array(mse_dom_list)
+  mse_subdom_array <- simplify2array(mse_subdom_list)
+
+  # Average over B (3rd dimension)
+  mse_dom_mean <- apply(mse_dom_array, c(1, 2), mean)
+  mse_subdom_mean <- apply(mse_subdom_array, c(1, 2), mean)
+
+  mse_dom_df <- data.frame(Domain = unique(framework_ebp_tf$pop_domains_vec),
+                           mse_dom_mean)
+  mse_subdom_df <- data.frame(Subdomain =
+                                unique(framework_ebp_tf$pop_subdomains_vec),
+                              mse_subdom_mean)
+
+  return(list(
+    mses_dom = mse_dom_df,
+    mses_subdom = mse_subdom_df
+  ))
+
+
 }
 
 
@@ -103,6 +121,7 @@ mse_estim_tf <- function(framework_ebp_tf,
   # in bootstrap_par_tf.
 
     superpop <- superpopulation_tf(
+      fixed = fixed,
       framework_ebp_tf = framework_ebp_tf,
       model_par_tf = model_par_tf,
       gen_model_tf = gen_model_tf,
@@ -220,8 +239,8 @@ mse_estim_tf <- function(framework_ebp_tf,
 # used to construct a superpopulation_tf model.
 
 
-superpopulation_tf <- function(framework_ebp_tf, model_par_tf, gen_model_tf, lambda, shift,
-                            transformation) {
+superpopulation_tf <- function(fixed, framework_ebp_tf, model_par_tf,
+                               gen_model_tf, lambda, shift,transformation) {
   # superpopulation individual errors
   eps <- vector(length = framework_ebp_tf$N_pop)
   eps[framework_ebp_tf$obs_subdom] <- rnorm(
@@ -238,14 +257,38 @@ superpopulation_tf <- function(framework_ebp_tf, model_par_tf, gen_model_tf, lam
            model_par_tf$sigmau2_2est)
   )
 
-  # superpopulation random effect
-  vu_tmp1 <- rnorm(framework_ebp_tf$N_dom_pop, 0, sqrt(model_par_tf$sigmau2_1est))
-  vu_tmp2 <- rnorm(framework_ebp_tf$N_subdom_pop, 0, sqrt(model_par_tf$sigmau2_2est))
-  vu_pop1 <- rep(vu_tmp1, framework_ebp_tf$n_pop)
-  vu_pop2 <- rep(vu_tmp2, framework_ebp_tf$ndt_pop)
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
+  # Generate random effects
+  vu_tmp1 <- rnorm(framework_ebp_tf$N_dom_pop, 0, sqrt(model_par_tf$sigmau2_1est))  # domain RE
+  vu_tmp2 <- rnorm(framework_ebp_tf$N_subdom_pop, 0, sqrt(model_par_tf$sigmau2_2est))  # subdomain RE
+
+  # Domain-level: create a lookup table
+  unique_dom_pop <- unique(framework_ebp_tf$pop_domains_vec)
+  dom_re_pop <- data.frame(idD = unique_dom_pop, vu1 = vu_tmp1)
+
+  # Subdomain-level: create another lookup table
+  unique_subdom_pop <- unique(framework_ebp_tf$pop_subdomains_vec)
+  subdom_re_pop <- data.frame(idSub = unique_subdom_pop,
+                             vu2 = vu_tmp2)
+
+  # Merge into population data
+  pop_data <- framework_ebp_tf$pop_data
+  pop_data$row_index <- seq_len(nrow(pop_data))
+  pop_data <- merge(pop_data, dom_re_pop,
+                    by.x = framework_ebp_tf$pop_domains,
+                    by.y = "idD", all.x = TRUE)
+  pop_data <- merge(pop_data, subdom_re_pop,
+                    by.x = framework_ebp_tf$pop_subdomains,
+                    by.y = "idSub", all.x = TRUE)
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
 
   #  superpopulation income vector
-  Y_pop_b <- gen_model_tf$mu_fixed + eps + vu_pop1 + vu_pop2
+  #Y_pop_b <- gen_model_tf$mu_fixed + eps + vu_pop1 + vu_pop2
+  pop_data[[paste0(fixed[2])]] <- seq_len(nrow(pop_data))
+  X_pop <- model.matrix(fixed, pop_data)
+  mu_fixed <- X_pop %*% model_par_tf$betas
+  Y_pop_b <- mu_fixed + eps + pop_data$vu1 + pop_data$vu2
 
   Y_pop_b <- back_transformation(
     y = Y_pop_b,
@@ -255,7 +298,13 @@ superpopulation_tf <- function(framework_ebp_tf, model_par_tf, gen_model_tf, lam
   )
   Y_pop_b[!is.finite(Y_pop_b)] <- 0
 
-  return(list(pop_income_vector = Y_pop_b, vu_tmp1 = vu_tmp1, vu_tmp2 = vu_tmp2))
+  bootstrap_pop <- pop_data
+  bootstrap_pop[paste(fixed[2])] <- Y_pop_b
+
+  bootstrap_pop <- bootstrap_pop[order(bootstrap_pop$row_index),]
+
+  return(list(pop_income_vector = bootstrap_pop[paste(fixed[2])][,1],
+              vu_tmp1 = vu_tmp1, vu_tmp2 = vu_tmp2))
 }
 
 # Bootstrap function -----------------------------------------------------------
@@ -270,15 +319,40 @@ bootstrap_par_tf <- function(fixed,
                           vu_tmp2) {
   # Bootstrap sample individual error term
   eps <- rnorm(framework_ebp_tf$N_smp, 0, sqrt(model_par_tf$sigmae2est))
+
   # Bootstrap sample random effect
-  vu_smp1 <- rep(vu_tmp1[framework_ebp_tf$dist_obs_dom], framework_ebp_tf$n_smp)
-  vu_smp2 <- rep(vu_tmp2[framework_ebp_tf$dist_obs_subdom], framework_ebp_tf$ndt_smp)
+  vu_smp1 <- vu_tmp1[framework_ebp_tf$dist_obs_dom]
+  vu_smp2 <- vu_tmp2[framework_ebp_tf$dist_obs_subdom]
+
+  ##############################################################################
+   # Domain-level: create a lookup table
+  unique_dom_smp <- unique(framework_ebp_tf$smp_domains_vec)
+  dom_re_smp <- data.frame(idD = unique_dom_smp, vu1 = vu_smp1)
+
+  # Subdomain-level: create another lookup table
+  unique_subdom_smp <- unique(framework_ebp_tf$smp_subdomains_vec)
+  subdom_re_smp <- data.frame(idSub = unique_subdom_smp,
+                              vu2 = vu_smp2)
+
+  # Merge into smp data
+  smp_data <- framework_ebp_tf$smp_data
+  smp_data$row_index <- seq_len(nrow(smp_data))
+  smp_data <- merge(smp_data, dom_re_smp,
+                    by.x = framework_ebp_tf$smp_domains,
+                    by.y = "idD", all.x = TRUE)
+  smp_data <- merge(smp_data, subdom_re_smp,
+                    by.x = framework_ebp_tf$smp_subdomains,
+                    by.y = "idSub", all.x = TRUE)
+  ##############################################################################
+
   # Extraction of design matrix
-  X_smp <- model.matrix(fixed, framework_ebp_tf$smp_data)
+  X_smp <- model.matrix(fixed, smp_data)
   # Constant part of income vector for bootstrap sample
   mu_smp <- X_smp %*% model_par_tf$betas
+
   # Transformed bootstrap income vector
-  Y_smp_b <- mu_smp + eps + vu_smp1 + vu_smp2
+  Y_smp_b <- mu_smp + eps + smp_data$vu1 + smp_data$vu2
+
   # Back transformation of bootstrap income vector
   Y_smp_b <- back_transformation(
     y = Y_smp_b,
@@ -289,8 +363,13 @@ bootstrap_par_tf <- function(fixed,
   Y_smp_b[!is.finite(Y_smp_b)] <- 0
 
   # Inclusion of bootstrap income vector into sample data
-  bootstrap_smp <- framework_ebp_tf$smp_data
+  bootstrap_smp <- smp_data
   bootstrap_smp[paste(fixed[2])] <- Y_smp_b
+
+  ##############################################################################
+  bootstrap_smp <- bootstrap_smp[order(bootstrap_smp$row_index),]
+  bootstrap_smp$row_index <- NULL
+#_____________________________________________________________________________
 
   return(bootstrap_sample = bootstrap_smp)
 }

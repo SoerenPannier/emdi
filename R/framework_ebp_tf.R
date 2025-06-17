@@ -38,12 +38,20 @@ framework_ebp_tf <- function(fixed, pop_data, pop_domains, pop_subdomains,
                  function ebp."))
   }
 
+  #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
+  pop_data[[pop_subdomains]] <- as.character(pop_data[[pop_subdomains]])
+  pop_data[[pop_domains]] <- as.character(pop_data[[pop_domains]])
+  smp_data[[smp_subdomains]] <- as.character(smp_data[[smp_subdomains]])
+  smp_data[[smp_domains]] <- as.character(smp_data[[smp_domains]])
+
+  #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
   #___________________________10.10.24__________________________________________
 
   # Order of domains
-  #pop_data <- pop_data[order(pop_data[[pop_subdomains]]),]
-  pop_data <- pop_data[order(interaction(pop_data[[pop_domains]]),
+  pop_data <- pop_data[order(pop_data[[pop_domains]],
                              pop_data[[pop_subdomains]]),]
+  #pop_data <- pop_data[order(interaction(pop_data[[pop_domains]]),
+   #                          pop_data[[pop_subdomains]]),]
 
   levels_tmp <- unique(pop_data[[pop_domains]])
   pop_data[[pop_domains]] <- factor(pop_data[[pop_domains]],
@@ -55,8 +63,10 @@ framework_ebp_tf <- function(fixed, pop_data, pop_domains, pop_subdomains,
 
   rm(levels_tmp)
 
-  smp_data <- smp_data[order(interaction(smp_data[[smp_domains]]),
+  smp_data <- smp_data[order(smp_data[[smp_domains]],
                              smp_data[[smp_subdomains]]),]
+  #smp_data <- smp_data[order(interaction(smp_data[[smp_domains]]),
+   #                          smp_data[[smp_subdomains]]),]
 
   smp_domains_vec <- smp_data[[smp_domains]]
   smp_domains_vec <- droplevels(smp_domains_vec)
@@ -231,6 +241,8 @@ framework_ebp_tf <- function(fixed, pop_data, pop_domains, pop_subdomains,
     pop_data = pop_data,
     pop_domains_vec = pop_domains_vec,
     pop_subdomains_vec = pop_subdomains_vec,
+    pop_domains = pop_domains,
+    pop_subdomains = pop_subdomains,
     smp_data = smp_data,
     smp_domains_vec = smp_domains_vec,
     smp_subdomains_vec = smp_subdomains_vec,

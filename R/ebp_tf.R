@@ -314,9 +314,8 @@ ebp_tf <- function(fixed,
     ebp_tf_out <- list(
       ind_Domain = point_ebp_tf$ind_Domain,
       ind_Subdomain = point_ebp_tf$ind_Subdomain,
-      MSE_Domain = mse_estimates_tf$mses,
+      MSE_Domain = mse_estimates_tf$mses_dom,
       MSE_Subdomain = mse_estimates_tf$mses_subdom,
-      #MSE = mse_estimates,
       transform_param = point_ebp_tf[c(
         "optimal_lambda",
         "shift_par"
