@@ -149,7 +149,7 @@ mse_estim_tf <- function(framework_ebp_tf,
     pop_weights_vec <- rep(1, nrow(framework_ebp_tf$pop_data))
   }
 
-  # True indicator values
+  # True indicator values - subdomain
   true_indicators_subdom <- matrix(
     nrow = N_subdom_pop_tmp,
     data = unlist(lapply(framework_ebp_tf$indicator_list,
@@ -172,7 +172,7 @@ mse_estim_tf <- function(framework_ebp_tf,
 
   colnames(true_indicators_subdom) <- framework_ebp_tf$indicator_names
 
-  # True indicator values
+  # True indicator values - domain
   true_indicators_dom <- matrix(
     nrow = N_dom_pop_tmp,
     data = unlist(lapply(framework_ebp_tf$indicator_list,
@@ -257,10 +257,11 @@ superpopulation_tf <- function(fixed, framework_ebp_tf, model_par_tf,
            model_par_tf$sigmau2_2est)
   )
 
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
   # Generate random effects
-  vu_tmp1 <- rnorm(framework_ebp_tf$N_dom_pop, 0, sqrt(model_par_tf$sigmau2_1est))  # domain RE
-  vu_tmp2 <- rnorm(framework_ebp_tf$N_subdom_pop, 0, sqrt(model_par_tf$sigmau2_2est))  # subdomain RE
+  # domain RE
+  vu_tmp1 <- rnorm(framework_ebp_tf$N_dom_pop, 0, sqrt(model_par_tf$sigmau2_1est))
+  # subdomain RE
+  vu_tmp2 <- rnorm(framework_ebp_tf$N_subdom_pop, 0, sqrt(model_par_tf$sigmau2_2est))
 
   # Domain-level: create a lookup table
   unique_dom_pop <- unique(framework_ebp_tf$pop_domains_vec)
@@ -281,10 +282,7 @@ superpopulation_tf <- function(fixed, framework_ebp_tf, model_par_tf,
                     by.x = framework_ebp_tf$pop_subdomains,
                     by.y = "idSub", all.x = TRUE)
 
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
 
-  #  superpopulation income vector
-  #Y_pop_b <- gen_model_tf$mu_fixed + eps + vu_pop1 + vu_pop2
   pop_data[[paste0(fixed[2])]] <- seq_len(nrow(pop_data))
   X_pop <- model.matrix(fixed, pop_data)
   mu_fixed <- X_pop %*% model_par_tf$betas
@@ -324,7 +322,6 @@ bootstrap_par_tf <- function(fixed,
   vu_smp1 <- vu_tmp1[framework_ebp_tf$dist_obs_dom]
   vu_smp2 <- vu_tmp2[framework_ebp_tf$dist_obs_subdom]
 
-  ##############################################################################
    # Domain-level: create a lookup table
   unique_dom_smp <- unique(framework_ebp_tf$smp_domains_vec)
   dom_re_smp <- data.frame(idD = unique_dom_smp, vu1 = vu_smp1)
@@ -343,7 +340,7 @@ bootstrap_par_tf <- function(fixed,
   smp_data <- merge(smp_data, subdom_re_smp,
                     by.x = framework_ebp_tf$smp_subdomains,
                     by.y = "idSub", all.x = TRUE)
-  ##############################################################################
+
 
   # Extraction of design matrix
   X_smp <- model.matrix(fixed, smp_data)
@@ -366,10 +363,9 @@ bootstrap_par_tf <- function(fixed,
   bootstrap_smp <- smp_data
   bootstrap_smp[paste(fixed[2])] <- Y_smp_b
 
-  ##############################################################################
   bootstrap_smp <- bootstrap_smp[order(bootstrap_smp$row_index),]
   bootstrap_smp$row_index <- NULL
-#_____________________________________________________________________________
+
 
   return(bootstrap_sample = bootstrap_smp)
 }

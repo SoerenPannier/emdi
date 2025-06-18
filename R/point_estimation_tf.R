@@ -46,7 +46,7 @@ point_ebp_tf <- function(framework_ebp_tf,
   # Estimation of the nested error linear regression model
   # See Molina and Rao (2010) p. 374
   # lme function is included in the nlme package which is imported.
-#browser()
+
   mixed_model_tf <- nlme::lme(
     fixed = fixed,
     data = transformation_par$transformed_data,
@@ -118,7 +118,6 @@ point_ebp_tf <- function(framework_ebp_tf,
 # error linear regression model. It returns the beta coefficients (betas),
 # sigmae2est, sigmau2est and the random effect (rand_eff).
 
-#browser()
 model_par_tf <- function(framework_ebp_tf,
                       mixed_model_tf,
                       fixed,
