@@ -44,6 +44,5 @@
 #' Guadarrama, M., Molina, I. and Rao, J.N.K. (2018). Small area estimation of
 #' general parameters under complex sampling designs. Computational Statistics &
 #' Data Analysis, Vol. 121, 20-40.
-#' @docType package
 #' @name emdi
 NULL
