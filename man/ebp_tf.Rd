@@ -105,7 +105,8 @@ values larger than 200 are recommended (see also
 
 \item{seed}{an integer to set the seed for the random number generator. For
 the usage of random number generation, see Details. If seed is set to
-\code{NULL}, seed is chosen randomly. Defaults to \code{123}.}
+\code{NULL}, seed is chosen randomly. Defaults to \code{123}.
+\code{"wild"} bootstrap are possible. Defaults to \code{"parametric"}.}
 
 \item{parallel_mode}{modus of parallelization, defaults to an automatic
 selection of a suitable mode, depending on the operating system, if the
@@ -129,10 +130,6 @@ observations are required. Defaults to \code{FALSE}.}
 indicates population weights in the population data. If a character string
 is provided weighted indicators are estimated using population weights.
 The variable has to be numeric. Defaults to \code{NULL}.}
-
-\item{boot_type}{character string to choose between different MSE estimation
-procedures,currently a \code{"parametric"} and a semi-parametric
-\code{"wild"} bootstrap are possible. Defaults to \code{"parametric"}.}
 }
 \value{
 An object of class "ebp_tf", "emdi" that provides estimators for

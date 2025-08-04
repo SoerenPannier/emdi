@@ -6,6 +6,7 @@
 # see Molina and Rao (2003) p.370-371
 
 
+
 framework_ebp_tf <- function(fixed, pop_data, pop_domains, pop_subdomains,
                              smp_data, smp_domains, smp_subdomains,
                              threshold, custom_indicator = NULL, na.rm,
@@ -142,7 +143,7 @@ framework_ebp_tf <- function(fixed, pop_data, pop_domains, pop_subdomains,
   unsampled_subdoms_smpdoms$dom_sampled <- obs_dom
   unsampled_subdoms_smpdoms$subdom_sampled <- obs_subdom
   # Filter for sampled subdomains only
-  unsampled_subdoms_smpdoms <- unsampled_subdoms_smpdoms %>%
+  unsampled_subdoms_smpdoms <- unsampled_subdoms_smpdoms |>
     dplyr::filter(dom_sampled == TRUE & subdom_sampled == FALSE)
   # Convert the column to a factor with all levels from pop_domains
   lvls_unsampled_subdoms_smpdoms <- levels(unsampled_subdoms_smpdoms[[pop_domains]])

@@ -77,8 +77,6 @@
 #' @param seed an integer to set the seed for the random number generator. For
 #' the usage of random number generation, see Details. If seed is set to
 #' \code{NULL}, seed is chosen randomly. Defaults to \code{123}.
-#' @param boot_type character string to choose between different MSE estimation
-#' procedures,currently a \code{"parametric"} and a semi-parametric
 #' \code{"wild"} bootstrap are possible. Defaults to \code{"parametric"}.
 #' @param parallel_mode modus of parallelization, defaults to an automatic
 #' selection of a suitable mode, depending on the operating system, if the
@@ -294,55 +292,55 @@ ebp_tf <- function(fixed,
 
   # MSE Estimation -------------------------------------------------------------
 
-  if (MSE == TRUE) {
-
-    # The function parametric_bootstrap_tf can be found in script mse_estimation_tf.R
-    mse_estimates_tf <- parametric_bootstrap_tf(
-      framework_ebp_tf = framework_ebp_tf,
-      point_ebp_tf = point_ebp_tf,
-      fixed = fixed,
-      transformation = transformation,
-      interval = interval,
-      L = L,
-      B = B,
-      parallel_mode = parallel_mode,
-      cpus = cpus
-    )
-
-
-
-    ebp_tf_out <- list(
-      ind_Domain = point_ebp_tf$ind_Domain,
-      ind_Subdomain = point_ebp_tf$ind_Subdomain,
-      MSE_Domain = mse_estimates_tf$mses_dom,
-      MSE_Subdomain = mse_estimates_tf$mses_subdom,
-      transform_param = point_ebp_tf[c(
-        "optimal_lambda",
-        "shift_par"
-      )],
-      model = point_ebp_tf$model,
-      framework_ebp_tf = framework_ebp_tf[c(
-        "N_subdom_unobs",
-        "N_subdom_smp",
-        "N_smp",
-        "N_pop",
-        "smp_subdomains",
-        "smp_data",
-        "smp_subdomains_vec",
-        "pop_subdomains_vec",
-        "N_dom_unobs",
-        "N_dom_smp",
-        "smp_domains",
-        "smp_domains_vec",
-        "pop_domains_vec"
-      )],
-      transformation = transformation,
-      method = "reml",
-      fixed = fixed,
-      call = call,
-      successful_bootstraps = NULL
-    )
-  } else {
+  # if (MSE == TRUE) {
+  #
+  #   # The function parametric_bootstrap_tf can be found in script mse_estimation_tf.R
+  #   mse_estimates_tf <- parametric_bootstrap_tf(
+  #     framework_ebp_tf = framework_ebp_tf,
+  #     point_ebp_tf = point_ebp_tf,
+  #     fixed = fixed,
+  #     transformation = transformation,
+  #     interval = interval,
+  #     L = L,
+  #     B = B,
+  #     parallel_mode = parallel_mode,
+  #     cpus = cpus
+  #   )
+  #
+  #
+  #
+  #   ebp_tf_out <- list(
+  #     ind_Domain = point_ebp_tf$ind_Domain,
+  #     ind_Subdomain = point_ebp_tf$ind_Subdomain,
+  #     MSE_Domain = mse_estimates_tf$mses_dom,
+  #     MSE_Subdomain = mse_estimates_tf$mses_subdom,
+  #     transform_param = point_ebp_tf[c(
+  #       "optimal_lambda",
+  #       "shift_par"
+  #     )],
+  #     model = point_ebp_tf$model,
+  #     framework_ebp_tf = framework_ebp_tf[c(
+  #       "N_subdom_unobs",
+  #       "N_subdom_smp",
+  #       "N_smp",
+  #       "N_pop",
+  #       "smp_subdomains",
+  #       "smp_data",
+  #       "smp_subdomains_vec",
+  #       "pop_subdomains_vec",
+  #       "N_dom_unobs",
+  #       "N_dom_smp",
+  #       "smp_domains",
+  #       "smp_domains_vec",
+  #       "pop_domains_vec"
+  #     )],
+  #     transformation = transformation,
+  #     method = "reml",
+  #     fixed = fixed,
+  #     call = call,
+  #     successful_bootstraps = NULL
+  #   )
+  # } else {
     ebp_tf_out <- list(
       ind_Domain = point_ebp_tf$ind_Domain,
       ind_Subdomain = point_ebp_tf$ind_Subdomain,
@@ -374,7 +372,7 @@ ebp_tf <- function(fixed,
       call = call,
       successful_bootstraps = NULL
     )
-  }
+  #}
 
   if (cpus > 1 && parallel_mode != "socket") {
     RNGkind(RNG_kind[1]) # restoring RNG type
