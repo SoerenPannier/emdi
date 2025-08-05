@@ -54,7 +54,8 @@ Imports:
     formula.tools,
     saeRobust,
     rlang, 
-    spdep
+    spdep,
+    dplyr
 Suggests:
     testthat,
     R.rsp,

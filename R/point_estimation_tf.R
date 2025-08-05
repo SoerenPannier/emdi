@@ -6,7 +6,7 @@
 # nested error linear regression model and the monte-carlo approximation to
 # predict the desired indicators. For twofold ebp, a weighted approach is
 # not yet implemented. See corresponding functions below.
-#' @export
+
 
 point_ebp_tf <- function(framework_ebp_tf,
                         fixed,

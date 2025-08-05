@@ -5,6 +5,7 @@
 # distinction between in-sample and out-of-sample
 # see Molina and Rao (2003) p.370-371
 
+#' @importFrom dplyr filter
 
 
 framework_ebp_tf <- function(fixed, pop_data, pop_domains, pop_subdomains,
@@ -144,7 +145,9 @@ framework_ebp_tf <- function(fixed, pop_data, pop_domains, pop_subdomains,
   unsampled_subdoms_smpdoms$subdom_sampled <- obs_subdom
   # Filter for sampled subdomains only
   unsampled_subdoms_smpdoms <- unsampled_subdoms_smpdoms |>
-    dplyr::filter(dom_sampled == TRUE & subdom_sampled == FALSE)
+    filter(.data$dom_sampled == TRUE & .data$subdom_sampled == FALSE)
+
+
   # Convert the column to a factor with all levels from pop_domains
   lvls_unsampled_subdoms_smpdoms <- levels(unsampled_subdoms_smpdoms[[pop_domains]])
   lvls_unsampled_subdoms_smpdoms <- factor(unsampled_subdoms_smpdoms[[pop_domains]],
