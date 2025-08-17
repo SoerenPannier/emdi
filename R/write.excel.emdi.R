@@ -34,10 +34,10 @@
 #' @return An Excel file is created in your working directory, or at the given
 #' path. Alternatively multiple ODS files are created at the given path.
 #' @details These functions create an Excel file via the package
-#' \pkg{\link{openxlsx}} and ODS files via the package
+#' \pkg{\link[openxlsx:openxlsx]{openxlsx}} and ODS files via the package
 #' \pkg{readODS}.
 #' Both packages require a zip application to be available to \R. If this is not
-#' the case the authors of \pkg{\link{openxlsx}} suggest the first of the
+#' the case the authors of \pkg{\link[openxlsx:openxlsx]{openxlsx}} suggest the first of the
 #' following two ways.
 #' \itemize{
 #' \item Install Rtools from: http://cran.r-project.org/bin/windows/Rtools/ and
