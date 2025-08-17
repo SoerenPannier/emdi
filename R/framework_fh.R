@@ -32,6 +32,11 @@ framework_FH <- function(combined_data, fixed, vardir, domains,
     vardir_orig <- vardir
     direct <- asin(sqrt(direct))
     vardir <- 1 / (4 * data[, eff_smpsize])
+  } else if (transformation == "logit") {
+    direct_orig <- direct
+    vardir_orig <- vardir
+    direct <- logit(direct)
+    vardir <- logit_variance(direct_orig, vardir_orig)
   }
 
   if (is.null(domains)) {

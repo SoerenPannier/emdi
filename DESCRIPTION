@@ -1,7 +1,7 @@
 Package: emdi
 Title: Estimating and Mapping Disaggregated Indicators
-Version: 2.2.0
-Date: 2023-06-13
+Version: 2.2.2
+Date: 2024-06-11
 Authors@R: c(person("Sylvia", "Harmening", role="aut", email = "sylvia.harmening@fu-berlin.de"), 
     person("Ann-Kristin", "Kreutzmann", role="aut", email="ann-kristin.kreutzmann@fu-berlin.de"),
     person("Soeren", "Pannier", role=c("aut", "cre"), email="soeren.pannier@fu-berlin.de"),
@@ -34,12 +34,11 @@ URL: https://github.com/SoerenPannier/emdi
 LazyData: true
 Encoding: UTF-8
 Copyright: inst/COPYRIGHTS
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Imports:
     nlme,
     moments,
     ggplot2,
-    MuMIn,
     gridExtra,
     openxlsx,
     reshape2,
