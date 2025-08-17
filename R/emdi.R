@@ -1,3 +1,5 @@
+"_PACKAGE"
+
 #' A package for estimating and mapping disaggregated indicators
 #'
 #' The package \pkg{emdi} supports estimating and mapping regional
