@@ -24,6 +24,31 @@ bibentry(bibtype = "Article",
   number       = "7",
   pages        = "1--33",
   doi          = "10.18637/jss.v091.i07",
-  header       = "To cite emdi in publications use:"
+  header       = "To cite emdi in publications use - depending on the estimation method:"
 )
 
+bibentry(bibtype = "Article",
+         title = "A Framework for Producing Small Area Estimates Based on Area-Level
+Models in {R}",
+         author = c(
+           person(given = "Sylvia",
+                  family = "Harmening",
+                  email = "sylvia.harmening@fu-berlin.de"),
+           person(given = "Ann-Kristin",
+                  family = "Kreutzmann",
+                  email = "ann-kristin.kreutzmann@fu-berlin.de"),
+           person(given = "S\\\"oren",
+                  family = "Schmidt",
+                  email = "soeren.pannier@fu-berlin.de"),
+           person(given = "Nicola",
+                  family = "Salvati",
+                  email = "nicola.salvati@unipi.it"),
+           person(given = "Timo",
+                  family = "Schmid",
+                  email = "timo.schmid@uni-bamberg.de")),
+         journal = "The R Journal",
+         year = "2023",
+         volume = "15/1",
+         pages = "316-341",
+         doi = "10.32614/RJ-2023-039"
+)
