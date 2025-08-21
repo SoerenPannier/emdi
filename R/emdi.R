@@ -45,4 +45,5 @@
 #' general parameters under complex sampling designs. Computational Statistics &
 #' Data Analysis, Vol. 121, 20-40.
 #' @name emdi
+"_PACKAGE"
 NULL
