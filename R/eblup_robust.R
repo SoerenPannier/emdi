@@ -4,7 +4,8 @@ eblup_robust <- function(framework, combined_data, method, k = 1.345, vardir,
     eblupobject <- saeRobust::rfh(framework$formula,
       data = framework$data,
       samplingVar = vardir,
-      tol = framework$tol, maxIter = framework$maxit
+      tol = framework$tol, maxIter = framework$maxit,
+      k = k
     )
 
     # Identity matrix mxm

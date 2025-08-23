@@ -1,9 +1,15 @@
+# emdi 2.2.3
+* Adapted linking to foreign packages
+* Added citation for area level models
+* Bugfix: Argument (k) path through fixed for robust FH models
+
+
 # emdi 2.2.2
 * Addition of logit transformation in FH model 
 * Removal of MuMIn dependency
 
 # emdi 2.2.1
-* Substitution of maptools and rgeos by sf due to depreciation of the former
+* Substitution of maptools and rgeos by sf due to deprecation of the former
 * Substitution of ggplot2::fortify by ggplot2::geom_sf due to depreciation of the former
 
 # emdi 2.2.0
