@@ -1,12 +1,11 @@
 ## Test environments
-* Windows10 R 4.4.0 local development environment
-* Windows10 R 4.2.2 local development environment
+* Windows11 R 4.5.1 local development environment
 * GitHub Actions:
   * macOS-latest,    R: release
   * windows-latest,  R: release
   * ubuntu-latest,   R: devel
   * ubuntu-latest,   R: release
-* Winbuilder: release, devel.
+* Winbuilder: release, devel., old-rel
 
 ## R CMD check results
 
