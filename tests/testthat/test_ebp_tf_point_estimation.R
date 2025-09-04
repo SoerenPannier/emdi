@@ -7,17 +7,19 @@ load("EBP_TF/population_data.RData")
 test_that("Does monte_carlo function give benchmark results?", {
   suppressWarnings(RNGversion("3.5.0"))
   # Single elements needed in monte_carlo()
-  framework_ebp_tf <- framework_ebp_tf(income ~ educ1,
+  framework <- framework_ebp(income ~ educ1,
                         population_data,
                         "provlab",
-                        "prov_gen",
                         sample_data,
                         "provlab",
-                        "prov_gen",
                         5741.0157,
                         custom_indicator = NULL,
                         na.rm = TRUE,
-                        pop_weights = NULL)
+                        weights = NULL,
+                        pop_weights = NULL,
+                        pop_subdomains = "prov_gen",
+                        smp_subdomains = "prov_gen",
+                        tf = TRUE)
   # Fixed optimal parameter and shift (benchmark values)
   ebp_optpar_bc <- read.csv2("EBP_TF/ebp_optpar_bc.csv", sep = ",",
                              stringsAsFactors = TRUE)
@@ -29,7 +31,7 @@ test_that("Does monte_carlo function give benchmark results?", {
 
   # Conduct transformation using the optimal parameter
   transformation_par <- data_transformation(fixed          = income ~ educ1,
-                                            smp_data       = framework_ebp_tf$smp_data,
+                                            smp_data       = framework$smp_data,
                                             transformation = "box.cox",
                                             lambda         = lambda
   )
@@ -39,24 +41,24 @@ test_that("Does monte_carlo function give benchmark results?", {
                      data   = transformation_par$transformed_data ,
                      random =
                        as.formula(paste0(
-                         "~ 1 | " , framework_ebp_tf$smp_domains, "/", framework_ebp_tf$smp_subdomains)),
+                         "~ 1 | " , framework$smp_domains, "/", framework$smp_subdomains)),
                      method = "REML")
 
   # Get model parameter
   est_par_tf <- model_par_tf(mixed_model_tf = mixed_model_tf,
-                       framework_ebp_tf   = framework_ebp_tf
+                       framework   = framework
   )
 
   # Get parameter for the generating model
   gen_par_tf <- gen_model_tf(model_par_tf   = est_par_tf,
                        fixed       = income~educ1,
-                       framework_ebp_tf   = framework_ebp_tf
+                       framework   = framework
   )
 
   set.seed(100)
   point <- monte_carlo_tf(transformation = "box.cox",
                                       L = 2,
-                                      framework_ebp_tf,
+                                      framework,
                                       lambda = lambda,
                                       shift = shift,
                                       model_par_tf = est_par_tf,
@@ -64,7 +66,7 @@ test_that("Does monte_carlo function give benchmark results?", {
                                       )
 
   set.seed(100)
-  point2 <- point_ebp_tf(framework_ebp_tf,
+  point2 <- point_estim(framework,
                         fixed = income ~ educ1,
                         transformation = "box.cox",
                         interval = "default",

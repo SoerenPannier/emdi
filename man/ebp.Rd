@@ -8,8 +8,10 @@ ebp(
   fixed,
   pop_data,
   pop_domains,
+  pop_subdomains = NULL,
   smp_data,
   smp_domains,
+  smp_subdomains = NULL,
   L = 50,
   threshold = NULL,
   transformation = "box.cox",
@@ -24,7 +26,8 @@ ebp(
   na.rm = FALSE,
   weights = NULL,
   pop_weights = NULL,
-  aggregate_to = NULL
+  aggregate_to = NULL,
+  tf = FALSE
 )
 }
 \arguments{
@@ -43,6 +46,11 @@ indicates domains in the population data. The variable can be numeric or
 a factor but needs to be of the same class as the variable named in
 \code{smp_domains}.}
 
+\item{pop_subdomains}{a character string containing the name of a variable
+that indicates sub-domains in the population data. The variable can be numeric
+or a factor but needs to be of the same class as the variable named in
+\code{smp_subdomains}.}
+
 \item{smp_data}{a data frame that needs to comprise all variables named in
 \code{fixed} and \code{smp_domains}.}
 
@@ -50,6 +58,11 @@ a factor but needs to be of the same class as the variable named in
 that indicates domains in the sample data. The variable can be numeric or a
 factor but needs to be of the same class as the variable named in
 \code{pop_domains}.}
+
+\item{smp_subdomains}{a character string containing the name of a variable
+that indicates sub-domains in the sample data. The variable can be numeric or a
+factor but needs to be of the same class as the variable named in
+\code{pop_subdomains}.}
 
 \item{L}{a number determining the number of Monte-Carlo simulations that
 must be at least 1. Defaults to 50. For practical applications, values
@@ -100,7 +113,8 @@ the usage of random number generation, see Details. If seed is set to
 
 \item{boot_type}{character string to choose between different MSE estimation
 procedures,currently a \code{"parametric"} and a semi-parametric
-\code{"wild"} bootstrap are possible. Defaults to \code{"parametric"}.}
+\code{"wild"} bootstrap are possible. Defaults to \code{"parametric"}. For
+twofold ebp only\code{"parametric"} is supported.}
 
 \item{parallel_mode}{modus of parallelization, defaults to an automatic
 selection of a suitable mode, depending on the operating system, if the
@@ -134,6 +148,8 @@ The variable has to be numeric. Defaults to \code{NULL}.}
 population data that indicates the target domain level for which the
 results are to be displayed. The variable can be numeric or a factor.
 Defaults to \code{NULL}.}
+
+\item{tf}{if \code{TRUE}, twofold ebp is activated. Defaults to \code{FALSE}.}
 }
 \value{
 An object of class "ebp", "emdi" that provides estimators for
@@ -153,11 +169,19 @@ likelihood (REML) method and one of
 five different transformation types for the dependent variable can be chosen.
 This approach can be extended to data under informative sampling using
 weights and is based on \cite{Guadarrama et al. (2018)}. Model  estimation
-combines the uni-level model of \cite{Battese, Harter and Fuller (1988)} and
+combines the unit-level model of \cite{Battese, Harter and Fuller (1988)} and
 the approach of \cite{You and Rao (2002)} using survey weights. At the
 moment, only the log-transformation is supported for this method.
 }
 \details{
+However, when the tf argument in the \code{ebp} function is set to
+\code{TRUE}, the function estimates indicators using the Twofold Empirical
+Best Prediction approach by \cite{Molina and Rao (2017)}. Point predictions
+of indicators are obtained by Monte-Carlo approximations. Additionally, mean
+squared error (MSE) estimation can be conducted by using a parametric
+bootstrap approach  (see also \cite{Kyalo et al. (2024)}). Use of survey
+weights is not supported for this method.
+
 For Monte-Carlo approximations and in the parametric bootstrap
 approach random number generation is used. Thus, a seed is set by the
 argument \code{seed}. \cr \cr
@@ -243,6 +267,40 @@ emdi_model <- ebp(
                         }
     ), na.rm = TRUE, pop_weights = "eqsize"
 )
+
+# Example 6: With tf = TRUE (fitting ebp twofold)
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_subdomains = "district", pop_domains = "state", smp_data = eusilcA_smp,
+  smp_subdomains = "district", smp_domains = "state",
+  na.rm = TRUE, tf = TRUE
+)
+
+
+# Example 7: Fitting ebp twofold with MSE, two additional indicators and function as threshold -
+# Please note that the example runs for several minutes. For a short check
+# change L and B to lower values.
+emdi_model <- ebp(
+  fixed = eqIncome ~ gender + eqsize + cash +
+    self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
+    fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+  pop_subdomains = "district", pop_domains = "state", smp_data = eusilcA_smp,
+   smp_subdomains = "district", smp_domains = "state", tf = TRUE,
+  threshold = function(y) {
+    0.6 * median(y)
+  }, transformation = "box.cox",
+  L = 50, MSE = TRUE, B = 50, custom_indicator =
+    list(
+      my_max = function(y) {
+        max(y)
+      },
+      my_min = function(y) {
+        min(y)
+      }
+    ), na.rm = TRUE, cpus = 1
+)
 }
 }
 \references{
@@ -263,6 +321,11 @@ Kreutzmann, A., Pannier, S., Rojas-Perilla, N., Schmid, T., Templ, M.
 and Tzavidis, N. (2019). The R Package emdi for Estimating and
 Mapping Regionally Disaggregated Indicators, Journal of Statistical Software,
 Vol. 91, No. 7, 1--33, <doi:10.18637/jss.v091.i07> \cr \cr
+Kyalo, R. K., T. Schmid, and N. Würz (2024). Twofold nested error regression
+models with data-driven transformations. Unpublished manuscript. \cr \cr
+Marhuenda, Y., I. Molina, D. Morales, and J. Rao (2017). Poverty mapping in
+small areas under a twofold nested error regression model. Journal of the
+Royal Statistical Society. Series A (Statistics in Society), 1111–1136. \cr \cr
 Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
 indicators. The Canadian Journal of Statistics, Vol. 38, No.3,
 369-385. \cr \cr

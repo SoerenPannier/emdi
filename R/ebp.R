@@ -10,9 +10,17 @@
 #' five different transformation types for the dependent variable can be chosen.
 #' This approach can be extended to data under informative sampling using
 #' weights and is based on \cite{Guadarrama et al. (2018)}. Model  estimation
-#' combines the uni-level model of \cite{Battese, Harter and Fuller (1988)} and
+#' combines the unit-level model of \cite{Battese, Harter and Fuller (1988)} and
 #' the approach of \cite{You and Rao (2002)} using survey weights. At the
 #' moment, only the log-transformation is supported for this method.
+#'
+#' However, when the tf argument in the \code{ebp} function is set to
+#' \code{TRUE}, the function estimates indicators using the Twofold Empirical
+#' Best Prediction approach by \cite{Molina and Rao (2017)}. Point predictions
+#' of indicators are obtained by Monte-Carlo approximations. Additionally, mean
+#' squared error (MSE) estimation can be conducted by using a parametric
+#' bootstrap approach  (see also \cite{Kyalo et al. (2024)}). Use of survey
+#' weights is not supported for this method.
 #'
 #' @param fixed a two-sided linear formula object describing the
 #' fixed-effects part of the nested error linear regression model with the
@@ -26,12 +34,20 @@
 #' indicates domains in the population data. The variable can be numeric or
 #' a factor but needs to be of the same class as the variable named in
 #' \code{smp_domains}.
+#' @param pop_subdomains a character string containing the name of a variable
+#' that indicates sub-domains in the population data. The variable can be numeric
+#' or a factor but needs to be of the same class as the variable named in
+#' \code{smp_subdomains}.
 #' @param smp_data a data frame that needs to comprise all variables named in
 #' \code{fixed} and \code{smp_domains}.
 #' @param smp_domains a character string containing the name of a variable
 #' that indicates domains in the sample data. The variable can be numeric or a
 #' factor but needs to be of the same class as the variable named in
 #' \code{pop_domains}.
+#' @param smp_subdomains a character string containing the name of a variable
+#' that indicates sub-domains in the sample data. The variable can be numeric or a
+#' factor but needs to be of the same class as the variable named in
+#' \code{pop_subdomains}.
 #' @param threshold a number defining a threshold. Alternatively, a threshold
 #' may be defined as a \code{function} of \code{y} returning a numeric value.
 #' Such a function will be evaluated once for the point estimation and in each
@@ -74,7 +90,8 @@
 #' \code{NULL}, seed is chosen randomly. Defaults to \code{123}.
 #' @param boot_type character string to choose between different MSE estimation
 #' procedures,currently a \code{"parametric"} and a semi-parametric
-#' \code{"wild"} bootstrap are possible. Defaults to \code{"parametric"}.
+#' \code{"wild"} bootstrap are possible. Defaults to \code{"parametric"}. For
+#' twofold ebp only\code{"parametric"} is supported.
 #' @param parallel_mode modus of parallelization, defaults to an automatic
 #' selection of a suitable mode, depending on the operating system, if the
 #' number of \code{cpus} is chosen higher than 1. For details, see
@@ -101,6 +118,7 @@
 #' population data that indicates the target domain level for which the
 #' results are to be displayed. The variable can be numeric or a factor.
 #' Defaults to \code{NULL}.
+#' @param tf if \code{TRUE}, twofold ebp is activated. Defaults to \code{FALSE}.
 #' @return An object of class "ebp", "emdi" that provides estimators for
 #' regional disaggregated indicators and optionally corresponding MSE estimates.
 #' Several generic functions have methods for the returned object. For a full
@@ -137,6 +155,11 @@
 #' and Tzavidis, N. (2019). The R Package emdi for Estimating and
 #' Mapping Regionally Disaggregated Indicators, Journal of Statistical Software,
 #' Vol. 91, No. 7, 1--33, <doi:10.18637/jss.v091.i07> \cr \cr
+#' Kyalo, R. K., T. Schmid, and N. Würz (2024). Twofold nested error regression
+#' models with data-driven transformations. Unpublished manuscript. \cr \cr
+#' Marhuenda, Y., I. Molina, D. Morales, and J. Rao (2017). Poverty mapping in
+#' small areas under a twofold nested error regression model. Journal of the
+#' Royal Statistical Society. Series A (Statistics in Society), 1111–1136. \cr \cr
 #' Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
 #' indicators. The Canadian Journal of Statistics, Vol. 38, No.3,
 #' 369-385. \cr \cr
@@ -219,6 +242,40 @@
 #'                         }
 #'     ), na.rm = TRUE, pop_weights = "eqsize"
 #' )
+#'
+#' # Example 6: With tf = TRUE (fitting ebp twofold)
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'     unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
+#'     house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_subdomains = "district", pop_domains = "state", smp_data = eusilcA_smp,
+#'   smp_subdomains = "district", smp_domains = "state",
+#'   na.rm = TRUE, tf = TRUE
+#' )
+#'
+#'
+#' # Example 7: Fitting ebp twofold with MSE, two additional indicators and function as threshold -
+#' # Please note that the example runs for several minutes. For a short check
+#' # change L and B to lower values.
+#' emdi_model <- ebp(
+#'   fixed = eqIncome ~ gender + eqsize + cash +
+#'     self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
+#'     fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
+#'   pop_subdomains = "district", pop_domains = "state", smp_data = eusilcA_smp,
+#'    smp_subdomains = "district", smp_domains = "state", tf = TRUE,
+#'   threshold = function(y) {
+#'     0.6 * median(y)
+#'   }, transformation = "box.cox",
+#'   L = 50, MSE = TRUE, B = 50, custom_indicator =
+#'     list(
+#'       my_max = function(y) {
+#'         max(y)
+#'       },
+#'       my_min = function(y) {
+#'         min(y)
+#'       }
+#'     ), na.rm = TRUE, cpus = 1
+#' )
 #' }
 #' @export
 #' @importFrom nlme fixed.effects VarCorr lme random.effects
@@ -232,8 +289,10 @@
 ebp <- function(fixed,
                 pop_data,
                 pop_domains,
+                pop_subdomains = NULL,
                 smp_data,
                 smp_domains,
+                smp_subdomains = NULL,
                 L = 50,
                 threshold = NULL,
                 transformation = "box.cox",
@@ -250,18 +309,21 @@ ebp <- function(fixed,
                 na.rm = FALSE,
                 weights = NULL,
                 pop_weights = NULL,
-                aggregate_to = NULL
+                aggregate_to = NULL,
+                tf = FALSE
                 ) {
+
   ebp_check1(
     fixed = fixed, pop_data = pop_data, pop_domains = pop_domains,
-    smp_data = smp_data, smp_domains = smp_domains, L = L
+    smp_data = smp_data, smp_domains = smp_domains, L = L,
+    pop_subdomains = pop_subdomains,smp_subdomains = smp_subdomains, tf = tf
   )
 
   ebp_check2(
     threshold = threshold, transformation = transformation,
     interval = interval, MSE = MSE, boot_type = boot_type, B = B,
     custom_indicator = custom_indicator, cpus = cpus, seed = seed,
-    na.rm = na.rm, weights = weights, pop_weights = pop_weights
+    na.rm = na.rm, weights = weights, pop_weights = pop_weights, tf = tf
   )
 
   # Save function call ---------------------------------------------------------
@@ -281,19 +343,41 @@ ebp <- function(fixed,
   }
 
   # The function framework_ebp can be found in script framework_ebp.R
-  framework <- framework_ebp(
-    pop_data = pop_data,
-    pop_domains = pop_domains,
-    smp_data = smp_data,
-    smp_domains = smp_domains,
-    aggregate_to = aggregate_to,
-    custom_indicator = custom_indicator,
-    fixed = fixed,
-    threshold = threshold,
-    na.rm = na.rm,
-    weights = weights,
-    pop_weights = pop_weights
-  )
+  if(tf == TRUE){
+    framework <- framework_ebp(
+      pop_data = pop_data,
+      pop_domains = pop_domains,
+      pop_subdomains = pop_subdomains,
+      smp_data = smp_data,
+      smp_domains = smp_domains,
+      smp_subdomains = smp_subdomains,
+      custom_indicator = custom_indicator,
+      fixed = fixed,
+      threshold = threshold,
+      na.rm = na.rm,
+      pop_weights = pop_weights,
+      weights = weights,
+      tf=tf
+    )
+  }else{
+    framework <- framework_ebp(
+      pop_data = pop_data,
+      pop_domains = pop_domains,
+      smp_data = smp_data,
+      smp_domains = smp_domains,
+      smp_subdomains = smp_subdomains,
+      pop_subdomains = pop_subdomains,
+      aggregate_to = aggregate_to,
+      custom_indicator = custom_indicator,
+      fixed = fixed,
+      threshold = threshold,
+      na.rm = na.rm,
+      weights = weights,
+      pop_weights = pop_weights,
+      tf=tf
+    )
+
+  }
 
 
 
@@ -313,38 +397,106 @@ ebp <- function(fixed,
   # MSE Estimation -------------------------------------------------------------
 
   if (MSE == TRUE) {
+    if(tf == FALSE){
+      # The function parametric_bootstrap can be found in script mse_estimation.R
+      mse_estimates <- parametric_bootstrap(
+        framework = framework,
+        point_estim = point_estim,
+        fixed = fixed,
+        transformation = transformation,
+        interval = interval,
+        L = L,
+        B = B,
+        boot_type = boot_type,
+        parallel_mode = parallel_mode,
+        cpus = cpus
+      )
 
-    # The function parametric_bootstrap can be found in script mse_estimation.R
-    mse_estimates <- parametric_bootstrap(
-      framework = framework,
-      point_estim = point_estim,
-      fixed = fixed,
-      transformation = transformation,
-      interval = interval,
-      L = L,
-      B = B,
-      boot_type = boot_type,
-      parallel_mode = parallel_mode,
-      cpus = cpus
-    )
 
 
+      ebp_out <- list(
+        ind = point_estim$ind,
+        MSE = mse_estimates,
+        transform_param = point_estim[c(
+          "optimal_lambda",
+          "shift_par"
+        )],
+        model = point_estim$model,
+        framework = framework[c(
+          "N_dom_unobs",
+          "N_dom_smp",
+          "N_smp",
+          "N_pop",
+          "smp_domains",
+          "smp_data",
+          "smp_domains_vec",
+          "pop_domains_vec"
+        )],
+        transformation = transformation,
+        method = "reml",
+        fixed = fixed,
+        call = call,
+        successful_bootstraps = NULL
+      )
+    }else{ #To me replaced when integrating the MSE for twofold
+      message("MSE is not yet defined for this method at this integration stage")
+      ebp_out <- list(
+        ind_Domain = point_estim$ind_Domain,
+        ind_Subdomain = point_estim$ind_Subdomain,
+        MSE = NULL,
+        transform_param = point_estim[c(
+          "optimal_lambda",
+          "shift_par"
+        )],
+        model = point_estim$model,
+        framework = framework[c(
+          "N_subdom_unobs",
+          "N_subdom_smp",
+          "N_dom_unobs",
+          "N_dom_smp",
+          "N_smp",
+          "N_pop",
+          "smp_subdomains",
+          "smp_domains",
+          "smp_data",
+          "smp_subdomains_vec",
+          "pop_subdomains_vec",
+          "smp_domains_vec",
+          "pop_domains_vec"
+        )],
+        transformation = transformation,
+        method = "reml",
+        fixed = fixed,
+        call = call,
+        successful_bootstraps = NULL
+      )
+    }
 
+
+  } else {
+
+  if( tf == TRUE){
     ebp_out <- list(
-      ind = point_estim$ind,
-      MSE = mse_estimates,
+      ind_Domain = point_estim$ind_Domain,
+      ind_Subdomain = point_estim$ind_Subdomain,
+      MSE = NULL,
       transform_param = point_estim[c(
         "optimal_lambda",
         "shift_par"
       )],
       model = point_estim$model,
       framework = framework[c(
+        "N_subdom_unobs",
+        "N_subdom_smp",
         "N_dom_unobs",
         "N_dom_smp",
         "N_smp",
         "N_pop",
+        "smp_subdomains",
         "smp_domains",
         "smp_data",
+        "smp_subdomains_vec",
+        "pop_subdomains_vec",
         "smp_domains_vec",
         "pop_domains_vec"
       )],
@@ -354,7 +506,7 @@ ebp <- function(fixed,
       call = call,
       successful_bootstraps = NULL
     )
-  } else {
+  }else{
     ebp_out <- list(
       ind = point_estim$ind,
       MSE = NULL,
@@ -380,6 +532,8 @@ ebp <- function(fixed,
       call = call,
       successful_bootstraps = NULL
     )
+  }
+
   }
 
   if (cpus > 1 && parallel_mode != "socket") {
