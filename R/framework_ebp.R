@@ -313,6 +313,7 @@ framework_ebp <- function(fixed, pop_data, pop_domains, smp_data, smp_domains,
       indicator_list = indicator_list,
       indicator_names = indicator_names,
       threshold = threshold,
+      aggregate_to = aggregate_to,
       pop_weights = pop_weights,
       weights = weights,
       tf= tf

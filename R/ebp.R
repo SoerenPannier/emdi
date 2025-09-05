@@ -323,7 +323,8 @@ ebp <- function(fixed,
     threshold = threshold, transformation = transformation,
     interval = interval, MSE = MSE, boot_type = boot_type, B = B,
     custom_indicator = custom_indicator, cpus = cpus, seed = seed,
-    na.rm = na.rm, weights = weights, pop_weights = pop_weights, tf = tf
+    na.rm = na.rm, weights = weights, pop_weights = pop_weights,
+    aggregate_to = aggregate_to, tf = tf
   )
 
   # Save function call ---------------------------------------------------------
@@ -355,6 +356,7 @@ ebp <- function(fixed,
       fixed = fixed,
       threshold = threshold,
       na.rm = na.rm,
+      aggregate_to = aggregate_to,
       pop_weights = pop_weights,
       weights = weights,
       tf=tf

@@ -46,11 +46,15 @@ ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L,
   }
 
   if(tf == TRUE){
-    if (!is.character(smp_data[[smp_subdomains]])) {
-      smp_data[[smp_subdomains]] <- as.character(smp_data[[smp_subdomains]])
+    if (is.null(pop_subdomains)) {
+      stop(strwrap(prefix = " ", initial = "",
+                   "You have selected tf = TRUE, hence activated EBP twofold.
+                   pop_subdomains cannot be NULL and must be specified"))
     }
-    if (!is.character(pop_data[[pop_subdomains]])) {
-      pop_data[[pop_subdomains]] <- as.character(pop_data[[pop_subdomains]])
+    if (is.null(smp_subdomains)) {
+      stop(strwrap(prefix = " ", initial = "",
+                   "You have selected tf = TRUE, hence activated EBP twofold.
+                   smp_subdomains cannot be NULL and must be specified"))
     }
     if (!is.character(pop_subdomains) || length(pop_subdomains) != 1) {
       stop(strwrap(prefix = " ", initial = "",
@@ -59,11 +63,6 @@ ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L,
                  variable indicating subdomains in the population data. See also
                  help(ebp)."))
     }
-    if (!is.character(smp_data[[smp_subdomains]])){
-      stop(strwrap(prefix = " ", initial = "",
-                   "smp_subdomains must be of class character variable indicating
-                 subdomains in the sample data. See also  help(ebp)."))
-    }
     if (!is.character(smp_subdomains) || length(smp_subdomains) != 1) {
       stop(strwrap(prefix = " ", initial = "",
                    "Smp_subdomains must be a vector of length 1 and of class
@@ -71,24 +70,47 @@ ebp_check1 <- function(fixed, pop_data, pop_domains, smp_data, smp_domains, L,
                  factor variable indicating subdomains in the sample data. See
                  also help(ebp)."))
     }
-
-    if (!is.character(smp_data[[smp_subdomains]])){
+    if (!(pop_subdomains %in% colnames(pop_data))) {
       stop(strwrap(prefix = " ", initial = "",
-                   "Smp_subdomains must be of class character variable indicating
-                 subdomains in the sample data. See also  help(ebp)."))
+                   paste0("The subdomain variable ", pop_subdomains, " is not
+                   contained in smp_data. Please provide valid variable name for
+                   smp_subdomains.")))
+    }
+    if (!(smp_subdomains %in% colnames(smp_data))) {
+      stop(strwrap(prefix = " ", initial = "",
+                   paste0("The subdomain variable ", smp_subdomains, " is not
+                   contained in smp_data. Please provide valid variable name for
+                   smp_subdomains.")))
     }
     if (!all(unique(as.character(smp_data[[smp_subdomains]])) %in%
              unique(as.character(pop_data[[pop_subdomains]])))) {
       stop(strwrap(prefix = " ", initial = "",
-                   "The sample data contains subdomains that are not contained in the
-                population data."))
+                   "The sample data contains subdomains that are not contained
+                   in the population data."))
+    }
+  }else{
+    if (!is.null(pop_subdomains)) {
+      stop(strwrap(prefix = " ", initial = "",
+                   "pop_subdomains should be NULL for ebp onefold. If you are
+                   trying to estimate ebp twofold, selected tf = TRUE. You can
+                   also explore the aggregate_to argument if you wish to diplay
+                   the ebp onefold estimates at a different level of aggregation.
+                   See also help(ebp)."))
+    }
+    if (!is.null(smp_subdomains)) {
+      stop(strwrap(prefix = " ", initial = "",
+                   "smp_subdomains should be NULL for ebp onefold. If you are
+                   trying to estimate ebp twofold, selected tf = TRUE. You can
+                   also explore the aggregate_to argument if you wish to diplay
+                   the ebp onefold estimates at a different level of aggregation.
+                   See also help(ebp)."))
     }
   }
 }
 
 ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
                        custom_indicator, cpus, seed, na.rm, weights,
-                       pop_weights, tf) {
+                       pop_weights, aggregate_to, tf) {
   if (!is.null(threshold) && !(is.numeric(threshold) &&
                                length(threshold) == 1) && !inherits(threshold, "function")) {
     stop(strwrap(prefix = " ", initial = "",
@@ -193,6 +215,11 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
   }
 
   if( tf == TRUE){
+    if (!is.null(aggregate_to)) {
+      stop(strwrap(prefix = " ", initial = "",
+                   " aggregate_to function is not supported in EBP twofold. Try
+                   setting aggregate_to = NULL"))
+    }
     if (is.null(boot_type) || !(length(boot_type) == 1 &&
                                 (boot_type == "parametric"))) {
       stop("The bootstrap procedure supported for this method is
@@ -226,7 +253,7 @@ ebp_check2 <- function(threshold, transformation, interval, MSE, boot_type, B,
     if (is.character(pop_weights) && length(pop_weights) != 1 ||
         !is.character(pop_weights) && !is.null(pop_weights)) {
       stop(strwrap(prefix = " ", initial = "",
-                   "Pop_weights must be a vector of length 1 and of class
+                 "Pop_weights must be a vector of length 1 and of class
                  character specifying the variable name of a numeric variable
                  indicating weights in the population data. See also
                  help(ebp)."))
@@ -289,39 +316,6 @@ fw_check1 <- function(pop_data, mod_vars, pop_domains, smp_data, fixed,
   }
 
   if(tf == TRUE){
-    if (is.null(pop_subdomains)) {
-      stop(strwrap(prefix = " ", initial = "",
-                   "You have set tf = TRUE, hence activated EBP twofold.
-                   pop_domains cannot be NULL"))
-
-    }
-    if (is.null(smp_subdomains)) {
-      stop(strwrap(prefix = " ", initial = "",
-                   paste0("You have set tf = TRUE, hence activated EBP twofold.
-                   ", smp_subdomains, " cannot be NULL")))
-
-    }
-
-    if (!is.null(pop_subdomains) && !(pop_subdomains %in%
-                                      colnames(pop_data))) {
-      stop(strwrap(prefix = " ", initial = "",
-                   paste0("The subdomain variable ", pop_subdomains, " is not
-                   contained in pop_data. Please provide valid variable name for
-                   pop_subdomains.")))
-    }
-    if (!(smp_subdomains %in% colnames(smp_data))) {
-      stop(strwrap(prefix = " ", initial = "",
-                   paste0("The subdomain variable ", smp_subdomains, " is not
-                   contained in smp_data. Please provide valid variable name for
-                   smp_subdomains.")))
-    }
-
-    if (!is.null(aggregate_to)) {
-      stop(strwrap(prefix = " ", initial = "",
-                   " aggregate_to function is not supported in EBP twofold. Try
-                   setting aggregate_to = NULL"))
-    }
-
     if (!is.null(weights)) {
       stop(strwrap(prefix = " ", initial = "",
                    " The weighted version for EBP twofold is not available.
