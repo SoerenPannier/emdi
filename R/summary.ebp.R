@@ -2,7 +2,6 @@
 
 #' @export
 #' @importFrom moments skewness kurtosis
-#' @importFrom MuMIn r.squaredGLMM
 #' @rdname emdi_summaries
 
 summary.ebp <- function(object, ...) {
@@ -105,7 +104,7 @@ summary.ebp <- function(object, ...) {
   )
   tempMod <- object$model
   tempMod$call$fixed <- object$fixed
-  r_squared <- suppressWarnings(r.squaredGLMM(tempMod))
+  r_squared <-lme_rsquared(tempMod)
   if (is.matrix(r_squared)) {
     r_marginal <- r_squared[1, 1]
     r_conditional <- r_squared[1, 2]
@@ -187,4 +186,42 @@ icc <- function(model) {
   u <- as.numeric(VarCorr(model)[1, 1])
   e <- model$sigma^2
   u / (u + e)
+}
+
+# Conditional and marginal R square
+# Code for conditional and marginal R square is an adapted copy from the MuMIn R Package Version: 1.47.5 under the GPL-2 License
+
+lme_rsquared <- function(x) {
+
+  VarFx <- var(fitted(x, level = 0L))
+  mmRE <- model.matrix(x$modelStruct$reStruct,
+                       data = x$data[rownames(x$fitted), ,
+                                     drop = FALSE])
+  n <- nrow(mmRE)
+  sigma2 <- x$sigma^2
+  reStruct <- x$modelStruct$reStruct
+  if ((m <- length(reStruct)) > 1L) {
+    nams <- names(reStruct)
+    for (i in seq.int(m)) attr(reStruct[[i]], "Dimnames")[[2L]] <- paste(nams[[i]],
+                                                                         attr(reStruct[[i]], "Dimnames")[[2L]], sep = ".")
+  }
+  varRe <- sum(vapply(reStruct, function(z) {
+    sig <- nlme::pdMatrix(z) * sigma2
+    mm1 <- mmRE[, rownames(sig), drop = FALSE]
+    sum(matmultdiag(mm1 %*% sig, ty = mm1)) / n
+  }, FUN.VALUE = numeric(1)))
+  varTot <- sum(VarFx, varRe)
+  res <- c(VarFx, varTot)/(varTot + sigma2)
+  names(res) <- c("R2m", "R2c")
+
+  return(res)
+}
+
+matmultdiag <- function (x, y, ty = t(y))
+{
+  if (ncol(x) != ncol(ty))
+    stop("non-conformable arguments")
+  if (nrow(x) != nrow(ty))
+    stop("result is not a square matrix")
+  return(rowSums(x * ty))
 }

@@ -67,10 +67,10 @@ fh_check <- function(fixed, vardir, combined_data, domains, method, interval, k,
   }
   if (is.null(transformation) || !is.character(transformation) ||
     !(transformation == "arcsin" || transformation == "log" ||
-      transformation == "no")) {
+      transformation == "logit" || transformation == "no")) {
     stop(strwrap(prefix = " ", initial = "",
-                 "transformation must be a character. The three options are
-                 ''no'', ''log'' or ''arcsin''."))
+                 "transformation must be a character. The four options are
+                 ''no'', ''log'', ''arcsin'' or ''logit''."))
   }
   if (!is.null(backtransformation) && !(backtransformation == "naive" ||
     backtransformation == "bc_crude" ||
@@ -262,10 +262,10 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
                             corMatrix, Ci, tol, maxit, MSE, mse_type, B, seed) {
   if (is.null(transformation) || !is.character(transformation) ||
     !(transformation == "arcsin" || transformation == "log" ||
-      transformation == "no")) {
+      transformation == "no" || transformation == "logit")) {
     stop(strwrap(prefix = " ", initial = "",
-                 "transformation must be a character. The three options are
-                 ''no'',''log'' or ''arcsin''."))
+                 "transformation must be a character. The four options are
+                 ''no'',''log'', ''arcsin'' or ''logit''."))
   }
   if ((method == "reml" || method == "ml") && correlation == "no" &&
     transformation == "no" && MSE == TRUE && mse_type != "analytical") {
@@ -416,12 +416,12 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
                  eff_smpsize is required and cannot be NULL. See also
                  help(fh)."))
   }
-  if ((transformation == "arcsin") && !(backtransformation == "naive" ||
-    backtransformation == "bc")) {
+  if ((transformation == "arcsin" || transformation == "logit") &&
+      !(backtransformation == "naive" || backtransformation == "bc")) {
     stop(strwrap(prefix = " ", initial = "",
-                 "If transformation is set to ''arcsin'', possible
+                 sprintf("If transformation is set to %s, possible
                  backtransformations are ''naive'' and ''bc''. See also
-                 help(fh)."))
+                 help(fh).", transformation)))
   }
   if ((transformation == "arcsin") && (backtransformation == "naive") &&
     (MSE == TRUE) && !(mse_type == "boot" || mse_type == "jackknife" ||
@@ -435,6 +435,14 @@ fh_combinations <- function(fixed, vardir, combined_data, domains, method,
     (MSE == TRUE) && !(mse_type == "boot")) {
     stop(strwrap(prefix = " ", initial = "",
                  "If transformation is set to ''arcsin'' and backtransformation
+                 to ''bc'', the mse_type must be set to ''boot''. See also
+                 help(fh)."))
+  }
+  if ((transformation == "logit") &&
+      ((backtransformation == "bc") || (backtransformation == "naive")) &&
+      (MSE == TRUE) && !(mse_type == "boot")) {
+    stop(strwrap(prefix = " ", initial = "",
+                 "If transformation is set to ''logit'' and backtransformation
                  to ''bc'', the mse_type must be set to ''boot''. See also
                  help(fh)."))
   }
