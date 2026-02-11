@@ -107,7 +107,7 @@ datta_lahiri <- function(framework, sigmau2, combined_data) {
     for (d_out in seq_len((framework$M - framework$m))) {
       xd_out <- matrix(pred_X[d_out, ], nrow = 1, ncol = framework$p)
       h[d_out] <- xd_out %*% Q %*% t(xd_out)
-      mse_out[d_out] <- sigmau2 + b + h[d_out]
+      mse_out[d_out] <- sigmau2 - b + h[d_out]
     }
 
     mse_data$FH[framework$obs_dom == FALSE] <- mse_out

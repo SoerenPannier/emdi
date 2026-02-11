@@ -1,3 +1,6 @@
+# emdi 2.2.4
+* Bugfix: Out-of-sample MSE estimation of ML variance estimation
+
 # emdi 2.2.3
 * Adapted linking to foreign packages
 * Added citation for area level models
